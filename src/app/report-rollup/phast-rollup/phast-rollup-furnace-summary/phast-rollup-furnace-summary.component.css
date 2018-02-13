@@ -22,6 +22,7 @@ tr > td {
         page-break-inside: avoid;
     }
 }
+
 table {
   table-layout: fixed;
 }

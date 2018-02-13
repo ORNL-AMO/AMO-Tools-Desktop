@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
+
+import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import * as regression from 'regression';
 import { PumpCurveService } from '../pump-curve.service';
 import { PsatService } from '../../../../psat/psat.service';

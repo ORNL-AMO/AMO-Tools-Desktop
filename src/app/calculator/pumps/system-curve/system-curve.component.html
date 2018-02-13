@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row psat" *ngIf="settings">
+<div class="modify-conditions panel-container row psat" *ngIf="settings && showForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -8,8 +8,9 @@
         <div class="row">
           <div class="col-12">
             <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
-              (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
-          </div>
+              (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
+              <a *ngIf="inAssessment" class="small pull-right reset-link" (click)="initializeCalculator(true)">Reset Baseline and Modifcation Data</a>
+            </div>
         </div>
       </div>
       <div class="col-6 align-top">

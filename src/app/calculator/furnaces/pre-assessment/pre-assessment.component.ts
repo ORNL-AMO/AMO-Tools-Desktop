@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Calculator } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -19,7 +20,10 @@ export class PreAssessmentComponent implements OnInit {
   settings: Settings;
   @Input()
   height: number;
-
+  @Input()
+  inModal: boolean;
+  @Input()
+  calculator: Calculator;
   @ViewChild('container') container: ElementRef;
 
   preAssessments: Array<PreAssessment>;
@@ -55,15 +59,35 @@ export class PreAssessmentComponent implements OnInit {
 
   getHeight() {
     setTimeout(() => {
-      this.height = this.container.nativeElement.clientHeight;
-    }, 100);
+      if (this.container.nativeElement.clientHeight) {
+        this.height = this.container.nativeElement.clientHeight;
+      }
+    }, 200);
   }
-  
+
   initAssessments() {
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
-    this.preAssessments = new Array<PreAssessment>();
-    this.addPreAssessment();
+    if (!this.calculator) {
+      this.preAssessments = new Array<PreAssessment>();
+      this.addPreAssessment();
+    } else {
+      if (this.calculator.preAssessments) {
+        if (this.calculator.preAssessments.length != 0) {
+          this.nameIndex = this.calculator.preAssessments.length;
+          this.preAssessments = this.calculator.preAssessments;
+        } else {
+          this.calculator.preAssessments = new Array<PreAssessment>();
+          this.preAssessments = new Array<PreAssessment>();
+          this.addPreAssessment();
+        }
+      } else {
+        this.calculator.preAssessments = new Array<PreAssessment>();
+        this.preAssessments = new Array<PreAssessment>();
+        this.addPreAssessment();
+      }
+      this.calculate();
+    }
   }
 
   setCurrentField(str: string) {
@@ -96,13 +120,20 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   calculate() {
+    if (this.calculator) {
+      this.calculator.preAssessments = this.preAssessments;
+    }
     this.results = new Array<any>();
     let i = this.preAssessments.length - 1;
     this.preAssessments.forEach(assessment => {
       if (assessment.type == 'Metered') {
-        this.calculateMetered(assessment);
+        if (assessment.meteredEnergy) {
+          this.calculateMetered(assessment);
+        }
       } else if (assessment.type == 'Designed') {
-        this.calculateDesigned(assessment);
+        if (assessment.designedEnergy) {
+          this.calculateDesigned(assessment);
+        }
       }
     })
     let sum = this.getSum(this.results);

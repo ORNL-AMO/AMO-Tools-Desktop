@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 
@@ -14,18 +16,23 @@ export class PreAssessmentGraphComponent implements OnInit {
   @Input()
   chartColors: Array<string>;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  exportName: string;
+
   firstChange: boolean = true;
   chart: any;
   columnData: Array<any>;
   chartContainerHeight: number;
   chartContainerWidth: number;
 
-  constructor() { }
+  window: any;
+  doc: any;
+
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData();
-    this.chartContainerWidth = window.innerWidth * 0.41;
-    this.chartContainerHeight = 280;
+
   }
 
   ngOnChanges(changes: SimpleChange) {
@@ -35,12 +42,16 @@ export class PreAssessmentGraphComponent implements OnInit {
         this.firstChange = !this.firstChange;
       }
       else {
-        this.updateChart();
+        this.initChart();
       }
     }
   }
 
   ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.chartContainerWidth = this.window.innerWidth * 0.41;
+    this.chartContainerHeight = 280;
     this.initChart();
   }
 
@@ -48,14 +59,15 @@ export class PreAssessmentGraphComponent implements OnInit {
     this.columnData = new Array();
     this.results.forEach(val => {
       let tmpArray = new Array();
-      tmpArray.push(val.name);
-      tmpArray.push(val.percent);
-      this.columnData.push(tmpArray);
-    })
+      tmpArray.push(val.name + ": " + val.percent.toFixed(2).toString() + "%");
+      tmpArray.push(val.percent.toFixed(2));
+      this.columnData.unshift(tmpArray);
+    });
   }
 
   initChart() {
     this.chart = c3.generate({
+      bindto: this.ngChart.nativeElement,
       data: {
         columns: this.columnData,
         type: 'pie',
@@ -68,7 +80,8 @@ export class PreAssessmentGraphComponent implements OnInit {
         pattern: this.chartColors
       },
       legend: {
-        show: false
+        show: true,
+        position: 'right'
       },
       tooltip: {
         contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
@@ -77,7 +90,7 @@ export class PreAssessmentGraphComponent implements OnInit {
           return html;
         }
       }
-    })
+    });
   }
 
   updateChart() {
@@ -86,5 +99,12 @@ export class PreAssessmentGraphComponent implements OnInit {
         columns: this.columnData
       });
     }
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "pre-assessment-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

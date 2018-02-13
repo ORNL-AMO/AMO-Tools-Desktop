@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 
 import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
+import { Calculator } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-assessment-dashboard',
@@ -27,6 +28,10 @@ export class AssessmentDashboardComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
+  @Output('emitPreAssessment')
+  emitPreAssessment = new EventEmitter<boolean>();
+  @Input()
+  directoryCalculator: Calculator;
 
   isChecked: boolean = false;
   view: string;
@@ -94,5 +99,9 @@ export class AssessmentDashboardComponent implements OnInit {
 
   emitImport(){
     this.importEmit.emit(true);
+  }
+
+  preAssessmentEmit(){
+    this.emitPreAssessment.emit(true);
   }
 }
