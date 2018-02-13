@@ -5,7 +5,9 @@ import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
-
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator, CurveData } from '../../../shared/models/calculators';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -18,7 +20,10 @@ export class SystemCurveComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-
+  @Input()
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
   curveConstants: any;
 
   pointOne: any;
@@ -27,72 +32,119 @@ export class SystemCurveComponent implements OnInit {
   staticHead: number;
   lossCoefficient: number;
   tabSelect: string = 'results';
+  calculator: Calculator;
   constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if (this.psat) {
-      this.psat.name = 'Baseline';
-      this.curveConstants = {
-        form: this.initCurveConstants(this.psat)
-      };
-      this.pointOne = {
-        form: this.initPointForm(this.psat),
-        fluidPower: 0
-      };
-      this.pointTwo = {
-        form: this.initPointForm(),
-        fluidPower: 0
-      };
-      this.pointTwo.form.patchValue({
-        flowRate: '',
-        head: ''
-      })
-    } else {
-      this.curveConstants = {
-        form: this.initCurveConstants()
-      };
-      this.pointOne = {
-        form: this.initPointForm(),
-        fluidPower: 0
-      };
-      this.pointTwo = {
-        form: this.initPointForm(),
-        fluidPower: 0
-      };
-      this.pointTwo.form.patchValue({
-        flowRate: 0,
-        head: 200
-      })
-    }
-
-    //get systen settings if using stand alone calculator
-    if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
-            //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
-            this.pointOne.form.patchValue({
-              flowRate: this.psatService.roundVal(tmpVal, 2)
+    //in assesssment
+    if (this.inAssessment) {
+      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
+        if (results.length != 0) {
+          this.calculator = results[0];
+          if (this.calculator.systemCurve) {
+            this.initDefault();
+            this.setPointValuesFromCalc(this.calculator, true, true);
+            this.curveConstants.form.patchValue({
+              specificGravity: this.calculator.systemCurve.specificGravity,
+              systemLossExponent: this.calculator.systemCurve.systemLossExponent
             })
-            // this.pointTwo.form.patchValue({
-            //   flowRate: this.psatService.roundVal(tmpVal2, 2)
-            // })
+          } else {
+            this.initInPsat();
           }
-          if (results[0].distanceMeasurement != 'ft') {
-            let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft').to(results[0].distanceMeasurement);
-            let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft').to(results[0].distanceMeasurement);
-            this.pointOne.form.patchValue({
-              head: this.psatService.roundVal(tmpVal, 2)
-            })
-            this.pointTwo.form.patchValue({
-              head: this.psatService.roundVal(tmpVal2, 2)
-            })
-          }
-          this.settings = results[0];
         }
-      )
+      })
     }
+    //stand alone
+    else {
+      this.initDefault();
+      //get system settings if using stand alone calculator
+      if (!this.settings) {
+        this.indexedDbService.getDirectorySettings(1).then(
+          results => {
+            this.settings = results[0];
+            this.convertDefaults(this.settings);
+          }
+        )
+      }
+    }
+  }
+
+  setPointValuesFromCalc(calculator: Calculator, p1?: boolean, p2?: boolean) {
+    if (p1) {
+      let p1 = _.find(calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == calculator.systemCurve.selectedP1Name });
+      this.pointOne.form.patchValue({
+        flowRate: p1.flowRate,
+        head: p1.head,
+        pointAdjustment: p1.modName
+      })
+    }
+    if (p2) {
+      let p2 = _.find(calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == calculator.systemCurve.selectedP2Name });
+      this.pointTwo.form.patchValue({
+        flowRate: p2.flowRate,
+        head: p2.head,
+        pointAdjustment: p2.modName
+      })
+    }
+  }
+
+  convertDefaults(settings: Settings) {
+    if (settings.flowMeasurement != 'gpm') {
+      let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
+      //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
+      this.pointOne.form.patchValue({
+        flowRate: this.psatService.roundVal(tmpVal, 2)
+      })
+      // this.pointTwo.form.patchValue({
+      //   flowRate: this.psatService.roundVal(tmpVal2, 2)
+      // })
+    }
+    if (settings.distanceMeasurement != 'ft') {
+      let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft').to(settings.distanceMeasurement);
+      let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft').to(settings.distanceMeasurement);
+      this.pointOne.form.patchValue({
+        head: this.psatService.roundVal(tmpVal, 2)
+      })
+      this.pointTwo.form.patchValue({
+        head: this.psatService.roundVal(tmpVal2, 2)
+      })
+    }
+  }
+
+  initInPsat() {
+    this.curveConstants = {
+      form: this.initCurveConstants(this.psat)
+    };
+    this.pointOne = {
+      form: this.initPointForm(this.psat),
+      fluidPower: 0
+    };
+    this.pointTwo = {
+      form: this.initPointForm(),
+      fluidPower: 0
+    };
+    this.pointTwo.form.patchValue({
+      flowRate: '',
+      head: ''
+    })
+  }
+
+  initDefault() {
+    this.curveConstants = {
+      form: this.initCurveConstants()
+    };
+    this.pointOne = {
+      form: this.initPointForm(),
+      fluidPower: 0
+    };
+    this.pointTwo = {
+      form: this.initPointForm(),
+      fluidPower: 0
+    };
+    this.pointTwo.form.patchValue({
+      flowRate: 0,
+      head: 200
+    })
   }
 
   initPointForm(psat?: PSAT) {
@@ -125,6 +177,18 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
+  saveCalculator() {
+    this.calculator.systemCurve.specificGravity = this.curveConstants.form.controls.specificGravity.value;
+    this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.systemLossExponent.specificGravity.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).flowRate = this.pointOne.form.controls.flowRate.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).head = this.pointOne.form.controls.head.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).flowRate = this.pointTwo.form.controls.flowRate.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).head = this.pointTwo.form.controls.head.value;
+    
+  }
+
+
+  //calculations
   calculateP1Flow() {
     this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.controls.head, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
   }

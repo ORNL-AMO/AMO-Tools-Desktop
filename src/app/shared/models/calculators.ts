@@ -10,7 +10,8 @@ export interface Calculator {
     preAssessments?: Array<PreAssessment>,
     headTool?: HeadTool,
     headToolSuction?: HeadToolSuction,
-    headToolType?: string
+    headToolType?: string,
+    systemCurve?: SystemCurve
 }
 
 export interface HeadToolSuction {
@@ -38,4 +39,18 @@ export interface HeadTool{
     dischargeGaugePressure: number,
     dischargeGaugeElevation: number,
     dischargeLineLossCoefficients: number,
+}
+
+export interface SystemCurve {
+    specificGravity?: number,
+    systemLossExponent?: number,
+    dataPoints?: Array<CurveData>,
+    selectedP1Name?: string,
+    selectedP2Name?: string
+}
+
+export interface CurveData {
+    flowRate?: number,
+    head?: number,
+    modName?: string
 }
