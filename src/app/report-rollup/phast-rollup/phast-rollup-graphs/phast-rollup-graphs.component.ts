@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
-import { BaseChartDirective } from 'ng2-charts';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -13,25 +14,27 @@ import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
 export class PhastRollupGraphsComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  printView: boolean;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
   results: Array<any>;
+  
+  // contains results for every option to build print view charts
+  allResults: Array<any>;
 
-  @ViewChild(BaseChartDirective) private baseChart;
+  chartContainerWidth: number;
+  isUpdate: boolean = false;
+  showLegend: boolean = false;
+  labels: boolean = true;
 
   pieChartLabels: Array<string>;
   pieChartData: Array<number>;
   chartColors: Array<any>;
-  //chartColorDataSet: Array<any>;
   backgroundColors: Array<string>;
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
   graphColors: Array<string>;
   resultData: Array<PhastResultsData>;
   dataOption: string = 'cost';
@@ -53,7 +56,14 @@ export class PhastRollupGraphsComponent implements OnInit {
         this.getData();
         this.resultData = val;
       }
-    })
+    });
+
+    if (this.printView) {
+      this.initPrintChartData();
+    }
+    else {
+      this.chartContainerWidth = (window.innerWidth - 30) * .28;
+    }
   }
 
   initTotals() {
@@ -100,6 +110,19 @@ export class PhastRollupGraphsComponent implements OnInit {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
+    this.updateChart();
+  }
+
+  initPrintChartData() {
+    this.allResults = new Array<any>();
+    this.dataOption = 'cost';
+    this.getResults(this.resultData);
+    this.getData();
+    this.allResults.push(this.results);
+    this.dataOption = 'energy';
+    this.getResults(this.resultData);
+    this.getData();
+    this.allResults.push(this.results);
   }
 
   getResults(resultsData: Array<PhastResultsData>) {
@@ -111,7 +134,7 @@ export class PhastRollupGraphsComponent implements OnInit {
         percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
       } else {
         let energyUsed = this.getConvertedValue(val.baselineResults.annualEnergyUsed, val.settings);
-        percent = this.getResultPercent(energyUsed, this.totalEnergy)
+        percent = this.getResultPercent(energyUsed, this.totalEnergy);
       }
       this.results.push({
         name: val.name,
@@ -120,7 +143,7 @@ export class PhastRollupGraphsComponent implements OnInit {
         settings: val.settings
       })
       i++;
-    })
+    });
   }
 
   getConvertedValue(val: number, settings: Settings) {
@@ -149,10 +172,6 @@ export class PhastRollupGraphsComponent implements OnInit {
       this.pieChartData.push(val.percent);
       this.backgroundColors.push(val.color);
     })
-    if (this.baseChart && this.baseChart.chart) {
-      this.baseChart.chart.config.data.labels = this.pieChartLabels;
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors;
-    }
     this.getColors();
   }
 
@@ -162,5 +181,9 @@ export class PhastRollupGraphsComponent implements OnInit {
         backgroundColor: this.backgroundColors
       }
     ]
+  }
+
+  updateChart() {
+    this.isUpdate = true;
   }
 }

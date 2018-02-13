@@ -188,7 +188,7 @@ export class PreAssessmentComponent implements OnInit {
         name: name,
         value: num,
         color: color
-      })
+      });
     }
   }
 
@@ -213,8 +213,9 @@ export class PreAssessmentComponent implements OnInit {
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
-      borderColor: this.assessmentGraphColors.pop()
-    })
+      borderColor: this.assessmentGraphColors[this.preAssessments.length]
+    });
+
     this.nameIndex++;
     if (this.preAssessments.length >= 20) {
       this.showAdd = false;

@@ -1,17 +1,26 @@
-<div class="row justify-content-center">
-  <div class="col-3">
-    <div class="form-group align-self-center">
-      <select (change)="buildChartData()" class="form-control graph-select" name="graphOption" [(ngModel)]="graphOption" id="graphOption">
-        <option *ngFor="let option of graphOptions" [ngValue]="option">{{option}}
-        </option>
-      </select>
+<!-- app version -->
+<div *ngIf="!printView">
+  <div class="row justify-content-center">
+    <div class="col-3">
+      <div class="form-group align-self-center">
+        <select (change)="ngOnChanges()" class="form-control graph-select" name="graphOption" [(ngModel)]="graphOption" id="graphOption">
+          <option *ngFor="let option of graphOptions" [ngValue]="option">{{option}}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-lg-8 col-md-10 col-sm-12">
-    <div style="display: block" *ngIf="chartData">
-      <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="options" [legend]="true" [chartType]="'bar'"></canvas>
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <!-- c3 graph container -->
+      <app-rollup-bar-chart [settings]="settings" [chartContainerWidth]="chartContainerWidth" [chartLabels]="chartLabels" [axisLabel]="axisLabel"
+        [unit]="unit" [graphColors]="graphColors" [showTitle]="showTitle" [printView]="printView" [title]="title" [showLegend]="showLegend"
+        [isUpdate]="isUpdate" [allDataColumns]="allDataColumns" [assessmentType]="'phast'"></app-rollup-bar-chart>
+    </div>
+  </div>
+  <div class="row justify-content-center table-row">
+    <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
+      <app-phast-rollup-furnace-summary-table [settings]="settings" [resultData]="resultData"></app-phast-rollup-furnace-summary-table>
     </div>
   </div>
 </div>
@@ -126,4 +135,5 @@
       </tbody>
     </table>
   </div>
+
 </div>

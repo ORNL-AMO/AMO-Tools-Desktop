@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-//declare const d3: any;
 import * as d3 from 'd3';
-
 import { PsatService } from '../../../../psat/psat.service';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 
 @Component({
   selector: 'app-system-curve-graph',
@@ -25,6 +24,9 @@ export class SystemCurveGraphComponent implements OnInit {
   lossCoefficient: number;
   @Input()
   settings: Settings;
+
+  @ViewChild("ngChart") ngChart: ElementRef;
+  exportName: string;
 
   svg: any;
   xAxis: any;
@@ -48,7 +50,7 @@ export class SystemCurveGraphComponent implements OnInit {
   fontSize: string;
 
   isFirstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
+  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     if (!this.lossCoefficient) {
@@ -60,7 +62,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
     this.isGridToggled = false;
 
-    d3.select('app-system-curve-graph').selectAll('#gridToggleBtn')
+    d3.select('app-system-curve').selectAll('#gridToggleBtn')
       .on("click", () => {
         this.toggleGrid();
       });
@@ -97,7 +99,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
       //debug
       this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
-      
+
       //real version
       // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
@@ -105,7 +107,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
       //debug
       this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
-      
+
       //real version
       // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
@@ -124,9 +126,9 @@ export class SystemCurveGraphComponent implements OnInit {
   makeGraph() {
 
     //Remove  all previous graphs
-    d3.select('app-system-curve-graph').selectAll('svg').remove();
+    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
-    this.svg = d3.select('app-system-curve-graph').append('svg')
+    this.svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       //debug
@@ -324,14 +326,14 @@ export class SystemCurveGraphComponent implements OnInit {
     this.makeCurve(x, y, data);
 
     // Define the div for the tooltip
-    this.detailBox = d3.select("app-system-curve-graph").append("div")
+    this.detailBox = d3.select(this.ngChart.nativeElement).append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
     //debug
-    this.tooltipPointer = d3.select("app-system-curve-graph").append("div")
+    this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
       .attr("id", "tooltipPointer")
       .attr("class", "tooltip-pointer")
       .style("opacity", 1)
@@ -655,6 +657,13 @@ export class SystemCurveGraphComponent implements OnInit {
       .style('pointer-events', 'none');
 
     d3.select("path.domain").attr("d", "");
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "system-curve-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
 }

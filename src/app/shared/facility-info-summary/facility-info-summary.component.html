@@ -1,5 +1,5 @@
 <div class="output-summary" *ngIf="facilityInfo">
-  <h5 class="show-print">Facility Information</h5>
+  <h5 class="show-print print-section-header">Facility Information</h5>
   <table class="table table-hover table-striped">
     <tr>
       <td class="bold">Company</td>
@@ -72,6 +72,6 @@
     </tr>
   </table>
 </div>
-<div *ngIf="!facilityInfo">
-  No Facility Information Found
+<div *ngIf="!facilityInfo" class="output-summary">
+  <h5 class="print-section-header">No Facility Information Found</h5>
 </div>

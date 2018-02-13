@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, ViewChild, SimpleChange } from '@angular/core';
-import { BaseChartDirective } from 'ng2-charts';
+import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-pre-assessment-graph',
   templateUrl: './pre-assessment-graph.component.html',
@@ -9,54 +12,98 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 export class PreAssessmentGraphComponent implements OnInit {
   @Input()
   results: Array<any>;
+  @Input()
+  chartColors: Array<string>;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  exportName: string;
 
-  @ViewChild(BaseChartDirective) private baseChart;
+  firstChange: boolean = true;
+  chart: any;
+  columnData: Array<any>;
+  chartContainerHeight: number;
+  chartContainerWidth: number;
 
-  pieChartLabels: Array<string>;
-  pieChartData: Array<number>;
-  chartColors: Array<any>;
-  //chartColorDataSet: Array<any>;
-  backgroundColors: Array<string>;
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
+  window: any;
+  doc: any;
 
-  constructor() { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData();
+
   }
 
   ngOnChanges(changes: SimpleChange) {
     if (changes) {
       this.getData();
+      if (this.firstChange) {
+        this.firstChange = !this.firstChange;
+      }
+      else {
+        this.initChart();
+      }
     }
+  }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.chartContainerWidth = this.window.innerWidth * 0.41;
+    this.chartContainerHeight = 280;
+    this.initChart();
   }
 
   getData() {
-    this.pieChartData = new Array();
-    this.pieChartLabels = new Array();
-    this.backgroundColors = new Array();
+    this.columnData = new Array();
     this.results.forEach(val => {
-      this.pieChartLabels.push(val.name+' (%)');
-      this.pieChartData.push(val.percent);
-      this.backgroundColors.push(val.color);
-    })
-    if (this.baseChart && this.baseChart.chart) {
-      this.baseChart.chart.config.data.labels = this.pieChartLabels;
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors;
-    }
-    this.getColors();
+      let tmpArray = new Array();
+      tmpArray.push(val.name + ": " + val.percent.toFixed(2).toString() + "%");
+      tmpArray.push(val.percent.toFixed(2));
+      this.columnData.unshift(tmpArray);
+    });
   }
 
-  getColors() {
-    this.chartColors = [
-      {
-        backgroundColor: this.backgroundColors
+  initChart() {
+    this.chart = c3.generate({
+      bindto: this.ngChart.nativeElement,
+      data: {
+        columns: this.columnData,
+        type: 'pie',
+      },
+      size: {
+        width: this.chartContainerWidth,
+        height: this.chartContainerHeight
+      },
+      color: {
+        pattern: this.chartColors
+      },
+      legend: {
+        show: true,
+        position: 'right'
+      },
+      tooltip: {
+        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+          return html;
+        }
       }
-    ]
+    });
+  }
+
+  updateChart() {
+    if (this.chart) {
+      this.chart.load({
+        columns: this.columnData
+      });
+    }
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "pre-assessment-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

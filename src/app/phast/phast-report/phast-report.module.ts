@@ -11,21 +11,22 @@ import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
 import { SankeyModule } from '../sankey/sankey.module';
 import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
 import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
+import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     SankeyModule,
-    ChartsModule,
+    // ChartsModule,
     SharedModule,
     PhastInputSummaryModule
   ],
-  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
+  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],
   providers: [PhastReportService, ExecutiveSummaryService]
 })

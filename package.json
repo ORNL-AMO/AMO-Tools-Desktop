@@ -47,6 +47,7 @@
     "ajv": "^5.2.2",
     "amo-tools-suite": "0.2.14",
     "bootstrap": "4.0.0",
+    "c3": "^0.4.18",
     "core-js": "^2.4.1",
     "d3": "4.5.0",
     "dotenv": "^4.0.0",
@@ -59,6 +60,7 @@
     "popper.js": "^1.12.3",
     "regression": "^2.0.0",
     "rxjs": "5.5.2",
+    "save-svg-as-png": "1.2.0",
     "ts-helpers": "^1.1.1",
     "typescript": "^2.5.1",
     "zone.js": "^0.8.12"
@@ -124,7 +126,6 @@
     "lodash.foreach": "^4.5.0",
     "lodash.keys": "^4.2.0",
     "moment": "^2.18.1",
-    "ng2-charts": "^1.5.0",
     "ng2-toasty": "^4.0.2",
     "ngx-bootstrap": "^2.0.0-beta.7",
     "node-loader": "^0.6.0",

@@ -19,6 +19,8 @@ import { MeteredEnergyService } from '../../../phast/metered-energy/metered-ener
 export class PhastRollupEnergyTableComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   steamTotalEnergy: number = 0;
   electricityTotalEnergy: number = 0;

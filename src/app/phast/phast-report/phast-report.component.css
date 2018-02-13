@@ -20,3 +20,10 @@
     margin-top: 15px;
     margin-left: 0;
 }
+
+@media print {
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+}
