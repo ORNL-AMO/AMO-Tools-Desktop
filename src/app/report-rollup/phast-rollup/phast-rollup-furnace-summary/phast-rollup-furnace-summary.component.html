@@ -19,40 +19,43 @@
   <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
     <table class="table table-hover table-striped">
       <thead>
-      <tr>
-        <th>
-          Energy Intensity
-        </th>
-        <th>
-          Annual Cost
-        </th>
-        <th>
-          Cost Savings
-        </th>
-        <th>
-          Implementation Costs
-        </th>
-        <th>
-          Simple Payback Period
-        </th>
         <tr>
+          <th></th>
+          <th colspan="2">
+            Energy Intensity
+          </th>
+          <th colspan="2">
+            Annual Cost
+          </th>
+          <th colspan="2">
+            Cost Savings
+          </th>
           <th>
+            Implementation Costs
+          </th>
+          <th>
+            Simple Payback Period
+          </th>
+        </tr>
+        <tr>
+          <th></th>
+          <th colspan="2">
             ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
           </th>
-          <th>
+          <!-- <th>
             ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
-          </th>
-          <th>
+          </th> -->
+          <th colspan="2">
             ($/yr)
           </th>
-          <th>
+          <!-- <th>
             ($/yr)
-          </th>
-          <th>
+          </th> -->
+          <th colspan="2">
             ($/yr)
           </th>
           <th>
@@ -61,24 +64,23 @@
           <th>
             (Months)
           </th>
-      </tr>
+        </tr>
         <tr>
-          <th colspan="2">
-            Furnace Name
-          </th>
-          <th colspan="2">
-            Modification Name
-          </th>
-          <th colspan="2">
-            Baseline
-          </th>
-          <th colspan="2">
+          <th></th>
+          <th>Baseline</th>
+          <th>
             Modification
           </th>
-          <th colspan="2">
+          <th>
             Baseline
           </th>
-          <th colspan="2">
+          <th>
+            Modification
+          </th>
+          <th>
+            Baseline
+          </th>
+          <th>
             Modification
           </th>
         </tr>
@@ -86,7 +88,7 @@
       <tbody *ngIf="resultData">
         <tr *ngFor="let data of resultData">
           <!-- name -->
-          <td colspan="2">{{data.name}}</td>
+          <td>{{data.name}}</td>
           <td *ngIf="data.modName">{{data.modName}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- energy intensity -->
@@ -94,7 +96,7 @@
           <td *ngIf="data.modName">{{getConvertedValue(data.modificationResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- annual cost -->
-          <td >${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
+          <td>${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="data.modName">${{data.modificationResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- savings -->
