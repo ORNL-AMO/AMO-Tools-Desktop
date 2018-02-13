@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col-12">
 
-            <div *ngIf="headToolType == 'Suction tank elevation'">
+            <div *ngIf="headToolType == 'Suction tank elevation' && headToolSuctionForm">
               <div class="head-diagram text-center">
                 <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
                 <small id="headDiagramHelp" class="text-muted text-help">K
@@ -45,7 +45,7 @@
                 [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-suction-form>
             </div>
 
-            <div *ngIf="headToolType == 'Suction gauge elevation'">
+            <div *ngIf="headToolType == 'Suction gauge elevation' && headToolForm">
               <div class="head-diagram text-center">
                 <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
                 <small id="headDiagramHelp" class="text-muted text-help">K

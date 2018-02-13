@@ -17,7 +17,7 @@
         [settings]="settings" [baseline]="true"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
         (saved)="save()" [settings]="settings" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
-        [baseline]="true"></app-field-data>
+        [baseline]="true" [assessment]="assessment"></app-field-data>
     </div>
   </div>
 
