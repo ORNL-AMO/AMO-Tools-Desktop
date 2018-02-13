@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
+import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-pump-curve-data-form',

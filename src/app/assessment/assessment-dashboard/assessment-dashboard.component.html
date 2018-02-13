@@ -11,21 +11,26 @@
 			(newDir)="newDir()" 
 			(genReport)="emitGenReport()" 
 			(exportEmit)="emitExport()" 
-			(importEmit)="emitImport()">
+			(importEmit)="emitImport()"
+			(emitPreAssessment)="preAssessmentEmit()">
 		</app-assessment-menu>
 		
 		<app-assessment-grid-view 
 			*ngIf="view == 'grid'" 
 			[isChecked]="isChecked" 
 			[directory]="directory" 
-			(directoryChange)="changeDirectory($event)">
+			(directoryChange)="changeDirectory($event)"
+			[directoryCalculator]="directoryCalculator"
+			(emitPreAssessment)="preAssessmentEmit()">
 		</app-assessment-grid-view>
 		
 		<app-assessment-list-view 
 			*ngIf="view == 'list'" 
 			[isChecked]="isChecked" 
 			[directory]="directory" 
-			(directoryChange)="changeDirectory($event)">
+			(directoryChange)="changeDirectory($event)"
+			[directoryCalculator]="directoryCalculator"
+			(emitPreAssessment)="preAssessmentEmit()">
 		</app-assessment-list-view>
 		
 		<app-assessment-settings 

@@ -16,6 +16,7 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
+import { Calculator } from '../shared/models/calculators';
 declare const packageJson;
 
 @Component({
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
+  @ViewChild('preAssessmentModal') public preAssessmentModal: ModalDirective;
 
   importInProgress: boolean = false;
   isExportView: boolean = false;
@@ -52,7 +54,10 @@ export class DashboardComponent implements OnInit {
   suiteDbInit: boolean = false;
   isModalOpen: boolean = false;
   createAssessment: boolean = false;
-
+  showPreAssessment: boolean = false;
+  workingDirectorySettings: Settings;
+  workingDirectoryCalculator: Calculator;
+  calcDataExists: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
     private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
@@ -141,6 +146,39 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  getWorkingDirectoryData(){
+    this.indexedDbService.getDirectorySettings(this.workingDirectory.id).then(results => {
+      if(results.length != 0){
+        this.workingDirectorySettings = results[0];
+      }
+    })
+
+    this.indexedDbService.getDirectoryCalculator(this.workingDirectory.id).then(results => {
+      if(results.length != 0){
+        this.workingDirectoryCalculator = results[0];
+        this.calcDataExists = true;
+      }else{
+        this.workingDirectoryCalculator = {
+          directoryId: this.workingDirectory.id
+        }
+        this.calcDataExists = false;
+      }
+    })
+  }
+
+  addCalculatorData(calcualtorData: Calculator){
+    if(this.calcDataExists){
+      this.indexedDbService.putCalculator(calcualtorData).then(() => {
+        this.hidePreAssessmentModal();
+      });
+    }else{
+      calcualtorData.directoryId = this.workingDirectory.id;
+      this.indexedDbService.addCalculator(calcualtorData).then(() => {
+        this.hidePreAssessmentModal();
+      });;
+    }
+  }
+
   getData() {
     this.indexedDbService.getDirectory(1).then(
       results => {
@@ -148,6 +186,7 @@ export class DashboardComponent implements OnInit {
           this.rootDirectoryRef = results;
           this.allDirectories = this.populateDirectories(results);
           this.workingDirectory = this.allDirectories
+          this.getWorkingDirectoryData();
         } else {
           this.createExampleAssessments();
           this.createDirectory();
@@ -167,6 +206,16 @@ export class DashboardComponent implements OnInit {
 
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
+  }
+
+  showPreAssessmentModal() {
+    this.showPreAssessment = true;
+    this.preAssessmentModal.show();
+  }
+
+  hidePreAssessmentModal() {
+    this.showPreAssessment = false;
+    this.preAssessmentModal.hide();
   }
 
   getAllDirectories() {
@@ -236,6 +285,7 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results) {
           this.workingDirectory = this.populateDirectories(results);
+          this.getWorkingDirectoryData();
         }
       })
   }
@@ -505,12 +555,6 @@ export class DashboardComponent implements OnInit {
       }
     )
     this.dashboardView = 'assessment-dashboard';
-  }
-
-  showMoveItemsModal() {
-    this.selectedItems = new Array();
-    this.getSelected(this.workingDirectory);
-    setTimeout(() => { console.log(this.selectedItems) }, 1000)
   }
 
 
