@@ -20,50 +20,68 @@
     <table class="table table-hover table-striped">
       <thead>
         <tr>
-          <th>
-            Furnace Name
+          <th></th>
+          <th colspan="2">
+            Energy Intensity
+          </th>
+          <th colspan="2">
+            Annual Cost
+          </th>
+          <th colspan="2">
+            Cost Savings
           </th>
           <th>
-            Modification Name
+            Implementation Costs
           </th>
           <th>
-            Energy Intensity<br>
+            Simple Payback Period
+          </th>
+        </tr>
+        <tr>
+          <th></th>
+          <th colspan="2">
             ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
-            Baseline
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
           </th>
-          <th>
-            Energy Intensity<br>
+          <!-- <th>
             ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+          </th> -->
+          <th colspan="2">
+            ($/yr)
+          </th>
+          <!-- <th>
+            ($/yr)
+          </th> -->
+          <th colspan="2">
+            ($/yr)
+          </th>
+          <th>
+            ($)
+          </th>
+          <th>
+            (Months)
+          </th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>Baseline</th>
+          <th>
             Modification
           </th>
           <th>
-            Annual Cost<br>
-            ($/yr)<br>
             Baseline
           </th>
           <th>
-            Annual Cost<br>
-            ($/yr)<br>
             Modification
           </th>
           <th>
-            Cost Savings<br>
-            ($/yr)<br>
-            &nbsp;
+            Baseline
           </th>
           <th>
-            Implementation Costs<br>
-            ($)<br>
-            &nbsp;
-          </th>
-          <th>
-            Simple Payback Period<br>
-            (Months)<br>
-            &nbsp;
+            Modification
           </th>
         </tr>
       </thead>
@@ -78,7 +96,7 @@
           <td *ngIf="data.modName">{{getConvertedValue(data.modificationResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- annual cost -->
-          <td >${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
+          <td>${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="data.modName">${{data.modificationResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- savings -->
