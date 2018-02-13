@@ -43,6 +43,8 @@ export class ChargeMaterialComponent implements OnInit {
   resultsUnit: string;
   disableType: boolean = false;
   lossesLocked: boolean = false;
+
+  showError: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -335,6 +337,10 @@ export class ChargeMaterialComponent implements OnInit {
         this.chargeMaterialCompareService.checkChargeMaterials();
       }
     }
+  }
+
+  setError(bool: boolean){
+    this.showError = bool;
   }
 }
 

@@ -37,6 +37,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
+
+  showError: boolean = false;
   _surfaceLosses: Array<ExtSurfaceObj>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -211,7 +213,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  setError(bool: boolean){
+    this.showError = bool;
+  }
   setCompareVals() {
     if (this.isBaseline) {
       this.extendedSurfaceCompareService.baselineSurface = this.losses.extendedSurfaces;

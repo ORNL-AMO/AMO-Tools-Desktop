@@ -37,6 +37,8 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
+  showError: boolean = false;
+
   _coolingLosses: Array<CoolingLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -266,6 +268,10 @@ export class CoolingLossesComponent implements OnInit {
   }
   focusOut() {
     this.fieldChange.emit('default');
+  }
+  setError(bool: boolean){
+    console.log(bool)
+    this.showError = bool;
   }
   setCompareVals() {
     if (this.isBaseline) {
