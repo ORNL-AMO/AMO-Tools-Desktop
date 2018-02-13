@@ -867,12 +867,12 @@ export class IndexedDbService {
       }
     })
   }
-  getAssessmentCalculator(directoryId: number): Promise<any> {
+  getAssessmentCalculator(assessmentId: number): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.calculator);
       let index = store.index('assessmentId');
-      let indexGetRequest = index.getAll(directoryId);
+      let indexGetRequest = index.getAll(assessmentId);
       myDb.setDefaultErrorHandler(indexGetRequest, myDb);
       indexGetRequest.onsuccess = (e) => {
         let calculators: Array<Calculator> = e.target.result;

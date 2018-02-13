@@ -33,6 +33,9 @@ export class SystemCurveComponent implements OnInit {
   lossCoefficient: number;
   tabSelect: string = 'results';
   calculator: Calculator;
+  calcExists: boolean = false;
+  showForm: boolean = false;
+  saving: boolean = false;
   constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -42,15 +45,33 @@ export class SystemCurveComponent implements OnInit {
         if (results.length != 0) {
           this.calculator = results[0];
           if (this.calculator.systemCurve) {
+            this.calcExists = true;
             this.initDefault();
-            this.setPointValuesFromCalc(this.calculator, true, true);
+            this.setPointValuesFromCalc(true);
             this.curveConstants.form.patchValue({
               specificGravity: this.calculator.systemCurve.specificGravity,
               systemLossExponent: this.calculator.systemCurve.systemLossExponent
             })
+            this.showForm = true;
           } else {
-            this.initInPsat();
+            this.initializeCalculator();
+            this.initDefault();
+            this.setPointValuesFromCalc(true);
+            this.curveConstants.form.patchValue({
+              specificGravity: this.calculator.systemCurve.specificGravity,
+              systemLossExponent: this.calculator.systemCurve.systemLossExponent
+            })
+            this.showForm = true;
           }
+        } else {
+          this.initializeCalculator();
+          this.initDefault();
+          this.setPointValuesFromCalc(true);
+          this.curveConstants.form.patchValue({
+            specificGravity: this.calculator.systemCurve.specificGravity,
+            systemLossExponent: this.calculator.systemCurve.systemLossExponent
+          })
+          this.showForm = true;
         }
       })
     }
@@ -63,29 +84,37 @@ export class SystemCurveComponent implements OnInit {
           results => {
             this.settings = results[0];
             this.convertDefaults(this.settings);
+            this.showForm = true;
           }
         )
+      } else {
+        this.showForm = true;
       }
     }
   }
 
-  setPointValuesFromCalc(calculator: Calculator, p1?: boolean, p2?: boolean) {
-    if (p1) {
-      let p1 = _.find(calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == calculator.systemCurve.selectedP1Name });
-      this.pointOne.form.patchValue({
-        flowRate: p1.flowRate,
-        head: p1.head,
-        pointAdjustment: p1.modName
-      })
+  setPointValuesFromCalc(init?: boolean) {
+    if (this.pointOne && !init) {
+      this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
     }
-    if (p2) {
-      let p2 = _.find(calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == calculator.systemCurve.selectedP2Name });
-      this.pointTwo.form.patchValue({
-        flowRate: p2.flowRate,
-        head: p2.head,
-        pointAdjustment: p2.modName
-      })
+    if (this.pointTwo && !init) {
+      this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
     }
+    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name });
+    this.pointOne.form.patchValue({
+      flowRate: p1.flowRate,
+      head: p1.head,
+      pointAdjustment: p1.modName
+    })
+    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name });
+    this.pointTwo.form.patchValue({
+      flowRate: p2.flowRate,
+      head: p2.head,
+      pointAdjustment: p2.modName
+    })
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
   }
 
   convertDefaults(settings: Settings) {
@@ -177,42 +206,101 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
+  initializeCalculator(reset?: boolean) {
+    let id
+    if (this.calculator) {
+      id = this.calculator.id;
+    }
+    let dataPoints = new Array<CurveData>();
+    let baselinePoint: CurveData = {
+      modName: this.psat.name,
+      flowRate: this.psat.inputs.flow_rate,
+      head: this.psat.inputs.head
+    }
+    dataPoints.push(baselinePoint)
+    this.psat.modifications.forEach(mod => {
+      let modPoint: CurveData = {
+        modName: mod.psat.name,
+        flowRate: mod.psat.inputs.flow_rate,
+        head: mod.psat.inputs.head
+      }
+      dataPoints.push(modPoint);
+    })
+    this.calculator = {
+      systemCurve: {
+        specificGravity: this.psat.inputs.specific_gravity,
+        systemLossExponent: 1.9,
+        dataPoints: dataPoints,
+        selectedP1Name: dataPoints[0].modName,
+        selectedP2Name: dataPoints[1].modName
+      }
+    }
+    if (id) {
+      this.calculator.id = id;
+      this.calculator.assessmentId = this.assessment.id;
+    }
+
+    if(reset){
+      this.setPointValuesFromCalc(true)
+      this.saveCalculator();
+    }
+  }
+
   saveCalculator() {
     this.calculator.systemCurve.specificGravity = this.curveConstants.form.controls.specificGravity.value;
-    this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.systemLossExponent.specificGravity.value;
+    this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
+    this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
+    this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
     _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).flowRate = this.pointOne.form.controls.flowRate.value;
     _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).head = this.pointOne.form.controls.head.value;
     _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).flowRate = this.pointTwo.form.controls.flowRate.value;
     _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).head = this.pointTwo.form.controls.head.value;
-    
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator);
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then(() => this.calcExists = true);
+      }
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
   }
 
 
   //calculations
   calculateP1Flow() {
-    this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.controls.head, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+    if (this.pointOne.form.status == 'VALID') {
+      this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+    }
   }
 
   calculateP2Flow() {
-    this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.controls.head, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+    if (this.pointTwo.form.status == 'VALID') {
+      this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+    }
   }
 
 
   calculateValues() {
-    this.lossCoefficient = this.getLossCoefficient(
-      this.pointOne.form.controls.flowRate.value,
-      this.pointOne.form.controls.head.value,
-      this.pointTwo.form.controls.flowRate.value,
-      this.pointTwo.form.controls.head.value,
-      this.curveConstants.form.controls.systemLossExponent.value
-    );
-    this.staticHead = this.getStaticHead(
-      this.pointOne.form.controls.flowRate.value,
-      this.pointOne.form.controls.head.value,
-      this.pointTwo.form.controls.flowRate.value,
-      this.pointTwo.form.controls.head.value,
-      this.curveConstants.form.controls.systemLossExponent.value
-    );
+    if (this.pointOne.form.status == 'VALID' && this.pointTwo.form.status == 'VALID' && this.curveConstants.form.status == 'VALID') {
+      this.lossCoefficient = this.getLossCoefficient(
+        this.pointOne.form.controls.flowRate.value,
+        this.pointOne.form.controls.head.value,
+        this.pointTwo.form.controls.flowRate.value,
+        this.pointTwo.form.controls.head.value,
+        this.curveConstants.form.controls.systemLossExponent.value
+      );
+      this.staticHead = this.getStaticHead(
+        this.pointOne.form.controls.flowRate.value,
+        this.pointOne.form.controls.head.value,
+        this.pointTwo.form.controls.flowRate.value,
+        this.pointTwo.form.controls.head.value,
+        this.curveConstants.form.controls.systemLossExponent.value
+      );
+    }
   }
 
   getFluidPower(head: number, flow: number, specificGravity: number): number {

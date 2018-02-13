@@ -60,7 +60,7 @@
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-system-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
@@ -107,7 +107,7 @@
   </div>
   <!--end report-->
   <!--footer-->
-  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment' || mainTab == 'calculators'">
+  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="subTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
@@ -115,9 +115,9 @@
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button> -->
       <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
     </div>
-    <div class="pull-right" *ngIf="mainTab == 'calculators'">
+    <!-- <div class="pull-right" *ngIf="mainTab == 'calculators'">
       <button class="btn btn-primary" [disabled]="calcTab != 'system-curve' && calcTab != 'pump-curve'">Save to Assessment</button>
-    </div>
+    </div> -->
     
     <div class="pull-right" *ngIf="mainTab == 'assessment'">
         <button class="btn btn-primary" (click)="goToReport()">Go To Report</button>
