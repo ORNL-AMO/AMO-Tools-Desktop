@@ -43,7 +43,7 @@
             <div *ngIf="results.length != 0">
               <h5>Process Heating Equipment - Energy Distribution</h5>
               <app-pre-assessment-graph [results]="results" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
-              <div class="row result-table">
+              <!-- <div class="row result-table">
                 <div class="col-6">
                   <table class="table table-hover">
                     <tbody>
@@ -64,7 +64,7 @@
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="col-11 no-data" *ngIf="results.length == 0">
               <h5>Enter furnace data for multiple furnaces to compare their energy consumption.</h5>
