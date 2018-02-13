@@ -60,6 +60,7 @@ export class PhastSettingsComponent implements OnInit {
         furnaceType: 'Steam'
       });
     }
+    this.startPolling();
   }
 
 
