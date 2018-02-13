@@ -1,11 +1,11 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
-    <h5>Operation Data ( {{numLosses}} )
-    <span class="pull-right fa" [ngClass]="{'fa-chevron-down': collapse, 'fa-chevron-up': !collapse}"></span>
+    <h5>Operation Data
+    <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
 
-  <div *ngIf="collapse">
+  <div *ngIf="!collapse">
     <div class="card-body">
       <div class="output-summary">
         <table class="table table-hover table-striped">
@@ -32,25 +32,25 @@
               {{settings.energySourceType}}
             </td>
           </tr>
-          <tr *ngIf=!null >
+          <tr>
             <td>
               Furnace Type
             </td>
             <td *ngIf="!settings.customFurnaceName">
               {{settings.furnaceType}}
             </td>
-            <td *ngIf="settings.customFurnaceName">
+            <td *ngIf="!settings.customFurnaceName">
+              {{settings.furnaceType}}
+            </td>
+          </tr>
+          <tr *ngIf="settings.customFurnaceName">
+            <td>
+              Furnace Name
+            </td>
+            <td>
               {{settings.customFurnaceName}}
             </td>
           </tr>
-          <!--<tr *ngIf=!null>-->
-            <!--<td>-->
-              <!--Furnace Name-->
-            <!--</td>-->
-            <!--<td>-->
-              <!--{{settings.customFurnaceName}}-->
-            <!--</td>-->
-          <!--</tr>-->
           <tr>
             <td>
               Operating Hours
@@ -64,7 +64,9 @@
           </tr>
           <tr>
             <td>
-              Cost of fuel
+              Fuel
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">($/MMBtu)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">($/GJ)</span>
             </td>
             <td>
               {{phast.operatingCosts.fuelCost}}
@@ -75,7 +77,9 @@
           </tr>
           <tr>
             <td>
-              Cost of Steam
+              Steam
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">($/MMBtu)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">($/GJ)</span>
             </td>
             <td>
               {{phast.operatingCosts.steamCost}}
@@ -86,7 +90,8 @@
           </tr>
           <tr>
             <td>
-              Cost of Electricity
+              Electricity
+              <span>($/kWh)</span>
             </td>
             <td>
               {{phast.operatingCosts.electricityCost}}
@@ -100,5 +105,4 @@
       </div>
     </div>
   </div>
-
 </div>

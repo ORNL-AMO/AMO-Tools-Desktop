@@ -16,22 +16,11 @@ export class OperationDataComponent implements OnInit {
 
 
   collapse: boolean = true;
-  numLosses: number = 0;
-  numMods: number = 0;
-  lossData: Array<any>;
+
   constructor() { }
 
   ngOnInit() {
-    if (this.phast) {
-      if (this.phast.modifications){
-        this.numMods = this.phast.modifications.length;
-      }
-    }
 
-    console.log(this.settings.energySourceType);
-    console.log(this.phast.operatingCosts);
-    console.log(this.phast.operatingHours);
-    console.log(this.settings.furnaceType);
   }
   toggleCollapse() {
     this.collapse = !this.collapse;
