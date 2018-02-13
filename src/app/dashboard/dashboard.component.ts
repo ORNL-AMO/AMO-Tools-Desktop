@@ -168,10 +168,14 @@ export class DashboardComponent implements OnInit {
 
   addCalculatorData(calcualtorData: Calculator){
     if(this.calcDataExists){
-      this.indexedDbService.putCalculator(calcualtorData);
+      this.indexedDbService.putCalculator(calcualtorData).then(() => {
+        this.hidePreAssessmentModal();
+      });
     }else{
       calcualtorData.directoryId = this.workingDirectory.id;
-      this.indexedDbService.addCalculator(calcualtorData);
+      this.indexedDbService.addCalculator(calcualtorData).then(() => {
+        this.hidePreAssessmentModal();
+      });;
     }
   }
 
@@ -552,13 +556,6 @@ export class DashboardComponent implements OnInit {
     )
     this.dashboardView = 'assessment-dashboard';
   }
-
-  showMoveItemsModal() {
-    this.selectedItems = new Array();
-    this.getSelected(this.workingDirectory);
-    setTimeout(() => { console.log(this.selectedItems) }, 1000)
-  }
-
 
   getSelected(dir: Directory) {
     //add selected and children dir assessments

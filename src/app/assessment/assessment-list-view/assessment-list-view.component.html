@@ -1,7 +1,10 @@
 <div class="list-view" style="padding-bottom: 20px;">
 	<div class="list-item" *ngIf="directoryCalculator" (click)="viewPreAssessment()">
-		<div class="list-row calc-item">
+		<div class="list-row calc-item" *ngIf="directoryCalculator.preAssessments">
 			<a>View or Edit PH Pre-Assessment / Screening</a>
+		</div>
+		<div class="list-row calc-item" *ngIf="!directoryCalculator.preAssessments">
+			<a>Add PH Pre-Assessment / Screening</a>
 		</div>
 	</div>
 	<div class="list-item" *ngFor="let directory of directory.subDirectory">
