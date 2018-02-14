@@ -1,12 +1,20 @@
 <div class="banner phast row">
   <div class="col-3">
-    <div class="pull-left">
-      <div *ngIf="assessment" class="title">
-        <h1>{{assessment.name}}</h1>
-        <h2 *ngIf="!settings.customFurnaceName">{{settings.furnaceType}}</h2>
-        <h2 *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:<br>{{settings.customFurnaceName}}</h2>
-        <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small>
+    <div class="row" *ngIf="assessment">
+      <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+        <img class="img-icon" src="assets/images/phast-logo.png">
       </div>
+      <div class="col">
+        <h2 class="h2-name">
+          {{assessment.name}}
+        </h2>
+        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName">
+          {{settings.furnaceType}}
+        </h3>
+        <h3 class="furnace-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:
+          <br>{{settings.customFurnaceName}}</h3>
+      </div>
+      <!-- <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small> -->
     </div>
   </div>
 

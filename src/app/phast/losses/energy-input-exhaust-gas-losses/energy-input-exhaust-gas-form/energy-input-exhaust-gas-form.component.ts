@@ -65,7 +65,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-  checkHeat(bool: boolean) {
+  checkHeat(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
