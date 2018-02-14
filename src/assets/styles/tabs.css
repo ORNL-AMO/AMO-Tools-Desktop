@@ -26,7 +26,7 @@ Tabs
       border-top: #611f00 solid 4px;
     }
   .tabs.primary a {
-    padding: 14px 10px;
+    padding: 6px;
     font-size: 14px;
     border-left: #c8c8c8 solid 1px;
     display: block;
@@ -64,7 +64,7 @@ Tabs
     padding-bottom: 6px;
     padding-left: 8px;
     padding-right: 8px;
-    font-size: 16px;
+    font-size: 14px;
     display: block;
     color: #0F0F0F;
   }

@@ -579,7 +579,7 @@ Reports
         border-left: none;
     }
     .assessment-report .tabs.primary a {
-        padding: 10px 44px;
+        padding: 12px;
     }
 
     .report-header, .report-data .results {
