@@ -35,7 +35,8 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 
 import { VersionModalComponent } from '../version-modal/version-modal.component';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
-import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgments-page.component";
+import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
+import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgme
     JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,
-    ReportRollupModule
+    ReportRollupModule,
+    PreAssessmentModule
   ],
   providers: [
     AssessmentService

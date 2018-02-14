@@ -197,7 +197,7 @@
           </ul>
           <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
             <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="saveModifications()"
-              (cancelEdit)="toggleDropdown()"></app-edit-condition-properties>
+              (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
           </div>
         </div>
       </div>

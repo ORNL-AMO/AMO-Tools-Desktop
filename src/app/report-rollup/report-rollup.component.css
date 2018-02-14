@@ -71,8 +71,27 @@
 }
 
 
+.print-notification {
+    top: 0;
+    position: fixed;
+    z-index: 1020;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ececec;
+}
+
 
 @media print {
+
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+    
+    .print-break-after {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
 
     .hide-print{
         display: none !important;

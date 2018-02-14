@@ -5,7 +5,7 @@
         <h3>Summary of Energy Sources Used</h3>
       </div>
       <div class="card-body">
-        <app-phast-rollup-energy-table [settings]="settings"></app-phast-rollup-energy-table>
+        <app-phast-rollup-energy-table [printView]="false" [settings]="settings"></app-phast-rollup-energy-table>
       </div>
     </div>
     <div class="card">
@@ -13,7 +13,7 @@
         <h3>Energy Use Graph</h3>
       </div>
       <div class="card-body">
-        <app-phast-rollup-graphs [settings]="settings"></app-phast-rollup-graphs>
+        <app-phast-rollup-graphs [printView]="false" [settings]="settings"></app-phast-rollup-graphs>
       </div>
     </div>
 
@@ -22,7 +22,7 @@
         <h3>Modification Summary</h3>
       </div>
       <div class="card-body">
-        <app-phast-rollup-furnace-summary [settings]="settings"></app-phast-rollup-furnace-summary>
+        <app-phast-rollup-furnace-summary [printView]="false" [settings]="settings"></app-phast-rollup-furnace-summary>
       </div>
     </div>
   </div>

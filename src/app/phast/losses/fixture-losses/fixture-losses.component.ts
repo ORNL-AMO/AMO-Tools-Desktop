@@ -37,6 +37,7 @@ export class FixtureLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
+  showError: boolean = false;
   resultsUnit: string;
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
@@ -75,7 +76,7 @@ export class FixtureLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -120,7 +121,7 @@ export class FixtureLossesComponent implements OnInit {
     //     }
     //   })
     // }
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
@@ -137,7 +138,7 @@ export class FixtureLossesComponent implements OnInit {
     this.fixtureLossesService.deleteLossIndex.next(null);
   }
 
-  disableForms(){
+  disableForms() {
     this._fixtureLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -150,7 +151,7 @@ export class FixtureLossesComponent implements OnInit {
       this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
     }
     this._fixtureLosses.push({
-      form: this.fixtureLossesService.initForm(this._fixtureLosses.length+1),
+      form: this.fixtureLossesService.initForm(this._fixtureLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -170,15 +171,15 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: FixtureLossObj){
+  collapseLoss(loss: FixtureLossObj) {
     loss.collapse = !loss.collapse;
   }
-  
+
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -196,7 +197,9 @@ export class FixtureLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  setError(bool: boolean) {
+    this.showError = bool;
+  }
   setCompareVals() {
     if (this.isBaseline) {
       this.fixtureLossesCompareService.baselineFixtureLosses = this.losses.fixtureLosses;
@@ -212,7 +215,7 @@ export class FixtureLossesComponent implements OnInit {
 
 }
 
-export interface FixtureLossObj{
+export interface FixtureLossObj {
   form: FormGroup,
   heatLoss: number,
   collapse: boolean

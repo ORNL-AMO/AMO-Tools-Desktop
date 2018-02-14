@@ -39,7 +39,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
   _atmosphereLosses: Array<AtmoLossObj>;
   firstChange: boolean = true;
-
+  inputError: boolean = false;
   resultsUnit: string;
   lossesLocked: boolean = false;
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
@@ -211,6 +211,10 @@ export class AtmosphereLossesComponent implements OnInit {
         this.atmosphereLossesCompareService.checkAtmosphereLosses();
       }
     }
+  }
+
+  setInputError(bool: boolean){
+    this.inputError = bool;
   }
 }
 

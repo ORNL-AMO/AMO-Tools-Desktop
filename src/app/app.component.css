@@ -354,7 +354,9 @@ select.form-control:not([size]):not([multiple]) {
     border: #BF3D00 solid !important;
 }
 
-
+.input-error{
+  color: red;
+}
 
 @media print {
 
@@ -596,7 +598,7 @@ Reports
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 33px;
-    padding: 9px 0 0px 48px;
+    padding: 9px 0 0px 30px;
 }
 .assessment-report.report-in-phast .assessment-name,
 .assessment-report.report-in-rollup.report-in-phast .assessment-name {
@@ -1701,9 +1703,73 @@ Toasty Overrides ================================= */
     text-decoration: none;
 }
 
-.show-print{
-    display: none;
+
+/* chart toggle grid lines */
+#gridToggleBtn{
+  padding: 0;
+  background-color: #dcdcdc;
+  height: 28px;
+  width: 28px;
+  opacity: 0.6;
+  transition: ease-in-out 0.2s all;
 }
+
+#gridToggleBtn:hover {
+  opacity: 1;
+  cursor: pointer;
+  border-color: #212529;
+}
+
+#gridToggleBtn::before{
+  background-color: #dcdcdc;
+  font-size: 12px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+
+
+
+/* chart download icon */
+
+.fa-download {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.percent-chart-btn {
+  left: -15%;
+  top: 105%;
+}
+
+
+#gridToggle .fa-download {
+  left: 55px;
+}
+
+.fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+/* .chart-container .fa-download:hover,
+#gridToggle .fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+} */
+
+
+.show-print{
+  display: none;
+}
+
 
 @media screen and (min-width: 768px) {
   /*.rollups .pumps {
@@ -1723,14 +1789,65 @@ Toasty Overrides ================================= */
     margin: 40px 0 100px;
 }
     .report-title h4 {
-        font-size: 38px;
+        font-size: 60px;
     }
     .report-title h5 {
-        font-size: 18px;
+        font-size: 34px;
     }
 
 
 @media print{
+
+  /* debug trying something */
+  .print-assessment-page {
+    page-break-before: always;
+    page-break-inside: avoid;
+  }
+
+  h2.assessment-title {
+    font-weight: 300 !important;
+    font-size: 46px !important;
+  }
+
+  h3.custom-name {
+      font-size: 26px !important;
+  }
+
+  h2.date-modified {
+      font-size: 26px !important;
+  }
+
+  .output-summary table td,
+  .output-summary table th {
+    font-size: 16px;
+    padding: 0px;
+    vertical-align: middle;
+  }
+
+  .output-summary .table td,
+  .output-summary .table th {
+    font-size: 16px;
+    padding: 0px;
+    vertical-align: middle;
+  }
+  
+  .output-summary .table .section-header {
+    font-size: 16px !important;
+  }
+
+  .report-in-rollup {
+    page-break-before: always;
+  }
+
+  .report-cover {
+    display: block;
+    width: 100%;
+    text-align: center;
+    page-break-after: always;
+  }
+
+  /* end debug */
+
 
   html, body {
     background: transparent;
@@ -1748,15 +1865,16 @@ Toasty Overrides ================================= */
   }
 
   .output-summary {
+    width: 100%;
     margin-bottom: 20px;
     page-break-inside: avoid;
   }
 
-  .output-summary table td {
+  /* .output-summary table td {
     font-size: 11px;
     padding: 0px;
     vertical-align: middle;
-  }
+  } */
 
   .assessment-report {
       background: #fff;
@@ -1770,17 +1888,26 @@ Toasty Overrides ================================= */
       padding-left: 0;
   }
 
-  .report-cover {
+  /* .report-cover {
         display: block;
         width: 100%;
         text-align: center;
         page-break-after: always;
-    }
+    } */
+
+    /*debug version */
     .doe-logo {
+      width: 350px;
+      display: inline-block;
+      margin-top: 100px;
+    }
+
+    /* real version */
+    /* .doe-logo {
         width: 200px;
         display: inline-block;
         margin-top: 100px;
-    }
+    } */
     .report-header {
         position: static;
         border: none;

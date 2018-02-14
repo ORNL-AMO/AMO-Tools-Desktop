@@ -1,0 +1,15 @@
+.calc-item:hover{
+    background-color: #95A4AF;
+    cursor: pointer;
+  }
+  
+  .calc-item{
+    text-align: center;
+  }
+
+  a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  

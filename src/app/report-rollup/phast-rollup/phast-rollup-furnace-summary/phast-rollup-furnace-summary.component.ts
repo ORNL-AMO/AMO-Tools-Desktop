@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
-import { BaseChartDirective } from 'ng2-charts';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { PhastService } from '../../../phast/phast.service';
 import { PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-phast-rollup-furnace-summary',
   templateUrl: './phast-rollup-furnace-summary.component.html',
@@ -15,18 +16,37 @@ import { PhastResultsService } from '../../../phast/phast-results.service';
 export class PhastRollupFurnaceSummaryComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  printView: boolean;
 
-  @ViewChild(BaseChartDirective) private baseChart;
+  firstLoad: boolean = true;
+  isUpdate: boolean = false;
+  showTitle: boolean = false;
+  showLegend: boolean = true;
 
+  //chart element
+  chartContainerWidth: number;
+
+  //chart text
   chartLabels: Array<string>;
-  chartData: Array<any>;
-  chartColors: Array<any>;
-  //chartColorDataSet: Array<any>;
-  backgroundColors: Array<string> = graphColors;
-  options: any;
-  graphColors: Array<string>;
-  resultData: Array<PhastResultsData>;
+  axisLabel: string;
+  unit: string;
+  title: string;
 
+  //print view chart variables
+  titles: Array<string>;
+  units: Array<string>;
+  printChartData: Array<any>;
+
+  //chart data
+  allDataColumns: Array<any>;
+  baselineColumns: Array<any>;
+  modColumns: Array<any>;
+
+  //chart color
+  graphColors: Array<string>;
+
+  resultData: Array<PhastResultsData>;
   graphOptions: Array<string> = [
     '% Available Heat',
     'Energy Use',
@@ -41,50 +61,70 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     this.reportRollupService.phastResults.subscribe((phasts: Array<PhastResultsData>) => {
       if (phasts.length != 0) {
         this.resultData = phasts;
-        this.buildChartData();
+        if (this.printView) {
+          this.chartContainerWidth = 1250;
+          this.initPrintChartData();
+        }
+        else {
+          this.chartContainerWidth = (window.innerWidth - 30) * .60;
+          this.buildChartData(this.graphOption, false);
+          this.initChartData();
+        }
       }
-    })
+    });
   }
 
-  buildChartData() {
-    let axisLabel = this.graphOption;
-    this.chartLabels = new Array();;
-    this.chartData = [
-      { data: new Array(), label: 'Baseline' },
-      { data: new Array(), label: 'Modification' }
-    ]
-    let i = 1;
-    this.resultData.forEach(data => {
+  ngOnChanges() {
+    if (this.firstLoad) {
+      this.firstLoad = !this.firstLoad;
+    }
+    else {
+      this.buildChartData(this.graphOption, true);
+      this.initChartData();
+    }
+  }
 
+  buildChartData(graphOption: string, update: boolean) {
+    //init arrays
+    this.baselineColumns = new Array<any>();
+    this.baselineColumns.push("Baseline");
+    this.modColumns = new Array<any>();
+    this.modColumns.push("Modification");
+    this.title = graphOption;
+    this.chartLabels = new Array();
+    let i = 1;
+
+    this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (this.graphOption == '% Available Heat') {
+      if (graphOption == '% Available Heat') {
+        this.unit = "%";
         num1 = this.getAvailableHeat(data.baselineResultData, data.settings)
         if (data.modName) {
           num2 = this.getAvailableHeat(data.modificationResultData, data.settings)
         }
-      } else if (this.graphOption == 'Energy Use') {
+      } else if (graphOption == 'Energy Use') {
         if (i == 1) {
-          axisLabel = axisLabel + ' (' + this.settings.phastRollupUnit + '/yr)';
+          this.unit = this.settings.phastRollupUnit + '/yr';
         }
         num1 = this.getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings);
         if (data.modName) {
           num2 = this.getConvertedValue(data.modificationResults.annualEnergyUsed, data.settings);
         }
-      } else if (this.graphOption == 'Cost') {
+      } else if (graphOption == 'Cost') {
         if (i == 1) {
-          axisLabel = axisLabel + ' ($/yr)';
+          this.unit = "$/yr";
         }
         num1 = data.baselineResults.annualCost;
         if (data.modName) {
           num2 = data.modificationResults.annualCost;
         }
-      } else if (this.graphOption == 'Energy Intensity') {
+      } else if (graphOption == 'Energy Intensity') {
         if (i == 1) {
           if (this.settings.unitsOfMeasure == 'Metric') {
-            axisLabel = axisLabel + ' (' + this.settings.phastRollupUnit + '/kg)';
+            this.unit = this.settings.phastRollupUnit + '/kg';
           } else {
-            axisLabel = axisLabel + ' (' + this.settings.phastRollupUnit + '/lb)';
+            this.unit = this.settings.phastRollupUnit + '/lb';
           }
         }
         num1 = this.getConvertedValue(data.baselineResults.energyPerMass, data.settings);
@@ -93,39 +133,22 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
         }
       }
       i++;
-      this.options = {
-        scales: {
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: axisLabel,
-              fontSize: 18,
-              fontStyle: 'bold'
-            }
-          }]
-        },
-        scaleShowVerticalLines: false,
-        responsive: true
-      }
       //sigFigs
       let num1SigFigs = this.reportRollupService.transform(num1, 4, true);
       let num2SigFigs = this.reportRollupService.transform(num2, 4, true);
       this.addData(data.name, num1SigFigs, num2SigFigs);
-    })
-  }
+    });
+    this.axisLabel = graphOption + " (" + this.unit + ")";
 
+    if (!this.printView) {
+      this.isUpdate = update;
+    }
+  }
 
   addData(label: string, baseNum: number, modNum: number) {
     this.chartLabels.push(label);
-    this.chartData[0].data.push(baseNum);
-    this.chartData[1].data.push(modNum);
-    if (this.baseChart && this.baseChart.chart) {
-      this.baseChart.chart.config.data.labels = this.chartLabels;
-      this.baseChart.chart.config.data.datasets = this.chartData;
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors[0];
-      this.baseChart.chart.config.data.datasets[1].backgroundColor = this.backgroundColors[1];
-      this.baseChart.chart.config.options.scales.yAxes[0].scaleLabel = this.options.scales.yAxes[0].scaleLabel;
-    }
+    this.baselineColumns.push(baseNum);
+    this.modColumns.push(modNum);
   }
 
   getConvertedValue(val: number, settings: Settings) {
@@ -151,4 +174,25 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     }
   }
 
+  initChartData() {
+    this.allDataColumns = new Array<any>();
+    this.allDataColumns.push(this.baselineColumns);
+    this.allDataColumns.push(this.modColumns);
+  }
+
+  initPrintChartData() {
+    this.printChartData = new Array<any>();
+    this.titles = new Array<any>();
+    this.units = new Array<any>();
+
+    for (let i = 0; i < this.graphOptions.length; i++) {
+      let tmpDataColumns = new Array<any>();
+      this.buildChartData(this.graphOptions[i], false);
+      tmpDataColumns.push(this.baselineColumns);
+      tmpDataColumns.push(this.modColumns);
+      this.printChartData.push(tmpDataColumns);
+      this.titles.push(this.graphOptions[i]);
+      this.units.push(this.unit);
+    }
+  }
 }

@@ -39,7 +39,7 @@
         (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
       <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
         [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()"
-        (closeHeadTool)="modalClose()"></app-field-data>
+        (closeHeadTool)="modalClose()" [assessment]="assessment"></app-field-data>
     </div>
     <div class="col-6 help-panel">
       <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [saveClicked]="saveClicked"></app-help-panel>
@@ -60,12 +60,12 @@
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-system-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
     <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
-    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-pump-curve>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat" [inAssessment]="true" [assessment]="assessment"></app-pump-curve>
   </div>
   <div class="tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
@@ -115,6 +115,9 @@
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button> -->
       <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
     </div>
+    <!-- <div class="pull-right" *ngIf="mainTab == 'calculators'">
+      <button class="btn btn-primary" [disabled]="calcTab != 'system-curve' && calcTab != 'pump-curve'">Save to Assessment</button>
+    </div> -->
     
     <div class="pull-right" *ngIf="mainTab == 'assessment'">
         <button class="btn btn-primary" (click)="goToReport()">Go To Report</button>

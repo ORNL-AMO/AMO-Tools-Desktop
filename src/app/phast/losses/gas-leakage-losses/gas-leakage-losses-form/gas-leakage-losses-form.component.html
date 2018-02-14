@@ -26,7 +26,7 @@
       <label class="small" for="leakageGasTemperature">Temperature of Gases Leaking</label>
       <div class="input-group">
         <input name="{{'leakageGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
-          id="leakageGasTemperature" onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('leakageGasTemperature')" (blur)="focusOut()">
+          id="leakageGasTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('leakageGasTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -45,7 +45,7 @@
       <label class="small" for="ambientTemperature">Ambient Temperature</label>
       <div class="input-group">
         <input name="{{'ambientTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
-          id="ambientTemperature" onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemperature')" (blur)="focusOut()">
+          id="ambientTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('ambientTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>

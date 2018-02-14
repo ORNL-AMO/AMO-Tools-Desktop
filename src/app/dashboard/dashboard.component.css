@@ -8,7 +8,7 @@
     overflow-y: auto;
 }
 
-.landing-screen{
+.dashboard-scroll{
     max-height: 100%;
     overflow-y: auto;
 }
@@ -30,3 +30,35 @@
   background-color: darkgrey;
   outline: 1px solid slategrey;
   }
+
+
+  .pre-assessment-modal .modal-dialog{
+      top: 0px;
+      height: 80vh
+      }
+
+
+.pre-assessment-modal .modal-dialog{
+    top: 0px;
+    margin: 5px 5px 5px 5px;
+    /* width: 80vh; */
+    min-width: 99vw;
+}
+
+.pre-assessment-modal .modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    min-height: 85vh;
+    max-height: 85vh;
+}
+
+
+
+.pre-assessment-modal .modal-header,
+.pre-assessment-modal .modal-footer{
+    padding: 8px;
+}
+
+.save-btn{
+    padding: 6px;
+}

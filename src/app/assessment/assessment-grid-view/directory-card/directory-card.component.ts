@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { AssessmentService } from '../../assessment.service';
 import { Router } from '@angular/router';
-
+import { ModalDirective } from 'ngx-bootstrap';
+import * as _ from 'lodash';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-directory-card',
   templateUrl: './directory-card.component.html',
@@ -17,9 +19,14 @@ export class DirectoryCardComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Input()
   isChecked: boolean;
+  @Output('updateDirectory')
+  updateDirectory = new EventEmitter();
 
   isFirstChange: boolean = true;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+  editForm: FormGroup;
+  directories: Array<Directory>;
+  @ViewChild('editModal') public editModal: ModalDirective;
+  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.populateDirectories(this.directory);
@@ -64,7 +71,11 @@ export class DirectoryCardComponent implements OnInit {
       results => {
         directory.subDirectory = results;
       }
-    )
+    );
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
+    })
   }
 
   setDelete() {
@@ -74,16 +85,50 @@ export class DirectoryCardComponent implements OnInit {
   goToAssessment(assessment: Assessment) {
     this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
-      if(assessment.psat.setupDone){
+      if (assessment.psat.setupDone) {
         this.assessmentService.tab = 'assessment';
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
-      if(assessment.phast.setupDone){
+      if (assessment.phast.setupDone) {
         this.assessmentService.tab = 'assessment';
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
     }
   }
 
+  showEditModal() {
+    this.editForm = this.formBuilder.group({
+      'name': [this.directory.name],
+      'directoryId': [this.directory.parentDirectoryId]
+    })
+    this.editModal.show();
+  }
+
+  hideEditModal() {
+    this.editModal.hide();
+  }
+
+  getParentDirStr(id: number) {
+    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    if (parentDir) {
+      let str = parentDir.name + '/';
+      while (parentDir.parentDirectoryId) {
+        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        str = parentDir.name + '/' + str;
+      }
+      return str;
+    } else {
+      return '';
+    }
+  }
+
+  save() {
+    this.directory.name = this.editForm.controls.name.value;
+    this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
+    this.indexedDbService.putDirectory(this.directory).then(val => {
+      this.updateDirectory.emit(true);
+      this.hideEditModal();
+    })
+  }
 }

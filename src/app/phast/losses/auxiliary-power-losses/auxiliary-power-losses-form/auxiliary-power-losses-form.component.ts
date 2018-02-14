@@ -20,8 +20,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
-  inputError: string = null;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
   firstChange: boolean = true;
   counter: any;
   voltageError: string = null;
@@ -83,6 +83,12 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
       this.voltageError = 'Supply Voltage must be between 0 and 480';
     } else {
       this.voltageError = null;
+    }
+
+    if(this.voltageError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

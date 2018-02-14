@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FacilityCardComponent } from './facility-card.component';
+import { RollupPieChartComponent } from './rollup-pie-chart.component';
 
-describe('FacilityCardComponent', () => {
-  let component: FacilityCardComponent;
-  let fixture: ComponentFixture<FacilityCardComponent>;
+describe('RollupPieChartComponent', () => {
+  let component: RollupPieChartComponent;
+  let fixture: ComponentFixture<RollupPieChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FacilityCardComponent ]
+      declarations: [ RollupPieChartComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FacilityCardComponent);
+    fixture = TestBed.createComponent(RollupPieChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

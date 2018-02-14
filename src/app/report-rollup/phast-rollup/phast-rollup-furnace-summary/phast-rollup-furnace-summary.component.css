@@ -1,4 +1,4 @@
-tr > td,
+/* tr > td,
 tr > th{
     text-align: center;
 }
@@ -13,4 +13,14 @@ tr > td {
 
 .graph-select{
     width: 100%;
+} */
+
+table {
+  table-layout: fixed;
+}
+table td {
+  width: 25%;
+}
+table td:first-child {
+  width: 50%;
 }

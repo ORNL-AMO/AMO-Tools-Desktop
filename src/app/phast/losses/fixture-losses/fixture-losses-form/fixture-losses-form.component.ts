@@ -28,6 +28,8 @@ export class FixtureLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -85,7 +87,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.lossesForm.patchValue({
       specificHeat: tmpMaterial.specificHeatSolid
     })
-    this.startSavePolling();
+    this.checkInputError();
   }
 
   checkInputError(bool?: boolean) {
@@ -101,6 +103,12 @@ export class FixtureLossesFormComponent implements OnInit {
       this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
     } else {
       this.feedRateError = null;
+    }
+
+    if(this.specificHeatError || this.feedRateError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

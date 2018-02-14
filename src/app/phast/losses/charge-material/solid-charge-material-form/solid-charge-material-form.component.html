@@ -51,7 +51,7 @@
       <label class="small" for="materialMeltingPoint">Melting Point</label>
       <div class="input-group">
         <input name="{{'materialMeltingPoint_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialMeltingPoint"
-          id="materialMeltingPoint" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('materialMeltingPoint')"
+          id="materialMeltingPoint" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialMeltingPoint')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -75,7 +75,7 @@
       <label class="small" for="initialTemperature">Initial Temperature</label>
       <div class="input-group">
         <input name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
-          id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemperature')"
+          id="initialTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -83,11 +83,11 @@
     </div>
 
 
-    <div class="form-group" [ngClass]="{'input-warning': checkDischargeTemp() == false}">
+    <div class="form-group">
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
       <div class="input-group">
         <input name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
-          id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('chargeMaterialDischargeTemperature')"
+          id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('chargeMaterialDischargeTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -121,7 +121,7 @@
       <label class="small" for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
       <div class="input-group">
         <input name="{{'waterVaporDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterVaporDischargeTemperature"
-          id="waterVaporDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterVaporDischargeTemperature')"
+          id="waterVaporDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('waterVaporDischargeTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -129,7 +129,7 @@
     </div>
 
 
-    <div class="form-group" [ngClass]="{'input-warning': checkDischargeTemp() == false}">
+    <div class="form-group">
       <label class="small" for="percentChargeMelted">Charge Melted</label>
       <div class="input-group">
         <input name="{{'percentChargeMelted_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="percentChargeMelted"
@@ -165,7 +165,7 @@
     <div class="form-group">
       <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
       <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic"
-        (change)="startSavePolling()" (focus)="focusField('endothermicOrExothermic')" (blur)="focusOut()">
+        (change)="checkInputError()" (focus)="focusField('endothermicOrExothermic')" (blur)="focusOut()">
         <option>Endothermic</option>
         <option>Exothermic</option>
       </select>
@@ -175,7 +175,7 @@
       <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
       <div class="input-group">
         <input name="{{'additionalHeatRequired_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="additionalHeatRequired"
-          id="additionalHeatRequired" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('additionalHeatRequired')"
+          id="additionalHeatRequired" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('additionalHeatRequired')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>

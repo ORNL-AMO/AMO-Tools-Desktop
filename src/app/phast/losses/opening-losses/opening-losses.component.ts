@@ -37,6 +37,7 @@ export class OpeningLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
+  showError: boolean = false;
   _openingLosses: Array<OpeningLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -218,6 +219,10 @@ export class OpeningLossesComponent implements OnInit {
         this.openingLossesCompareService.checkOpeningLosses();
       }
     }
+  }
+
+  setError(bool: boolean) {
+    this.showError = bool;
   }
 }
 

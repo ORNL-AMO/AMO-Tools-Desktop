@@ -6,3 +6,27 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+
+#cashFlowDl {
+  position: absolute;
+  z-index: 9999;
+
+  left: 30px
+}
+
+
+#cashFlowDl .fa-download {
+  position: absolute;
+  padding: 5px;
+  border-radius: 4px;
+  opacity: 0.6;
+  background-color: #dcdcdc;
+}
+
+#cashFlowDl .fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+

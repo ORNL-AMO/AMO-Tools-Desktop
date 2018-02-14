@@ -45,7 +45,7 @@ export class FolderContactInfoComponent implements OnInit {
     this.showModal = false;
   }
 
-  toggleCollapse(){
+  toggleCollapse() {
     this.collapse = !this.collapse;
   }
 
@@ -65,42 +65,46 @@ export class FolderContactInfoComponent implements OnInit {
   }
 
   checkShow() {
-    if (this.settings.facilityInfo.address) {
-      if (this.settings.facilityInfo.address.city ||
-        this.settings.facilityInfo.address.state || 
-        this.settings.facilityInfo.address.zip || 
-        this.settings.facilityInfo.address.street || 
-        this.settings.facilityInfo.address.country) {
+    if (this.settings.facilityInfo) {
+      if (this.settings.facilityInfo.address) {
+        if (this.settings.facilityInfo.address.city ||
+          this.settings.facilityInfo.address.state ||
+          this.settings.facilityInfo.address.zip ||
+          this.settings.facilityInfo.address.street ||
+          this.settings.facilityInfo.address.country) {
           this.showAddress = true;
-      }else{
-        this.showAddress = false;
+        } else {
+          this.showAddress = false;
+        }
       }
-    }
 
-    if(this.settings.facilityInfo.facilityContact){
-      if(this.settings.facilityInfo.facilityContact.contactName || this.settings.facilityInfo.facilityContact.email || this.settings.facilityInfo.facilityContact.phoneNumber){
-        this.showFacilityContact = true;
-      }else{
-        this.showFacilityContact = false;
+      if (this.settings.facilityInfo.facilityContact) {
+        if (this.settings.facilityInfo.facilityContact.contactName || this.settings.facilityInfo.facilityContact.email || this.settings.facilityInfo.facilityContact.phoneNumber) {
+          this.showFacilityContact = true;
+        } else {
+          this.showFacilityContact = false;
+        }
       }
-    }
 
-    if(this.settings.facilityInfo.assessmentContact){
-      if(this.settings.facilityInfo.assessmentContact.contactName || this.settings.facilityInfo.assessmentContact.email || this.settings.facilityInfo.assessmentContact.phoneNumber){
-        this.showAssessmentContact = true;
-      }else{
-        this.showAssessmentContact = false;
+      if (this.settings.facilityInfo.assessmentContact) {
+        if (this.settings.facilityInfo.assessmentContact.contactName || this.settings.facilityInfo.assessmentContact.email || this.settings.facilityInfo.assessmentContact.phoneNumber) {
+          this.showAssessmentContact = true;
+        } else {
+          this.showAssessmentContact = false;
+        }
       }
-    }
 
-    if(!this.showFacilityContact && !this.showAddress && !this.showAssessmentContact){
-      if(this.settings.facilityInfo.facilityName || this.settings.facilityInfo.facilityName){
+      if (!this.showFacilityContact && !this.showAddress && !this.showAssessmentContact) {
+        if (this.settings.facilityInfo.facilityName || this.settings.facilityInfo.companyName) {
+          this.showNoData = false;
+        } else {
+          this.showNoData = true;
+        }
+      } else {
         this.showNoData = false;
-      }else{
-        this.showNoData = true;
       }
-    }else{
-      this.showNoData = false;
+    } else {
+      this.showNoData = true;
     }
   }
 

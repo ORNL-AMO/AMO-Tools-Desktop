@@ -4,7 +4,7 @@
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
       <div class="input-group">
         <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea" id="surfaceArea"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units"><span>ft<sup>2</sup></span></span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"><span>m<sup>2</sup></span></span>
       </div>
@@ -15,7 +15,7 @@
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
       <div class="input-group">
         <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
-          id="avgSurfaceTemp" onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('avgSurfaceTemp')" (blur)="focusOut()">
+          id="avgSurfaceTemp" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('avgSurfaceTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -26,7 +26,7 @@
       <label class="small" for="ambientTemp">Ambient Temperature</label>
       <div class="input-group">
         <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -36,7 +36,7 @@
     <div class="form-group">
       <label class="small" for="surfaceEmissivity" aria-describedby="emissivityHelp">Surface Emissivity</label>
       <input name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="surfaceEmissivity"
-        id="surfaceEmissivity" onfocus="this.select();" (input)="checkEmissivity()" (focus)="focusField('surfaceEmissivity')" (blur)="focusOut()">
+        id="surfaceEmissivity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceEmissivity')" (blur)="focusOut()">
       <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
   </div>

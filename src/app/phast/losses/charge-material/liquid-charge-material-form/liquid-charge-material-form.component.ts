@@ -29,6 +29,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   firstChange: boolean = true;
@@ -67,7 +70,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-    this.checkDischargeTemp();
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -95,15 +98,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  checkDischargeTemp() {
-    if ((this.chargeMaterialForm.controls.dischargeTemperature > this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value == 0) {
-      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
-    } else if ((this.chargeMaterialForm.controls.dischargeTemperature < this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value > 0) {
-      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
-    } else {
-      this.dischargeTempError = null;
-    }
-  }
+  // checkDischargeTemp() {
+  //   if ((this.chargeMaterialForm.controls.dischargeTemperature > this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value == 0) {
+  //     this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+  //   } else if ((this.chargeMaterialForm.controls.dischargeTemperature < this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value > 0) {
+  //     this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+  //   } else {
+  //     this.dischargeTempError = null;
+  //   }
+  // }
 
 
   setProperties() {
@@ -173,11 +176,24 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     } else {
       this.materialLatentHeatError = null;
     }
+
+    if ((this.chargeMaterialForm.controls.dischargeTemperature > this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+    } else if ((this.chargeMaterialForm.controls.dischargeTemperature < this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+    } else {
+      this.dischargeTempError = null;
+    }
+
+    if (this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
+    }
   }
 
   startSavePolling() {
     this.calculate.emit(true);
-    this.checkDischargeTemp();
     this.emitSave();
   }
 

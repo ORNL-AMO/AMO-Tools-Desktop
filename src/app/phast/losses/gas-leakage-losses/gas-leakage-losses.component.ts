@@ -41,6 +41,7 @@ export class GasLeakageLossesComponent implements OnInit {
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   resultsUnit: string;
+  showError: boolean = false;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -161,6 +162,10 @@ export class GasLeakageLossesComponent implements OnInit {
   
   collapseLoss(loss: GasLeakageObj){
     loss.collapse = !loss.collapse;
+  }
+
+  setError(bool: boolean){
+    this.showError = bool;
   }
 
   removeLoss(lossIndex: number) {

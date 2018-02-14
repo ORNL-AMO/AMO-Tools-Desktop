@@ -8,19 +8,78 @@
     <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
     <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
     <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
-    <br><div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
+    <br>
+    <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
     <!-- <div class="last-updated" *ngIf="!isSetup"><br>Asset not setup</div> -->
 
   </div>
+  <div>
+    <span class="fa fa-edit pull-right" (click)="showEditModal()"></span>
+  </div>
   <div class="actions" *ngIf="isSetup">
-
-    <a (click)="goToAssessment(assessment, 'system-setup')">Asset</a>
+    <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
     <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
-    <a (click)="goToAssessment(assessment, 'diagram')">Diagram</a>
-    <a (click)="goToAssessment(assessment, 'report')">Report</a>
+    <a (click)="showReportModal()">Quick Report</a>
+    <a (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
 
   </div>
   <div class="actions" *ngIf="!isSetup">
-      <div class="last-updated">Asset not setup</div>
+    <div class="last-updated">Asset not setup</div>
+  </div>
+</div>
+
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit {{assessment.name}} Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Assessment Name</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Move Assessment to Different Folder</label>
+            <select class="form-control" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close pull-right" (click)="hideReportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="showReport">
+        <app-phast-report *ngIf="assessment.type == 'PHAST'" [assessment]="assessment" [settings]="settings" [phast]="assessment.phast"
+          [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
+        <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings" [psat]="assessment.psat"
+          [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
+      </div>
+    </div>
   </div>
 </div>

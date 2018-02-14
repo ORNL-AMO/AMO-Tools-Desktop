@@ -36,7 +36,7 @@
       <label class="small" for="initialTemp">Initial Temperature</label>
       <div class="input-group">
         <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -46,7 +46,7 @@
       <label class="small" for="finalTemp">Final Temperature</label>
       <div class="input-group">
         <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('finalTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -55,7 +55,7 @@
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
-        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')"
+        id="correctionFactor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('correctionFactor')"
         (blur)="focusOut()">
     </div>
   </div>

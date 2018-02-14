@@ -29,6 +29,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   firstChange: boolean = true;
   options: any;
@@ -154,6 +156,11 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       this.flueGasLossForm.patchValue({
         o2InFlueGas: this.calculationFlueGasO2
       });
+    }
+    if(this.calculationWarning){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 
