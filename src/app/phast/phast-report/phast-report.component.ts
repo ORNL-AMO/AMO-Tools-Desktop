@@ -34,6 +34,8 @@ export class PhastReportComponent implements OnInit {
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
+  showPrint: boolean = false;
+  showPrintDiv: boolean = false;
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -60,6 +62,17 @@ export class PhastReportComponent implements OnInit {
     if (!this.phast.operatingHours.hoursPerYear) {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
+
+    this.phastReportService.showPrint.subscribe(printVal => {
+      this.showPrintDiv = printVal;
+      if(printVal == true){
+        setTimeout(() => {
+          this.showPrint = printVal;
+        },20)
+      }else{
+         this.showPrint = printVal;
+      }
+    });
   }
 
   setTab(str: string) {
@@ -115,6 +128,7 @@ export class PhastReportComponent implements OnInit {
 
 
   print() {
+    console.log('clicked');
     //when print clicked set show print value to true
     this.phastReportService.showPrint.next(true);
     
