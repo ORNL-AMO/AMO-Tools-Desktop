@@ -15,12 +15,8 @@ tr > td {
     width: 100%;
 } */
 
-table {
-  table-layout: fixed;
-}
-table td {
-  width: 25%;
-}
-table td:first-child {
-  width: 50%;
+
+
+th, td{
+    text-align: center !important;
 }
