@@ -10,3 +10,11 @@ ul{
 .btn-dashboard{
     height: 100%;
 }
+
+.back-col{
+    padding-right: 0px;
+}
+
+.title h1{
+    padding-top: 5px;
+}
