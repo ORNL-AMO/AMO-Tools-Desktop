@@ -18,3 +18,31 @@ ul{
     margin-bottom: -14px;
     color: rgba(255,255,255,.75);
 }
+
+.img-icon{
+    width: 50px;
+    padding-top: 20%;
+}
+
+.banner-name{
+    font-size: 20px;
+}
+
+
+.furnace-name{
+    font-weight: 400;
+    font-size: 16px;
+    color: rgba(255,255,255,.75);
+}
+
+.img-col{
+    padding-right: 0px;
+}
+
+.h2-name{
+    font-size: 20px;
+    color: white;
+    padding-top: 6px;
+    font-weight: 300;
+    margin-bottom: 0px;
+}

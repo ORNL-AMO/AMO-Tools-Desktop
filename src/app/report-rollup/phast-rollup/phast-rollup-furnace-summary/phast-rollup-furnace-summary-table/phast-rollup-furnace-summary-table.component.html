@@ -1,43 +1,66 @@
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th>
-        Furnace Name
+      <th colspan="2"></th>
+      <th colspan="2">
+        Energy Intensity
       </th>
-      <th>
-        Modification Name
+      <th colspan="2">
+        Available Heat
       </th>
-      <th>
-        Baseline Energy Intensity
-        <br> /{{settings.phastRollupUnit}}
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
-      </th>
-      <th>
-        Modification Energy Intensity
-        <br> ({{settings.phastRollupUnit}}
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
-      </th>
-      <th>
-        Baseline Annual Cost
-        <br> ($/yr)
-      </th>
-      <th>
-        Modification Annual Cost
-        <br> ($/yr)
+      <th colspan="2">
+        Annual Cost
       </th>
       <th>
         Cost Savings
-        <br> ($/yr)
       </th>
       <th>
         Implementation Costs
-        <br> ($)
       </th>
       <th>
         Simple Payback Period
-        <br> (Months)
+      </th>
+    </tr>
+    <tr>
+      <th colspan="2"></th>
+      <th colspan="2">
+        ({{settings.phastRollupUnit}}
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+      </th>
+      <th colspan="2">
+        (%)
+      </th>
+      <th colspan="2">
+        ($/yr)
+      </th>
+      <th>
+        ($/yr)
+      </th>
+      <th>
+        ($)
+      </th>
+      <th>
+        (Months)
+      </th>
+    </tr>
+    <tr>
+      <th colspan="2"></th>
+      <th>Baseline</th>
+      <th>
+        Modification
+      </th>
+      <th>
+        Baseline
+      </th>
+      <th>
+        Modification
+      </th>
+      <th>
+        Baseline
+      </th>
+      <th>
+        Modification
       </th>
     </tr>
   </thead>
@@ -50,6 +73,10 @@
       <!-- energy intensity -->
       <td>{{getConvertedValue(data.baselineResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
       <td *ngIf="data.modName">{{getConvertedValue(data.modificationResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
+      <td *ngIf="!data.modName">&mdash;</td>
+      <!-- available heat -->
+      <td>{{getAvailableHeat(data.baselineResultData, data.settings) | sigFigs:'5'}}</td>
+      <td *ngIf="data.modName">{{getAvailableHeat(data.modificationResultData, data.settings) | sigFigs:'5'}}</td>
       <td *ngIf="!data.modName">&mdash;</td>
       <!-- annual cost -->
       <td>${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
@@ -67,7 +94,7 @@
           &mdash;
         </span>
       </td>
-      <td *ngIf="!data.modName">&mdash;</td>
+      <td class="col-span" *ngIf="!data.modName">&mdash;</td>
       <!-- simple patback -->
       <td *ngIf="data.modName">
         <span *ngIf="data.modificationResults.paybackPeriod">

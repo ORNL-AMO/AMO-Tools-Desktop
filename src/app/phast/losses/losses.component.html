@@ -96,7 +96,7 @@
           <h5 class="pull-right add-loss">
             <a class="small click-link" [ngClass]="{'disabled-link': !modificationSelected}">
               <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
-              <span *ngIf="isDropdownOpen" (click)="toggleDropdown()">Cancel</span>
+              <span *ngIf="isDropdownOpen && !showEditModification" (click)="toggleDropdown()">Cancel</span>
             </a>
           </h5>
           <!-- <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
@@ -186,7 +186,7 @@
                 <a (click)="selectModification(modification)">
                   {{modification.phast.name}}
                 </a>
-                <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+                <a class="pull-right click-link" (click)="dispEditModification(modification)">Edit / Delete</a>
               </button>
             </li>
             <li class="add-modification">

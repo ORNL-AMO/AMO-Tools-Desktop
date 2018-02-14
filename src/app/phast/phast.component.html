@@ -108,10 +108,9 @@
     <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight"></app-pre-assessment>
   </div>
   <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
-    <div class="pull-left">
+    <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
       <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
-      <button class="btn btn-secondary" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')"
-        (click)="lastStep()">Back</button>
+      <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
       <!-- <button class="btn btn-secondary" (click)="save()">Save</button> -->

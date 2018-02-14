@@ -364,10 +364,7 @@ export class PhastBarChartComponent implements OnInit {
     else if (this.settings.unitsOfMeasure == "Imperial") {
       unit = "MMBtu/hr";
     }
-
     let xTickWidth = (this.chartContainerWidth - 500) / this.chartLabels.length;
-    console.log("chartContainerWidth = " + this.chartContainerWidth);
-    console.log("xTickWidth = " + xTickWidth);
 
     this.chart = c3.generate({
       bindto: currentChart,
