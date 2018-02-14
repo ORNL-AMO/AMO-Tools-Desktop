@@ -1725,8 +1725,6 @@ Toasty Overrides ================================= */
 }
 
 
-
-
 /* chart download icon */
 
 .fa-download {
@@ -1742,6 +1740,11 @@ Toasty Overrides ================================= */
 .percent-chart-btn {
   left: -15%;
   top: 105%;
+}
+
+.percent-chart-table-btn {
+  left: 0;
+  top: 5px;
 }
 
 
