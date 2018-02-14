@@ -64,7 +64,7 @@ Tabs
     padding-bottom: 6px;
     padding-left: 8px;
     padding-right: 8px;
-    font-size: 14px;
+    font-size: 16px;
     display: block;
     color: #0F0F0F;
   }
@@ -97,7 +97,7 @@ Tabs
     .tabs.subtabs.progress-tabs a {
       color: #000;
       padding-top: 8px;
-      font-size: 14px;
+      font-size: 16px;
       padding-bottom: 8px;
     }
       .tabs.subtabs.progress-tabs li:hover {
