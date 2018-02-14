@@ -5,12 +5,14 @@
         <div class="header">
           <h3>System Curve Calculator</h3>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
           <div class="col-12">
             <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
               (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
-              <a *ngIf="inAssessment" class="small pull-right reset-link" (click)="initializeCalculator(true)">Reset Baseline and Modifcation Data</a>
-            </div>
+          </div>
+          <div class="col-md-auto btn-col">
+            <button *ngIf="inAssessment" class="btn btn-primary reset-btn" (click)="initialiazeCalculator(true)">Reset Points to Match Assessment</button>
+          </div>
         </div>
       </div>
       <div class="col-6 align-top">
