@@ -29,6 +29,7 @@ import { RollupBarChartComponent } from './rollup-bar-chart/rollup-bar-chart.com
 import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-energy-use-table/phast-rollup-energy-use-table.component';
 import { PsatRollupPrintComponent } from './psat-rollup/psat-rollup-print/psat-rollup-print.component';
 import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-pump-summary-table/psat-rollup-pump-summary-table.component';
+import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-p
     RollupBarChartComponent,
     PhastRollupEnergyUseTableComponent,
     PsatRollupPrintComponent,
-    PsatRollupPumpSummaryTableComponent
+    PsatRollupPumpSummaryTableComponent,
+    PhastRollupFurnaceSummaryTableComponent
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]

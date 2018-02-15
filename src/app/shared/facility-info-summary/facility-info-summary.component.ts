@@ -20,8 +20,10 @@ export class FacilityInfoSummaryComponent implements OnInit {
     this.indexedDbService.getDirectorySettings(this.assessment.directoryId).then(val => {
       if(val){
         let settings = val[0];
-        if(settings.facilityInfo){
-          this.facilityInfo = settings.facilityInfo;
+        if (settings) {
+          if(settings.facilityInfo){
+            this.facilityInfo = settings.facilityInfo;
+          }
         }
       }
     })
