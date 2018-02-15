@@ -1,6 +1,6 @@
 <div *ngIf="!printView && assessmentType == 'phast'">
   <div class="pie-chart-container chart-container">
-    <div class="phast-rollup-pie-chart" id="pie-chart">
+    <div #ngChart class="phast-rollup-pie-chart">
 
     </div>
   </div>
@@ -8,7 +8,7 @@
 
 <div *ngIf="printView && assessmentType == 'phast'">
   <div class="pie-chart-container chart-container">
-    <div class="print-phast-rollup-pie-chart" id="pie-chart">
+    <div #ngChart class="print-phast-rollup-pie-chart">
 
     </div>
   </div>
@@ -16,7 +16,7 @@
 
 <div *ngIf="!printView && assessmentType == 'psat'">
   <div class="pie-chart-container chart-container">
-    <div class="psat-rollup-pie-chart" id="pie-chart">
+    <div #ngChart class="psat-rollup-pie-chart">
 
     </div>
   </div>
@@ -24,8 +24,9 @@
 
 <div *ngIf="printView && assessmentType == 'psat'">
   <div class="pie-chart-container chart-container">
-    <div class="print-psat-rollup-pie-chart" id="pie-chart">
+    <div #ngChart class="print-psat-rollup-pie-chart">
 
     </div>
   </div>
 </div>
+<span #btnDownload class="pie-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

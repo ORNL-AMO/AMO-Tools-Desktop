@@ -11,11 +11,14 @@ export class SvgToPngService {
     let svg;
     for (let i = 0; i < element.nativeElement.children.length; i++) {
       if (element.nativeElement.children[i].nodeName.trim() == "svg") {
+        console.log("found an svg");
         svg = element.nativeElement.children[i];
       }
     }
+    // exportFunc.saveSvgAsPng(svg, fn.trim());
     svg.style = "background-color: #fff";
     exportFunc.saveSvgAsPng(svg, fn.trim());
+    // exportFunc.saveSvgAsPng(svg, fn.trim(), {backgroundColor: "#ffffff"});
     svg.style = "background-color: none";
   }
 
