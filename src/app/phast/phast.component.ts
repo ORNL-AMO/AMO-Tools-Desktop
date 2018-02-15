@@ -287,7 +287,7 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.mainTab == 'system-basics') {
+    if (this.mainTab == 'system-setup') {
       if (this.stepTab.step == 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);
@@ -298,6 +298,8 @@ export class PhastComponent implements OnInit {
         } else {
           this.phastService.goToStep(this.stepTab.back);
         }
+      }else if(this.stepTab.back){
+        this.phastService.goToStep(this.stepTab.back);
       }
     } else if (this.mainTab == 'assessment') {
       if (this.assessmentTab == 'modify-conditions') {

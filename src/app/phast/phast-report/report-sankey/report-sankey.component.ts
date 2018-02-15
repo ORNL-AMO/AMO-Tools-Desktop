@@ -15,6 +15,8 @@ export class ReportSankeyComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
+  @Input()
+  showPrint: boolean;
 
   modification: PHAST;
   assessmentName: string;
@@ -22,7 +24,6 @@ export class ReportSankeyComponent implements OnInit {
   phast1: PHAST;
   phast2: PHAST;
   modExists: boolean = false;
-  showPrint: boolean = false;
   constructor(private phastReportService: PhastReportService) { }
 
   ngOnInit() {
@@ -37,9 +38,9 @@ export class ReportSankeyComponent implements OnInit {
       });
       this.phast2 = this.phastOptions[1];
     }
-    this.phastReportService.showPrint.subscribe(printVal => {
-      this.showPrint = printVal;
-    });
+    // this.phastReportService.showPrint.subscribe(printVal => {
+    //   this.showPrint = printVal;
+    // });
   }
 
 }

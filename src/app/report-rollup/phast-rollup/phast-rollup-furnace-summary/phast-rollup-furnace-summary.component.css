@@ -1,26 +1,7 @@
-/* tr > td,
-tr > th{
-    text-align: center;
-}
 
-tr > td {
-    vertical-align: middle;
-}
-
-.table-row{
-    padding-top: 14px;
-}
-
-.graph-select{
-    width: 100%;
-} */
-
-table {
-  table-layout: fixed;
-}
-table td {
-  width: 25%;
-}
-table td:first-child {
-  width: 50%;
+@media print {
+    .print-rollup-bar-chart-container {
+        padding-bottom: 30px;
+        page-break-inside: avoid;
+    }
 }

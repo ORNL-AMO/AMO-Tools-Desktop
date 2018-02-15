@@ -45,7 +45,14 @@
               <app-pre-assessment-graph [results]="results" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
             </div>
             <div class="col-11 no-data" *ngIf="results.length == 0">
-              <h5>Enter furnace data for multiple furnaces to compare their energy consumption.</h5>
+              <h5>Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</h5>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row note-row-width">
+            <div class=" alert alert-info">
+              <p>
+                Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout this tool.
+              </p>
             </div>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">

@@ -579,7 +579,7 @@ Reports
         border-left: none;
     }
     .assessment-report .tabs.primary a {
-        padding: 10px 44px;
+        padding: 12px;
     }
 
     .report-header, .report-data .results {
@@ -1169,7 +1169,10 @@ Footer
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
   background: #fff;
   border-top: #8b8b8b solid 1px;
   z-index: 5;
@@ -1180,7 +1183,8 @@ Footer
   content: "";
 }
 .footer .btn {
-  padding: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 
@@ -1224,7 +1228,6 @@ Banner
 }
   .banner h1 {
     font-size: 22px;
-    margin-top: 10px;
     margin-bottom: -14px;
     color: rgba(255,255,255,1);
   }
@@ -1287,13 +1290,13 @@ Banner
   background: url('../assets/images/ico-psat-diagram.png') no-repeat 14px;
   background-size: 31px;
 }
-.banner.phast .title {
+/* .banner.phast .title {
   color: #fff;
   padding-left: 75px;
   background: url('../assets/images/phast-logo.png') no-repeat 10px;
   background-size: 60px;
-  /*background-color: #000B13;*/
-}
+  /*background-color: #000B13;
+} */
 
 .banner-border{
   border-bottom: solid;
@@ -1725,8 +1728,6 @@ Toasty Overrides ================================= */
 }
 
 
-
-
 /* chart download icon */
 
 .fa-download {
@@ -1742,6 +1743,11 @@ Toasty Overrides ================================= */
 .percent-chart-btn {
   left: -15%;
   top: 105%;
+}
+
+.percent-chart-table-btn {
+  left: 0;
+  top: 5px;
 }
 
 

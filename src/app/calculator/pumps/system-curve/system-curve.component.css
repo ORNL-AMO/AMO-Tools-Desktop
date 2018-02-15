@@ -12,3 +12,11 @@ a:not([href]):not([tabindex]){
 .reset-link{
     padding: 10px;
 }
+
+.reset-btn{
+    padding: 6px;
+}
+
+.btn-col{
+    padding-top: 20px;
+}

@@ -41,6 +41,7 @@ export class SystemCurveComponent implements OnInit {
   ngOnInit() {
     //in assesssment
     if (this.inAssessment) {
+      this.psat.name = 'Baseline';
       this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
         if (results.length != 0) {
           this.calculator = results[0];
@@ -117,10 +118,10 @@ export class SystemCurveComponent implements OnInit {
     this.calculateValues();
   }
 
-  changes(){
-    if(this.inAssessment){
+  changes() {
+    if (this.inAssessment) {
       this.saveCalculator();
-    }else{
+    } else {
       this.calculateP1Flow();
       this.calculateP2Flow();
       this.calculateValues();
@@ -272,7 +273,11 @@ export class SystemCurveComponent implements OnInit {
       } else {
         this.saving = true;
         this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then(() => this.calcExists = true);
+        this.indexedDbService.addCalculator(this.calculator).then((result) => { 
+          this.calculator.id = result; 
+          this.calcExists = true; 
+          this.saving = false;
+        });
       }
     }
     this.calculateP1Flow();

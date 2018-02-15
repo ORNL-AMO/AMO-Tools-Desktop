@@ -22,7 +22,7 @@
           <div class="hide-print" *ngIf="modification.psat.outputs.percent_annual_savings">
             <div class="col-8 mx-auto">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
-                [unit]="unit"></app-percent-graph>
+                [unit]="unit" [title]="'psat-modification-savings'"></app-percent-graph>
             </div>
           </div>
           <div class="show-print text-center" *ngIf="modification.psat.outputs.percent_annual_savings">

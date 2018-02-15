@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastResultsData } from '../../../report-rollup.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../../phast/phast-results.service';
+import { PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',
@@ -15,16 +15,12 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
   settings: Settings;
   @Input()
   resultData: Array<PhastResultsData>;
-  @Input()
-  printView: boolean;
 
-  constructor(private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
   }
-
-
-  getConvertedValue(val: number, settings: Settings) {
+ getConvertedValue(val: number, settings: Settings) {
     return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
   }
 

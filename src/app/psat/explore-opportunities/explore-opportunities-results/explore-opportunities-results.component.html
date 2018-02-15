@@ -17,7 +17,7 @@
         </td>
         <td class="percent-graph">
           <div class="col-8 mx-auto" *ngIf="percentSavings">
-            <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+            <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
           </div>
           <div *ngIf="!percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>
