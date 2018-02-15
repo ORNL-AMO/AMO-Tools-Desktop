@@ -1703,6 +1703,10 @@ Toasty Overrides ================================= */
     text-decoration: none;
 }
 
+/* gauge chart sizing helper */
+.gauge-chart-width {
+  min-width: 200px;
+}
 
 /* chart toggle grid lines */
 #gridToggleBtn{
@@ -1748,6 +1752,16 @@ Toasty Overrides ================================= */
 .percent-chart-table-btn {
   left: 0;
   top: 5px;
+}
+
+.pie-chart-btn {
+  left: 30px;
+  bottom: 5px;
+}
+
+.bar-chart-btn {
+  left: -10px;
+  bottom: 10px;
 }
 
 

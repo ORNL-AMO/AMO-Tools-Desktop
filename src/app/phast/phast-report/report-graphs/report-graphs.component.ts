@@ -22,6 +22,8 @@ export class ReportGraphsComponent implements OnInit {
   inPhast: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  showPrint: boolean;
 
   selectedPhast1: any;
   selectedPhast2: any;
@@ -36,7 +38,7 @@ export class ReportGraphsComponent implements OnInit {
   colors: Array<string>;
   baselineLabels: Array<string>;
   modifiedLabels: Array<string>;
-  showPrint: boolean = false;
+  // showPrint: boolean = false;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -72,9 +74,9 @@ export class ReportGraphsComponent implements OnInit {
     this.chartContainerWidth = window.innerWidth * 0.90;
 
     //subscribe to show print value
-    this.phastReportService.showPrint.subscribe(printVal => {
-      this.showPrint = printVal;
-    });
+    // this.phastReportService.showPrint.subscribe(printVal => {
+    //   this.showPrint = printVal;
+    // });
   }
 
   ngOnDestroy() {

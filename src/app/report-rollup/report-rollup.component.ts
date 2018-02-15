@@ -45,6 +45,9 @@ export class ReportRollupComponent implements OnInit {
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    this._phastAssessments = new Array<ReportItem>();
+    this._psatAssessments = new Array<ReportItem>();
+
     setTimeout(() => {
       this.assessmentsGathered = true;
       this.numPhasts = this._phastAssessments.length;
@@ -130,11 +133,19 @@ export class ReportRollupComponent implements OnInit {
     // this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
   }
 
+  setPrintViewThenPrint(){
+    
+    this.printView = true;
+    setTimeout(() => {
+      this.print();
+    }, 100);
+  }
+
   print() {
     // let win = this.windowRefService.nativeWindow;
     // let doc = this.windowRefService.getDoc();
     // win.print();
-    this.printView = true;
+    //this.printView = true;
     this.phastReportService.showPrint.next(true);
 
 

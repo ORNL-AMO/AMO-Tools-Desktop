@@ -48,3 +48,8 @@ td{
     min-height: 85vh;
     max-height: 85vh;
 }
+
+.note-row-width {
+  width: 96%;
+  margin-left: 2%;
+}

@@ -33,6 +33,7 @@ export class PumpCurveComponent implements OnInit {
   calculator: Calculator;
   calcExists: boolean = false;
   saving: boolean = false;
+  pumpFormExists: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
@@ -51,6 +52,7 @@ export class PumpCurveComponent implements OnInit {
           this.calculator = results[0];
           this.calcExists = true;
           if (this.calculator.pumpCurveForm) {
+            this.pumpFormExists = true;
             this.pumpCurveForm = this.calculator.pumpCurveForm;
             this.subscribe();
           } else {
@@ -182,8 +184,11 @@ export class PumpCurveComponent implements OnInit {
           assessmentId: this.assessment.id,
           pumpCurveForm: this.pumpCurveForm
         }
-        this.indexedDbService.addCalculator(this.calculator).then(() => {
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          debugger
+          this.calculator.id = result
           this.calcExists = true;
+          this.saving = false;
         })
       }
     }

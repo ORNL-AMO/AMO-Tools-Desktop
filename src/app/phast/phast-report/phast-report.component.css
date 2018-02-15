@@ -26,4 +26,29 @@
         page-break-before: always;
         page-break-inside: avoid;
     }
+
+    .print-div{
+        display: none;
+    }
+}
+
+.print-div{
+    z-index: 100;
+    height: 100%;
+    width: 93%;
+    position: fixed;
+    /* background-color: red; */
+}
+
+.print-col{
+    background-color:#CCD1D1;
+    text-align: center;
+}
+
+.print-col h4{
+    padding-top: 20px;
+}
+
+.fa-print{
+    font-size: 150px;
 }

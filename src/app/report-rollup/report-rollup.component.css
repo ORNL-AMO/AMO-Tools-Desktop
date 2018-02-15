@@ -116,8 +116,10 @@
         page-break-before: always;
         padding-top: 0px !important;
     }
+    .print-div{
+        display: none;
+    }
 }
-
 
 .phast-modal .modal-dialog,
 .psat-modal .modal-dialog{
@@ -155,3 +157,24 @@
   .sb-item{
       width: 100%;
   }
+
+.print-div{
+z-index: 100;
+height: 100%;
+width: 100%;
+position: fixed;
+background-color:#CCD1D1;
+/* background-color: red; */
+}
+
+.print-col{
+text-align: center;
+}
+
+/* .print-col h4{
+padding-top: 15%;
+} */
+
+.fa-print{
+font-size: 150px;
+}
