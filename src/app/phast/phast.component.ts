@@ -298,6 +298,8 @@ export class PhastComponent implements OnInit {
         } else {
           this.phastService.goToStep(this.stepTab.back);
         }
+      }else if(this.stepTab.back){
+        this.phastService.goToStep(this.stepTab.back);
       }
     } else if (this.mainTab == 'assessment') {
       if (this.assessmentTab == 'modify-conditions') {
