@@ -68,9 +68,6 @@ export class PercentGraphComponent implements OnInit {
       this.chartHeight = 120;
       this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
-    else {
-      this.chartHeight = 160;
-    }
     this.initChart();
   }
 
