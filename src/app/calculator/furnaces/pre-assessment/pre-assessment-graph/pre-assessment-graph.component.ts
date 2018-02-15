@@ -4,6 +4,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+
 @Component({
   selector: 'app-pre-assessment-graph',
   templateUrl: './pre-assessment-graph.component.html',

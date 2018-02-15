@@ -1,22 +1,7 @@
-/* tr > td,
-tr > th{
-    text-align: center;
-}
 
-tr > td {
-    vertical-align: middle;
-}
-
-.table-row{
-    padding-top: 14px;
-}
-
-.graph-select{
-    width: 100%;
-} */
-
-
-
-th, td{
-    text-align: center !important;
+@media print {
+    .print-rollup-bar-chart-container {
+        padding-bottom: 30px;
+        page-break-inside: avoid;
+    }
 }

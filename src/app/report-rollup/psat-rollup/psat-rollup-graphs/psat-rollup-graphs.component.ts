@@ -70,20 +70,22 @@ export class PsatRollupGraphsComponent implements OnInit {
   getResults(resultsData: Array<PsatResultsData>) {
     this.results = new Array();
     let i = 0;
-    resultsData.forEach(val => {
-      let percent;
-      if (this.dataOption == 'cost') {
-        percent = this.getTotalCostPercent(val.baselineResults.annual_cost);
-      } else {
-        percent = this.getTotalEnergyPercent(val.baselineResults.annual_energy);
-      }
-      this.results.push({
-        name: val.name,
-        percent: percent,
-        color: graphColors[i]
+    if (resultsData) {
+      resultsData.forEach(val => {
+        let percent;
+        if (this.dataOption == 'cost') {
+          percent = this.getTotalCostPercent(val.baselineResults.annual_cost);
+        } else {
+          percent = this.getTotalEnergyPercent(val.baselineResults.annual_energy);
+        }
+        this.results.push({
+          name: val.name,
+          percent: percent,
+          color: graphColors[i]
+        })
+        i++;
       })
-      i++;
-    })
+    }
   }
 
   getTotalCostPercent(val: number) {
