@@ -133,11 +133,19 @@ export class ReportRollupComponent implements OnInit {
     // this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
   }
 
+  setPrintViewThenPrint(){
+    
+    this.printView = true;
+    setTimeout(() => {
+      this.print();
+    }, 100);
+  }
+
   print() {
     // let win = this.windowRefService.nativeWindow;
     // let doc = this.windowRefService.getDoc();
     // win.print();
-    this.printView = true;
+    //this.printView = true;
     this.phastReportService.showPrint.next(true);
 
 
@@ -152,7 +160,7 @@ export class ReportRollupComponent implements OnInit {
       //after printing hide content again
       this.phastReportService.showPrint.next(false);
       this.printView = false;
-    }, 10000);
+    }, 5000);
   }
 
   closeReport() {
