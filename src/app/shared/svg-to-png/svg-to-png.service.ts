@@ -1,5 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-
 @Injectable()
 export class SvgToPngService {
 
@@ -15,7 +14,9 @@ export class SvgToPngService {
         svg = element.nativeElement.children[i];
       }
     }
+    svg.style = "background-color: #fff";
     exportFunc.saveSvgAsPng(svg, fn.trim());
+    svg.style = "background-color: none";
   }
 
 

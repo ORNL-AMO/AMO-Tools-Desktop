@@ -1754,6 +1754,16 @@ Toasty Overrides ================================= */
   top: 5px;
 }
 
+.pie-chart-btn {
+  left: 30px;
+  bottom: 5px;
+}
+
+.bar-chart-btn {
+  left: -10px;
+  bottom: 10px;
+}
+
 
 #gridToggle .fa-download {
   left: 55px;

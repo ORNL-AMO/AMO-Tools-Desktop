@@ -3,6 +3,7 @@ import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/m
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { graphColors } from '../graphColors';
 import { PhastReportService } from '../../phast-report.service';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 @Component({
@@ -27,6 +28,9 @@ export class PhastPieChartComponent implements OnInit {
   chartIndex: number;
 
   @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+
+  exportName: string;
 
   chartContainerHeight: number;
 
@@ -65,7 +69,7 @@ export class PhastPieChartComponent implements OnInit {
   tmpChartData: Array<any>;
 
 
-  constructor(private phastReportService: PhastReportService, private windowRefService: WindowRefService) { }
+  constructor(private phastReportService: PhastReportService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData(this.results, this.resultCats);
@@ -221,10 +225,8 @@ export class PhastPieChartComponent implements OnInit {
       }, 500);
     }
     else {
-      setTimeout(() => {
-        d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
-        d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
-      }, 500);
+      d3.selectAll(".print-pie-chart .c3-legend-item text").style("font-size", "1.3rem");
+      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
     }
   }
 
@@ -394,5 +396,12 @@ export class PhastPieChartComponent implements OnInit {
         backgroundColor: graphColors
       }
     ];
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "phast-report-pie-graph-" + this.chartIndex;
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
