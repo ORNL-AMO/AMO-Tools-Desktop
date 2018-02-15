@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../graphColors';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 @Component({
@@ -29,10 +30,12 @@ export class PhastBarChartComponent implements OnInit {
   chartIndex: number;
   @Input()
   chartContainerWidth: number;
-
   chartContainerHeight: number;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
 
+  exportName: string;
   chartColors: any = [{}];
   baselineData: Array<any>;
   modificationData: Array<any>;
@@ -46,7 +49,7 @@ export class PhastBarChartComponent implements OnInit {
   resultsWidth: number;
   chart: any;
 
-  constructor(private windowRefService: WindowRefService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData(this.results, this.modResults, this.resultCats);
@@ -64,13 +67,13 @@ export class PhastBarChartComponent implements OnInit {
         this.chartContainerWidth = this.chartContainerWidth * 0.58;
       }
       this.chartContainerHeight = 280;
-      this.initChart();
     }
     else {
       this.chartContainerWidth = 1400;
       this.chartContainerHeight = 400;
-      this.initPrintCharts();
     }
+
+    this.initChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,8 +93,6 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   initChart() {
-    let charts = document.getElementsByClassName("bar-chart");
-    let currentChart;
 
     let unit;
     if (this.settings.unitsOfMeasure == "Metric") {
@@ -101,11 +102,18 @@ export class PhastBarChartComponent implements OnInit {
       unit = "MMBtu/hr";
     }
 
-    currentChart = document.getElementsByClassName("bar-chart")[charts.length - 1];
-    currentChart.className = "app-chart";
+    let yAxisLabel: string;
+    if (this.printView) {
+      yAxisLabel = "";
+      this.ngChart.nativeElement.className = "print-bar-chart";
+    }
+    else {
+      yAxisLabel = "Heat Loss (" + unit + ")";
+    }
+
 
     this.chart = c3.generate({
-      bindto: currentChart,
+      bindto: this.ngChart.nativeElement,
       data: {
         columns: this.chartData,
         type: 'bar',
@@ -117,7 +125,7 @@ export class PhastBarChartComponent implements OnInit {
         },
         y: {
           label: {
-            text: 'Heat Loss (' + unit + ')',
+            text: yAxisLabel,
             position: 'outer-middle'
           },
           tick: {
@@ -173,15 +181,24 @@ export class PhastBarChartComponent implements OnInit {
         }
       }
     });
-    d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-    d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-
-    d3.selectAll(".c3-texts").style("font-size", "20px");
-    // d3.selectAll(".c3-texts").style("font-size", "10px");
-
-    d3.selectAll(".c3-legend-item text").style("font-size", "11px");
-    d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+    if (this.printView) {
+      d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
+      d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+      d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "18px").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.2rem").style("fill", "none").style("stroke", "#000").style("line-height", "20px");
+      d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "1.0rem");
+      // d3.selectAll(".print-bar-chart .c3-legend-item text").style("font-size", "1.3rem");
+    }
+    else {
+      d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+      d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+      d3.selectAll(".c3-texts").style("font-size", "20px");
+      d3.selectAll(".c3-legend-item text").style("font-size", "11px");
+      d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+    }
   }
+
 
   updateChart(i: number, tmp: string) {
     if (this.chart) {
@@ -354,77 +371,10 @@ export class PhastBarChartComponent implements OnInit {
   }
 
 
-  initPrintCharts() {
-    let currentChart = document.getElementsByClassName("bar-chart")[0];
-    currentChart.className = "print-bar-chart";
-    let unit;
-    if (this.settings.unitsOfMeasure == "Metric") {
-      unit = "GJ/hr";
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "phast-report-bar-graph";
     }
-    else if (this.settings.unitsOfMeasure == "Imperial") {
-      unit = "MMBtu/hr";
-    }
-    let xTickWidth = (this.chartContainerWidth - 500) / this.chartLabels.length;
-
-    this.chart = c3.generate({
-      bindto: currentChart,
-      data: {
-        columns: this.chartData,
-        type: 'bar',
-      },
-      axis: {
-        x: {
-          type: 'category',
-          categories: this.chartLabels,
-          tick: {
-            multiline: true,
-            height: 100,
-            width: 55
-          },
-          // height: 250,
-          // width: null
-          // padding: {
-          //   left: 0,
-          //   right: 0
-          // }
-        },
-        y: {
-          label: {
-            text: '',
-            position: 'outer-bottom',
-          }
-        }
-      },
-      grid: {
-        y: {
-          show: true
-        }
-      },
-      size: {
-        width: this.chartContainerWidth,
-        height: this.chartContainerHeight
-      },
-      padding: {
-        bottom: 20
-      },
-      color: {
-        pattern: graphColors
-      },
-      legend: {
-        position: 'right'
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          return;
-        }
-      }
-    });
-    d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
-    d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-    d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "18px").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
-    // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.2rem").style("fill", "#000").style("stroke", "#000");
-    // d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "1.0rem");
-    d3.selectAll(".print-bar-chart .c3-axis-y-label").style("font-size", "1.4rem");
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
