@@ -11,11 +11,21 @@ export class FlowFactorFormComponent implements OnInit {
   inputs: PneumaticValve;
   @Output('calculate')
   calculate = new EventEmitter<PneumaticValve>();
+  @Output('setUser')
+  setUser = new EventEmitter<boolean>();
+  @Input()
+  userFlowRate: boolean;
+  @Input()
+  valveFlowFactor: number;
   constructor() { }
 
   ngOnInit() {
   }
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  setUserFlowRate(bool: boolean){
+    this.setUser.emit(bool);
   }
 }

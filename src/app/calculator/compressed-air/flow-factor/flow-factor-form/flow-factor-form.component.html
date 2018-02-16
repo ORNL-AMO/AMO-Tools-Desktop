@@ -1,31 +1,33 @@
 <form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="intelPressure">Intel Pressure</label>
-      <div class="input-group">
-        <input name="intelPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="intelPressure"
+  <div class="form-group">
+    <label for="intelPressure">Intel Pressure</label>
+    <div class="input-group">
+      <input name="intelPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="intelPressure"
         (input)="emitChange()" onfocus="this.select();">
-        <span class="input-group-addon units">psi</span>
-      </div>
+      <span class="input-group-addon units">psi</span>
     </div>
-    <div class="form-group">
-      <label for="outletPressure">Outlet Pressure</label>
-      <div class="input-group">
-        <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
-               (input)="emitChange()" onfocus="this.select();">
-        <span class="input-group-addon units">psi</span>
-      </div>
+  </div>
+  <div class="form-group">
+    <label for="outletPressure">Outlet Pressure</label>
+    <div class="input-group">
+      <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
+        (input)="emitChange()" onfocus="this.select();">
+      <span class="input-group-addon units">psi</span>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label class="bold">Flow Rate</label>
+  <div class="form-group" *ngIf="!userFlowRate">
+    <label class="bold">Flow Rate
+    <a class="form-text small click-link" (click)="setUserFlowRate(true)">Add Flow Rate</a>
+    </label>
+    <div class="input-group">
       <div class="text-center small">
         {{inputs.flowRate | number:'1.0-2'}} SCFM
       </div>
     </div>
   </div>
 
-  <div class="form-section">
+  <!-- <div class="form-section">
     <div class="form-group">
       <label for="intelPressureKnown">Intel Pressure</label>
       <div class="input-group">
@@ -41,21 +43,22 @@
                (input)="emitChange()" onfocus="this.select();">
         <span class="input-group-addon units">psi</span>
       </div>
+    </div> -->
+  <div class="form-group" *ngIf="userFlowRate">
+    <label for="flowRate">Flow Rate
+    <a class="form-text small click-link" (click)="setUserFlowRate(false)">Automatically Calculate</a>
+    </label>
+    <div class="input-group">
+      <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate" (input)="emitChange()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">SCFM</span>
     </div>
-    <div class="form-group">
-      <label for="flowRate">Flow Rate</label>
-      <div class="input-group">
-        <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate"
-               (input)="emitChange()" onfocus="this.select();">
-        <span class="input-group-addon units">SCFM</span>
-      </div>
-    </div>
+  </div>
 
-    <div class="form-group">
-      <label class="bold">Valve Flow Factor</label>
-      <div class="text-center small">
-        {{  | number:'1.0-2'}} SCFM
-      </div>
+  <div class="form-group">
+    <label class="bold">Valve Flow Factor</label>
+    <div class="text-center small">
+      {{ valveFlowFactor}} SCFM
     </div>
   </div>
 </form>
