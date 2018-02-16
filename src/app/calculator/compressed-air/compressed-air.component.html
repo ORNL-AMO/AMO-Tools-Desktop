@@ -16,6 +16,18 @@
             </p>
           </div>
         </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('flow-factor')">Flow Factor</a>
+            <p>
+              Use flow factor calculator to calculate gasses flow factor.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,4 +36,7 @@
 
 <div class="stand-alone-calc" *ngIf="getSelectedTool() == 'bag-method'">
   <app-bag-method></app-bag-method>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'flow-factor'">
+<app-flow-factor></app-flow-factor>
 </div>
