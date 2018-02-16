@@ -18,7 +18,8 @@ export class SvgToPngService {
       }
     }
 
-    exportFunc.svgAsPngUri(svg, {}, (data) => {
+    //remove backgroundColor option to get transparent background
+    exportFunc.svgAsPngUri(svg, {backgroundColor: "#fff"}, (data) => {
       let doc = this.windowRefService.getDoc();
       let dlLink = doc.createElement("a");
       dlLink.setAttribute("type", "image");
@@ -26,7 +27,6 @@ export class SvgToPngService {
       dlLink.setAttribute("download", fn);
       dlLink.click()
     })
-
   }
 
 
