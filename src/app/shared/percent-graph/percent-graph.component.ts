@@ -53,14 +53,6 @@ export class PercentGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.setValueMargin() };
-    //let object render before resizing initially
-    setTimeout(() => {
-      this.setValueMargin();
-    }, 1500)
-
     this.exportName = this.title + "-graph";
 
     if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings") {
@@ -68,44 +60,11 @@ export class PercentGraphComponent implements OnInit {
       this.chartHeight = 120;
       this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
-    else {
-      this.chartHeight = 160;
-    }
     this.initChart();
   }
 
   ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
-  setValueMargin() {
-    let div = this.doc.getElementsByClassName('chart-container')
-    let valueClass = this.doc.getElementsByClassName('value');
-    let chartDiv = div[0];
-    if (chartDiv) {
-      if (chartDiv.clientWidth < 350 && chartDiv.clientWidth > 200) {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '24px';
-        }
-      } else if (chartDiv.clientWidth < 200) {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '16px';
-        }
-      } else {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '32px';
-        }
-      }
-      let percentValue = this.doc.getElementById('percent');
-      if (percentValue) {
-        let marginTop = ((chartDiv.clientWidth / 2) - (percentValue.clientHeight / 2)) / 2;
-        let marginLeft = (chartDiv.clientWidth / 2) - (percentValue.clientWidth / 2);
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.marginTop = marginTop + 'px';
-          valueClass[i].style.marginLeft = marginLeft + 'px';
-        }
-      }
-    }
+    
   }
 
   ngOnChanges() {

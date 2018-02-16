@@ -1703,6 +1703,11 @@ Toasty Overrides ================================= */
     text-decoration: none;
 }
 
+/* gauge chart sizing helper */
+.gauge-chart-width {
+  min-width: 200px;
+  max-width: 400px;
+}
 
 /* chart toggle grid lines */
 #gridToggleBtn{
