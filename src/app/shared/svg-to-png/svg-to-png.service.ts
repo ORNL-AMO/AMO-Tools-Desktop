@@ -16,22 +16,14 @@ export class SvgToPngService {
         svg = element.nativeElement.children[i];
       }
     }
-    //    debugger
 
     exportFunc.svgAsPngUri(svg, {}, (data) => {
-      // console.log(data);
       let doc = this.windowRefService.getDoc();
       let dlLink = doc.createElement("a");
       dlLink.setAttribute("type", "image");
       dlLink.setAttribute("href", data);
-      dlLink.setAttribute("download", "testImg");
-      console.log(dlLink);
+      dlLink.setAttribute("download", fn);
       dlLink.click()
-      //this.importExportService.createFile(data);
-      //this.importExportService.downloadImage(data);
-      // svg.style = "background-color: #fff";
-      // exportFunc.saveSvgAsPng(svg, fn.trim());
-      // svg.style = "background-color: none";
     })
 
   }
