@@ -122,7 +122,7 @@ export class PercentGraphComponent implements OnInit {
     if (this.chart) {
       this.chart.load({
         columns: [
-          ['show', this.value],
+          ['data', this.value],
         ]
       });
       d3.select(this.ngChart.nativeElement).selectAll(".c3-chart-arcs-title").node().innerHTML = this.value.toFixed(0) + "%";
@@ -142,6 +142,9 @@ export class PercentGraphComponent implements OnInit {
           ['data', 0]
         ],
         type: 'gauge',
+      },
+      legend: {
+        show: false
       },
       size: {
         height: this.chartHeight

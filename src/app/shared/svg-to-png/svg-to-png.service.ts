@@ -15,10 +15,8 @@ export class SvgToPngService {
         svg = element.nativeElement.children[i];
       }
     }
-    // exportFunc.saveSvgAsPng(svg, fn.trim());
     svg.style = "background-color: #fff";
     exportFunc.saveSvgAsPng(svg, fn.trim());
-    // exportFunc.saveSvgAsPng(svg, fn.trim(), {backgroundColor: "#ffffff"});
     svg.style = "background-color: none";
   }
 
