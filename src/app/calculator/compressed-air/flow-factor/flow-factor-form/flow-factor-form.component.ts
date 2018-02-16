@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PneumaticValve } from '../../../../shared/models/standalone';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {BagMethodInput, PneumaticValve} from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-flow-factor-form',
@@ -9,10 +9,13 @@ import { PneumaticValve } from '../../../../shared/models/standalone';
 export class FlowFactorFormComponent implements OnInit {
   @Input()
   inputs: PneumaticValve;
-  
+  @Output('calculate')
+  calculate = new EventEmitter<PneumaticValve>();
   constructor() { }
 
   ngOnInit() {
   }
-
+  emitChange() {
+    this.calculate.emit(this.inputs);
+  }
 }

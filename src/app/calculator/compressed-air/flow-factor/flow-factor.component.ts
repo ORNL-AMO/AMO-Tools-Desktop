@@ -18,15 +18,15 @@ export class FlowFactorComponent implements OnInit  {
       inletPressure: 0,
       outletPressure: 0,
       flowRate: 0
-    }
+    };
   }
 
 
-  getFlowRate(){
+  getFlowRate() {
     this.inputs.flowRate = StandaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
   }
 
-  getValveFlowFactor(){
+  getValveFlowFactor() {
     this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
   }
 }
