@@ -9,10 +9,24 @@ import {PneumaticValve} from "../../../shared/models/standalone";
 })
 export class FlowFactorComponent implements OnInit  {
 
-
+  inputs: PneumaticValve;
+  valveFlowFactor: number;
   constructor() { }
 
   ngOnInit() {
+    this.inputs = {
+      inletPressure: 0,
+      outletPressure: 0,
+      flowRate: 0
+    }
   }
 
+
+  getFlowRate(){
+    this.inputs.flowRate = StandaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
+  }
+
+  getValveFlowFactor(){
+    this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
+  }
 }
