@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -6,6 +6,7 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { PhastService } from '../../phast/phast.service';
 import { PhastResults, ShowResultsCategories } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../../phast/phast-results.service';
+import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 
@@ -48,10 +49,13 @@ export class RollupBarChartComponent implements OnInit {
   allDataColumns: Array<any>;
 
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+  exportName: string;
+
   barChart: any;
 
-
-  constructor() { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
   }
@@ -67,28 +71,14 @@ export class RollupBarChartComponent implements OnInit {
   }
 
   initChart() {
-    let currentChart;
-
     if (this.assessmentType == "phast") {
       if (this.printView) {
-        let printChartContainers = document.getElementsByClassName("print-phast-rollup-bar-chart");
-        currentChart = printChartContainers[0];
-        currentChart.className = "printing-phast-rollup-bar-chart";
-      }
-      else {
-        let appChartContainers = document.getElementsByClassName("phast-rollup-bar-chart");
-        currentChart = appChartContainers[0];
+        this.ngChart.nativeElement.className = "printing-phast-rollup-bar-chart";
       }
     }
     else if (this.assessmentType == "psat") {
       if (this.printView) {
-        let printChartContainers = document.getElementsByClassName("print-psat-rollup-bar-chart");
-        currentChart = printChartContainers[0];
-        currentChart.className = "printing-psat-rollup-bar-chart";
-      }
-      else {
-        let appChartContainers = document.getElementsByClassName("psat-rollup-bar-chart");
-        currentChart = appChartContainers[0];
+        this.ngChart.nativeElement.className = "printing-psat-rollup-bar-chart";
       }
     }
 
@@ -96,7 +86,7 @@ export class RollupBarChartComponent implements OnInit {
 
     if (this.allDataColumns) {
         this.barChart = c3.generate({
-        bindto: currentChart,
+        bindto: this.ngChart.nativeElement,
         data: {
           columns: this.allDataColumns,
           type: 'bar',
@@ -184,5 +174,21 @@ export class RollupBarChartComponent implements OnInit {
         y: this.axisLabel
       });
     }
+  }
+
+
+  downloadChart() {
+    if (!this.title) {
+      if (this.assessmentType == "phast") {
+        this.exportName = "phast-rollup-bar-graph";
+      }
+      else {
+        this.exportName = "psat-rollup-bar-graph";
+      }
+    }
+    else {
+      this.exportName = this.assessmentType + "-" + this.title + "-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
