@@ -114,7 +114,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
       materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
     })
-    this.calculate.emit(true);
+    this.startSavePolling();
   }
 
   roundVal(val: number, digits: number) {
@@ -184,9 +184,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.calculate.emit(true);
     this.emitSave();
   }
-  checkSpecificHeatDiffLiquid(){
+  checkSpecificHeatDiffLiquid() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+        material.specificHeatLiquid = this.roundVal(val, 4);
+      }
       if (material.specificHeatLiquid != this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value) {
         return true;
       } else {
@@ -195,9 +199,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  checkVaporizingTempDiff(){
+  checkVaporizingTempDiff() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
+        material.vaporizationTemperature = this.roundVal(val, 4);
+      }
       if (material.vaporizationTemperature != this.chargeMaterialForm.controls.materialVaporizingTemperature.value) {
         return true;
       } else {
@@ -206,9 +214,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  checkLatentHeatDiff(){
+  checkLatentHeatDiff() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
+        material.latentHeat = this.roundVal(val, 4);
+      }
       if (material.latentHeat != this.chargeMaterialForm.controls.materialLatentHeat.value) {
         return true;
       } else {
@@ -217,9 +229,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  checkSpecificHeatVaporDiff(){
+  checkSpecificHeatVaporDiff() {
     let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
+        material.specificHeatVapor = this.roundVal(val, 4);
+      }
       if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeatVapor.value) {
         return true;
       } else {

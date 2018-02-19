@@ -109,21 +109,19 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-
     if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
       selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
       selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
       selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
-
     this.chargeMaterialForm.patchValue({
       materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
       materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
       materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
       materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
-    this.calculate.emit(true);
+    this.startSavePolling();
   }
 
   roundVal(val: number, digits: number) {
@@ -204,9 +202,13 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.emitSave();
   }
 
-  checkSpecificHeatOfSolid() { 
+  checkSpecificHeatOfSolid() {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
+        material.specificHeatSolid = this.roundVal(val, 4);
+      }
       if (material.specificHeatSolid != this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value) {
         return true;
       } else {
@@ -217,16 +219,24 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   checkLatentHeatOfFusion() {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg')
+        material.latentHeat = this.roundVal(val, 4);
+      }
       if (material.latentHeat != this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value) {
         return true;
       } else {
         return false;
       }
     }
-   }
-  checkHeatOfLiquid() { 
+  }
+  checkHeatOfLiquid() {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC')
+        material.specificHeatLiquid = this.roundVal(val, 4);
+      }
       if (material.specificHeatLiquid != this.chargeMaterialForm.controls.materialHeatOfLiquid.value) {
         return true;
       } else {
@@ -234,9 +244,13 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       }
     }
   }
-  checkMeltingPoint() { 
+  checkMeltingPoint() {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.meltingPoint).from('F').to('C')
+        material.meltingPoint = this.roundVal(val, 4);
+      }
       if (material.meltingPoint != this.chargeMaterialForm.controls.materialMeltingPoint.value) {
         return true;
       } else {

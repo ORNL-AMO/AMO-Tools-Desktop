@@ -86,6 +86,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
   checkMaterialValues() {
     let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      if(this.settings.unitsOfMeasure == 'Metric'){
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
+        material.specificHeatVapor = this.roundVal(val, 4);
+      }
       if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeat.value) {
         return true;
       } else {
@@ -116,7 +120,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
     });
-    this.calculate.emit(true);
+    this.startSavePolling();
   }
 
   roundVal(val: number, digits: number) {
