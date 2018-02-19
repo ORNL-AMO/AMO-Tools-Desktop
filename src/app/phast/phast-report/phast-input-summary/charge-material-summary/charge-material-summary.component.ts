@@ -299,10 +299,10 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
   checkSpecificHeatVapor(loss: ChargeMaterialSummaryData){
     let material;
-     if (loss.materialType == 'Gas') {
-       let gasOptions = this.suiteDbService.selectGasLoadChargeMaterials();
-       material = gasOptions.find(val => { return val.substance == loss.materialName });
-      }
+    //  if (loss.materialType == 'Gas') {
+    //    let gasOptions = this.suiteDbService.selectGasLoadChargeMaterials();
+    //    material = gasOptions.find(val => { return val.substance == loss.materialName });
+    //   }
 
     if (loss.materialType == 'Liquid') {
       let liquidOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
