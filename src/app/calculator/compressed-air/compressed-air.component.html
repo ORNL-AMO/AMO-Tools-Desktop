@@ -28,6 +28,18 @@
             </p>
           </div>
         </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('pneumatic-air')">Pneumatic Air</a>
+            <p>
+              Use pneumatic calculator to calculate pneumatic air factor.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -39,4 +51,7 @@
 </div>
 <div class="stand-alone-calc" *ngIf="getSelectedTool() == 'flow-factor'">
 <app-flow-factor></app-flow-factor>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'pneumatic-air'">
+  <app-pneumatic-air></app-pneumatic-air>
 </div>

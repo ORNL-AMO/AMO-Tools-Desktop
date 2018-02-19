@@ -7,6 +7,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { BagMethodFormComponent } from './bag-method/bag-method-form/bag-method-form.component';
 import { FlowFactorComponent } from './flow-factor/flow-factor.component';
 import { FlowFactorFormComponent } from './flow-factor/flow-factor-form/flow-factor-form.component';
+import { PneumaticAirComponent } from './pneumatic-air/pneumatic-air.component';
+import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pneumatic-air-form.component';
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import { FlowFactorFormComponent } from './flow-factor/flow-factor-form/flow-fac
     BagMethodComponent,
     BagMethodFormComponent,
     FlowFactorComponent,
-    FlowFactorFormComponent
+    FlowFactorFormComponent,
+    PneumaticAirComponent,
+    PneumaticAirFormComponent
   ],
   exports: [
     CompressedAirComponent
