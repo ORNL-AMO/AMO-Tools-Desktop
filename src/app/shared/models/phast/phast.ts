@@ -29,7 +29,8 @@ export interface PHAST {
   systemEfficiency?: number,
   operatingCosts?: OperatingCosts,
   implementationCost?: number,
-  disableSetupDialog?: boolean
+  disableSetupDialog?: boolean,
+  equipmentNotes?: string
 }
 
 export interface OperatingCosts {
