@@ -41,6 +41,17 @@ export class MeteredElectricityComponent implements OnInit {
         auxElectricityCollectionTime: 0
       };
     }
+    if (!this.phast.meteredEnergy.meteredEnergyFuel) {
+      this.phast.meteredEnergy.meteredEnergyFuel = {
+        fuelDescription: 'gas',
+        fuelType: 0,
+        heatingValue: 0,
+        collectionTime: 0,
+        electricityUsed: 0,
+        electricityCollectionTime: 0,
+        fuelEnergy: 0
+      };
+    }
     this.calculate();
   }
 
@@ -53,7 +64,7 @@ export class MeteredElectricityComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
+    this.results = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings, this.phast.meteredEnergy.meteredEnergyFuel);
   }
 
   setField(str: string) {

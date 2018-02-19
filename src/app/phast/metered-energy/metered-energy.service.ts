@@ -11,8 +11,8 @@ export class MeteredEnergyService {
 
   constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
-  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
-    //Metered Energy Use
+  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings, fuelInput?: MeteredEnergyFuel): MeteredEnergyResults {
+     //Metered Energy Use
     //meteredEnergyUsed = Electricity Used during collection / Collection Time
     let meteredEnergyUsed = this.calcElectricityUsed(input);
     //Energy Intensity for Charge Material = meteredEnergyUsed / sum(charge material feed rates)
@@ -36,6 +36,19 @@ export class MeteredEnergyService {
       calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
       calculatedEnergyIntensity: calculated.energyIntensity,
       calculatedElectricityUsed: calculated.electricityUsed
+    }
+    if(fuelInput){
+      let fuelResults: MeteredEnergyResults = this.meteredFuel(fuelInput, phast, settings);
+      if(settings.unitsOfMeasure == 'Metric'){
+        fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('GJ').to('kWh');
+        fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('GJ').to('kWh');
+      }else{
+        fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('MMBtu').to('kWh');
+        fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('MMBtu').to('kWh');
+      }
+      tmpResults.meteredEnergyUsed += fuelResults.meteredEnergyUsed;
+      tmpResults.meteredEnergyIntensity += fuelResults.meteredEnergyIntensity;
+      tmpResults.meteredElectricityUsed += fuelResults.meteredElectricityUsed;
     }
     return tmpResults;
   }
