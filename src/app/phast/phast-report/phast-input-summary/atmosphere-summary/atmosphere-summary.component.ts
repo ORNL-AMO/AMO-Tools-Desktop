@@ -2,6 +2,9 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
+import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-atmosphere-summary',
@@ -37,7 +40,7 @@ export class AtmosphereSummaryComponent implements OnInit {
   flowRateDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.atmosphereGasDiff = new Array();
@@ -101,6 +104,25 @@ export class AtmosphereSummaryComponent implements OnInit {
     }
   }
 
+  checkSpecificHeat(loss: AtmosphereLoss){
+    let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(loss.atmosphereGas);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC')
+        material.specificHeat = this.roundVal(val, 4);
+      }
+      if (material.specificHeat != loss.specificHeat) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
   //real version
   // //function used to check if baseline and modification values are different
   // //called from html

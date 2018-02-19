@@ -149,12 +149,12 @@ export class FixtureLossesFormComponent implements OnInit {
           });
         })
         //specificHeat
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-          specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different-db', val);
-          });
-        })
+        // this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+        //   specificHeatElements.forEach(element => {
+        //     element.classList.toggle('indicate-different-db', val);
+        //   });
+        // })
         //feedRate
         this.fixtureLossesCompareService.differentArray[this.lossIndex].different.feedRate.subscribe((val) => {
           let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);

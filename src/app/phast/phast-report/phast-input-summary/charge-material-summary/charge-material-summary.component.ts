@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST, Losses } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-charge-material-summary',
   templateUrl: './charge-material-summary.component.html',
@@ -67,7 +68,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   vaporizingTemperatureDiff: Array<boolean>;
   chargeMeltedDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
+  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.materialTypeDiff = new Array();
@@ -96,7 +97,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.chargeMaterials) {
@@ -140,6 +141,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
           index++;
         })
       }
+      console.log(this.lossData);
     }
   }
 
@@ -165,6 +167,45 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
+  checkSpecificHeatGas(loss: ChargeMaterialSummaryData) {
+    if (loss.materialType == 'Gas') {
+      let gasOptions = this.suiteDbService.selectGasLoadChargeMaterials();
+      let material = gasOptions.find(val => { return val.substance == loss.materialName });
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
+        material.specificHeatVapor = this.roundVal(val, 4);
+      }
+      if (material.specificHeatVapor != loss.specificHeatGas) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkSpecificHeatSolid(loss: ChargeMaterialSummaryData) {
+    if (loss.materialType == 'Solid') {
+      let solidOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
+      let material = solidOptions.find(val => { return val.substance == loss.materialName });
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+        material.specificHeatSolid = this.roundVal(val, 4);
+      }
+      if (material.specificHeatSolid != loss.specificHeatSolid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
 

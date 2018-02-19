@@ -42,18 +42,18 @@
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff[index] == true}">
+              <td>
                 Specific Heat
               </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db': checkSpecificHeat(data.baseline)}">
                 {{data.baseline.specificHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeat, mod.specificHeat, 'specificHeatDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeat(mod)}">
                 {{mod.specificHeat}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':feedRateDiff[index] == true}"> 
+              <td [ngClass]="{'indicate-report-field-different':feedRateDiff[index] == true}">
                 Fixture Weight Feed Rate
               </td>
               <td [ngClass]="{'indicate-report-field-different':feedRateDiff[index] == true}">
@@ -89,7 +89,7 @@
               <td [ngClass]="{'indicate-report-field-different':correctionFactorDiff[index] == true}">
                 Correction Factor
               </td>
-              <td [ngClass]="{'indicate-report-field-different':correctionFactorDiff[index] == true}"> 
+              <td [ngClass]="{'indicate-report-field-different':correctionFactorDiff[index] == true}">
                 {{data.baseline.correctionFactor}}
               </td>
               <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.correctionFactor, mod.correctionFactor, 'correctionFactorDiff', index)}">

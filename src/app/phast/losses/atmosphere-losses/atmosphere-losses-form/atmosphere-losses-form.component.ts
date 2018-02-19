@@ -171,12 +171,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
           });
         })
         //specificHeat
-        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-          specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different-db', val);
-          });
-        })
+        // this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+        //   specificHeatElements.forEach(element => {
+        //     element.classList.toggle('indicate-different-db', val);
+        //   });
+        // })
         //inletTemp
         this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
           let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);

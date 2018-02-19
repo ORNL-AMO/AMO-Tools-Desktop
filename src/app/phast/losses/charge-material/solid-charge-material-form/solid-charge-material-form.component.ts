@@ -206,9 +206,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
       if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
-        material.specificHeatSolid = this.roundVal(val, 4);
+        material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
       }
+      material.specificHeatSolid = this.roundVal(material.specificHeatSolid, 4);
       if (material.specificHeatSolid != this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value) {
         return true;
       } else {
