@@ -166,25 +166,37 @@
             </tr>
             <!--DB-->
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatLiquidDiff[index] == true}">
+              <td>
                 Specific Heat Liquid
               </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatLiquidDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db':checkSpecificHeatLiquid(data.baseline)}">
                 {{data.baseline.specificHeatLiquid}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeatLiquid, mod.specificHeatLiquid, 'specificHeatLiquidDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatLiquid(mod)}">
                 {{mod.specificHeatLiquid}}
               </td>
             </tr>
             <!--DB-->
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':meltingPointDiff[index] == true}">
+              <td>
+                Specific Heat Vapor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkSpecificHeatVapor(data.baseline)}">
+                {{data.baseline.specificHeatVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatVapor(mod)}">
+                {{mod.specificHeatVapor}}
+              </td>
+            </tr>
+            <!--DB-->
+            <tr>
+              <td>
                 Melting Point
               </td>
-              <td [ngClass]="{'indicate-report-field-different':meltingPointDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db': checkMeltingPoint(data.baseline)}">
                 {{data.baseline.meltingPoint}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.meltingPoint, mod.meltingPoint, 'meltingPointDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkMeltingPoint(mod)}">
                 {{mod.meltingPoint}}
               </td>
             </tr>
@@ -223,13 +235,13 @@
             </tr>
             <!--DB-->
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':latentHeatDiff[index] == true}">
+              <td>
                 Latent Heat
               </td>
-              <td [ngClass]="{'indicate-report-field-different':latentHeatDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db':checkLatentHeat(data.baseline)}">
                 {{data.baseline.latentHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.latentHeat, mod.latentHeat, 'latentHeatDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkLatentHeat(mod)}">
                 {{mod.latentHeat}}
               </td>
             </tr>
@@ -246,13 +258,13 @@
             </tr>
             <!--DB-->
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':vaporizingTemperatureDiff[index] == true}">
+              <td>
                 Vaporizing Temperature
               </td>
-              <td [ngClass]="{'indicate-report-field-different':vaporizingTemperatureDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db':checkVaporizingTemp(data.baseline)}">
                 {{data.baseline.vaporizingTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.vaporizingTemperature, mod.vaporizingTemperature, 'vaporizingTemperatureDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkVaporizingTemp(mod)}">
                 {{mod.vaporizingTemperature}}
               </td>
             </tr>

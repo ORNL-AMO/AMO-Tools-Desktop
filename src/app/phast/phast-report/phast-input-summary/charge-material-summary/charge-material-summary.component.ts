@@ -195,9 +195,9 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       let solidOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
       let material = solidOptions.find(val => { return val.substance == loss.materialName });
       if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
-        material.specificHeatSolid = this.roundVal(val, 4);
+        material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
       }
+      material.specificHeatSolid = this.roundVal(material.specificHeatSolid, 4);
       if (material.specificHeatSolid != loss.specificHeatSolid) {
         return true;
       } else {
@@ -208,6 +208,120 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     }
   }
 
+  checkSpecificHeatLiquid(loss: ChargeMaterialSummaryData) {
+    let material;
+    if (loss.materialType == 'Solid') {
+      let solidOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
+      material = solidOptions.find(val => { return val.substance == loss.materialName });
+    }
+
+    if (loss.materialType == 'Liquid') {
+      let liquidOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      material = liquidOptions.find(val => { return val.substance == loss.materialName });
+    }
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        material.specificHeatLiquid = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+      }
+      material.specificHeatLiquid = this.roundVal(material.specificHeatLiquid, 4);
+
+      if (material.specificHeatLiquid != loss.specificHeatLiquid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkMeltingPoint(loss: ChargeMaterialSummaryData) {
+    if (loss.materialType == 'Solid') {
+      let solidOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
+      let material = solidOptions.find(val => { return val.substance == loss.materialName });
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        material.meltingPoint = this.convertUnitsService.value(material.meltingPoint).from('F').to('C');
+      }
+      material.meltingPoint = this.roundVal(material.meltingPoint, 4);
+      if (material.meltingPoint != loss.meltingPoint) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkLatentHeat(loss: ChargeMaterialSummaryData) {
+    let material;
+    if (loss.materialType == 'Solid') {
+      let solidOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
+      material = solidOptions.find(val => { return val.substance == loss.materialName });
+    }
+
+    if (loss.materialType == 'Liquid') {
+      let liquidOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      material = liquidOptions.find(val => { return val.substance == loss.materialName });
+    }
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        material.latentHeat = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
+      }
+      material.latentHeat = this.roundVal(material.latentHeat, 4);
+      if (material.latentHeat != loss.latentHeat) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkVaporizingTemp(loss: ChargeMaterialSummaryData) {
+    if (loss.materialType == 'Liquid') {
+      let liquidOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      let material = liquidOptions.find(val => { return val.substance == loss.materialName });
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        material.vaporizationTemperature = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
+      }
+      material.vaporizationTemperature = this.roundVal(material.vaporizationTemperature, 4);
+      if (material.vaporizationTemperature != loss.vaporizingTemperature) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkSpecificHeatVapor(loss: ChargeMaterialSummaryData){
+    let material;
+     if (loss.materialType == 'Gas') {
+       let gasOptions = this.suiteDbService.selectGasLoadChargeMaterials();
+       material = gasOptions.find(val => { return val.substance == loss.materialName });
+      }
+
+    if (loss.materialType == 'Liquid') {
+      let liquidOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      material = liquidOptions.find(val => { return val.substance == loss.materialName });
+    }
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        material.specificHeatVapor = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
+      }
+      material.specificHeatVapor = this.roundVal(material.specificHeatVapor, 4);
+      if (material.specificHeatVapor != loss.specificHeatVapor) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   getData(loss: ChargeMaterial): ChargeMaterialSummaryData {
     let tmpMaterialName, tmpReactionType, tmpSpecificHeatGas, tmpSpecificHeatVapor,
@@ -278,8 +392,8 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       tmpReactionHeat = loss.liquidChargeMaterial.reactionHeat;
       tmpHeatRequired = loss.liquidChargeMaterial.heatRequired;
       tmpAdditionalHeat = loss.liquidChargeMaterial.additionalHeat;
+      tmpLatentHeat = loss.liquidChargeMaterial.latentHeat
     }
-
 
     let tmpSummaryData: ChargeMaterialSummaryData = {
       name: loss.name,
