@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from 'electron';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { SigFigsPipe } from '../../shared/sig-figs.pipe';
+import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 @Component({
@@ -37,9 +38,13 @@ export class RollupPieChartComponent implements OnInit {
   @Input()
   assessmentType: string;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+  exportName: string;
+
   pieChart: any;
 
-  constructor() { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -64,29 +69,19 @@ export class RollupPieChartComponent implements OnInit {
 
     if (this.assessmentType == "phast") {
       if (this.printView) {
-        let printChartContainers = document.getElementsByClassName("print-phast-rollup-pie-chart");
-        currentChart = printChartContainers[0];
-        currentChart.className = "printing-phast-rollup-bar-chart";
+        this.ngChart.nativeElement.className = "printing-phast-rollup-pie-chart";
       }
-      else {
-        let appChartContainers = document.getElementsByClassName("phast-rollup-pie-chart");
-        currentChart = appChartContainers[0];
-      }
+
     }
     else if (this.assessmentType == "psat") {
       if (this.printView) {
-        let printChartContainers = document.getElementsByClassName("print-psat-rollup-pie-chart");
-        currentChart = printChartContainers[0];
-        currentChart.className = "printing-psat-rollup-bar-chart";
-      }
-      else {
-        let appChartContainers = document.getElementsByClassName("psat-rollup-pie-chart");
-        currentChart = appChartContainers[0];
+
+        this.ngChart.nativeElement.className = "printing-psat-rollup-pie-chart";
       }
     }
 
     this.pieChart = c3.generate({
-      bindto: currentChart,
+      bindto: this.ngChart.nativeElement,
       data: {
         columns: [],
         type: 'pie',
@@ -139,5 +134,20 @@ export class RollupPieChartComponent implements OnInit {
         });
       }
     }
+  }
+
+  downloadChart() {
+    if (!this.title) {
+      if (this.assessmentType == "phast") {
+        this.exportName = "phast-rollup-pie-graph";
+      }
+      else {
+        this.exportName = "psat-rollup-pie-graph";
+      }
+    }
+    else {
+      this.exportName = this.title + "-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
