@@ -11,7 +11,8 @@ export class MeteredEnergyResultsComponent implements OnInit {
   results: MeteredEnergyResults;
   @Input()
   settings: Settings;
-
+  @Input()
+  label: string;
   resultUnits: any = {
     energyPerMassUnit: '',
     energyPerTimeUnit: '',

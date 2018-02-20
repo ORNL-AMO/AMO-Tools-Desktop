@@ -41,7 +41,9 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <app-metered-energy-results [results]="results" [settings]="settings"></app-metered-energy-results>
+              <app-metered-energy-results [label]="'Fuel'" [results]="fuelResults" [settings]="settings"></app-metered-energy-results>
+              <app-metered-energy-results [label]="'Electricity'" [results]="electricResults" [settings]="settings"></app-metered-energy-results>
+              <app-metered-energy-results [label]="'Total'" [results]="resultsSum" [settings]="settings"></app-metered-energy-results>
             </div>
           </div>
         </div>

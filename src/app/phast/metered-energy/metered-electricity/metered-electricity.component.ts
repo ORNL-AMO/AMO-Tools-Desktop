@@ -4,6 +4,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 import { PhastService } from '../../phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { MeteredEnergyService } from '../metered-energy.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-metered-electricity',
@@ -19,7 +20,7 @@ export class MeteredElectricityComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
 
   tabSelect: string = 'results';
-  results: MeteredEnergyResults = {
+  resultsSum: MeteredEnergyResults = {
     meteredEnergyUsed: 0,
     meteredEnergyIntensity: 0,
     meteredElectricityUsed: 0,
@@ -28,8 +29,25 @@ export class MeteredElectricityComponent implements OnInit {
     calculatedElectricityUsed: 0
   };
 
+  electricResults: MeteredEnergyResults = {
+    meteredEnergyUsed: 0,
+    meteredEnergyIntensity: 0,
+    meteredElectricityUsed: 0,
+    calculatedFuelEnergyUsed: 0,
+    calculatedEnergyIntensity: 0,
+    calculatedElectricityUsed: 0
+  }
+
+  fuelResults: MeteredEnergyResults = {
+    meteredEnergyUsed: 0,
+    meteredEnergyIntensity: 0,
+    meteredElectricityUsed: 0,
+    calculatedFuelEnergyUsed: 0,
+    calculatedEnergyIntensity: 0,
+    calculatedElectricityUsed: 0
+  }
   currentField: string = 'fuelType';
-  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService) { }
+  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
   ngOnInit() {
@@ -64,7 +82,28 @@ export class MeteredElectricityComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings, this.phast.meteredEnergy.meteredEnergyFuel);
+    this.fuelResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
+    this.fuelResults = this.convertFuelResults(this.fuelResults);
+    this.electricResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
+    this.resultsSum = {
+      meteredEnergyUsed: this.electricResults.meteredEnergyUsed + this.fuelResults.meteredEnergyUsed,
+      meteredEnergyIntensity: this.electricResults.meteredEnergyIntensity + this.fuelResults.meteredEnergyIntensity,
+      meteredElectricityUsed: this.fuelResults.meteredElectricityUsed + this.electricResults.meteredElectricityUsed,
+      calculatedFuelEnergyUsed: this.electricResults.calculatedFuelEnergyUsed,
+      calculatedEnergyIntensity: this.electricResults.calculatedEnergyIntensity,
+      calculatedElectricityUsed: this.electricResults.calculatedElectricityUsed
+    }
+  }
+
+  convertFuelResults(results: MeteredEnergyResults): MeteredEnergyResults{
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      results.meteredEnergyUsed = this.convertUnitsService.value(results.meteredEnergyUsed).from('GJ').to('kWh');
+      results.meteredEnergyIntensity = this.convertUnitsService.value(results.meteredEnergyIntensity).from('GJ').to('kWh');
+    }else{
+      results.meteredEnergyUsed = this.convertUnitsService.value(results.meteredEnergyUsed).from('MMBtu').to('kWh');
+      results.meteredEnergyIntensity = this.convertUnitsService.value(results.meteredEnergyIntensity).from('MMBtu').to('kWh');
+    }
+    return results;
   }
 
   setField(str: string) {
