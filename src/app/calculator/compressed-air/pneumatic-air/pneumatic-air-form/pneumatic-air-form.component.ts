@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {PneumaticAirRequirementInput, PneumaticAirRequirementOutput} from "../../../../shared/models/standalone";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../../../../shared/models/standalone";
 
 @Component({
   selector: 'app-pneumatic-air-form',
@@ -14,9 +14,15 @@ export class PneumaticAirFormComponent implements OnInit {
   outputs: PneumaticAirRequirementOutput;
   @Output('calculate')
   calculate = new EventEmitter<PneumaticAirRequirementInput>();
-  pistonTypes: Array<string> = [
-    'Single Acting',
-    'Double Acting',
+  pistonTypes: Array<any> = [
+    {
+      name: 'Single Acting',
+      value: 0
+    },
+    {
+      name: 'Double Acting',
+      value: 1
+    },
   ];
   constructor() { }
 

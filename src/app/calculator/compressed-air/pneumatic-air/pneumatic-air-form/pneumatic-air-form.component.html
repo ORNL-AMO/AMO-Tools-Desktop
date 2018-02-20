@@ -3,8 +3,8 @@
     <div class="form-group">
       <label for="pistonType">Piston Type</label>
       <div class="input-group">
-        <select name="pistonType" class="form-control" id="pistonType" (change)="getPistonType()" [(ngModel)]="pistonType" >
-        <option *ngFor="let pistonType of pistonTypes" [ngValue]="pistonType" >{{pistonType}}</option>
+        <select name="pistonType" class="form-control" id="pistonType" (change)="emitChange()" [(ngModel)]="inputs.pistonType" >
+        <option *ngFor="let pistonType of pistonTypes" [ngValue]="pistonType.value" >{{pistonType.name}}</option>
         </select>
         <!--<input name="pistonType" class="form-control" type="number" step="any" [(ngModel)]="inputs.pistonType" id="pistonType"-->
                <!--(input)="emitChange()" onfocus="this.select();"></div>-->
