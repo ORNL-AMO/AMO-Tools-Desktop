@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="materialSpecificHeatLiquid">Specific Heat of Liquid</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatDiffLiquid()}">
 
         <input name="{{'materialSpecificHeatLiquid_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialSpecificHeatLiquid"
           id="materialSpecificHeatLiquid" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeatLiquid')"
@@ -24,7 +24,7 @@
 
     <div class="form-group">
       <label class="small" for="materialVaporizingTemperature">Vaporizing Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkVaporizingTempDiff()}">
         <input name="{{'materialVaporizingTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialVaporizingTemperature"
           id="materialVaporizingTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialVaporizingTemperature')"
           (blur)="focusOut()">
@@ -35,7 +35,7 @@
 
     <div class="form-group">
       <label class="small" for="materialLatentHeat">Latent Heat of Vaporization</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkLatentHeatDiff()}">
         <input name="{{'materialLatentHeat_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="materialLatentHeat"
           id="materialLatentHeat" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialLatentHeat')"
           (blur)="focusOut()">
@@ -47,7 +47,7 @@
 
     <div class="form-group">
       <label class="small" for="materialSpecificHeatVapor">Specific Heat of Vapor</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatVaporDiff()}">
         <input name="{{'materialSpecificHeatVapor_'+lossIndex}}" type="number" min="0" class="form-control" formControlName="materialSpecificHeatVapor"
           id="materialSpecificHeatVapor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeatVapor')"
           (blur)="focusOut()">

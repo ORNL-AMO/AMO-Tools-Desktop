@@ -8,6 +8,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
+import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -44,7 +46,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   specificHeatGasVaporError: string = null;
   feedGasReactedError: string = null;
   heatOfReactionError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -81,6 +83,20 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
 
+  checkMaterialValues() {
+    let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      if(this.settings.unitsOfMeasure == 'Metric'){
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
+        material.specificHeatVapor = this.roundVal(val, 4);
+      }
+      if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeat.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 
   disableForm() {
     this.chargeMaterialForm.disable();
@@ -104,7 +120,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
     });
-    this.calculate.emit(true);
+    this.startSavePolling();
   }
 
   roundVal(val: number, digits: number) {
@@ -150,9 +166,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = null;
     }
 
-    if(this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError){
+    if (this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError) {
       this.inputError.emit(true);
-    }else{
+    } else {
       this.inputError.emit(false);
     }
   }
@@ -175,12 +191,12 @@ export class GasChargeMaterialFormComponent implements OnInit {
           });
         })
         //materialSpecificHeat
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.subscribe((val) => {
-          let materialSpecificHeatElements = doc.getElementsByName('materialSpecificHeat_' + this.lossIndex);
-          materialSpecificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different-db', val);
-          });
-        })
+        // this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.subscribe((val) => {
+        //   let materialSpecificHeatElements = doc.getElementsByName('materialSpecificHeat_' + this.lossIndex);
+        //   materialSpecificHeatElements.forEach(element => {
+        //     element.classList.toggle('indicate-different-db', val);
+        //   });
+        // })
         //feedRate
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.feedRate.subscribe((val) => {
           let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
