@@ -1,0 +1,74 @@
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="pistonType">Piston Type</label>
+      <div class="input-group">
+        <select name="pistonType" class="form-control" id="pistonType" (change)="emitChange()" [(ngModel)]="inputs.pistonType" >
+        <option *ngFor="let pistonType of pistonTypes" [ngValue]="pistonType.value" >{{pistonType.name}}</option>
+        </select>
+        <!--<input name="pistonType" class="form-control" type="number" step="any" [(ngModel)]="inputs.pistonType" id="pistonType"-->
+               <!--(input)="emitChange()" onfocus="this.select();"></div>-->
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="cylinderDiameter">Cylinder Diameter</label>
+      <div class="input-group">
+        <input name="cylinderDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderDiameter" id="cylinderDiameter"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">inch</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="cylinderStroke">Cylinder Stroke</label>
+      <div class="input-group">
+        <input name="cylinderStroke" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderStroke" id="cylinderStroke"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">inch</span>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="inputs.pistonType == 1">
+      <label for="pistonRodDiameter">Piston Rod Diameter</label>
+      <div class="input-group">
+        <input name="pistonRodDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.pistonRodDiameter" id="pistonRodDiameter"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">inch</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="airPressure">Air Pressure</label>
+      <div class="input-group">
+        <input name="airPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressure" id="airPressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="cyclesPerMinute">Cycles per Minute Stroke</label>
+      <div class="input-group">
+        <input name="cyclesPerMinute" class="form-control" type="number" step="any" [(ngModel)]="inputs.cyclesPerMinute" id="cyclesPerMinute"
+               (input)="emitChange()" onfocus="this.select();">
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="bold">Air Requirement Pneumatic Cylinder</label>
+      <div class="text-center small">
+        {{outputs.airRequirementPneumaticCylinder | number:'1.0-2'}} ft
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="bold">Volume of Air Intake</label>
+      <div class="text-center small">
+        {{outputs.volumeAirIntakePiston | number:'1.0-2'}} ft <sup>2</sup>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="bold">Compression Ratio</label>
+      <div class="text-center small">
+        {{outputs.compressionRatio | number:'1.0-2'}}
+      </div>
+    </div>
+  </div>
+
+</form>
