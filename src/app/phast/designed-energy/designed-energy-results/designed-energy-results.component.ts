@@ -12,7 +12,8 @@ export class DesignedEnergyResultsComponent implements OnInit {
   results: DesignedEnergyResults;
   @Input()
   settings: Settings;
-
+  @Input()
+  title: string;
   resultUnits: any = {
     energyPerMassUnit: '',
     energyPerTimeUnit: '',

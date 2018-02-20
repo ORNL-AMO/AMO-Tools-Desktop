@@ -103,7 +103,10 @@ export class EnergyUsedComponent implements OnInit {
     
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy.designedEnergyElectricity) {
-        this.designedResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+        let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast,this.settings);
+        fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
+        let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+        this.designedResults = this.designedEnergyService.sumFuelElectric(fuelResults, elecResults);
       }
     }
   }

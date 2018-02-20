@@ -128,5 +128,35 @@ export class DesignedEnergyService {
     }
     return val;
   }
+
+  sumFuelElectric(fuelResults: DesignedEnergyResults, electricResults: DesignedEnergyResults): DesignedEnergyResults {
+    // if (settings.unitsOfMeasure == 'Imperial') {
+    //   fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('MMBtu').to('kWh');
+    //   fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('MMBtu').to('kWh');
+    // } else {
+    //   fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('GJ').to('kWh');
+    //   fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('GJ').to('kWh');
+    // }
+    let results: DesignedEnergyResults = {
+      designedEnergyUsed: fuelResults.designedEnergyUsed + electricResults.designedEnergyUsed,
+      designedEnergyIntensity: fuelResults.designedEnergyIntensity + electricResults.designedEnergyIntensity,
+      designedElectricityUsed: fuelResults.designedElectricityUsed + electricResults.designedElectricityUsed,
+      calculatedFuelEnergyUsed: electricResults.calculatedFuelEnergyUsed,
+      calculatedEnergyIntensity: electricResults.calculatedEnergyIntensity,
+      calculatedElectricityUsed: electricResults.calculatedElectricityUsed
+    }
+    return results;
+  }
+
+  convertFuelToElectric(fuelResults: DesignedEnergyResults, settings: Settings): DesignedEnergyResults {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('MMBtu').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('MMBtu').to('kWh');
+    } else {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('GJ').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('GJ').to('kWh');
+    }
+    return fuelResults;
+  }
 }
 

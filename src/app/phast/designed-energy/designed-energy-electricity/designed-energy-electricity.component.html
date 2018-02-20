@@ -24,7 +24,10 @@
                 </button>
               </div>
               <div class="col-12">
+                <label>Electric</label>
                 <app-designed-energy-electricity-form [inputs]="zone" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-electricity-form>
+                <label>Fuel</label>
+                <app-designed-energy-fuel-form [inputs]="phast.designedEnergy.designedEnergyFuel[index]" [settings]="settings" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-fuel-form>
               </div>
             </div>
           </form>
@@ -51,7 +54,9 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <app-designed-energy-results [results]="results" [settings]="settings"></app-designed-energy-results>
+              <app-designed-energy-results [title]="'Fuel'" [results]="fuelResults" [settings]="settings"></app-designed-energy-results>
+              <app-designed-energy-results [title]="'Electricity'" [results]="electricResults" [settings]="settings"></app-designed-energy-results>
+              <app-designed-energy-results [title]="'Total'" [results]="totalResults" [settings]="settings"></app-designed-energy-results>
             </div>
           </div>
         </div>
