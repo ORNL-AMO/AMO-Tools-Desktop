@@ -1,3 +1,8 @@
+export interface FSAT {
+  name?: string
+}
+
+
 export interface FanRatedInfo {
   fanSpeed: number;
   motorSpeed: number;

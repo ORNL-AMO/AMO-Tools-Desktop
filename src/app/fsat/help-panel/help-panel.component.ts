@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { HelpPanelService } from './help-panel.service';
 
 @Component({
   selector: 'app-help-panel',
@@ -13,9 +14,14 @@ export class HelpPanelComponent implements OnInit {
   stepTab: string;
   @Input()
   inSetup: boolean;
-  constructor() { }
+
+  currentField: string;
+  constructor(private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
+    this.helpPanelService.currentField.subscribe(val => {
+      this.currentField = val;
+    })
   }
 
 }

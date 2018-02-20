@@ -1,0 +1,89 @@
+<form [formGroup]="ratedInfoForm" *ngIf="ratedInfoForm">
+  <div class="row">
+    <div class="col-12">
+      <div class="header">
+        <h3>Basic Fan Information</h3>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="fanSpeed">Fan Speed</label>
+    <div class="input-group">
+      <input name="fanSpeed" type="number" min="0" max="1" step="any" class="form-control" formControlName="fanSpeed" id="fanSpeed"
+        (input)="save()" (focus)="focusField('fanSpeed')" onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="motorSpeed">Fan Speed</label>
+    <div class="input-group">
+      <input name="motorSpeed" type="number" min="0" max="1" step="any" class="form-control" formControlName="motorSpeed" id="motorSpeed"
+        (input)="save()" (focus)="focusField('motorSpeed')" onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="driveType">Drive</label>
+    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="save()" (focus)="focusField('driveType')">
+      <option *ngFor="let drive of driveTypes" [ngValue]="drive">{{drive}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="fanSpeedCorrected">Corrected Fan Speed (N
+      <sub>c</sub>)</label>
+    <div class="input-group">
+      <input name="fanSpeedCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="fanSpeedCorrected"
+        id="fanSpeedCorrected" (input)="save()" (focus)="focusField('fanSpeedCorrected')" onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <!-- don't think "P" is correct, some symbol-->
+    <label for="densityCorrected">Corrected Density (P
+      <sub>c</sub>)</label>
+    <div class="input-group">
+      <input name="densityCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="densityCorrected"
+        id="densityCorrected" (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
+      <span class="input-group-addon units">lbm/ft
+        <sup>3</sup>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="pressureBarometricCorrected">Corrected Pressure Barometric (Pb
+      <sub>c</sub>)</label>
+    <div class="input-group">
+      <input name="pressureBarometricCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="pressureBarometricCorrected"
+        id="pressureBarometricCorrected" (input)="save()" (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="includesEvase">Rated Fan Performance Includes Evase</label>
+    <div class="input-group">
+      <select class="form-control" name="includesEvase" formControlName="includesEvase" id="includesEvase" (change)="save()" (focus)="focusField('includesEvase')">
+        <option [ngValue]="'Yes'">Yes</option>
+        <option [ngValue]="'No'">No</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="upDownStream">Plane 5 Upstream or Downstram of Plane 2 (Evase Case)</label>
+    <div class="input-group">
+      <select class="form-control" name="upDownStream" formControlName="upDownStream" id="upDownStream" (change)="save()" (focus)="focusField('upDownStream')">
+        <option [ngValue]="'Upstream'">Upstream</option>
+        <option [ngValue]="'Downstream'">Downstream</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="traversePlanes">Number of Traverse Planes</label>
+    <div class="input-group">
+      <select class="form-control" name="traversePlanes" formControlName="traversePlanes" id="traversePlanes" (change)="save()" (focus)="focusField('traversePlanes')">
+        <option *ngFor="let plane of planes" [ngValue]="plane">{{plane}}</option>
+      </select>
+    </div>
+  </div>
+</form>

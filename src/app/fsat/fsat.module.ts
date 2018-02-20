@@ -10,7 +10,9 @@ import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
-
+import { FsatBasicsComponent } from './fsat-basics/fsat-basics.component';
+import { FsatBasicsHelpComponent } from './help-panel/fsat-basics-help/fsat-basics-help.component';
+import { HelpPanelService } from './help-panel/help-panel.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,8 +22,8 @@ import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/syste
     SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent],
-  providers: [FsatService],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent],
+  providers: [FsatService, HelpPanelService],
   exports: [FsatComponent]
 })
 export class FsatModule { }

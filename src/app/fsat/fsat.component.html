@@ -7,6 +7,7 @@
   <div *ngIf="mainTab == 'system-setup'" class="row tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-6 panel-column modification">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"></app-system-basics>
+      <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
     </div>
     <div class="col-6 help-panel">
       <app-help-panel [settings]="settings" [stepTab]="stepTab" [inSetup]="true"></app-help-panel>

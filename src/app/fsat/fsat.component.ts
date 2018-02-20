@@ -30,6 +30,7 @@ export class FsatComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        console.log(this.assessment);
         this.getSettings();
       })
     })
