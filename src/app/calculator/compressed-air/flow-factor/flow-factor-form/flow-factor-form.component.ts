@@ -25,7 +25,7 @@ export class FlowFactorFormComponent implements OnInit {
     this.calculate.emit(this.inputs);
   }
 
-  setUserFlowRate(bool: boolean){
+  setUserFlowRate(bool: boolean) {
     this.setUser.emit(bool);
   }
 }

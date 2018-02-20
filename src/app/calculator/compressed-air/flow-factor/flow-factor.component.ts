@@ -22,7 +22,7 @@ export class FlowFactorComponent implements OnInit  {
     };
   }
 
-setUserFlowRate(bool: boolean){
+setUserFlowRate(bool: boolean) {
   this.userFlowRate = bool;
 }
   getFlowRate() {
@@ -30,7 +30,7 @@ setUserFlowRate(bool: boolean){
   }
 
   getValveFlowFactor() {
-    if(!this.userFlowRate){
+    if (!this.userFlowRate) {
       this.getFlowRate();
       console.log('get');
     }

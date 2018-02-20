@@ -10,10 +10,14 @@ export class PneumaticAirFormComponent implements OnInit {
 
   @Input()
   inputs: PneumaticAirRequirementInput;
-  @Output()
+  @Input()
   outputs: PneumaticAirRequirementOutput;
   @Output('calculate')
   calculate = new EventEmitter<PneumaticAirRequirementInput>();
+  pistonTypes: Array<string> = [
+    'Single Acting',
+    'Double Acting',
+  ];
   constructor() { }
 
   ngOnInit() {
