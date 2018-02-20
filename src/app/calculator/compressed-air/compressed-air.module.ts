@@ -9,6 +9,9 @@ import { FlowFactorComponent } from './flow-factor/flow-factor.component';
 import { FlowFactorFormComponent } from './flow-factor/flow-factor-form/flow-factor-form.component';
 import { PneumaticAirComponent } from './pneumatic-air/pneumatic-air.component';
 import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pneumatic-air-form.component';
+import { ReceiverTankComponent } from './receiver-tank/receiver-tank.component';
+import { GeneralMethodComponent } from './receiver-tank/general-method/general-method.component';
+import { GeneralMethodFormComponent } from './receiver-tank/general-method/general-method-form/general-method-form.component';
 
 @NgModule({
   imports: [
@@ -24,7 +27,10 @@ import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pn
     FlowFactorComponent,
     FlowFactorFormComponent,
     PneumaticAirComponent,
-    PneumaticAirFormComponent
+    PneumaticAirFormComponent,
+    ReceiverTankComponent,
+    GeneralMethodComponent,
+    GeneralMethodFormComponent
   ],
   exports: [
     CompressedAirComponent
