@@ -5,36 +5,6 @@
     when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
     with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.</p>
 </div>
-
-<div class="help-content">
-  <div class="card" *ngIf="currentField == 'o2CombAir'">
-    <div class="card-header">
-      O
-      <sub>2</sub> Combustion Air
-    </div>
-    <div class="card-block">
-      <label>
-        <u>Description:</u>
-      </label>
-      <p>
-        Molar (or volumetric) fraction (%) of O
-        <sub>2</sub> in incoming air for combustion. Oxygen enrichment can result in increased efficiency, lower emissions, and
-        improved temperature stability.
-      </p>
-      <label>
-        <u>Input:</u>
-      </label>
-      <p>
-        Units: %
-        <strong></strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>100</strong>
-        <br>
-      </p>
-    </div>
-
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'o2CombAir'">
         <div class="card-header">
@@ -104,7 +74,7 @@
       </div>
       <div class="card" *ngIf="currentField == 'fuelConsumption'">
         <div class="card-header">
-          O<sub>2</sub> Combustion Air
+          Fuel Consumption
         </div>
         <div class="card-block">
           <label><u>Description:</u></label>
@@ -117,113 +87,4 @@
           </p>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'combAirTemp'">
-    <div class="card-header">
-      Combustion Air Preheat Temperature
-    </div>
-    <div class="card-block">
-      <label>
-        <u>Description:</u>
-      </label>
-      <p>
-        Temperature of the incoming combustion air after preheating. Use of preheated combustion air increases the available heat
-        (compared to combustion air at ambient temperature).
-      </p>
-      <label>
-        <u>Input:</u>
-      </label>
-      <p>
-        Units: &#8457; or &#8451;
-        <strong></strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>2,000</strong>
-        <br>
-      </p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'o2FlueGas'">
-    <div class="card-header">
-      O
-      <sub>2</sub> in Flue Gases
-    </div>
-    <div class="card-block">
-      <label>
-        <u>Description:</u>
-      </label>
-      <p>
-        Molar (or volumetric) fraction (% Dry) of O
-        <sub>2</sub> in outgoing flue gas (ignoring moisture content). Higher O
-        <sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering
-        the available heat).
-      </p>
-      <label>
-        <u>Input:</u>
-      </label>
-      <p>
-        Units: % Dry
-        <strong></strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>100</strong>
-        <br>
-      </p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'flueGasTemp'">
-    <div class="card-header">
-      Flue Gas Temperature
-    </div>
-    <div class="card-block">
-      <label>
-        <u>Description:</u>
-      </label>
-      <p>
-        Temperature of the outgoing flue gas. Higher flue gas temperature increases the heat content of flue gases and indicates
-        less heat was retained by the system (lower available heat).
-      </p>
-      <label>
-        <u>Input:</u>
-      </label>
-      <p>
-        Units: &#8457; or &#8451;
-        <strong></strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>4,000</strong>
-        <br>
-      </p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'fuelConsumption'">
-    <div class="card-header">
-      O
-      <sub>2</sub> Combustion Air
-    </div>
-    <div class="card-block">
-      <label>
-        <u>Description:</u>
-      </label>
-      <p>
-        Energy of consumed fuel
-      </p>
-      <label>
-        <u>Input:</u>
-      </label>
-      <p>
-        Units: MMBtu/hr or GJ/hr
-        <strong></strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>10,000</strong>
-        <br>
-      </p>
-    </div>
-  </div>
 </div>

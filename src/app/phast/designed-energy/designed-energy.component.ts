@@ -14,7 +14,9 @@ export class DesignedEnergyComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-
+  @Input()
+  containerHeight: number;
+  
   constructor() { }
 
   ngOnInit() {

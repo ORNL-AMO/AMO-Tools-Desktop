@@ -1,7 +1,7 @@
 <!--Charge Materials-->
 <div class="row">
   <div class="col-12">
-    <app-charge-material-summary [phast]="phast"></app-charge-material-summary>
+    <app-charge-material-summary [phast]="phast" [settings]="settings"></app-charge-material-summary>
   </div>
 </div>
 <!--Fixtures-->
@@ -93,5 +93,11 @@
 <div class="row" *ngIf="lossCategories.showSystemEff">
   <div class="col-12">
     <app-system-efficiency-summary [phast]="phast"></app-system-efficiency-summary>
+  </div>
+</div>
+<!--Operation Data-->
+<div class="row">
+  <div class="col-12">
+    <app-operation-data [phast]="phast" [settings]="settings"></app-operation-data>
   </div>
 </div>

@@ -7,6 +7,8 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator, HeadTool, HeadToolSuction } from '../../../shared/models/calculators';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -23,7 +25,8 @@ export class HeadToolComponent implements OnInit {
   headToolResults: any;
   @Input()
   inAssessment: boolean;
-
+  @Input()
+  assessment: Assessment;
 
   results: any = {
     differentialElevationHead: 0.0,
@@ -43,10 +46,43 @@ export class HeadToolComponent implements OnInit {
   showSettings: boolean = false;
   settingsForm: FormGroup;
   canSave: boolean = false;
+  isSavedCalc: boolean = false;
+  calculator: Calculator;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (this.inAssessment) {
+      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
+        if (results.length != 0) {
+          this.calculator = results[0];
+          if (this.calculator.headTool) {
+            this.isSavedCalc = true;
+            this.headToolForm = this.getHeadToolFormFromObj(this.calculator.headTool);
+            this.headToolSuctionForm = this.getHeadToolSuctionFormFromObj(this.calculator.headToolSuction);
+            this.headToolType = this.calculator.headToolType;
+          } else {
+            this.getFormFromSettings();
+          }
+        } else {
+          this.getFormFromSettings();
+        }
+      })
+    } else {
+      this.getFormFromSettings();
+    }
 
+    // if(this.inAssessment){
+    //   this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results:Array<Calculator>)=> {
+    //     if(results.length != 0){
+    //       this.headToolForm = results[0].headToolForm;
+    //       this.headToolSuctionForm = results[0].headToolSuctionForm;
+    //       this.headToolType = results[0].headToolType;
+    //     }
+    //   })
+    // }
+  }
+
+  getFormFromSettings() {
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
@@ -97,13 +133,34 @@ export class HeadToolComponent implements OnInit {
     this.showSettings = false;
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.currentField = str;
   }
 
   save() {
     this.psat.inputs.head = this.results.pumpHead;
-    this.closeTool();
+    if (this.inAssessment) {
+      if (this.isSavedCalc) {
+        this.calculator.headTool = this.getHeadToolFromForm(this.headToolForm),
+          this.calculator.headToolSuction = this.getHeadToolSuctionFromForm(this.headToolSuctionForm),
+          this.calculator.headToolType = this.headToolType;
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.closeTool();
+        });
+      } else {
+        this.calculator = {
+          headTool: this.getHeadToolFromForm(this.headToolForm),
+          headToolSuction: this.getHeadToolSuctionFromForm(this.headToolSuctionForm),
+          headToolType: this.headToolType,
+          assessmentId: this.assessment.id
+        }
+        this.indexedDbService.addCalculator(this.calculator).then(() => {
+          this.closeTool();
+        });;
+      }
+    } else {
+      this.closeTool();
+    }
   }
 
   roundVal(val: number, digits: number) {
@@ -162,7 +219,7 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
-  setFormView(str: string){
+  setFormView(str: string) {
     this.headToolType = str;
   }
 
@@ -207,5 +264,68 @@ export class HeadToolComponent implements OnInit {
       'specificGravity': [1, Validators.required],
       'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
     })
+  }
+
+
+  getHeadToolFormFromObj(headTool: HeadTool) {
+    return this.formBuilder.group({
+      'suctionPipeDiameter': [headTool.suctionPipeDiameter, Validators.required],
+      'suctionGuagePressure': [headTool.suctionGaugePressure, Validators.required],
+      'suctionGuageElevation': [headTool.suctionGaugeElevation, Validators.required],
+      'suctionLineLossCoefficients': [headTool.suctionLineLossCoefficients, Validators.required],
+      'dischargePipeDiameter': [headTool.dischargePipeDiameter, Validators.required],
+      'dischargeGaugePressure': [headTool.dischargeGaugePressure, Validators.required],
+      'dischargeGaugeElevation': [headTool.dischargeGaugeElevation, Validators.required],
+      'dischargeLineLossCoefficients': [headTool.dischargeLineLossCoefficients, Validators.required],
+      'specificGravity': [headTool.specificGravity, Validators.required],
+      'flowRate': [headTool.flowRate, Validators.required],
+    })
+  }
+
+  getHeadToolSuctionFormFromObj(headToolSuction: HeadToolSuction) {
+    return this.formBuilder.group({
+      'suctionPipeDiameter': [headToolSuction.suctionPipeDiameter, Validators.required],
+      'suctionTankGasOverPressure': [headToolSuction.suctionTankGasOverPressure, Validators.required],
+      'suctionTankFluidSurfaceElevation': [headToolSuction.suctionTankFluidSurfaceElevation, Validators.required],
+      'suctionLineLossCoefficients': [headToolSuction.suctionLineLossCoefficients, Validators.required],
+      'dischargePipeDiameter': [headToolSuction.dischargePipeDiameter, Validators.required],
+      'dischargeGaugePressure': [headToolSuction.dischargeGaugePressure, Validators.required],
+      'dischargeGaugeElevation': [headToolSuction.dischargeGaugeElevation, Validators.required],
+      'dischargeLineLossCoefficients': [headToolSuction.dischargeLineLossCoefficients, Validators.required],
+      'specificGravity': [headToolSuction.specificGravity, Validators.required],
+      'flowRate': [headToolSuction.flowRate, Validators.required],
+    })
+  }
+
+  getHeadToolFromForm(form: FormGroup): HeadTool {
+    let headTool: HeadTool = {
+      specificGravity: form.controls.specificGravity.value,
+      flowRate: form.controls.flowRate.value,
+      suctionPipeDiameter: form.controls.suctionPipeDiameter.value,
+      suctionGaugePressure: form.controls.suctionGuagePressure.value,
+      suctionGaugeElevation: form.controls.suctionGuageElevation.value,
+      suctionLineLossCoefficients: form.controls.suctionLineLossCoefficients.value,
+      dischargePipeDiameter: form.controls.dischargePipeDiameter.value,
+      dischargeGaugePressure: form.controls.dischargeGaugePressure.value,
+      dischargeGaugeElevation: form.controls.dischargeGaugeElevation.value,
+      dischargeLineLossCoefficients: form.controls.dischargeLineLossCoefficients.value,
+    }
+    return headTool;
+  }
+
+  getHeadToolSuctionFromForm(form: FormGroup) {
+    let headToolSuction: HeadToolSuction = {
+      specificGravity: form.controls.specificGravity.value,
+      flowRate: form.controls.flowRate.value,
+      suctionPipeDiameter: form.controls.suctionPipeDiameter.value,
+      suctionTankGasOverPressure: form.controls.suctionTankGasOverPressure.value,
+      suctionTankFluidSurfaceElevation: form.controls.suctionTankFluidSurfaceElevation.value,
+      suctionLineLossCoefficients: form.controls.suctionLineLossCoefficients.value,
+      dischargePipeDiameter: form.controls.dischargePipeDiameter.value,
+      dischargeGaugePressure: form.controls.dischargeGaugePressure.value,
+      dischargeGaugeElevation: form.controls.dischargeGaugeElevation.value,
+      dischargeLineLossCoefficients: form.controls.dischargeLineLossCoefficients.value,
+    }
+    return headToolSuction;
   }
 }

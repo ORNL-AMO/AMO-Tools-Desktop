@@ -355,6 +355,7 @@ export class ConvertPhastService {
   }
   //extendedSurface
   convertExtendedSurface(loss: ExtendedSurface, oldSettings: Settings, newSettings: Settings): ExtendedSurface {
+    debugger
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       loss.ambientTemperature = this.convertVal(loss.ambientTemperature, 'C', 'F');
       loss.surfaceTemperature = this.convertVal(loss.surfaceTemperature, 'C', 'F');

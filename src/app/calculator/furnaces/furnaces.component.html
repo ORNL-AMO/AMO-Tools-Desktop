@@ -4,43 +4,68 @@
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2>Process Heating Calculators</h2>
-        <ul>
-          <li>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/o2.png" class="ico-size2">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('o2-enrichment')">O<sub>2</sub> Enrichment</a>
-            <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion and
-              flue gases
+            <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion
+              and flue gases.
             </p>
-          </li>
-          <li>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/eff-impr.png" class="ico-size2">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('efficiency-improvement')">Efficiency Improvement</a>
             <p>
               Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
             </p>
-          </li>
-          <li>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/energy-equ.png" class="ico-size2">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('energy-equivalency')">Energy Equivalency</a>
             <p>
               Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
               or vice versa.
             </p>
-          </li>
-          <li>
-            <a (click)="showTool('energy-use')">Flow Calculations Energy Use
-            </a>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/flow.png" class="ico-size2">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('energy-use')">Flow Calculations Energy Use</a>
             <p>
               Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
               the gas is a fuel (i.e. natural gas, propane). This calculator estimates the energy flow into the furnace by
               calculating the gas flow from data obtained by an orifice meter. This can then be compared to the calculations
               provided by the PHAST tool.
             </p>
-          </li>
-          <li>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/assessment.png" class="ico-size2">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
-            <p>Enter design or metered energy use data for furnaces within a facility to determine the relative energy use and prioritize
-              energy use evaluations and improvements.
+            <p>
+              This calculator allows the user to enter either energy use information gathered from meters or design specifications (for
+              fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows users
+              to compare the relative energy use of furnaces within a facility to prioritize energy evaluations and efficiency
+              improvements.
             </p>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,7 +82,7 @@
     </div>
   </div> -->
 
-    <app-o2-enrichment></app-o2-enrichment>
+  <app-o2-enrichment></app-o2-enrichment>
 </div>
 
 
@@ -73,7 +98,7 @@
     </div>
   </div>
   <div class="calculator-container"> -->
-    <app-efficiency-improvement></app-efficiency-improvement>
+  <app-efficiency-improvement></app-efficiency-improvement>
   <!-- </div> -->
 </div>
 
@@ -87,7 +112,7 @@
     </div>
   </div>
   <div class="calculator-container"> -->
-    <app-energy-equivalency></app-energy-equivalency>
+  <app-energy-equivalency></app-energy-equivalency>
   <!-- </div> -->
 </div>
 
@@ -100,7 +125,7 @@
     </div>
   </div> -->
 
-    <app-energy-use></app-energy-use>
+  <app-energy-use></app-energy-use>
 
 </div>
 
@@ -118,8 +143,8 @@
   <div class="row">
     <div class="col-lg-11 mx-auto">
       <div class="calculator-container"> -->
-        <app-pre-assessment></app-pre-assessment>
-      <!-- </div>
+  <app-pre-assessment></app-pre-assessment>
+  <!-- </div>
     </div>
   </div> -->
 </div>

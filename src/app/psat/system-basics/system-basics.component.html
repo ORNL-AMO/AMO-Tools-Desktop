@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-12">
     <div class="header">
-      <h3>{{assessment.name}} Settings</h3>
+      <h3>{{assessment.name}} Settings</h3><br>
+      <a class="no-data-link" *ngIf="showUpdateData" (click)="updateData()">Your units have changed! Click here to update your data to reflect these changes!</a>
+      <span class="data-updated" *ngIf="dataUpdated">Data Updated!</span>
     </div>
     <!-- <div class="header">
         <h3 *ngIf="!isEditingName" (click)="editName()">{{assessment.name}} Settings</h3>
@@ -33,7 +35,7 @@
 
 
 
-<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
+<!-- <div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -52,4 +54,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

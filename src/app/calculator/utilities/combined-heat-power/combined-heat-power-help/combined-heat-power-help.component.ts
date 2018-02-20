@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { CombinedHeatPower } from '../../../../shared/models/combinedHeatPower';
+import { CombinedHeatPower } from '../../../../shared/models/standalone';
 @Component({
   selector: 'app-combined-heat-power-help',
   templateUrl: './combined-heat-power-help.component.html',

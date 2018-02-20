@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -24,6 +24,11 @@ export class PsatComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
 
   assessment: Assessment;
 
@@ -170,12 +175,12 @@ export class PsatComponent implements OnInit {
           //   this.settings = this.settingsService.setTemperatureUnit(this.settings);
           // }
           this.isAssessmentSettings = true;
-          if (update) {
-            this.addToast('Settings Saved');
-            if (this.saveContinue) {
-              this.continue(this.saveContinue)
-            }
-          }
+          // if (update) {
+          //   this.addToast('Settings Saved');
+          //   if (this.saveContinue) {
+          //     this.continue(this.saveContinue)
+          //   }
+          // }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -264,23 +269,39 @@ export class PsatComponent implements OnInit {
   }
 
   continue(bool?: boolean) {
-    if (this.subTab != 'system-basics' || bool) {
-      if (!bool) {
-        this.save();
-      } else {
-        this.saveContinue = false;
-      }
-      if (this.subTab == 'field-data') {
-        this.psatService.mainTab.next('assessment');
-      } else {
-        this.subTabIndex++;
-        this.subTab = this.subTabs[this.subTabIndex];
-      }
+    if (this.subTab == 'field-data') {
+      this.psatService.mainTab.next('assessment');
     } else {
-      this.saveContinue = true;
-      this.toggleSave();
+      this.subTabIndex++;
+      this.subTab = this.subTabs[this.subTabIndex];
     }
+
+    //if (this.subTab != 'system-basics' || bool) {
+    // if (!bool) {
+    //   this.save();
+    // } else {
+    //   this.saveContinue = false;
+    // }
+    //   if (this.subTab == 'field-data') {
+    //     this.psatService.mainTab.next('assessment');
+    //   } else {
+    //     this.subTabIndex++;
+    //     this.subTab = this.subTabs[this.subTabIndex];
+    //   }
+    // } else {
+    //   this.saveContinue = true;
+    //   this.toggleSave();
+    // }
     this.getContainerHeight();
+  }
+
+  back(){
+    if(this.mainTab == 'assessment'){
+      this.psatService.mainTab.next('system-setup')
+    }else{
+      this.subTabIndex--;
+      this.subTab = this.subTabs[this.subTabIndex];
+    }
   }
 
   getCanContinue() {
@@ -301,10 +322,6 @@ export class PsatComponent implements OnInit {
 
   close() {
     this.location.back();
-  }
-
-  goBack() {
-    this.psatService.secondaryTab.next('system-setup');
   }
 
   toggleSave() {
@@ -338,7 +355,6 @@ export class PsatComponent implements OnInit {
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {
-        this.addToast('Assessment Saved');
         this.psatService.getResults.next(true);
       }
     )
@@ -349,6 +365,7 @@ export class PsatComponent implements OnInit {
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
+  
   addToast(msg: string) {
     let toastOptions: ToastOptions = {
       title: msg,

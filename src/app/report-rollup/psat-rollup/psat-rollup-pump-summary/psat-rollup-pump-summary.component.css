@@ -1,3 +1,12 @@
+.table-row{
+    padding-top: 14px;
+}
+
+.graph-select{
+    width: 100%;
+}
+
+
 tr > td,
 tr > th{
     text-align: center;
@@ -8,10 +17,22 @@ tr > td {
 }
 
 
-.table-row{
-    padding-top: 14px;
+.name{
+    border-left: solid 10px;
+    padding-left: 4px;
 }
 
-.graph-select{
-    width: 100%;
+th{
+    width:9%;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+@media print {
+    tr > td,
+    tr > th {
+        font-size: 18px !important;
+    }
 }

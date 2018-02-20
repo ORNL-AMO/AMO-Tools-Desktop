@@ -17,3 +17,21 @@ ul{
 .summary-card-body .fa-folder{
   font-size: large;
 }
+
+
+/* .card-header:hover{
+  cursor: inherit;
+  background: inherit;
+} */
+
+
+.fa-edit:hover{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fa-edit{
+  padding-top: 4px;
+  font-size: larger;
+}

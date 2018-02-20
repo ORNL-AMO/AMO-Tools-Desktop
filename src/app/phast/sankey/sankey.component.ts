@@ -1,19 +1,19 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Losses, PHAST } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
 import { PhastService } from '../phast.service';
-// declare var d3: any;
+import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
-var svg;
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
 
+var svg;
 // use these values to alter label font position and size
 const width = 2650,
   height = 1400,
   labelFontSize = 28,
   labelPadding = 4,
-  reportFontSize = 30,
+  reportFontSize = 34,
   reportPadding = 4,
   topLabelPositionY = 150,
   bottomLabelPositionY = 1250,
@@ -34,15 +34,32 @@ export class SankeyComponent implements OnInit {
   settings: Settings;
   @Input()
   location: string;
+  @Input()
+  printView: boolean;
+  @Input()
+  modIndex: number;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("btnDownload") btnDownload: ElementRef;
+
+  exportName: string;
+
+  window: any;
+  doc: any;
+  // svg: any;
+  graph: any;
+  isBaseline: boolean;
   firstChange: boolean = true;
   baseSize: number = 300;
   minSize: number = 3;
 
-  constructor(private phastService: PhastService, private sankeyService: SankeyService) {
+  constructor(private phastService: PhastService, private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
   }
 
   ngOnInit() {
+    if (this.location != "sankey-diagram") {
+      this.location = this.location + this.modIndex.toString();
+    }
   }
 
   ngAfterViewInit() {
@@ -66,6 +83,7 @@ export class SankeyComponent implements OnInit {
     }
   }
 
+
   sankey(results: FuelResults) {
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
@@ -86,15 +104,29 @@ export class SankeyComponent implements OnInit {
     links.push({ source: i, target: i + 1 })
 
 
-    svg = d3.select('#' + this.location).append('svg')
-      .call(() => {
-        this.calcSankey(results.nodes);
-      })
-      .attr("width", "100%")
-      .attr("height", "80%")
-      .attr("viewBox", "0 0 " + width + " " + height)
-      .attr("preserveAspectRatio", "xMinYMin")
-      .append("g");
+    if (this.printView) {
+      svg = d3.select('#' + this.location).append('svg')
+        .call(() => {
+          this.calcSankey(results.nodes);
+        })
+        .attr("width", "2400px")
+        .attr("height", "800px")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
+    else {
+      svg = d3.select('#' + this.location).append('svg')
+        .call(() => {
+          this.calcSankey(results.nodes);
+        })
+        .attr("width", "100%")
+        .attr("height", "80%")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
+
 
     this.drawFurnace();
     var color = this.findColor(results.nodes[0].value);
@@ -430,7 +462,7 @@ export class SankeyComponent implements OnInit {
     nodes.forEach(function (d, i) {
       var node_data = d;
       if (!d.inter || d.usefulOutput) {
-        svg.select("#end-" + i)
+        this.svg.select("#end-" + i)
           .attr("fill", function () {
             return color(node_data.value);
           })
@@ -439,7 +471,7 @@ export class SankeyComponent implements OnInit {
 
     links.forEach(function (d, i) {
       var link_data = d;
-      svg.select("#linear-gradient-" + i)
+      this.svg.select("#linear-gradient-" + i)
         .attr("x1", nodes[link_data.source].x)
         .attr("y1", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {
@@ -618,5 +650,12 @@ export class SankeyComponent implements OnInit {
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = this.location + "-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

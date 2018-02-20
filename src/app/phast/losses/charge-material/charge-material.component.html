@@ -6,42 +6,48 @@
 <div class="card-form" *ngFor="let material of _chargeMaterial; let lossIndex = index">
   <div class="row">
     <div class="col-12">
-      <form class="name-input-form" [formGroup]="material.solidForm" *ngIf="material.chargeMaterialType == 'Solid'">
-        <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
-            <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
-            <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
-          </span>
-          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
-            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-          </span>
-        </div>
-      </form>
-      <form class="name-input-form" [formGroup]="material.gasForm" *ngIf="material.chargeMaterialType == 'Gas'">
-        <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
-            <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
-            <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
-          </span>
-          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
-            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-          </span>
-        </div>
-      </form>
-      <form class="name-input-form" [formGroup]="material.liquidForm" *ngIf="material.chargeMaterialType == 'Liquid'">
-        <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
-            <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
-            <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
-          </span>
-          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
-            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-          </span>
-        </div>
-      </form>
+      <div *ngIf="material.chargeMaterialType == 'Solid'">
+        <form class="name-input-form" [formGroup]="material.solidForm">
+          <div class="input-group">
+            <span class="input-group-addon units left" (click)="collapseLoss(material)">
+              <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
+              <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
+            </span>
+            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
+              <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="material.chargeMaterialType == 'Gas'">
+        <form class="name-input-form" [formGroup]="material.gasForm">
+          <div class="input-group">
+            <span class="input-group-addon units left" (click)="collapseLoss(material)">
+              <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
+              <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
+            </span>
+            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
+              <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+            </span>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="material.chargeMaterialType == 'Liquid'">
+        <form class="name-input-form" [formGroup]="material.liquidForm">
+          <div class="input-group">
+            <span class="input-group-addon units left" (click)="collapseLoss(material)">
+              <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
+              <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
+            </span>
+            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
+              <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+            </span>
+          </div>
+        </form>
+      </div>
       <!-- <label class="group-label loss-label">
         <span *ngIf="material.collapse" class="fa fa-caret-down" (click)="collapseLoss(material)"></span>
         <span *ngIf="!material.collapse" class="fa fa-caret-up" (click)="collapseLoss(material)"></span>
@@ -65,21 +71,43 @@
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-solid-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-liquid-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-gas-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-gas-charge-material-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Total</label>
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Total</label>
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Total</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Net Heat Loss</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Net Heat Loss</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Net Heat Loss</label>
+        <div *ngIf="material.netHeatLoss" class="text-center small font-weight-bold">
+          {{material.netHeatLoss | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!material.netHeatLoss" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Reaction Heat</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Reaction Heat</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Reaction Heat</label>
+        <div *ngIf="material.endoExoHeat" class="text-center small font-weight-bold">
+          {{material.endoExoHeat | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!material.endoExoHeat" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Gross Heat</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Gross Heat</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Gross Heat</label>
         <div *ngIf="material.heatRequired" class="text-center small font-weight-bold">
           {{material.heatRequired | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>
@@ -87,6 +115,8 @@
         <div *ngIf="!material.heatRequired" class="text-center small font-weight-bold">
           &mdash; &mdash;
         </div>
+
+
       </div>
     </div>
   </div>

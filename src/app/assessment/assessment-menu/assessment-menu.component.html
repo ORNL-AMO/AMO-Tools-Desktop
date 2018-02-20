@@ -25,8 +25,6 @@
   </div>
 </div>
 
-
-
 <div class="row">
   <div class="col-12">
 
@@ -34,6 +32,7 @@
 
       <div class="actions">
         <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Assessment</button>
+        <!-- <button (click)="showPreAssessment()" type="button" class="btn btn-secondary">Add PH Pre-Assessment</button> -->
         <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
         <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
         <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
@@ -45,18 +44,12 @@
 
       <div class="header" *ngIf="view != 'settings'">
         <label>
-          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" /> Select all</label>
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/>Select all</label>
       </div>
 
     </div>
 
   </div>
-  <!-- <div class="col-2">
-    <div class="btn-group pull-right" role="group">
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
-    </div>
-  </div> -->
 </div>
 
 <!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->

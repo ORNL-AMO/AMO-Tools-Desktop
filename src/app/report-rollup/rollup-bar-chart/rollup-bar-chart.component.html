@@ -1,0 +1,32 @@
+<div *ngIf="!printView && assessmentType == 'phast'">
+  <div class="phast-rollup bar-chart-container chart-container">
+    <div #ngChart class="phast-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="printView && assessmentType == 'phast'">
+  <div class="phast-rollup bar-chart-container chart-container">
+    <div #ngChart class="print-phast-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="!printView && assessmentType == 'psat'">
+  <div class="psat-rollup bar-chart-container chart-container">
+    <div #ngChart class="psat-rollup-bar-chart">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="printView && assessmentType == 'psat'">
+  <div class="psat-rollup bar-chart-container chart-container">
+    <div #ngChart class="print-psat-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+<span #btnDownload class="bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

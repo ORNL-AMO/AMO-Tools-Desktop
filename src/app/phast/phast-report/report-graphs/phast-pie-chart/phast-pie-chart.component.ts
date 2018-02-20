@@ -1,8 +1,11 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
-import { BaseChartDirective } from 'ng2-charts';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { graphColors } from '../graphColors';
 import { PhastReportService } from '../../phast-report.service';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-phast-pie-chart',
   templateUrl: './phast-pie-chart.component.html',
@@ -15,14 +18,27 @@ export class PhastPieChartComponent implements OnInit {
   resultCats: ShowResultsCategories;
   @Input()
   isBaseline: boolean;
+  @Input()
+  modExists: boolean;
+  @Input()
+  printView: boolean;
+  @Input()
+  chartContainerWidth: number;
+  @Input()
+  chartIndex: number;
+
+  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+
+  exportName: string;
+
+  chartContainerHeight: number;
 
   chartData: any = {
     pieChartLabels: new Array<string>(),
     pieChartData: new Array<number>()
   }
-
   chartColors: Array<any>;
-  //chartColorDataSet: Array<any>;
 
   options: any = {
     legend: {
@@ -30,92 +46,333 @@ export class PhastPieChartComponent implements OnInit {
     }
   }
 
-  @ViewChild(BaseChartDirective) private baseChart;
+  totalWallLoss: number;
+  totalAtmosphereLoss: number;
+  totalOtherLoss: number;
+  totalCoolingLoss: number;
+  totalOpeningLoss: number;
+  totalFixtureLoss: number;
+  totalLeakageLoss: number;
+  totalExtSurfaceLoss: number;
+  totalChargeMaterialLoss: number;
+  totalFlueGas: number;
+  totalAuxPower: number;
+  totalSlag: number;
+  totalExhaustGasEAF: number;
+  totalExhaustGas: number;
+  totalSystemLosses: number;
 
-  constructor(private phastReportService: PhastReportService) { }
+  doc: any;
+  window: any;
+
+  chart: any;
+  tmpChartData: Array<any>;
+
+
+  constructor(private phastReportService: PhastReportService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData(this.results, this.resultCats);
     this.getColors();
   }
 
+  ngAfterViewInit() {
+    if (!this.printView) {
+      if (this.modExists) {
+        this.chartContainerWidth = this.chartContainerWidth / 2;
+      }
+      this.chartContainerHeight = 280;
+    }
+    else {
+      this.chartContainerHeight = 500;
+      this.chartContainerWidth = 1400;
+    }
+    this.initChart();
+  }
+
+
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.results.firstChange) {
       this.getData(this.results, this.resultCats);
+      this.updateChart();
     }
   }
 
+
+  initChart() {
+
+    if (this.printView) {
+      this.ngChart.nativeElement.className = 'print-pie-chart';
+    }
+
+    this.chart = c3.generate({
+      bindto: this.ngChart.nativeElement,
+      data: {
+        columns: [
+          ["wall", this.totalWallLoss],
+          ["atmosphere", this.totalAtmosphereLoss],
+          ["other", this.totalOtherLoss],
+          ["cooling", this.totalCoolingLoss],
+          ["opening", this.totalOpeningLoss],
+          ["fixture", this.totalFixtureLoss],
+          ["leakage", this.totalLeakageLoss],
+          ["extSurface", this.totalExtSurfaceLoss],
+          ["charge", this.totalChargeMaterialLoss],
+        ],
+        type: 'pie',
+        labels: true,
+        names: {
+          wall: "Wall Losses " + this.totalWallLoss + "%",
+          atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+          other: "Other Losses " + this.totalOtherLoss + "%",
+          cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+          opening: "Opening Losses " + this.totalOpeningLoss + "%",
+          fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+          leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+          extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+        }
+      },
+      size: {
+        width: this.chartContainerWidth,
+        height: this.chartContainerHeight
+      },
+      color: {
+        pattern: graphColors
+      },
+      legend: {
+        position: 'right'
+      },
+      tooltip: {
+        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+          return html;
+        }
+      }
+    });
+
+    if (this.resultCats.showFlueGas) {
+      this.chart.load({
+        columns: [
+          ["flue", this.totalFlueGas]
+        ],
+        labels: true,
+        names: {
+          flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+        }
+      });
+    }
+    if (this.resultCats.showAuxPower) {
+      this.chart.load({
+        columns: [
+          ["aux", this.totalAuxPower]
+        ],
+        labels: true,
+        names: {
+          aux: "Total Auxillary Power " + this.totalAuxPower + "%"
+        }
+      });
+    }
+    if (this.resultCats.showSlag) {
+      this.chart.load({
+        columns: [
+          ["slag", this.totalSlag]
+        ],
+        labels: true,
+        names: {
+          slag: "Total Slag " + this.totalSlag + "%"
+        }
+      });
+    }
+    if (this.resultCats.showExGas) {
+      this.chart.load({
+        columns: [
+          ["exGasEAF", this.totalExhaustGasEAF]
+        ],
+        labels: true,
+        names: {
+          exGasEAF: "Total Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%"
+        }
+      });
+    }
+    else if (this.resultCats.showEnInput2) {
+      this.chart.load({
+        columns: [
+          ["exGas", this.totalExhaustGas]
+        ],
+        labels: true,
+        names: {
+          exGas: "Total Exhaust Gas Losses " + this.totalExhaustGas + "%"
+        }
+      });
+    }
+    if (this.resultCats.showSystemEff) {
+      this.chart.load({
+        columns: [
+          ["sys", this.totalSystemLosses]
+        ],
+        labels: true,
+        names: {
+          sys: "Total System Losses " + this.totalSystemLosses + "%"
+        }
+      });
+    }
+
+    if (!this.printView) {
+      setTimeout(() => {
+        d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
+      }, 500);
+    }
+    else {
+      d3.selectAll(".print-pie-chart .c3-legend-item text").style("font-size", "1.3rem");
+      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+    }
+  }
+
+  updateChart() {
+
+    if (this.chart) {
+
+      this.chart.load({
+        columns: [
+          ["wall", this.totalWallLoss],
+          ["atmosphere", this.totalAtmosphereLoss],
+          ["other", this.totalOtherLoss],
+          ["cooling", this.totalCoolingLoss],
+          ["opening", this.totalOpeningLoss],
+          ["fixture", this.totalFixtureLoss],
+          ["leakage", this.totalLeakageLoss],
+          ["extSurface", this.totalExtSurfaceLoss],
+          ["charge", this.totalChargeMaterialLoss],
+        ],
+        labels: true,
+        names: {
+          wall: "Wall Losses " + this.totalWallLoss + "%",
+          atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+          other: "Other Losses " + this.totalOtherLoss + "%",
+          cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+          opening: "Opening Losses " + this.totalOpeningLoss + "%",
+          fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+          leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+          extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+        }
+      });
+      if (this.resultCats.showFlueGas) {
+        this.chart.load({
+          columns: [
+            ["flue", this.totalFlueGas]
+          ],
+          labels: true,
+          names: {
+            flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+          }
+        });
+      }
+      if (this.resultCats.showAuxPower) {
+        this.chart.load({
+          columns: [
+            ["aux", this.totalAuxPower]
+          ],
+          labels: true,
+          names: {
+            aux: "Total Auxillary Power " + this.totalAuxPower + "%"
+          }
+        });
+      }
+      if (this.resultCats.showSlag) {
+        this.chart.load({
+          columns: [
+            ["slag", this.totalSlag]
+          ],
+          labels: true,
+          names: {
+            slag: "Total Slag " + this.totalSlag + "%"
+          }
+        });
+      }
+      if (this.resultCats.showExGas) {
+        this.chart.load({
+          columns: [
+            ["exGasEAF", this.totalExhaustGasEAF]
+          ],
+          labels: true,
+          names: {
+            exGasEAF: "Total Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%"
+          }
+        });
+      }
+      else if (this.resultCats.showEnInput2) {
+        this.chart.load({
+          columns: [
+            ["exGas", this.totalExhaustGas]
+          ],
+          labels: true,
+          names: {
+            exGas: "Total Exhaust Gas Losses " + this.totalExhaustGas + "%"
+          }
+        });
+      }
+      if (this.resultCats.showSystemEff) {
+        this.chart.load({
+          columns: [
+            ["sys", this.totalSystemLosses]
+          ],
+          labels: true,
+          names: {
+            sys: "Total System Losses " + this.totalSystemLosses + "%"
+          }
+        });
+      }
+      if (!this.printView) {
+        setTimeout(() => {
+          d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
+        }, 800);
+      }
+      else {
+        setTimeout(() => {
+          d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
+          d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+        }, 800);
+      }
+    }
+  }
+
+
   getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
-    this.chartData.pieChartData = new Array<number>();
-    this.chartData.pieChartLabels = new Array<string>();
-
-    let totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
-    this.chartData.pieChartData.push(totalWallLoss);
-    this.chartData.pieChartLabels.push('Wall Losses' + " " + totalWallLoss + "%");
-
-    let totalAtmosphereLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAtmosphereLoss);
-    this.chartData.pieChartData.push(totalAtmosphereLoss);
-    this.chartData.pieChartLabels.push('Atmosphere Losses' + " " + totalAtmosphereLoss + "%");
-
-    let totalOtherLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOtherLoss);
-    this.chartData.pieChartData.push(totalOtherLoss);
-    this.chartData.pieChartLabels.push('Other Losses' + " " + totalOtherLoss + "%");
-
-    let totalCoolingLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalCoolingLoss);
-    this.chartData.pieChartData.push(totalCoolingLoss);
-    this.chartData.pieChartLabels.push('Cooling Losses' + " " + totalCoolingLoss + "%");
-
-    let totalOpeningLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOpeningLoss);
-    this.chartData.pieChartData.push(totalOpeningLoss);
-    this.chartData.pieChartLabels.push('Opening Losses' + " " + totalOpeningLoss + "%");
-
-    let totalFixtureLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFixtureLoss);
-    this.chartData.pieChartData.push(totalFixtureLoss);
-    this.chartData.pieChartLabels.push('Fixture Losses' + " " + totalFixtureLoss + "%" );
-
-    let totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
-    this.chartData.pieChartData.push(totalLeakageLoss);
-    this.chartData.pieChartLabels.push('Leakage Losses' + " " + totalLeakageLoss + "%");
-
-    let totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
-    this.chartData.pieChartData.push(totalExtSurfaceLoss);
-    this.chartData.pieChartLabels.push('Extended Surface Losses' + " " + totalExtSurfaceLoss + "%");
-
-    let totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
-    this.chartData.pieChartData.push(totalChargeMaterialLoss);
-    this.chartData.pieChartLabels.push('Charge Materials' + " " + totalChargeMaterialLoss + "%");
+    this.totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
+    this.totalAtmosphereLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAtmosphereLoss);
+    this.totalOtherLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOtherLoss);
+    this.totalCoolingLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalCoolingLoss);
+    this.totalOpeningLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOpeningLoss);
+    this.totalFixtureLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFixtureLoss);
+    this.totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
+    this.totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
+    this.totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
+    this.totalFlueGas = 0;
+    this.totalSlag = 0;
+    this.totalExhaustGas = 0;
+    this.totalExhaustGasEAF = 0;
+    this.totalSystemLosses = 0;
 
     if (resultCats.showFlueGas) {
-      let totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
-      this.chartData.pieChartData.push(totalFlueGas);
-      this.chartData.pieChartLabels.push('Flue Gas Losses' + " " + totalFlueGas + "%");
+      this.totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
     }
-
     if (resultCats.showAuxPower) {
-      let totalAuxPower = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAuxPower);
-      this.chartData.pieChartData.push(totalAuxPower);
-      this.chartData.pieChartLabels.push('Auxiliary Power Losses' + " " + totalAuxPower + "%");
+      this.totalAuxPower = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAuxPower);
     }
-
     if (resultCats.showSlag) {
-      let totalSlag = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSlag);
-      this.chartData.pieChartData.push(totalSlag);
-      this.chartData.pieChartLabels.push('Slag Losses' + " " + totalSlag + "%");
+      this.totalSlag = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSlag);
     }
     if (resultCats.showExGas) {
-      let totalExhaustGasEAF = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGasEAF);
-      this.chartData.pieChartData.push(totalExhaustGasEAF);
-      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + totalExhaustGasEAF + "%");
+      this.totalExhaustGasEAF = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGasEAF);
     }
     if (resultCats.showEnInput2) {
-      let totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
-      this.chartData.pieChartData.push(totalExhaustGas);
-      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + totalExhaustGas + "%");
+      this.totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
     }
     if (resultCats.showSystemEff) {
-      let totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
-      this.chartData.pieChartData.push(totalSystemLosses);
-      this.chartData.pieChartLabels.push('System Losses' + " " + totalSystemLosses + "%");
+      this.totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
     }
     if (this.isBaseline) {
       this.phastReportService.baselineChartLabels.next(this.chartData.pieChartLabels);
@@ -138,6 +395,13 @@ export class PhastPieChartComponent implements OnInit {
       {
         backgroundColor: graphColors
       }
-    ]
+    ];
+  }
+
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "phast-report-pie-graph-" + this.chartIndex;
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

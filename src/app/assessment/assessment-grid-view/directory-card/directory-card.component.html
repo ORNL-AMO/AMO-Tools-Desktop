@@ -1,42 +1,9 @@
-<!-- <div class="list-card" *ngIf="directory">
-
-  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
-  <div class="assessment-name">
-    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
-    <span>Folder / Plant</span>
-  </div>
-
-  <div class="assessment-details">
-    <ul *ngIf="directory.subDirectory">
-      <li *ngFor="let directory of directory.subDirectory">
-        <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
-      </li>
-    </ul>
-    <ul *ngIf="directory.assessments">
-      <li *ngFor="let assessment of directory.assessments">
-        <i class="fa fa-bar-chart-o" aria-hidden="true"></i> {{assessment.name}}
-      </li>
-    </ul>
-  </div>
-
-  <button type="button">Menu</button>
-  <ul class="menu">
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-  </ul>
-
-  <!-- <div class="last-updated">{{directory.date | date}}</div>
-  <div class="last-updated">Last updated {{directory.modifiedDate | date }}</div>
-
-</div> -->
-
 <div class="card">
-  <div class="card-header summary-card-header" (click)="goToDirectory(directory)">
+  <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <span class="fa fa-folder"></span>
-    <a>{{directory.name}}</a>
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
+    <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
   </div>
   <div class="card-body summary-card-body scroll-item">
     <ul *ngIf="directory.subDirectory && directory.subDirectory.length != 0">
@@ -54,5 +21,38 @@
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{directory.modifiedDate | date }}</div>
+  </div>
+</div>
+
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit {{directory.name}} Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Folder Name</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Change Folder Location</label>
+            <select class="form-control" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
   </div>
 </div>

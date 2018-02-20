@@ -173,7 +173,7 @@ label {
   position: relative;
 }
   .form-group:hover {
-    background: #efefef;
+    background: #D5D8DC;
   }
   .modal .form-group:hover {
     background: transparent;
@@ -316,6 +316,11 @@ select.form-control:not([size]):not([multiple]) {
   box-shadow: 0px 0px 5px #2980b9;
 }
 
+.indicate-report-field-different-db{
+  color: #33CC33;
+  font-weight: bold;
+}
+
 .psat .indicate-report-field-different{
     color: #2980b9 !important;
     font-weight: bold !important;
@@ -329,17 +334,26 @@ select.form-control:not([size]):not([multiple]) {
   border: #BF3D00 solid 2px;
   box-shadow: 0px 0px 5px #BF3D00;
 }
+.indicate-different-db{
+  border: #33CC33 solid 2px;
+  box-shadow: 0px 0px 5px #33CC33;
+}
+
+
 
 .phast .indicate-report-field-different{
     color: #BF3D00 !important;
     font-weight: bold !important;
 }
 
+
 .phast .indicate-report-row-different{
     border: #BF3D00 solid !important;
 }
 
-
+.input-error{
+  color: red;
+}
 
 @media print {
 
@@ -413,7 +427,7 @@ In-Assessment Calculators
   .calc-form form {
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: #efefef solid 1px;
+    border-bottom: #D5D8DC solid 1px;
   }
    .calc-form .form-group label {
     font-size: 15px;
@@ -562,7 +576,7 @@ Reports
         border-left: none;
     }
     .assessment-report .tabs.primary a {
-        padding: 10px 44px;
+        padding: 12px;
     }
 
     .report-header, .report-data .results {
@@ -581,7 +595,7 @@ Reports
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 33px;
-    padding: 9px 0 0px 48px;
+    padding: 9px 0 0px 30px;
 }
 .assessment-report.report-in-phast .assessment-name,
 .assessment-report.report-in-rollup.report-in-phast .assessment-name {
@@ -1063,6 +1077,61 @@ Calculators
   background: transparent;
 }
 
+.ico-size {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size2 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(255, 0, 22, 0.42));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size3 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(187, 187, 187, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size4 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.calculator-panel .ico-size,
+.calculator-panel .ico-size2,
+.calculator-panel .ico-size3,
+.calculator-panel .ico-size4{
+  height: 35px;
+  border-radius: 8px;
+}
+
+.calculator-panel .header{
+  padding-bottom: 5px;
+}
+
+.calc-item-row{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: #eee solid 1px;
+}
+
+
 /* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
@@ -1109,7 +1178,10 @@ Footer
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
   background: #fff;
   border-top: #8b8b8b solid 1px;
   z-index: 5;
@@ -1120,7 +1192,8 @@ Footer
   content: "";
 }
 .footer .btn {
-  padding: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 
@@ -1171,7 +1244,6 @@ Banner
 }
   .banner h1 {
     font-size: 22px;
-    margin-top: 10px;
     margin-bottom: -14px;
     color: rgba(255,255,255,1);
   }
@@ -1242,12 +1314,13 @@ margin-bottom: 0px;
   background: url('../assets/images/ico-psat-diagram.png') no-repeat 14px;
   background-size: 31px;
 }
-.banner.phast .title {
+/* .banner.phast .title {
   color: #fff;
-  padding-left: 58px;
-  background: url('../assets/images/ico-phast-diagram.png') no-repeat 14px;
-  background-size: 31px;
-}
+  padding-left: 75px;
+  background: url('../assets/images/phast-logo.png') no-repeat 10px;
+  background-size: 60px;
+  /*background-color: #000B13;
+} */
 
 .banner-border{
   border-bottom: solid;
@@ -1338,7 +1411,7 @@ Modify Conditions
     /* .modification .header button {
       background: #fff;
       border: none;
-      border-left: #efefef solid 1px;
+      border-left: #D5D8DC solid 1px;
       margin: 0;
       padding: 4px 16px;
       float: right;
@@ -1348,7 +1421,7 @@ Modify Conditions
     }
       .modification .header button:hover {
         cursor: pointer;
-        background: #efefef;
+        background: #D5D8DC;
       } */
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
@@ -1472,7 +1545,7 @@ Modify Conditions
 
 .note-form textarea {
   width: 100%;
-    border: #efefef solid 1px;
+    border: #D5D8DC solid 1px;
     padding: 6px 8px;
     font-size: 15px;
 
@@ -1556,7 +1629,7 @@ No Data Messaging
 .no-data {
   padding: 26px 50px;
   text-align: center;
-  background: #efefef;
+  background: #D5D8DC;
   border-right: #cacaca solid 1px;
 }
 .no-data h3 {
@@ -1634,7 +1707,7 @@ Toasty Overrides ================================= */
   padding-top: 103px;
 } */
 .losses-container.disabled, .losses-container:disabled{
-    background: #efefef;
+    background: #D5D8DC;
 }
 
 .losses-empty{
@@ -1654,9 +1727,91 @@ Toasty Overrides ================================= */
     text-decoration: none;
 }
 
-.show-print{
-    display: none;
+/* gauge chart sizing helper */
+.gauge-chart-width {
+  min-width: 200px;
+  max-width: 400px;
 }
+
+/* chart toggle grid lines */
+#gridToggleBtn{
+  padding: 0;
+  background-color: #dcdcdc;
+  height: 28px;
+  width: 28px;
+  opacity: 0.6;
+  transition: ease-in-out 0.2s all;
+}
+
+#gridToggleBtn:hover {
+  opacity: 1;
+  cursor: pointer;
+  border-color: #212529;
+}
+
+#gridToggleBtn::before{
+  background-color: #dcdcdc;
+  font-size: 12px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+
+/* chart download icon */
+
+.fa-download {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.percent-chart-btn {
+  left: -15%;
+  top: 105%;
+}
+
+.percent-chart-table-btn {
+  left: 0;
+  top: 5px;
+}
+
+.pie-chart-btn {
+  left: 30px;
+  bottom: 5px;
+}
+
+.bar-chart-btn {
+  left: -10px;
+  bottom: 10px;
+}
+
+
+#gridToggle .fa-download {
+  left: 55px;
+}
+
+.fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+/* .chart-container .fa-download:hover,
+#gridToggle .fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+} */
+
+
+.show-print{
+  display: none;
+}
+
 
 @media screen and (min-width: 768px) {
   /*.rollups .pumps {
@@ -1676,14 +1831,65 @@ Toasty Overrides ================================= */
     margin: 40px 0 100px;
 }
     .report-title h4 {
-        font-size: 38px;
+        font-size: 60px;
     }
     .report-title h5 {
-        font-size: 18px;
+        font-size: 34px;
     }
 
 
 @media print{
+
+  /* debug trying something */
+  .print-assessment-page {
+    page-break-before: always;
+    page-break-inside: avoid;
+  }
+
+  h2.assessment-title {
+    font-weight: 300 !important;
+    font-size: 46px !important;
+  }
+
+  h3.custom-name {
+      font-size: 26px !important;
+  }
+
+  h2.date-modified {
+      font-size: 26px !important;
+  }
+
+  .output-summary table td,
+  .output-summary table th {
+    font-size: 16px;
+    padding: 0px;
+    vertical-align: middle;
+  }
+
+  .output-summary .table td,
+  .output-summary .table th {
+    font-size: 16px;
+    padding: 0px;
+    vertical-align: middle;
+  }
+  
+  .output-summary .table .section-header {
+    font-size: 16px !important;
+  }
+
+  .report-in-rollup {
+    page-break-before: always;
+  }
+
+  .report-cover {
+    display: block;
+    width: 100%;
+    text-align: center;
+    page-break-after: always;
+  }
+
+  /* end debug */
+
 
   html, body {
     background: transparent;
@@ -1701,15 +1907,16 @@ Toasty Overrides ================================= */
   }
 
   .output-summary {
+    width: 100%;
     margin-bottom: 20px;
     page-break-inside: avoid;
   }
 
-  .output-summary table td {
+  /* .output-summary table td {
     font-size: 11px;
     padding: 0px;
     vertical-align: middle;
-  }
+  } */
 
   .assessment-report {
       background: #fff;
@@ -1723,17 +1930,26 @@ Toasty Overrides ================================= */
       padding-left: 0;
   }
 
-  .report-cover {
+  /* .report-cover {
         display: block;
         width: 100%;
         text-align: center;
         page-break-after: always;
-    }
+    } */
+
+    /*debug version */
     .doe-logo {
+      width: 350px;
+      display: inline-block;
+      margin-top: 100px;
+    }
+
+    /* real version */
+    /* .doe-logo {
         width: 200px;
         display: inline-block;
         margin-top: 100px;
-    }
+    } */
     .report-header {
         position: static;
         border: none;

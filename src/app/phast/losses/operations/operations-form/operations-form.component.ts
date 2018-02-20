@@ -74,7 +74,7 @@ export class OperationsFormComponent implements OnInit {
   calculatHrsPerYear() {
     let timeCheck = this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.hoursPerShift.value;
     if (timeCheck > 24) {
-      this.timeError = "You have exceeded 24 hours/day  " + " "  + "("  + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
+      this.timeError = "You have exceeded 24 hours/day  " + " " + "(" + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
     } else {
       this.timeError = null;
     }
@@ -93,7 +93,7 @@ export class OperationsFormComponent implements OnInit {
     } else {
       this.shiftsPerDayError = null;
     }
-    if ( this.operationsForm.controls.hoursPerShift.value > 24 || this.operationsForm.controls.hoursPerShift.value <= 0) {
+    if (this.operationsForm.controls.hoursPerShift.value > 24 || this.operationsForm.controls.hoursPerShift.value <= 0) {
       this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
     } else {
       this.hoursPerShiftError = null;
@@ -183,12 +183,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.saveEmit.emit(true);
-    }, 3000)
+    this.saveEmit.emit(true);
   }
 
   initDifferenceMonitor() {

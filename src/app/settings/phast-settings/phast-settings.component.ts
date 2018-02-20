@@ -49,13 +49,18 @@ export class PhastSettingsComponent implements OnInit {
     if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
       this.settingsForm.patchValue({
         furnaceType: 'Ladle Heater'
-      })
+      });
     } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
       this.settingsForm.patchValue({
         furnaceType: 'Electrical Infrared',
         energyResultUnit: 'kWh'
-      })
+      });
+    } else if (this.settingsForm.controls.energySourceType.value === 'Steam') {
+      this.settingsForm.patchValue({
+        furnaceType: 'Steam'
+      });
     }
+    this.startPolling();
   }
 
 

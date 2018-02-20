@@ -8,6 +8,8 @@ import { Directory } from '../../shared/models/directory';
 import { ReportRollupService } from '../../report-rollup/report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
+import { PhastReportService } from './phast-report.service';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-phast-report',
@@ -32,7 +34,9 @@ export class PhastReportComponent implements OnInit {
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
+  showPrint: boolean = false;
+  showPrintDiv: boolean = false;
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -58,6 +62,17 @@ export class PhastReportComponent implements OnInit {
     if (!this.phast.operatingHours.hoursPerYear) {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
+
+    this.phastReportService.showPrint.subscribe(printVal => {
+      this.showPrintDiv = printVal;
+      if(printVal == true){
+        setTimeout(() => {
+          this.showPrint = printVal;
+        },20)
+      }else{
+         this.showPrint = printVal;
+      }
+    });
   }
 
   setTab(str: string) {
@@ -111,9 +126,26 @@ export class PhastReportComponent implements OnInit {
     }
   }
 
+
   print() {
-    let win = this.windowRefService.nativeWindow;
-    let doc = this.windowRefService.getDoc();
-    win.print();
+    console.log('clicked');
+    //when print clicked set show print value to true
+    this.phastReportService.showPrint.next(true);
+    
+
+    //eventually add logic for modal or something to say "building print view"
+
+    //set timeout for delay to print call. May want to do this differently later but for now should work
+    //10000000 is excessive, put it at whatever you want
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      let doc = this.windowRefService.getDoc();
+      win.print();
+      //after printing hide content again
+      this.phastReportService.showPrint.next(false);
+    }, 2000)
+    // let win = this.windowRefService.nativeWindow;
+    // let doc = this.windowRefService.getDoc();
+    // win.print();
   }
 }

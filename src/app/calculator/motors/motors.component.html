@@ -4,21 +4,39 @@
     <div class="col-10  mx-auto">
       <div class="content-container calculator-list">
         <h2>Motors Calculators</h2>
-        <ul>
-          <li>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/nema.png" class="ico-size4">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
-            <p>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
+            <p>
+              The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
             </p>
-          </li>
-          <li>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/performance.png" class="ico-size4">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('motor-performance')">Motor Performance</a>
-            <p>Plots current, efficiency, power factor vs motor shaft load for a given motor description.</p>
-          </li>
-          <li>
-            <a (click)="showTool('percent-load-estimation')">Percent Load Estimation</a>
-            <p>Calculates Percent Load Estimation</p>
-          </li>
-        </ul>
+            <p>
+              Plots current, efficiency, power factor vs motor shaft load for a given motor description.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/load-est.png" class="ico-size4">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('percent-load-estimation')"> Percent Load Estimation</a>
+            <p>
+              Calculates Percent Load Estimation
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +61,7 @@
 
 
 <!-- Original Version -->
-<!-- 
+<!--
 <div class="calculator" *ngIf="getSelectedTool() == 'percent-load-estimation'">
   <div class="row">
     <div class="col-lg-10  mx-auto">

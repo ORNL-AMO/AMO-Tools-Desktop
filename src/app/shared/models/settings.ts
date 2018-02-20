@@ -20,5 +20,30 @@ export interface Settings {
     energyResultUnit?: string,
     customFurnaceName?: string,
     appVersion?: string,
-    phastRollupUnit?: string
+    phastRollupUnit?: string,
+    facilityInfo?: FacilityInfo
+}
+
+
+export interface FacilityInfo {
+    companyName?: string,
+    facilityName?: string,
+    address?: StreetAddress,
+    facilityContact?: Contact,
+    assessmentContact?: Contact,
+    date?: string
+}
+
+export interface StreetAddress {
+    street?: string,
+    city?: string,
+    state?: string,
+    country?: string,
+    zip?: string
+}
+
+export interface Contact {
+    contactName?: string,
+    phoneNumber?: number,
+    email?: string
 }

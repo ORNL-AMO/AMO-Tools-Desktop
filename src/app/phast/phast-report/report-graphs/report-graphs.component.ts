@@ -6,13 +6,14 @@ import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
 import { graphColors } from './graphColors';
 import { PhastReportService } from '../phast-report.service';
+import { WindowRefService } from '../../../indexedDb/window-ref.service';
+
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
   styleUrls: ['./report-graphs.component.css']
 })
 export class ReportGraphsComponent implements OnInit {
-
   @Input()
   settings: Settings;
   @Input()
@@ -21,9 +22,13 @@ export class ReportGraphsComponent implements OnInit {
   inPhast: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  showPrint: boolean;
 
   selectedPhast1: any;
   selectedPhast2: any;
+  baselinePhast: any;
+  chartContainerWidth: number;
 
   resultsArray: Array<any>;
   modExists: boolean = false;
@@ -33,8 +38,8 @@ export class ReportGraphsComponent implements OnInit {
   colors: Array<string>;
   baselineLabels: Array<string>;
   modifiedLabels: Array<string>;
-
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService) { }
+  // showPrint: boolean = false;
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.colors = graphColors;
@@ -44,6 +49,7 @@ export class ReportGraphsComponent implements OnInit {
       this.baselineResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
       this.selectedPhast1 = this.resultsArray[0];
+      this.baselinePhast = this.resultsArray[0];
       if (this.phast.modifications) {
         if (this.phast.modifications.length != 0) {
           this.modExists = true;
@@ -63,7 +69,18 @@ export class ReportGraphsComponent implements OnInit {
       if (val) {
         this.getPieLabels(val);
       }
-    })
+    });
+
+    this.chartContainerWidth = window.innerWidth * 0.90;
+
+    //subscribe to show print value
+    // this.phastReportService.showPrint.subscribe(printVal => {
+    //   this.showPrint = printVal;
+    // });
+  }
+
+  ngOnDestroy() {
+    this.showPrint = false;
   }
 
 

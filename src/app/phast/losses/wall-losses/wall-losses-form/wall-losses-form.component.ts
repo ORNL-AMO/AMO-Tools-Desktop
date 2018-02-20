@@ -29,7 +29,9 @@ export class WallLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+  
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   windVelocityError: string = null;
@@ -46,8 +48,7 @@ export class WallLossesFormComponent implements OnInit {
   ngOnInit() {
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
-    this.checkEmissivity(true);
-    this.checkSurfaceTemp(true);
+    this.checkInputError(true);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -81,28 +82,28 @@ export class WallLossesFormComponent implements OnInit {
     this.wallLossesForm.enable();
   }
   //checkSurfaceTemp and ambientTemp for needed warnings
-  checkSurfaceTemp(bool?: boolean) {
-    //bool = true on call from ngOnInit to skip save line
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
-      this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
-    } else {
-      this.surfaceTmpError = null;
-    }
-  }
+  // checkSurfaceTemp(bool?: boolean) {
+  //   //bool = true on call from ngOnInit to skip save line
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
+  //     this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
+  //   } else {
+  //     this.surfaceTmpError = null;
+  //   }
+  // }
   //same as above for emissivity
-  checkEmissivity(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
-      this.emissivityError = 'Surface emissivity must be between 0 and 1';
-    } else {
-      this.emissivityError = null;
-    }
-  }
+  // checkEmissivity(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
+  //     this.emissivityError = 'Surface emissivity must be between 0 and 1';
+  //   } else {
+  //     this.emissivityError = null;
+  //   }
+  // }
 
   //emits to wall-losses.component the focused field changed
   focusField(str: string) {
@@ -127,22 +128,34 @@ export class WallLossesFormComponent implements OnInit {
     } else {
       this.windVelocityError = null;
     }
-    if (this.wallLossesForm.controls.surfaceArea.value < 0 ) {
+    if (this.wallLossesForm.controls.surfaceArea.value < 0) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
     } else {
       this.surfaceAreaError = null;
+    }
+
+    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
+      this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
+    } else {
+      this.surfaceTmpError = null;
+    }
+    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
+    } else {
+      this.emissivityError = null;
+    }
+
+    if(this.windVelocityError || this.surfaceAreaError || this.surfaceTmpError || this.emissivityError){
+      this.inputError.emit(true);
+    }else {
+      this.inputError.emit(false);
     }
   }
 
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
     this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   //method used to subscribe to service monitoring differences in baseline vs modification forms

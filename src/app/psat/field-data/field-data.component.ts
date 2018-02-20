@@ -8,6 +8,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { Assessment } from '../../shared/models/assessment';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -38,6 +39,8 @@ export class FieldDataComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  assessment: Assessment;
 
   counter: any;
 
@@ -129,6 +132,15 @@ export class FieldDataComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
+
   checkForm(form: any) {
     this.formValid = this.psatService.isFieldDataFormValid(form);
     if (this.formValid) {
@@ -174,12 +186,7 @@ export class FieldDataComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm(this.psatForm);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.savePsat(this.psatForm)
-    }, 3000)
+    this.savePsat(this.psatForm)
   }
 
   checkFlowRate(bool?: boolean) {

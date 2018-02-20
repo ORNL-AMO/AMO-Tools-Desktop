@@ -29,7 +29,8 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   availableHeat: number;
-
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
 
@@ -54,6 +55,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkHeat(true)
   }
 
   ngAfterViewInit() {
@@ -63,8 +65,10 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-     checkHeat() {
-       this.startSavePolling();
+  checkHeat(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.settings.unitsOfMeasure === 'Imperial') {
       if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 300) {
         this.combustionError = 'Combustion Air Temperature cannot be less than 300 degrees F';
@@ -78,16 +82,21 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       }
     }
     if (this.settings.unitsOfMeasure === 'Metric') {
-        if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 150) {
-          this.combustionError = 'Combustion Air Temperature cannot be less than 150 degrees C';
-        } else {
-          this.combustionError = null;
-        }
-        if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 4) {
+      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 150) {
+        this.combustionError = 'Combustion Air Temperature cannot be less than 150 degrees C';
+      } else {
+        this.combustionError = null;
+      }
+      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 4) {
         this.heatError = 'Exhaust Gas Temperature cannot be less than 4 degrees C';
       } else {
-          this.heatError = null;
-        }
+        this.heatError = null;
+      }
+    }
+    if (this.combustionError || this.heatError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
     }
   }
 
@@ -115,12 +124,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { BaseChartDirective } from 'ng2-charts';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-psat-rollup-pump-summary',
   templateUrl: './psat-rollup-pump-summary.component.html',
@@ -12,21 +12,42 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 export class PsatRollupPumpSummaryComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  printView: boolean;
 
-  @ViewChild(BaseChartDirective) private baseChart;
+  firstLoad: boolean = true;
+  isUpdate: boolean = false;
+  showTitle: boolean = false;
+  showLegend: boolean = true;
 
+  //chart element
+  chartContainerWidth: number;
+
+  //chart text
+  title: string;
+  unit: string;
+  axisLabel: string;
   chartLabels: Array<string>;
-  chartData: Array<any>;
-  chartColors: Array<any>;
-  //chartColorDataSet: Array<any>;
-  backgroundColors: Array<string> = graphColors;
-  options: any;
+
+  //print view chart variables
+  titles: Array<string>;
+  units: Array<string>;
+  printChartData: Array<any>;
+
+  //chart data
+  allDataColumns: Array<any>;
+  baselineColumns: Array<any>;
+  modColumns: Array<any>;
+
+  //chart color  
   graphColors: Array<string>;
+
   resultData: Array<PsatResultsData>;
   graphOptions: Array<string> = [
     'Energy Use',
     'Cost'
-  ]
+  ];
+  numPsats: number;
   graphOption: string = 'Energy Use';
   constructor(private reportRollupService: ReportRollupService) { }
 
@@ -34,35 +55,55 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     this.resultData = new Array();
     this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
+        this.numPsats = psats.length;
         this.resultData = psats;
-        this.buildChartData();
+        if (this.printView) {
+          this.chartContainerWidth = 1250;
+          this.initPrintChartData();
+        }
+        else {
+          this.chartContainerWidth = (window.innerWidth - 30) * .60;
+          this.buildChartData(this.graphOption, false);
+          this.initChartData();
+        }
       }
-    })
+    });
   }
 
+  ngOnChanges() {
+    if (this.firstLoad) {
+      this.firstLoad = !this.firstLoad;
+    }
+    else {
+      this.buildChartData(this.graphOption, true);
+      this.initChartData();
+    }
+  }
 
-  buildChartData() {
-    let axisLabel = this.graphOption;
-    this.chartLabels = new Array();;
-    this.chartData = [
-      { data: new Array(), label: 'Baseline' },
-      { data: new Array(), label: 'Modification' }
-    ]
+  buildChartData(graphOption: string, update: boolean) {
+    //init arrays
+    this.baselineColumns = new Array<any>();
+    this.baselineColumns.push("Baseline");
+    this.modColumns = new Array<any>();
+    this.modColumns.push("Modification");
+    this.title = graphOption;
+    this.chartLabels = new Array();
     let i = 1;
+
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (this.graphOption == 'Energy Use') {
+      if (graphOption == 'Energy Use') {
         if (i == 1) {
-          axisLabel = axisLabel + ' (kWh/yr)';
+          this.unit = 'kWh/yr';
         }
         num1 = data.baselineResults.annual_energy;
         if (data.modName) {
           num2 = data.modificationResults.annual_energy;
         }
-      } else if (this.graphOption == 'Cost') {
+      } else if (graphOption == 'Cost') {
         if (i == 1) {
-          axisLabel = axisLabel + ' ($/yr)';
+          this.unit = "$/yr";
         }
         num1 = data.baselineResults.annual_cost;
         if (data.modName) {
@@ -70,52 +111,58 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
         }
       }
       i++;
-      this.options = {
-        scales: {
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: axisLabel,
-              fontSize: 18,
-              fontStyle: 'bold'
-            }
-          }]
-        },
-        scaleShowVerticalLines: false,
-        responsive: true
-      }
       this.addData(data.name, num1, num2);
-    })
+    });
+    this.axisLabel = graphOption + " (" + this.unit + ")";
+
+    if (!this.printView) {
+      this.isUpdate = update;
+    }
   }
 
   addData(label: string, baseNum: number, modNum: number) {
     this.chartLabels.push(label);
-    this.chartData[0].data.push(baseNum);
-    this.chartData[1].data.push(modNum);
-    if (this.baseChart && this.baseChart.chart) {
-      this.baseChart.chart.config.data.labels = this.chartLabels;
-      this.baseChart.chart.config.data.datasets = this.chartData;
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors[0];
-      this.baseChart.chart.config.data.datasets[1].backgroundColor = this.backgroundColors[1];
-      this.baseChart.chart.config.options.scales.yAxes[0].scaleLabel = this.options.scales.yAxes[0].scaleLabel;
-    }
+    this.baselineColumns.push(baseNum);
+    this.modColumns.push(modNum);
   }
 
 
-  getPayback(modCost: number, baselineCost: number, implementationCost: number){
-    if(implementationCost){
-      let val = (implementationCost / (baselineCost-modCost)) * 12;
-      if(isNaN(val)==false){
+  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
+    if (implementationCost) {
+      let val = (implementationCost / (baselineCost - modCost)) * 12;
+      if (isNaN(val) == false) {
         return val;
-      }else{
+      } else {
         return 0;
       }
-    }else{
+    } else {
       return 0;
     }
   }
 
-  getSavings(modCost: number, baselineCost: number){
+  getSavings(modCost: number, baselineCost: number) {
     return baselineCost - modCost;
+  }
+
+  initChartData() {
+    this.allDataColumns = new Array<any>();
+    this.allDataColumns.push(this.baselineColumns);
+    this.allDataColumns.push(this.modColumns);
+  }
+
+  initPrintChartData() {
+    this.printChartData = new Array<any>();
+    this.titles = new Array<any>();
+    this.units = new Array<any>();
+
+    for (let i = 0; i < this.graphOptions.length; i++) {
+      let tmpDataColumns = new Array<any>();
+      this.buildChartData(this.graphOptions[i], false);
+      tmpDataColumns.push(this.baselineColumns);
+      tmpDataColumns.push(this.modColumns);
+      this.printChartData.push(tmpDataColumns);
+      this.titles.push(this.graphOptions[i]);
+      this.units.push(this.unit);
+    }
   }
 }

@@ -1,3 +1,6 @@
-<div style="display: block">
-  <canvas baseChart [colors]="[{}]" [datasets]="chartData.barChartData" [labels]="chartData.barChartLabels" [chartType]="'bar'" [options]="options"></canvas>
+<div class="bar-chart-container chart-container">
+  <div #ngChart class="bar-chart">
+
+  </div>
 </div>
+<span #btnDownload class="bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

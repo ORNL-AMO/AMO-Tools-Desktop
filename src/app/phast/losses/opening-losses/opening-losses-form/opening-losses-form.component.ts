@@ -27,6 +27,8 @@ export class OpeningLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   totalArea: number = 0.0;
 
@@ -42,8 +44,8 @@ export class OpeningLossesFormComponent implements OnInit {
   viewFactorError: string = null;
 
   constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService,
-              private openingLossesCompareService: OpeningLossesCompareService,
-              private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+    private openingLossesCompareService: OpeningLossesCompareService,
+    private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -93,27 +95,27 @@ export class OpeningLossesFormComponent implements OnInit {
     });
   }
 
-  roundVal(val: number, digits: number): number{
+  roundVal(val: number, digits: number): number {
     return Number(val.toFixed(digits));
   }
 
   checkOpeningDimensions(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
     if (this.openingLossesForm.controls.openingType.value === 'Round') {
       this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Diameter must be greater than 0" : null;
     } else {
       this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Length must be greater than 0" : null;
       this.heightError = (this.openingLossesForm.controls.heightOfOpening.value <= 0) ? "Opening Height must be greater than 0" : null;
     }
-  }
-
-  checkThickness(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
+  }
+
+  checkThickness(bool?: boolean) {
     this.thicknessError = (this.openingLossesForm.controls.wallThickness.value < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    if (!bool) {
+      this.startSavePolling();
+    }
   }
 
   checkNumOpenings(bool?: boolean) {
@@ -124,33 +126,33 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   checkViewFactor(bool?: boolean) {
+    this.viewFactorError = (this.openingLossesForm.controls.viewFactor.value < 0) ? "View Factor must be greater than 0" : null;
     if (!bool) {
       this.startSavePolling();
     }
-    this.viewFactorError = (this.openingLossesForm.controls.viewFactor.value < 0) ? "View Factor must be greater than 0" : null;
   }
 
   checkTemperature(bool?: boolean) {
+    this.temperatureError = (this.openingLossesForm.controls.ambientTemp.value > this.openingLossesForm.controls.insideTemp.value) ?
+      'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
     if (!bool) {
       this.startSavePolling();
     }
-    this.temperatureError = (this.openingLossesForm.controls.ambientTemp.value > this.openingLossesForm.controls.insideTemp.value) ?
-      'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
   }
 
   checkSurfaceEmissivity(bool?: boolean) {
+    this.emissivityError = (this.openingLossesForm.controls.emissivity.value > 1 || this.openingLossesForm.controls.emissivity.value < 0) ? 'Surface emissivity must be between 0 and 1' : null;
     if (!bool) {
       this.startSavePolling();
     }
-    this.emissivityError = (this.openingLossesForm.controls.emissivity.value > 1 || this.openingLossesForm.controls.emissivity.value < 0) ? 'Surface emissivity must be between 0 and 1' : null;
   }
 
   checkTimeOpen(bool?: boolean) {
+    this.timeOpenError = (this.openingLossesForm.controls.percentTimeOpen.value < 0 || this.openingLossesForm.controls.percentTimeOpen.value > 100) ?
+      'Percent Time Open must be between 0% and 100%' : null;
     if (!bool) {
       this.startSavePolling();
     }
-    this.timeOpenError = (this.openingLossesForm.controls.percentTimeOpen.value < 0 || this.openingLossesForm.controls.percentTimeOpen.value > 100) ?
-      'Percent Time Open must be between 0% and 100%' : null;
   }
 
   getArea() {
@@ -208,14 +210,20 @@ export class OpeningLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
-  startSavePolling() {
-    this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
+  checkInputError() {
+    if (this.temperatureError || this.emissivityError || this.timeOpenError || this.numOpeningsError || this.thicknessError || this.lengthError ||
+      this.heightError || this.viewFactorError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
     }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+
+  }
+
+  startSavePolling() {
+    this.checkInputError();
+    this.calculate.emit(true);
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

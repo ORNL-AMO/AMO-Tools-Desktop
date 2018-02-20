@@ -29,6 +29,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   firstChange: boolean = true;
   options: any;
@@ -155,6 +157,11 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         o2InFlueGas: this.calculationFlueGasO2
       });
     }
+    if(this.calculationWarning){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
+    }
   }
 
   setProperties() {
@@ -184,12 +191,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

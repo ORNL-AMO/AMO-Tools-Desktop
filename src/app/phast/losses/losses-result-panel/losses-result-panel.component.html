@@ -1,6 +1,6 @@
 <div class="results-panel help-panel col-12">
   <div class="row" #resultTabs>
-    <div class="col-12">
+    <div class="col-12 tab-col">
     <ul class="tabs primary tab-row">
       <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
         <a (click)="setTab('results')">Results</a>
@@ -23,8 +23,8 @@
     <div class="col-12 data-table">
       <app-results-data [phast]="phast" [inPhast]="true" [settings]="settings" [inSetup]="inSetup" [toggleCalculate]="toggleCalculate"
         [modification]="modification"></app-results-data>
-        <br>
-        <p>*Save to update calculations</p>
+        <!--<br>
+         <p>*Save to update calculations</p> -->
     </div>
   </div>
   <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">

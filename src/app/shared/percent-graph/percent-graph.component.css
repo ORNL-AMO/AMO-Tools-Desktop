@@ -10,8 +10,11 @@ h1 {
     font-weight: bold;
 }
 
+
 @keyframes value-entrance{
     0% {opacity: 0;}
     50% {opacity: 0;}
     100% {opacity: 100;}
 }
+
+

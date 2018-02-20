@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 
 //declare const d3: any;
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 @Component({
   selector: 'app-specific-speed-graph',
   templateUrl: './specific-speed-graph.component.html',
@@ -13,6 +14,9 @@ import { FormGroup } from '@angular/forms';
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   speedForm: FormGroup;
+
+  @ViewChild("ngChart") ngChart: ElementRef;
+  exportName: string;
 
   svg: any;
   xAxis: any;
@@ -42,7 +46,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
   // efficiencyCorrection: number = 0;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
 
@@ -132,9 +136,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
   makeGraph() {
     if (this.height > 0 && this.width > 0) {
       //Remove  all previous graphs
-      d3.select('app-specific-speed-graph').selectAll('svg').remove();
+      d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
-      this.svg = d3.select('app-specific-speed-graph').append('svg')
+      this.svg = d3.select(this.ngChart.nativeElement).append('svg')
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")
@@ -288,14 +292,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
         .style("stroke-width", "3px");
 
       // Define the div for the tooltip
-      this.detailBox = d3.select("app-specific-speed-graph").append("div")
+      this.detailBox = d3.select(this.ngChart.nativeElement).append("div")
         .attr("id", "detailBox")
         .attr("class", "d3-tip")
         .style("opacity", 0)
         .style('pointer-events', 'none');
 
       //debug
-      this.tooltipPointer = d3.select("app-specific-speed-graph").append("div")
+      this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
         .attr("id", "tooltipPointer")
         .attr("class", "tooltip-pointer")
         .style("opacity", 0)
@@ -541,8 +545,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("fill", "none")
       .style("stroke", "#2ECC71")
       .style('pointer-events', 'none');
+  }
 
-
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "specific-speed-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
 }

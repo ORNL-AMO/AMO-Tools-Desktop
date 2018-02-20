@@ -1,80 +1,82 @@
-<form>
-  <div class="form-section">
-    <div class="form-group">
-      <label class="small" for="specificGravity">Fluid Specific Gravity</label>
-      <input name="tmpSpecificGravity" type="number" step="any" class="form-control" [(ngModel)]="tmpSpecificGravity" id="specificGravity" (input)="checkInputs()"
+<form [formGroup]="curveConstants.form" class="form-section">
+  <div class="form-group">
+    <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+    <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity"
+      (input)="saveChanges()" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
+    <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent"
+      id="systemLossExponent" (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
+    <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
+  </div>
+</form>
+
+
+<form [formGroup]="pointOne.form" class="form-section">
+  <div class="form-group">
+    <label class="group-label point-label" for="pointAdjustment">Point 1</label>
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment"
+      id="pointAdjustment">
+      <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="small" for="flowRate1">Flow Rate</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate" (input)="saveChanges()"
         onfocus="this.select();">
-    </div>
-    <div class="form-group">
-      <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
-      <input name="tmpSystemLossExponent" type="number" min="1" max="2.5" step="any" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent"
-        (input)="checkInputs()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
-      <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
+      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
   </div>
-
-
-  <div class="form-section">
-    <div class="form-group">
-      <label class="group-label point-label" for="pointAdjustment">Point 1</label>
-      <select name="p1Option" class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointOne)" [(ngModel)]="p1Option" id="pointAdjustment">
-        <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="small" for="flowRate1">Flow Rate</label>
-      <div class="input-group calc-addon-group">
-        <input name="flowRate1" type="number" step="any" class="form-control addon-input" id="flowRate1" [(ngModel)]="p1FlowRate" (input)="checkInputs()"
-          onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="small" for="head1">Head</label>
-      <div class="input-group calc-addon-group">
-        <input name="head1" type="number" step="any" class="form-control addon-input" id="head1" [(ngModel)]="p1Head" (input)="checkInputs()" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <small>Fluid Power, {{settings.powerMeasurement}}</small>
-      </div>
-      <div class="col-6 text-center">
-        <small>{{pointOne.fluidPower| number:'2.2-2'}}</small>
-      </div>
+  <div class="form-group">
+    <label class="small" for="head1">Head</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="head1" formControlName="head" (input)="saveChanges()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
     </div>
   </div>
+  <div class="row">
+    <div class="col-6">
+      <small>Fluid Power, {{settings.powerMeasurement}}</small>
+    </div>
+    <div class="col-6 text-center">
+      <small>{{pointOne.fluidPower| number:'2.2-2'}}</small>
+    </div>
+  </div>
+</form>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label class="group-label point-label" for="pointAdjustment">Point 2</label>
-      <select name="pointAdjustment" class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointTwo)" id="pointAdjustment" [(ngModel)]="p2Option">
-        <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
-      </select>
+<form [formGroup]="pointTwo.form" class="form-section">
+  <div class="form-group">
+    <label class="group-label point-label" for="pointAdjustment2">Point 2</label>
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment"
+      id="pointAdjustment2">
+      <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="small" for="flowRate2">Flow Rate</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate" (input)="saveChanges()"
+        onfocus="this.select();" autofocus>
+      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
-    <div class="form-group">
-      <label class="small" for="flowRate2">Flow Rate</label>
-      <div class="input-group calc-addon-group">
-        <input name="flowRate2" type="number" step="any" class="form-control addon-input" id="flowRate2" [(ngModel)]="p2FlowRate" (input)="checkInputs()"
-          onfocus="this.select();" autofocus>
-        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
-      </div>
+  </div>
+  <div class="form-group">
+    <label class="small" for="head2">Head</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="head2" formControlName="head" (input)="saveChanges()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
     </div>
-    <div class="form-group">
-      <label class="small" for="head2">Head</label>
-      <div class="input-group calc-addon-group">
-        <input name="head2" type="number" step="any" class="form-control addon-input" id="head2" [(ngModel)]="p2Head" (input)="checkInputs()" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <small>Fluid Power, hp</small>
     </div>
-    <div class="row">
-      <div class="col-6">
-        <small>Fluid Power, hp</small>
-      </div>
-      <div class="col-6 text-center">
-        <small>{{pointTwo.fluidPower | number:'2.2-2'}}</small>
-      </div>
+    <div class="col-6 text-center">
+      <small>{{pointTwo.fluidPower | number:'2.2-2'}}</small>
     </div>
   </div>
 </form>

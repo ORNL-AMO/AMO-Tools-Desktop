@@ -2,6 +2,9 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
+import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-fixture-summary',
   templateUrl: './fixture-summary.component.html',
@@ -25,7 +28,7 @@ export class FixtureSummaryComponent implements OnInit {
   finalTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.materialNameDiff = new Array();
@@ -38,7 +41,7 @@ export class FixtureSummaryComponent implements OnInit {
     this.materialOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.fixtureLosses) {
@@ -46,7 +49,7 @@ export class FixtureSummaryComponent implements OnInit {
         let index = 0;
         this.phast.losses.fixtureLosses.forEach(loss => {
           let modificationData = new Array();
-          if(this.phast.modifications){
+          if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.fixtureLosses[index];
               modificationData.push(modData);
@@ -101,7 +104,25 @@ export class FixtureSummaryComponent implements OnInit {
     return '';
   }
 
-
+  checkSpecificHeat(loss: FixtureLoss) {
+    console.log(loss);
+    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
+        material.specificHeatSolid = this.roundVal(val, 4);
+      }
+      if (material.specificHeatSolid != loss.specificHeat) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
   toggleCollapse() {
     this.collapse = !this.collapse;
   }

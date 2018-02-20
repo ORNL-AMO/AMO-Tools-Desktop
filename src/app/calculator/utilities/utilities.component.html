@@ -2,30 +2,45 @@
   <div class="row">
     <div class="col-10  mx-auto">
       <div class="content-container calculator-list">
-        <h2>Utilities Calculators</h2>
-        <ul>
-          <li>
+        <h2>General Calculators</h2>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/unit-converter.png" class="ico-size3">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('convert-units')">Unit Converter</a>
-            <p>Use unit converter for quick unit conversion calculations.</p>
-          </li>
-          <li>
-            <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
-            <p>The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to
-              conduct a very preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
-              Electricity Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours.
-              This calculator is not intended to estimate the economic performance of a specific CHP project, rather it is
-              intended to only give the user an initial understanding of whether CHP has the potential to provide economic
-              savings at their facility.
+            <p>
+              Use unit converter for quick unit conversion calculations.
             </p>
-          </li>
-          <li>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/chp.png" class="ico-size3">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
+            <p>
+              The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
+              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
+              Electricity Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual
+              Operating hours. This calculator is not intended to estimate the economic performance of a specific
+              CHP project, rather it is intended to only give the user an initial understanding of whether
+              CHP has the potential to provide economic savings at their facility.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/cash-flow.png" class="ico-size3">
+          </div>
+          <div class="col-11">
             <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
             <p>
-              Cash flow diagram displays the revenues (savings) and costs associated with an investment. Includes calculation of Benefit:Cost
-              Ratio and Simple Payback Period.
+              Cash flow diagram displays the revenues (savings) and costs associated with an investment.
             </p>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

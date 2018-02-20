@@ -17,6 +17,7 @@
 	min-height: 100vh;
     height: auto !important;
     height: 100%;*/
+    min-height: 100%;
 }
 
 .tab-content{
@@ -71,9 +72,8 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
-.header{
-    padding-top: 8.5px;
-    padding-bottom: 8.5px;
+.header h3{
+    margin-left: 5px;
 }
 
 
@@ -91,6 +91,10 @@
 
 .psat .disabled .header{
     border-bottom-color: gray;
+}
+
+.compressed-air .header{
+    border-bottom: #17A589 groove 2px;
 }
 
 .panel-add a{

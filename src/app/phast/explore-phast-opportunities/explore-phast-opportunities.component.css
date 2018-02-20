@@ -6,12 +6,6 @@ p {
 	padding-left: 15px;
 }
 
-.panel-container{
-    max-height: none;
-    padding-bottom: 67px;
-    height: initial;
-}
-
 .no-padding-left{
     padding-left: 0px;
 }

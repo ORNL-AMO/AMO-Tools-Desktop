@@ -43,6 +43,8 @@ export class ChargeMaterialComponent implements OnInit {
   resultsUnit: string;
   disableType: boolean = false;
   lossesLocked: boolean = false;
+
+  showError: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -153,6 +155,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(lossIndex),
           gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss),
           heatRequired: loss.gasChargeMaterial.heatRequired || 0.0,
+          netHeatLoss: loss.gasChargeMaterial.netHeatLoss || 0.0,
+          endoExoHeat: loss.gasChargeMaterial.endoExoHeat || 0.0,
           collapse: false
         };
       }
@@ -163,6 +167,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(lossIndex),
           gasForm: this.chargeMaterialService.initGasForm(lossIndex),
           heatRequired: loss.solidChargeMaterial.heatRequired || 0.0,
+          netHeatLoss: loss.solidChargeMaterial.netHeatLoss || 0.0,
+          endoExoHeat: loss.solidChargeMaterial.endoExoHeat || 0.0,
           collapse: false
         };
       }
@@ -173,6 +179,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss),
           gasForm: this.chargeMaterialService.initGasForm(lossIndex),
           heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0,
+          netHeatLoss: loss.liquidChargeMaterial.netHeatLoss || 0.0,
+          endoExoHeat: loss.liquidChargeMaterial.endoExoHeat || 0.0,
           collapse: false
         };
       }
@@ -194,6 +202,8 @@ export class ChargeMaterialComponent implements OnInit {
       liquidForm: this.chargeMaterialService.initLiquidForm(this._chargeMaterial.length + 1),
       gasForm: this.chargeMaterialService.initGasForm(this._chargeMaterial.length + 1),
       heatRequired: 0.0,
+      netHeatLoss: 0.0,
+      endoExoHeat: 0.0,
       collapse: false
     });
     this.saveLosses();
@@ -211,23 +221,32 @@ export class ChargeMaterialComponent implements OnInit {
     if (loss.chargeMaterialType == 'Solid') {
       if (loss.solidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
-        loss.heatRequired = this.phastService.solidLoadChargeMaterial(tmpMaterial.solidChargeMaterial, this.settings);
+        const results = this.phastService.solidLoadChargeMaterial(tmpMaterial.solidChargeMaterial, this.settings);
+        loss.heatRequired = results.grossHeatLoss;
+        loss.netHeatLoss = results.netHeatLoss;
+        loss.endoExoHeat = results.endoExoHeat;
       } else {
         loss.heatRequired = null;
       }
     } else if (loss.chargeMaterialType == 'Liquid') {
       if (loss.liquidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(loss.liquidForm);
-        loss.heatRequired = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
+        const results = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
+        loss.heatRequired = results.grossHeatLoss;
+        loss.netHeatLoss = results.netHeatLoss;
+        loss.endoExoHeat = results.endoExoHeat;
       } else {
         loss.heatRequired = null;
       }
     } else if (loss.chargeMaterialType == 'Gas') {
       if (loss.gasForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(loss.gasForm);
-        loss.heatRequired = this.phastService.gasLoadChargeMaterial(tmpMaterial.gasChargeMaterial, this.settings);
+        const results = this.phastService.gasLoadChargeMaterial(tmpMaterial.gasChargeMaterial, this.settings);
+        loss.heatRequired = results.grossHeatLoss;
+        loss.netHeatLoss = results.netHeatLoss;
+        loss.endoExoHeat = results.endoExoHeat;
       } else {
-        loss.heatRequired = null
+        loss.heatRequired = null;
       }
     }
   }
@@ -240,8 +259,8 @@ export class ChargeMaterialComponent implements OnInit {
       if (material.chargeMaterialType == 'Gas') {
         if (!material.gasForm.controls.name.value) {
           material.gasForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
@@ -250,8 +269,8 @@ export class ChargeMaterialComponent implements OnInit {
       } else if (material.chargeMaterialType == 'Solid') {
         if (!material.solidForm.controls.name.value) {
           material.solidForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
@@ -260,8 +279,8 @@ export class ChargeMaterialComponent implements OnInit {
       } else if (material.chargeMaterialType == 'Liquid') {
         if (!material.liquidForm.controls.name.value) {
           material.liquidForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
@@ -269,7 +288,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.chargeMaterialType = 'Liquid';
       }
       tmpChargeMaterials.push(tmpMaterial);
-    })
+    });
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.setCompareVals();
     this.savedLoss.emit(true);
@@ -319,6 +338,10 @@ export class ChargeMaterialComponent implements OnInit {
       }
     }
   }
+
+  setError(bool: boolean){
+    this.showError = bool;
+  }
 }
 
 
@@ -328,5 +351,7 @@ export interface ChargeMaterialObj {
   liquidForm: FormGroup,
   gasForm: FormGroup,
   heatRequired: number,
+  netHeatLoss: number,
+  endoExoHeat: number,
   collapse: boolean
 }

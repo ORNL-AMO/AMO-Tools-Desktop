@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-import { BaseChartDirective } from 'ng2-charts';
+import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
+import * as c3 from 'c3';
+
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
@@ -23,225 +25,117 @@ export class PercentGraphComponent implements OnInit {
   @Input()
   unit: string;
 
-  @ViewChild(BaseChartDirective) private baseChart;
-
   doughnutChartLabels: string[];
   doughnutChartData: number[];
   doughnutChartType: string = 'doughnut';
   chartOptions: any;
   chartColors: Array<any> = [{}];
   chartColorDataSet: Array<any>;
+  chart: any;
+  chartHeight: number;
+
+  firstChange: boolean = true;
+  inChart: boolean = false;
+  exportName: string;
 
   potential: number = 0;
 
   doc: any;
   window: any;
 
-  constructor(private windowRefService: WindowRefService) { }
+  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    this.initChart();
+
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.setValueMargin() };
-    //let object render before resizing initially
-    setTimeout(() => {
-      this.setValueMargin();
-    }, 1500)
-  }
+    this.exportName = this.title + "-graph";
 
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
-  setValueMargin() {
-    let div = this.doc.getElementsByClassName('chart-container')
-    let valueClass = this.doc.getElementsByClassName('value');
-    let chartDiv = div[0];
-    if (chartDiv) {
-      if (chartDiv.clientWidth < 350 && chartDiv.clientWidth > 200) {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '24px';
-        }
-      } else if (chartDiv.clientWidth < 200) {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '16px';
-        }
-      } else {
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.fontSize = '32px';
-        }
-      }
-      let percentValue = this.doc.getElementById('percent');
-      if (percentValue) {
-        let marginTop = ((chartDiv.clientWidth / 2) - (percentValue.clientHeight / 2)) / 2;
-        let marginLeft = (chartDiv.clientWidth / 2) - (percentValue.clientWidth / 2);
-        for (let i = 0; i < valueClass.length; i++) {
-          valueClass[i].style.marginTop = marginTop + 'px';
-          valueClass[i].style.marginLeft = marginLeft + 'px';
-        }
-      }
+    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings") {
+      this.inChart = true;
+      this.chartHeight = 120;
+      this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
-  }
-
-  ngOnChanges() {
     this.initChart();
   }
 
+  ngOnDestroy() {
+    
+  }
+
+  ngOnChanges() {
+    if (this.firstChange) {
+      this.firstChange = !this.firstChange;
+    }
+    else {
+      this.updateChart();
+    }
+  }
+
+
+  updateChart() {
+    if (this.chart) {
+      this.chart.load({
+        columns: [
+          ['data', this.value],
+        ]
+      });
+      d3.select(this.ngChart.nativeElement).selectAll(".c3-chart-arcs-title").node().innerHTML = this.value.toFixed(0) + "%";
+      d3.selectAll('.c3-chart-arcs-title').style("padding-bottom", "20px").style("font-size", "26px");
+      d3.selectAll(".c3-gauge-value").style("display", "none");
+    }
+    else {
+      this.initChart();
+    }
+  }
+
   initChart() {
-    if (this.title) {
-      this.chartOptions = {
-        legend: {
-          display: false
-        },
-        title: {
-          text: this.title,
-          display: true,
-          position: this.titlePlacement || "bottom",
-          fontStyle: this.fontStyle || "bold",
-          fontSize: this.fontSize || 22
-        },
-        tooltips: {
-          enabled: false
+    this.chart = c3.generate({
+      bindto: this.ngChart.nativeElement,
+      data: {
+        columns: [
+          ['data', 0]
+        ],
+        type: 'gauge',
+      },
+      legend: {
+        show: false
+      },
+      size: {
+        height: this.chartHeight
+      },
+      gauge: {
+        width: 30,
+        label: {
+          show: false
         }
+      },
+      color: {
+        pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        threshold: {
+          values: [25, 50, 75, 101]
+        }
+      },
+      tooltip: {
+        show: false
       }
-    } else {
-      this.chartOptions = {
-        legend: {
-          display: false
-        },
-        tooltips: {
-          enabled: false
-        }
-      };
+    });
+    d3.selectAll(".c3-gauge-value").style("display", "none");
+    d3.selectAll(".c3-axis.c3-axis-x .tick text").style("display", "none");
+    d3.selectAll(".c3-chart-arcs-background").style("fill", "#FFF");
+    d3.selectAll(".c3-chart-arcs-background").style("stroke", "#b8b8b8").style("stroke-width","0.5px");
+
+    if (this.value && this.chart) {
+      this.updateChart();
     }
-    this.doughnutChartLabels = [this.valueDescription, 'Potential']
-    if (this.value <= 100 && this.value > 0) {
-      this.potential = 100 - this.value;
-    } else if (this.value < 0) {
-      this.potential = 100 + this.value;
-    } else {
-      this.potential = 0;
-    }
-    this.doughnutChartData = [this.value, this.potential];
-    if (this.value >= 11 && this.value <= 100) {
-      this.chartColorDataSet = [
-        {
-          options: this.chartOptions,
-          data: this.doughnutChartData,
-          backgroundColor: [
-            "#27AE60", //green
-            "#CCD1D1"
-          ],
-          hoverBackground: [
-            "#229954",
-            "#B2BABB"
-          ]
-        }
-      ]
-    } else if (this.value <= 10 && this.value >= 5) {
-      this.chartColorDataSet = [
-        {
-          options: this.chartOptions,
-          data: this.doughnutChartData,
-          backgroundColor: [
-            "#3498DB",  //blue
-            "#CCD1D1"
+  }
 
-          ],
-          hoverBackground: [
-            "#DC7633",
-            "#B2BABB"
-          ]
-        }
-      ]
 
-      // this.chartColorDataSet = [
-      //   {
-      //     options: this.chartOptions,
-      //     data: this.doughnutChartData,
-      //     backgroundColor: [
-      //       "#EB984E", //orange
-      //       "#CCD1D1"
-
-      //     ],
-      //     hoverBackground: [
-      //       "#DC7633",
-      //       "#B2BABB"
-      //     ]
-      //   }
-      // ]
-    } else if (this.value > 100) {
-      this.chartColorDataSet = [
-        {
-          options: this.chartOptions,
-          data: this.doughnutChartData,
-          backgroundColor: [
-            "#E74C3C",  //red
-            "#CCD1D1"
-
-          ],
-          hoverBackground: [
-            "#DC7633",
-            "#CB4335"
-          ]
-        }
-      ]
-
-      // this.chartColorDataSet = [
-      //   {
-      //     options: this.chartOptions,
-      //     data: this.doughnutChartData,
-      //     backgroundColor: [
-      //       "#3498DB", //blue
-      //       "#CCD1D1"
-
-      //     ],
-      //     hoverBackground: [
-      //       "#DC7633",
-      //       "#B2BABB"
-      //     ]
-      //   }
-      // ]
-    } else {  // < 5%
-
-      this.chartColorDataSet = [
-        {
-          options: this.chartOptions,
-          data: this.doughnutChartData,
-          backgroundColor: [
-            "#52489C",  //purple
-            "#CCD1D1"
-
-          ],
-          hoverBackground: [
-            "#DC7633",
-            "#B2BABB"
-          ]
-        }
-      ]
-
-      // this.chartColorDataSet = [
-      //   {
-      //     options: this.chartOptions,
-      //     data: this.doughnutChartData,
-      //     backgroundColor: [
-      //       "#E74C3C",   //red
-      //       "#CCD1D1"
-
-      //     ],
-      //     hoverBackground: [
-      //       "#DC7633",
-      //       "#CB4335"
-      //     ]
-      //   }
-      // ]
-    }
-    if (this.baseChart.chart) {
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.chartColorDataSet[0].backgroundColor;
-    }
+  downloadChart() {
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

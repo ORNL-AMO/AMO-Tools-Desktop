@@ -20,8 +20,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
-  inputError: string = null;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
   firstChange: boolean = true;
   counter: any;
   voltageError: string = null;
@@ -84,17 +84,17 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     } else {
       this.voltageError = null;
     }
+
+    if(this.voltageError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
+    }
   }
 
   startSavePolling() {
-    console.log(this.auxLossesForm);
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

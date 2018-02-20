@@ -1,6 +1,6 @@
 <div class="output-summary">
   <div class="summary-table">
-    <h5>Summary of Energy Sources Used</h5>
+    <h5 class="print-section-header">Summary of Energy Sources Used</h5>
     <table class="table table-hover table-striped">
       <thead>
         <tr>
@@ -49,17 +49,26 @@
         </tr>
       </tbody>
     </table>
+    <div class="row" *ngIf="phast.equipmentNotes">
+      <div class="col">
+        <p>
+          <small>
+            <b>Equipment Notes &mdash;</b> {{phast.equipmentNotes}}
+          </small>
+        </p>
+      </div>
+    </div>
     <div class="row" *ngIf="phast.operatingHours.operatingConditions">
       <div class="col">
         <p>
           <small>
-          <b>Operating Conditions &mdash;</b> {{phast.operatingHours.operatingConditions}}
+            <b>Operating Conditions &mdash;</b> {{phast.operatingHours.operatingConditions}}
           </small>
         </p>
       </div>
     </div>
   </div>
-  <h5>Compare PHAST Calculations</h5>
+  <h5 class="print-section-header">Compare PHAST Calculations</h5>
   <table class="table">
     <thead>
       <tr>
@@ -122,13 +131,15 @@
       <p>
         <small>
           <b>Calculated By PHAST &mdash;</b> This method calculates total energy used by a furnace using bottom-up heat balance
-            analysis. The heat balance analysis includes heat to load and various heat losses.<br>
+          analysis. The heat balance analysis includes heat to load and various heat losses.
+          <br>
           <b>Metered Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying metered fuel
-            energy used by the measurement period.<br>
-          <b>Design Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying total rated capacity
-            of burners ({{energyPerTimeUnit}}) used in different heat zones with annual operating hours, percentage rated capacity
-            used and duty cycle.
-       </small>
+          energy used by the measurement period.
+          <br>
+          <b>Design Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying total rated
+          capacity of burners ({{energyPerTimeUnit}}) used in different heat zones with annual operating hours, percentage
+          rated capacity used and duty cycle.
+        </small>
       </p>
     </div>
   </div>

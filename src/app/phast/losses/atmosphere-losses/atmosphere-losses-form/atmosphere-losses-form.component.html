@@ -12,7 +12,7 @@
 
     <div class="form-group">
       <label class="small" for="specificHeat">Specific heat of gas</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeat()}">
         <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="specificHeat"
           id="specificHeat" onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('specificHeat')"
           (blur)="focusOut()">

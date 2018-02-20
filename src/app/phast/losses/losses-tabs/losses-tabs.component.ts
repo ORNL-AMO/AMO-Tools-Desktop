@@ -57,6 +57,12 @@ export class LossesTabsComponent implements OnInit {
       this.selectedTab = this.lossesService.getTab(val);
     })
     this.checkDone();
+    this.lossesService.updateTabs.subscribe(val => {
+      this.checkDone();
+      if (this.phast.losses) {
+        this.getNumLosses(this.phast.losses)
+      }
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,7 +114,7 @@ export class LossesTabsComponent implements OnInit {
   //         componentStr: 'energy-input' 
   //       })
   //     } 
-      
+
   //     else if (this.settings.furnaceType != 'Custom Electrotechnology') {
   //       this.showAuxPower = true;
   //       this.lossesService.lossesTabs.push({
@@ -127,7 +133,7 @@ export class LossesTabsComponent implements OnInit {
   //         componentStr: 'energy-input-exhaust-gas' 
   //       })
   //     } 
-      
+
   //     else if (this.settings.furnaceType == 'Custom Electrotechnology') {
   //       this.showSystemEff = true;
   //       this.lossesService.lossesTabs.push({
@@ -139,7 +145,7 @@ export class LossesTabsComponent implements OnInit {
   //       })
   //     }
   //   } 
-    
+
   //   else if (this.settings.energySourceType == 'Steam') {
   //     this.showSystemEff = true;
   //     this.lossesService.lossesTabs.push({
@@ -150,7 +156,7 @@ export class LossesTabsComponent implements OnInit {
   //       componentStr: 'heat-system-efficiency' 
   //     })
   //   } 
-    
+
   //   else if (this.settings.energySourceType == 'Fuel') {
   //     this.showFlueGas = true;
   //     this.lossesService.lossesTabs.push({

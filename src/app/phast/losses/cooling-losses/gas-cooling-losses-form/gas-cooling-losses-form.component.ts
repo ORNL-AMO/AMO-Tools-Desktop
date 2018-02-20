@@ -24,6 +24,8 @@ export class GasCoolingLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   specificHeatError: string = null;
   gasFlowError: string = null;
@@ -45,7 +47,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { this.checkTemperature(true); }
+  ngOnInit() { this.checkInputError(true); }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
@@ -63,20 +65,16 @@ export class GasCoolingLossesFormComponent implements OnInit {
     this.lossesForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true)
-  }
-
-  checkTemperature(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-    } else {
-      this.temperatureError = null;
-    }
-  }
+  // checkTemperature(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
+  //     this.temperatureError = 'Inlet temperature is greater than outlet temperature'
+  //   } else {
+  //     this.temperatureError = null;
+  //   }
+  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -97,7 +95,17 @@ export class GasCoolingLossesFormComponent implements OnInit {
     } else {
       this.gasDensityError = null;
     }
+    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
+      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
+    } else {
+      this.temperatureError = null;
+    }
 
+    if (this.specificHeatError || this.gasFlowError || this.gasDensityError || this.temperatureError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
+    }
   }
 
   focusField(str: string) {
@@ -110,13 +118,8 @@ export class GasCoolingLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   startSavePolling() {
-    this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.calculate.emit(true)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

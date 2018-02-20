@@ -1,38 +1,11 @@
-<!-- <div class="list-card">
-
-  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"/>
-  <div class="assessment-name">
-    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
-    <span>Box Type Annealing Furnace</span>
-  </div>
-
-  <div class="assessment-details">
-    Assessment details go here
-  </div>
-
-  <button type="button">Menu</button>
-  <ul class="menu">
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-  </ul>
-
-  <!-- <div class="last-updated">{{assessment.date | date}}</div>
-  <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
-
-</div> -->
-
-
 <div class="card">
-  <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}"
-    (click)="goToAssessment(assessment)">
+  <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
-    <span *ngIf="assessment.type != 'FSAT'">
+    <span (click)="goToAssessment(assessment)" *ngIf="assessment.type != 'FSAT'">
       <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
       <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png"> {{assessment.name}}
     </span>
-    <span *ngIf="assessment.type == 'FSAT'">
+    <span (click)="goToAssessment(assessment)" *ngIf="assessment.type == 'FSAT'">
       <span class="fan-block">
         <i class="fa fa-sun-o fa-spin"></i>
       </span>
@@ -44,5 +17,41 @@
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>
+  </div>
+</div>
+
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit {{assessment.name}} Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Assessment Name</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Move Assessment to Different Folder</label>
+            <select class="form-control" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
   </div>
 </div>

@@ -5,15 +5,15 @@
       <div class="input-group">
         <input name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="totalHeatInput"
           id="totalHeatInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
     <div class="form-group">
       <label class="small" for="electricalPowerInput">Electrical Power Input</label>
       <div class="input-group">
         <input name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricalPowerInput"
-          id="electricalPowerInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricalPowerInput')">
+          id="electricalPowerInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('electricalPowerInput')">
         <span class="input-group-addon units">kW</span>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <label class="small" for="excessAir">Excess Air</label>
       <div class="input-group">
         <input name="{{'excessAir_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="excessAir" id="excessAir"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAir')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('excessAir')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>

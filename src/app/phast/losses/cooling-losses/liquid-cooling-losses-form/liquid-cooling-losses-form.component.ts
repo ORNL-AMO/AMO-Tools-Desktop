@@ -24,6 +24,8 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   specificHeatError: string = null;
   firstChange: boolean = true;
@@ -47,7 +49,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
 
 
   ngOnInit() {
-    this.checkTemperature(true);
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -69,16 +71,16 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     this.calculate.emit(true)
   }
 
-  checkTemperature(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-      this.temperatureError = 'Inlet temperature is greater than outlet temperature';
-    } else {
-      this.temperatureError = null;
-    }
-  }
+  // checkTemperature(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
+  //     this.temperatureError = 'Inlet temperature is greater than outlet temperature';
+  //   } else {
+  //     this.temperatureError = null;
+  //   }
+  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -99,6 +101,18 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     } else {
       this.liquidFlowError = null;
     }
+
+    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
+      this.temperatureError = 'Inlet temperature is greater than outlet temperature';
+    } else {
+      this.temperatureError = null;
+    }
+
+    if(this.specificHeatError || this.densityLiquidError || this.liquidFlowError || this.temperatureError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
+    }
   }
 
   focusField(str: string) {
@@ -112,12 +126,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   }
   startSavePolling() {
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

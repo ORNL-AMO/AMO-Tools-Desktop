@@ -14,3 +14,19 @@
   .summary-card-header.fsat{
     border-bottom: #FFE400 groove 2px;
   }
+/* 
+  .card-header:hover{
+    cursor: inherit;
+    background: inherit;
+  } */
+
+  .fa-edit:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .fa-edit{
+    padding-top: 4px;
+    font-size: larger;
+  }

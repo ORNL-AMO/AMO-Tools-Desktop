@@ -28,6 +28,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -64,6 +66,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.disableForm();
     }
     this.setCalcMethod();
+    this.checkInputError(true);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -171,7 +174,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       moisture: this.roundVal(tmpFlueGas.moisture, 4),
       nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
     });
-    this.checkForm();
+    this.checkInputError();
   }
   emitSave() {
     this.saveEmit.emit(true);
@@ -184,12 +187,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000);
+    this.emitSave();
   }
 
   checkInputError(bool?: boolean) {
@@ -205,6 +203,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.unburnedCarbonInAshError = null;
+    }
+
+    if(this.moistureInAirCompositionError || this.unburnedCarbonInAshError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

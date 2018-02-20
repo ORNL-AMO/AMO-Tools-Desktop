@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -24,6 +24,12 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event){
+    this.getContainerHeight();
+  }
+
 
   assessment: Assessment;
 
@@ -119,6 +125,7 @@ export class PhastComponent implements OnInit {
 
       this.phastService.stepTab.subscribe(val => {
         this.stepTab = val;
+        this.getContainerHeight();
       })
 
       this.phastService.specTab.subscribe(val => {
@@ -145,9 +152,9 @@ export class PhastComponent implements OnInit {
     // this.phastService.specTab.subscribe(val => {
     //   this.specTab = val;
     // })
-     this.phastService.calcTab.subscribe(val => {
-       this.calcTab = val;
-     })
+    this.phastService.calcTab.subscribe(val => {
+      this.calcTab = val;
+    })
   }
 
 
@@ -180,13 +187,15 @@ export class PhastComponent implements OnInit {
 
   getContainerHeight() {
     if (this.content) {
-      let contentHeight = this.content.nativeElement.clientHeight;
-      let headerHeight = this.header.nativeElement.clientHeight;
-      let footerHeight = 0;
-      if(this.footer){
-        footerHeight = this.footer.nativeElement.clientHeight;
-      }
-      this.containerHeight = contentHeight - headerHeight - footerHeight;
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      },100);
     }
   }
 
@@ -194,6 +203,7 @@ export class PhastComponent implements OnInit {
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this.lossesService.updateTabs.next(true);
     this.initSankeyList();
   }
 
@@ -207,9 +217,6 @@ export class PhastComponent implements OnInit {
           this.isAssessmentSettings = true;
           this.checkSetupDone();
           this.init = false;
-          if (update) {
-            this.addToast('Settings Saved');
-          }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -230,7 +237,6 @@ export class PhastComponent implements OnInit {
           //create settings for assessment
           this.indexedDbService.addSettings(tmpSettings).then(
             results => {
-              this.addToast('Settings Saved');
               this.getSettings();
             })
         }
@@ -281,7 +287,7 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.mainTab == 'system-basics') {
+    if (this.mainTab == 'system-setup') {
       if (this.stepTab.step == 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);
@@ -292,6 +298,8 @@ export class PhastComponent implements OnInit {
         } else {
           this.phastService.goToStep(this.stepTab.back);
         }
+      }else if(this.stepTab.back){
+        this.phastService.goToStep(this.stepTab.back);
       }
     } else if (this.mainTab == 'assessment') {
       if (this.assessmentTab == 'modify-conditions') {
@@ -328,16 +336,17 @@ export class PhastComponent implements OnInit {
   save() {
     this.saveClicked = !this.saveClicked;
   }
+
   saveDb() {
     this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
-    this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { this.addToast('Assessment Saved') }
+      results => {
+
+      }
     )
   }
-
 
   exportData() {
     //TODO: Logic for exporting data
@@ -346,7 +355,7 @@ export class PhastComponent implements OnInit {
   disclaimerToast() {
     let toastOptions: ToastOptions = {
       title: 'Disclaimer:',
-      msg: ' The PHAST Tool is still in the early stages of development. Only a portion of the tools functionality is in place, some links/buttons/forms may not work and are placeholders for future work.',
+      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
       showClose: true,
       timeout: 10000000,
       theme: 'default'

@@ -6,6 +6,7 @@ import { PsatService } from '../../psat/psat.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../models/settings';
 import { ImportExportService } from './import-export.service';
+import { ImportDataObjects } from '../../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-import-export',
@@ -25,7 +26,7 @@ export class ImportExportComponent implements OnInit {
   importData = new EventEmitter<any>();
 
 
-  exportData: Array<any>;
+  exportData: Array<ImportDataObjects>;
   isDataGathered: boolean;
   gatheringData: any;
   fileReference: any;
@@ -62,37 +63,48 @@ export class ImportExportComponent implements OnInit {
 
 
   getAssessmentSettings(item: any) {
-    //check for assessment settings
-    this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
-        } else {
-          //no assessment settings, find dir settings being usd
-          this.getParentDirSettingsThenResults(item.assessment.directoryId, item);
-        }
-      }
-    )
-  }
-
-  getParentDirSettingsThenResults(parentDirectoryId: number, item: any) {
-    //get parent directory
-    this.indexedDbService.getDirectory(parentDirectoryId).then(
-      results => {
-        let parentDirectory = results;
-        //get parent directory settings
-        this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
+    if (item.directory) {
+      //check for assessment settings
+      this.indexedDbService.getDirectorySettings(item.directory.id).then(dirSettings => {
+        this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
           results => {
             if (results.length != 0) {
-              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
+              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: dirSettings[0] });
             } else {
-              //no settings try again with parents parent directory
-              this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
+              //no assessment settings, find dir settings being usd
+              this.exportData.push({ assessment: item.assessment, settings: dirSettings[0], directory: item.directory, directorySettings: dirSettings[0] });
             }
-          })
-      }
-    )
+          }
+        )
+      })
+    } else {
+      this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
+        results => {
+          if (results.length != 0) {
+            this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: undefined });
+          }
+        });
+    }
   }
+
+  // getParentDirSettingsThenResults(parentDirectoryId: number, item: any) {
+  //   //get parent directory
+  //   this.indexedDbService.getDirectory(parentDirectoryId).then(
+  //     results => {
+  //       let parentDirectory = results;
+  //       //get parent directory settings
+  //       this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
+  //         results => {
+  //           if (results.length != 0) {
+  //             this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
+  //           } else {
+  //             //no settings try again with parents parent directory
+  //             this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
+  //           }
+  //         })
+  //     }
+  //   )
+  // }
 
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData);

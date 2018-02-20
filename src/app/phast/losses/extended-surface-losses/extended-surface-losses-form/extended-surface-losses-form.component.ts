@@ -23,6 +23,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   surfaceAreaError: string = null;
   firstChange: boolean = true;
@@ -44,8 +46,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.checkEmissivity(true);
-    this.checkTemperature(true);
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -66,18 +67,18 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     this.calculate.emit(true);
   }
 
-  checkEmissivity(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
-      this.emissivityError = 'Surface emissivity must be between 0 and 1';
-    } else {
-      this.emissivityError = null;
-    }
-  }
+  // checkEmissivity(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
+  //     this.emissivityError = 'Surface emissivity must be between 0 and 1';
+  //   } else {
+  //     this.emissivityError = null;
+  //   }
+  // }
 
-  checkTemperature(bool?: boolean) {
+  checkInputError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
@@ -90,6 +91,16 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
     } else {
       this.surfaceAreaError = null;
+    }
+    if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
+    } else {
+      this.emissivityError = null;
+    }
+    if(this.temperatureError || this.surfaceAreaError || this.emissivityError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 
@@ -104,12 +115,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   }
   startSavePolling() {
     this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {
