@@ -4,10 +4,11 @@
     <app-fsat-tabs></app-fsat-tabs>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="row tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'system-setup'" class="row tab-content panel-container" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-6 panel-column modification">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
+      <app-fsat-info *ngIf="stepTab == 'fsat-info'"></app-fsat-info>
     </div>
     <div class="col-6 help-panel">
       <app-help-panel [settings]="settings" [stepTab]="stepTab" [inSetup]="true"></app-help-panel>

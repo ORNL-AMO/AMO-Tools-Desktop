@@ -13,6 +13,7 @@ import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/syste
 import { FsatBasicsComponent } from './fsat-basics/fsat-basics.component';
 import { FsatBasicsHelpComponent } from './help-panel/fsat-basics-help/fsat-basics-help.component';
 import { HelpPanelService } from './help-panel/help-panel.service';
+import { FsatInfoComponent } from './fsat-info/fsat-info.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +23,7 @@ import { HelpPanelService } from './help-panel/help-panel.service';
     SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent],
   providers: [FsatService, HelpPanelService],
   exports: [FsatComponent]
 })

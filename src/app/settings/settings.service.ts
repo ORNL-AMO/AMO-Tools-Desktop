@@ -46,7 +46,9 @@ export class SettingsService {
       'energyResultUnit': [settings.energyResultUnit],
       'customFurnaceName': [settings.customFurnaceName],
       'temperatureMeasurement': [settings.temperatureMeasurement],
-      'phastRollupUnit': [settings.phastRollupUnit]
+      'phastRollupUnit': [settings.phastRollupUnit],
+      'fanCurveType': [settings.fanCurveType],
+      'fanConvertedConditions': [settings.fanConvertedConditions]
     });
   }
 
@@ -68,7 +70,9 @@ export class SettingsService {
       customFurnaceName: form.controls.customFurnaceName.value,
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
       appVersion: packageJson.version,
-      phastRollupUnit: form.controls.phastRollupUnit.value      
+      phastRollupUnit: form.controls.phastRollupUnit.value, 
+      fanCurveType: form.controls.fanCurveType.value,
+      fanConvertedConditions: form.controls.fanConvertedConditions.value    
     };
     return tmpSettings;
   }
@@ -89,7 +93,9 @@ export class SettingsService {
       furnaceType: settings.furnaceType,
       customFurnaceName: settings.customFurnaceName,
       temperatureMeasurement: settings.temperatureMeasurement,
-      phastRollupUnit: settings.phastRollupUnit
+      phastRollupUnit: settings.phastRollupUnit,
+      fanCurveType: settings.fanCurveType,
+      fanConvertedConditions: settings.fanConvertedConditions
     }
     return newSettings;
   }

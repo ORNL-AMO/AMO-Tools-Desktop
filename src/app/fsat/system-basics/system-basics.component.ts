@@ -23,7 +23,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
 
-  startSavePolling(){
+  save(){
     
   }
 }

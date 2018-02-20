@@ -21,7 +21,9 @@ export interface Settings {
     customFurnaceName?: string,
     appVersion?: string,
     phastRollupUnit?: string,
-    facilityInfo?: FacilityInfo
+    facilityInfo?: FacilityInfo,
+    fanCurveType?: string,
+    fanConvertedConditions?: string
 }
 
 
