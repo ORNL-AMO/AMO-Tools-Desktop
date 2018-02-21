@@ -9,19 +9,21 @@ import {ReceiverTankGeneral} from "../../../../shared/models/standalone";
 })
 export class GeneralMethodComponent implements OnInit {
   inputs: ReceiverTankGeneral;
-  requiredStorage: number;
+  finalTankPressure : number;
 
   constructor() { }
 
   ngOnInit() {
-    // this.inputs = {
-    //   airDemand: 0,
-    //   allowablePressureDrop: 0,
-    //   atmosphericPressure: 0
-    // };
+    this.inputs = {
+      airDemand: 0,
+      allowablePressureDrop: 0,
+      method: 0,
+      atmosphericPressure: 0,
+    };
+
   }
 
   getStorage() {
-    this.requiredStorage = StandaloneService.receiverTankSizeGeneral(this.inputs);
+    this.finalTankPressure  = StandaloneService.receiverTankSizeGeneral(this.inputs);
   }
 }

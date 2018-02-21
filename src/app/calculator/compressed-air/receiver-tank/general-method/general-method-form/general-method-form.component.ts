@@ -12,7 +12,7 @@ export class GeneralMethodFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter();
   @Input()
-  requiredStorage: number;
+  finalTankPressure: number;
 
   constructor() { }
 

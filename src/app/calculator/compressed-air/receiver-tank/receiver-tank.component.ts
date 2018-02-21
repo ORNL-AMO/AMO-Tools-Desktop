@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {ReceiverTankGeneral} from "../../../shared/models/standalone";
+
 
 @Component({
   selector: 'app-receiver-tank',

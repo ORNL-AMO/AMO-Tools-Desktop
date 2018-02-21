@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-           <app-general-method-form [inputs]="inputs" (calculate)="getStorage($event)"></app-general-method-form>
+           <app-general-method-form [inputs]="inputs"  [finalTankPressure]="finalTankPressure" (calculate)="getStorage($event)"></app-general-method-form>
           </div>
         </div>
       </div>
