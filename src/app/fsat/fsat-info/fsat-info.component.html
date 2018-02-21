@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="showInletDamperCurves">Show Fan Inlet Damper Curves?</label>
     <select class="form-control" name="showInletDamperCurves" formControlName="showInletDamperCurves" id="showInletDamperCurves"
       (change)="save()" (focus)="focusField('showInletDamperCurves')">
@@ -29,7 +29,7 @@
       (change)="save()" (focus)="focusField('showInterpolatedDamperCurves')">
       <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
     </select>
-  </div>
+  </div> -->
 
   <div class="form-group">
     <label for="interpolatedCurveTimeOpen">Interpolated Curve Time Open</label>
@@ -40,20 +40,20 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="showVariableSpeedCurves">Show Variable Speed Curves?</label>
     <select class="form-control" name="showVariableSpeedCurves" formControlName="showVariableSpeedCurves" id="showVariableSpeedCurves"
       (change)="save()" (focus)="focusField('showVariableSpeedCurves')">
       <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
     </select>
-  </div>
+  </div> -->
 
   <div class="form-group">
-    <label for="impellerDiameter">Interpolated Curve Time Open</label>
+    <label for="impellerDiameter">Impeller Diameter</label>
     <div class="input-group">
       <input name="impellerDiameter" type="number" step="any" class="form-control" formControlName="impellerDiameter" id="impellerDiameter"
         (input)="save()" (focus)="focusField('impellerDiameter')" onfocus="this.select();">
-      <span class="input-group-addon units">%</span>
+      <span class="input-group-addon units">ft</span>
     </div>
   </div>
 
@@ -85,7 +85,7 @@
   <div>
     <label class="group-label">Original Curve Conditions</label>
     <div class="form-group">
-      <label for="originalDensity">Density</label>
+      <label for="originalDensity">Density (P)</label>
       <div class="input-group">
         <input name="originalDensity" type="number" step="any" class="form-control" formControlName="originalDensity" id="originalDensity"
           (input)="save()" (focus)="focusField('originalDensity')" onfocus="this.select();">
@@ -95,7 +95,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="originalFanSpeed">Fan Speed</label>
+      <label for="originalFanSpeed">Fan Speed (N)</label>
       <div class="input-group">
         <input name="originalFanSpeed" type="number" step="any" class="form-control" formControlName="originalFanSpeed" id="originalFanSpeed"
           (input)="save()" (focus)="focusField('originalFanSpeed')" onfocus="this.select();">
@@ -103,7 +103,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="originalPressure">Pressure</label>
+      <label for="originalPressure">Pressure (P<sub>b</sub>)</label>
       <div class="input-group">
         <input name="originalPressure" type="number" step="any" class="form-control" formControlName="originalPressure" id="originalPressure"
           (input)="save()" (focus)="focusField('originalPressure')" onfocus="this.select();">
@@ -121,7 +121,7 @@
   <div>
     <label class="group-label">Converted Curve Conditions</label>
     <div class="form-group">
-      <label for="convertedDensity">Density</label>
+      <label for="convertedDensity">Density (P)</label>
       <div class="input-group">
         <input name="convertedDensity" type="number" step="any" class="form-control" formControlName="convertedDensity" id="convertedDensity"
           (input)="save()" (focus)="focusField('convertedDensity')" onfocus="this.select();">
@@ -131,7 +131,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="convertedFanSpeed">Fan Speed</label>
+      <label for="convertedFanSpeed">Fan Speed (N)</label>
       <div class="input-group">
         <input name="convertedFanSpeed" type="number" step="any" class="form-control" formControlName="convertedFanSpeed" id="convertedFanSpeed"
           (input)="save()" (focus)="focusField('convertedFanSpeed')" onfocus="this.select();">
@@ -139,7 +139,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="convertedPressure">Pressure</label>
+      <label for="convertedPressure">Pressure (P<sub>b</sub>)</label>
       <div class="input-group">
         <input name="convertedPressure" type="number" step="any" class="form-control" formControlName="convertedPressure" id="convertedPressure"
           (input)="save()" (focus)="focusField('convertedPressure')" onfocus="this.select();">

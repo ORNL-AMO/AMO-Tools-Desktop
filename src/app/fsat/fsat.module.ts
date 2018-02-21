@@ -14,6 +14,7 @@ import { FsatBasicsComponent } from './fsat-basics/fsat-basics.component';
 import { FsatBasicsHelpComponent } from './help-panel/fsat-basics-help/fsat-basics-help.component';
 import { HelpPanelService } from './help-panel/help-panel.service';
 import { FsatInfoComponent } from './fsat-info/fsat-info.component';
+import { FanCurveDataComponent } from './fan-curve-data/fan-curve-data.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -23,7 +24,7 @@ import { FsatInfoComponent } from './fsat-info/fsat-info.component';
     SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent],
   providers: [FsatService, HelpPanelService],
   exports: [FsatComponent]
 })

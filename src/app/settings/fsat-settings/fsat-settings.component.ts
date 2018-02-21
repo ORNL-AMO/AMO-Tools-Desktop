@@ -19,9 +19,9 @@ export class FsatSettingsComponent implements OnInit {
   ]
 
   conditions: Array<string> = [
-    'User Defined',
-    'Condition 2',
-    'Condition 3'
+    'Base Case Fan',
+    'Optimized Fan',
+    'User Defined'
   ]
   constructor() { }
 

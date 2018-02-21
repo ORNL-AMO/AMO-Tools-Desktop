@@ -21,10 +21,10 @@ export class FsatInfoComponent implements OnInit {
   ngOnInit() {
     this.fanInfoForm = this.formBuilder.group({
       pt1Factor: [-.09, Validators.required],
-      showInletDamperCurves: ['No', Validators.required],
-      showInterpolatedDamperCurves: ['Yes', Validators.required],
+      //showInletDamperCurves: ['No', Validators.required],
+      //showInterpolatedDamperCurves: ['Yes', Validators.required],
       interpolatedCurveTimeOpen: [35.5, Validators.required],
-      showVariableSpeedCurves: ['No', Validators.required],
+      //showVariableSpeedCurves: ['No', Validators.required],
       impellerDiameter: [78.5, Validators.required],
       planeArea1: [34.04, Validators.required],
       planeArea2: [12.66, Validators.required],

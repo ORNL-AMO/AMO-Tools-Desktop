@@ -9,6 +9,7 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <app-fsat-info *ngIf="stepTab == 'fsat-info'"></app-fsat-info>
+      <app-fan-curve-data *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
     </div>
     <div class="col-6 help-panel">
       <app-help-panel [settings]="settings" [stepTab]="stepTab" [inSetup]="true"></app-help-panel>
