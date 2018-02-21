@@ -29,7 +29,7 @@
   </div>
   <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">
     <div *ngIf="modification" class="col-12 notes-col">
-      <app-notes [(notes)]="modification.notes" [currentTab]="lossesTab"></app-notes>
+      <app-notes [(notes)]="modification.notes" [currentTab]="lossesTab" (emitSave)="save()"></app-notes>
       </div>
       <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
         You must add a modification to take notes on it.
