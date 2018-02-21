@@ -28,6 +28,9 @@
         font-weight: bold;
     }
 
+    .print-mod-notes {
+        font-size: 22px;
+    }
 
     .print-graphs-container {
         page-break-before: always;

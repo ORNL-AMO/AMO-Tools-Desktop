@@ -7,12 +7,6 @@ import { PhastResultsService } from '../../../phast-results.service';
 import { graphColors } from '../graphColors';
 import { PhastReportService } from '../../phast-report.service';
 
-//debug
-import { LossTab } from '../../../tabs';
-import { LossesService } from '../../../losses/losses.service';
-
-
-
 @Component({
     selector: 'app-report-graphs-print',
     templateUrl: './report-graphs-print.component.html',
@@ -45,32 +39,20 @@ export class ReportGraphsPrintComponent implements OnInit {
     sankeyPhastOptions: Array<any>;
     assessmentName: string;
     energyUnit: string;
-
-
-    //debug
-    lossesTabs: Array<LossTab>;
     _modifications: Array<Modification>;
+    allNotes: Array<any>;
 
 
-    constructor(private lossesService: LossesService) { }
+    constructor() { }
 
     ngOnInit() {
-        //debug
-        this.lossesTabs = this.lossesService.lossesTabs;
         this._modifications = new Array<Modification>();
-        
-
-        //real version
         this.assessmentName = this.assessment.name.replace(/\s/g, '');
         this.sankeyPhastOptions = new Array<any>();
         this.sankeyPhastOptions.push({ name: 'Baseline', phast: this.phast });
         this.sankeyBaseline = this.sankeyPhastOptions[0];
         if (this.phast.modifications) {
-
-            //debug
             this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-
-            //real version
             if (this.phast.modifications.length > 0) {
                 this.modExists = true;
             }
@@ -79,21 +61,69 @@ export class ReportGraphsPrintComponent implements OnInit {
             });
         }
         this.energyUnit = this.settings.energyResultUnit;
-
-        //debug
-        this.printAllNotes();
+        if (this.modExists) {
+            this.getAllNotes();
+        }
     }
 
 
-    printAllNotes() {
+    getAllNotes() {
+        this.allNotes = new Array<any>();
 
-        
-        for (let i = 0; i < this.lossesTabs.length; i++) {
-            let loss = this.lossesTabs[i].tabName;
-            let note = this._modifications[i].notes.chargeNotes;
-            console.log("loss " + loss + " = " + note);
+        for (let i = 0; i < this._modifications.length; i++) {
+            let notes = new Array<string>();
 
-            
+            if (this._modifications[i].notes) {
+                if (this._modifications[i].notes.chargeNotes) {
+                    notes.push("Charge Material - " + this._modifications[i].notes.chargeNotes);
+                }
+                if (this._modifications[i].notes.wallNotes) {
+                    notes.push("Wall Loss - " + this._modifications[i].notes.wallNotes);
+                }
+                if (this._modifications[i].notes.atmosphereNotes) {
+                    notes.push("Atmosphere Loss - " + this._modifications[i].notes.atmosphereNotes);
+                }
+                if (this._modifications[i].notes.fixtureNotes) {
+                    notes.push("Fixture Loss - " + this._modifications[i].notes.fixtureNotes);
+                }
+                if (this._modifications[i].notes.openingNotes) {
+                    notes.push("Opening Loss - " + this._modifications[i].notes.openingNotes);
+                }
+                if (this._modifications[i].notes.coolingNotes) {
+                    notes.push("Cooling Loss - " + this._modifications[i].notes.coolingNotes);
+                }
+                if (this._modifications[i].notes.flueGasNotes) {
+                    notes.push("Flue Gas Loss - " + this._modifications[i].notes.flueGasNotes);
+                }
+                if (this._modifications[i].notes.otherNotes) {
+                    notes.push("Other Loss - " + this._modifications[i].notes.otherNotes);
+                }
+                if (this._modifications[i].notes.leakageNotes) {
+                    notes.push("Leakage Loss - " + this._modifications[i].notes.leakageNotes);
+                }
+                if (this._modifications[i].notes.extendedNotes) {
+                    notes.push("Extended Surface Loss - " + this._modifications[i].notes.extendedNotes);
+                }
+                if (this._modifications[i].notes.slagNotes) {
+                    notes.push("Slag Loss - " + this._modifications[i].notes.slagNotes);
+                }
+                if (this._modifications[i].notes.auxiliaryPowerNotes) {
+                    notes.push("Auxiliary Power - " + this._modifications[i].notes.auxiliaryPowerNotes);
+                }
+                if (this._modifications[i].notes.exhaustGasNotes) {
+                    notes.push("Exhaust Loss - " + this._modifications[i].notes.exhaustGasNotes);
+                }
+                if (this._modifications[i].notes.energyInputExhaustGasNotes) {
+                    notes.push("EAF Loss - " + this._modifications[i].notes.energyInputExhaustGasNotes);
+                }
+                if (this._modifications[i].notes.heatSystemEfficiencyNotes) {
+                    notes.push("System Heat Efficiency - " + this._modifications[i].notes.heatSystemEfficiencyNotes);
+                }
+                if (this._modifications[i].notes.operationsNotes) {
+                    notes.push("Operations - " + this._modifications[i].notes.operationsNotes);
+                }
+            }
+            this.allNotes.push(notes);
         }
     }
 }
