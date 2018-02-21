@@ -195,7 +195,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.flueGasLossForm.controls.moistureInAirComposition.value < 0 || this.flueGasLossForm.controls.moistureInAirComposition.value > 100) {
-      this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or greater than 0 and less than or equal to 100%';
+      this.moistureInAirCompositionError = 'Moisture in Combustion Air must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.moistureInAirCompositionError = null;
     }
