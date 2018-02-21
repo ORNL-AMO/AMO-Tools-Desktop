@@ -1,10 +1,11 @@
-<div class="help-header">
-  <h3>O
-    <sub>2</sub> Enrichment Help</h3>
-  <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
-    when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
-    with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.</p>
-</div>
+<!--<div class="help-header">-->
+  <!--<h3>-->
+    <!--O<sub>2</sub> Enrichment Help-->
+  <!--</h3>-->
+  <!--<p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings-->
+    <!--when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion-->
+    <!--with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.</p>-->
+<!--</div>-->
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'o2CombAir'">
         <div class="card-header">
@@ -85,6 +86,25 @@
           <p>
             Units: MMBtu/hr<strong></strong><br> Minimum Value Allowed: <strong>0</strong><br>
           </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'default'">
+        <div class="help-header">
+          <h3>
+            O<sup>2</sup> Enrichment
+          </h3>
+          <p>
+          Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
+          when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
+          with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.
+          </p>
+        </div>
+        <div class="card-block">
+          <div class="alert alert-info">
+            <p>
+              Note: This calculator is only valid for natural gas fuels in North America.
+            </p>
+          </div>
         </div>
       </div>
 </div>
