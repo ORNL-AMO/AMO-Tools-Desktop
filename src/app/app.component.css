@@ -316,6 +316,11 @@ select.form-control:not([size]):not([multiple]) {
   box-shadow: 0px 0px 5px #2980b9;
 }
 
+.indicate-report-field-different-db{
+  color: #33CC33;
+  font-weight: bold;
+}
+
 .psat .indicate-report-field-different{
     color: #2980b9 !important;
     font-weight: bold !important;
@@ -329,15 +334,11 @@ select.form-control:not([size]):not([multiple]) {
   border: #BF3D00 solid 2px;
   box-shadow: 0px 0px 5px #BF3D00;
 }
-.phast .indicate-different-db{
-  border: #006120 solid 2px;
-  box-shadow: 0px 0px 5px #006120;
+.indicate-different-db{
+  border: #33CC33 solid 2px;
+  box-shadow: 0px 0px 5px #33CC33;
 }
 
-.phast .indicate-different-db{
-  border: #538055 solid 2px;
-  box-shadow: 0px 0px 5px #538055;
-}
 
 
 .phast .indicate-report-field-different{
@@ -345,10 +346,6 @@ select.form-control:not([size]):not([multiple]) {
     font-weight: bold !important;
 }
 
-.phast .indicate-report-field-different-db{
-  color: #006120 !important;
-  font-weight: bold !important;
-}
 
 .phast .indicate-report-row-different{
     border: #BF3D00 solid !important;
@@ -1114,6 +1111,18 @@ Calculators
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.calculator-panel .ico-size,
+.calculator-panel .ico-size2,
+.calculator-panel .ico-size3,
+.calculator-panel .ico-size4{
+  height: 35px;
+  border-radius: 8px;
+}
+
+.calculator-panel .header{
+  padding-bottom: 5px;
 }
 
 .calc-item-row{

@@ -72,7 +72,7 @@ export class StandaloneService {
 
   // calculate flow coefficient
   static pneumaticValve(input: PneumaticValve): number {
-    return standaloneAddon.pneumaticVale(input).flowCoefficient;
+    return standaloneAddon.pneumaticValve(input).flowCoefficient;
   }
 
   static bagMethod(input: BagMethodInput): BagMethodOutput {

@@ -69,15 +69,30 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+    let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat, ).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
     }
 
     this.atmosphereLossForm.patchValue({
       specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
     });
     this.startSavePolling();
+  }
+
+  checkSpecificHeat(){
+    let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC')
+        material.specificHeat = this.roundVal(val, 4);
+      }
+      if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   disableForm() {
@@ -156,12 +171,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
           });
         })
         //specificHeat
-        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-          specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different-db', val);
-          });
-        })
+        // this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+        //   specificHeatElements.forEach(element => {
+        //     element.classList.toggle('indicate-different-db', val);
+        //   });
+        // })
         //inletTemp
         this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
           let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);

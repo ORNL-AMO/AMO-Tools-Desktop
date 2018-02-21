@@ -38,7 +38,7 @@
 
   <div class="form-group" *ngIf="!inPsat">
     <label for="energyResultUnit">Energy Result Unit</label>
-    <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit">
+    <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit" (change)="save()">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
       </option>
@@ -46,7 +46,7 @@
   </div>
   <div class="form-group" *ngIf="generalSettings">
     <label for="phastRollupUnit">Process Heating Common Result Unit</label>
-    <select class="form-control" formControlName="phastRollupUnit" id="phastRollupUnit">
+    <select class="form-control" formControlName="phastRollupUnit" id="phastRollupUnit" (change)="save()">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
       </option>

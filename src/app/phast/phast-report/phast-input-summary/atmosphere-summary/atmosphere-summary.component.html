@@ -46,16 +46,16 @@
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff[index] == true}">
+              <td>
                 Specific Heat of Gas
-                (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(SCF-&#8457;)</span>
+                <!-- (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(SCF-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(Nm
-                  <sup>3</sup>-&#8451;)</span>)
+                  <sup>3</sup>-&#8451;)</span>) -->
               </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db': checkSpecificHeat(data.baseline)}">
                 {{data.baseline.specificHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeat, mod.specificHeat, 'specificHeatDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeat(mod)}">
                 {{mod.specificHeat}}
               </td>
             </tr>

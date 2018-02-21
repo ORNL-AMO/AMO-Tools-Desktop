@@ -7,6 +7,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -82,12 +83,31 @@ export class FixtureLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
+
   setSpecificHeat() {
     let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    }
     this.lossesForm.patchValue({
-      specificHeat: tmpMaterial.specificHeatSolid
+      specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 4)
     })
     this.checkInputError();
+  }
+
+  checkSpecificHeat() {
+    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
+        material.specificHeatSolid = this.roundVal(val, 4);
+      }
+      if (material.specificHeatSolid != this.lossesForm.controls.specificHeat.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   checkInputError(bool?: boolean) {
@@ -105,9 +125,9 @@ export class FixtureLossesFormComponent implements OnInit {
       this.feedRateError = null;
     }
 
-    if(this.specificHeatError || this.feedRateError){
+    if (this.specificHeatError || this.feedRateError) {
       this.inputError.emit(true);
-    }else{
+    } else {
       this.inputError.emit(false);
     }
   }
@@ -129,12 +149,12 @@ export class FixtureLossesFormComponent implements OnInit {
           });
         })
         //specificHeat
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-          specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different-db', val);
-          });
-        })
+        // this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+        //   specificHeatElements.forEach(element => {
+        //     element.classList.toggle('indicate-different-db', val);
+        //   });
+        // })
         //feedRate
         this.fixtureLossesCompareService.differentArray[this.lossIndex].different.feedRate.subscribe((val) => {
           let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);

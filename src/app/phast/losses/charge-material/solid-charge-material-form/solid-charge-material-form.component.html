@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <label class="small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatOfSolid()}">
         <input name="{{'materialSpecificHeatOfSolidMaterial_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
           formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial" onfocus="this.select();"
           (input)="checkInputError()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')" (blur)="focusOut()">
@@ -25,7 +25,7 @@
 
     <div class="form-group">
       <label class="small" for="materialLatentHeatOfFusion">Latent Heat of Fusion</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkLatentHeatOfFusion()}">
         <input name="{{'materialLatentHeatOfFusion_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialLatentHeatOfFusion"
           id="materialLatentHeatOfFusion" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialLatentHeatOfFusion')"
           (blur)="focusOut()">
@@ -37,7 +37,7 @@
 
     <div class="form-group">
       <label class="small" for="materialHeatOfLiquid">Specific heat of liquid from molten material</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkHeatOfLiquid()}">
         <input name="{{'materialHeatOfLiquid_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialHeatOfLiquid"
           id="materialHeatOfLiquid" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialHeatOfLiquid')"
           (blur)="focusOut()">
@@ -49,7 +49,7 @@
 
     <div class="form-group">
       <label class="small" for="materialMeltingPoint">Melting Point</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkMeltingPoint()}">
         <input name="{{'materialMeltingPoint_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialMeltingPoint"
           id="materialMeltingPoint" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialMeltingPoint')"
           (blur)="focusOut()">
