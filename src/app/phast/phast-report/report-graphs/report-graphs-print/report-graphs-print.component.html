@@ -4,10 +4,12 @@
             <div class="col-12">
 
                 <!-- pie charts -->
-                <div class="row justify-content-center align-items-center">
+                <!-- <div class="row justify-content-center align-items-center"> -->
+                <div class="row">
                     <div class="col-12">
                         <div class="row show-print">
-                            <div class="col-12 print-graph-title">
+                            <!-- <div class="col-12 mx-auto justify-content-center align-items-center print-graph-title"> -->
+                            <div align="center" style="text-align: center;" class="print-graph-title">
                                 Baseline
                             </div>
                         </div>
@@ -16,15 +18,31 @@
                                 <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="baselinePhast.data"
                                     [resultCats]="resultCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
                             </div>
+
+
+                            <!-- real version -->
+                            <!-- <div class="col-12">
+                                <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="baselinePhast.data"
+                                    [resultCats]="resultCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+                            </div> -->
                         </div>
                         <div class="row show-print" *ngIf="modExists" style="padding-top: 50px;">
-                            <div class="col-12 print-graph-title">
-                                {{result.name}}
+                            <!-- <div class="col-12 justify-content-center align-items-center mx-auto print-graph-title"> -->
+                            <div align="center" style="text-align: center;" class="print-graph-title">
+                                Modification: {{result.name}}
                             </div>
                         </div>
                         <div class="row show-print" *ngIf="modExists">
-                            <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="result.data"
-                                [resultCats]="resultCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+                            <!-- debug -->
+                            <div class="col-12" *ngFor="let tab of lossesTabs; let j = index">
+                                <!-- <app-notes [(notes)]="'hello'" [currentTab]="tab"></app-notes> -->
+                            </div>
+
+                            <!-- real version -->
+                            <div class="col-12">
+                                <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="result.data"
+                                    [resultCats]="resultCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+                            </div>
                         </div>
                     </div>
                 </div>
