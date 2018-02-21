@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-12">
+      <div class="header">
+        <h3>Rated Operating Points at Original Curve Conditions</h3>
+        <h5 class="pull-right panel-add" *ngIf="showInputs">
+          <a class="small">
+            <span (click)="addDataRow()">+Add Data</span>
+          </a>
+        </h5>
+      </div>
+    </div>
+  </div>
+  <div class="row add-data-dialog" *ngIf="!showInputs">
+    <div class="col-12 text-center">
+      <p>How would you like to input your data?</p>
+      <a class="click-link" (click)="showForm()">Manual Entry</a>
+      <br>
+      <a class="click-link disabled">Use AMCA 203 Module</a>
+    </div>
+  </div>
+  <div *ngIf="showInputs">
+    <div class="data-form" *ngFor="let point of operatingPoints; let index=index;">
+      <div class="input-group">
+        <span class="input-group-addon units left" (click)="collapsePoint(point)">
+          <span *ngIf="point.collapse" class="fa fa-caret-down"></span>
+          <span *ngIf="!point.collapse" class="fa fa-caret-up"></span>
+        </span>
+        <input type="text" class="form-control name-input" [(ngModel)]="point.pointDescription">
+        <span class="input-group-addon units" (click)="removePoint(index)">
+          <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+        </span>
+      </div>
+      <app-rated-operating-points-form *ngIf="!point.collapse" [point]="point" [settings]="settings"></app-rated-operating-points-form>
+    </div>
+  </div>

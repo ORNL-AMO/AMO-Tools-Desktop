@@ -10,6 +10,8 @@
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <app-fsat-info *ngIf="stepTab == 'fsat-info'"></app-fsat-info>
       <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
+      <app-operating-points [settings]="settings" *ngIf="stepTab == 'operating-points'"></app-operating-points>
+      <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points>
     </div>
     <div class="col-6 help-panel">
       <app-help-panel [settings]="settings" [stepTab]="stepTab" [inSetup]="true"></app-help-panel>
