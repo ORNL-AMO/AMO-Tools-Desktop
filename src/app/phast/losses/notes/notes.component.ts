@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Notes } from '../../../shared/models/phast/phast';
 import { LossTab } from '../../tabs';
 
@@ -12,9 +12,15 @@ export class NotesComponent implements OnInit {
   notes: Notes;
   @Input()
   currentTab: LossTab;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
   }
 
+
+  save(){
+    this.emitSave.emit(true);
+  }
 }
