@@ -12,10 +12,10 @@ export class FsatSettingsComponent implements OnInit {
   @Output('save')
   save = new EventEmitter<boolean>();
 
-  fanTypes: Array<string> = [
-    'Type 1',
-    'Type 2',
-    'Type 3'
+  fanCurveTypes: Array<string> = [
+    'Fan Total Pressure',
+    'Fan Static Pressure',
+    'Static Pressure Rise'
   ]
 
   conditions: Array<string> = [

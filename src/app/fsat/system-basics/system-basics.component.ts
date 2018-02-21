@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SettingsService } from '../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
@@ -14,6 +14,10 @@ export class SystemBasicsComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
+
+
   settingsForm: FormGroup; 
   constructor(private settingsService: SettingsService) { }
 
@@ -24,6 +28,6 @@ export class SystemBasicsComponent implements OnInit {
 
 
   save(){
-    
+    this.emitSave.emit(true);
   }
 }

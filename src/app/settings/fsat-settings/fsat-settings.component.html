@@ -2,7 +2,7 @@
   <div class="form-group">
     <label>Fan Curve Type</label>
     <select (change)="emitSave()" class="form-control" formControlName="fanCurveType" id="fanCurveType">
-        <option *ngFor="let option of fanTypes" [ngValue]="option">{{option}}</option>
+        <option *ngFor="let option of fanCurveTypes" [ngValue]="option">{{option}}</option>
       </select>
   </div>
 

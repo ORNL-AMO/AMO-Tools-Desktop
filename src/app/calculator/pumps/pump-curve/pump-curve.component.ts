@@ -185,7 +185,6 @@ export class PumpCurveComponent implements OnInit {
           pumpCurveForm: this.pumpCurveForm
         }
         this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          debugger
           this.calculator.id = result
           this.calcExists = true;
           this.saving = false;

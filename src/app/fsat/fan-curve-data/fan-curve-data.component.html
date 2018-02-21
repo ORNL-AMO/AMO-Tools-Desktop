@@ -1,17 +1,64 @@
-<form [formGroup]="dataForm" *ngIf="dataForm">
-  <div class="row">
-    <div class="col-12">
-      <div class="header">
-        <h3>Fan Curve Data Points</h3>
+<div class="row">
+  <div class="col-12">
+    <div class="header">
+      <h3>Fan Curve Data Points</h3>
+      <h5 class="pull-right panel-add" *ngIf="showInputs">
+          <a class="small">
+            <span (click)="addDataRow()">+Add Data</span>
+            </a>
+            </h5>
+    </div>
+  </div>
+</div>
+<div class="row add-data-dialog" *ngIf="!showInputs">
+  <div class="col-12 text-center">
+    <p>How would you like to input your data?</p>
+    <a class="click-link" (click)="showForm()">Manual Entry</a>
+    <br>
+    <a class="click-link disabled">Desktop Digitizer</a>
+    <br>
+    <a class="click-link disabled">Import From CSV</a>
+  </div>
+</div>
+<div *ngIf="showInputs">
+  <div *ngFor="let dataRow of curveDataArr; let index = index;">
+    <div class="row align-items-end">
+      <div class="col-1 text-center">
+        {{index+1}}
+      </div>
+      <div class="form-group col">
+        <label class="group-label" *ngIf="index == 0" for="gasFlowRate">Gas Flow Rate (Q)</label>
+        <div class="input-group">
+          <input name="gasFlowRate" [(ngModel)]="dataRow.gasFlowRate" type="number" step="any" class="form-control" id="gasFlowRate"
+            onfocus="this.select();" (focus)="focusField('gasFlowRate')" (input)="save()">
+          <span class="input-group-addon units">cfm</span>
+        </div>
+      </div>
+      <div class="form-group col">
+        <label class="group-label" *ngIf="index == 0 && settings.fanCurveType == 'Fan Total Pressure'" for="pressure">Fan Static Pressure (P
+          <sub>s</sub>)
+        </label>
+        <div class="input-group">
+          <input name="pressure" [(ngModel)]="dataRow.pressure" type="number" step="any" class="form-control" id="pressure" onfocus="this.select();"
+            (focus)="focusField('pressure')" (input)="save()">
+          <span class="input-group-addon units">in.wg</span>
+        </div>
+      </div>
+      <div class="form-group col">
+        <label class="group-label" *ngIf="index == 0" for="fanPower">Fan Power (H)
+        </label>
+        <div class="input-group">
+          <input name="fanPower" [(ngModel)]="dataRow.fanPower" type="number" step="any" class="form-control" id="fanPower" onfocus="this.select();"
+            (focus)="focusField('fanPower')" (input)="save()">
+          <span class="input-group-addon units">hp</span>
+        </div>
+      </div>
+      <div class="col-1" style="height: 100%;">
+        <span class="float-right" *ngIf="curveDataArr.length != 1">
+          <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
+        </span>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 text-center">
-      <p>How would you like to input your data?</p>
-      <a class="click-link">Traditional Inputs</a> <br>
-      <a class="click-link disabled">Desktop Digitizer</a><br>
-      <a class="click-link disabled">Import From CSV</a>
-    </div>
-  </div>
-</form>
+
+</div>
