@@ -55,52 +55,13 @@ export class ApplicationSettingsComponent implements OnInit {
   }
 
   setUnits() {
-    // if (this.settingsForm.value.unitsOfMeasure == 'Imperial') {
-    //   this.settingsForm.patchValue({
-    //     powerMeasurement: 'hp',
-    //     flowMeasurement: 'gpm',
-    //     distanceMeasurement: 'ft',
-    //     pressureMeasurement: 'psi'
-        // currentMeasurement: 'A',
-        // viscosityMeasurement: 'cST',
-        // voltageMeasurement: 'V'
-    //   })
-
-    // } else if (this.settingsForm.value.unitsOfMeasure == 'Metric') {
-    //   this.settingsForm.patchValue({
-    //     powerMeasurement: 'kW',
-    //     flowMeasurement: 'm3/h',
-    //     distanceMeasurement: 'm',
-    //     pressureMeasurement: 'kPa'
-        // currentMeasurement: 'A',
-        // viscosityMeasurement: 'cST',
-        // voltageMeasurement: 'V'
-      //})
-    //}
-    //this.setEnergyResultUnit();
     this.settingsForm = this.settingsService.setUnits(this.settingsForm);
-    this.startSavePolling.emit(true);
+    this.startSavePolling.emit(false);
   }
 
-  // setEnergyResultUnit() {
-  //   if (this.settingsForm.value.unitsOfMeasure == 'Imperial') {
-  //     this.settingsForm.patchValue({
-  //       energyResultUnit: 'Btu'
-  //     })
-  //   }
-  //   else if (this.settingsForm.value.unitsOfMeasure == 'Metric') {
-  //     this.settingsForm.patchValue({
-  //       energyResultUnit: 'kJ'
-  //     })
-  //   }
-
-  //   if (this.settingsForm.value.energySourceType == 'Electricity') {
-  //     this.settingsForm.patchValue({
-  //       energyResultUnit: 'kW'
-  //     })
-  //   }
-  //}
-
+  save(){
+    this.startSavePolling.emit(true);
+  }
 
   getUnitName(unit: any) {
     if (unit) {
