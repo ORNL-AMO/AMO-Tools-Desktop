@@ -19,6 +19,8 @@ import { OperatingPointsComponent } from './operating-points/operating-points.co
 import { OperatingPointsFormComponent } from './operating-points/operating-points-form/operating-points-form.component';
 import { RatedOperatingPointsComponent } from './rated-operating-points/rated-operating-points.component';
 import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
+import { FanCurveDataHelpComponent } from './help-panel/fan-curve-data-help/fan-curve-data-help.component';
+import { OperatingPointsHelpComponent } from './help-panel/operating-points-help/operating-points-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +30,7 @@ import { RatedOperatingPointsFormComponent } from './rated-operating-points/rate
     SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent, OperatingPointsComponent, OperatingPointsFormComponent, RatedOperatingPointsComponent, RatedOperatingPointsFormComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent, OperatingPointsComponent, OperatingPointsFormComponent, RatedOperatingPointsComponent, RatedOperatingPointsFormComponent, FanCurveDataHelpComponent, OperatingPointsHelpComponent],
   providers: [FsatService, HelpPanelService],
   exports: [FsatComponent]
 })
