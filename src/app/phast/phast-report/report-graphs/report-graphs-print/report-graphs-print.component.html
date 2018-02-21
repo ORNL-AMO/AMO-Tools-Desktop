@@ -40,10 +40,12 @@
 
 
                 <!-- bar charts -->
-                <div class="row" *ngIf="modExists" style="padding-top: 50px; padding-left: 55px; font-size: 28px;">
-                    Heat Loss ({{energyUnit}}/hr)
+                <div class="row show-print" *ngIf="modExists" style="padding-top: 50px; font-size: 28px;">
+                    <div align="center" style="text-align: center;">
+                        Heat Loss ({{energyUnit}}/hr)
+                    </div>
                 </div>
-                <div class="row justify-content-center align-items-center" *ngIf="modExists" style="padding-top: 10px;">
+                <div class="row show-print justify-content-center align-items-center" *ngIf="modExists">
                     <div class="col-12">
                         <app-phast-bar-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [resultCats]="resultCats"
                             [phast1Name]="baselinePhast.name" [phast2Name]="result.name" [modResults]="result.data" [results]="baselinePhast.data"
@@ -52,31 +54,40 @@
                 </div>
 
                 <!-- sankey -->
-                <div class="row align-items-center" [ngClass]="{'print-sankey': modExists}">
+                <div class="row" [ngClass]="{'print-sankey': modExists}">
                     <div class="col-12">
-                        <div class="row align-items-center print-baseline-sankey-title">
-                            <div class="col-12" class="print-graph-title">
+                        <div class="row show-print">
+                            <div align="center" style="text-align: center;" class="print-graph-title">
                                 Baseline
                             </div>
                         </div>
-                        <div class="row align-items-center print-baseline-sankey">
-                            <app-sankey [settings]="settings" [phast]="sankeyBaseline.phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                                [modIndex]="i"></app-sankey>
-                        </div>
-                        <div *ngIf="modExists" class="row align-items-center print-mod-sankey-title" style="padding-top: 100px;">
-                            <div class="col-12" class="print-graph-title">
-                                {{result.name}}
+                        <div class="row show-print">
+                            <div class="col-12">
+                                <app-sankey [settings]="settings" [phast]="sankeyBaseline.phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                                    [modIndex]="i"></app-sankey>
                             </div>
                         </div>
-                        <div *ngIf="modExists" class="row align-items-center print-mod-sankey">
-                            <app-sankey [settings]="settings" [phast]="sankeyPhastOptions[i].phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                                [modIndex]="i"></app-sankey>
+                        <div class="row show-print" *ngIf="modExists" style="padding-top: 50px;">
+                            <div align="center" style="text-align: center;" class="print-graph-title">
+                                Modification: {{result.name}}
+                            </div>
+                        </div>
+                        <div class="row show-print" *ngIf="modExists">
+                            <div class="col-12" style="padding-top: 10px;">
+                                <div class="row" *ngFor="let note of allNotes[i - 1]">
+                                    <div class="col-12 print-mod-notes">
+                                        {{note}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <app-sankey [settings]="settings" [phast]="sankeyPhastOptions[i].phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                                    [modIndex]="i"></app-sankey>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <!-- </div> -->
         </div>
     </div>
 </div>
