@@ -28,14 +28,14 @@ export class FsatInfoComponent implements OnInit {
       impellerDiameter: [78.5, Validators.required],
       planeArea1: [34.04, Validators.required],
       planeArea2: [12.66, Validators.required],
-      originalFanSpeed: [],
-      originalDensity: [],
-      originalPressure: [],
-      originalIsentropicExponent: [],
-      convertedFanSpeed: [],
-      convertedDensity: [],
-      convertedPressure: [],
-      convertedIsentropicExponent: []
+      originalFanSpeed: [1180, Validators.required],
+      originalDensity: [.0308, Validators.required],
+      originalPressure: [29.36, Validators.required],
+      originalIsentropicExponent: [1.4, Validators.required],
+      convertedFanSpeed: [1187, Validators.required],
+      convertedDensity: [.0332, Validators.required],
+      convertedPressure: [29.36, Validators.required],
+      convertedIsentropicExponent: [1.40, Validators.required]
     })
   }
 
