@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { Modification, PsatInputs } from '../../shared/models/psat';
@@ -25,6 +25,8 @@ export class HelpPanelComponent implements OnInit {
   modificationIndex: number;
   @Input()
   saveClicked: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
 
   tabSelect: string = 'results';
   baselineResults: PsatOutputs;
@@ -83,4 +85,8 @@ export class HelpPanelComponent implements OnInit {
     this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
   }
 
+
+  save(){
+    this.emitSave.emit(true);
+  }
 }

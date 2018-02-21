@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
@@ -27,6 +27,8 @@ export class LossesResultPanelComponent implements OnInit {
   inSetup: boolean;
   @Input()
   containerHeight: number;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
@@ -60,5 +62,9 @@ export class LossesResultPanelComponent implements OnInit {
 
   setTab(str: string){
     this.tabSelect = str;
+  }
+
+  save(){
+    this.emitSave.emit(true);
   }
 }
