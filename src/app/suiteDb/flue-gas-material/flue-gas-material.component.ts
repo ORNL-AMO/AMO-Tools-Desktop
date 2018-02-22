@@ -68,7 +68,7 @@ export class FlueGasMaterialComponent implements OnInit {
       + this.selectedMaterial.CO + this.selectedMaterial.CO2 + this.selectedMaterial.H2 + this.selectedMaterial.H2O
       + this.selectedMaterial.N2 + this.selectedMaterial.O2 + this.selectedMaterial.SO2;
 
-    } else if (this.canAdd) {
+    } else  {
       this.totalOfFlueGasses = this.newMaterial.C2H6 + this.newMaterial.C3H8 + this.newMaterial.C4H10_CnH2n;
     }
 
@@ -173,6 +173,7 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = vals.heatingValue;
       this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
       this.newMaterial.specificGravity = vals.specificGravity;
+      this.getTotalOfFlueGasses();
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
@@ -182,6 +183,7 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = 0;
       this.newMaterial.heatingValueVolume = 0;
       this.newMaterial.specificGravity = 0;
+      this.getTotalOfFlueGasses();
     }
   }
 
