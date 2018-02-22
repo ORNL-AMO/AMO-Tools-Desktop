@@ -18,6 +18,27 @@
         display: block;
     }
 
+    .print-pad-graph-title {
+        padding-top: 50px;
+
+    }
+
+    .print-center-title {
+        text-align: center;
+    }
+
+    .print-bar-chart-title {
+        font-size: 28px;
+    }
+
+    .print-notes-padding {
+        padding-top: 10px;
+    }
+
+    .print-padding-top {
+        padding-top: 50px;
+    }
+
     .print-sankey {
         page-break-before: always;
         page-break-inside: avoid;

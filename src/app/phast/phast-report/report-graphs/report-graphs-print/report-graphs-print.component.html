@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="row show-print">
-                            <div align="center" style="text-align: center;" class="print-graph-title">
+                            <div align="center" class="print-graph-title print-center-title">
                                 Baseline
                             </div>
                         </div>
@@ -17,13 +17,13 @@
                                     [resultCats]="resultCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
                             </div>
                         </div>
-                        <div class="row show-print" *ngIf="modExists" style="padding-top: 50px;">
-                            <div align="center" style="text-align: center;" class="print-graph-title">
+                        <div class="row show-print print-pad-graph-title" *ngIf="modExists">
+                            <div align="center" class="print-graph-title print-center-title">
                                 Modification: {{result.name}}
                             </div>
                         </div>
                         <div class="row show-print" *ngIf="modExists">
-                            <div class="col-12" style="padding-top: 10px;">
+                            <div class="col-12 print-notes-padding">
                                 <div class="row" *ngFor="let note of allNotes[i - 1]">
                                     <div class="col-12 print-mod-notes">
                                         {{note}}
@@ -40,8 +40,8 @@
 
 
                 <!-- bar charts -->
-                <div class="row show-print" *ngIf="modExists" style="padding-top: 50px; font-size: 28px;">
-                    <div align="center" style="text-align: center;">
+                <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists">
+                    <div align="center" class="print-center-title">
                         Heat Loss ({{energyUnit}}/hr)
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 <div class="row" [ngClass]="{'print-sankey': modExists}">
                     <div class="col-12">
                         <div class="row show-print">
-                            <div align="center" style="text-align: center;" class="print-graph-title">
+                            <div align="center" class="print-graph-title print-center-title">
                                 Baseline
                             </div>
                         </div>
@@ -67,13 +67,13 @@
                                     [modIndex]="i"></app-sankey>
                             </div>
                         </div>
-                        <div class="row show-print" *ngIf="modExists" style="padding-top: 50px;">
-                            <div align="center" style="text-align: center;" class="print-graph-title">
+                        <div class="row show-print print-pad-graph-title" *ngIf="modExists">
+                            <div align="center" class="print-graph-title print-center-title">
                                 Modification: {{result.name}}
                             </div>
                         </div>
                         <div class="row show-print" *ngIf="modExists">
-                            <div class="col-12" style="padding-top: 10px;">
+                            <div class="col-12 print-notes-padding">
                                 <div class="row" *ngFor="let note of allNotes[i - 1]">
                                     <div class="col-12 print-mod-notes">
                                         {{note}}
