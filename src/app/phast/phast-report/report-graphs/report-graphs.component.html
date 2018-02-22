@@ -60,7 +60,7 @@
   </div>
 
   <!-- if there is a mod, show bar chart -->
-  <div class="row align-items-center hide-print" *ngIf="modExists" style="padding-top: 25px;">
+  <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
     <div class="col-7 mx-auto">
       <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
         [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
