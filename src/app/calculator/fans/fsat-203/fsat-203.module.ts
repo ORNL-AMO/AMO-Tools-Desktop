@@ -5,7 +5,7 @@ import { FsatBasicsComponent } from './fsat-basics/fsat-basics.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { FanDataComponent } from './fan-data/fan-data.component';
-import { GasDensityComponent } from './fan-data/gas-density/gas-density.component';
+import { GasDensityComponent } from './gas-density/gas-density.component';
 
 @NgModule({
   imports: [

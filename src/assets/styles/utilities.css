@@ -47,6 +47,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 }
 
 
+.fsat .btn-primary{
+    background-color: #FFE400;
+    color: black;
+}
+
 .fan-block i{
     color:#FFE400
   }

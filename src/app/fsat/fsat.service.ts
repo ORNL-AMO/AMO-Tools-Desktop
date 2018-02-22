@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+declare var fanAddon: any; 
+
 @Injectable()
 export class FsatService {
 
@@ -10,5 +12,9 @@ export class FsatService {
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
+  }
+
+  test(){
+    console.log(fanAddon);
   }
 }

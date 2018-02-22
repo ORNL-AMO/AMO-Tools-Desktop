@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -9,17 +9,28 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class GasDensityComponent implements OnInit {
   @Input()
   fanGasDensity: FanGasDensity;
+  @Output('emitCanContinue')
+  emitCanContinue = new EventEmitter<boolean>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<FanGasDensity>();
 
   gasDensityForm: FormGroup;
 
-  methods: Array<any> = [
-    {
-      id: 1,
-      name: 'Input a reference density at reference temperature and pressure condition'
-    }, {
-      id: 2,
-      name: 'Calculate base gas density from dry bulb temperature, static pressure, barometric pressure, specific gravity, and gas humidity data'
-    }
+  // methods: Array<any> = [
+  //   {
+  //     id: 1,
+  //     name: 'Input a reference density at reference temperature and pressure condition'
+  //   }, {
+  //     id: 2,
+  //     name: 'Calculate base gas density from dry bulb temperature, static pressure, barometric pressure, specific gravity, and gas humidity data'
+  //   }
+  // ]
+
+  methods: Array<string> = [
+    'Relative Humidity %',
+    'Wet Bulb Temperature',
+    'Gas Dew Point',
+    'Use Custom Density'
   ]
 
   gasTypes: Array<string> = [
@@ -30,10 +41,21 @@ export class GasDensityComponent implements OnInit {
 
   ngOnInit() {
     this.gasDensityForm = this.getFormFromObj(this.fanGasDensity);
+    this.checkForm();
+  }
+
+  checkForm(){
+    if(this.gasDensityForm.status == 'VALID'){
+      this.emitCanContinue.emit(true);
+    }else{
+      this.emitCanContinue.emit(false);
+    }
   }
 
   save(){
-
+    this.checkForm();
+    this.fanGasDensity = this.getObjFromForm(this.gasDensityForm);
+    this.emitSave.emit(this.fanGasDensity);
   }
 
   focusField(){
@@ -78,7 +100,7 @@ export class GasDensityComponent implements OnInit {
 }
 
 export interface FanGasDensity {
-  method: number,
+  method: string,
   gasType: string,
  // humidityData: string,
   conditionLocation: number,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FanRatedInfo } from '../../../shared/models/fans';
-import { FanGasDensity } from './fan-data/gas-density/gas-density.component';
+import { FanGasDensity } from './gas-density/gas-density.component';
+import { FsatService } from '../../../fsat/fsat.service';
 
 @Component({
   selector: 'app-fsat-203',
@@ -24,7 +25,7 @@ export class Fsat203Component implements OnInit {
   };
 
   fanGasDensity: FanGasDensity = {
-    method: 1,
+    method: 'Relative Humidity %',
     gasType: 'Air',
   //  humidityData: 'Wet Bulb Temperature',
     conditionLocation: 4,
@@ -39,9 +40,13 @@ export class Fsat203Component implements OnInit {
   }
 
   showBasics: boolean = true;
-  constructor() { }
+  basicsDone: boolean = false;
+  densityDone: boolean = false;
+  canContinue: boolean = false;
+  constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
+    this.fsatService.test();
   }
 
 
@@ -57,7 +62,23 @@ export class Fsat203Component implements OnInit {
     this.showBasics = true;
   }
 
-  save(info: FanRatedInfo){
+  saveBasics(info: FanRatedInfo){
     this.fanRatedInfo = info;
+  }
+
+  saveDensity(density: FanGasDensity){
+    this.fanGasDensity = density;
+  }
+
+  setDensityContinue(bool: boolean){
+    this.densityDone = bool;
+  }
+
+  setBasicsContinue(bool: boolean){
+    this.basicsDone = bool;
+  }
+
+  checkContinue(){
+    this.canContinue = (this.basicsDone && this.densityDone);
   }
 }

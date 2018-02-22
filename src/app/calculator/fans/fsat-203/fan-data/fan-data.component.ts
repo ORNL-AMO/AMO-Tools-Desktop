@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FanRatedInfo } from '../../../../shared/models/fans';
-import { FanGasDensity } from './gas-density/gas-density.component';
 
 @Component({
   selector: 'app-fan-data',
@@ -8,10 +7,7 @@ import { FanGasDensity } from './gas-density/gas-density.component';
   styleUrls: ['./fan-data.component.css']
 })
 export class FanDataComponent implements OnInit {
-  @Input()
-  fanRatedInfo: FanRatedInfo;
-  @Input()
-  fanGasDensity: FanGasDensity;
+
   stepTab: number = 1;
   constructor() { }
 

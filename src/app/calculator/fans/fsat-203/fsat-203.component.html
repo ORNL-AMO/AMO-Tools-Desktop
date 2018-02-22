@@ -9,9 +9,15 @@
                 <div class="row">
                     <div class="col-12">
                         <!--forms-->
-                        <app-fsat-basics *ngIf="showBasics" [fanRatedInfo]="fanRatedInfo" (emitSave)="save($event)" (emitContinue)="continue()"></app-fsat-basics>
+                        <app-fsat-basics *ngIf="showBasics" [fanRatedInfo]="fanRatedInfo" (emitSave)="saveBasics($event)" (emitCanContinue)="setBasicsContinue($event)"></app-fsat-basics>
+                        <app-gas-density *ngIf="showBasics" [fanGasDensity]="fanGasDensity" (emitSave)="saveDensity($event)" (emitCanContinue)="setDensityContinue($event)"></app-gas-density>
+                        <div class="row continue-btn-row justify-content-center" *ngIf="showBasics">
+                            <div class="col text-center">
+                                <button class="btn btn-primary continue-btn" [disabled]="canContinue" (click)="continue()">Continue To Plane Data</button>
+                            </div>
+                        </div>
                         <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br>
-                        <app-fan-data *ngIf="!showBasics" [fanRatedInfo]="fanRatedInfo" [fanGasDensity]="fanGasDensity"></app-fan-data>
+                        <app-fan-data *ngIf="!showBasics"></app-fan-data>
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@ export class FsatBasicsComponent implements OnInit {
   @Input()
   fanRatedInfo: FanRatedInfo;
   @Output('emitContinue')
-  emitContinue = new EventEmitter<boolean>();
+  emitCanContinue = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<FanRatedInfo>();
 
@@ -33,6 +33,7 @@ export class FsatBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.ratedInfoForm = this.getFormFromObject(this.fanRatedInfo);
+    this.checkForm();
   }
 
   focusField(str: string) {
@@ -41,14 +42,18 @@ export class FsatBasicsComponent implements OnInit {
 
 
   save() {
+    this.checkForm();
     this.fanRatedInfo = this.getObjectFromForm(this.ratedInfoForm);
     this.emitSave.emit(this.fanRatedInfo);
   }
 
-  continue() {
-    this.emitContinue.emit(true);
+  checkForm(){
+    if(this.ratedInfoForm.status == 'VALID'){
+      this.emitCanContinue.emit(true);
+    }else{
+      this.emitCanContinue.emit(false);
+    }
   }
-
 
   getFormFromObject(obj: FanRatedInfo): FormGroup {
     let form = this.formBuilder.group({

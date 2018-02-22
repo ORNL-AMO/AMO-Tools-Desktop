@@ -6,6 +6,8 @@ label{
     font-size: small;
 }
 
-.method-select{
-    width: 100% !important;
+
+.density-val{
+    font-size: small;
+    text-align: center;
 }
