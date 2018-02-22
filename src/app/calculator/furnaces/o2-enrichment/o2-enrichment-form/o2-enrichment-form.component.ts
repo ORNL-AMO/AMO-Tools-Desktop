@@ -85,7 +85,9 @@ export class O2EnrichmentFormComponent implements OnInit {
   changeField(str: string) {
     this.changeFieldEmit.emit(str);
   }
-
+  focusOut() {
+    this.changeFieldEmit.emit('default');
+  }
   enterPlot() {
     document.getElementById("plotBtn").click();
   }

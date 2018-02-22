@@ -44,3 +44,6 @@ tr > th:not(:first-child){
 .tr-underline {
   border-bottom: 2px groove #bf3d00;
 }
+.tr-border {
+  border-top: 2px groove #bf3d00;
+}
