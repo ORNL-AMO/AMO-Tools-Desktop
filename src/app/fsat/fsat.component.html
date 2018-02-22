@@ -10,7 +10,7 @@
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <app-fsat-info *ngIf="stepTab == 'fsat-info'"></app-fsat-info>
       <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
-      <app-operating-points [settings]="settings" *ngIf="stepTab == 'operating-points'"></app-operating-points>
+      <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points>
     </div>
     <div class="col-6 help-panel">
@@ -24,6 +24,25 @@
       <div class="pull-right">
         <button class="btn btn-secondary">Save</button>
         <button class="btn btn-primary">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #fsat203Modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fsat203Modal" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        AMCA 203 Module
+        <button class="close" aria-label="Close" (click)="hide203Modal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-fsat-203></app-fsat-203>
       </div>
     </div>
   </div>

@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
 import { SettingsService } from '../settings/settings.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-fsat',
@@ -12,6 +13,11 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./fsat.component.css']
 })
 export class FsatComponent implements OnInit {
+
+  @ViewChild('fsat203Modal') public fsat203Modal: ModalDirective;
+
+
+
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
@@ -109,4 +115,13 @@ export class FsatComponent implements OnInit {
         }
       })
   }
+  
+  show203Modal() {
+    this.fsat203Modal.show();
+  }
+
+  hide203Modal() {
+    this.fsat203Modal.hide();
+  }
+
 }

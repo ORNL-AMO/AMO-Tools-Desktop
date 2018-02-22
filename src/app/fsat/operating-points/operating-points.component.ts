@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 
 
@@ -10,6 +10,8 @@ import { Settings } from '../../shared/models/settings';
 export class OperatingPointsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Output('show203')
+  show203 = new EventEmitter();
 
   operatingPoints: Array<OperatingDataPoint>;
   showInputs: boolean = false;
@@ -50,7 +52,7 @@ export class OperatingPointsComponent implements OnInit {
 
   addDataRow() {
     this.operatingPoints.push({
-      pointDescription: 'Point ' + (this.operatingPoints.length+1),
+      pointDescription: 'Point ' + (this.operatingPoints.length + 1),
       usePtFactor: 'Yes',
       fullSpeed: 'Yes',
       gasFlowRate: 0,
@@ -65,7 +67,9 @@ export class OperatingPointsComponent implements OnInit {
     })
   }
 
-
+  show203Module() {
+    this.show203.emit(true);
+  }
 }
 
 export interface OperatingDataPoint {

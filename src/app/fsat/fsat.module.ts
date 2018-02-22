@@ -10,7 +10,7 @@ import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
-import { FsatBasicsComponent } from './fsat-basics/fsat-basics.component';
+
 import { FsatBasicsHelpComponent } from './help-panel/fsat-basics-help/fsat-basics-help.component';
 import { HelpPanelService } from './help-panel/help-panel.service';
 import { FsatInfoComponent } from './fsat-info/fsat-info.component';
@@ -21,6 +21,8 @@ import { RatedOperatingPointsComponent } from './rated-operating-points/rated-op
 import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
 import { FanCurveDataHelpComponent } from './help-panel/fan-curve-data-help/fan-curve-data-help.component';
 import { OperatingPointsHelpComponent } from './help-panel/operating-points-help/operating-points-help.component';
+import { Fsat203Module } from './fsat-203/fsat-203.module';
+import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,9 +30,11 @@ import { OperatingPointsHelpComponent } from './help-panel/operating-points-help
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    SettingsModule
+    SettingsModule,
+    Fsat203Module,
+    ModalModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent, OperatingPointsComponent, OperatingPointsFormComponent, RatedOperatingPointsComponent, RatedOperatingPointsFormComponent, FanCurveDataHelpComponent, OperatingPointsHelpComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent, OperatingPointsComponent, OperatingPointsFormComponent, RatedOperatingPointsComponent, RatedOperatingPointsFormComponent, FanCurveDataHelpComponent, OperatingPointsHelpComponent],
   providers: [FsatService, HelpPanelService],
   exports: [FsatComponent]
 })
