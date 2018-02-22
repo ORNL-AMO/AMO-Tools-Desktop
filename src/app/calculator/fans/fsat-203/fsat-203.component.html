@@ -1,0 +1,46 @@
+<div class="modify-conditions panel-container row fsat">
+    <div class="col-12">
+        <div class="row align-items-top calculator-panel">
+            <div class="modification panel-column col-6 align-top">
+                <div class="header">
+                    <h3>
+                        <!-- <img src="assets/images/pump-eff.png" class="ico-size">--> Operating Points Calculator</h3>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!--forms-->
+                        <app-fsat-basics *ngIf="showBasics" [fanRatedInfo]="fanRatedInfo" (emitSave)="save($event)" (emitContinue)="continue()"></app-fsat-basics>
+                        <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br>
+                        <app-fan-data *ngIf="!showBasics" [fanRatedInfo]="fanRatedInfo" [fanGasDensity]="fanGasDensity"></app-fan-data>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 align-top">
+                <div class="help-panel">
+                    <div class="row">
+                        <ul class="tabs primary tab-row">
+                            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a (click)="setTab('results')">Graph</a>
+                            </li><!--
+                            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a (click)="setTab('help')">Help</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+                        <div class="col-11" id="achievableEfficiencyGraph">
+                            <!--results-->
+                        </div>
+                    </div>
+                    <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+                        <div class="col-11">
+                            <div class="calc-help">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

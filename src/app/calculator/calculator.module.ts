@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
 import { FurnacesModule } from './furnaces/furnaces.module';
 import { CalculatorComponent } from './calculator.component';
 
-import { FansComponent } from './fans/fans.component';
 
 import { SteamComponent } from './steam/steam.component';
 import { MotorsModule } from './motors/motors.module';
@@ -15,11 +14,11 @@ import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
 import { StandaloneService } from './standalone.service';
 import { CompressedAirModule } from './compressed-air/compressed-air.module';
+import { FansModule } from './fans/fans.module';
 
 @NgModule({
   declarations: [
     CalculatorComponent,
-    FansComponent,
     SteamComponent
   ],
   exports: [
@@ -35,7 +34,8 @@ import { CompressedAirModule } from './compressed-air/compressed-air.module';
     UtilitiesModule,
     FurnacesModule,
     MotorsModule,
-    CompressedAirModule
+    CompressedAirModule,
+    FansModule
   ],
   providers: [
     StandaloneService

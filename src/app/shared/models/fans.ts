@@ -9,6 +9,12 @@ export interface FanRatedInfo {
   fanSpeedCorrected: number;
   densityCorrected: number;
   pressureBarometricCorrected: number;
+  //Mark additions
+  driveType: string;
+  includesEvase: string;
+  upDownStream: string;
+  traversePlanes: number;
+  planarBarometricPressure: number;
 }
 
 // unfortunately as of now we have to have both rectangular and circular variants of every Plane
@@ -30,13 +36,13 @@ export interface PlaneCircular {
 export interface TraverseRectangular extends PlaneRectangular {
   psx: number;
   pitotTubeCoefficient: number;
-  traverseData: Array< Array <number> >;
+  traverseData: Array<Array<number>>;
 }
 
 export interface TraverseCircular extends PlaneCircular {
   psx: number;
   pitotTubeCoefficient: number;
-  traverseData: Array< Array <number> >;
+  traverseData: Array<Array<number>>;
 }
 
 export interface PlaneMstRectangular extends PlaneRectangular {

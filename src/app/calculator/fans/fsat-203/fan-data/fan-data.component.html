@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col">
+    <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/fan-diagram-case-1.png">
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <nav class="hide-print text-center">
+      <ul class="tabs subtabs progress-tabs fsat">
+        <li [ngClass]="{'active': stepTab == 1}">
+          <a (click)="changeStepTab(1)">
+            <span class="step-number">1</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == 2}">
+          <a (click)="changeStepTab(2)">
+            <span class="step-number">2</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == 3}">
+          <a (click)="changeStepTab(3)">
+            <span class="step-number">3</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == 4}">
+          <a (click)="changeStepTab(4)">
+            <span class="step-number">4</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == 5}">
+          <a (click)="changeStepTab(5)">
+            <span class="step-number">5</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <app-gas-density *ngIf="stepTab == 1" [fanGasDensity]="fanGasDensity"></app-gas-density>
+  </div>
+</div>

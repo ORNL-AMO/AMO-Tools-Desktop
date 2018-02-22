@@ -1,3 +1,20 @@
 .fsat-container{
     height: 100%;
 }
+
+
+.modal-dialog{
+    max-width: none;
+    margin: 5px;
+    top: 0px;
+}
+
+.modal-header{
+    padding: 6px;
+    background: #FFE400;
+}
+
+.modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

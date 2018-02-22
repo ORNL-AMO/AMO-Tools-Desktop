@@ -1,0 +1,97 @@
+<form [formGroup]="gasDensityForm" *ngIf="gasDensityForm">
+  <!-- <div class="row">
+      <div class="col-12">
+        <div class="header">
+          <h3>Basic Fan Information</h3>
+        </div>
+      </div>
+    </div> -->
+  <label class="group-label">Establish Gas Density</label>
+  <div class="form-group">
+    <label for="method">Method to Establish Gas Density</label>
+  </div>
+  <div class="form-group">
+    <select class="form-control method-select" name="method" formControlName="method" id="method" (change)="save()" (focus)="focusField('method')">
+      <option *ngFor="let method of methods" [ngValue]="method.id">{{method.id}}: {{method.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="gasType">Gas Type</label>
+    <div class="input-group">
+      <select class="form-control" name="gasType" formControlName="gasType" id="gasType" (change)="save()" (focus)="focusField('gasType')">
+        <option *ngFor="let gas of gasTypes" [ngValue]="gas">{{gas}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="dryBulbTemp">Dry Bulb Temp (T
+      <sub>do</sub>)</label>
+    <div class="input-group">
+      <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="save()"
+        (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
+      <span class="input-group-addon units">&#8457;</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="staticPressure">Static Pressure (P
+      <sub>so</sub>)</label>
+    <div class="input-group">
+      <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
+        (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+      <span class="input-group-addon units">in. Wg</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="barometricPressure">Barometric Pressure (P
+      <sub>bo</sub>)</label>
+    <div class="input-group">
+      <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
+        (input)="save()" (focus)="focusField('barometricPressure')" onfocus="this.select();">
+      <span class="input-group-addon units">in. Hg</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="gasSpecificGravity">Gas Specific Gravity (G)</label>
+    <div class="input-group">
+      <input name="gasSpecificGravity" type="number" step="any" class="form-control" formControlName="gasSpecificGravity" id="gasSpecificGravity"
+        (input)="save()" (focus)="focusField('gasSpecificGravity')" onfocus="this.select();">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="wetBulbTemp">Wet Bulb Temp (T
+      <sub>wo</sub>)</label>
+    <div class="input-group">
+      <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp" id="wetBulbTemp" (input)="save()"
+        (focus)="focusField('wetBulbTemp')" onfocus="this.select();">
+      <span class="input-group-addon units">&#8457;</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="relativeHumidity">Relative Humidity</label>
+    <div class="input-group">
+      <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity" id="relativeHumidity"
+        (input)="save()" (focus)="focusField('relativeHumidity')" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="gasDewpointTemp">Gas Dew Point (T
+      <sub>dp</sub>)</label>
+    <div class="input-group">
+      <input name="gasDewpointTemp" type="number" step="any" class="form-control" formControlName="gasDewpointTemp" id="gasDewpointTemp"
+        (input)="save()" (focus)="focusField('gasDewpointTemp')" onfocus="this.select();">
+      <span class="input-group-addon units">&#8457;</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="gasDensity">Gas Density (P
+      <sub>0</sub>)</label>
+    <div class="input-group">
+      <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity" id="gasDensity" (input)="save()"
+        (focus)="focusField('gasDensity')" onfocus="this.select();">
+      <span class="input-group-addon units">lb/ft
+        <sup>3</sup>
+      </span>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,11 @@
+label{
+    font-size: small;
+}
+
+.form-control{
+    font-size: small;
+}
+
+.method-select{
+    width: 100% !important;
+}

@@ -1,25 +1,19 @@
 <form [formGroup]="ratedInfoForm" *ngIf="ratedInfoForm">
-  <div class="row">
-    <div class="col-12">
-      <div class="header">
-        <h3>Basic Fan Information</h3>
-      </div>
-    </div>
-  </div>
+  <label class="group-label">Basic Fan Information</label>
   <div class="form-group">
     <label for="fanSpeed">Fan Speed</label>
     <div class="input-group">
-      <input name="fanSpeed" type="number" min="0" max="1" step="any" class="form-control" formControlName="fanSpeed" id="fanSpeed"
-        (input)="save()" (focus)="focusField('fanSpeed')" onfocus="this.select();">
+      <input name="fanSpeed" type="number" step="any" class="form-control" formControlName="fanSpeed" id="fanSpeed" (input)="save()"
+        (focus)="focusField('fanSpeed')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
   </div>
 
   <div class="form-group">
-    <label for="motorSpeed">Fan Speed</label>
+    <label for="motorSpeed">Motor Speed</label>
     <div class="input-group">
-      <input name="motorSpeed" type="number" min="0" max="1" step="any" class="form-control" formControlName="motorSpeed" id="motorSpeed"
-        (input)="save()" (focus)="focusField('motorSpeed')" onfocus="this.select();">
+      <input name="motorSpeed" type="number" step="any" class="form-control" formControlName="motorSpeed" id="motorSpeed" (input)="save()"
+        (focus)="focusField('motorSpeed')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
   </div>
@@ -34,8 +28,8 @@
     <label for="fanSpeedCorrected">Corrected Fan Speed (N
       <sub>c</sub>)</label>
     <div class="input-group">
-      <input name="fanSpeedCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="fanSpeedCorrected"
-        id="fanSpeedCorrected" (input)="save()" (focus)="focusField('fanSpeedCorrected')" onfocus="this.select();">
+      <input name="fanSpeedCorrected" type="number" step="any" class="form-control" formControlName="fanSpeedCorrected" id="fanSpeedCorrected"
+        (input)="save()" (focus)="focusField('fanSpeedCorrected')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
   </div>
@@ -44,20 +38,20 @@
     <label for="densityCorrected">Corrected Density (P
       <sub>c</sub>)</label>
     <div class="input-group">
-      <input name="densityCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="densityCorrected"
-        id="densityCorrected" (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
+      <input name="densityCorrected" type="number" step="any" class="form-control" formControlName="densityCorrected" id="densityCorrected"
+        (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
       <span class="input-group-addon units">lbm/ft
         <sup>3</sup>
       </span>
     </div>
   </div>
   <div class="form-group">
-    <label for="pressureBarometricCorrected">Corrected Pressure Barometric (Pb
+    <label for="pressureBarometricCorrected">Corrected Barometric Pressure (Pb
       <sub>c</sub>)</label>
     <div class="input-group">
-      <input name="pressureBarometricCorrected" type="number" min="0" max="1" step="any" class="form-control" formControlName="pressureBarometricCorrected"
+      <input name="pressureBarometricCorrected" type="number" step="any" class="form-control" formControlName="pressureBarometricCorrected"
         id="pressureBarometricCorrected" (input)="save()" (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
-      <span class="input-group-addon units">rpm</span>
+      <span class="input-group-addon units">in. Hg</span>
     </div>
   </div>
   <div class="form-group">
@@ -81,9 +75,23 @@
   <div class="form-group">
     <label for="traversePlanes">Number of Traverse Planes</label>
     <div class="input-group">
-      <select class="form-control" name="traversePlanes" formControlName="traversePlanes" id="traversePlanes" (change)="save()" (focus)="focusField('traversePlanes')">
+      <select class="form-control" name="traversePlanes" formControlName="traversePlanes" id="traversePlanes" (change)="save()"
+        (focus)="focusField('traversePlanes')">
         <option *ngFor="let plane of planes" [ngValue]="plane">{{plane}}</option>
       </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="traversePlanes">Planar Barometric Pressure</label>
+    <div class="input-group">
+      <input name="planarBarometricPressure" type="number" step="any" class="form-control" formControlName="planarBarometricPressure"
+        id="planarBarometricPressure" (input)="save()" (focus)="focusField('planarBarometricPressure')" onfocus="this.select();">
+      <span class="input-group-addon units">in. Hg</span>
+    </div>
+  </div>
+  <div class="row continue-btn-row justify-content-center">
+    <div class="col text-center">
+      <button class="btn btn-primary continue-btn" [disabled]="ratedInfoForm.status == 'INVALID'" (click)="continue()">Continue Fan Setup</button>
     </div>
   </div>
 </form>

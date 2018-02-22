@@ -21,7 +21,7 @@ import { RatedOperatingPointsComponent } from './rated-operating-points/rated-op
 import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
 import { FanCurveDataHelpComponent } from './help-panel/fan-curve-data-help/fan-curve-data-help.component';
 import { OperatingPointsHelpComponent } from './help-panel/operating-points-help/operating-points-help.component';
-import { Fsat203Module } from './fsat-203/fsat-203.module';
+import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
   imports: [

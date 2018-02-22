@@ -500,7 +500,7 @@ Modals
   font-style: italic;
 }
 .modal h3 {
-  font-size: 22px;
+  /* font-size: 22px; */
   margin-bottom: 0;
   width: 100%;
 }
