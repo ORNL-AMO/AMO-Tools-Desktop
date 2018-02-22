@@ -70,7 +70,7 @@
 
     <div class="form-group">
       <label class="small font-weight-bold">Available heat</label>
-      <div class="small">{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</strong></div>
     </div>
 
   </div>
@@ -130,20 +130,20 @@
 
     <div class="form-group">
       <label class="small font-weight-bold">Fuel consumption</label>
-      <div class="small">{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+      <div class="small"><strong>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}</strong>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>MMBtu/hr</strong></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>GJ/hr</strong></span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small font-weight-bold">Available heat</label>
-      <div class="small">{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</strong></div>
     </div>
 
     <div class="form-group">
       <label class="small font-weight-bold">Fuel savings</label>
-      <div class="small">{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</strong></div>
     </div>
 
     <div class="text-center" style="padding-top: 20px">
@@ -151,3 +151,4 @@
     </div>
   </div>
   <!-- End .col -->
+</div>
