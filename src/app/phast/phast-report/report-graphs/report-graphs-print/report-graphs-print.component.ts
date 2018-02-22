@@ -40,8 +40,8 @@ export class ReportGraphsPrintComponent implements OnInit {
     assessmentName: string;
     energyUnit: string;
     _modifications: Array<Modification>;
-    allNotes: Array<any>;
-
+    allNotes: Array<Array<string>>;
+    equipmentNotes: string;
 
     constructor() { }
 
@@ -64,11 +64,15 @@ export class ReportGraphsPrintComponent implements OnInit {
         if (this.modExists) {
             this.getAllNotes();
         }
+
+        if (this.phast.equipmentNotes) {
+            this.equipmentNotes = "Equipment Notes - " + this.phast.equipmentNotes;
+        }
     }
 
 
     getAllNotes() {
-        this.allNotes = new Array<any>();
+        this.allNotes = new Array<Array<string>>();
 
         for (let i = 0; i < this._modifications.length; i++) {
             let notes = new Array<string>();

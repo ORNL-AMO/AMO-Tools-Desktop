@@ -72,7 +72,9 @@
   <!-- <div *ngIf="showPrint && modExists" class="row show-print print-component"> -->
   <div *ngIf="showPrint" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
-    <app-report-graphs-print [assessment]="assessment" [printView]="true" [settings]="settings" [modExists]="modExists" [resultCats]="showResultsCats"
-      [baselinePhast]="baselinePhast" [resultsArray]="resultsArray" [phast]="phast"></app-report-graphs-print>
+    <div class="col-12">
+      <app-report-graphs-print [assessment]="assessment" [printView]="true" [settings]="settings" [modExists]="modExists" [resultCats]="showResultsCats"
+        [baselinePhast]="baselinePhast" [resultsArray]="resultsArray" [phast]="phast"></app-report-graphs-print>
+    </div>
   </div>
 </div>
