@@ -1,0 +1,15 @@
+.continue-btn-row{
+    padding-top: 10px;
+}
+
+.continue-btn{
+    padding: 6px;
+}
+
+
+
+.pressure-reading-div{
+    height: 50px;
+    width: 50px;
+    background-color: red;
+}

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FanRatedInfo } from '../../../../shared/models/fans';
 import { FanData } from './fan-data-form/fan-data-form.component';
 import * as _ from 'lodash';
+import { PitotTubeData } from './plane-3-form/plane-3-form.component';
 @Component({
   selector: 'app-fan-data',
   templateUrl: './fan-data.component.html',
@@ -82,20 +83,28 @@ export class FanDataComponent implements OnInit {
       numInletBoxes: 0
     }
   ];
-  fanData: FanData;
+
+  pitotTubeData: Array<PitotTubeData> = [
+    {
+      tubeType: 'Standard',
+      tubeCoefficient: 0,
+      traverseHoles: 0,
+      insertionPoints: 0,
+      pressureReadings: []
+    },
+    {
+      tubeType: 'Standard',
+      tubeCoefficient: 0,
+      traverseHoles: 0,
+      insertionPoints: 0,
+      pressureReadings: []
+    }
+  ]
   constructor() { }
 
-  ngOnInit() {
-    this.setData();
-  }
-
+  ngOnInit() { }
 
   changeStepTab(str: string) {
     this.stepTab = str;
-    this.setData();
-  }
-
-  setData(){
-    this.fanData = _.find(this.planeData, (data) => {return data.planeNum = this.stepTab});
   }
 }

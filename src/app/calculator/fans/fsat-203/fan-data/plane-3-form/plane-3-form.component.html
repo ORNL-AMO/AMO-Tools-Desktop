@@ -1,0 +1,32 @@
+<form [formGroup]="pitotDataForm" *ngIf="pitotDataForm">
+  <label class="group-label">Input Velocity Pressure Traverse Data</label>
+  <div class="form-group">
+    <label for="tubeType">Pitot Tube Type</label>
+    <select class="form-control" name="tubeType" formControlName="tubeType" id="tubeType" (change)="save()" (focus)="focusField('tubeType')">
+      <option [ngValue]="'Standard'">Standard</option>
+      <option [ngValue]="'S-Type'">S-Type</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="tubeCoefficient">Pitot Tube Coefficient (C
+      <sub>p</sub>)</label>
+    <input name="tubeCoefficient" type="number" step="any" class="form-control" formControlName="tubeCoefficient" id="tubeCoefficient"
+      (input)="save()" (focus)="focusField('tubeCoefficient')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label for="traverseHoles">Number of Traverse Holes</label>
+    <input name="traverseHoles" type="number" step="any" class="form-control" formControlName="traverseHoles" id="traverseHoles"
+      (input)="save()" (focus)="focusField('traverseHoles')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label for="insertionPoints">Number of Insertion Points</label>
+    <input name="insertionPoints" type="number" step="any" class="form-control" formControlName="insertionPoints" id="insertionPoints"
+      (input)="save()" (focus)="focusField('insertionPoints')" onfocus="this.select();">
+  </div>
+</form>
+
+<div class="row continue-btn-row justify-content-center">
+  <div class="col text-center">
+    <button class="btn btn-primary continue-btn" [disabled]="true" (click)="showPitotModal()">Add Differential Pressure Readings</button>
+  </div>
+</div>
