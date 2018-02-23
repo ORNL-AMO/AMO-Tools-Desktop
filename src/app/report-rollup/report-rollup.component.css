@@ -87,6 +87,15 @@
         page-break-before: always;
         page-break-inside: avoid;
     }
+
+    .print-width {
+        width: 100%;
+    }
+
+    .print-container {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
     
     .print-break-after {
         page-break-after: always;
@@ -104,6 +113,10 @@
     }
     .report-container{
         margin-top: 0;
+    }
+
+    .report-container, .sidebar {
+        width: 0px !important;
     }
 
     .report-container .content {

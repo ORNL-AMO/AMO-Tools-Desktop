@@ -24,6 +24,10 @@ ul {
     width: 50%;
 }
 
+.medium-padding-top {
+    padding-top: 25px;
+}
+
 
 @media print {
 

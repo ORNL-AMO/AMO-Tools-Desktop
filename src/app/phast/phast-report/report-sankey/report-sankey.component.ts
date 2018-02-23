@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastReportService } from '../phast-report.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
+
 @Component({
   selector: 'app-report-sankey',
   templateUrl: './report-sankey.component.html',
@@ -18,15 +20,26 @@ export class ReportSankeyComponent implements OnInit {
   @Input()
   showPrint: boolean;
 
+  baseline: ExecutiveSummary;
+
+  phast1CostSavings: number = 0;
+  phast1EnergySavings: number = 0;
+  phast2CostSavings: number = 0;
+  phast2EnergySavings: number = 0;
+
+  energySavingsUnit: string;
+
   modification: PHAST;
+  modifications: Array<ExecutiveSummary>;
   assessmentName: string;
   phastOptions: Array<any>;
-  phast1: PHAST;
-  phast2: PHAST;
+  phast1: {name, phast};
+  phast2: {name, phast};
   modExists: boolean = false;
-  constructor(private phastReportService: PhastReportService) { }
+  constructor(private phastReportService: PhastReportService, private executiveSummaryService: ExecutiveSummaryService) { }
 
   ngOnInit() {
+    this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
     this.phastOptions = new Array<any>();
     this.phastOptions.push({name: 'Baseline', phast: this.phast});
@@ -38,9 +51,45 @@ export class ReportSankeyComponent implements OnInit {
       });
       this.phast2 = this.phastOptions[1];
     }
+
     // this.phastReportService.showPrint.subscribe(printVal => {
     //   this.showPrint = printVal;
     // });
+    this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
+    this.getPhast1Savings();
+    this.getPhast2Savings();
   }
 
+  getPhast1Savings() {
+    if (!this.phast1) {
+      return;
+    }
+
+    let isMod;
+    if (this.phast1.name == this.phast.name) {
+      isMod = false;
+    }
+    else {
+      isMod = true;
+    }
+    let tmpSummary = this.executiveSummaryService.getSummary(this.phast1.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
+    this.phast1CostSavings = tmpSummary.annualCostSavings;
+    this.phast1EnergySavings = tmpSummary.annualEnergySavings;
+  }
+
+  getPhast2Savings() {
+    if (!this.phast2) {
+      return;
+    }
+    let isMod;
+    if (this.phast2.name == this.phast.name) {
+      isMod = false;
+    }
+    else {
+      isMod = true;
+    }
+    let tmpSummary = this.executiveSummaryService.getSummary(this.phast2.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
+    this.phast2CostSavings = tmpSummary.annualCostSavings;
+    this.phast2EnergySavings = tmpSummary.annualEnergySavings;
+  }
 }

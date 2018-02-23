@@ -48,8 +48,8 @@
         </div>
         <div class="form-group row align-items-center">
           <label class="col-4 col-form-label" for="currentExcessAir">Excess Air</label>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.currentExcessAir | number:'2.2-2'}} %</div>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.newExcessAir | number:'2.2-2'}} %</div>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.currentExcessAir | number:'2.2-2'}} %</strong></div>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.newExcessAir | number:'2.2-2'}} %</strong></div>
         </div>
       </div>
       <div class="form-section">
@@ -74,13 +74,13 @@
         </div>
         <div class="form-group row align-items-center">
           <label class="col-4 col-form-label" for="currentFlueGasOxygen">Available Heat</label>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.currentAvailableHeat | number:'2.2-2'}} % of HHV</div>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.newAvailableHeat | number:'2.2-2'}} % of HHV</div>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.currentAvailableHeat | number:'2.2-2'}} % of HHV</strong></div>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.newAvailableHeat | number:'2.2-2'}} % of HHV</strong></div>
         </div>
         <div class="form-group row align-items-center">
           <label class="col-4 col-form-label" for="fuelSavings">Fuel Savings</label>
-          <div class="col-4 text-center small">&mdash;</div>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.newFuelSavings | number:'2.2-2'}} %</div>
+          <div class="col-4 text-center small"><strong>&mdash;</strong></div>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.newFuelSavings | number:'2.2-2'}} %</strong></div>
         </div>
         <div class="form-group row align-items-center">
           <label class="col-4 col-form-label" for="currentEnergyInput">Energy Input</label>
@@ -92,9 +92,9 @@
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
             </div>
           </div>
-          <div class="col-4 text-center small">{{efficiencyImprovementOutputs.newEnergyInput | number:'2.2-2'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+          <div class="col-4 text-center small"><strong>{{efficiencyImprovementOutputs.newEnergyInput | number:'2.2-2'}}</strong>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>MMBtu/hr</strong></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>GJ/hr</strong></span>
           </div>
         </div>
       </div>
