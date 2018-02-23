@@ -18,7 +18,7 @@
         <input type="number" step="10" min="0" class="form-control" formControlName="measuredSpeed" id="measuredSpeed"
           (input)="calculate()" onfocus="this.select();" autofocus>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>      
+      <span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>
     </div> -->
 
     <div class="form-group">
@@ -42,7 +42,7 @@
     <div class="form-group">
       <label for="synchronousSpeed">Synchronous Speed</label>
       <div class="text-center small" *ngIf="showSynchronousSpeed">
-        {{percentLoadEstimationForm.controls.synchronousSpeed.value}}
+        <strong>{{percentLoadEstimationForm.controls.synchronousSpeed.value}}</strong>
       </div>
       <span class="alert-danger pull-right small" *ngIf="synchronousSpeedError !== null">{{synchronousSpeedError}}</span>
     </div>
