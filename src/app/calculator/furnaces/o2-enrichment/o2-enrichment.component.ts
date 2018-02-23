@@ -35,7 +35,7 @@ export class O2EnrichmentComponent implements OnInit {
 
   lines = [];
   tabSelect: string = 'results';
-  currentField: string = 'o2CombAir';
+  currentField: string = 'default';
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {

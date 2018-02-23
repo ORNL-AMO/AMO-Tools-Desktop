@@ -36,7 +36,10 @@ export class EnergyEquivalencyFormComponent implements OnInit {
     this.calculateFuel.emit(true);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
+  }
+  focusOut() {
+    this.changeField.emit('default');
   }
 }

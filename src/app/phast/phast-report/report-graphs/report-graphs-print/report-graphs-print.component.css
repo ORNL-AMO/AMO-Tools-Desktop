@@ -1,15 +1,4 @@
-.custom-row {
-    display: inline-block;
-    width: 100%;
-}
-.show-duo-left {
-    display: inline-block;
-    width: 49%;
-}
-.show-duo-right {
-    display: inline-block;
-    width: 50%;
-}
+
 
 
 @media print {
@@ -18,16 +7,49 @@
         display: block;
     }
 
+    .print-pad-graph-title {
+        padding-top: 50px;
+
+    }
+
+    .print-center-title {
+        text-align: center;
+    }
+
+    .print-bar-chart-title {
+        font-size: 28px;
+    }
+
+    .print-notes-padding {
+        padding-top: 10px;
+    }
+
+    .print-padding-top {
+        padding-top: 50px;
+    }
+
     .print-sankey {
         page-break-before: always;
         page-break-inside: avoid;
     }
 
-    .print-graph-title {
-        font-size: 25px !important;
+    .print-page-title {
+        font-size: 40px !important;
         font-weight: bold;
     }
 
+    .print-graph-title {
+        font-size: 35px !important;
+        font-weight: bold;
+    }
+
+    .print-graph-sub-title {
+        font-size: 28px !important;
+    }
+
+    .print-mod-notes {
+        font-size: 22px;
+    }
 
     .print-graphs-container {
         page-break-before: always;
@@ -84,6 +106,14 @@
         page-break-inside: avoid;
         position: relative;
         top: 150px;
+        left: -200px;
+    }
+
+    .print-pie-chart-left {
+        left: -290px;
+    }
+
+    .print-pie-chart-right {
         left: -200px;
     }
 }

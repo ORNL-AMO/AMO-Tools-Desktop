@@ -10,10 +10,10 @@
         <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
       </p>
     </div>-->
-    <div class="help-header">
-      <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
-        (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
-    </div>
+    <!--<div class="help-header">-->
+      <!--<p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing-->
+        <!--(Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>-->
+    <!--</div>-->
     <div class="help-content">
       <!--top fuel fired input field-->
       <div class="card" *ngIf="currentField == 'fuelFiredEfficiency'">
@@ -164,6 +164,23 @@
             <br> Minimum Value Allowed:
             <strong>0</strong>
           </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'default'">
+        <div class="help-header">
+          <h3>
+            Energy Equivalency
+          </h3>
+          <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
+            (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
+        </div>
+        <div class="card-block">
+          <div class="alert alert-info">
+            <p>
+              Note: This calculator is only valid for natural gas fuels in North America.
+            </p>
+          </div>
         </div>
       </div>
     </div>

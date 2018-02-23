@@ -90,7 +90,7 @@ export class FixtureLossesFormComponent implements OnInit {
       tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
     this.lossesForm.patchValue({
-      specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 4)
+      specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
     })
     this.checkInputError();
   }
@@ -100,7 +100,7 @@ export class FixtureLossesFormComponent implements OnInit {
     if (material) {
       if (this.settings.unitsOfMeasure == 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
-        material.specificHeatSolid = this.roundVal(val, 4);
+        material.specificHeatSolid = this.roundVal(val, 3);
       }
       if (material.specificHeatSolid != this.lossesForm.controls.specificHeat.value) {
         return true;

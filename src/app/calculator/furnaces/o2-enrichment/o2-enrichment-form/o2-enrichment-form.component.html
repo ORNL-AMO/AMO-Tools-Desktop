@@ -10,7 +10,7 @@
           <sub>2</sub> in combustion air</label>
         <div class="input-group">
           <input autofocus type="number" [disabled]="true" min="1" step="any" max="100" class="form-control" id="o2CombAir" (input)="calc()"
-            (focus)="changeField('o2CombAir')" [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            (focus)="changeField('o2CombAir')" [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="error.o2CombAir !== null">{{error.o2CombAir}}</span>
@@ -20,7 +20,7 @@
         <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
         <div class="input-group">
           <input type="number" min="0" step="10" class="form-control" id="combAirTemp" (input)="calc()" (focus)="changeField('combAirTemp')"
-            [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
 
@@ -33,7 +33,7 @@
           <sub>2</sub> in flue gasses</label>
         <div class="input-group">
           <input type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGas" (input)="calc()" (focus)="changeField('o2FlueGas')"
-            [(ngModel)]="o2Enrichment.o2FlueGas" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.o2FlueGas" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="error.o2FlueGas !== null">{{error.o2FlueGas}}</span>
@@ -43,7 +43,7 @@
         <label class="small" for="flueGasTemp">Flue gas temperature</label>
         <div class="input-group">
           <input type="number" min="0" step="10" class="form-control" id="flueGasTemp" (input)="calc()" (focus)="changeField('flueGasTemp')"
-            [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
 
@@ -55,7 +55,7 @@
         <label class="small" for="fuelConsumption">Fuel consumption</label>
         <div class="input-group">
           <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (input)="calc()" (focus)="changeField('fuelConsumption')"
-            [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
 
           <!-- debug -->
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
@@ -70,7 +70,7 @@
 
     <div class="form-group">
       <label class="small font-weight-bold">Available heat</label>
-      <div class="small">{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</strong></div>
     </div>
 
   </div>
@@ -88,7 +88,7 @@
           <sub>2</sub> in combustion air</label>
         <div class="input-group">
           <input type="number" min="0" step="any" max="100" class="form-control" id="o2CombAirEnriched" (focus)="changeField('o2CombAir')"
-            [(ngModel)]="o2Enrichment.o2CombAirEnriched" (input)="calc()" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.o2CombAirEnriched" (input)="calc()" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="error.o2CombAirEnriched !== null">{{error.o2CombAirEnriched}}</span>
@@ -98,7 +98,7 @@
         <label class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
         <div class="input-group">
           <input type="number" min="0"  step="10" class="form-control" id="combAirTempEnriched" (focus)="changeField('combAirTemp')"
-            [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -110,7 +110,7 @@
           <sub>2</sub> in flue gasses</label>
         <div class="input-group">
           <input type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGasEnriched" (input)="calc()" (focus)="changeField('o2FlueGas')"
-            [(ngModel)]="o2Enrichment.o2FlueGasEnriched" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.o2FlueGasEnriched" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="error.o2FlueGasEnriched !== null">{{error.o2FlueGasEnriched}}</span>
@@ -120,7 +120,7 @@
         <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
         <div class="input-group">
           <input type="number" min="0" step="10" class="form-control" id="flueGasTempEnriched" (input)="calc()" (focus)="changeField('flueGasTemp')"
-            [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();" (keyup.enter)="enterPlot()">
+            [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();" (keyup.enter)="enterPlot()" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -130,20 +130,20 @@
 
     <div class="form-group">
       <label class="small font-weight-bold">Fuel consumption</label>
-      <div class="small">{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+      <div class="small"><strong>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}</strong>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>MMBtu/hr</strong></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>GJ/hr</strong></span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small font-weight-bold">Available heat</label>
-      <div class="small">{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</strong></div>
     </div>
 
     <div class="form-group">
       <label class="small font-weight-bold">Fuel savings</label>
-      <div class="small">{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</div>
+      <div class="small"><strong>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</strong></div>
     </div>
 
     <div class="text-center" style="padding-top: 20px">
@@ -151,3 +151,4 @@
     </div>
   </div>
   <!-- End .col -->
+</div>
