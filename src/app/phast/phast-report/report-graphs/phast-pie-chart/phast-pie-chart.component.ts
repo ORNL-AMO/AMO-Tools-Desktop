@@ -84,8 +84,8 @@ export class PhastPieChartComponent implements OnInit {
       this.chartContainerHeight = 280;
     }
     else {
-      this.chartContainerHeight = 500;
-      this.chartContainerWidth = 1400;
+      this.chartContainerHeight = 400;
+      this.chartContainerWidth = 1100;
     }
     this.initChart();
   }
