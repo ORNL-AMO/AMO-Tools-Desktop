@@ -7,28 +7,33 @@
   <div class="col">
     <nav class="hide-print text-center">
       <ul class="tabs subtabs progress-tabs fsat">
-        <li [ngClass]="{'active': stepTab == 1}">
-          <a (click)="changeStepTab(1)">
+        <li [ngClass]="{'active': stepTab == '1'}">
+          <a (click)="changeStepTab('1')">
             <span class="step-number">1</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == 2}">
-          <a (click)="changeStepTab(2)">
+        <li [ngClass]="{'active': stepTab == '2'}">
+          <a (click)="changeStepTab('2')">
             <span class="step-number">2</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == 3}">
-          <a (click)="changeStepTab(3)">
-            <span class="step-number">3</span>
+        <li [ngClass]="{'active': stepTab == '3a'}">
+          <a (click)="changeStepTab('3a')">
+            <span class="step-number">3a</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == 4}">
-          <a (click)="changeStepTab(4)">
+        <li [ngClass]="{'active': stepTab == '3b'}">
+            <a (click)="changeStepTab('3b')">
+              <span class="step-number">3b</span>
+            </a>
+          </li>
+        <li [ngClass]="{'active': stepTab == '4'}">
+          <a (click)="changeStepTab('4')">
             <span class="step-number">4</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == 5}">
-          <a (click)="changeStepTab(5)">
+        <li [ngClass]="{'active': stepTab == '5'}">
+          <a (click)="changeStepTab('5')">
             <span class="step-number">5</span>
           </a>
         </li>
@@ -36,8 +41,14 @@
     </nav>
   </div>
 </div>
-<!-- <div class="row">
+<div class="row">
   <div class="col">
-    <app-gas-density [fanGasDensity]="fanGasDensity"></app-gas-density>
+    <app-fan-data-form *ngIf="stepTab == '1'" [fanData]="planeData[0]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '2'" [fanData]="planeData[1]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '3a'" [fanData]="planeData[2]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '3b'" [fanData]="planeData[3]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '4'" [fanData]="planeData[4]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '5'" [fanData]="planeData[5]"></app-fan-data-form>
+
   </div>
-</div> -->
+</div>

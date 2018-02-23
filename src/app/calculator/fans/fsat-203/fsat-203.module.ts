@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { FanDataComponent } from './fan-data/fan-data.component';
 import { GasDensityComponent } from './gas-density/gas-density.component';
+import { FanDataFormComponent } from './fan-data/fan-data-form/fan-data-form.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { GasDensityComponent } from './gas-density/gas-density.component';
     ReactiveFormsModule,
     SharedModule
   ],
-  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent],
+  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent],
   exports: [Fsat203Component]
 })
 export class Fsat203Module { }
