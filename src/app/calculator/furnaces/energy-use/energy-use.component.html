@@ -18,7 +18,7 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Graph</a>
+                <a (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
@@ -32,21 +32,21 @@
                   <tbody>
                     <tr>
                       <th>Flow</th>
-                      <td>{{flowCalculationResults.flow | number:'2.2-2'}} 
+                      <td>{{flowCalculationResults.flow | number:'2.2-2'}}
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scfh</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/hr</span>
                       </td>
                     </tr>
                     <tr>
                       <th>Total Flow</th>
-                      <td>{{flowCalculationResults.totalFlow | number:'2.2-2'}} 
+                      <td>{{flowCalculationResults.totalFlow | number:'2.2-2'}}
                           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scf</span>
                           <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
                       </td>
                     </tr>
                     <tr>
                       <th>Energy Use</th>
-                      <td>{{flowCalculationResults.heatInput | number:'2.2-2'}} 
+                      <td>{{flowCalculationResults.heatInput | number:'2.2-2'}}
                           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
                           <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
                       </td>
