@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FanRatedInfo } from '../../../../shared/models/fans';
+import { FanRatedInfo, Fan203Inputs } from '../../../../shared/models/fans';
 import { FanData } from './fan-data-form/fan-data-form.component';
 import * as _ from 'lodash';
 import { PitotTubeData } from './plane-3-form/plane-3-form.component';
@@ -110,7 +110,20 @@ export class FanDataComponent implements OnInit {
     this.stepTab = str;
   }
 
-  showReadingsForm(){
+  showReadingsForm(data: PitotTubeData, num: number) {
+    if (num == 1) {
+      this.pitotTubeData[0] = data;
+    } else {
+      this.pitotTubeData[1] = data;
+    }
     this.showReadings = true;
+  }
+
+  savePitotData(data: PitotTubeData, num: number){
+    if (num == 1) {
+      this.pitotTubeData[0] = data;
+    } else {
+      this.pitotTubeData[1] = data;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BaseGasDensity } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-gas-density',
@@ -8,11 +9,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class GasDensityComponent implements OnInit {
   @Input()
-  fanGasDensity: FanGasDensity;
+  fanGasDensity: BaseGasDensity;
   @Output('emitCanContinue')
   emitCanContinue = new EventEmitter<boolean>();
   @Output('emitSave')
-  emitSave = new EventEmitter<FanGasDensity>();
+  emitSave = new EventEmitter<BaseGasDensity>();
 
   gasDensityForm: FormGroup;
 
@@ -62,7 +63,7 @@ export class GasDensityComponent implements OnInit {
 
   }
 
-  getFormFromObj(obj: FanGasDensity): FormGroup {
+  getFormFromObj(obj: BaseGasDensity): FormGroup {
     let form = this.formBuilder.group({
       method: [obj.method, Validators.required],
       gasType: [obj.gasType, Validators.required],
@@ -80,8 +81,8 @@ export class GasDensityComponent implements OnInit {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): FanGasDensity {
-    let fanGasDensity: FanGasDensity = {
+  getObjFromForm(form: FormGroup): BaseGasDensity {
+    let fanGasDensity: BaseGasDensity = {
       method: form.controls.method.value,
       gasType: form.controls.gasType.value,
     //  humidityData: form.controls.humidityData.value,
@@ -97,19 +98,4 @@ export class GasDensityComponent implements OnInit {
     }
     return fanGasDensity;
   }
-}
-
-export interface FanGasDensity {
-  method: string,
-  gasType: string,
- // humidityData: string,
-  conditionLocation: number,
-  dryBulbTemp: number,
-  staticPressure: number,
-  barometricPressure: number,
-  gasSpecificGravity: number,
-  wetBulbTemp: number,
-  relativeHumidity: number,
-  gasDewpointTemp: number,
-  gasDensity: number
 }

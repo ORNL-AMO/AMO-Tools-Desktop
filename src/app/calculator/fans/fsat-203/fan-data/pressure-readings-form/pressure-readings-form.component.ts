@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { PitotTubeData } from '../plane-3-form/plane-3-form.component';
 
 @Component({
   selector: 'app-pressure-readings-form',
@@ -6,16 +7,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pressure-readings-form.component.css']
 })
 export class PressureReadingsFormComponent implements OnInit {
+  @Input()
+  pitotTubeData: PitotTubeData;
+  @Output('emitSave')
+  emitSave = new EventEmitter<PitotTubeData>();
+
   traverseHoles: Array<Array<number>>;
   constructor() { }
 
   ngOnInit() {
-    this.traverseHoles =
-      [
-        [1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
-        [6, 7, 8, 9, 0, 1, 2, 3, 4, 5],
-        [11, 22, 33, 44, 5, 1, 2, 3, 4, 5]
-      ];
+    let cols = new Array();
+    for (let i = 0; i < this.pitotTubeData.traverseHoles; i++) {
+      cols.push(i)
+    }
+
+    let rows = new Array();
+    for (let i = 0; i < this.pitotTubeData.insertionPoints; i++) {
+      rows.push(JSON.parse(JSON.stringify(cols)));
+    }
+    this.traverseHoles = rows;
   }
 
+  save() {
+    this.pitotTubeData.pressureReadings = this.traverseHoles;
+    this.emitSave.emit(this.pitotTubeData);
+
+  }
+
+  trackByFn(index: any, item: any) {
+    return index;
+ }
 }

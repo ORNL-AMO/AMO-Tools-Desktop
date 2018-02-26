@@ -85,6 +85,13 @@ export interface BaseGasDensity {
   barometricPressure: number;
   gasDensity: number;
   gasType: string;
+  //mark additions
+  method: string,
+  conditionLocation: number,
+  gasSpecificGravity: number,
+  wetBulbTemp: number,
+  relativeHumidity: number,
+  gasDewpointTemp: number,
 }
 
 export interface FanShaftPower {
@@ -99,6 +106,14 @@ export interface FanShaftPower {
 }
 
 // holds the results of the fan203 calculation
+
+export interface Fan203Inputs {
+  FanRatedInfo: FanRatedInfo,
+  BaseGasDensity: BaseGasDensity,
+  FanShaftPower: FanShaftPower,
+  PlaneData?: PlaneDataRectangular | PlaneDataCircular
+}
+
 export interface Fan203Results {
   fanEfficiencyTp: number;
   fanEfficiencySp: number;

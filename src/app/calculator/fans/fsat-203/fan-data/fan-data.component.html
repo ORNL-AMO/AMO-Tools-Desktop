@@ -47,12 +47,13 @@
     <app-fan-data-form *ngIf="stepTab == '2'" [fanData]="planeData[1]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '3a'" [fanData]="planeData[2]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '3b'" [fanData]="planeData[3]"></app-fan-data-form>
-    <app-plane-3-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
-    <app-plane-3-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
+    <app-plane-3-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (showReadingsForm)="showReadingsForm($event, 1)"></app-plane-3-form>
+    <app-plane-3-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (showReadingsForm)="showReadingsForm($event, 2)"></app-plane-3-form>
     <app-fan-data-form *ngIf="stepTab == '4'" [fanData]="planeData[4]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '5'" [fanData]="planeData[5]"></app-fan-data-form>
   </div>
   <div class="col" *ngIf="showReadings">
-    <app-pressure-readings-form></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (emitSave)="savePitotData($event, 1)"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (emitSave)="savePitotData($event, 2)"></app-pressure-readings-form>
   </div>
 </div>

@@ -39,6 +39,6 @@
 
 <div class="row continue-btn-row justify-content-center">
   <div class="col text-center">
-    <button class="btn btn-primary continue-btn" (click)="showDataToggle()">Add Differential Pressure Readings</button>
+    <button class="btn btn-primary continue-btn" [disabled]="pitotDataForm.status == 'INVALID'" (click)="showDataToggle()">Add Differential Pressure Readings</button>
   </div>
 </div>

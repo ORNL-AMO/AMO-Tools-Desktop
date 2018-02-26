@@ -6,3 +6,7 @@
     padding: 6px;
 }
 
+.group-label:hover{
+    cursor: pointer;
+    background-color: #D5D8DC;
+}

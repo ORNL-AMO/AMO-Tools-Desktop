@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
   FanRatedInfo, TraverseRectangular, TraverseCircular, PlaneDataRectangular, PlaneDataCircular, BaseGasDensity,
-  FanShaftPower, Fan203Results
+  FanShaftPower, Fan203Results, Fan203Inputs
 } from '../shared/models/fans';
 
 declare var fanAddon: any;
@@ -14,7 +14,7 @@ declare var fanAddon: any;
 // import { FormGroup } from '@angular/forms';
 
 class Fan203 {
-  protected fan203Input: any;
+  protected fan203Input: Fan203Inputs;
   protected fan203Results: Fan203Results;
 
   protected constructor (fanRatedInfo: FanRatedInfo, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower) {

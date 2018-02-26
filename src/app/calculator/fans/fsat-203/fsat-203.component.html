@@ -4,20 +4,38 @@
             <div class="modification panel-column col-6 align-top">
                 <div class="header">
                     <h3>
-                        <!-- <img src="assets/images/pump-eff.png" class="ico-size">--> Operating Points Calculator</h3>
+                        <!-- <img src="assets/images/pump-eff.png" class="ico-size">-->Operating Points Calculator</h3>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="formSelect == 'none'">
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fsat-basics')">Basic Fan Info</label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('gas-density')">Establish Gas Density</label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fan-data')">Input Plane Data</label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fan-shaft-power')">Fan Shaft Power</label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="formSelect != 'none'">
                     <div class="col-12">
                         <!--forms-->
-                        <app-fsat-basics *ngIf="showBasics" [fanRatedInfo]="fanRatedInfo" (emitSave)="saveBasics($event)" (emitCanContinue)="setBasicsContinue($event)"></app-fsat-basics>
-                        <app-gas-density *ngIf="showBasics" [fanGasDensity]="fanGasDensity" (emitSave)="saveDensity($event)" (emitCanContinue)="setDensityContinue($event)"></app-gas-density>
-                        <div class="row continue-btn-row justify-content-center" *ngIf="showBasics">
+                        <a class="click-link small pull-left" (click)="goToForm('none')"><span class="fa fa-chevron-left"></span> Return to Setup</a><br>
+                        <app-fsat-basics *ngIf="formSelect == 'fsat-basics'" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="saveBasics($event)"
+                            (emitCanContinue)="setBasicsContinue($event)"></app-fsat-basics>
+                        <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
+                            (emitCanContinue)="setDensityContinue($event)"></app-gas-density>
+                        <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
+                        <app-fan-data *ngIf="formSelect == 'fan-data'"></app-fan-data>
+                        <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power'"></app-fan-shaft-power>
+                        <!-- <div class="row continue-btn-row justify-content-center">
                             <div class="col text-center">
-                                <button class="btn btn-primary continue-btn" [disabled]="canContinue" (click)="continue()">Continue To Plane Data</button>
+                                <button class="btn btn-primary continue-btn" (click)="goToForm('none')">Continue Setup</button>
                             </div>
-                        </div>
-                        <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br>
-                        <app-fan-data *ngIf="!showBasics"></app-fan-data>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -34,7 +52,7 @@
                         </ul>
                     </div>
                     <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-                        <div class="col-11" id="achievableEfficiencyGraph">
+                        <div class="col-11">
                             <!--results-->
                         </div>
                     </div>
