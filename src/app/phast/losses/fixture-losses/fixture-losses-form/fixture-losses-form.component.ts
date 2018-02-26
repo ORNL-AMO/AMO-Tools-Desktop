@@ -96,17 +96,22 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   checkSpecificHeat() {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
-    if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
+    if (this.lossesForm.controls.materialName.value) {
+      let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+      if (material) {
+        let val = material.specificHeatSolid;
+        if (this.settings.unitsOfMeasure == 'Metric') {
+          val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC')
+        }
         material.specificHeatSolid = this.roundVal(val, 3);
+        if (material.specificHeatSolid != this.lossesForm.controls.specificHeat.value) {
+          return true;
+        } else {
+          return false;
+        }
       }
-      if (material.specificHeatSolid != this.lossesForm.controls.specificHeat.value) {
-        return true;
-      } else {
-        return false;
-      }
+    } else {
+      return false;
     }
   }
 
