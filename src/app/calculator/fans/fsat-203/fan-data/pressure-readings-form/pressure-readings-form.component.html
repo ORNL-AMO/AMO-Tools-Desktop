@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col">
+    <label class="group-label">Input Pitot Tube Differential Pressure Readings</label>
+    <!-- <div class="row data-labels">
+      <div class="col-2">Insertion</div>
+      <div class="col">
+        <div class="row">
+          <div class="col" style="text-align:center">Traverse Holes</div>
+         </div>
+         <div class="row">
+          <div class="col">1</div>
+          <div class="col">2</div>
+          <div class="col">3</div>
+          <div class="col">4</div>
+          <div class="col">5</div>
+          <div class="col">1</div>
+          <div class="col">2</div>
+          <div class="col">3</div>
+          <div class="col">4</div>
+          <div class="col">5</div>
+        </div>
+      </div>
+    </div> -->
+    <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
+      <div class="input-group-prepend">
+        <span class="input-group-text">{{index+1}}</span>
+      </div>
+        <input  *ngFor="let traverseCol of traverseRow; let i=index;" type="number" class="form-control" [(ngModel)]="traverseRow[i]">
+    </div>
+  </div>
+</div>

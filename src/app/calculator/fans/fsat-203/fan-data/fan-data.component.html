@@ -23,10 +23,10 @@
           </a>
         </li>
         <li [ngClass]="{'active': stepTab == '3b'}">
-            <a (click)="changeStepTab('3b')">
-              <span class="step-number">3b</span>
-            </a>
-          </li>
+          <a (click)="changeStepTab('3b')">
+            <span class="step-number">3b</span>
+          </a>
+        </li>
         <li [ngClass]="{'active': stepTab == '4'}">
           <a (click)="changeStepTab('4')">
             <span class="step-number">4</span>
@@ -42,14 +42,17 @@
   </div>
 </div>
 <div class="row">
-  <div class="col">
+  <div class="col" *ngIf="!showReadings">
     <app-fan-data-form *ngIf="stepTab == '1'" [fanData]="planeData[0]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '2'" [fanData]="planeData[1]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '3a'" [fanData]="planeData[2]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '3b'" [fanData]="planeData[3]"></app-fan-data-form>
-    <app-plane-3-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]"></app-plane-3-form>
-    <app-plane-3-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" ></app-plane-3-form>
+    <app-plane-3-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
+    <app-plane-3-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
     <app-fan-data-form *ngIf="stepTab == '4'" [fanData]="planeData[4]"></app-fan-data-form>
     <app-fan-data-form *ngIf="stepTab == '5'" [fanData]="planeData[5]"></app-fan-data-form>
+  </div>
+  <div class="col" *ngIf="showReadings">
+    <app-pressure-readings-form></app-pressure-readings-form>
   </div>
 </div>

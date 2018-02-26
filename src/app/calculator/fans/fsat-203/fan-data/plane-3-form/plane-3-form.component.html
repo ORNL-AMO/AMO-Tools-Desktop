@@ -24,9 +24,21 @@
       (input)="save()" (focus)="focusField('insertionPoints')" onfocus="this.select();">
   </div>
 </form>
+<!-- 
+<div class="row" *ngIf="showData">
+  <div class="col">
+    <label class="group-label">Input Pitot Tube Differential Pressure Readings</label>
+    <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
+      <div class="input-group-prepend">
+        <span class="input-group-text">{{index}}</span>
+      </div>
+      <input *ngFor="let traverseCol of traverseRow" type="number" class="form-control">
+    </div>
+  </div>
+</div> -->
 
 <div class="row continue-btn-row justify-content-center">
   <div class="col text-center">
-    <button class="btn btn-primary continue-btn" [disabled]="true" (click)="showPitotModal()">Add Differential Pressure Readings</button>
+    <button class="btn btn-primary continue-btn" (click)="showDataToggle()">Add Differential Pressure Readings</button>
   </div>
 </div>

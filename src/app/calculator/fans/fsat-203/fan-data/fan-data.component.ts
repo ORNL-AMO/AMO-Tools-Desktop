@@ -100,11 +100,17 @@ export class FanDataComponent implements OnInit {
       pressureReadings: []
     }
   ]
+
+  showReadings: boolean = false;
   constructor() { }
 
   ngOnInit() { }
 
   changeStepTab(str: string) {
     this.stepTab = str;
+  }
+
+  showReadingsForm(){
+    this.showReadings = true;
   }
 }
