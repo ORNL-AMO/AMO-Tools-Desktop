@@ -1,21 +1,14 @@
-<!--<div class="percent-load-estimationBLAH">-->
-<!--<div class="row" *ngIf="settings">-->
-<!--<div class="col-md-4 col-sm-12  mx-auto">-->
-<!--&lt;!&ndash;<app-percent-load-estimation-form [(percentLoadEstimationForm)]="percentLoadEstimationForm" [settings]="settings" (calculate)="calculate()"></app-percent-load-estimation-form>&ndash;&gt;-->
-<!--<app-percent-load-estimation-form [(percentLoadEstimationForm)]="percentLoadEstimationForm" [settings]="settings"></app-percent-load-estimation-form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-
-<!-- debug trying something -->
 <div class="modify-conditions panel-container row psat" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3><img src="assets/images/load-est.png" class="ico-size4">
-            Percent Load Estimation Calculator</h3>
+        <div class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/load-est.png" class="ico-size4">
+          </div>
+          <div class="col">
+            <h3>Percent Load Estimation Calculator</h3>
+          </div>
         </div>
         <div class="row">
           <div class="col-12">
@@ -30,7 +23,7 @@
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a (click)="setTab('results')">Graph</a>
               </li><!--
-        --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
               </li>
             </ul>
@@ -45,9 +38,10 @@
               <div class="calc-help">
                 <h3>Percent Load Estimation Help</h3>
                 <p>
-                  <strong>This calculator</strong> estimates the percent of actual load served by the electric motor as compared to the
-                  rated full-load capability of the motor. Most electric motors are designed to run at 50% to 100% of rated load and maximum efficiency is
-                  usually near 75% of rated load.<strong></strong>
+                  <strong>This calculator</strong> estimates the percent of actual load served by the electric motor as compared
+                  to the rated full-load capability of the motor. Most electric motors are designed to run at 50% to 100%
+                  of rated load and maximum efficiency is usually near 75% of rated load.
+                  <strong></strong>
                 </p>
               </div>
             </div>

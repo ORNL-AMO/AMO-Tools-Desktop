@@ -2,9 +2,13 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3><img src="assets/images/flow.png" class="ico-size2">
-            Flow Calculations Energy Use Calculator</h3>
+        <div class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/flow.png" class="ico-size2">
+          </div>
+          <div class="col">
+            <h3>Flow Calculations Energy Use Calculator</h3>
+          </div>
         </div>
         <div class="row">
           <div class="col-12">
@@ -33,24 +37,42 @@
                     <tr>
                       <th>Flow</th>
 
-                      <td><strong>{{flowCalculationResults.flow | number:'2.2-2'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>Scfh</strong></span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>Nm<sup>3</sup>/hr</strong></span>
+                      <td>
+                        <strong>{{flowCalculationResults.flow | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                          <strong>Scfh</strong>
+                        </span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                          <strong>Nm
+                            <sup>3</sup>/hr</strong>
+                        </span>
                       </td>
                     </tr>
                     <tr>
                       <th>Total Flow</th>
 
-                      <td><strong>{{flowCalculationResults.totalFlow | number:'2.2-2'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>Scf</strong></span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>Nm<sup>3</sup></strong></span>
+                      <td>
+                        <strong>{{flowCalculationResults.totalFlow | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                          <strong>Scf</strong>
+                        </span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                          <strong>Nm
+                            <sup>3</sup>
+                          </strong>
+                        </span>
                       </td>
                     </tr>
                     <tr>
                       <th>Energy Use</th>
-                      <td><strong>{{flowCalculationResults.heatInput | number:'2.2-2'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>MMBtu</strong></span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>GJ</strong></span>
+                      <td>
+                        <strong>{{flowCalculationResults.heatInput | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                          <strong>MMBtu</strong>
+                        </span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                          <strong>GJ</strong>
+                        </span>
                       </td>
                     </tr>
                   </tbody>
