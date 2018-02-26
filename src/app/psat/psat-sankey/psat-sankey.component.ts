@@ -124,8 +124,6 @@ export class PsatSankeyComponent implements OnInit {
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
 
-    console.log("this.location = " + this.location);
-
     this.width = width;
     this.height = height;
 
@@ -389,7 +387,6 @@ export class PsatSankeyComponent implements OnInit {
       })
       .text(function (d) {
         if (!d.inter) {
-          // return twoDecimalFormat(d.value) + " " + this.settings.powerMeasurement;
           return twoDecimalFormat(d.value) + " kW";
         }
       })
