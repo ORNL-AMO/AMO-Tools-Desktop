@@ -6,6 +6,7 @@ import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
+import { PhastResultsService } from '../phast-results.service';
 
 var svg;
 // use these values to alter label font position and size
@@ -18,7 +19,9 @@ const width = 2650,
   topLabelPositionY = 150,
   bottomLabelPositionY = 1250,
   topReportPositionY = 125,
-  bottomReportPositionY = 1250;
+  bottomReportPositionY = 1250,
+  availableHeatX = 450,
+  availableHeatY = 740;
 
 
 @Component({
@@ -53,7 +56,10 @@ export class SankeyComponent implements OnInit {
   baseSize: number = 300;
   minSize: number = 3;
 
-  constructor(private phastService: PhastService, private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
+  availableHeatPercent: { val: number, name: string, x: number, y: number };
+
+
+  constructor(private phastResultService: PhastResultsService, private phastService: PhastService, private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
   }
 
   ngOnInit() {
@@ -76,9 +82,20 @@ export class SankeyComponent implements OnInit {
     }
   }
 
+  calcAvailableHeatPercent(results: FuelResults) {
+
+    this.availableHeatPercent = {
+      val: results.availableHeatPercent,
+      x: availableHeatX,
+      y: availableHeatY,
+      name: "Available Heat"
+    }
+  }
+
   makeSankey() {
     let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
     if (results.totalInput > 0) {
+      this.calcAvailableHeatPercent(results);
       this.sankey(results);
     }
   }
@@ -87,6 +104,13 @@ export class SankeyComponent implements OnInit {
   sankey(results: FuelResults) {
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
+
+    let availableHeat = [{
+      val: this.availableHeatPercent.val,
+      name: this.availableHeatPercent.name,
+      x: this.availableHeatPercent.x,
+      y: this.availableHeatPercent.y
+    }];
 
     //create node linkes
     let links = new Array<any>();
@@ -177,6 +201,7 @@ export class SankeyComponent implements OnInit {
       .append('g')
       .append("polygon")
       .attr('class', 'node');
+
     // Label Adjustment
     var nodes_text = svg.selectAll(".nodetext")
       .data(results.nodes)
@@ -302,6 +327,44 @@ export class SankeyComponent implements OnInit {
         }
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
+
+
+    var availableHeatText = svg
+      .data(availableHeat)
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dx", function (d) {
+        return d.x;
+      })
+      .attr("dy", function (d) {
+        return d.y;
+      })
+      .text((d) => {
+        return d.name
+      })
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+      .attr("fill", "white");
+
+    availableHeatText = svg
+      .data(availableHeat)
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dx", function (d) {
+        return d.x;
+      })
+      .attr("dy", function (d) {
+        if (this.location === 'sankey-diagram') {
+          return d.y + labelFontSize + 1 + "px";
+        }
+        else {
+          return d.y + reportFontSize + 1 + "px";
+        }
+      })
+      .text((d) => {
+        return Math.floor(d.val + 0.5) + "%";
+      })
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+      .attr("fill", "white");
   }
 
   //positions elements
