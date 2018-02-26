@@ -7,6 +7,10 @@ import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast/phast.service';
 
+
+
+
+
 @Component({
   selector: 'app-flue-gas-material',
   templateUrl: './flue-gas-material.component.html',
@@ -35,7 +39,8 @@ export class FlueGasMaterialComponent implements OnInit {
     SO2: 0,
     heatingValue: 0,
     heatingValueVolume: 0,
-    specificGravity: 0
+    specificGravity: 0,
+
   };
   selectedMaterial: FlueGasMaterial;
   allMaterials: Array<FlueGasMaterial>;
@@ -44,6 +49,8 @@ export class FlueGasMaterialComponent implements OnInit {
   canAdd: boolean;
   isNameValid: boolean;
   currentField: string = 'selectedMaterial';
+  totalOfFlueGasses: number = 0;
+
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -51,9 +58,15 @@ export class FlueGasMaterialComponent implements OnInit {
     this.checkMaterialName();
     this.setHHV();
     this.canAdd = true;
+    this.getTotalOfFlueGasses();
     // this.selectedMaterial = this.allMaterials[0];
   }
 
+  getTotalOfFlueGasses() {
+    this.totalOfFlueGasses = this.newMaterial.C2H6 + this.newMaterial.C3H8 + this.newMaterial.C4H10_CnH2n + this.newMaterial.CH4
+      + this.newMaterial.CO + this.newMaterial.CO2 + this.newMaterial.H2 + this.newMaterial.H2O
+      + this.newMaterial.N2 + this.newMaterial.O2 + this.newMaterial.SO2;
+  }
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
@@ -115,7 +128,8 @@ export class FlueGasMaterialComponent implements OnInit {
           heatingValueVolume: this.selectedMaterial.heatingValueVolume,
           specificGravity: this.selectedMaterial.specificGravity
         }
-      }      
+      }
+      this.getTotalOfFlueGasses();
       this.checkMaterialName();
       this.setHHV();
     }
@@ -147,12 +161,14 @@ export class FlueGasMaterialComponent implements OnInit {
   // }
 
   setHHV() {
+    this.getTotalOfFlueGasses();
     const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
     if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = vals.heatingValue;
       this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
       this.newMaterial.specificGravity = vals.specificGravity;
+
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
@@ -162,6 +178,7 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = 0;
       this.newMaterial.heatingValueVolume = 0;
       this.newMaterial.specificGravity = 0;
+
     }
   }
 

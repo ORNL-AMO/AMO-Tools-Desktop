@@ -32,23 +32,25 @@
                   <tbody>
                     <tr>
                       <th>Flow</th>
-                      <td>{{flowCalculationResults.flow | number:'2.2-2'}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scfh</span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/hr</span>
+
+                      <td><strong>{{flowCalculationResults.flow | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>Scfh</strong></span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>Nm<sup>3</sup>/hr</strong></span>
                       </td>
                     </tr>
                     <tr>
                       <th>Total Flow</th>
-                      <td>{{flowCalculationResults.totalFlow | number:'2.2-2'}}
-                          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scf</span>
-                          <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+
+                      <td><strong>{{flowCalculationResults.totalFlow | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>Scf</strong></span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>Nm<sup>3</sup></strong></span>
                       </td>
                     </tr>
                     <tr>
                       <th>Energy Use</th>
-                      <td>{{flowCalculationResults.heatInput | number:'2.2-2'}}
-                          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-                          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+                      <td><strong>{{flowCalculationResults.heatInput | number:'2.2-2'}}</strong>
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"><strong>MMBtu</strong></span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"><strong>GJ</strong></span>
                       </td>
                     </tr>
                   </tbody>
