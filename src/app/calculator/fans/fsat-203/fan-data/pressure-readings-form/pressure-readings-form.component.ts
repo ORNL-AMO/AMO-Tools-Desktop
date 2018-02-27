@@ -13,12 +13,14 @@ export class PressureReadingsFormComponent implements OnInit {
   emitSave = new EventEmitter<Plane>();
 
   traverseHoles: Array<Array<number>>;
+  numLabels: Array<number>;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.fanData.length);
+    console.log(this.fanData.traverseData.length);
     console.log(this.fanData.numInsertionPoints);
     console.log(this.fanData.numTraverseHoles);
+    this.numLabels = new Array();
     if (this.fanData.traverseData.length != this.fanData.numInsertionPoints) {
       let cols = new Array();
       for (let i = 0; i < this.fanData.numTraverseHoles; i++) {
@@ -32,6 +34,9 @@ export class PressureReadingsFormComponent implements OnInit {
       this.traverseHoles = rows;
     } else {
       this.traverseHoles = this.fanData.traverseData
+      for(let i = 0; i < this.fanData.numTraverseHoles; i++){
+        this.numLabels.push(i+1);
+      }
     }
   }
 

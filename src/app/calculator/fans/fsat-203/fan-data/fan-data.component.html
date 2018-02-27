@@ -53,7 +53,7 @@
     <app-fan-data-form *ngIf="stepTab == '5'" [planeNum]="'5'" [planeDescription]="'Outlet Measurement Plane'" [fanData]="planeData.OutletMstPlane"></app-fan-data-form>
   </div>
   <div class="col" *ngIf="showReadings">
-    <app-pressure-readings-form *ngIf="stepTab == '3a'" [fanData]="planeData.FlowTraverse"></app-pressure-readings-form>
-    <app-pressure-readings-form *ngIf="stepTab == '3b'" [fanData]="planeData.AddlTraversePlanes[0]"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3a'" [fanData]="planeData.FlowTraverse" (emitSave)="savePitotData()"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3b'" [fanData]="planeData.AddlTraversePlanes[0]" (emitSave)="savePitotData()"></app-pressure-readings-form>
   </div>
 </div>

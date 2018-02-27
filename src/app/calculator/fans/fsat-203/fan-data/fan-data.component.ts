@@ -38,5 +38,6 @@ export class FanDataComponent implements OnInit {
     // } else {
     //   this.pitotTubeData[1] = data;
     // }
+    this.showReadings = false;
   }
 }

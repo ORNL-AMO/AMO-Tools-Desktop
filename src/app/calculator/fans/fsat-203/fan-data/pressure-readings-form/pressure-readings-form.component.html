@@ -2,33 +2,38 @@
   <div class="col">
     <form>
       <label class="group-label">Input Pitot Tube Differential Pressure Readings</label>
-      <!-- <div class="row data-labels">
-      <div class="col-2">Insertion</div>
-      <div class="col">
-        <div class="row">
-          <div class="col" style="text-align:center">Traverse Holes</div>
-         </div>
-         <div class="row">
-          <div class="col">1</div>
-          <div class="col">2</div>
-          <div class="col">3</div>
-          <div class="col">4</div>
-          <div class="col">5</div>
-          <div class="col">1</div>
-          <div class="col">2</div>
-          <div class="col">3</div>
-          <div class="col">4</div>
-          <div class="col">5</div>
+      <div class="row align-items-center form-padding">
+        <div class="col-md-auto vert-text-col">
+          <span class="vert-text point-label">Insertion
+            <br> Points</span>
         </div>
-      </div>
-    </div> -->
-      <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
-        <div class="input-group-prepend">
-          <span class="input-group-text">{{index+1}}</span>
+        <div class="col">
+          <div class="row justify-content-center">
+            <div class="col-md-auto">
+              <span class="point-label">Traverse Holes</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text hide-text">1</span>
+            </div>
+            <input *ngFor="let label of numLabels; let i=index; trackBy:trackByFn" id="{{'label_'+i}}" name="{{'label_'+i}}"
+              type="number" class="form-control disabled-input" [disabled]="true" [(ngModel)]="numLabels[i]">
+          </div>
+          <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">{{index+1}}</span>
+            </div>
+            <input *ngFor="let traverseCol of traverseRow; let i=index; trackBy:trackByFn" id="{{'hole'+index+'_'+i}}" name="{{'hole'+index+'_'+i}}"
+              type="number" class="form-control" [(ngModel)]="traverseHoles[index][i]">
+          </div>
         </div>
-        <input *ngFor="let traverseCol of traverseRow; let i=index; trackBy:trackByFn" id="{{'hole'+index+'_'+i}}" name="{{'hole'+index+'_'+i}}" type="number"
-          class="form-control" [(ngModel)]="traverseHoles[index][i]">
       </div>
     </form>
+  </div>
+</div>
+<div class="row form-padding">
+  <div class="col-md-auto">
+      <a class="click-link small pull-left" (click)="save()"><span class="fa fa-chevron-left"></span> Finish and Return to Plane Data</a>
   </div>
 </div>
