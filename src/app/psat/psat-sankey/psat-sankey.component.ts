@@ -124,7 +124,6 @@ export class PsatSankeyComponent implements OnInit {
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
 
-
     this.width = width;
     this.height = height;
 
