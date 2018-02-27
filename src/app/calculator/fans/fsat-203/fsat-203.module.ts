@@ -10,6 +10,7 @@ import { FanDataFormComponent } from './fan-data/fan-data-form/fan-data-form.com
 import { Plane3FormComponent } from './fan-data/plane-3-form/plane-3-form.component';
 import { PressureReadingsFormComponent } from './fan-data/pressure-readings-form/pressure-readings-form.component';
 import { FanShaftPowerComponent } from './fan-shaft-power/fan-shaft-power.component';
+import { Fsat203Service } from './fsat-203.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { FanShaftPowerComponent } from './fan-shaft-power/fan-shaft-power.compon
     SharedModule
   ],
   declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent],
-  exports: [Fsat203Component]
+  exports: [Fsat203Component],
+  providers: [Fsat203Service]
 })
 export class Fsat203Module { }

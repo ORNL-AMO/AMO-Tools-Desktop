@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FanRatedInfo, Fan203Inputs, BaseGasDensity } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
+import { Fsat203Service } from './fsat-203.service';
 
 @Component({
   selector: 'app-fsat-203',
@@ -9,54 +10,19 @@ import { FsatService } from '../../../fsat/fsat.service';
 })
 export class Fsat203Component implements OnInit {
   tabSelect: string = 'results';
-  inputs: Fan203Inputs = {
-    FanRatedInfo: {
-      fanSpeed: 1191.0,
-      motorSpeed: 1191.0,
-      fanSpeedCorrected: 1170.0,
-      densityCorrected: .0500,
-      pressureBarometricCorrected: 26.28,
-      driveType: 'Direct Drive',
-      includesEvase: 'Yes',
-      upDownStream: 'Upstream',
-      traversePlanes: 1,
-      planarBarometricPressure: 10
-    },
-
-    BaseGasDensity: {
-      method: 'Relative Humidity %',
-      gasType: 'Air',
-      //  humidityData: 'Wet Bulb Temperature',
-      conditionLocation: 4,
-      dryBulbTemp: 123,
-      staticPressure: -17.6,
-      barometricPressure: 26.57,
-      gasSpecificGravity: 1.00,
-      wetBulbTemp: 119.0,
-      relativeHumidity: 0,
-      gasDewpointTemp: 0,
-      gasDensity: 0.0547
-    },
-    FanShaftPower: {
-      isMethodOne: true,
-      voltage: 0,
-      amps: 0,
-      powerFactorAtLoad: 0,
-      efficiencyMotor: 0,
-      efficiencyVFD: 0,
-      efficiencyBelt: 0,
-      sumSEF: 0
-    }
-  }
+  inputs: Fan203Inputs;
   showBasics: boolean = true;
   basicsDone: boolean = false;
   densityDone: boolean = false;
   canContinue: boolean = false;
   formSelect: string = 'none';
-  constructor(private fsatService: FsatService) { }
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
-    this.fsatService.test();
+    // this.fsatService.test();
+    this.inputs = this.fsat203Service.getMockData();
+    let test = this.fsatService.fan203(this.inputs);
+    console.log(test);
   }
 
 

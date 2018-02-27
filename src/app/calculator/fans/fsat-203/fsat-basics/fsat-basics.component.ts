@@ -66,7 +66,7 @@ export class FsatBasicsComponent implements OnInit {
       includesEvase: [obj.includesEvase, Validators.required],
       upDownStream: [obj.upDownStream, Validators.required],
       traversePlanes: [obj.traversePlanes, Validators.required],
-      planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
+      //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
     })
     return form;
   }
@@ -83,7 +83,7 @@ export class FsatBasicsComponent implements OnInit {
       includesEvase: form.controls.includesEvase.value,
       upDownStream: form.controls.upDownStream.value,
       traversePlanes: form.controls.traversePlanes.value,
-      planarBarometricPressure: form.controls.planarBarometricPressure.value
+    //  planarBarometricPressure: form.controls.planarBarometricPressure.value
     }
     return obj;
   }

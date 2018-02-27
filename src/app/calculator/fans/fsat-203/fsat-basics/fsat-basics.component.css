@@ -5,3 +5,9 @@ label{
 .form-control{
     font-size: small;
 }
+
+
+.fa-check{
+    color: green;
+    font-size: large;
+}

@@ -10,3 +10,17 @@
     cursor: pointer;
     background-color: #D5D8DC;
 }
+
+
+.group-label.disabled {
+    color: #efefef;
+}
+
+.group-label.disabled .step-number{
+    background: #efefef;
+}
+
+.fa-check{
+    color: green;
+    font-size: large;
+}

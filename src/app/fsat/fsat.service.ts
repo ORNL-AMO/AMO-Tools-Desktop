@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Fan203Inputs } from '../shared/models/fans';
 
 declare var fanAddon: any; 
 
@@ -16,5 +17,9 @@ export class FsatService {
 
   test(){
     console.log(fanAddon);
+  }
+
+  fan203(input: Fan203Inputs){
+    return fanAddon.fan203(input);
   }
 }

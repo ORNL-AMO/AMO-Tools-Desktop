@@ -1,5 +1,8 @@
 <form [formGroup]="ratedInfoForm" *ngIf="ratedInfoForm">
-  <label class="group-label">Basic Fan Information</label>
+  <label class="group-label">
+    <span class="step-number">1</span>Basic Fan Info
+    <span class="fa fa-check pull-right"></span>
+  </label>
   <div class="form-group">
     <label for="fanSpeed">Fan Speed</label>
     <div class="input-group">
@@ -81,14 +84,14 @@
       </select>
     </div>
   </div>
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="traversePlanes">Planar Barometric Pressure</label>
     <div class="input-group">
       <input name="planarBarometricPressure" type="number" step="any" class="form-control" formControlName="planarBarometricPressure"
         id="planarBarometricPressure" (input)="save()" (focus)="focusField('planarBarometricPressure')" onfocus="this.select();">
       <span class="input-group-addon units">in. Hg</span>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="row continue-btn-row justify-content-center">
     <div class="col text-center">
       <button class="btn btn-primary continue-btn" [disabled]="ratedInfoForm.status == 'INVALID'" (click)="continue()">Continue Fan Setup</button>

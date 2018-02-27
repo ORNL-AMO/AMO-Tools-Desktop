@@ -14,7 +14,6 @@ export interface FanRatedInfo {
   includesEvase: string;
   upDownStream: string;
   traversePlanes: number;
-  planarBarometricPressure: number;
 }
 
 // unfortunately as of now we have to have both rectangular and circular variants of every Plane
