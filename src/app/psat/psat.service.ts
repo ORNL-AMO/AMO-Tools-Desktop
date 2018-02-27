@@ -611,19 +611,7 @@ export class PsatService {
     }
     return effClass;
   }
-  getEfficiencyNumClassFromEnum(num: number): number {
-    let effClass;
-    if (num === 0) {
-      effClass = 0; //'Standard Efficiency';
-    } else if (num === 1) {
-      effClass = 1; //'Energy Efficient';
-    } else if (num === 2) {
-      effClass = 2; //'Premium';
-    } else if (num === 3) {
-      effClass = 3; //'Specified';
-    }
-    return effClass;
-  }
+
   getDriveEnum(drive: string): number {
     let driveEnum;
     if (drive == 'Direct Drive') {
