@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PlaneData, Plane } from '../../../../../shared/models/fan-copy';
 @Component({
   selector: 'app-plane-3-form',
   templateUrl: './plane-3-form.component.html',
@@ -7,17 +8,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class Plane3FormComponent implements OnInit {
   @Input()
-  pitotTubeData: PitotTubeData;
+  fanData: Plane;
   @Output('showReadingsForm')
-  showReadingsForm = new EventEmitter<PitotTubeData>();
+  showReadingsForm = new EventEmitter<Plane>();
 
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.pressureReadings = this.pitotTubeData.pressureReadings;
-    this.pitotDataForm = this.getFormFromObj(this.pitotTubeData);
+    this.pressureReadings = this.fanData.traverseData;
+    this.pitotDataForm = this.getFormFromObj(this.fanData);
   }
 
   focusField() {
@@ -25,43 +26,30 @@ export class Plane3FormComponent implements OnInit {
   }
 
   save() {
-    this.pitotTubeData = this.getObjFromForm(this.pitotDataForm);
-    console.log(this.pitotDataForm.status);
+    //this.planeData = this.getObjFromForm(this.pitotDataForm);
+    //console.log(this.pitotDataForm.status);
   }
 
-  getFormFromObj(obj: PitotTubeData): FormGroup {
+  getFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      tubeType: [obj.tubeType],
-      tubeCoefficient: [obj.tubeCoefficient],
-      traverseHoles: [obj.traverseHoles, [Validators.min(1), Validators.max(10)]],
-      insertionPoints: [obj.insertionPoints, [Validators.min(1), Validators.max(10)]]
+      pitotTubeType: [obj.pitotTubeType],
+      pitotTubeCoefficient: [obj.pitotTubeCoefficient],
+      numTraverseHoles: [obj.numTraverseHoles, [Validators.min(1), Validators.max(10)]],
+      numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
     })
     return form;
   }
 
-  getObjFromForm(form: FormGroup): PitotTubeData {
-    let obj: PitotTubeData = {
-      tubeType: form.controls.tubeType.value,
-      tubeCoefficient: form.controls.tubeCoefficient.value,
-      traverseHoles: form.controls.traverseHoles.value,
-      insertionPoints: form.controls.insertionPoints.value,
-      pressureReadings: this.pressureReadings
-    }
-    return obj;
+  getObjFromForm(form: FormGroup): Plane {
+    this.fanData.pitotTubeType = form.controls.tubeType.value;
+    this.fanData.pitotTubeCoefficient = form.controls.pitotTubeCoefficient.value;
+    this.fanData.numTraverseHoles = form.controls.numTraverseHoles.value;
+    this.fanData.numInsertionPoints = form.controls.numInsertionPoints.value;
+    return this.fanData;
   }
 
-  showDataToggle(){
+  showDataToggle() {
     this.save();
-    this.showReadingsForm.emit(this.pitotTubeData);
+    this.showReadingsForm.emit(this.fanData);
   }
-
-}
-
-
-export interface PitotTubeData {
-  tubeType: string,
-  tubeCoefficient: number,
-  traverseHoles: number,
-  insertionPoints: number,
-  pressureReadings:  Array<Array<number>>
 }

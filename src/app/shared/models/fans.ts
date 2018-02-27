@@ -20,9 +20,15 @@ export interface FanRatedInfo {
 export interface PlaneRectangular {
   length: number;
   width: number;
+  //tdx => dryBulbTemp
   tdx: number;
+  //pbx => barometricPressure
   pbx: number;
+  //noInletBoxes => numInletBoxes
   noInletBoxes?: number; // should have a default of 1
+
+  //Mark Additions
+
 }
 
 export interface PlaneCircular {

@@ -43,17 +43,17 @@
 </div>
 <div class="row">
   <div class="col" *ngIf="!showReadings">
-    <app-fan-data-form *ngIf="stepTab == '1'" [fanData]="planeData[0]"></app-fan-data-form>
-    <app-fan-data-form *ngIf="stepTab == '2'" [fanData]="planeData[1]"></app-fan-data-form>
-    <app-fan-data-form *ngIf="stepTab == '3a'" [fanData]="planeData[2]"></app-fan-data-form>
-    <app-fan-data-form *ngIf="stepTab == '3b'" [fanData]="planeData[3]"></app-fan-data-form>
-    <app-plane-3-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (showReadingsForm)="showReadingsForm($event, 1)"></app-plane-3-form>
-    <app-plane-3-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (showReadingsForm)="showReadingsForm($event, 2)"></app-plane-3-form>
-    <app-fan-data-form *ngIf="stepTab == '4'" [fanData]="planeData[4]"></app-fan-data-form>
-    <app-fan-data-form *ngIf="stepTab == '5'" [fanData]="planeData[5]"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '1'" [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'" [fanData]="planeData.FanInletFlange"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '2'" [planeNum]="'2'" [planeDescription]="'Fan or Evase Outlet Flange'" [fanData]="planeData.FanEvaseOrOutletFlange"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '3a'" [planeNum]="'3a'" [planeDescription]="'Additional Traverse Plane 1'" [fanData]="planeData.FlowTraverse"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '3b'" [planeNum]="'3b'" [planeDescription]="'Additional Traverse Plane 2'" [fanData]="planeData.AddlTraversePlanes[0]"></app-fan-data-form>
+    <app-plane-3-form *ngIf="stepTab == '3a'" [fanData]="planeData.FlowTraverse" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
+    <app-plane-3-form *ngIf="stepTab == '3b'" [fanData]="planeData.AddlTraversePlanes[0]" (showReadingsForm)="showReadingsForm()"></app-plane-3-form>
+    <app-fan-data-form *ngIf="stepTab == '4'" [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'" [fanData]="planeData.InletMstPlane"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '5'" [planeNum]="'5'" [planeDescription]="'Outlet Measurement Plane'" [fanData]="planeData.OutletMstPlane"></app-fan-data-form>
   </div>
   <div class="col" *ngIf="showReadings">
-    <app-pressure-readings-form *ngIf="stepTab == '3a'" [pitotTubeData]="pitotTubeData[0]" (emitSave)="savePitotData($event, 1)"></app-pressure-readings-form>
-    <app-pressure-readings-form *ngIf="stepTab == '3b'" [pitotTubeData]="pitotTubeData[1]" (emitSave)="savePitotData($event, 2)"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3a'" [fanData]="planeData.FlowTraverse"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3b'" [fanData]="planeData.AddlTraversePlanes[0]"></app-pressure-readings-form>
   </div>
 </div>

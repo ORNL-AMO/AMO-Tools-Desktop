@@ -1,41 +1,29 @@
 <form [formGroup]="pitotDataForm" *ngIf="pitotDataForm">
   <label class="group-label">Input Velocity Pressure Traverse Data</label>
   <div class="form-group">
-    <label for="tubeType">Pitot Tube Type</label>
-    <select class="form-control" name="tubeType" formControlName="tubeType" id="tubeType" (change)="save()" (focus)="focusField('tubeType')">
+    <label for="pitotTubeType">Pitot Tube Type</label>
+    <select class="form-control" name="pitotTubeType" formControlName="pitotTubeType" id="pitotTubeType" (change)="save()" (focus)="focusField('pitotTubeType')">
       <option [ngValue]="'Standard'">Standard</option>
       <option [ngValue]="'S-Type'">S-Type</option>
     </select>
   </div>
   <div class="form-group">
-    <label for="tubeCoefficient">Pitot Tube Coefficient (C
+    <label for="pitotTubeCoefficient">Pitot Tube Coefficient (C
       <sub>p</sub>)</label>
-    <input name="tubeCoefficient" type="number" step="any" class="form-control" formControlName="tubeCoefficient" id="tubeCoefficient"
-      (input)="save()" (focus)="focusField('tubeCoefficient')" onfocus="this.select();">
+    <input name="pitotTubeCoefficient" type="number" step="any" class="form-control" formControlName="pitotTubeCoefficient" id="pitotTubeCoefficient"
+      (input)="save()" (focus)="focusField('pitotTubeCoefficient')" onfocus="this.select();">
   </div>
   <div class="form-group">
-    <label for="traverseHoles">Number of Traverse Holes</label>
-    <input name="traverseHoles" type="number" step="any" class="form-control" formControlName="traverseHoles" id="traverseHoles"
-      (input)="save()" (focus)="focusField('traverseHoles')" onfocus="this.select();">
+    <label for="numTraverseHoles">Number of Traverse Holes</label>
+    <input name="numTraverseHoles" type="number" step="any" class="form-control" formControlName="numTraverseHoles" id="numTraverseHoles"
+      (input)="save()" (focus)="focusField('numTraverseHoles')" onfocus="this.select();">
   </div>
   <div class="form-group">
-    <label for="insertionPoints">Number of Insertion Points</label>
-    <input name="insertionPoints" type="number" step="any" class="form-control" formControlName="insertionPoints" id="insertionPoints"
-      (input)="save()" (focus)="focusField('insertionPoints')" onfocus="this.select();">
+    <label for="numInsertionPoints">Number of Insertion Points</label>
+    <input name="numInsertionPoints" type="number" step="any" class="form-control" formControlName="numInsertionPoints" id="numInsertionPoints"
+      (input)="save()" (focus)="focusField('numInsertionPoints')" onfocus="this.select();">
   </div>
 </form>
-<!-- 
-<div class="row" *ngIf="showData">
-  <div class="col">
-    <label class="group-label">Input Pitot Tube Differential Pressure Readings</label>
-    <div class="input-group" *ngFor="let traverseRow of traverseHoles; let index=index;">
-      <div class="input-group-prepend">
-        <span class="input-group-text">{{index}}</span>
-      </div>
-      <input *ngFor="let traverseCol of traverseRow" type="number" class="form-control">
-    </div>
-  </div>
-</div> -->
 
 <div class="row continue-btn-row justify-content-center">
   <div class="col text-center">

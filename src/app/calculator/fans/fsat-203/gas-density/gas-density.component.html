@@ -11,7 +11,7 @@
     <label for="gasType">Gas Type</label>
     <div class="input-group">
       <select class="form-control" name="gasType" formControlName="gasType" id="gasType" (change)="save()" (focus)="focusField('gasType')">
-        <option *ngFor="let gas of gasTypes" [ngValue]="gas">{{gas}}</option>
+        <option *ngFor="let gas of gasTypes" [ngValue]="gas.value">{{gas.display}}</option>
       </select>
     </div>
   </div>

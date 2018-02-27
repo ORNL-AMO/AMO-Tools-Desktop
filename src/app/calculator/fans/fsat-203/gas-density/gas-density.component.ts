@@ -34,9 +34,9 @@ export class GasDensityComponent implements OnInit {
     'Use Custom Density'
   ]
 
-  gasTypes: Array<string> = [
-    'Air',
-    'Other Gas'
+  gasTypes: Array<any> = [
+    { display: 'Air', value: 'AIR' },
+    { display: 'Other Gas', value: 'OTHER' }
   ]
   constructor(private formBuilder: FormBuilder) { }
 
@@ -45,21 +45,21 @@ export class GasDensityComponent implements OnInit {
     this.checkForm();
   }
 
-  checkForm(){
-    if(this.gasDensityForm.status == 'VALID'){
+  checkForm() {
+    if (this.gasDensityForm.status == 'VALID') {
       this.emitCanContinue.emit(true);
-    }else{
+    } else {
       this.emitCanContinue.emit(false);
     }
   }
 
-  save(){
+  save() {
     this.checkForm();
     this.fanGasDensity = this.getObjFromForm(this.gasDensityForm);
     this.emitSave.emit(this.fanGasDensity);
   }
 
-  focusField(){
+  focusField() {
 
   }
 
@@ -67,7 +67,7 @@ export class GasDensityComponent implements OnInit {
     let form = this.formBuilder.group({
       method: [obj.method, Validators.required],
       gasType: [obj.gasType, Validators.required],
-     // humidityData: ['Yes', Validators.required],
+      // humidityData: ['Yes', Validators.required],
       conditionLocation: [obj.conditionLocation, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, Validators.required],
       staticPressure: [obj.staticPressure, Validators.required],
@@ -85,7 +85,7 @@ export class GasDensityComponent implements OnInit {
     let fanGasDensity: BaseGasDensity = {
       method: form.controls.method.value,
       gasType: form.controls.gasType.value,
-    //  humidityData: form.controls.humidityData.value,
+      //  humidityData: form.controls.humidityData.value,
       conditionLocation: form.controls.conditionLocation.value,
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,

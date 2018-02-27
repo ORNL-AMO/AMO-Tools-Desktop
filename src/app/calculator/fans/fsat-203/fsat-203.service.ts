@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs } from '../../../shared/models/fans';
+import { Fan203Inputs } from '../../../shared/models/fan-copy';
 
 @Injectable()
 export class Fsat203Service {
@@ -28,26 +28,36 @@ export class Fsat203Service {
         totalPressureLossBtwnPlanes1and4: 0,
         totalPressureLossBtwnPlanes2and5: 0.627,
         FanInletFlange: {
+          planeType: 'Rectangular',
           width: 143.63,
           length: 32.63,
-          tdx: 123,
-          pbx: 26.57,
-          noInletBoxes: 2
+          area: 0,
+          dryBulbTemp: 123,
+          barometricPressure: 26.57,
+          numInletBoxes: 2
         },
         FanEvaseOrOutletFlange: {
+          planeType: 'Rectangular',
           width: 70,
           length: 78,
-          tdx: 132.7,
-          pbx: 26.57
-          // noInletBoxes isn't necessary, will default to 1
+          area: 0,
+          dryBulbTemp: 132.7,
+          barometricPressure: 26.57,
+          numInletBoxes: 0
         },
         FlowTraverse: {
+          planeType: 'Rectangular',
           width: 143.63,
           length: 32.63,
-          tdx: 123,
-          pbx: 26.57,
-          psx: -18.1,
+          area: 0,
+          dryBulbTemp: 123,
+          barometricPressure: 26.57,
+          numInletBoxes: 0,
+          staticPressure: -18.1,
           pitotTubeCoefficient: 0.87292611371180784,
+          pitotTubeType: 'Standard',
+          numTraverseHoles: 10,
+          numInsertionPoints: 3,
           traverseData: [
             [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
             [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
@@ -56,12 +66,18 @@ export class Fsat203Service {
         },
         AddlTraversePlanes: [
           {
+            planeType: 'Rectangular',
             width: 143.63,
             length: 32.63,
-            tdx: 123,
-            pbx: 26.57,
-            psx: -17.0,
+            area: 0,
+            dryBulbTemp: 123,
+            barometricPressure: 26.57,
+            numInletBoxes: 0,
+            staticPressure: -17.0,
             pitotTubeCoefficient: 0.87292611371180784,
+            pitotTubeType: 'Standard',
+            numTraverseHoles: 10,
+            numInsertionPoints: 3,
             traverseData: [
               [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
               [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
@@ -70,20 +86,23 @@ export class Fsat203Service {
           }
         ],
         InletMstPlane: {
+          planeType: 'Rectangular',
+          area: 0,
           width: 143.63,
           length: 32.63,
-          tdx: 123,
-          pbx: 26.57,
-          psx: -17.55,
-          noInletBoxes: 2
+          dryBulbTemp: 123,
+          barometricPressure: 26.57,
+          staticPressure: -17.55,
+          numInletBoxes: 2
         },
         OutletMstPlane: {
+          planeType: 'Rectangular',
+          area: 0,
           width: 55.42,
           length: 60.49,
-          tdx: 132.7,
-          pbx: 26.57,
-          psx: 1.8
-          // noInletBoxes not provided here.. defaults to 1
+          dryBulbTemp: 132.7,
+          barometricPressure: 26.57,
+          staticPressure: 1.8
         }
       },
       BaseGasDensity: {

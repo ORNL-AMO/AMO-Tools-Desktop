@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, BaseGasDensity } from '../../../shared/models/fans';
+import { FanRatedInfo, Fan203Inputs, BaseGasDensity } from '../../../shared/models/fan-copy';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 
@@ -21,8 +21,8 @@ export class Fsat203Component implements OnInit {
   ngOnInit() {
     // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
-    let test = this.fsatService.fan203(this.inputs);
-    console.log(test);
+    // let test = this.fsatService.fan203(this.inputs);
+    //console.log(test);
   }
 
 
@@ -58,7 +58,7 @@ export class Fsat203Component implements OnInit {
     this.canContinue = (this.basicsDone && this.densityDone);
   }
 
-  goToForm(str: string){
+  goToForm(str: string) {
     this.formSelect = str;
   }
 }

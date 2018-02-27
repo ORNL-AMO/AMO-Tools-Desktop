@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { PitotTubeData } from '../plane-3-form/plane-3-form.component';
+import { Plane } from '../../../../../shared/models/fan-copy';
 
 @Component({
   selector: 'app-pressure-readings-form',
@@ -8,33 +8,40 @@ import { PitotTubeData } from '../plane-3-form/plane-3-form.component';
 })
 export class PressureReadingsFormComponent implements OnInit {
   @Input()
-  pitotTubeData: PitotTubeData;
+  fanData: Plane;
   @Output('emitSave')
-  emitSave = new EventEmitter<PitotTubeData>();
+  emitSave = new EventEmitter<Plane>();
 
   traverseHoles: Array<Array<number>>;
   constructor() { }
 
   ngOnInit() {
-    let cols = new Array();
-    for (let i = 0; i < this.pitotTubeData.traverseHoles; i++) {
-      cols.push(i)
-    }
+    console.log(this.fanData.length);
+    console.log(this.fanData.numInsertionPoints);
+    console.log(this.fanData.numTraverseHoles);
+    if (this.fanData.traverseData.length != this.fanData.numInsertionPoints) {
+      let cols = new Array();
+      for (let i = 0; i < this.fanData.numTraverseHoles; i++) {
+        cols.push(i)
+      }
 
-    let rows = new Array();
-    for (let i = 0; i < this.pitotTubeData.insertionPoints; i++) {
-      rows.push(JSON.parse(JSON.stringify(cols)));
+      let rows = new Array();
+      for (let i = 0; i < this.fanData.numInsertionPoints; i++) {
+        rows.push(JSON.parse(JSON.stringify(cols)));
+      }
+      this.traverseHoles = rows;
+    } else {
+      this.traverseHoles = this.fanData.traverseData
     }
-    this.traverseHoles = rows;
   }
 
   save() {
-    this.pitotTubeData.pressureReadings = this.traverseHoles;
-    this.emitSave.emit(this.pitotTubeData);
+    this.fanData.traverseData = this.traverseHoles;
+    this.emitSave.emit(this.fanData);
 
   }
 
   trackByFn(index: any, item: any) {
     return index;
- }
+  }
 }

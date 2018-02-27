@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Plane } from '../../../../../shared/models/fan-copy';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -8,8 +9,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class FanDataFormComponent implements OnInit {
   @Input()
-  fanData: FanData;
-
+  fanData: Plane;
+  @Input()
+  planeNum: string;
+  @Input()
+  planeDescription: string;
+  
   dataForm: FormGroup;
   constructor(private formBuilder: FormBuilder) { }
 
@@ -17,9 +22,9 @@ export class FanDataFormComponent implements OnInit {
     this.dataForm = this.getFormFromObj(this.fanData);
   }
 
-  getFormFromObj(obj: FanData): FormGroup {
+  getFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      shape: [obj.shape],
+      planeType: [obj.planeType],
       length: [obj.length],
       width: [obj.width],
       area: [obj.area],
@@ -31,18 +36,18 @@ export class FanDataFormComponent implements OnInit {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): FanData {
-    let obj: FanData = {
-      planeNum: this.fanData.planeNum,
-      planeDescription: this.fanData.planeDescription,
-      shape: form.controls.shape.value,
+  getObjFromForm(form: FormGroup): Plane {
+    let obj: Plane = {
+      planeType: form.controls.planeType.value,
       length: form.controls.length.value,
       width: form.controls.width.value,
       area: form.controls.area.value,
       staticPressure: form.controls.staticPressure.value,
       dryBulbTemp: form.controls.dryBulbTemp.value,
       barometricPressure: form.controls.barometricPressure.value,
-      numInletBoxes: form.controls.numInletBoxes.value
+      numInletBoxes: form.controls.numInletBoxes.value,
+      pitotTubeCoefficient: this.fanData.pitotTubeCoefficient,
+      traverseData: this.fanData.traverseData
     }
     return obj;
   }
@@ -57,15 +62,15 @@ export class FanDataFormComponent implements OnInit {
 }
 
 
-export interface FanData {
-  planeNum: string,
-  planeDescription: string,
-  shape: string,
-  length: number,
-  width: number,
-  area: number,
-  staticPressure: number,
-  dryBulbTemp: number,
-  barometricPressure: number,
-  numInletBoxes: number
-}
+// export interface FanData {
+//   planeNum: string,
+//   planeDescription: string,
+//   shape: string,
+//   length: number,
+//   width: number,
+//   area: number,
+//   staticPressure: number,
+//   dryBulbTemp: number,
+//   barometricPressure: number,
+//   numInletBoxes: number
+// }

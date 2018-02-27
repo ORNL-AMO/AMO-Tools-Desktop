@@ -37,7 +37,7 @@
                         <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
                             (emitCanContinue)="setDensityContinue($event)"></app-gas-density>
                         <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
-                        <app-fan-data *ngIf="formSelect == 'fan-data'"></app-fan-data>
+                        <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData"></app-fan-data>
                         <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power'"></app-fan-shaft-power>
                         <!-- <div class="row continue-btn-row justify-content-center">
                             <div class="col text-center">

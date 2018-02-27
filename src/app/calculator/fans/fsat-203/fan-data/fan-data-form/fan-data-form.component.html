@@ -1,9 +1,9 @@
 <form [formGroup]="dataForm" *ngIf="dataForm">
-  <label class="group-label">{{fanData.planeNum}}: {{fanData.planeDescription}}</label>
+  <label class="group-label">{{planeNum}}: {{planeDescription}}</label>
   <div class="form-group">
-    <label for="shape">Planar Shape</label>
+    <label for="planeType">Planar Shape</label>
     <div class="input-group">
-      <select class="form-control" name="shape" formControlName="shape" id="shape" (change)="save()" (focus)="focusField('shape')">
+      <select class="form-control" name="planeType" formControlName="planeType" id="planeType" (change)="save()" (focus)="focusField('planeType')">
         <option [ngValue]="'Rectangular'">Rectangular</option>
         <option [ngValue]="'Circular'">Circular</option>
       </select>
@@ -32,14 +32,14 @@
       <sup>2</sup>
     </div>
   </div>
-  <div class="form-group" *ngIf="fanData.planeNum == '1' || fanData.planeNum == '4'">
+  <div class="form-group" *ngIf="planeNum == '1' || planeNum == '4'">
     <label for="numInletBoxes">Number of Inlet Boxes</label>
     <div class="input-group">
       <input name="width" type="numInletBoxes" step="any" class="form-control" formControlName="numInletBoxes" id="numInletBoxes"
         (input)="save()" (focus)="focusField('numInletBoxes')" onfocus="this.select();">
     </div>
   </div>
-  <div class="form-group" *ngIf="fanData.planeNum != '1' && fanData.planeNum != '2'">
+  <div class="form-group" *ngIf="planeNum != '1' && planeNum != '2'">
     <label for="staticPressure">Static Pressure (P
       <sub>sx</sub>)</label>
     <div class="input-group">
