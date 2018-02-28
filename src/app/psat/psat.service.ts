@@ -962,11 +962,11 @@ export class PsatService {
       return response
     } else if (motorRPM < range.min) {
       response.valid = false;
-      response.message = 'Motor RPM too Small for Selected Line Frequency';
+      response.message = 'Motor RPM too small for selected efficiency class';
       return response;
     } else if (motorRPM > range.max) {
       response.valid = false;
-      response.message = 'Motor RPM too Latge for Selected Line Frequency';
+      response.message = 'Motor RPM too large for selected efficiency class';
       return response;
     } else {
       return response;
