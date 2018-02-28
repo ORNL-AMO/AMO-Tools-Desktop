@@ -1,0 +1,12 @@
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="airFlow">Airflow</label>
+      <div class="input-group">
+        <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">SCFM</span>
+      </div>
+    </div>
+  </div>
+</form>
