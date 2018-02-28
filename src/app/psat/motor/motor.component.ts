@@ -400,6 +400,7 @@ export class MotorComponent implements OnInit {
 
   changeEfficiencyClass() {
     this.modifyPowerArrays();
+    this.checkMotorRpm();
     this.startSavePolling();
   }
 
