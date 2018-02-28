@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-pipe-sizing-form [inputs]="inputs" [outputs]="outputs"></app-pipe-sizing-form>
+            <app-pipe-sizing-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePipeSize($event)"></app-pipe-sizing-form>
           </div>
         </div>
       </div>
