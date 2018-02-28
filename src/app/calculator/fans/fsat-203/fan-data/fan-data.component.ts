@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared/models/fan-copy';
 
 import * as _ from 'lodash';
@@ -10,34 +10,27 @@ import * as _ from 'lodash';
 export class FanDataComponent implements OnInit {
   @Input()
   planeData: PlaneData;
+  @Output('emitSave')
+  emitSave = new EventEmitter<any>();
+  @Input()
+  planeDataDone: boolean;
 
   stepTab: string = '1';
   showReadings: boolean = false;
   constructor() { }
 
   ngOnInit() { 
-    console.log(this.planeData);
   }
 
   changeStepTab(str: string) {
     this.stepTab = str;
   }
 
-  showReadingsForm() {
-    // if (num == 1) {
-    //   this.pitotTubeData[0] = data;
-    // } else {
-    //   this.pitotTubeData[1] = data;
-    // }
-    this.showReadings = true;
+  toggleReadings() {
+    this.showReadings = !this.showReadings;
   }
 
-  savePitotData(){
-    // if (num == 1) {
-    //   this.pitotTubeData[0] = data;
-    // } else {
-    //   this.pitotTubeData[1] = data;
-    // }
-    this.showReadings = false;
+  savePlane(plane: Plane, str: string){
+    this.emitSave.emit({plane: plane, planeNumber: str})
   }
 }

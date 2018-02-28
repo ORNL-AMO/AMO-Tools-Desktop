@@ -20,7 +20,12 @@
     background: #efefef;
 }
 
-.fa-check{
+.group-label .fa{
     color: green;
     font-size: large;
+}
+
+
+.group-label .fa-square-o{
+    color: black;
 }

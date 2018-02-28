@@ -27,6 +27,7 @@ export interface Plane {
     barometricPressure: number;
     //noInletBoxes => numInletBoxes
     numInletBoxes?: number; // should have a default of 1 and the
+    //psx => staticPressure
     staticPressure?: number;
     pitotTubeCoefficient?: number;
     traverseData?: Array<Array<number>>;
@@ -35,14 +36,14 @@ export interface Plane {
     numInsertionPoints?: number
 }
 
- export interface Traverse extends Plane {
-     //psx => staticPressure
-    pitotTubeCoefficient?: number;
-    traverseData?: Array<Array<number>>;
-    pitotTubeType?: string,
-    numTraverseHoles?: number,
-    numInsertionPoints?: number
- }
+//  export interface Traverse extends Plane {
+//      //psx => staticPressure
+//     pitotTubeCoefficient?: number;
+//     traverseData?: Array<Array<number>>;
+//     pitotTubeType?: string,
+//     numTraverseHoles?: number,
+//     numInsertionPoints?: number
+//  }
 
 // export interface PlaneMeasurement extends Plane {
 //     //psx => staticPressure

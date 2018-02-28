@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Plane } from '../../../../../shared/models/fan-copy';
+import { Fsat203Service } from '../../fsat-203.service';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -9,68 +10,26 @@ import { Plane } from '../../../../../shared/models/fan-copy';
 })
 export class FanDataFormComponent implements OnInit {
   @Input()
-  fanData: Plane;
+  planeData: Plane;
   @Input()
   planeNum: string;
   @Input()
   planeDescription: string;
-  
+  @Output('emitSave')
+  emitSave = new EventEmitter<Plane>();
   dataForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
-    this.dataForm = this.getFormFromObj(this.fanData);
-  }
-
-  getFormFromObj(obj: Plane): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      planeType: [obj.planeType],
-      length: [obj.length],
-      width: [obj.width],
-      area: [obj.area],
-      staticPressure: [obj.staticPressure],
-      dryBulbTemp: [obj.dryBulbTemp],
-      barometricPressure: [obj.barometricPressure],
-      numInletBoxes: [obj.numInletBoxes]
-    })
-    return form;
-  }
-
-  getObjFromForm(form: FormGroup): Plane {
-    let obj: Plane = {
-      planeType: form.controls.planeType.value,
-      length: form.controls.length.value,
-      width: form.controls.width.value,
-      area: form.controls.area.value,
-      staticPressure: form.controls.staticPressure.value,
-      dryBulbTemp: form.controls.dryBulbTemp.value,
-      barometricPressure: form.controls.barometricPressure.value,
-      numInletBoxes: form.controls.numInletBoxes.value,
-      pitotTubeCoefficient: this.fanData.pitotTubeCoefficient,
-      traverseData: this.fanData.traverseData
-    }
-    return obj;
+    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData);
   }
 
   save(){
-    //todo
+    this.planeData = this.fsat203Service.getPlaneObjFromForm(this.dataForm, this.planeData);
+    this.emitSave.emit(this.planeData);
   }
 
   focusField(){
     //todo
   }
 }
-
-
-// export interface FanData {
-//   planeNum: string,
-//   planeDescription: string,
-//   shape: string,
-//   length: number,
-//   width: number,
-//   area: number,
-//   staticPressure: number,
-//   dryBulbTemp: number,
-//   barometricPressure: number,
-//   numInletBoxes: number
-// }

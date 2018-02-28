@@ -6,7 +6,10 @@
         </div>
       </div>
     </div> -->
-  <label class="group-label">Establish Gas Density</label>
+  <label class="group-label">Establish Gas Density                            
+    <span class="fa fa-square-o pull-right" *ngIf="!gasDone"></span>
+    <span class="fa fa-check-square-o pull-right" *ngIf="gasDone"></span>
+  </label>
   <div class="form-group">
     <label for="gasType">Gas Type</label>
     <div class="input-group">

@@ -8,42 +8,43 @@ import { Plane } from '../../../../../shared/models/fan-copy';
 })
 export class PressureReadingsFormComponent implements OnInit {
   @Input()
-  fanData: Plane;
+  planeData: Plane;
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
-
+  @Output('emitBack')
+  emitBack = new EventEmitter<boolean>();
   traverseHoles: Array<Array<number>>;
   numLabels: Array<number>;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.fanData.traverseData.length);
-    console.log(this.fanData.numInsertionPoints);
-    console.log(this.fanData.numTraverseHoles);
     this.numLabels = new Array();
-    if (this.fanData.traverseData.length != this.fanData.numInsertionPoints) {
+    if (this.planeData.traverseData.length != this.planeData.numInsertionPoints) {
       let cols = new Array();
-      for (let i = 0; i < this.fanData.numTraverseHoles; i++) {
+      for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
         cols.push(i)
       }
 
       let rows = new Array();
-      for (let i = 0; i < this.fanData.numInsertionPoints; i++) {
+      for (let i = 0; i < this.planeData.numInsertionPoints; i++) {
         rows.push(JSON.parse(JSON.stringify(cols)));
       }
       this.traverseHoles = rows;
     } else {
-      this.traverseHoles = this.fanData.traverseData
-      for(let i = 0; i < this.fanData.numTraverseHoles; i++){
+      this.traverseHoles = this.planeData.traverseData
+      for(let i = 0; i < this.planeData.numTraverseHoles; i++){
         this.numLabels.push(i+1);
       }
     }
   }
 
   save() {
-    this.fanData.traverseData = this.traverseHoles;
-    this.emitSave.emit(this.fanData);
+    this.planeData.traverseData = this.traverseHoles;
+    this.emitSave.emit(this.planeData);
+  }
 
+  goBack(){
+    this.emitBack.emit(true);
   }
 
   trackByFn(index: any, item: any) {

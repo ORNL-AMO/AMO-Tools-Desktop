@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlaneData, Plane } from '../../../../../shared/models/fan-copy';
+import { Fsat203Service } from '../../fsat-203.service';
 @Component({
   selector: 'app-plane-3-form',
   templateUrl: './plane-3-form.component.html',
@@ -8,17 +9,19 @@ import { PlaneData, Plane } from '../../../../../shared/models/fan-copy';
 })
 export class Plane3FormComponent implements OnInit {
   @Input()
-  fanData: Plane;
+  planeData: Plane;
   @Output('showReadingsForm')
-  showReadingsForm = new EventEmitter<Plane>();
-
+  showReadingsForm = new EventEmitter<boolean>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<Plane>();
+  
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
-    this.pressureReadings = this.fanData.traverseData;
-    this.pitotDataForm = this.getFormFromObj(this.fanData);
+    this.pressureReadings = this.planeData.traverseData;
+    this.pitotDataForm = this.fsat203Service.getTraversePlaneFormFromObj(this.planeData);
   }
 
   focusField() {
@@ -26,30 +29,11 @@ export class Plane3FormComponent implements OnInit {
   }
 
   save() {
-    //this.planeData = this.getObjFromForm(this.pitotDataForm);
-    //console.log(this.pitotDataForm.status);
-  }
-
-  getFormFromObj(obj: Plane): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      pitotTubeType: [obj.pitotTubeType],
-      pitotTubeCoefficient: [obj.pitotTubeCoefficient],
-      numTraverseHoles: [obj.numTraverseHoles, [Validators.min(1), Validators.max(10)]],
-      numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
-    })
-    return form;
-  }
-
-  getObjFromForm(form: FormGroup): Plane {
-    this.fanData.pitotTubeType = form.controls.tubeType.value;
-    this.fanData.pitotTubeCoefficient = form.controls.pitotTubeCoefficient.value;
-    this.fanData.numTraverseHoles = form.controls.numTraverseHoles.value;
-    this.fanData.numInsertionPoints = form.controls.numInsertionPoints.value;
-    return this.fanData;
+    this.planeData = this.fsat203Service.getTraversePlaneObjFromForm(this.pitotDataForm, this.planeData);
+    this.emitSave.emit(this.planeData);
   }
 
   showDataToggle() {
-    this.save();
-    this.showReadingsForm.emit(this.fanData);
+    this.showReadingsForm.emit(true);
   }
 }

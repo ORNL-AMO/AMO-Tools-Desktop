@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FanRatedInfo } from '../../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HelpPanelService } from '../../../../fsat/help-panel/help-panel.service';
+import { Fsat203Service } from '../fsat-203.service';
 
 @Component({
   selector: 'app-fsat-basics',
@@ -11,8 +12,8 @@ import { HelpPanelService } from '../../../../fsat/help-panel/help-panel.service
 export class FsatBasicsComponent implements OnInit {
   @Input()
   fanRatedInfo: FanRatedInfo;
-  @Output('emitContinue')
-  emitCanContinue = new EventEmitter<boolean>();
+  @Input()
+  basicsDone: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FanRatedInfo>();
 
@@ -29,11 +30,10 @@ export class FsatBasicsComponent implements OnInit {
     1, 2, 3
   ]
 
-  constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService) { }
+  constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
-    this.ratedInfoForm = this.getFormFromObject(this.fanRatedInfo);
-    this.checkForm();
+    this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo);
   }
 
   focusField(str: string) {
@@ -42,49 +42,7 @@ export class FsatBasicsComponent implements OnInit {
 
 
   save() {
-    this.checkForm();
-    this.fanRatedInfo = this.getObjectFromForm(this.ratedInfoForm);
+    this.fanRatedInfo = this.fsat203Service.getBasicsObjectFromForm(this.ratedInfoForm);
     this.emitSave.emit(this.fanRatedInfo);
-  }
-
-  checkForm(){
-    if(this.ratedInfoForm.status == 'VALID'){
-      this.emitCanContinue.emit(true);
-    }else{
-      this.emitCanContinue.emit(false);
-    }
-  }
-
-  getFormFromObject(obj: FanRatedInfo): FormGroup {
-    let form = this.formBuilder.group({
-      fanSpeed: [obj.fanSpeed, Validators.required],
-      motorSpeed: [obj.motorSpeed, Validators.required],
-      fanSpeedCorrected: [obj.fanSpeedCorrected, Validators.required],
-      densityCorrected: [obj.densityCorrected, Validators.required],
-      pressureBarometricCorrected: [obj.pressureBarometricCorrected, Validators.required],
-      driveType: [obj.driveType, Validators.required],
-      includesEvase: [obj.includesEvase, Validators.required],
-      upDownStream: [obj.upDownStream, Validators.required],
-      traversePlanes: [obj.traversePlanes, Validators.required],
-      //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
-    })
-    return form;
-  }
-
-  getObjectFromForm(form: FormGroup): FanRatedInfo {
-    let obj: FanRatedInfo = {
-      fanSpeed: form.controls.fanSpeed.value,
-      motorSpeed: form.controls.motorSpeed.value,
-      fanSpeedCorrected: form.controls.fanSpeedCorrected.value,
-      densityCorrected: form.controls.densityCorrected.value,
-      pressureBarometricCorrected: form.controls.pressureBarometricCorrected.value,
-      //Mark additions
-      driveType: form.controls.driveType.value,
-      includesEvase: form.controls.includesEvase.value,
-      upDownStream: form.controls.upDownStream.value,
-      traversePlanes: form.controls.traversePlanes.value,
-    //  planarBarometricPressure: form.controls.planarBarometricPressure.value
-    }
-    return obj;
   }
 }

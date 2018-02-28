@@ -1,7 +1,8 @@
 <form [formGroup]="ratedInfoForm" *ngIf="ratedInfoForm">
   <label class="group-label">
     <span class="step-number">1</span>Basic Fan Info
-    <span class="fa fa-check pull-right"></span>
+    <span class="fa fa-square-o pull-right" *ngIf="!basicsDone"></span>
+    <span class="fa fa-check-square-o pull-right" *ngIf="basicsDone"></span>
   </label>
   <div class="form-group">
     <label for="fanSpeed">Fan Speed</label>

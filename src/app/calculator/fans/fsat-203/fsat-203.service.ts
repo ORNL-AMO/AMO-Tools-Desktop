@@ -1,12 +1,126 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs } from '../../../shared/models/fan-copy';
+import { Fan203Inputs, FanRatedInfo, Plane } from '../../../shared/models/fan-copy';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BaseGasDensity } from '../../../shared/models/fans';
 
 @Injectable()
 export class Fsat203Service {
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
+
+  getBasicsFormFromObject(obj: FanRatedInfo): FormGroup {
+    let form = this.formBuilder.group({
+      fanSpeed: [obj.fanSpeed, Validators.required],
+      motorSpeed: [obj.motorSpeed, Validators.required],
+      fanSpeedCorrected: [obj.fanSpeedCorrected, Validators.required],
+      densityCorrected: [obj.densityCorrected, Validators.required],
+      pressureBarometricCorrected: [obj.pressureBarometricCorrected, Validators.required],
+      driveType: [obj.driveType, Validators.required],
+      includesEvase: [obj.includesEvase, Validators.required],
+      upDownStream: [obj.upDownStream, Validators.required],
+      traversePlanes: [obj.traversePlanes, Validators.required],
+      //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
+    })
+    return form;
+  }
+
+  getBasicsObjectFromForm(form: FormGroup): FanRatedInfo {
+    let obj: FanRatedInfo = {
+      fanSpeed: form.controls.fanSpeed.value,
+      motorSpeed: form.controls.motorSpeed.value,
+      fanSpeedCorrected: form.controls.fanSpeedCorrected.value,
+      densityCorrected: form.controls.densityCorrected.value,
+      pressureBarometricCorrected: form.controls.pressureBarometricCorrected.value,
+      //Mark additions
+      driveType: form.controls.driveType.value,
+      includesEvase: form.controls.includesEvase.value,
+      upDownStream: form.controls.upDownStream.value,
+      traversePlanes: form.controls.traversePlanes.value,
+      //  planarBarometricPressure: form.controls.planarBarometricPressure.value
+    }
+    return obj;
+  }
+
+  getGasDensityFormFromObj(obj: BaseGasDensity): FormGroup {
+    let form = this.formBuilder.group({
+      method: [obj.method, Validators.required],
+      gasType: [obj.gasType, Validators.required],
+      // humidityData: ['Yes', Validators.required],
+      conditionLocation: [obj.conditionLocation, Validators.required],
+      dryBulbTemp: [obj.dryBulbTemp, Validators.required],
+      staticPressure: [obj.staticPressure, Validators.required],
+      barometricPressure: [obj.barometricPressure, Validators.required],
+      gasSpecificGravity: [obj.gasSpecificGravity, Validators.required],
+      wetBulbTemp: [obj.wetBulbTemp, Validators.required],
+      relativeHumidity: [obj.relativeHumidity, Validators.required],
+      gasDewpointTemp: [obj.gasDewpointTemp, Validators.required],
+      gasDensity: [obj.gasDensity, Validators.required],
+    })
+    return form;
+  }
+
+  getGasDensityObjFromForm(form: FormGroup): BaseGasDensity {
+    let fanGasDensity: BaseGasDensity = {
+      method: form.controls.method.value,
+      gasType: form.controls.gasType.value,
+      //  humidityData: form.controls.humidityData.value,
+      conditionLocation: form.controls.conditionLocation.value,
+      dryBulbTemp: form.controls.dryBulbTemp.value,
+      staticPressure: form.controls.staticPressure.value,
+      barometricPressure: form.controls.barometricPressure.value,
+      gasSpecificGravity: form.controls.gasSpecificGravity.value,
+      wetBulbTemp: form.controls.wetBulbTemp.value,
+      relativeHumidity: form.controls.relativeHumidity.value,
+      gasDewpointTemp: form.controls.gasDewpointTemp.value,
+      gasDensity: form.controls.gasDensity.value
+    }
+    return fanGasDensity;
+  }
 
 
+  getTraversePlaneFormFromObj(obj: Plane): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      pitotTubeType: [obj.pitotTubeType, Validators.required],
+      pitotTubeCoefficient: [obj.pitotTubeCoefficient, Validators.required],
+      numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
+      numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
+    })
+    return form;
+  }
+
+  getTraversePlaneObjFromForm(form: FormGroup, planeData: Plane): Plane {
+    planeData.pitotTubeType = form.controls.pitotTubeType.value;
+    planeData.pitotTubeCoefficient = form.controls.pitotTubeCoefficient.value;
+    planeData.numTraverseHoles = form.controls.numTraverseHoles.value;
+    planeData.numInsertionPoints = form.controls.numInsertionPoints.value;
+    return planeData;
+  }
+
+  getPlaneFormFromObj(obj: Plane): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      planeType: [obj.planeType, Validators.required],
+      length: [obj.length, Validators.required],
+      width: [obj.width, Validators.required],
+      area: [obj.area, Validators.required],
+      staticPressure: [obj.staticPressure],
+      dryBulbTemp: [obj.dryBulbTemp],
+      barometricPressure: [obj.barometricPressure],
+      numInletBoxes: [obj.numInletBoxes]
+    })
+    return form;
+  }
+
+  getPlaneObjFromForm(form: FormGroup, obj: Plane): Plane {
+    obj.planeType = form.controls.planeType.value;
+    obj.length = form.controls.length.value;
+    obj.width = form.controls.width.value;
+    obj.area = form.controls.area.value;
+    obj.staticPressure = form.controls.staticPressure.value;
+    obj.dryBulbTemp = form.controls.dryBulbTemp.value;
+    obj.barometricPressure = form.controls.barometricPressure.value;
+    obj.numInletBoxes = form.controls.numInletBoxes.value;
+    return obj;
+  }
 
 
   getMockData(): any {
