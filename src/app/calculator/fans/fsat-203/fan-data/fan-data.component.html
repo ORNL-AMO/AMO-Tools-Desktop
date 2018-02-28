@@ -2,7 +2,7 @@
   <div class="col-12">
     <label class="group-label">
       <span class="step-number">3</span>Input Plane Data
-      <span class="fa fa-square-o pull-right" *ngIf="!planeDataDone"></span>
+      <span class="fa fa-exclamation-circle pull-right" *ngIf="!planeDataDone"></span>
       <span class="fa fa-check-square-o pull-right" *ngIf="planeDataDone"></span>
     </label>
   </div>
@@ -12,34 +12,34 @@
 </div>
 <div class="row">
   <div class="col">
-    <nav class="hide-print text-center">
+    <nav class="hide-print text-center data-steps">
       <ul class="tabs subtabs progress-tabs fsat">
-        <li [ngClass]="{'active': stepTab == '1'}">
+        <li [ngClass]="{'active': stepTab == '1', 'step-error': !plane1Done}">
           <a (click)="changeStepTab('1')">
             <span class="step-number">1</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == '2'}">
+        <li [ngClass]="{'active': stepTab == '2', 'step-error': !plane2Done}">
           <a (click)="changeStepTab('2')">
             <span class="step-number">2</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == '3a'}">
+        <li [ngClass]="{'active': stepTab == '3a', 'step-error': !plane3aDone}">
           <a (click)="changeStepTab('3a')">
             <span class="step-number">3a</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == '3b'}">
+        <li [ngClass]="{'active': stepTab == '3b', 'step-error': !plane3bDone}">
           <a (click)="changeStepTab('3b')">
             <span class="step-number">3b</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == '4'}">
+        <li [ngClass]="{'active': stepTab == '4', 'step-error': !plane4Done}">
           <a (click)="changeStepTab('4')">
             <span class="step-number">4</span>
           </a>
         </li>
-        <li [ngClass]="{'active': stepTab == '5'}">
+        <li [ngClass]="{'active': stepTab == '5', 'step-error': !plane5Done}">
           <a (click)="changeStepTab('5')">
             <span class="step-number">5</span>
           </a>

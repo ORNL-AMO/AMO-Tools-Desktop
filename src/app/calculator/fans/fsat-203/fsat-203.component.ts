@@ -38,12 +38,28 @@ export class Fsat203Component implements OnInit {
     this.checkPlane('4');
     this.checkPlane('5');
     this.checkShaftPower();
+    this.calculate();
   }
 
-  calculate(){
-    if(this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone)
-    {
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
 
+  calculate() {
+    if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
+      this.results = this.fsatService.fan203(this.inputs);
+    } else {
+      this.results = {
+        fanEfficiencyTotalPressure: 0,
+        fanEfficiencyStaticPressure: 0,
+        fanEfficiencyStaticPressureRise: 0,
+        flowCorrected: 0,
+        pressureTotalCorrected: 0,
+        pressureStaticCorrected: 0,
+        staticPressureRiseCorrected: 0,
+        powerCorrected: 0,
+        kpc: 0
+      }
     }
   }
 
@@ -56,6 +72,12 @@ export class Fsat203Component implements OnInit {
     }
   }
 
+  saveBasics(info: FanRatedInfo) {
+    this.inputs.FanRatedInfo = info;
+    this.checkBasics();
+    this.calculate();
+  }
+
   checkGasDensity() {
     let tmpForm: FormGroup = this.fsat203Service.getGasDensityFormFromObj(this.inputs.BaseGasDensity);
     if (tmpForm.status == 'VALID') {
@@ -65,18 +87,10 @@ export class Fsat203Component implements OnInit {
     }
   }
 
-  setTab(str: string) {
-    this.tabSelect = str;
-  }
-
-  saveBasics(info: FanRatedInfo) {
-    this.inputs.FanRatedInfo = info;
-    this.checkBasics();
-  }
-
   saveDensity(density: BaseGasDensity) {
     this.inputs.BaseGasDensity = density;
     this.checkGasDensity();
+    this.calculate();
   }
 
   checkPlane(planeNumber: string) {
@@ -152,20 +166,22 @@ export class Fsat203Component implements OnInit {
       this.inputs.PlaneData.OutletMstPlane = event.plane;
       this.checkPlane('5');
     }
+    this.calculate();
   }
 
-  checkShaftPower(){
+  checkShaftPower() {
     let tmpForm: FormGroup = this.fsat203Service.getShaftPowerFormFromObj(this.inputs.FanShaftPower);
-    if(tmpForm.status == 'VALID'){
+    if (tmpForm.status == 'VALID') {
       this.shaftPowerDone = true;
-    }else{
+    } else {
       this.shaftPowerDone = false;
     }
   }
 
-  saveShaftPower(shaftPower: FanShaftPower){
+  saveShaftPower(shaftPower: FanShaftPower) {
     this.inputs.FanShaftPower = shaftPower;
     this.checkShaftPower();
+    this.calculate();
   }
 
   goToForm(str: string) {

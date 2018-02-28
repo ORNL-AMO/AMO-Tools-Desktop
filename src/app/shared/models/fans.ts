@@ -108,5 +108,5 @@ export interface Fan203Results {
   pressureStaticCorrected: number;
   staticPressureRiseCorrected: number;
   powerCorrected: number;
-  Kpc: number;
+  kpc: number;
 }

@@ -1,7 +1,8 @@
 <form [formGroup]="shaftPowerForm" *ngIf="shaftPowerForm">
-  <label class="group-label"><span class="step-number">4</span>Fan Shaft Power
-      <span class="fa fa-square-o pull-right" *ngIf="!shaftPowerDone"></span>
-      <span class="fa fa-check-square-o pull-right" *ngIf="shaftPowerDone"></span>
+  <label class="group-label">
+    <span class="step-number">4</span>Fan Shaft Power
+    <span class="fa fa-exclamation-circle pull-right" *ngIf="!shaftPowerDone"></span>
+    <span class="fa fa-check-square-o pull-right" *ngIf="shaftPowerDone"></span>
   </label>
   <div class="form-group">
     <label for="isMethodOne">Method for Establishing Fan Shaft Power</label>
@@ -105,17 +106,26 @@
   <label class="group-label group-label-2">Motor and Drive Effiicencies</label>
   <div class="form-group">
     <label for="efficiencyMotor">Motor Efficiency at Load</label>
-    <input name="efficiencyMotor" type="number" step="any" class="form-control" formControlName="efficiencyMotor" id="efficiencyMotor"
-      (input)="save()" (focus)="focusField('efficiencyMotor')" onfocus="this.select();">
+    <div class="input-group">
+      <input name="efficiencyMotor" type="number" step="any" class="form-control" formControlName="efficiencyMotor" id="efficiencyMotor"
+        (input)="save()" (focus)="focusField('efficiencyMotor')" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
   </div>
   <div class="form-group">
     <label for="efficiencyVFD">VFD Efficiency</label>
-    <input name="efficiencyVFD" type="number" step="any" class="form-control" formControlName="efficiencyVFD" id="efficiencyVFD"
-      (input)="save()" (focus)="focusField('efficiencyVFD')" onfocus="this.select();">
+    <div class="input-group">
+      <input name="efficiencyVFD" type="number" step="any" class="form-control" formControlName="efficiencyVFD" id="efficiencyVFD"
+        (input)="save()" (focus)="focusField('efficiencyVFD')" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
   </div>
   <div class="form-group">
     <label for="efficiencyBelt">Belt Efficiency</label>
-    <input name="efficiencyBelt" type="number" step="any" class="form-control" formControlName="efficiencyBelt" id="efficiencyBelt"
-      (input)="save()" (focus)="focusField('efficiencyBelt')" onfocus="this.select();">
+    <div class="input-group">
+      <input name="efficiencyBelt" type="number" step="any" class="form-control" formControlName="efficiencyBelt" id="efficiencyBelt"
+        (input)="save()" (focus)="focusField('efficiencyBelt')" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
   </div>
 </form>

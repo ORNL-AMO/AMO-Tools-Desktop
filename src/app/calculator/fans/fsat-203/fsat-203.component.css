@@ -21,11 +21,11 @@
 }
 
 .group-label .fa{
-    color: green;
+    color: #1E8449;
     font-size: large;
 }
 
 
-.group-label .fa-square-o{
-    color: black;
+.group-label .fa-exclamation-circle{
+    color: #B03A2E;
 }

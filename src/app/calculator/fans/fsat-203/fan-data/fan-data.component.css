@@ -1,9 +1,17 @@
 .fa{
-    color: green;
+    color: #1E8449;
     font-size: large;
 }
 
 
-.fa-square-o{
-    color: black;
+.fa-exclamation-circle{
+    color: #B03A2E;
+}
+
+.tabs.subtabs.fsat .step-error .step-number{
+    background: #B03A2E !important;
+}
+
+.data-steps .step-number{
+    margin-right: 0px;
 }

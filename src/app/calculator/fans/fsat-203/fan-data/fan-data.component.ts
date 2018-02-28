@@ -14,6 +14,20 @@ export class FanDataComponent implements OnInit {
   emitSave = new EventEmitter<any>();
   @Input()
   planeDataDone: boolean;
+  @Input()
+  plane1Done: boolean;
+  @Input()
+  plane2Done: boolean;
+  @Input()
+  plane3aDone: boolean;
+  @Input()
+  plane3bDone: boolean;
+  @Input()
+  plane4Done: boolean;
+  @Input()
+  plane5Done: boolean;
+
+
 
   stepTab: string = '1';
   showReadings: boolean = false;

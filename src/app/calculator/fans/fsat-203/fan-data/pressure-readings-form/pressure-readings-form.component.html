@@ -25,7 +25,7 @@
               <span class="input-group-text">{{index+1}}</span>
             </div>
             <input *ngFor="let traverseCol of traverseRow; let i=index; trackBy:trackByFn" id="{{'hole'+index+'_'+i}}" name="{{'hole'+index+'_'+i}}"
-              type="number" class="form-control" [(ngModel)]="traverseHoles[index][i]">
+              type="number" class="form-control" [(ngModel)]="traverseHoles[index][i]" (input)="save()">
           </div>
         </div>
       </div>

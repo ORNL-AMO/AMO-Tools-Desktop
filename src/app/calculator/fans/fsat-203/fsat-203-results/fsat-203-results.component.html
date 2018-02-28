@@ -1,0 +1,42 @@
+<div class="output-summary" *ngIf="results">
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Fan Efficiency Total Pressure</td>
+        <td>{{results.fanEfficiencyTotalPressure |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Fan Efficiency Static Pressure</td>
+        <td>{{results.fanEfficiencyStaticPressure |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Fan Efficiency Static Pressure Rise</td>
+        <td>{{results.fanEfficiencyStaticPressureRise |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Flow Corrected</td>
+        <td>{{results.flowCorrected |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Pressure Total Corrected</td>
+        <td>{{results.pressureTotalCorrected |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Pressure Static Corrected</td>
+        <td>{{results.pressureStaticCorrected |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Static Pressure Rise Corrected</td>
+        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Power Corrected</td>
+        <td>{{results.powerCorrected |sigFigs: '6'}}</td>
+      </tr>
+      <tr>
+        <td>Kpc</td>
+        <td>{{results.kpc |sigFigs: '6'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
