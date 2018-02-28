@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Plane } from '../../../../../shared/models/fan-copy';
+import { Plane } from '../../../../../shared/models/fans';
 
 @Component({
   selector: 'app-pressure-readings-form',

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared/models/fan-copy';
+import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared/models/fans';
 
 import * as _ from 'lodash';
 @Component({

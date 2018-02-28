@@ -16,72 +16,37 @@ export interface FanRatedInfo {
   traversePlanes: number;
 }
 
-// unfortunately as of now we have to have both rectangular and circular variants of every Plane
-export interface PlaneRectangular {
-  length: number;
-  width: number;
+export interface Plane {
+  planeType: string,
+  length: number,
+  width: number,
+  area: number,
   //tdx => dryBulbTemp
-  tdx: number;
+  dryBulbTemp: number;
   //pbx => barometricPressure
-  pbx: number;
+  barometricPressure: number;
   //noInletBoxes => numInletBoxes
-  noInletBoxes?: number; // should have a default of 1
-
-  //Mark Additions
-
+  numInletBoxes?: number; // should have a default of 1 and the
+  //psx => staticPressure
+  staticPressure?: number;
+  pitotTubeCoefficient?: number;
+  traverseData?: Array<Array<number>>;
+  pitotTubeType?: string,
+  numTraverseHoles?: number,
+  numInsertionPoints?: number
 }
 
-export interface PlaneCircular {
-  circularDiameter: number;
-  tdx: number;
-  pbx: number;
-  noInletBoxes?: number; // should have a default of 1
-}
-
-export interface TraverseRectangular extends PlaneRectangular {
-  psx: number;
-  pitotTubeCoefficient: number;
-  traverseData: Array<Array<number>>;
-}
-
-export interface TraverseCircular extends PlaneCircular {
-  psx: number;
-  pitotTubeCoefficient: number;
-  traverseData: Array<Array<number>>;
-}
-
-export interface PlaneMstRectangular extends PlaneRectangular {
-  psx: number;
-}
-
-export interface PlaneMstCircular extends PlaneCircular {
-  psx: number;
-}
-
-export interface PlaneDataRectangular {
+export interface PlaneData {
   plane5upstreamOfPlane2: boolean;
   totalPressureLossBtwnPlanes1and4: number;
   totalPressureLossBtwnPlanes2and5: number;
 
-  FanInletFlange: PlaneRectangular;
-  FanEvaseOrOutletFlange: PlaneRectangular;
-  FlowTraverse: TraverseRectangular;
-  AddlTraversePlanes: Array<TraverseRectangular>;
-  InletMstPlane: PlaneMstRectangular;
-  OutletMstPlane: PlaneMstRectangular;
-}
-
-export interface PlaneDataCircular {
-  plane5upstreamOfPlane2: boolean;
-  totalPressureLossBtwnPlanes1and4: number;
-  totalPressureLossBtwnPlanes2and5: number;
-
-  FanInletFlange: PlaneCircular;
-  FanEvaseOrOutletFlange: PlaneCircular;
-  FlowTraverse: TraverseCircular;
-  AddlTraversePlanes: Array<TraverseCircular>;
-  InletMstPlane: PlaneMstCircular;
-  OutletMstPlane: PlaneMstCircular;
+  FanInletFlange: Plane;
+  FanEvaseOrOutletFlange: Plane;
+  FlowTraverse: Plane;
+  AddlTraversePlanes: Array<Plane>;
+  InletMstPlane: Plane;
+  OutletMstPlane: Plane;
 }
 
 export interface BaseGasDensity {
@@ -110,13 +75,12 @@ export interface FanShaftPower {
   sumSEF: number;
 }
 
-// holds the results of the fan203 calculation
 
 export interface Fan203Inputs {
   FanRatedInfo: FanRatedInfo,
   BaseGasDensity: BaseGasDensity,
   FanShaftPower: FanShaftPower,
-  PlaneData?: PlaneDataRectangular | PlaneDataCircular
+  PlaneData?: PlaneData | PlaneData
 }
 
 export interface Fan203Results {

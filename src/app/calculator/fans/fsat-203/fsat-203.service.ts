@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, Plane } from '../../../shared/models/fan-copy';
+import { Fan203Inputs, FanRatedInfo, Plane } from '../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../shared/models/fans';
 

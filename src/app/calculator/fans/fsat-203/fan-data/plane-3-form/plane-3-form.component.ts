@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PlaneData, Plane } from '../../../../../shared/models/fan-copy';
+import { PlaneData, Plane } from '../../../../../shared/models/fans';
 import { Fsat203Service } from '../../fsat-203.service';
 @Component({
   selector: 'app-plane-3-form',

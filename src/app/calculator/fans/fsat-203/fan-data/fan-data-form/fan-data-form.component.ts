@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Plane } from '../../../../../shared/models/fan-copy';
+import { Plane } from '../../../../../shared/models/fans';
 import { Fsat203Service } from '../../fsat-203.service';
 
 @Component({

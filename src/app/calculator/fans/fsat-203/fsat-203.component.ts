@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane } from '../../../shared/models/fan-copy';
+import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
