@@ -38,6 +38,9 @@ export class PhastPieChartComponent implements OnInit {
     pieChartLabels: new Array<string>(),
     pieChartData: new Array<number>()
   }
+
+  pieChartData: Array<Array<any>>;
+
   chartColors: Array<any>;
 
   options: any = {
@@ -81,11 +84,11 @@ export class PhastPieChartComponent implements OnInit {
       if (this.modExists) {
         this.chartContainerWidth = this.chartContainerWidth / 2;
       }
-      this.chartContainerHeight = 280;
+      this.chartContainerHeight = 300;
     }
     else {
-      this.chartContainerHeight = 400;
-      this.chartContainerWidth = 1100;
+      this.chartContainerHeight = 450;
+      this.chartContainerWidth = 1000;
     }
     this.initChart();
   }
@@ -105,33 +108,14 @@ export class PhastPieChartComponent implements OnInit {
       this.ngChart.nativeElement.className = 'print-pie-chart';
     }
 
+    //debug
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
-        columns: [
-          ["wall", this.totalWallLoss],
-          ["atmosphere", this.totalAtmosphereLoss],
-          ["other", this.totalOtherLoss],
-          ["cooling", this.totalCoolingLoss],
-          ["opening", this.totalOpeningLoss],
-          ["fixture", this.totalFixtureLoss],
-          ["leakage", this.totalLeakageLoss],
-          ["extSurface", this.totalExtSurfaceLoss],
-          ["charge", this.totalChargeMaterialLoss],
-        ],
+        columns: this.pieChartData,
         type: 'pie',
         labels: true,
-        names: {
-          wall: "Wall Losses " + this.totalWallLoss + "%",
-          atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-          other: "Other Losses " + this.totalOtherLoss + "%",
-          cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-          opening: "Opening Losses " + this.totalOpeningLoss + "%",
-          fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-          leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-          extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-        }
+        order: null
       },
       size: {
         width: this.chartContainerWidth,
@@ -152,81 +136,105 @@ export class PhastPieChartComponent implements OnInit {
       }
     });
 
-    if (this.resultCats.showFlueGas) {
-      this.chart.load({
-        columns: [
-          ["flue", this.totalFlueGas]
-        ],
-        labels: true,
-        names: {
-          flue: "Flue Gas Losses " + this.totalFlueGas + "%"
-        }
-      });
-    }
-    if (this.resultCats.showAuxPower) {
-      this.chart.load({
-        columns: [
-          ["aux", this.totalAuxPower]
-        ],
-        labels: true,
-        names: {
-          aux: "Total Auxillary Power " + this.totalAuxPower + "%"
-        }
-      });
-    }
-    if (this.resultCats.showSlag) {
-      this.chart.load({
-        columns: [
-          ["slag", this.totalSlag]
-        ],
-        labels: true,
-        names: {
-          slag: "Total Slag " + this.totalSlag + "%"
-        }
-      });
-    }
-    if (this.resultCats.showExGas) {
-      this.chart.load({
-        columns: [
-          ["exGasEAF", this.totalExhaustGasEAF]
-        ],
-        labels: true,
-        names: {
-          exGasEAF: "Total Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%"
-        }
-      });
-    }
-    else if (this.resultCats.showEnInput2) {
-      this.chart.load({
-        columns: [
-          ["exGas", this.totalExhaustGas]
-        ],
-        labels: true,
-        names: {
-          exGas: "Total Exhaust Gas Losses " + this.totalExhaustGas + "%"
-        }
-      });
-    }
-    if (this.resultCats.showSystemEff) {
-      this.chart.load({
-        columns: [
-          ["sys", this.totalSystemLosses]
-        ],
-        labels: true,
-        names: {
-          sys: "Total System Losses " + this.totalSystemLosses + "%"
-        }
-      });
-    }
-
     if (!this.printView) {
       setTimeout(() => {
-        d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
+
+        //debug
+        this.chart.load({
+          names: {
+            wall: "Wall " + this.totalWallLoss + "%",
+            atmosphere: "Atmosphere " + this.totalAtmosphereLoss + "%",
+            other: "Other Loss " + this.totalOtherLoss + "%",
+            cooling: "Cooling " + this.totalCoolingLoss + "%",
+            opening: "Opening " + this.totalOpeningLoss + "%",
+            fixture: "Fixture " + this.totalFixtureLoss + "%",
+            leakage: "Leakage " + this.totalLeakageLoss + "%",
+            extSurface: "Extended Surface " + this.totalExtSurfaceLoss + "%",
+            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+            flue: "Flue Gas " + this.totalFlueGas + "%",
+            aux: "Auxillary Power " + this.totalAuxPower + "%",
+            slag: "Slag " + this.totalSlag + "%",
+            exGasEAF: "Exhaust Gas (EAF) " + this.totalExhaustGasEAF + "%",
+            exGas: "Exhaust Gas " + this.totalExhaustGas + "%",
+            sys: "System " + this.totalSystemLosses + "%"
+          },
+        });
+
+
+        //real version
+        // this.chart.load({
+        //   names: {
+        //     wall: "Wall Losses " + this.totalWallLoss + "%",
+        //     atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+        //     other: "Other Losses " + this.totalOtherLoss + "%",
+        //     cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+        //     opening: "Opening Losses " + this.totalOpeningLoss + "%",
+        //     fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+        //     leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+        //     extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+        //     charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+        //     flue: "Flue Gas Losses " + this.totalFlueGas + "%",
+        //     aux: "Auxillary Power " + this.totalAuxPower + "%",
+        //     slag: "Slag " + this.totalSlag + "%",
+        //     exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
+        //     exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
+        //     sys: "System Losses " + this.totalSystemLosses + "%"
+        //   },
+        // });
+
+        d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
+        d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "13px");
+        d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
       }, 500);
     }
     else {
-      d3.selectAll(".print-pie-chart .c3-legend-item text").style("font-size", "1.3rem");
-      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+
+      //debug
+      this.chart.load({
+        names: {
+          wall: "Wall " + this.totalWallLoss + "%",
+          atmosphere: "Atmosphere " + this.totalAtmosphereLoss + "%",
+          other: "Other " + this.totalOtherLoss + "%",
+          cooling: "Cooling " + this.totalCoolingLoss + "%",
+          opening: "Opening " + this.totalOpeningLoss + "%",
+          fixture: "Fixture " + this.totalFixtureLoss + "%",
+          leakage: "Leakage " + this.totalLeakageLoss + "%",
+          extSurface: "Extended Surface " + this.totalExtSurfaceLoss + "%",
+          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+          flue: "Flue Gas " + this.totalFlueGas + "%",
+          aux: "Auxillary Power " + this.totalAuxPower + "%",
+          slag: "Slag " + this.totalSlag + "%",
+          exGasEAF: "Exhaust Gas (EAF) " + this.totalExhaustGasEAF + "%",
+          exGas: "Exhaust Gas " + this.totalExhaustGas + "%",
+          sys: "System " + this.totalSystemLosses + "%"
+        },
+      });
+
+      //real version
+      // this.chart.load({
+      //   names: {
+      //     wall: "Wall Losses " + this.totalWallLoss + "%",
+      //     atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+      //     other: "Other Losses " + this.totalOtherLoss + "%",
+      //     cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+      //     opening: "Opening Losses " + this.totalOpeningLoss + "%",
+      //     fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+      //     leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+      //     extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+      //     charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+      //     flue: "Flue Gas Losses " + this.totalFlueGas + "%",
+      //     aux: "Auxillary Power " + this.totalAuxPower + "%",
+      //     slag: "Slag " + this.totalSlag + "%",
+      //     exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
+      //     exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
+      //     sys: "System Losses " + this.totalSystemLosses + "%"
+      //   },
+      // });
+      d3.selectAll(".print-pie-chart .c3-legend-item text").style("font-size", "1.2rem");
+      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1rem");
+      d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
+      // d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
+      // d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
     }
   }
 
@@ -235,18 +243,7 @@ export class PhastPieChartComponent implements OnInit {
     if (this.chart) {
 
       this.chart.load({
-        columns: [
-          ["wall", this.totalWallLoss],
-          ["atmosphere", this.totalAtmosphereLoss],
-          ["other", this.totalOtherLoss],
-          ["cooling", this.totalCoolingLoss],
-          ["opening", this.totalOpeningLoss],
-          ["fixture", this.totalFixtureLoss],
-          ["leakage", this.totalLeakageLoss],
-          ["extSurface", this.totalExtSurfaceLoss],
-          ["charge", this.totalChargeMaterialLoss],
-        ],
-        labels: true,
+        columns: this.pieChartData,
         names: {
           wall: "Wall Losses " + this.totalWallLoss + "%",
           atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
@@ -257,83 +254,49 @@ export class PhastPieChartComponent implements OnInit {
           leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
           extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
           charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-        }
+          flue: "Flue Gas Losses " + this.totalFlueGas + "%",
+          aux: "Auxillary Power " + this.totalAuxPower + "%",
+          slag: "Slag " + this.totalSlag + "%",
+          exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
+          exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
+          sys: "System Losses " + this.totalSystemLosses + "%"
+        },
+        order: null
       });
-      if (this.resultCats.showFlueGas) {
+
+      setTimeout(() => {
         this.chart.load({
-          columns: [
-            ["flue", this.totalFlueGas]
-          ],
-          labels: true,
           names: {
-            flue: "Flue Gas Losses " + this.totalFlueGas + "%"
-          }
+            wall: "Wall Losses " + this.totalWallLoss + "%",
+            atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+            other: "Other Losses " + this.totalOtherLoss + "%",
+            cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+            opening: "Opening Losses " + this.totalOpeningLoss + "%",
+            fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+            leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+            extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+            flue: "Flue Gas Losses " + this.totalFlueGas + "%",
+            aux: "Auxillary Power " + this.totalAuxPower + "%",
+            slag: "Slag " + this.totalSlag + "%",
+            exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
+            exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
+            sys: "System Losses " + this.totalSystemLosses + "%"
+          },
         });
-      }
-      if (this.resultCats.showAuxPower) {
-        this.chart.load({
-          columns: [
-            ["aux", this.totalAuxPower]
-          ],
-          labels: true,
-          names: {
-            aux: "Total Auxillary Power " + this.totalAuxPower + "%"
-          }
-        });
-      }
-      if (this.resultCats.showSlag) {
-        this.chart.load({
-          columns: [
-            ["slag", this.totalSlag]
-          ],
-          labels: true,
-          names: {
-            slag: "Total Slag " + this.totalSlag + "%"
-          }
-        });
-      }
-      if (this.resultCats.showExGas) {
-        this.chart.load({
-          columns: [
-            ["exGasEAF", this.totalExhaustGasEAF]
-          ],
-          labels: true,
-          names: {
-            exGasEAF: "Total Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%"
-          }
-        });
-      }
-      else if (this.resultCats.showEnInput2) {
-        this.chart.load({
-          columns: [
-            ["exGas", this.totalExhaustGas]
-          ],
-          labels: true,
-          names: {
-            exGas: "Total Exhaust Gas Losses " + this.totalExhaustGas + "%"
-          }
-        });
-      }
-      if (this.resultCats.showSystemEff) {
-        this.chart.load({
-          columns: [
-            ["sys", this.totalSystemLosses]
-          ],
-          labels: true,
-          names: {
-            sys: "Total System Losses " + this.totalSystemLosses + "%"
-          }
-        });
-      }
+      }, 300)
+
       if (!this.printView) {
         setTimeout(() => {
-          d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
-        }, 800);
+          d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
+          d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "13px");
+          d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
+        }, 500);
       }
       else {
         setTimeout(() => {
-          d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
-          d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+          d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.2rem");
+          d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.2rem");
         }, 800);
       }
     }
@@ -352,6 +315,7 @@ export class PhastPieChartComponent implements OnInit {
     this.totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
     this.totalFlueGas = 0;
     this.totalSlag = 0;
+    this.totalAuxPower = 0;
     this.totalExhaustGas = 0;
     this.totalExhaustGasEAF = 0;
     this.totalSystemLosses = 0;
@@ -378,6 +342,101 @@ export class PhastPieChartComponent implements OnInit {
       this.phastReportService.baselineChartLabels.next(this.chartData.pieChartLabels);
     } else {
       this.phastReportService.modificationChartLabels.next(this.chartData.pieChartLabels);
+    }
+
+    this.pieChartData = new Array<Array<any>>();
+    let tmpArray = new Array<any>();
+
+    tmpArray = new Array<any>();
+    tmpArray.push("flue");
+    tmpArray.push(this.totalFlueGas);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("charge");
+    tmpArray.push(this.totalChargeMaterialLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("opening");
+    tmpArray.push(this.totalOpeningLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("wall");
+    tmpArray.push(this.totalWallLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("atmosphere");
+    tmpArray.push(this.totalAtmosphereLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("cooling");
+    tmpArray.push(this.totalCoolingLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("fixture");
+    tmpArray.push(this.totalFixtureLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("leakage");
+    tmpArray.push(this.totalLeakageLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("extSurface");
+    tmpArray.push(this.totalExtSurfaceLoss);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("exGasEAF");
+    tmpArray.push(this.totalExhaustGasEAF);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("exGas");
+    tmpArray.push(this.totalExhaustGas);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("sys");
+    tmpArray.push(this.totalSystemLosses);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("slag");
+    tmpArray.push(this.totalSlag);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("aux");
+    tmpArray.push(this.totalAuxPower);
+    this.pieChartData.push(tmpArray);
+
+    tmpArray = new Array<any>();
+    tmpArray.push("other");
+    tmpArray.push(this.totalOtherLoss);
+    this.pieChartData.push(tmpArray);
+  }
+
+  //insertion sort
+  sortPieChartData() {
+    let k = this.pieChartData.length;
+    for (let i = 0; i < k; i++) {
+      let j = i;
+      while (j > 0 && this.pieChartData[j - 1][1] < this.pieChartData[j][1]) {
+        let tmpA = this.pieChartData[j][0];
+        let tmpB = this.pieChartData[j][1];
+        this.pieChartData[j][0] = this.pieChartData[j - 1][0];
+        this.pieChartData[j][1] = this.pieChartData[j - 1][1];
+        this.pieChartData[j - 1][0] = tmpA;
+        this.pieChartData[j - 1][1] = tmpB;
+        j = j - 1;
+      }
     }
   }
 
