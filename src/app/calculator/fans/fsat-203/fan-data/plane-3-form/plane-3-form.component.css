@@ -6,10 +6,10 @@
     padding: 6px;
 }
 
+label{
+    font-size: small;
+}
 
-
-.pressure-reading-div{
-    height: 50px;
-    width: 50px;
-    background-color: red;
+.form-control{
+    font-size: small;
 }

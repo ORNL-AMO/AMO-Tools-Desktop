@@ -163,6 +163,11 @@
     width: 100%;
 }
 
+.panel-container .group-label.group-label-2{
+    letter-spacing: 0;
+    padding-bottom: 0px;
+}
+
 .psat .group-label{
     border-bottom: #2980b9 groove 2px;
 }

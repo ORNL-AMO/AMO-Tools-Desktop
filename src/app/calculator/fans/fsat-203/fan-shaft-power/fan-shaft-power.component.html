@@ -1,10 +1,13 @@
 <form [formGroup]="shaftPowerForm" *ngIf="shaftPowerForm">
-  <label class="group-label">Fan Shaft Power</label>
+  <label class="group-label"><span class="step-number">4</span>Fan Shaft Power
+      <span class="fa fa-square-o pull-right" *ngIf="!shaftPowerDone"></span>
+      <span class="fa fa-check-square-o pull-right" *ngIf="shaftPowerDone"></span>
+  </label>
   <div class="form-group">
-    <label for="tubeType">Method for Establishing Fan Shaft Power</label>
-    <select class="form-control" name="method" formControlName="method" id="method" (change)="save()" (focus)="focusField('method')">
-      <option [ngValue]="'Method 1'">Method 1</option>
-      <option [ngValue]="'Method 2'">Method 2</option>
+    <label for="isMethodOne">Method for Establishing Fan Shaft Power</label>
+    <select class="form-control" name="isMethodOne" formControlName="isMethodOne" id="isMethodOne" (change)="save()" (focus)="focusField('isMethodOne')">
+      <option [ngValue]="true">Method 1</option>
+      <option [ngValue]="false">Method 2</option>
     </select>
   </div>
   <div class="form-group">
@@ -48,18 +51,18 @@
       onfocus="this.select();">
   </div>
 
-  <div class="form-group" *ngIf="shaftPowerForm.controls.method.value == 'Method 1'">
+  <div class="form-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
     <label for="vfdInput">H
       <sub>i</sub>
     </label>
     <div class="input-group">
       <input name="vfdInput" type="number" step="any" class="form-control" formControlName="vfdInput" id="vfdInput" (input)="save()"
         (focus)="focusField('vfdInput')" onfocus="this.select();">
-        <span class="input-group-addon units">kW</span>
+      <span class="input-group-addon units">kW</span>
     </div>
   </div>
 
-  <div *ngIf="shaftPowerForm.controls.method.value == 'Method 2'">
+  <div *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
     <label class="group-label group-label-2">Phase 1</label>
     <div class="form-group">
       <label for="phase1Voltage">Voltage</label>
@@ -98,5 +101,21 @@
       <input name="phase3Amps" type="number" step="any" class="form-control" formControlName="phase3Amps" id="phase3Amps" (input)="save()"
         (focus)="focusField('phase3Amps')" onfocus="this.select();">
     </div>
+  </div>
+  <label class="group-label group-label-2">Motor and Drive Effiicencies</label>
+  <div class="form-group">
+    <label for="efficiencyMotor">Motor Efficiency at Load</label>
+    <input name="efficiencyMotor" type="number" step="any" class="form-control" formControlName="efficiencyMotor" id="efficiencyMotor"
+      (input)="save()" (focus)="focusField('efficiencyMotor')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label for="efficiencyVFD">VFD Efficiency</label>
+    <input name="efficiencyVFD" type="number" step="any" class="form-control" formControlName="efficiencyVFD" id="efficiencyVFD"
+      (input)="save()" (focus)="focusField('efficiencyVFD')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label for="efficiencyBelt">Belt Efficiency</label>
+    <input name="efficiencyBelt" type="number" step="any" class="form-control" formControlName="efficiencyBelt" id="efficiencyBelt"
+      (input)="save()" (focus)="focusField('efficiencyBelt')" onfocus="this.select();">
   </div>
 </form>

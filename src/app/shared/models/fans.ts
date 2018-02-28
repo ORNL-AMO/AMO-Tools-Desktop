@@ -73,8 +73,24 @@ export interface FanShaftPower {
   efficiencyVFD: number;
   efficiencyBelt: number;
   sumSEF: number;
+  //mark additions
+  // method: string,
+  isVFD: string,
+  mainsDataAvailable: string,
+  ratedHP: number,
+  synchronousSpeed: number,
+  npv: number,
+  fla: number,
+  vfdInput: number,
+  phase1: MotorPhase,
+  phase2: MotorPhase,
+  phase3: MotorPhase
 }
-
+export interface MotorPhase {
+  voltage: number,
+  amps: number,
+  powerFactor?: number
+}
 
 export interface Fan203Inputs {
   FanRatedInfo: FanRatedInfo,
@@ -84,13 +100,13 @@ export interface Fan203Inputs {
 }
 
 export interface Fan203Results {
-  fanEfficiencyTp: number;
-  fanEfficiencySp: number;
-  fanEfficiencySpr: number;
-  Qc: number;
-  Ptc: number;
-  Psc: number;
-  SPRc: number;
-  Hc: number;
+  fanEfficiencyTotalPressure: number;
+  fanEfficiencyStaticPressure: number;
+  fanEfficiencyStaticPressureRise: number;
+  flowCorrected: number;
+  pressureTotalCorrected: number;
+  pressureStaticCorrected: number;
+  staticPressureRiseCorrected: number;
+  powerCorrected: number;
   Kpc: number;
 }

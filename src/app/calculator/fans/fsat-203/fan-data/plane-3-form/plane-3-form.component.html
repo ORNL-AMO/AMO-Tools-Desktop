@@ -1,5 +1,5 @@
 <form [formGroup]="pitotDataForm" *ngIf="pitotDataForm">
-  <label class="group-label">Input Velocity Pressure Traverse Data</label>
+  <label class="group-label group-label-2">Input Velocity Pressure Traverse Data</label>
   <div class="form-group">
     <label for="pitotTubeType">Pitot Tube Type</label>
     <select class="form-control" name="pitotTubeType" formControlName="pitotTubeType" id="pitotTubeType" (change)="save()" (focus)="focusField('pitotTubeType')">

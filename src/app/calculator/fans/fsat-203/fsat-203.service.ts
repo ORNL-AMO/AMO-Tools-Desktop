@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, Plane } from '../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo, Plane, FanShaftPower } from '../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../shared/models/fans';
 
@@ -121,9 +121,60 @@ export class Fsat203Service {
     obj.numInletBoxes = form.controls.numInletBoxes.value;
     return obj;
   }
+  getShaftPowerFormFromObj(obj: FanShaftPower): FormGroup {
+    let form = this.formBuilder.group({
+      isMethodOne: [obj.isMethodOne, Validators.required],
+      isVFD: [obj.isVFD, Validators.required],
+      mainsDataAvailable: [obj.mainsDataAvailable, Validators.required],
+      ratedHP: [obj.ratedHP, Validators.required],
+      synchronousSpeed: [obj.synchronousSpeed, Validators.required],
+      npv: [obj.npv, Validators.required],
+      fla: [obj.fla, Validators.required],
+      vfdInput: [obj.vfdInput, Validators.required],
+      phase1Voltage: [obj.phase1.voltage],
+      phase1Amps: [obj.phase1.amps],
+      phase1PowerFactor: [obj.phase1.powerFactor],
+      phase2Voltage: [obj.phase2.voltage],
+      phase2Amps: [obj.phase2.amps],
+      phase3Voltage: [obj.phase3.voltage],
+      phase3Amps: [obj.phase3.amps],
+      efficiencyMotor: [obj.efficiencyMotor, Validators.required],
+      efficiencyVFD: [obj.efficiencyVFD, Validators.required],
+      efficiencyBelt: [obj.efficiencyBelt, Validators.required],
+    })
+    return form;
+  }
 
+  getShaftPowerObjFromForm(form: FormGroup, obj: FanShaftPower): FanShaftPower {
+    obj.isMethodOne = form.controls.isMethodOne.value;
+    obj.isVFD = form.controls.isVFD.value;
+    obj.mainsDataAvailable = form.controls.mainsDataAvailable.value;
+    obj.ratedHP = form.controls.ratedHP.value;
+    obj.synchronousSpeed = form.controls.synchronousSpeed.value;
+    obj.npv = form.controls.npv.value;
+    obj.fla = form.controls.fla.value;
+    obj.vfdInput = form.controls.vfdInput.value;
+    obj.phase1 = {
+      voltage: form.controls.phase1Voltage.value,
+      amps: form.controls.phase1Amps.value,
+      powerFactor: form.controls.phase1PowerFactor.value
+    };
+    obj.phase2 = {
+      voltage: form.controls.phase2Voltage.value,
+      amps: form.controls.phase2Amps.value
+    };
+    obj.phase3 = {
+      voltage: form.controls.phase3Voltage.value,
+      amps: form.controls.phase3Amps.value
+    };
+    obj.efficiencyMotor = form.controls.efficiencyMotor.value;
+    obj.efficiencyVFD = form.controls.efficiencyVFD.value;
+    obj.efficiencyBelt = form.controls.efficiencyBelt.value;
+    obj.powerFactorAtLoad = form.controls.phase1PowerFactor.value;
+    return obj;
+  }
 
-  getMockData(): any {
+  getMockData(): Fan203Inputs {
     let inputs: Fan203Inputs = {
       FanRatedInfo: {
         fanSpeed: 1191,
@@ -235,14 +286,34 @@ export class Fsat203Service {
         gasDewpointTemp: 0,
       },
       FanShaftPower: {
-        isMethodOne: false,
+        isMethodOne: true,
         voltage: 4200,
         amps: 205,
         powerFactorAtLoad: 0.88,
         efficiencyMotor: 95,
         efficiencyVFD: 100,
         efficiencyBelt: 100,
-        sumSEF: 0
+        sumSEF: 0,
+        mainsDataAvailable: 'Yes',
+        isVFD: 'No',
+        ratedHP: 1750,
+        synchronousSpeed: 1200,
+        npv: 4160,
+        fla: 210,
+        vfdInput: 0,
+        phase1: {
+          voltage: 4200,
+          amps: 205,
+          powerFactor: .88
+        },
+        phase2: {
+          voltage: 4200,
+          amps: 205
+        },
+        phase3: {
+          voltage: 4200,
+          amps: 205
+        }
       }
     };
 

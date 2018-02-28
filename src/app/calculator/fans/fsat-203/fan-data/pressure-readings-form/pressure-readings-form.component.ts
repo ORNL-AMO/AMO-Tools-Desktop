@@ -19,10 +19,11 @@ export class PressureReadingsFormComponent implements OnInit {
 
   ngOnInit() {
     this.numLabels = new Array();
-    if (this.planeData.traverseData.length != this.planeData.numInsertionPoints) {
+    if (this.planeData.traverseData.length != this.planeData.numInsertionPoints || this.planeData.traverseData[0].length != this.planeData.numTraverseHoles) {
       let cols = new Array();
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-        cols.push(i)
+        cols.push(0)
+        this.numLabels.push(i+1);
       }
 
       let rows = new Array();

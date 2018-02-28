@@ -23,6 +23,9 @@ export class FanDataComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
+    if(str != '3a' && str != '3b' && this.showReadings){
+      this.toggleReadings();
+    }
     this.stepTab = str;
   }
 

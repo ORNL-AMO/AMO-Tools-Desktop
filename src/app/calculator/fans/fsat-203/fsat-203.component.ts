@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane } from '../../../shared/models/fans';
+import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
@@ -12,10 +12,8 @@ import { FormGroup } from '@angular/forms';
 export class Fsat203Component implements OnInit {
   tabSelect: string = 'results';
   inputs: Fan203Inputs;
-  showBasics: boolean = true;
   basicsDone: boolean = false;
   gasDone: boolean = false;
-  canContinue: boolean = false;
   formSelect: string = 'none';
   planeDataDone: boolean = false;
   plane1Done: boolean = false;
@@ -24,6 +22,9 @@ export class Fsat203Component implements OnInit {
   plane3bDone: boolean = false;
   plane4Done: boolean = false;
   plane5Done: boolean = false;
+  shaftPowerDone: boolean = false;
+
+  results: Fan203Results;
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
@@ -36,6 +37,14 @@ export class Fsat203Component implements OnInit {
     this.checkPlane('3b');
     this.checkPlane('4');
     this.checkPlane('5');
+    this.checkShaftPower();
+  }
+
+  calculate(){
+    if(this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone)
+    {
+
+    }
   }
 
   checkBasics() {
@@ -143,6 +152,20 @@ export class Fsat203Component implements OnInit {
       this.inputs.PlaneData.OutletMstPlane = event.plane;
       this.checkPlane('5');
     }
+  }
+
+  checkShaftPower(){
+    let tmpForm: FormGroup = this.fsat203Service.getShaftPowerFormFromObj(this.inputs.FanShaftPower);
+    if(tmpForm.status == 'VALID'){
+      this.shaftPowerDone = true;
+    }else{
+      this.shaftPowerDone = false;
+    }
+  }
+
+  saveShaftPower(shaftPower: FanShaftPower){
+    this.inputs.FanShaftPower = shaftPower;
+    this.checkShaftPower();
   }
 
   goToForm(str: string) {
