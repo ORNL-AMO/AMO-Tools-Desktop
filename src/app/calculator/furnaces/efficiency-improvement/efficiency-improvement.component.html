@@ -2,9 +2,13 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3><img src="assets/images/eff-impr.png" class="ico-size2">
-            Efficiency Improvement Calculator</h3>
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/eff-impr.png" class="ico-size2">
+          </div>
+          <div class="col">
+            <h3>Efficiency Improvement Calculator</h3>
+          </div>
         </div>
         <div class="losses-container tab-content">
           <div class="card-form">
@@ -20,7 +24,7 @@
       </div>
       <div class="col-6 align-top">
         <div class="help-panel">
-          <div class="header">
+          <div [ngStyle]="{'height.px': headerHeight}" class="header">
             <h3>Help</h3>
           </div>
           <div class="tab-content">

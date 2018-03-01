@@ -18,10 +18,13 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3>
-              <img src="assets/images/head-tool.png" class="ico-size">
-            Pump Head Calculator</h3>
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/head-tool.png" class="ico-size">
+          </div>
+          <div class="col">
+            <h3>Pump Head Calculator</h3>
+          </div>
         </div>
         <div class="row justify-content-center head-tool-toggle-switch">
           <div class="btn-group btn-group-sm align-self-center">
@@ -58,7 +61,8 @@
                   <sub>d</sub>
                 </small>
               </div>
-              <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-form>
+              <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"
+                (changeField)="changeField($event)"></app-head-tool-form>
             </div>
           </div>
         </div>
@@ -68,10 +72,10 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Results</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>

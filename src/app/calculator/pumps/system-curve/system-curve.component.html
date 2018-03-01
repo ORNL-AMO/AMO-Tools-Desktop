@@ -2,9 +2,13 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3><img src="assets/images/system-curve-tran.png" class="ico-size">
-            System Curve Calculator</h3>
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/system-curve-tran.png" class="ico-size">
+          </div>
+          <div class="col">
+            <h3>System Curve Calculator</h3>
+          </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-12">
@@ -21,10 +25,10 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Graph</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>

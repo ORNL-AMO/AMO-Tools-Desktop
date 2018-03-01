@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
@@ -20,6 +20,15 @@ export class AchievableEfficiencyComponent implements OnInit {
   @Input()
   inPsat: boolean;
   
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
@@ -54,6 +63,18 @@ export class AchievableEfficiencyComponent implements OnInit {
           }
         }
       )
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

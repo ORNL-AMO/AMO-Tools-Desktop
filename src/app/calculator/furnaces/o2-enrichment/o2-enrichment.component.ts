@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../shared/models/phast/o2Enrichment';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
@@ -13,6 +13,16 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 export class O2EnrichmentComponent implements OnInit {
   @Input()
   settings: Settings
+
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   o2Enrichment: O2Enrichment = {
     o2CombAir: 21,
@@ -39,20 +49,31 @@ export class O2EnrichmentComponent implements OnInit {
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if(!this.settings){
+    if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(results => {
-        if(results){
+        if (results) {
           this.settings = results[0];
           this.initDefaultValues(this.settings);
           this.calculate();
         }
       })
-    }else{
+    } else {
       this.initDefaultValues(this.settings);
       this.calculate()
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
 
   initDefaultValues(settings: Settings) {
     if (settings.unitsOfMeasure == 'Metric') {
@@ -93,7 +114,7 @@ export class O2EnrichmentComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.currentField = str;
   }
 }
