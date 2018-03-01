@@ -9,6 +9,8 @@ import { FlowFactorComponent } from './flow-factor/flow-factor.component';
 import { FlowFactorFormComponent } from './flow-factor/flow-factor-form/flow-factor-form.component';
 import { PneumaticAirComponent } from './pneumatic-air/pneumatic-air.component';
 import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pneumatic-air-form.component';
+import { PipeSizingComponent } from './pipe-sizing/pipe-sizing.component';
+import { PipeSizingFormComponent } from './pipe-sizing/pipe-sizing-form/pipe-sizing-form.component';
 
 @NgModule({
   imports: [
@@ -24,7 +26,9 @@ import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pn
     FlowFactorComponent,
     FlowFactorFormComponent,
     PneumaticAirComponent,
-    PneumaticAirFormComponent
+    PneumaticAirFormComponent,
+    PipeSizingComponent,
+    PipeSizingFormComponent
   ],
   exports: [
     CompressedAirComponent
