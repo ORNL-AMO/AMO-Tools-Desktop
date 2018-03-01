@@ -138,9 +138,9 @@ export class Fsat203Service {
       phase2Amps: [obj.phase2.amps],
       phase3Voltage: [obj.phase3.voltage],
       phase3Amps: [obj.phase3.amps],
-      efficiencyMotor: [obj.efficiencyMotor, Validators.required],
-      efficiencyVFD: [obj.efficiencyVFD, Validators.required],
-      efficiencyBelt: [obj.efficiencyBelt, Validators.required],
+      efficiencyMotor: [obj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100)]],
+      efficiencyVFD: [obj.efficiencyVFD, [Validators.required, Validators.min(0), Validators.max(100)]],
+      efficiencyBelt: [obj.efficiencyBelt, [Validators.required, Validators.min(0), Validators.max(100)]],
     })
     return form;
   }
@@ -186,7 +186,7 @@ export class Fsat203Service {
         driveType: 'Direct Drive',
         includesEvase: 'Yes',
         upDownStream: 'Upstream',
-        traversePlanes: 1
+        traversePlanes: 2
       },
       PlaneData: {
         plane5upstreamOfPlane2: true,

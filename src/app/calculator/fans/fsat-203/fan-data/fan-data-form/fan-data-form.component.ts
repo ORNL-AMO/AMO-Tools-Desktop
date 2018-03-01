@@ -33,7 +33,7 @@ export class FanDataFormComponent implements OnInit {
       if(tmpData.numInletBoxes){
         tmpArea = tmpArea*tmpData.numInletBoxes
       }
-      tmpArea = this.convertUnitsService.value(tmpArea).from('in').to('ft');
+      tmpArea = this.convertUnitsService.value(tmpArea).from('in2').to('ft2');
       this.dataForm.patchValue({
         'area': tmpArea
       })
@@ -42,7 +42,7 @@ export class FanDataFormComponent implements OnInit {
       if(tmpData.numInletBoxes){
         tmpArea = tmpArea*tmpData.numInletBoxes
       }
-      tmpArea = this.convertUnitsService.value(tmpArea).from('in').to('ft');
+      tmpArea = this.convertUnitsService.value(tmpArea).from('in2').to('ft2');
       this.dataForm.patchValue({
         'area': tmpArea
       })

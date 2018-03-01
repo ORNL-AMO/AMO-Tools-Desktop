@@ -11,28 +11,28 @@
                         <label class="group-label" (click)="goToForm('fsat-basics')">
                             <span class="step-number">1</span>Basic Fan Info
                             <span class="fa fa-exclamation-circle pull-right" *ngIf="!basicsDone"></span>
-                            <span class="fa fa-check-square-o pull-right" *ngIf="basicsDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="basicsDone"></span>
                         </label>
                     </div>
                     <div class="col-12">
                         <label class="group-label" (click)="goToForm('gas-density')">
                             <span class="step-number">2</span>Establish Gas Density
                             <span class="fa fa-exclamation-circle pull-right" *ngIf="!gasDone"></span>
-                            <span class="fa fa-check-square-o pull-right" *ngIf="gasDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="gasDone"></span>
                         </label>
                     </div>
                     <div class="col-12">
                         <label class="group-label" (click)="goToForm('fan-data')">
                             <span class="step-number">3</span>Input Plane Data
                             <span class="fa fa-exclamation-circle pull-right" *ngIf="!planeDataDone"></span>
-                            <span class="fa fa-check-square-o pull-right" *ngIf="planeDataDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="planeDataDone"></span>
                         </label>
                     </div>
                     <div class="col-12">
                         <label class="group-label" (click)="goToForm('fan-shaft-power')">
                             <span class="step-number">4</span>Fan Shaft Power
                             <span class="fa fa-exclamation-circle pull-right" *ngIf="!shaftPowerDone"></span>
-                            <span class="fa fa-check-square-o pull-right" *ngIf="shaftPowerDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="shaftPowerDone"></span>
                         </label>
                     </div>
                 </div>
@@ -47,8 +47,9 @@
                         <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
                             [gasDone]="gasDone"></app-gas-density>
                         <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
-                        <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" (emitSave)="savePlane($event)" [planeDataDone]="planeDataDone"
-                            [plane1Done]="plane1Done" [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone"
+                        <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="savePlane($event)"
+                            (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
+                            [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone"
                             [plane4Done]="plane4Done" [plane5Done]="plane5Done"></app-fan-data>
                         <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power'" [fanShaftPower]="inputs.FanShaftPower" (emitSave)="saveShaftPower($event)"
                             [shaftPowerDone]="shaftPowerDone"></app-fan-shaft-power>

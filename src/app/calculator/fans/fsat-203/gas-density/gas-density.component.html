@@ -8,7 +8,7 @@
     </div> -->
   <label class="group-label"><span class="step-number">2</span>Establish Gas Density                            
     <span class="fa fa-exclamation-circle pull-right" *ngIf="!gasDone"></span>
-    <span class="fa fa-check-square-o pull-right" *ngIf="gasDone"></span>
+    <span class="fa fa-check pull-right" *ngIf="gasDone"></span>
   </label>
   <div class="form-group">
     <label for="gasType">Gas Type</label>
@@ -19,6 +19,12 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="method">Method to Establish Gas Density</label>
+    <select class="form-control" name="method" formControlName="method" id="method" (change)="save()" (focus)="focusField('method')">
+      <option *ngFor="let method of methods" [ngValue]="method">{{method}}</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="gasDensityForm.controls.method.value != 'Use Custom Density'">
     <label for="dryBulbTemp">Dry Bulb Temp (T
       <sub>do</sub>)</label>
     <div class="input-group">
@@ -27,7 +33,7 @@
       <span class="input-group-addon units">&#8457;</span>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="gasDensityForm.controls.method.value != 'Use Custom Density'">
     <label for="staticPressure">Static Pressure (P
       <sub>so</sub>)</label>
     <div class="input-group">
@@ -36,7 +42,7 @@
       <span class="input-group-addon units">in. Wg</span>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="gasDensityForm.controls.method.value != 'Use Custom Density'">
     <label for="barometricPressure">Barometric Pressure (P
       <sub>bo</sub>)</label>
     <div class="input-group">
@@ -45,18 +51,12 @@
       <span class="input-group-addon units">in. Hg</span>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="gasDensityForm.controls.method.value != 'Use Custom Density'">
     <label for="gasSpecificGravity">Gas Specific Gravity (G)</label>
     <div class="input-group">
       <input name="gasSpecificGravity" type="number" step="any" class="form-control" formControlName="gasSpecificGravity" id="gasSpecificGravity"
         (input)="save()" (focus)="focusField('gasSpecificGravity')" onfocus="this.select();">
     </div>
-  </div>
-  <div class="form-group">
-    <label for="method">Method to Establish Gas Density</label>
-    <select class="form-control" name="method" formControlName="method" id="method" (change)="save()" (focus)="focusField('method')">
-      <option *ngFor="let method of methods" [ngValue]="method">{{method}}</option>
-    </select>
   </div>
   <div class="form-group" *ngIf="gasDensityForm.controls.method.value == 'Wet Bulb Temperature'">
     <label for="wetBulbTemp">Wet Bulb Temp (T

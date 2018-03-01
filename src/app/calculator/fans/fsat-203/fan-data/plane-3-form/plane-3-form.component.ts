@@ -14,7 +14,7 @@ export class Plane3FormComponent implements OnInit {
   showReadingsForm = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
-  
+
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
   constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service) { }
@@ -35,5 +35,18 @@ export class Plane3FormComponent implements OnInit {
 
   showDataToggle() {
     this.showReadingsForm.emit(true);
+  }
+
+  setCoefficient() {
+    if (this.pitotDataForm.controls.pitotTubeType.value == 'Standard') {
+      this.pitotDataForm.patchValue({
+        pitotTubeCoefficient: 1
+      })
+    } else if (this.pitotDataForm.controls.pitotTubeType.value == 'S-Type') {
+      this.pitotDataForm.patchValue({
+        pitotTubeCoefficient: .86
+      })
+    }
+    this.save();
   }
 }

@@ -10,8 +10,12 @@ import * as _ from 'lodash';
 export class FanDataComponent implements OnInit {
   @Input()
   planeData: PlaneData;
+  @Input()
+  fanRatedInfo: FanRatedInfo;
   @Output('emitSave')
   emitSave = new EventEmitter<any>();
+  @Output('emitSaveTraverse')
+  emitSaveTraverse = new EventEmitter<any>();
   @Input()
   planeDataDone: boolean;
   @Input()
@@ -23,21 +27,22 @@ export class FanDataComponent implements OnInit {
   @Input()
   plane3bDone: boolean;
   @Input()
+  plane3cDone: boolean;
+  @Input()
   plane4Done: boolean;
   @Input()
   plane5Done: boolean;
-
 
 
   stepTab: string = '1';
   showReadings: boolean = false;
   constructor() { }
 
-  ngOnInit() { 
+  ngOnInit() {
   }
 
   changeStepTab(str: string) {
-    if(str != '3a' && str != '3b' && this.showReadings){
+    if(str != '3a' && str != '3b' && str != '3c' && this.showReadings){
       this.toggleReadings();
     }
     this.stepTab = str;
@@ -49,5 +54,9 @@ export class FanDataComponent implements OnInit {
 
   savePlane(plane: Plane, str: string){
     this.emitSave.emit({plane: plane, planeNumber: str})
+  }
+
+  saveTraversePlane(plane: Plane, str: string){
+    this.emitSaveTraverse.emit({plane: plane, planeNumber: str})
   }
 }
