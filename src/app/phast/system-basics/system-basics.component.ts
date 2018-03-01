@@ -56,7 +56,7 @@ export class SystemBasicsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.saveClicked && !this.isFirstChange) {
-      this.saveChanges();
+      this.saveChanges(false);
     } else {
       this.isFirstChange = false;
     }
@@ -69,7 +69,7 @@ export class SystemBasicsComponent implements OnInit {
       return false;
     }
   }
-  saveChanges() {
+  saveChanges(bool?: boolean) {
     let id = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -81,7 +81,7 @@ export class SystemBasicsComponent implements OnInit {
       //this.showSettingsModal();
     }
 
-    if (this.showUpdateData == false && this.phast.losses) {
+    if (this.showUpdateData == false && this.phast.losses && !bool) {
       this.dataUpdated = true;
     }
     // } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
@@ -150,7 +150,7 @@ export class SystemBasicsComponent implements OnInit {
     this.openModal.emit(false);
     this.settingsModal.hide();
   }
-  startSavePolling() {
-    this.saveChanges()
-  }
+  // startSavePolling() {
+  //   this.saveChanges()
+  // }
 }

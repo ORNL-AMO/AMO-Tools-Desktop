@@ -18,14 +18,14 @@ export class EnergyUseComponent implements OnInit {
 
   flowCalculations: FlowCalculations = {
     //natural gas
-    gasType: 9,
-    specificGravity: 0.14,
+    gasType: 0,
+    specificGravity: 0.657,
     orificeDiameter: 3.5,
     insidePipeDiameter: 8,
     // 1 is sharp edge
     sectionType: 1,
     dischargeCoefficient: 0.6,
-    gasHeatingValue: 7325,
+    gasHeatingValue: 22031,
     gasTemperature: 85,
     gasPressure: 85,
     orificePressureDrop: 10,
@@ -62,31 +62,30 @@ export class EnergyUseComponent implements OnInit {
     if (settings.unitsOfMeasure == 'Metric') {
       this.flowCalculations = {
         //natural gas
-        gasType: 9,
-        specificGravity: 0.14,
+        gasType: 0,
+        specificGravity: 0.657,
         orificeDiameter: this.convertUnitsService.roundVal(this.convertUnitsService.value(3.5).from('in').to('cm'), 2),
         insidePipeDiameter: this.convertUnitsService.roundVal(this.convertUnitsService.value(8).from('in').to('cm'), 2),
         // 1 is sharp edge
         sectionType: 1,
         dischargeCoefficient: 0.6,
-        gasHeatingValue: this.convertUnitsService.roundVal(this.convertUnitsService.value(7325).from('btuSCF').to('kJNm3'), 2),
+        gasHeatingValue: this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuSCF').to('kJNm3'), 2),
         gasTemperature: this.convertUnitsService.roundVal(this.convertUnitsService.value(85).from('F').to('C'), 2),
         gasPressure: this.convertUnitsService.roundVal(this.convertUnitsService.value(85).from('psi').to('kPa'), 2),
         orificePressureDrop: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('in').to('cm'), 2),
         operatingTime: 10
       };
-    }
-    else {
+    }else {
       this.flowCalculations = {
         //natural gas
-        gasType: 9,
-        specificGravity: 0.14,
+        gasType: 0,
+        specificGravity: 0.657,
         orificeDiameter: 3.5,
         insidePipeDiameter: 8,
         // 1 is sharp edge
         sectionType: 1,
         dischargeCoefficient: 0.6,
-        gasHeatingValue: 7325,
+        gasHeatingValue: 22031,
         gasTemperature: 85,
         gasPressure: 85,
         orificePressureDrop: 10,

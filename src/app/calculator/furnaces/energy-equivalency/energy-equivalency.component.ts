@@ -28,7 +28,7 @@ export class EnergyEquivalencyComponent implements OnInit {
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
 
-  currentField: string = 'fuelFiredEfficiency';
+  currentField: string = 'default';
   tabSelect: string = 'results';
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 

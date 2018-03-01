@@ -6,6 +6,12 @@ import { Settings } from '../../../shared/models/settings';
 import * as d3 from 'd3';
 var svg;
 
+const labelFontSize = 8,
+  labelPadding = 10,
+  topLabelPositionY = 40,
+  bottomLabelPositionY = 1250,
+  topReportPositionY = 125,
+  bottomReportPositionY = 1250;
 @Component({
   selector: 'app-explore-opportunities-sankey',
   templateUrl: './explore-opportunities-sankey.component.html',
@@ -73,8 +79,6 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
 
   sankey(location, results) {
 
-    this.baseSize = 50 * (results.motor_power/this.baselineResults.motor_power);
-
     // Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
 
@@ -87,6 +91,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       .append("g");
 
     this.calcLosses(results);
+
 
     var nodes = [];
     nodes.push(
@@ -290,23 +295,34 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize / 2) - 9;
+          return d.y + (d.displaySize);
         }
         else {
           if (d.top) {
-            return d.y - 50;
+            return topLabelPositionY;
           }
           else {
-            return d.y + 60;
+            return topLabelPositionY;
           }
         }
+        // if (d.input || d.output) {
+        //   return d.y + (d.displaySize / 2) - 9;
+        // }
+        // else {
+        //   if (d.top) {
+        //     return d.y - 50;
+        //   }
+        //   else {
+        //     return d.y + 60;
+        //   }
+        // }
       })
       .text(function (d) {
         if (!d.inter) {
           return d.name;
         }
       })
-      .style("font-size", "12px");
+      .style("font-size", labelFontSize + "px");
 
     var twoDecimalFormat = d3.format(".3");
 
@@ -328,57 +344,66 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return (d.y + (d.displaySize / 2)) + 6;
+          return d.y + (d.displaySize) + labelPadding;
         }
         else if (d.top) {
-          return d.y - 35;
+          return topLabelPositionY + labelPadding;
         }
         else {
-          return d.y + 110;
+          return topLabelPositionY + labelPadding;
         }
+        // if (d.input || d.output) {
+        //   return (d.y + (d.displaySize / 2)) + 6;
+        // }
+        // else if (d.top) {
+        //   return d.y - 35;
+        // }
+        // else {
+        //   return d.y + 110;
+        // }
       })
       .text(function (d) {
         if (!d.inter) {
-          return twoDecimalFormat(d.value);
+          return twoDecimalFormat(d.value) + " kW";
         }
       })
-      .style("font-size", "12px");
+      .style("font-size", labelFontSize + "px");
 
-    var nodes_units = svg.selectAll(".nodetext")
-      .data(nodes)
-      .enter()
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("dx", function (d) {
-        if (d.input) {
-          return d.x - 30;
-        }
-        else if (d.output) {
-          return d.x + (d.displaySize * .7) + 24;
-        }
-        else {
-          return d.x;
-        }
-      })
-      .attr("dy", function (d) {
-        if (d.input || d.output) {
-          return d.y + (d.displaySize / 2) + 21;
-        }
-        else {
-          if (d.top) {
-            return d.y - 20;
-          }
-          else {
-            return d.y + 160;
-          }
-        }
-      })
-      .text(function (d) {
-        if (!d.inter) {
-          return "kW";
-        }
-      })
-      .style("font-size", "12px");
+    // var nodes_units = svg.selectAll(".nodetext")
+    //   .data(nodes)
+    //   .enter()
+    //   .append("text")
+    //   .attr("text-anchor", "middle")
+    //   .attr("dx", function (d) {
+    //     if (d.input) {
+    //       return d.x - 30;
+    //     }
+    //     else if (d.output) {
+    //       return d.x + (d.displaySize * .7) + 24;
+    //     }
+    //     else {
+    //       return d.x;
+    //     }
+    //   })
+    //   .attr("dy", function (d) {
+    //     if (d.input || d.output) {
+    //       return d.y + (d.displaySize / 2) + 21;
+    //     }
+    //     else {
+    //       if (d.top) {
+    //         return d.y - 20;
+    //       }
+    //       else {
+    //         return d.y + 160;
+    //       }
+    //     }
+    //   })
+    //   .text(function (d) {
+    //     if (!d.inter) {
+    //       return "kW";
+    //     }
+    //   })
+    //   .style("font-size", labelFontSize + "px");
   }
 
   calcSankey(nodes) {

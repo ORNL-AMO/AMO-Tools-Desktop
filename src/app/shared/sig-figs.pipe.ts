@@ -12,7 +12,7 @@ export class SigFigsPipe implements PipeTransform {
       //converted to number to get trailing/leading zeros
       let newValNumber = parseFloat(newValString);
       //convert back to string
-      let numWithZerosAndCommas = newValNumber.toLocaleString();
+      let numWithZerosAndCommas = newValNumber.toLocaleString(undefined, {minimumSignificantDigits: sigFigs, maximumSignificantDigits: sigFigs });
       if (scientificNotation) {
         return newValString;
       } else {

@@ -118,12 +118,11 @@ export class PsatSankeyComponent implements OnInit {
     d3.select('#' + this.location).selectAll('svg').remove();
   }
 
-  sankey(results) {
+  sankey(results: PsatOutputs) {
 
     this.closeSankey();
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
-
 
     this.width = width;
     this.height = height;
@@ -388,7 +387,6 @@ export class PsatSankeyComponent implements OnInit {
       })
       .text(function (d) {
         if (!d.inter) {
-          // return twoDecimalFormat(d.value) + " " + this.settings.powerMeasurement;
           return twoDecimalFormat(d.value) + " kW";
         }
       })
