@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
@@ -13,6 +13,15 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 export class EfficiencyImprovementComponent implements OnInit {
   @Input()
   settings: Settings
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   efficiencyImprovementInputs: EfficiencyImprovementInputs = {
     currentFlueGasOxygen: 6,
@@ -41,6 +50,18 @@ export class EfficiencyImprovementComponent implements OnInit {
     } else {
       this.initDefaultValues(this.settings);
       this.calculate();
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

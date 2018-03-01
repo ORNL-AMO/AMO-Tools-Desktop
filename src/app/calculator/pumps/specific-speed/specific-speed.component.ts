@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
@@ -17,6 +17,16 @@ export class SpecificSpeedComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   currentField: string;
   speedForm: FormGroup;
   specificSpeed: number;
@@ -59,6 +69,18 @@ export class SpecificSpeedComponent implements OnInit {
           this.settings = results[0];
         }
       )
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

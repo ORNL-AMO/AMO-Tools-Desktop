@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="row header">
+        <div #leftPanelHeader class="row header">
           <div class="col-md-auto ico-col">
             <img src="assets/images/eff-impr.png" class="ico-size2">
           </div>
@@ -24,7 +24,7 @@
       </div>
       <div class="col-6 align-top">
         <div class="help-panel">
-          <div class="header">
+          <div [ngStyle]="{'height.px': headerHeight}" class="header">
             <h3>Help</h3>
           </div>
           <div class="tab-content">

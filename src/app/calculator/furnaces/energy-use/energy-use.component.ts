@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
@@ -15,6 +15,13 @@ export class EnergyUseComponent implements OnInit {
   inPhast: boolean;
   @Input()
   settings: Settings;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
 
   flowCalculations: FlowCalculations = {
     //natural gas
@@ -38,6 +45,8 @@ export class EnergyUseComponent implements OnInit {
     totalFlow: 0
   };
 
+  headerHeight: number;
+
   currentField: string = 'orificeDiameter';
   tabSelect: string = 'results';
 
@@ -58,6 +67,18 @@ export class EnergyUseComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
   initDefaultValues(settings: Settings) {
     if (settings.unitsOfMeasure == 'Metric') {
       this.flowCalculations = {
@@ -75,7 +96,7 @@ export class EnergyUseComponent implements OnInit {
         orificePressureDrop: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('in').to('cm'), 2),
         operatingTime: 10
       };
-    }else {
+    } else {
       this.flowCalculations = {
         //natural gas
         gasType: 0,

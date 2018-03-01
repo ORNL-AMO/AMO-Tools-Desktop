@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -18,6 +18,15 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   currentField: string;
   nemaForm: FormGroup;
@@ -51,6 +60,19 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       )
     }
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
   setTab(str: string) {
     this.tabSelect = str;
   }

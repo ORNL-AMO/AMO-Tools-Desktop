@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -24,6 +24,15 @@ export class PumpCurveComponent implements OnInit {
   @Input()
   assessment: Assessment;
   tabSelect: string = 'results';
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   pumpCurveForm: PumpCurveForm;
   toggleCalculate: boolean = false;
@@ -67,6 +76,18 @@ export class PumpCurveComponent implements OnInit {
     } else {
       this.initForm();
       this.subscribe();
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

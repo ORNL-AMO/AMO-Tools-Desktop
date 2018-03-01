@@ -3,7 +3,7 @@
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
         <div class="col-md-12">
-          <div class="header">
+          <div #leftPanelHeader class="header">
             <h3>
               Heat and Power Calculator
             </h3>
@@ -20,10 +20,10 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Results</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-                  <a (click)="setTab('help')">Help</a>
+                  <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>
