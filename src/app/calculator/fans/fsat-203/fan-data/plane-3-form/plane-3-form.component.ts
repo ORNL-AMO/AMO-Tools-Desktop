@@ -20,12 +20,7 @@ export class Plane3FormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
-    this.pressureReadings = this.planeData.traverseData;
     this.pitotDataForm = this.fsat203Service.getTraversePlaneFormFromObj(this.planeData);
-  }
-
-  focusField() {
-    //todo
   }
 
   save() {

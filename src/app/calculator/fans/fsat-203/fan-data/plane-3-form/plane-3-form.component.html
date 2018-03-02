@@ -2,7 +2,7 @@
   <label class="group-label group-label-2">Input Velocity Pressure Traverse Data</label>
   <div class="form-group">
     <label for="pitotTubeType">Pitot Tube Type</label>
-    <select class="form-control" name="pitotTubeType" formControlName="pitotTubeType" id="pitotTubeType" (change)="save()" (focus)="focusField('pitotTubeType')">
+    <select class="form-control" name="pitotTubeType" formControlName="pitotTubeType" id="pitotTubeType" (change)="setCoefficient()" (focus)="focusField('pitotTubeType')">
       <option [ngValue]="'Standard'">Standard</option>
       <option [ngValue]="'S-Type'">S-Type</option>
     </select>
