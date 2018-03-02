@@ -96,6 +96,7 @@ export class OpeningLossesComponent implements OnInit {
           if (this.openingLossesCompareService.differentArray && !this.isBaseline) {
             this.openingLossesCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
