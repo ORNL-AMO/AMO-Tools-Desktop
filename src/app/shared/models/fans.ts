@@ -56,12 +56,19 @@ export interface BaseGasDensity {
   gasDensity: number;
   gasType: string;
   //mark additions
-  method: string,
+  method: string, // this I think should be mapped to inputType - the bindings expect a string labeled inputType
   conditionLocation: number,
-  gasSpecificGravity: number,
+  gasSpecificGravity: number, // this should be replaced by specificGravity below
   wetBulbTemp: number,
-  relativeHumidity: number,
-  gasDewpointTemp: number,
+  relativeHumidity: number, // both this variable and gasDewpointTemp should be unused, they are covered by relativeHumidityOrDewPoint
+  gasDewpointTemp: number, // see above comment
+
+
+  // new optional fields - used when gasDensity isn't an explicit user input
+  inputType?: string; // relativeHumidity, dewPoint, or wetBulb are the options
+  relativeHumidityOrDewPoint?: number; // required for when inputType is relativeHumidity or dewPoint
+  specificGravity?: number; // required for anything other than explicit user input gasDensity (custom)
+  specificHeatGas?: number; // required when method 3 wetBulb is used
 }
 
 export interface FanShaftPower {
