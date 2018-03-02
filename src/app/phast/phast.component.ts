@@ -68,7 +68,7 @@ export class PhastComponent implements OnInit {
   selectedLossTab: LossTab;
   calcTab: string;
   assessmentTab: string = 'explore-opportunities';
-
+  screenshotHeight: number = 0;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -154,6 +154,10 @@ export class PhastComponent implements OnInit {
     // })
     this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
+    });
+    this.assessmentService.screenShotHeight.subscribe(val => {
+      this.screenshotHeight = val;
+      this.getContainerHeight();
     })
   }
 
@@ -188,7 +192,7 @@ export class PhastComponent implements OnInit {
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
-        let contentHeight = this.content.nativeElement.clientHeight;
+        let contentHeight = this.content.nativeElement.clientHeight - this.screenshotHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
         let footerHeight = 0;
         if (this.footer) {

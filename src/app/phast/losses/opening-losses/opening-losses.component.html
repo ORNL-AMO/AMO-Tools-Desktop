@@ -32,7 +32,7 @@
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"></app-opening-losses-form>
     </div>
   </div>
-  <div class="row" [ngClass]="{'input-error': showError == true}">
+  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
         <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
