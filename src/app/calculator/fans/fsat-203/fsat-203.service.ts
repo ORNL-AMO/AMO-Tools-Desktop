@@ -43,36 +43,38 @@ export class Fsat203Service {
 
   getGasDensityFormFromObj(obj: BaseGasDensity): FormGroup {
     let form = this.formBuilder.group({
-      method: [obj.method, Validators.required],
+      inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
       // humidityData: ['Yes', Validators.required],
       conditionLocation: [obj.conditionLocation, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, Validators.required],
       staticPressure: [obj.staticPressure, Validators.required],
       barometricPressure: [obj.barometricPressure, Validators.required],
-      gasSpecificGravity: [obj.gasSpecificGravity, Validators.required],
+      specificGravity: [obj.specificGravity, Validators.required],
       wetBulbTemp: [obj.wetBulbTemp, Validators.required],
       relativeHumidity: [obj.relativeHumidity, Validators.required],
-      gasDewpointTemp: [obj.gasDewpointTemp, Validators.required],
+      dewPoint: [obj.dewPoint, Validators.required],
       gasDensity: [obj.gasDensity, Validators.required],
+      specificHeatGas: [obj.specificHeatGas]
     })
     return form;
   }
 
   getGasDensityObjFromForm(form: FormGroup): BaseGasDensity {
     let fanGasDensity: BaseGasDensity = {
-      method: form.controls.method.value,
+      inputType: form.controls.inputType.value,
       gasType: form.controls.gasType.value,
       //  humidityData: form.controls.humidityData.value,
       conditionLocation: form.controls.conditionLocation.value,
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,
       barometricPressure: form.controls.barometricPressure.value,
-      gasSpecificGravity: form.controls.gasSpecificGravity.value,
+      specificGravity: form.controls.specificGravity.value,
       wetBulbTemp: form.controls.wetBulbTemp.value,
       relativeHumidity: form.controls.relativeHumidity.value,
-      gasDewpointTemp: form.controls.gasDewpointTemp.value,
-      gasDensity: form.controls.gasDensity.value
+      dewPoint: form.controls.dewPoint.value,
+      gasDensity: form.controls.gasDensity.value,
+      specificHeatGas: form.controls.specificHeatGas.value
     }
     return fanGasDensity;
   }
@@ -277,13 +279,14 @@ export class Fsat203Service {
         gasDensity: 0.0547,
         gasType: 'AIR',
         //Mark Additions
-        method: 'Relative Humidity %',
+        inputType: 'relativeHumidity',
         conditionLocation: 4,
         //Method 2 variables
-        gasSpecificGravity: 1,
+        specificGravity: 1,
         wetBulbTemp: 119,
         relativeHumidity: 0,
-        gasDewpointTemp: 0,
+        dewPoint: 0,
+        specificHeatGas: 10
       },
       FanShaftPower: {
         isMethodOne: false,

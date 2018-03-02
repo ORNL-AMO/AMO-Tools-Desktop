@@ -29,6 +29,7 @@ export class Fsat203Component implements OnInit {
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
+    this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
     this.checkBasics();
     this.checkGasDensity();

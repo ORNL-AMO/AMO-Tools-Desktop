@@ -1,25 +1,49 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity } from '../shared/models/fans';
 
-declare var fanAddon: any; 
+declare var fanAddon: any;
 
 @Injectable()
 export class FsatService {
 
 
-  mainTab:BehaviorSubject<string>
+  mainTab: BehaviorSubject<string>
   stepTab: BehaviorSubject<string>;
-  constructor() { 
+  constructor() {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
   }
 
-  test(){
+  test() {
     console.log(fanAddon);
   }
 
-  fan203(input: Fan203Inputs){
+  fan203(input: Fan203Inputs) {
     return fanAddon.fan203(input);
+  }
+
+  getBaseGasDensityDewPoint(inputs: BaseGasDensity): number {
+    return fanAddon.getBaseGasDensityDewPoint(inputs);
+  }
+
+  getBaseGasDensityRelativeHumidity(inputs: BaseGasDensity): number {
+    return fanAddon.getBaseGasDensityRelativeHumidity(inputs);
+  }
+
+  getBaseGasDensityWetBulb(inputs: BaseGasDensity): number {
+    debugger
+    let inp = {
+      dryBulbTemp: 123,
+      staticPressure: -17.6,
+      barometricPressure: 26.57,
+      gasDensity: 0.0547,
+      gasType: 'AIR',
+      inputType: 'wetBulb',
+      wetBulbTemp: 110,
+      specificGravity: 1.05,
+      specificHeatGas: 1.03
+    };
+    return fanAddon.getBaseGasDensityWetBulb(inp);
   }
 }
