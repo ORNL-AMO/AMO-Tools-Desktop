@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fan203Inputs, FanRatedInfo, Plane, FanShaftPower } from '../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo, Plane, FanShaftPower, PlaneData } from '../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../shared/models/fans';
 
@@ -176,6 +176,18 @@ export class Fsat203Service {
     return obj;
   }
 
+
+  getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
+    let form = this.formBuilder.group({
+      variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
+      globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
+      estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
+      totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, Validators.required],
+      totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required]
+    })
+    return form;
+  }
+
   getMockData(): Fan203Inputs {
     let inputs: Fan203Inputs = {
       FanRatedInfo: {
@@ -194,6 +206,9 @@ export class Fsat203Service {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: 0,
         totalPressureLossBtwnPlanes2and5: 0.627,
+        variationInBarometricPressure: true,
+        globalBarometricPressure: 26.57,
+        estimate2and5TempFrom1: false,
         FanInletFlange: {
           planeType: 'Rectangular',
           width: 143.63,

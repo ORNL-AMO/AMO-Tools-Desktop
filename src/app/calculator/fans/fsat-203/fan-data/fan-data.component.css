@@ -8,6 +8,11 @@
     color: #B03A2E;
 }
 
+.fa-info{
+    color: white;
+    display: inherit;
+}
+
 .tabs.subtabs.fsat .step-error .step-number{
     background: #B03A2E !important;
 }

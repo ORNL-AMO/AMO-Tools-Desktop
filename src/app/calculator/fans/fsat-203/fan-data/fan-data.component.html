@@ -14,6 +14,11 @@
   <div class="col">
     <nav class="hide-print text-center data-steps">
       <ul class="tabs subtabs progress-tabs fsat">
+        <li [ngClass]="{'active': stepTab == 'plane-info'}">
+          <a (click)="changeStepTab('plane-info')">
+            <span class="step-number"><i class="fa fa-info"></i></span>
+          </a>
+        </li>
         <li [ngClass]="{'active': stepTab == '1', 'step-error': !plane1Done}">
           <a (click)="changeStepTab('1')">
             <span class="step-number">1</span>
@@ -55,6 +60,8 @@
 </div>
 <div class="row">
   <div class="col" *ngIf="!showReadings">
+    <!-- plane info -->
+    <app-plane-info *ngIf="stepTab == 'plane-info'" [planeData]="planeData"></app-plane-info>
     <!--1-->
     <app-fan-data-form *ngIf="stepTab == '1'" [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'" [planeData]="planeData.FanInletFlange"
       (emitSave)="savePlane($event, '1')"></app-fan-data-form>
