@@ -15,3 +15,7 @@
 .data-steps .step-number{
     margin-right: 0px;
 }
+.area-val{
+    font-size: small;
+    text-align: center;
+}

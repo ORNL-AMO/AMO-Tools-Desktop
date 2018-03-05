@@ -67,4 +67,18 @@
       <span class="input-group-addon units">in. Hg</span>
     </div>
   </div>
+
+  <!--3 velocity data-->
+  <div class="form-group" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
+    <label for="pv3">Pv3</label>
+    <div class="area-val">
+      {{velocityData.pv3 | sigFigs: '6'}} in. wg
+    </div>
+  </div>
+  <div class="form-group" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
+    <label for="percent75Rule">Points Satisfying 75% Rule</label>
+    <div class="area-val">
+      {{velocityData.percent75Rule | sigFigs: '6'}} %
+    </div>
+  </div>
 </form>

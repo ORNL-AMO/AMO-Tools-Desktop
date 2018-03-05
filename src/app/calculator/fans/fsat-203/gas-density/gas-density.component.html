@@ -96,7 +96,7 @@
     <label for="gasDensity">Gas Density (P
       <sub>0</sub>)</label>
     <div class="density-val" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
-      {{fanGasDensity.gasDensity}} lb/ft<sup>3</sup>
+      {{fanGasDensity.gasDensity | sigFigs: '6'}} lb/ft<sup>3</sup>
     </div>
     <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
       <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity" id="gasDensity" (input)="save()"

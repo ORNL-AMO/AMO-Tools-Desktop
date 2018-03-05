@@ -18,6 +18,10 @@ export class FanDataFormComponent implements OnInit {
   planeDescription: string;
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
+  @Input()
+  velocityData: {pv3: number, percent75Rule: number};
+
+
   dataForm: FormGroup;
   constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 

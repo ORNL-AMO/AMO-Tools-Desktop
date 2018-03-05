@@ -64,7 +64,7 @@ export class GasDensityComponent implements OnInit {
 
   calcDensityDewPoint() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })

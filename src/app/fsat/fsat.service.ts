@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, PlaneData, Plane } from '../shared/models/fans';
 
 declare var fanAddon: any;
 
@@ -32,18 +32,22 @@ export class FsatService {
   }
 
   getBaseGasDensityWetBulb(inputs: BaseGasDensity): number {
-    debugger
-    let inp = {
-      dryBulbTemp: 123,
-      staticPressure: -17.6,
-      barometricPressure: 26.57,
-      gasDensity: 0.0547,
-      gasType: 'AIR',
-      inputType: 'wetBulb',
-      wetBulbTemp: 110,
-      specificGravity: 1.05,
-      specificHeatGas: 1.03
-    };
-    return fanAddon.getBaseGasDensityWetBulb(inp);
+    // let inp = {
+    //   dryBulbTemp: 123,
+    //   staticPressure: -17.6,
+    //   barometricPressure: 26.57,
+    //   gasDensity: 0.0547,
+    //   gasType: 'AIR',
+    //   inputType: 'wetBulb',
+    //   wetBulbTemp: 110,
+    //   specificGravity: 1.05,
+    //   specificHeatGas: 1.03
+    // };
+    return fanAddon.getBaseGasDensityWetBulb(inputs);
+  }
+
+
+  getVelocityPressureData(inputs: Plane){
+    return fanAddon.getVelocityPressureData(inputs);
   }
 }

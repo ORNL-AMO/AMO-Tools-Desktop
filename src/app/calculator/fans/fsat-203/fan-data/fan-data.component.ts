@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared/models/fans';
 
 import * as _ from 'lodash';
+import { FsatService } from '../../../../fsat/fsat.service';
 @Component({
   selector: 'app-fan-data',
   templateUrl: './fan-data.component.html',
@@ -36,14 +37,31 @@ export class FanDataComponent implements OnInit {
 
   stepTab: string = '1';
   showReadings: boolean = false;
-  constructor() { }
+  velocityData: {pv3: number, percent75Rule: number};
+  constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
+    this.velocityData = {
+      pv3: 0,
+      percent75Rule: 0
+    }
   }
 
   changeStepTab(str: string) {
     if(str != '3a' && str != '3b' && str != '3c' && this.showReadings){
       this.toggleReadings();
+    }
+
+    if(str == '3a'){
+      this.calcVelocityData(this.planeData.FlowTraverse);
+    }
+
+    if(str == '3b'){
+      this.calcVelocityData(this.planeData.AddlTraversePlanes[0]);
+    }
+
+    if(str == '3c'){
+      this.calcVelocityData(this.planeData.AddlTraversePlanes[1]);
     }
     this.stepTab = str;
   }
@@ -53,10 +71,18 @@ export class FanDataComponent implements OnInit {
   }
 
   savePlane(plane: Plane, str: string){
+    if(str == '3a' || str == '3b' || str == '3c'){
+      this.calcVelocityData(plane);
+    }
     this.emitSave.emit({plane: plane, planeNumber: str})
   }
 
+  calcVelocityData(plane: Plane){
+    this.velocityData = this.fsatService.getVelocityPressureData(plane)
+  }
+
   saveTraversePlane(plane: Plane, str: string){
+    this.calcVelocityData(plane);
     this.emitSaveTraverse.emit({plane: plane, planeNumber: str})
   }
 }
