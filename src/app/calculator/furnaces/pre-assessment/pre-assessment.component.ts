@@ -24,6 +24,8 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
+  @Input()
+  inRollup: boolean;
   @ViewChild('container') container: ElementRef;
 
   preAssessments: Array<PreAssessment>;

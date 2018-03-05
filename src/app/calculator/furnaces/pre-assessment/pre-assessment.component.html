@@ -43,7 +43,8 @@
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div *ngIf="results.length != 0">
               <h5>Process Heating Equipment - Energy Distribution</h5>
-              <app-pre-assessment-graph [results]="results" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
+              <!-- <app-pre-assessment-graph [results]="results" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph> -->
+              <app-pre-assessment-graph [settings]="settings" [preAssessments]="preAssessments" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
             </div>
             <div class="col-11 no-data" *ngIf="results.length == 0">
               <h5>Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</h5>

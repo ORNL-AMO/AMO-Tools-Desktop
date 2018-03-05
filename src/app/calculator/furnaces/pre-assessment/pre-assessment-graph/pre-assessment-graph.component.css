@@ -2,4 +2,12 @@
 
 .fa-download {
     left: 50px;
+    position: initial;
+}
+
+
+@media print {
+    .fa-download {
+        display: none;
+    }
 }

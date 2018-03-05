@@ -6,6 +6,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { Calculator } from '../../../shared/models/calculators';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -16,6 +17,10 @@ export class PhastRollupGraphsComponent implements OnInit {
   settings: Settings
   @Input()
   printView: boolean;
+  @Input()
+  calculator: Calculator;
+  // @Input()
+  // preAssessmentData: 
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;

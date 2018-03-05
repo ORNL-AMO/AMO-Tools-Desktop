@@ -22,7 +22,7 @@ import { IndexedDbModule } from './indexedDb/indexedDb.module';
     SharedModule,
     CoreModule,
     routing,
-    IndexedDbModule,
+    IndexedDbModule
   ],
   providers: [
     appRoutingProviders

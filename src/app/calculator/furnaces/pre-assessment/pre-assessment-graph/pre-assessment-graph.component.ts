@@ -4,6 +4,10 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { PreAssessment } from '../pre-assessment';
+import { PreAssessmentService } from '../pre-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
+import { Calculator } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -12,9 +16,19 @@ import * as c3 from 'c3';
 })
 export class PreAssessmentGraphComponent implements OnInit {
   @Input()
-  results: Array<any>;
+  settings: Settings;
+  @Input()
+  preAssessments: Array<PreAssessment>;
   @Input()
   chartColors: Array<string>;
+  @Input()
+  printView: boolean;
+  @Input()
+  inRollup: boolean;
+
+  @Input()
+  calculators: Array<Calculator>;
+
 
   @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
@@ -25,14 +39,28 @@ export class PreAssessmentGraphComponent implements OnInit {
   chartContainerHeight: number;
   chartContainerWidth: number;
 
+  showLegend: boolean;
+
   window: any;
   doc: any;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    this.getData();
 
+    if (!this.printView) {
+      this.printView = false;
+    }
+
+    if (this.inRollup) {
+      this.showLegend = false;
+    }
+    else {
+      this.showLegend = true;
+    }
+
+    this.chartColors = graphColors;
+    this.getData();
   }
 
   ngOnChanges(changes: SimpleChange) {
@@ -50,19 +78,39 @@ export class PreAssessmentGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.chartContainerWidth = this.window.innerWidth * 0.41;
+    this.chartContainerWidth = (this.window.innerWidth - 30) * .28;
     this.chartContainerHeight = 280;
+
+    if (this.printView) {
+      this.chartContainerWidth = 500;
+    }
+
     this.initChart();
   }
 
+  //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
+
+    // console.log("pre-assessment-graph-component getData()");
+
+    if (this.calculators) {
+      // console.log('calculators exist');
+
+      if (this.calculators[0].preAssessments) {
+        this.preAssessments = this.calculators[0].preAssessments;
+      }
+    }
     this.columnData = new Array();
-    this.results.forEach(val => {
-      let tmpArray = new Array();
-      tmpArray.push(val.name + ": " + val.percent.toFixed(2).toString() + "%");
-      tmpArray.push(val.percent.toFixed(2));
-      this.columnData.unshift(tmpArray);
-    });
+    if (this.preAssessments) {
+      let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
+      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
+      for (let i = 0; i < tmpArray.length; i++) {
+        this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
+      }
+    }
+    else {
+      // console.log("NO PRE ASSESSMENTS");
+    }
   }
 
   initChart() {
@@ -80,7 +128,7 @@ export class PreAssessmentGraphComponent implements OnInit {
         pattern: this.chartColors
       },
       legend: {
-        show: true,
+        show: this.showLegend,
         position: 'right'
       },
       tooltip: {

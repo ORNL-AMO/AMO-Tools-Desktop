@@ -2,11 +2,28 @@
 
   <div class="row justify-content-center">
     <div class="col-12">
-      <!-- <div class="header"> -->
-        <h3>PHAST Rollup Report</h3>
-      <!-- </div> -->
+      <h3>PHAST Rollup Report</h3>
     </div>
   </div>
+
+  <div class="row justify-content-center" *ngIf="showPreAssessment">
+    <div class="col-12">
+      <div class="header">
+        <h5>Pre Assessment Summary</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-pre-assessment-graph [printView]="true" [settings]="settings" [calculators]="calculators" [inRollup]="true"></app-pre-assessment-graph>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-phast-rollup-pre-assessment-table [printView]="true" [settings]="settings" [calculators]="calculators"></app-phast-rollup-pre-assessment-table>
+    </div>
+  </div>
+
   <div class="row justify-content-center">
     <div class="col-12">
       <div class="header">
