@@ -11,6 +11,8 @@ import { PneumaticAirComponent } from './pneumatic-air/pneumatic-air.component';
 import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pneumatic-air-form.component';
 import { PipeSizingComponent } from './pipe-sizing/pipe-sizing.component';
 import { PipeSizingFormComponent } from './pipe-sizing/pipe-sizing-form/pipe-sizing-form.component';
+import { AirVelocityComponent } from './air-velocity/air-velocity.component';
+import { AirVelocityFormComponent } from './air-velocity/air-velocity-form/air-velocity-form.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { PipeSizingFormComponent } from './pipe-sizing/pipe-sizing-form/pipe-siz
     PneumaticAirComponent,
     PneumaticAirFormComponent,
     PipeSizingComponent,
-    PipeSizingFormComponent
+    PipeSizingFormComponent,
+    AirVelocityComponent,
+    AirVelocityFormComponent
   ],
   exports: [
     CompressedAirComponent
