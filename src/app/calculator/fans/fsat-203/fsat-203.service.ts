@@ -19,6 +19,7 @@ export class Fsat203Service {
       includesEvase: [obj.includesEvase, Validators.required],
       upDownStream: [obj.upDownStream, Validators.required],
       traversePlanes: [obj.traversePlanes, Validators.required],
+      globalBarometricPressure: [obj.globalBarometricPressure, Validators.required]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
     })
     return form;
@@ -36,6 +37,7 @@ export class Fsat203Service {
       includesEvase: form.controls.includesEvase.value,
       upDownStream: form.controls.upDownStream.value,
       traversePlanes: form.controls.traversePlanes.value,
+      globalBarometricPressure: form.controls.globalBarometricPressure.value
       //  planarBarometricPressure: form.controls.planarBarometricPressure.value
     }
     return obj;
@@ -179,8 +181,8 @@ export class Fsat203Service {
 
   getPlaneInfoFormFromObj(obj: PlaneData): FormGroup {
     let form = this.formBuilder.group({
-      variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
-      globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
+      // variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
+      // globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
       estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, Validators.required],
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required]
@@ -200,14 +202,15 @@ export class Fsat203Service {
         driveType: 'Direct Drive',
         includesEvase: 'Yes',
         upDownStream: 'Upstream',
-        traversePlanes: 2
+        traversePlanes: 2,
+        globalBarometricPressure: 26.57,
       },
       PlaneData: {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: 0,
         totalPressureLossBtwnPlanes2and5: 0.627,
-        variationInBarometricPressure: true,
-        globalBarometricPressure: 26.57,
+        //  variationInBarometricPressure: true,
+        // globalBarometricPressure: 26.57,
         estimate2and5TempFrom1: false,
         FanInletFlange: {
           planeType: 'Rectangular',

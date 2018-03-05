@@ -68,11 +68,11 @@
     <div class="form-group">
       <label for="phase1Voltage">Voltage</label>
       <input name="phase1Voltage" type="number" step="any" class="form-control" formControlName="phase1Voltage" id="phase1Voltage"
-        (input)="save()" (focus)="focusField('phase1Voltage')" onfocus="this.select();">
+        (input)="calcAverageVoltage()" (focus)="focusField('phase1Voltage')" onfocus="this.select();">
     </div>
     <div class="form-group">
       <label for="phase1Amps">Amps</label>
-      <input name="phase1Amps" type="number" step="any" class="form-control" formControlName="phase1Amps" id="phase1Amps" (input)="save()"
+      <input name="phase1Amps" type="number" step="any" class="form-control" formControlName="phase1Amps" id="phase1Amps" (input)="calcAverageAmps()"
         (focus)="focusField('phase1Amps')" onfocus="this.select();">
     </div>
     <div class="form-group">
@@ -84,23 +84,36 @@
     <div class="form-group">
       <label for="phase2Voltage">Voltage</label>
       <input name="phase2Voltage" type="number" step="any" class="form-control" formControlName="phase2Voltage" id="phase2Voltage"
-        (input)="save()" (focus)="focusField('phase2Voltage')" onfocus="this.select();">
+        (input)="calcAverageVoltage()" (focus)="focusField('phase2Voltage')" onfocus="this.select();">
     </div>
     <div class="form-group">
       <label for="phase2Amps">Amps</label>
-      <input name="phase2Amps" type="number" step="any" class="form-control" formControlName="phase2Amps" id="phase2Amps" (input)="save()"
+      <input name="phase2Amps" type="number" step="any" class="form-control" formControlName="phase2Amps" id="phase2Amps" (input)="calcAverageAmps()"
         (focus)="focusField('phase2Amps')" onfocus="this.select();">
     </div>
     <label class="group-label group-label-2">Phase 3</label>
     <div class="form-group">
       <label for="phase3Voltage">Voltage</label>
       <input name="phase3Voltage" type="number" step="any" class="form-control" formControlName="phase3Voltage" id="phase3Voltage"
-        (input)="save()" (focus)="focusField('phase3Voltage')" onfocus="this.select();">
+        (input)="calcAverageVoltage()" (focus)="focusField('phase3Voltage')" onfocus="this.select();">
     </div>
     <div class="form-group">
       <label for="phase3Amps">Amps</label>
-      <input name="phase3Amps" type="number" step="any" class="form-control" formControlName="phase3Amps" id="phase3Amps" (input)="save()"
+      <input name="phase3Amps" type="number" step="any" class="form-control" formControlName="phase3Amps" id="phase3Amps" (input)="calcAverageAmps()"
         (focus)="focusField('phase3Amps')" onfocus="this.select();">
+    </div>
+    <label class="group-label group-label-2">Averages</label>
+    <div class="form-group">
+      <label for="fanSpeedCorrected">Voltage</label>
+      <div class="area-val">
+        {{fanShaftPower.voltage | sigFigs: '6'}}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="fanSpeedCorrected">Amps</label>
+      <div class="area-val">
+        {{fanShaftPower.amps | sigFigs: '6'}}
+      </div>
     </div>
   </div>
   <label class="group-label group-label-2">Motor and Drive Effiicencies</label>

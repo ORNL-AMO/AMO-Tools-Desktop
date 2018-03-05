@@ -14,6 +14,7 @@ export interface FanRatedInfo {
   includesEvase: string;
   upDownStream: string;
   traversePlanes: number;
+  globalBarometricPressure: number;
 }
 
 export interface Plane {
@@ -40,8 +41,8 @@ export interface PlaneData {
   plane5upstreamOfPlane2: boolean;
   totalPressureLossBtwnPlanes1and4: number;
   totalPressureLossBtwnPlanes2and5: number;
-  variationInBarometricPressure: boolean;
-  globalBarometricPressure: number;
+  //variationInBarometricPressure: boolean;
+  // globalBarometricPressure: number;
   estimate2and5TempFrom1: boolean;
   FanInletFlange: Plane;
   FanEvaseOrOutletFlange: Plane;

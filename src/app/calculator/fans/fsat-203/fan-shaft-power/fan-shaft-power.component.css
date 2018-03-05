@@ -16,3 +16,8 @@ label{
 .fa-exclamation-circle{
     color: #B03A2E;
 }
+
+.area-val{
+    font-size: small;
+    text-align: center;
+}

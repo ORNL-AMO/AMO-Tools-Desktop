@@ -49,7 +49,7 @@ export class Fsat203Component implements OnInit {
 
   calculate() {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
-      //this.results = this.fsatService.fan203(this.inputs);
+      this.results = this.fsatService.fan203(this.inputs);
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,
