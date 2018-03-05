@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {StandaloneService} from "../../standalone.service";
-import {AirVelocityInput} from "../../../shared/models/standalone";
+import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-air-velocity',
@@ -10,7 +10,7 @@ import {AirVelocityInput} from "../../../shared/models/standalone";
 export class AirVelocityComponent implements OnInit {
 
   inputs: AirVelocityInput;
-  airVelocityOutput: number;
+  outputs: PipeSizes;
   constructor() { }
 
   ngOnInit() {
@@ -19,9 +19,25 @@ export class AirVelocityComponent implements OnInit {
       pipePressure: 0,
       atmosphericPressure: 0,
     };
+    this.outputs = {
+      oneHalf: 0,
+      threeFourths: 0,
+      one: 0,
+      oneAndOneFourth: 0,
+      oneAndOneHalf: 0,
+      two: 0,
+      twoAndOneHalf: 0,
+      three: 0,
+      threeAndOneHalf: 0,
+      four: 0,
+      five: 0,
+      six: 0,
+    };
+    // this.getAirVelocity();
+    // console.log(this.airVelocityOutput);
   }
-  // getAirVelocity () {
-  //   this.airVelocityOutput = StandaloneService.airVelocity(this.inputs);
-  // }
+  getAirVelocity (inputs: AirVelocityInput) {
+    this.outputs = StandaloneService.airVelocity(inputs);
+  }
 
 }

@@ -1,3 +1,129 @@
-<p>
-  air-velocity-form works!
-</p>
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="airFlow">Air Flow</label>
+      <div class="input-group">
+        <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">SCFM</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pipePressure">Pipe Pressure</label>
+      <div class="input-group">
+        <input name="pipePressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.pipePressure"
+               id="pipePressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psig</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="atmosphericPressure">Atmospheric Pressure</label>
+      <div class="input-group">
+        <input name="atmosphericPressure" class="form-control" type="number" step="any"
+               [(ngModel)]="inputs.atmosphericPressure" id="atmosphericPressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="header">
+      <h3>Compressed Air Velocity in the Piping</h3>
+    </div>
+    <div class="row">
+      <!--First row-->
+      <div class="col-6">
+        <label class="bold">Pipe Size (in)</label>
+        <div class="form-group">
+          <label class="bold"><sup>1</sup>&frasl;<sub>2</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.oneHalf"><strong>{{outputs.oneHalf | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.oneHalf"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold"><sup>3</sup>&frasl;<sub>4</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.threeFourths"><strong>{{outputs.threeFourths | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.threeFourths"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">1</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.one"><strong>{{outputs.one | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.one"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">1<sup>1</sup>&frasl;<sub>4</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.oneAndOneFourth"><strong>{{outputs.oneAndOneFourth | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.oneAndOneFourth"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">1<sup>1</sup>&frasl;<sub>2</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.oneAndOneHalf"><strong>{{outputs.oneAndOneHalf | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.one"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">2</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.two"><strong>{{outputs.two | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.two"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+      </div>
+      <!--Second row-->
+      <div class="col-6">
+        <label class="bold">Pipe Size (in)</label>
+        <div class="form-group">
+          <label class="bold">2<sup>1</sup>&frasl;<sub>2</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.twoAndOneHalf"><strong>{{outputs.twoAndOneHalf | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.twoAndOneHalf"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">3</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.three"><strong>{{outputs.three | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.three"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">3<sup>1</sup>&frasl;<sub>2</sub></label>
+          <div class="text-center small">
+            <span *ngIf="outputs.threeAndOneHalf"><strong>{{outputs.threeAndOneHalf | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.threeAndOneHalf"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">4</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.four"><strong>{{outputs.four | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.four"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">5</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.five"><strong>{{outputs.five | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.five"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="bold">6</label>
+          <div class="text-center small">
+            <span *ngIf="outputs.six"><strong>{{outputs.six | number:'1.0-2'}} ft/s</strong></span>
+            <span *ngIf="!outputs.six"><strong>&mdash; &mdash;</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

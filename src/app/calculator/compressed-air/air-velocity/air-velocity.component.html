@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-air-velocity-form></app-air-velocity-form>
+            <app-air-velocity-form [inputs]="inputs" [outputs]="outputs" (calculate)="getAirVelocity($event)"></app-air-velocity-form>
           </div>
         </div>
       </div>
