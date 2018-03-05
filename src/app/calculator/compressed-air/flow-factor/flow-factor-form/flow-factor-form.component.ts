@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {BagMethodInput, PneumaticValve} from '../../../../shared/models/standalone';
+import {PneumaticValve} from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-flow-factor-form',

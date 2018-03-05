@@ -24,7 +24,7 @@
         <div class="form-group">
           <label class="small" for="grossHeat">Gross Heat</label>
           <div *ngIf="grossHeat"  class="text-center small">
-            {{grossHeat | sigFigs:'5'}} <span>{{resultsUnit}}</span>
+            {{grossHeat | sigFigs:'6'}} <span>{{resultsUnit}}</span>
           </div>
           <div *ngIf="!grossHeat" class="text-center small">
             &mdash; &mdash;
@@ -33,7 +33,7 @@
         <div class="form-group">
           <label class="small" for="systemLosses">System Losses</label>
           <div *ngIf="systemLosses"  class="text-center small">
-            {{systemLosses | sigFigs:'5'}} <span>{{resultsUnit}}</span>
+            {{systemLosses | sigFigs:'6'}} <span>{{resultsUnit}}</span>
           </div>
           <div *ngIf="!systemLosses" class="text-center small">
             &mdash; &mdash;
