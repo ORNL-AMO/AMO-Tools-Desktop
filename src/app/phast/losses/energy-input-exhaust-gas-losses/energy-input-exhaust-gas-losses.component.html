@@ -51,7 +51,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
         <div *ngIf="loss.exhaustGas" class="text-center small font-weight-bold">
-          {{loss.exhaustGas | sigFigs:'5'}}
+          {{loss.exhaustGas | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.exhaustGas" class="text-center small font-weight-bold">

@@ -38,7 +38,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">Heat Delivered</label>
         <div *ngIf="loss.results.heatDelivered" class="text-center small font-weight-bold">
-          {{loss.results.heatDelivered | sigFigs:'5'}}
+          {{loss.results.heatDelivered | sigFigs:'6'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
@@ -49,7 +49,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">Total Chemical Energy Input</label>
         <div *ngIf="loss.results.totalChemicalEnergyInput" class="text-center small font-weight-bold">
-          {{loss.results.totalChemicalEnergyInput | sigFigs:'5'}}
+          {{loss.results.totalChemicalEnergyInput | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.results.totalChemicalEnergyInput" class="text-center small font-weight-bold">
