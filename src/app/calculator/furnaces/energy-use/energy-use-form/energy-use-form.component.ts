@@ -1,8 +1,8 @@
-import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
-import {SuiteDbService} from '../../../../suiteDb/suite-db.service';
-import {Settings} from '../../../../shared/models/settings';
-import {FlowCalculations, FlowCalculationsOutput} from '../../../../shared/models/phast/flowCalculations';
-import {ConvertUnitsService} from "../../../../shared/convert-units/convert-units.service";
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
+import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
 
 @Component({
   selector: 'app-energy-use-form',
@@ -102,11 +102,8 @@ export class EnergyUseFormComponent implements OnInit {
     } else if (this.flowCalculations.gasType == 2) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 0.9669;
-    } else if (this.flowCalculations.gasType == 3 && this.settings.unitsOfMeasure == 'Imperial') {
+    } else if (this.flowCalculations.gasType == 3) {
       this.flowCalculations.gasHeatingValue = 325;
-      this.flowCalculations.specificGravity = 0.0696;
-    } else if (this.flowCalculations.gasType == 3 && this.settings.unitsOfMeasure == 'Metric') {
-      this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(325).from('btuSCF').to('kJNm3'), 2);
       this.flowCalculations.specificGravity = 0.0696;
     } else if (this.flowCalculations.gasType == 4) {
       this.flowCalculations.gasHeatingValue = 0;
@@ -117,6 +114,10 @@ export class EnergyUseFormComponent implements OnInit {
     } else if (this.flowCalculations.gasType == 6) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 0;
+    }
+
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuSCF').to('kJNm3'), 2);
     }
     this.calculate();
   }
