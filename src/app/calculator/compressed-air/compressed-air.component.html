@@ -61,6 +61,9 @@
             <a class="click-item" (click)="showTool('air-velocity')">Air Velocity</a>
             <p>
               Use air velocity calculator to calculate compressed air velocity in the piping.
+            <a class="click-item" (click)="showTool('operation-cost')">Operation Cost Calculations</a>
+            <p>
+              Use operation cost calculator to calculate operation cost.
             </p>
           </div>
         </div>
@@ -84,4 +87,6 @@
 </div>
 <div class="stand-alone-calc" *ngIf="getSelectedTool() == 'air-velocity'">
   <app-air-velocity></app-air-velocity>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'operation-cost'">
+  <app-operating-cost></app-operating-cost>
 </div>

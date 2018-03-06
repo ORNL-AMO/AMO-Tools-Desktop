@@ -62,7 +62,7 @@
         <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Gas'">{{loss.gasCoolingForm.controls.name.value}} Total</label>
         <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Liquid'">{{loss.liquidCoolingForm.controls.name.value}} Total</label>
         <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
-          {{loss.heatLoss| sigFigs:'5'}}
+          {{loss.heatLoss| sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">

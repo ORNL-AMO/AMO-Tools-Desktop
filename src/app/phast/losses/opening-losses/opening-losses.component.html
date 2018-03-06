@@ -37,7 +37,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
         <div *ngIf="loss.totalOpeningLosses" class="small text-center font-weight-bold">
-          {{loss.totalOpeningLosses | sigFigs:'5'}}
+          {{loss.totalOpeningLosses | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.totalOpeningLosses" class="text-center small font-weight-bold">

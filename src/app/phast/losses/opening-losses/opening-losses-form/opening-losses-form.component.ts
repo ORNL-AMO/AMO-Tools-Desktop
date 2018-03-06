@@ -93,6 +93,7 @@ export class OpeningLossesFormComponent implements OnInit {
     this.openingLossesForm.patchValue({
       viewFactor: this.roundVal(viewFactor, 3)
     });
+    this.startSavePolling();
   }
 
   roundVal(val: number, digits: number): number {
@@ -178,8 +179,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
         let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
-
-        this.calculate.emit(true);
+        this.startSavePolling();
       }
     } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
@@ -194,8 +194,7 @@ export class OpeningLossesFormComponent implements OnInit {
           heightFeet = this.convertUnitsService.value(heightInches).from(smallUnit).to(largeUnit);
         }
         this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.controls.numberOfOpenings.value;
-
-        this.calculate.emit(true);
+        this.startSavePolling();
       }
     } else {
       this.totalArea = 0.0;
