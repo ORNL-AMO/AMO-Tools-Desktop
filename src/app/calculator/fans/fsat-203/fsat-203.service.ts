@@ -15,7 +15,6 @@ export class Fsat203Service {
       fanSpeedCorrected: [obj.fanSpeedCorrected, Validators.required],
       densityCorrected: [obj.densityCorrected, Validators.required],
       pressureBarometricCorrected: [obj.pressureBarometricCorrected, Validators.required],
-      driveType: [obj.driveType, Validators.required],
       includesEvase: [obj.includesEvase, Validators.required],
       upDownStream: [obj.upDownStream, Validators.required],
       traversePlanes: [obj.traversePlanes, Validators.required],
@@ -33,7 +32,6 @@ export class Fsat203Service {
       densityCorrected: form.controls.densityCorrected.value,
       pressureBarometricCorrected: form.controls.pressureBarometricCorrected.value,
       //Mark additions
-      driveType: form.controls.driveType.value,
       includesEvase: form.controls.includesEvase.value,
       upDownStream: form.controls.upDownStream.value,
       traversePlanes: form.controls.traversePlanes.value,
@@ -145,6 +143,9 @@ export class Fsat203Service {
       efficiencyMotor: [obj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100)]],
       efficiencyVFD: [obj.efficiencyVFD, [Validators.required, Validators.min(0), Validators.max(100)]],
       efficiencyBelt: [obj.efficiencyBelt, [Validators.required, Validators.min(0), Validators.max(100)]],
+      driveType: [obj.driveType],
+      efficiencyClass: [obj.efficiencyClass],
+      frequency: [obj.frequency]
     })
     return form;
   }
@@ -175,6 +176,9 @@ export class Fsat203Service {
     obj.efficiencyVFD = form.controls.efficiencyVFD.value;
     obj.efficiencyBelt = form.controls.efficiencyBelt.value;
     obj.powerFactorAtLoad = form.controls.phase1PowerFactor.value;
+    obj.driveType = form.controls.driveType.value;
+    obj.frequency = form.controls.frequency.value;
+    obj.efficiencyClass = form.controls.efficiencyClass.value;
     return obj;
   }
 
@@ -195,7 +199,7 @@ export class Fsat203Service {
     obj.totalPressureLossBtwnPlanes1and4 = form.controls.totalPressureLossBtwnPlanes1and4.value;
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
     return obj;
-    
+
   }
 
   getMockData(): Fan203Inputs {
@@ -207,7 +211,6 @@ export class Fsat203Service {
         densityCorrected: 0.05,
         pressureBarometricCorrected: 26.28,
         //Mark additions
-        driveType: 'Direct Drive',
         includesEvase: 'Yes',
         upDownStream: 'Upstream',
         traversePlanes: 2,
@@ -342,7 +345,10 @@ export class Fsat203Service {
         phase3: {
           voltage: 4200,
           amps: 205
-        }
+        },
+        driveType: 'Direct Drive',
+        efficiencyClass: 'Standard Efficiency',
+        frequency: '50 Hz'
       }
     };
 

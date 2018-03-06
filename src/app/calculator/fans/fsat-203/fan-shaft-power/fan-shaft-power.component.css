@@ -21,3 +21,21 @@ label{
     font-size: small;
     text-align: center;
 }
+
+
+.hide-text{
+    opacity: 0;
+    /* padding-top: 0px;
+    padding-bottom: 0px; */
+}
+
+
+.disabled-input{
+    text-align: center;
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;
+}
+
+.amp-volt-input{
+    text-align: center;
+}

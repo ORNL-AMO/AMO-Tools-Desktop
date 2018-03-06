@@ -23,12 +23,6 @@
   </div>
 
   <div class="form-group">
-    <label for="driveType">Drive</label>
-    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="save()" (focus)="focusField('driveType')">
-      <option *ngFor="let drive of driveTypes" [ngValue]="drive">{{drive}}</option>
-    </select>
-  </div>
-  <div class="form-group">
     <label for="globalBarometricPressure">Barometric Pressure (Pb)</label>
     <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
       id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">

@@ -3,6 +3,8 @@ import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanSh
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-fsat-203',
@@ -26,9 +28,14 @@ export class Fsat203Component implements OnInit {
   shaftPowerDone: boolean = false;
 
   results: Fan203Results;
-  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service) { }
+
+  settings: Settings;
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.indexedDbService.getDirectorySettings(1).then(val => {
+      this.settings = val;
+    })
     //this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
     this.checkBasics();

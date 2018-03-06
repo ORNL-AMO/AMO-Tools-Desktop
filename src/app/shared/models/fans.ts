@@ -10,7 +10,6 @@ export interface FanRatedInfo {
   densityCorrected: number;
   pressureBarometricCorrected: number;
   //Mark additions
-  driveType: string;
   includesEvase: string;
   upDownStream: string;
   traversePlanes: number;
@@ -78,7 +77,7 @@ export interface FanShaftPower {
   efficiencyBelt: number;
   sumSEF: number;
   //mark additions
-  // method: string,
+  driveType: string;
   isVFD: string,
   mainsDataAvailable: string,
   ratedHP: number,
@@ -88,7 +87,9 @@ export interface FanShaftPower {
   vfdInput: number,
   phase1: MotorPhase,
   phase2: MotorPhase,
-  phase3: MotorPhase
+  phase3: MotorPhase,
+  efficiencyClass: string,
+  frequency: string
 }
 export interface MotorPhase {
   voltage: number,

@@ -19,13 +19,6 @@ export class FsatBasicsComponent implements OnInit {
 
   ratedInfoForm: FormGroup;
 
-  driveTypes: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
-  ];
-
   planes: Array<number> = [
     1, 2, 3
   ]
