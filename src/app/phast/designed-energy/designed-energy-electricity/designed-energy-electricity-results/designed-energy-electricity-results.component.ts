@@ -1,19 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
-import { Settings } from '../../../shared/models/settings';
+import { DesignedEnergyResults } from '../../../../shared/models/phast/designedEnergy';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-designed-energy-results',
-  templateUrl: './designed-energy-results.component.html',
-  styleUrls: ['./designed-energy-results.component.css']
+  selector: 'app-designed-energy-electricity-results',
+  templateUrl: './designed-energy-electricity-results.component.html',
+  styleUrls: ['./designed-energy-electricity-results.component.css']
 })
-export class DesignedEnergyResultsComponent implements OnInit {
+export class DesignedEnergyElectricityResultsComponent implements OnInit {
   @Input()
-  results: DesignedEnergyResults;
+  totalResults: DesignedEnergyResults;
+  @Input()
+  electricResults: DesignedEnergyResults;
+  @Input()
+  fuelResults: DesignedEnergyResults;
   @Input()
   settings: Settings;
-  @Input()
-  title: string;
   resultUnits: { energyPerMassUnit: string, energyPerTimeUnit: string, electricityUsedUnit: string } = {
     energyPerMassUnit: '',
     energyPerTimeUnit: '',
@@ -34,4 +36,5 @@ export class DesignedEnergyResultsComponent implements OnInit {
     }
     this.resultUnits.electricityUsedUnit = 'kW';
   }
+
 }
