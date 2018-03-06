@@ -8,6 +8,7 @@ import { PreAssessment } from '../pre-assessment';
 import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import { Calculator } from '../../../../shared/models/calculators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -27,12 +28,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   inRollup: boolean;
   @Input()
   toggleCalculate: boolean;
-  // @Input()
-  // ind: number;
-
-  //just use preAssessments array
-  // @Input()
-  // calculators: Array<Calculator>;
 
 
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -43,6 +38,8 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   columnData: Array<any>;
   chartContainerHeight: number;
   chartContainerWidth: number;
+
+  hideTooltip: boolean = false;
 
   showLegend: boolean;
 
@@ -66,28 +63,20 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     this.chartColors = graphColors;
     this.getData();
 
-    // this.preAssessments.updateGraph.subscribe(val => {
 
-    // })
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    //console.log("ngOnChanges");
-    console.log(changes);
     if (changes) {
-      if(changes.toggleCalculate){
-        console.log('calculate graph')
+      if (changes.toggleCalculate) {
         this.getData();
-        this.updateChart();
+        if (this.firstChange) {
+          this.firstChange = !this.firstChange;
+        }
+        else if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
+          this.initChart();
+        }
       }
-      // console.log("changes");
-      // this.getData();
-      // if (this.firstChange) {
-      //   this.firstChange = !this.firstChange;
-      // }
-      // else {
-      //   this.initChart();
-      // }
     }
   }
 
@@ -101,18 +90,13 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     if (this.printView) {
       this.chartContainerWidth = 500;
     }
-    this.initChart();
+    if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
+      this.initChart();
+    }
   }
 
-  //debug
   //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
-
-    // if (this.calculators) {
-    //   if (this.calculators[this.ind].preAssessments) {
-    //     this.preAssessments = this.calculators[this.ind].preAssessments;
-    //   }
-    // }
     this.columnData = new Array();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
@@ -123,33 +107,11 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
   }
 
-  //real version
-  // //invoke preAssessment service to calculate result data from Array<PreAssessment>
-  // getData() {
-
-  //   // console.log("pre-assessment-graph-component getData()");
-
-  //   if (this.calculators) {
-  //     // console.log('calculators exist');
-
-  //     if (this.calculators[0].preAssessments) {
-  //       this.preAssessments = this.calculators[0].preAssessments;
-  //     }
-  //   }
-  //   this.columnData = new Array();
-  //   if (this.preAssessments) {
-  //     let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-  //     tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
-  //     for (let i = 0; i < tmpArray.length; i++) {
-  //       this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
-  //     }
-  //   }
-  //   else {
-  //     // console.log("NO PRE ASSESSMENTS");
-  //   }
-  // }
 
   initChart() {
+
+    this.hideTooltip = true;
+
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {

@@ -18,7 +18,7 @@
           <tbody>
             <tr *ngFor="let preAssessment of preAssessments; let i = index">
               <td class="name" [ngStyle]="{'border-left-color': data[i].color}">
-                {{preAssessment.name}}
+                {{data[i].name}}
               </td>
               <td>
                 {{preAssessment.type}}

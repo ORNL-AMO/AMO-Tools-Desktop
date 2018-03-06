@@ -69,7 +69,6 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   initAssessments() {
-    console.log("initAssessments()");
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
@@ -125,29 +124,7 @@ export class PreAssessmentComponent implements OnInit {
 
   calculate() {
     //this is fired when forms change
-    console.log('calculate()')
     this.toggleCalculate = !this.toggleCalculate;
-    //console.log("pre-assessment calculate()");
-    // if (this.calculator) {
-    //   this.calculator.preAssessments = this.preAssessments;
-    // }
-    // this.results = new Array<any>();
-    // let i = this.preAssessments.length - 1;
-    // this.preAssessments.forEach(assessment => {
-    //   if (assessment.type == 'Metered') {
-    //     if (assessment.meteredEnergy) {
-    //       this.calculateMetered(assessment);
-    //     }
-    //   } else if (assessment.type == 'Designed') {
-    //     if (assessment.designedEnergy) {
-    //       this.calculateDesigned(assessment);
-    //     }
-    //   }
-    // })
-    // let sum = this.getSum(this.results);
-    // this.results.forEach(result => {
-    //   result.percent = this.getResultPercent(result.value, sum);
-    // })
   }
 
   calculateMetered(assessment: PreAssessment) {
