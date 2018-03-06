@@ -46,7 +46,9 @@ export class PreAssessmentMeteredComponent implements OnInit {
     }
   }
 
+
   calculate(){
+    console.log("emit calculate()");
     this.emitCalculate.emit(true);
   }
 

@@ -23,37 +23,37 @@ export class PhastRollupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (typeof this.calculators === 'undefined') {
-      console.log("typeof this.calculators === 'undefined'");
-      this.showPreAssessment = false;
+    // if (typeof this.calculators === 'undefined') {
+    //   console.log("typeof this.calculators === 'undefined'");
+    //   this.showPreAssessment = false;
 
-    }
-    if (!this.calculators) {
-      console.log("CALCULATORS == FALSE");
-      this.showPreAssessment = false;
-    }
-    else {
-      console.log("CALCULATORS == true");
-      // console.log("this.calculators.length = " + this.calculators.length);
-      // if (typeof this.calculators[0].preAssessments === 'undefined') {
+    // }
+    // if (!this.calculators) {
+    //   console.log("CALCULATORS == FALSE");
+    //   this.showPreAssessment = false;
+    // }
+    // else {
+    //   console.log("CALCULATORS == true");
+    //   // console.log("this.calculators.length = " + this.calculators.length);
+    //   // if (typeof this.calculators[0].preAssessments === 'undefined') {
 
-      if (!this.calculators[0]) {
-        console.log("CALCULATORS[0] == FALSE");
-        this.showPreAssessment = false;
-      }
-      else {
-        if (!this.calculators[0].preAssessments) {
-          console.log("PreASSESSMENTS == FALSE");
-          this.showPreAssessment = false;
-        }
-        else {
-          console.log("PreASESSMENTS == true");
-          this.showPreAssessment = true;
-        }
-      }
+    //   if (!this.calculators[0]) {
+    //     console.log("CALCULATORS[0] == FALSE");
+    //     this.showPreAssessment = false;
+    //   }
+    //   else {
+    //     if (!this.calculators[0].preAssessments) {
+    //       console.log("PreASSESSMENTS == FALSE");
+    //       this.showPreAssessment = false;
+    //     }
+    //     else {
+    //       console.log("PreASESSMENTS == true");
+    //       this.showPreAssessment = true;
+    //     }
+    //   }
 
 
-    }
+    // }
 
     // console.log("phast-rollup component, showPreAssessment = " + this.showPreAssessment);
   }

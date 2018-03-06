@@ -16,15 +16,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of preAssessments; let i = index">
-              <td>
-                {{data.name}}
+            <tr *ngFor="let preAssessment of preAssessments; let i = index">
+              <td class="name" [ngStyle]="{'border-left-color': data[i].color}">
+                {{preAssessment.name}}
               </td>
               <td>
-                {{data.type}}
+                {{preAssessment.type}}
               </td>
               <td>
-                {{percentages[i]}}
+                {{data[i].percent}}
               </td>
             </tr>
           </tbody>

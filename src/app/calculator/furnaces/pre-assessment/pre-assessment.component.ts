@@ -68,6 +68,7 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   initAssessments() {
+    console.log("initAssessments()");
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
@@ -122,6 +123,7 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   calculate() {
+    console.log("pre-assessment calculate()");
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
     }

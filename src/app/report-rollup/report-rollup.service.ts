@@ -55,6 +55,7 @@ export class ReportRollupService {
     this.allPhastResults = new BehaviorSubject<Array<AllPhastResultsData>>(new Array<AllPhastResultsData>());
 
 
+    this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
   }
 
@@ -108,9 +109,9 @@ export class ReportRollupService {
     this.indexedDbService.getDirectoryCalculator(subDir.id).then(calcs => {
       if (calcs) {
 
-        if (!this.calcsArray) {
-          this.calcsArray = new Array<Calculator>();
-        }
+        // if (!this.calcsArray) {
+        //   this.calcsArray = new Array<Calculator>();
+        // }
 
         //add me to report
         // console.log("calcs.length = " + calcs.length);

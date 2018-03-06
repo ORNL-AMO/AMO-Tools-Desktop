@@ -19,33 +19,38 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
   calculators: Array<Calculator>;
   @Input()
   preAssessments: Array<PreAssessment>;
+  @Input()
+  ind: number;
 
-  percentages: Array<string>;
-
+  graphColors: Array<string>;
+  data: Array<{name: string, percent: number, color: string}>;
 
   constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
+
+    this.graphColors = graphColors;
     this.getData();
   }
 
   getData() {
 
     if (this.calculators) {
-      if (this.calculators[0].preAssessments) {
-        this.preAssessments = this.calculators[0].preAssessments;
+      if (this.calculators[this.ind].preAssessments) {
+        this.preAssessments = this.calculators[this.ind].preAssessments;
       }
     }
-    this.percentages = new Array<string>();
+    this.data = new Array<{name: string, percent: number, color: string}>();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
       tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
-      for (let i = 0; i < tmpArray.length; i++) {
-        this.percentages.push(tmpArray[i].percent.toFixed(2) + "%");
+      for (let i = tmpArray.length - 1; i >= 0; i--) {
+        this.data.unshift({
+          name: tmpArray[i].name,
+          percent: Math.round(tmpArray[i].percent * 100) / 100,
+          color: this.graphColors[(tmpArray.length - 1) - i]
+        });
       }
-    }
-    else {
-      // console.log("NO PRE ASSESSMENTS");
     }
   }
 }

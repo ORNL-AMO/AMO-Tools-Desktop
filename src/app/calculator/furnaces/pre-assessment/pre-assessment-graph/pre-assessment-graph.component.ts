@@ -25,6 +25,8 @@ export class PreAssessmentGraphComponent implements OnInit {
   printView: boolean;
   @Input()
   inRollup: boolean;
+  @Input()
+  ind: number;
 
   @Input()
   calculators: Array<Calculator>;
@@ -64,7 +66,9 @@ export class PreAssessmentGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChange) {
+    console.log("ngOnChanges");
     if (changes) {
+      console.log("changes");
       this.getData();
       if (this.firstChange) {
         this.firstChange = !this.firstChange;
@@ -75,29 +79,26 @@ export class PreAssessmentGraphComponent implements OnInit {
     }
   }
 
+
   ngAfterViewInit() {
+
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
     this.chartContainerWidth = (this.window.innerWidth - 30) * .28;
     this.chartContainerHeight = 280;
-
     if (this.printView) {
       this.chartContainerWidth = 500;
     }
-
     this.initChart();
   }
 
+  //debug
   //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
 
-    // console.log("pre-assessment-graph-component getData()");
-
     if (this.calculators) {
-      // console.log('calculators exist');
-
-      if (this.calculators[0].preAssessments) {
-        this.preAssessments = this.calculators[0].preAssessments;
+      if (this.calculators[this.ind].preAssessments) {
+        this.preAssessments = this.calculators[this.ind].preAssessments;
       }
     }
     this.columnData = new Array();
@@ -108,10 +109,33 @@ export class PreAssessmentGraphComponent implements OnInit {
         this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
       }
     }
-    else {
-      // console.log("NO PRE ASSESSMENTS");
-    }
   }
+
+  //real version
+  // //invoke preAssessment service to calculate result data from Array<PreAssessment>
+  // getData() {
+
+  //   // console.log("pre-assessment-graph-component getData()");
+
+  //   if (this.calculators) {
+  //     // console.log('calculators exist');
+
+  //     if (this.calculators[0].preAssessments) {
+  //       this.preAssessments = this.calculators[0].preAssessments;
+  //     }
+  //   }
+  //   this.columnData = new Array();
+  //   if (this.preAssessments) {
+  //     let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
+  //     tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
+  //     for (let i = 0; i < tmpArray.length; i++) {
+  //       this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
+  //     }
+  //   }
+  //   else {
+  //     // console.log("NO PRE ASSESSMENTS");
+  //   }
+  // }
 
   initChart() {
     this.chart = c3.generate({

@@ -1,5 +1,3 @@
-
-
 <app-metered-electricity-form *ngIf="assessment.settings.energySourceType == 'Electricity'" [inputs]="assessment.meteredEnergy.meteredEnergyElectricity"
     (emitCalculate)="calculate()" (changeField)="changeField($event)" [inCalc]="true"></app-metered-electricity-form>
 <app-metered-fuel-form *ngIf="assessment.settings.energySourceType == 'Fuel'" [inputs]="assessment.meteredEnergy.meteredEnergyFuel"

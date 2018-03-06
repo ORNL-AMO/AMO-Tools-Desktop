@@ -46,6 +46,10 @@ export class PreAssessmentFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    console.log("form changes");
+  }
+
   editName() {
     this.isEditingName = true;
   }
@@ -55,6 +59,7 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   calculate() {
+    console.log("emit calculate() form parent");
     this.emitCalcualte.emit(true);
   }
 
@@ -67,6 +72,7 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   changeField(str: string) {
+    console.log("changeField");
     this.emitChangeField.emit(str);
     this.changeEnergyType();
     this.changeAssessmentType();
