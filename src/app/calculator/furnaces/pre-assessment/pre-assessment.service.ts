@@ -4,12 +4,12 @@ import { MeteredEnergyService } from '../../../phast/metered-energy/metered-ener
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PreAssessmentService {
 
   unitOfMeasurement: string;
-
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 

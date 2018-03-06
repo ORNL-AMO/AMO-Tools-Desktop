@@ -10,6 +10,7 @@
     </div>
 
     <!-- debug -->
+    <!-- Right here you are doing an *ngFor that iterates calculators-->
     <div class="card" *ngFor="let calculator of calculators; let i = index">
       <div class="header">
         <h3>Pre Assessment Summary</h3>
@@ -17,10 +18,14 @@
       <div class="card-body">
         <div class="row justify-content-center">
           <div class="col-lg-4 col-md-6">
-            <app-pre-assessment-graph [printView]="false" [settings]="settings" [calculators]="calculators" [inRollup]="true" [ind]="i"></app-pre-assessment-graph>
+            <!-- <app-pre-assessment-graph [printView]="false" [settings]="settings" [calculators]="calculators" [inRollup]="true" [ind]="i"></app-pre-assessment-graph> -->
+            <!--you have the calculator object, just pass it's preAssessment with calculator.preAssessments -->
+            <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments"></app-pre-assessment-graph>
           </div>
           <div class="col-lg-8 col-md-11">
-            <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [calculators]="calculators" [ind]="i"></app-phast-rollup-pre-assessment-table>
+            <!-- <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [calculators]="calculators" [ind]="i"></app-phast-rollup-pre-assessment-table> -->
+            <!-- same as above-->
+            <!-- <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessment"></app-phast-rollup-pre-assessment-table> -->
           </div>
         </div>
 

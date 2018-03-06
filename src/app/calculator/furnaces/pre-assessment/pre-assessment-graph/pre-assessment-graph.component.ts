@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
@@ -14,7 +14,7 @@ import { Calculator } from '../../../../shared/models/calculators';
   templateUrl: './pre-assessment-graph.component.html',
   styleUrls: ['./pre-assessment-graph.component.css']
 })
-export class PreAssessmentGraphComponent implements OnInit {
+export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()
   settings: Settings;
   @Input()
@@ -26,10 +26,13 @@ export class PreAssessmentGraphComponent implements OnInit {
   @Input()
   inRollup: boolean;
   @Input()
-  ind: number;
+  toggleCalculate: boolean;
+  // @Input()
+  // ind: number;
 
-  @Input()
-  calculators: Array<Calculator>;
+  //just use preAssessments array
+  // @Input()
+  // calculators: Array<Calculator>;
 
 
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -49,7 +52,6 @@ export class PreAssessmentGraphComponent implements OnInit {
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-
     if (!this.printView) {
       this.printView = false;
     }
@@ -63,19 +65,29 @@ export class PreAssessmentGraphComponent implements OnInit {
 
     this.chartColors = graphColors;
     this.getData();
+
+    // this.preAssessments.updateGraph.subscribe(val => {
+
+    // })
   }
 
-  ngOnChanges(changes: SimpleChange) {
-    console.log("ngOnChanges");
+  ngOnChanges(changes: SimpleChanges) {
+    //console.log("ngOnChanges");
+    console.log(changes);
     if (changes) {
-      console.log("changes");
-      this.getData();
-      if (this.firstChange) {
-        this.firstChange = !this.firstChange;
+      if(changes.toggleCalculate){
+        console.log('calculate graph')
+        this.getData();
+        this.updateChart();
       }
-      else {
-        this.initChart();
-      }
+      // console.log("changes");
+      // this.getData();
+      // if (this.firstChange) {
+      //   this.firstChange = !this.firstChange;
+      // }
+      // else {
+      //   this.initChart();
+      // }
     }
   }
 
@@ -96,11 +108,11 @@ export class PreAssessmentGraphComponent implements OnInit {
   //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
 
-    if (this.calculators) {
-      if (this.calculators[this.ind].preAssessments) {
-        this.preAssessments = this.calculators[this.ind].preAssessments;
-      }
-    }
+    // if (this.calculators) {
+    //   if (this.calculators[this.ind].preAssessments) {
+    //     this.preAssessments = this.calculators[this.ind].preAssessments;
+    //   }
+    // }
     this.columnData = new Array();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();

@@ -37,6 +37,7 @@ export class PreAssessmentComponent implements OnInit {
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
+  toggleCalculate: boolean = false;
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -123,27 +124,30 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   calculate() {
-    console.log("pre-assessment calculate()");
-    if (this.calculator) {
-      this.calculator.preAssessments = this.preAssessments;
-    }
-    this.results = new Array<any>();
-    let i = this.preAssessments.length - 1;
-    this.preAssessments.forEach(assessment => {
-      if (assessment.type == 'Metered') {
-        if (assessment.meteredEnergy) {
-          this.calculateMetered(assessment);
-        }
-      } else if (assessment.type == 'Designed') {
-        if (assessment.designedEnergy) {
-          this.calculateDesigned(assessment);
-        }
-      }
-    })
-    let sum = this.getSum(this.results);
-    this.results.forEach(result => {
-      result.percent = this.getResultPercent(result.value, sum);
-    })
+    //this is fired when forms change
+    console.log('calculate()')
+    this.toggleCalculate = !this.toggleCalculate;
+    //console.log("pre-assessment calculate()");
+    // if (this.calculator) {
+    //   this.calculator.preAssessments = this.preAssessments;
+    // }
+    // this.results = new Array<any>();
+    // let i = this.preAssessments.length - 1;
+    // this.preAssessments.forEach(assessment => {
+    //   if (assessment.type == 'Metered') {
+    //     if (assessment.meteredEnergy) {
+    //       this.calculateMetered(assessment);
+    //     }
+    //   } else if (assessment.type == 'Designed') {
+    //     if (assessment.designedEnergy) {
+    //       this.calculateDesigned(assessment);
+    //     }
+    //   }
+    // })
+    // let sum = this.getSum(this.results);
+    // this.results.forEach(result => {
+    //   result.percent = this.getResultPercent(result.value, sum);
+    // })
   }
 
   calculateMetered(assessment: PreAssessment) {

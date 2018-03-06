@@ -46,8 +46,9 @@ export class PreAssessmentFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngOnChanges() {
-    console.log("form changes");
+  ngOnChanges(changes: SimpleChanges) {
+    // console.log("form changes");
+    console.log(changes)
   }
 
   editName() {
