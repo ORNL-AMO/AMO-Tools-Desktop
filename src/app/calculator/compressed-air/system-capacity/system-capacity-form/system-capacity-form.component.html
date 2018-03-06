@@ -1,0 +1,114 @@
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="oneHalf">1/2</label>
+      <div class="input-group">
+        <input name="oneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneHalf" id="oneHalf"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="threeFourths">3/2</label>
+      <div class="input-group">
+        <input name="threeFourths" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeFourths"
+               id="threeFourths"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="one">1</label>
+      <div class="input-group">
+        <input name="one" class="form-control" type="number" step="any" [(ngModel)]="inputs.one" id="one"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="oneAndOneFourth">1.25</label>
+      <div class="input-group">
+        <input name="oneAndOneFourth" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneFourth"
+               id="oneAndOneFourth"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="oneAndOneHalf">1.5</label>
+      <div class="input-group">
+        <input name="oneAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneHalf"
+               id="oneAndOneHalf"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="two">2</label>
+      <div class="input-group">
+        <input name="two" class="form-control" type="number" step="any" [(ngModel)]="inputs.two" id="two"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="twoAndOneHalf">2.5</label>
+      <div class="input-group">
+        <input name="twoAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.twoAndOneHalf"
+               id="twoAndOneHalf"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="three">3</label>
+      <div class="input-group">
+        <input name="three" class="form-control" type="number" step="any" [(ngModel)]="inputs.three" id="three"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="oneHalf">3.5</label>
+      <div class="input-group">
+        <input name="threeAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeAndOneHalf"
+               id="threeAndOneHalf"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="four">4</label>
+      <div class="input-group">
+        <input name="four" class="form-control" type="number" step="any" [(ngModel)]="inputs.four" id="four"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="five">5</label>
+      <div class="input-group">
+        <input name="five" class="form-control" type="number" step="any" [(ngModel)]="inputs.five" id="five"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="six">6</label>
+      <div class="input-group">
+        <input name="six" class="form-control" type="number" step="any" [(ngModel)]="inputs.six" id="six"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="bold">Total Pipe Volume</label>
+      <div class="text-center small">
+        <span *ngIf="outputs.totalPipeVolume"><strong>{{outputs.totalPipeVolume | number:'1.0-2'}} ft</strong></span>
+        <span *ngIf="!outputs.totalPipeVolume"><strong>&mdash; &mdash;</strong></span>
+      </div>
+    </div>
+  </div>
+</form>
