@@ -36,6 +36,6 @@ import { AirVelocityFormComponent } from './air-velocity/air-velocity-form/air-v
   ],
   exports: [
     CompressedAirComponent
-  ]
+  ],
 })
 export class CompressedAirModule { }
