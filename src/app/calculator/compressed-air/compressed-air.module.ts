@@ -34,7 +34,7 @@ import { OperatingCostFormComponent } from './operating-cost/operating-cost-form
     PipeSizingComponent,
     PipeSizingFormComponent,
     AirVelocityComponent,
-    AirVelocityFormComponent
+    AirVelocityFormComponent,
     OperatingCostComponent,
     OperatingCostFormComponent
   ],
