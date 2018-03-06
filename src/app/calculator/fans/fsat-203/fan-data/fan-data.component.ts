@@ -14,9 +14,11 @@ export class FanDataComponent implements OnInit {
   @Input()
   fanRatedInfo: FanRatedInfo;
   @Output('emitSave')
-  emitSave = new EventEmitter<any>();
+  emitSave = new EventEmitter<{ plane: Plane, planeNumber: string }>();
   @Output('emitSaveTraverse')
-  emitSaveTraverse = new EventEmitter<any>();
+  emitSaveTraverse = new EventEmitter<{ plane: Plane, planeNumber: string }>();
+  @Output('emitSavePlaneData')
+  emitSavePlaneData = new EventEmitter<PlaneData>();
   @Input()
   planeDataDone: boolean;
   @Input()
@@ -37,7 +39,7 @@ export class FanDataComponent implements OnInit {
 
   stepTab: string = '1';
   showReadings: boolean = false;
-  velocityData: {pv3: number, percent75Rule: number};
+  velocityData: { pv3: number, percent75Rule: number };
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -48,19 +50,19 @@ export class FanDataComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
-    if(str != '3a' && str != '3b' && str != '3c' && this.showReadings){
+    if (str != '3a' && str != '3b' && str != '3c' && this.showReadings) {
       this.toggleReadings();
     }
 
-    if(str == '3a'){
+    if (str == '3a') {
       this.calcVelocityData(this.planeData.FlowTraverse);
     }
 
-    if(str == '3b'){
+    if (str == '3b') {
       this.calcVelocityData(this.planeData.AddlTraversePlanes[0]);
     }
 
-    if(str == '3c'){
+    if (str == '3c') {
       this.calcVelocityData(this.planeData.AddlTraversePlanes[1]);
     }
     this.stepTab = str;
@@ -70,19 +72,23 @@ export class FanDataComponent implements OnInit {
     this.showReadings = !this.showReadings;
   }
 
-  savePlane(plane: Plane, str: string){
-    if(str == '3a' || str == '3b' || str == '3c'){
+  savePlane(plane: Plane, str: string) {
+    if (str == '3a' || str == '3b' || str == '3c') {
       this.calcVelocityData(plane);
     }
-    this.emitSave.emit({plane: plane, planeNumber: str})
+    this.emitSave.emit({ plane: plane, planeNumber: str })
   }
 
-  calcVelocityData(plane: Plane){
+  calcVelocityData(plane: Plane) {
     this.velocityData = this.fsatService.getVelocityPressureData(plane)
   }
 
-  saveTraversePlane(plane: Plane, str: string){
+  saveTraversePlane(plane: Plane, str: string) {
     this.calcVelocityData(plane);
-    this.emitSaveTraverse.emit({plane: plane, planeNumber: str})
+    this.emitSaveTraverse.emit({ plane: plane, planeNumber: str })
+  }
+
+  savePlaneData(planeData: PlaneData) {
+    this.emitSavePlaneData.emit(planeData);
   }
 }

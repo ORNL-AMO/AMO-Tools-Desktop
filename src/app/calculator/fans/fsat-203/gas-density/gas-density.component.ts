@@ -44,6 +44,18 @@ export class GasDensityComponent implements OnInit {
 
   }
 
+  getDensity(){
+    if(this.gasDensityForm.controls.inputType.value == 'relativeHumidity'){
+      this.calcDensityRelativeHumidity();
+    }else if(this.gasDensityForm.controls.inputType.value == 'wetBulb'){
+      this.calcDensityWetBulb();
+    }else if(this.gasDensityForm.controls.inputType.value == 'dewPoint'){
+      this.calcDensityDewPoint();
+    }else{
+      this.save();
+    }
+  }
+
   calcDensityWetBulb() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
     let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj);

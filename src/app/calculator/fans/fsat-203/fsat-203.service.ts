@@ -183,11 +183,19 @@ export class Fsat203Service {
     let form = this.formBuilder.group({
       // variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
       // globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
-      estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
+      // estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, Validators.required],
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required]
     })
     return form;
+  }
+
+  getPlaneInfoObjFromForm(form: FormGroup, obj: PlaneData): PlaneData {
+    // obj.estimate2and5TempFrom1 = form.controls.estimate2and5TempFrom1.value;
+    obj.totalPressureLossBtwnPlanes1and4 = form.controls.totalPressureLossBtwnPlanes1and4.value;
+    obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
+    return obj;
+    
   }
 
   getMockData(): Fan203Inputs {
@@ -216,7 +224,7 @@ export class Fsat203Service {
           planeType: 'Rectangular',
           width: 143.63,
           length: 32.63,
-          area: 781.1078,
+          area: 69.0923,
           dryBulbTemp: 123,
           barometricPressure: 26.57,
           numInletBoxes: 2
@@ -225,7 +233,7 @@ export class Fsat203Service {
           planeType: 'Rectangular',
           width: 70,
           length: 78,
-          area: 455,
+          area: 37.9167,
           dryBulbTemp: 132.7,
           barometricPressure: 26.57,
           numInletBoxes: 0
@@ -234,7 +242,7 @@ export class Fsat203Service {
           planeType: 'Rectangular',
           width: 143.63,
           length: 32.63,
-          area: 390.5539,
+          area: 32.5462,
           dryBulbTemp: 123,
           barometricPressure: 26.57,
           numInletBoxes: 0,
@@ -254,7 +262,7 @@ export class Fsat203Service {
             planeType: 'Rectangular',
             width: 143.63,
             length: 32.63,
-            area: 390.5539,
+            area: 32.5462,
             dryBulbTemp: 123,
             barometricPressure: 26.57,
             numInletBoxes: 0,
@@ -272,7 +280,7 @@ export class Fsat203Service {
         ],
         InletMstPlane: {
           planeType: 'Rectangular',
-          area: 781.1078,
+          area: 65.0923,
           width: 143.63,
           length: 32.63,
           dryBulbTemp: 123,
@@ -282,7 +290,7 @@ export class Fsat203Service {
         },
         OutletMstPlane: {
           planeType: 'Rectangular',
-          area: 279.363,
+          area: 23.2802,
           width: 55.42,
           length: 60.49,
           dryBulbTemp: 132.7,

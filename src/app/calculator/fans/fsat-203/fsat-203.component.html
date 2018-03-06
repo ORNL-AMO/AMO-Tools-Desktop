@@ -50,7 +50,7 @@
                         <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="savePlane($event)"
                             (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
                             [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone"
-                            [plane4Done]="plane4Done" [plane5Done]="plane5Done"></app-fan-data>
+                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)"></app-fan-data>
                         <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power'" [fanShaftPower]="inputs.FanShaftPower" (emitSave)="saveShaftPower($event)"
                             [shaftPowerDone]="shaftPowerDone"></app-fan-shaft-power>
                         <!-- <div class="row continue-btn-row justify-content-center">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower } from '../../../shared/models/fans';
+import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower, PlaneData } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
@@ -175,6 +175,11 @@ export class Fsat203Component implements OnInit {
       this.inputs.PlaneData.OutletMstPlane = event.plane;
       this.checkPlane('5');
     }
+    this.calculate();
+  }
+
+  savePlaneData(planeData: PlaneData){
+    this.inputs.PlaneData = planeData;
     this.calculate();
   }
 

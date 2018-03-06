@@ -61,7 +61,7 @@
 <div class="row">
   <div class="col" *ngIf="!showReadings">
     <!-- plane info -->
-    <app-plane-info *ngIf="stepTab == 'plane-info'" [planeData]="planeData"></app-plane-info>
+    <app-plane-info *ngIf="stepTab == 'plane-info'" [planeData]="planeData" (emitSave)="savePlaneData($event)"></app-plane-info>
     <!--1-->
     <app-fan-data-form *ngIf="stepTab == '1'" [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'" [planeData]="planeData.FanInletFlange"
       (emitSave)="savePlane($event, '1')"></app-fan-data-form>

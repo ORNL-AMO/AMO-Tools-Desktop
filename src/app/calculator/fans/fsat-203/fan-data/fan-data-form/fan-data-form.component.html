@@ -30,7 +30,7 @@
     <div class="form-group" *ngIf="planeNum == '1' || planeNum == '4'">
       <label for="numInletBoxes">Number of Inlet Boxes</label>
       <div class="input-group">
-        <input name="numInletBoxes" type="numInletBoxes" step="any" class="form-control" formControlName="numInletBoxes" id="numInletBoxes"
+        <input name="numInletBoxes" type="number" step="any" class="form-control" formControlName="numInletBoxes" id="numInletBoxes"
           (input)="calcArea()" (focus)="focusField('numInletBoxes')" onfocus="this.select();">
       </div>
     </div>
@@ -42,34 +42,35 @@
       </div>
     </div>
   </div>
-  <div class="form-group" *ngIf="planeNum != '1' && planeNum != '2'">
-    <label for="staticPressure">Static Pressure (P
-      <sub>sx</sub>)</label>
-    <div class="input-group">
-      <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
-        (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
-      <span class="input-group-addon units">in. Wg</span>
+  <div class="form-section">
+    <div class="form-group" *ngIf="planeNum != '1' && planeNum != '2'">
+      <label for="staticPressure">Static Pressure (P
+        <sub>sx</sub>)</label>
+      <div class="input-group">
+        <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
+          (input)="save()" (focus)="focusField('staticPressure')" onfocus="this.select();">
+        <span class="input-group-addon units">in. Wg</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dryBulbTemp">Dry Bulb Temp (T
+        <sub>dx</sub>)</label>
+      <div class="input-group">
+        <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="save()"
+          (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="barometricPressure">Barometric Pressure (P
+        <sub>bx</sub>)</label>
+      <div class="input-group">
+        <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
+          (input)="save()" (focus)="focusField('barometricPressure')" onfocus="this.select();">
+        <span class="input-group-addon units">in. Hg</span>
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="dryBulbTemp">Dry Bulb Temp (T
-      <sub>dx</sub>)</label>
-    <div class="input-group">
-      <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="save()"
-        (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
-      <span class="input-group-addon units">&#8457;</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="barometricPressure">Barometric Pressure (P
-      <sub>bx</sub>)</label>
-    <div class="input-group">
-      <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
-        (input)="save()" (focus)="focusField('barometricPressure')" onfocus="this.select();">
-      <span class="input-group-addon units">in. Hg</span>
-    </div>
-  </div>
-
   <!--3 velocity data-->
   <div class="form-group" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
     <label for="pv3">Pv3</label>
