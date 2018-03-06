@@ -29,6 +29,11 @@
     </select>
   </div>
   <div class="form-group">
+    <label for="globalBarometricPressure">Barometric Pressure (Pb)</label>
+    <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
+      id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
     <label for="fanSpeedCorrected">Corrected Fan Speed (N
       <sub>c</sub>)</label>
     <div class="input-group">
@@ -85,22 +90,4 @@
       </select>
     </div>
   </div>
-  <div class="form-group">
-    <label for="globalBarometricPressure">Barometric Pressure (Pb)</label>
-    <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
-      id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
-  </div>
-  <!-- <div class="form-group">
-    <label for="traversePlanes">Planar Barometric Pressure</label>
-    <div class="input-group">
-      <input name="planarBarometricPressure" type="number" step="any" class="form-control" formControlName="planarBarometricPressure"
-        id="planarBarometricPressure" (input)="save()" (focus)="focusField('planarBarometricPressure')" onfocus="this.select();">
-      <span class="input-group-addon units">in. Hg</span>
-    </div>
-  </div> -->
-  <!-- <div class="row continue-btn-row justify-content-center">
-    <div class="col text-center">
-      <button class="btn btn-primary continue-btn" [disabled]="ratedInfoForm.status == 'INVALID'" (click)="continue()">Continue Fan Setup</button>
-    </div>
-  </div> -->
 </form>
