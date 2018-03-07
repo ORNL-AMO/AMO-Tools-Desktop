@@ -35,7 +35,7 @@ import { CompressedAirModule } from './compressed-air/compressed-air.module';
     UtilitiesModule,
     FurnacesModule,
     MotorsModule,
-    CompressedAirModule
+    CompressedAirModule,
   ],
   providers: [
     StandaloneService

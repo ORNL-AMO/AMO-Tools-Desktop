@@ -24,6 +24,8 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
+  @Input()
+  inRollup: boolean;
   @ViewChild('container') container: ElementRef;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -44,7 +46,7 @@ export class PreAssessmentComponent implements OnInit {
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
-
+  toggleCalculate: boolean = false;
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -140,86 +142,8 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   calculate() {
-    if (this.calculator) {
-      this.calculator.preAssessments = this.preAssessments;
-    }
-    this.results = new Array<any>();
-    let i = this.preAssessments.length - 1;
-    this.preAssessments.forEach(assessment => {
-      if (assessment.type == 'Metered') {
-        if (assessment.meteredEnergy) {
-          this.calculateMetered(assessment);
-        }
-      } else if (assessment.type == 'Designed') {
-        if (assessment.designedEnergy) {
-          this.calculateDesigned(assessment);
-        }
-      }
-    })
-    let sum = this.getSum(this.results);
-    this.results.forEach(result => {
-      result.percent = this.getResultPercent(result.value, sum);
-    })
-  }
-
-  calculateMetered(assessment: PreAssessment) {
-    if (assessment.settings.energySourceType == 'Fuel') {
-      let tmpResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    } else if (assessment.settings.energySourceType == 'Steam') {
-      let tmpResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-    else if (assessment.settings.energySourceType == 'Electricity') {
-      let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-  }
-
-  calculateDesigned(assessment: PreAssessment) {
-    if (assessment.settings.energySourceType == 'Fuel') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      tmpResults = tmpResults;
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    } else if (assessment.settings.energySourceType == 'Steam') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-    else if (assessment.settings.energySourceType == 'Electricity') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-  }
-
-  convertElectrotechResults(val: number) {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kWh').to('kJ');
-    } else {
-      val = this.convertUnitsService.value(val).from('kWh').to('Btu');
-    }
-    return val;
-  }
-
-  addResult(num: number, name: string, color: string) {
-    if (isNaN(num) != true) {
-      this.results.push({
-        name: name,
-        value: num,
-        color: color
-      });
-    }
-  }
-
-  getSum(data: Array<any>): number {
-    let sum = _.sumBy(data, 'value');
-    return sum;
-  }
-
-  getResultPercent(value: number, sum: number): number {
-    let percent = (value / sum) * 100;
-    return percent;
+    //this is fired when forms change
+    this.toggleCalculate = !this.toggleCalculate;
   }
 
   addPreAssessment() {

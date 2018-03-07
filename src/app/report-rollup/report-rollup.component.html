@@ -93,7 +93,7 @@
 
                 <div class="row print-break-before">
                     <div class="col-12">
-                        <app-phast-rollup-print [settings]="settings"></app-phast-rollup-print>
+                        <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup-print>
                     </div>
                 </div>
                 <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
@@ -185,7 +185,7 @@
                 </button>
             </div>
             <div class="modal-body panel-container phast">
-                <app-phast-rollup [settings]="settings"></app-phast-rollup>
+                <app-phast-rollup [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup>
             </div>
         </div>
     </div>
