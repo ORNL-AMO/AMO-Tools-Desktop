@@ -79,13 +79,16 @@
 
   </div>
 
-  <div class="form-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
-    <label for="vfdInput">Motor Shaft Power (Hi)
+  <div class="form-group">
+    <label for="motorShaftPower">Motor Shaft Power (Hi)
     </label>
-    <div class="input-group">
-      <input name="vfdInput" type="number" step="any" class="form-control" formControlName="vfdInput" id="vfdInput" (input)="save()"
-        (focus)="focusField('vfdInput')" onfocus="this.select();">
+    <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
+      <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower" (input)="save()"
+        (focus)="focusField('motorShaftPower')" onfocus="this.select();">
       <span class="input-group-addon units">hp</span>
+    </div>
+    <div class="area-val" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
+      {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
     </div>
   </div>
   <label class="group-label group-label-2">Motor and Drive Effiicencies</label>
@@ -123,9 +126,9 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="phase1PowerFactor">Power Factor</label>
-    <input name="phase1PowerFactor" type="number" step="any" class="form-control" formControlName="phase1PowerFactor" id="powerFactor"
-      (input)="save()" (focus)="focusField('phase1PowerFactor')" onfocus="this.select();">
+    <label for="powerFactorAtLoad">Power Factor at Load</label>
+    <input name="powerFactorAtLoad" type="number" step="any" class="form-control" formControlName="powerFactorAtLoad" id="powerFactorAtLoad"
+      (input)="calcMotorShaftPower()" (focus)="focusField('powerFactorAtLoad')" onfocus="this.select();">
   </div>
 
   <div *ngIf="shaftPowerForm.controls.isMethodOne.value == false">

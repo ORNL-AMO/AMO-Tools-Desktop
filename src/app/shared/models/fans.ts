@@ -76,6 +76,7 @@ export interface FanShaftPower {
   efficiencyVFD: number;
   efficiencyBelt: number;
   sumSEF: number;
+  motorShaftPower: number;
   //mark additions
   driveType: string;
   isVFD: string,
@@ -84,7 +85,7 @@ export interface FanShaftPower {
   synchronousSpeed: number,
   npv: number,
   fla: number,
-  vfdInput: number,
+  // vfdInput: number,
   phase1: MotorPhase,
   phase2: MotorPhase,
   phase3: MotorPhase,
@@ -93,8 +94,7 @@ export interface FanShaftPower {
 }
 export interface MotorPhase {
   voltage: number,
-  amps: number,
-  powerFactor?: number
+  amps: number
 }
 
 export interface Fan203Inputs {

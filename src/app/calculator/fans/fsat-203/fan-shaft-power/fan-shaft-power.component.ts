@@ -58,13 +58,22 @@ export class FanShaftPowerComponent implements OnInit {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
     let total = this.fanShaftPower.phase1.amps + this.fanShaftPower.phase2.amps + this.fanShaftPower.phase3.amps;
     this.fanShaftPower.amps = total / 3;
-    this.save();
+    this.calcMotorShaftPower();
   }
 
   calcAverageVoltage() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
     let total = this.fanShaftPower.phase1.voltage + this.fanShaftPower.phase2.voltage + this.fanShaftPower.phase3.voltage;
     this.fanShaftPower.voltage = total / 3;
+    this.calcMotorShaftPower();
+  }
+
+  calcMotorShaftPower(){
+    this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
+    let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * this.fanShaftPower.powerFactorAtLoad;
+    this.shaftPowerForm.patchValue({
+      motorShaftPower: tmpVal
+    })    
     this.save();
   }
 

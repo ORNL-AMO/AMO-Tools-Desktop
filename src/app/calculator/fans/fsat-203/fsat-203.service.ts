@@ -130,12 +130,12 @@ export class Fsat203Service {
       mainsDataAvailable: [obj.mainsDataAvailable, Validators.required],
       ratedHP: [obj.ratedHP, Validators.required],
       synchronousSpeed: [obj.synchronousSpeed, Validators.required],
+      powerFactorAtLoad: [obj.powerFactorAtLoad, Validators.required],
       npv: [obj.npv, Validators.required],
       fla: [obj.fla, Validators.required],
-      vfdInput: [obj.vfdInput, Validators.required],
+      motorShaftPower: [obj.motorShaftPower, Validators.required],
       phase1Voltage: [obj.phase1.voltage],
       phase1Amps: [obj.phase1.amps],
-      phase1PowerFactor: [obj.phase1.powerFactor, Validators.required],
       phase2Voltage: [obj.phase2.voltage],
       phase2Amps: [obj.phase2.amps],
       phase3Voltage: [obj.phase3.voltage],
@@ -158,11 +158,10 @@ export class Fsat203Service {
     obj.synchronousSpeed = form.controls.synchronousSpeed.value;
     obj.npv = form.controls.npv.value;
     obj.fla = form.controls.fla.value;
-    obj.vfdInput = form.controls.vfdInput.value;
+    obj.motorShaftPower = form.controls.motorShaftPower.value;
     obj.phase1 = {
       voltage: form.controls.phase1Voltage.value,
-      amps: form.controls.phase1Amps.value,
-      powerFactor: form.controls.phase1PowerFactor.value
+      amps: form.controls.phase1Amps.value
     };
     obj.phase2 = {
       voltage: form.controls.phase2Voltage.value,
@@ -175,7 +174,7 @@ export class Fsat203Service {
     obj.efficiencyMotor = form.controls.efficiencyMotor.value;
     obj.efficiencyVFD = form.controls.efficiencyVFD.value;
     obj.efficiencyBelt = form.controls.efficiencyBelt.value;
-    obj.powerFactorAtLoad = form.controls.phase1PowerFactor.value;
+    obj.powerFactorAtLoad = form.controls.powerFactorAtLoad.value;
     obj.driveType = form.controls.driveType.value;
     obj.frequency = form.controls.frequency.value;
     obj.efficiencyClass = form.controls.efficiencyClass.value;
@@ -332,11 +331,10 @@ export class Fsat203Service {
         synchronousSpeed: 1200,
         npv: 4160,
         fla: 210,
-        vfdInput: 10,
+        motorShaftPower: 10,
         phase1: {
           voltage: 4200,
-          amps: 205,
-          powerFactor: .88
+          amps: 205
         },
         phase2: {
           voltage: 4200,
