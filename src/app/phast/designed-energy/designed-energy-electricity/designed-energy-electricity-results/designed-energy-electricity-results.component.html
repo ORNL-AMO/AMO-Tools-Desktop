@@ -11,17 +11,17 @@
       <tr>
         <td>Fuel</td>
         <td>{{fuelResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
-        <td>{{fuelResults.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">&mdash;</td>
       </tr>
       <tr>
         <td>Electricity</td>
         <td>{{electricResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
-        <td>{{electricResults.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">&mdash;</td>
       </tr>
       <tr>
         <td>Total</td>
         <td>{{totalResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
-        <td>{{totalResults.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
       </tr>
     </tbody>
   </table>
@@ -37,17 +37,17 @@
       <tr>
         <td>Fuel</td>
         <td>{{fuelResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{fuelResults.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">&mdash;</td>
       </tr>
       <tr>
         <td>Electricity</td>
         <td>{{electricResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{electricResults.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">&mdash;</td>
       </tr>
       <tr>
         <td>Total</td>
         <td>{{totalResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{totalResults.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
       </tr>
     </tbody>
   </table>
@@ -60,20 +60,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <!-- <tr>
         <td>Fuel</td>
         <td>{{fuelResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
-        <td>{{fuelResults.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td>&mdash;</td>
       </tr>
       <tr>
         <td>Electricity</td>
         <td>{{electricResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
-        <td>{{electricResults.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
-      </tr>
+        <td>&mdash;</td>
+      </tr> -->
       <tr>
         <td>Total</td>
         <td>{{totalResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
-        <td>{{totalResults.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
       </tr>
     </tbody>
   </table>

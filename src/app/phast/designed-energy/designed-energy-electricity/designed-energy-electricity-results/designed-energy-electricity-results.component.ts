@@ -18,23 +18,17 @@ export class DesignedEnergyElectricityResultsComponent implements OnInit {
   settings: Settings;
   resultUnits: { energyPerMassUnit: string, energyPerTimeUnit: string, electricityUsedUnit: string } = {
     energyPerMassUnit: '',
-    energyPerTimeUnit: '',
-    electricityUsedUnit: ''
+    energyPerTimeUnit: 'kW/hr',
+    electricityUsedUnit: 'kW'
   };
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit == 'kWh') {
-      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit;
-    } else {
-      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
-    }
     if (this.settings.unitsOfMeasure == 'Metric') {
-      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
+      this.resultUnits.energyPerMassUnit = 'kW/kg';
     } else if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
+      this.resultUnits.energyPerMassUnit = 'kW/lb';
     }
-    this.resultUnits.electricityUsedUnit = 'kW';
   }
 
 }

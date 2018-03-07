@@ -8,3 +8,8 @@ tr > th:not(:first-child){
     width: 25%;
     text-align: right;
 }
+
+
+.text-center{
+    text-align: center;
+}
