@@ -26,7 +26,7 @@ export class PhastComponent implements OnInit {
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event){
+  onResize(event) {
     this.getContainerHeight();
   }
 
@@ -43,12 +43,6 @@ export class PhastComponent implements OnInit {
   isAssessmentSettings: boolean;
   stepTab: StepTab;
   _phast: PHAST;
-  // phast: PHAST;
-  modification: PHAST;
-  phastOptions: Array<any>;
-  phastOptionsLength: number;
-  phast1: PHAST;
-  phast2: PHAST;
 
   mainTab: string = 'system-setup';
   init: boolean = true;
@@ -59,6 +53,7 @@ export class PhastComponent implements OnInit {
   calcTab: string;
   assessmentTab: string = 'explore-opportunities';
   screenshotHeight: number = 0;
+  sankeyPhast: PHAST;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -136,22 +131,6 @@ export class PhastComponent implements OnInit {
     })
   }
 
-
-  initSankeyList() {
-    this.phastOptions = new Array<any>();
-    this.phastOptions.push({ name: 'Baseline', phast: this._phast });
-    this.phast1 = this.phastOptions[0];
-    if (this._phast.modifications) {
-      this._phast.modifications.forEach(mod => {
-        this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
-      })
-      this.phast2 = this.phastOptions[1];
-      this.phastOptionsLength = this.phastOptions.length;
-    }
-  }
-
-
-
   ngAfterViewInit() {
     this.disclaimerToast();
     setTimeout(() => {
@@ -174,16 +153,14 @@ export class PhastComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-      },100);
+      }, 100);
     }
   }
-
-
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
     this.lossesService.updateTabs.next(true);
-    this.initSankeyList();
+    this.sankeyPhast = this._phast;
   }
 
   getSettings(update?: boolean) {
@@ -277,7 +254,7 @@ export class PhastComponent implements OnInit {
         } else {
           this.phastService.goToStep(this.stepTab.back);
         }
-      }else if(this.stepTab.back){
+      } else if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
     } else if (this.mainTab == 'assessment') {

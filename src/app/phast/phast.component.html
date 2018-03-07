@@ -58,10 +58,12 @@
   <!--Assessment-->
   <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'assessment'">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
-      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment" (save)="saveDb()" [saveClicked]="saveClicked"></app-explore-phast-opportunities>
+      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
+        (save)="saveDb()" [saveClicked]="saveClicked"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
-      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"
+        [inSetup]="false"></app-losses>
     </div>
   </div>
   <!--Report-->
@@ -72,28 +74,19 @@
   </div>
   <!--Sankey-->
   <div *ngIf="mainTab == 'sankey'" class="row">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 ">
-          <div class="row" *ngIf="phastOptionsLength > 1">
-            <div class="col-1"></div>
-            <div class="col-10">
-              <div class="form-group">
-                <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="phast1">
-                  <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{phast.name}}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <app-sankey [phast]="phast1.phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
-            </div>
-          </div>
-        </div>
+    <div class="col-10 mx-auto">
+      <div class="form-group">
+        <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
+          <option [ngValue]="_phast">Baseline</option>
+          <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
+        </select>
       </div>
     </div>
+    <div class="col-12" *ngIf="sankeyPhast">
+      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+    </div>
   </div>
+
   <!--Diagram-->
   <div *ngIf="mainTab =='diagram'" class="tab-content">
     <app-phast-diagram></app-phast-diagram>
