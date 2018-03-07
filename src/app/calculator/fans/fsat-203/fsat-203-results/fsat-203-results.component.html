@@ -2,39 +2,52 @@
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
-        <td>Fan Efficiency Total Pressure</td>
-        <td>{{results.fanEfficiencyTotalPressure |sigFigs: '6'}}</td>
+        <td>Fan Total Efficiency (&eta;
+          <sub>T</sub>)</td>
+        <td>{{results.fanEfficiencyTotalPressure |sigFigs: '6'}} %</td>
       </tr>
       <tr>
-        <td>Fan Efficiency Static Pressure</td>
-        <td>{{results.fanEfficiencyStaticPressure |sigFigs: '6'}}</td>
+        <td>Fan Static Efficiency (&eta;
+          <sub>S</sub>)</td>
+        <td>{{results.fanEfficiencyStaticPressure |sigFigs: '6'}} %</td>
       </tr>
       <tr>
-        <td>Fan Efficiency Static Pressure Rise</td>
-        <td>{{results.fanEfficiencyStaticPressureRise |sigFigs: '6'}}</td>
+        <td>Fan Efficiency based on Static Pressure Rise (&eta;
+          <sub>SPR</sub>)</td>
+        <td>{{results.fanEfficiencyStaticPressureRise |sigFigs: '6'}} in. wg</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Converted Flow (Q
+          <sub>c</sub>)</td>
+        <td>{{results.flowCorrected |sigFigs: '6'}} scfm</td>
       </tr>
       <tr>
-        <td>Flow Corrected</td>
-        <td>{{results.flowCorrected |sigFigs: '6'}}</td>
+        <td>Converted Total Pressure (P
+          <sub>TC</sub>)</td>
+        <td>{{results.pressureTotalCorrected |sigFigs: '6'}} in. wg</td>
       </tr>
       <tr>
-        <td>Pressure Total Corrected</td>
-        <td>{{results.pressureTotalCorrected |sigFigs: '6'}}</td>
+        <td>Converted Static Pressure (P
+          <sub>SC</sub>)</td>
+        <td>{{results.pressureStaticCorrected |sigFigs: '6'}} in. wg</td>
       </tr>
       <tr>
-        <td>Pressure Static Corrected</td>
-        <td>{{results.pressureStaticCorrected |sigFigs: '6'}}</td>
+        <td>Converted Static Pressure Rise (SPR
+          <sub>c</sub>)</td>
+        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}} in. wg</td>
       </tr>
       <tr>
-        <td>Static Pressure Rise Corrected</td>
-        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}}</td>
+        <td>Converted Power (H
+          <sub>C</sub>)</td>
+        <td>{{results.powerCorrected |sigFigs: '6'}} hp</td>
       </tr>
       <tr>
-        <td>Power Corrected</td>
-        <td>{{results.powerCorrected |sigFigs: '6'}}</td>
-      </tr>
-      <tr>
-        <td>Kpc</td>
+        <td>Converted Compressability Factor (K
+          <sub>pc</sub>)</td>
         <td>{{results.kpc |sigFigs: '6'}}</td>
       </tr>
     </tbody>

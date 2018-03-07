@@ -1,0 +1,7 @@
+td{
+    font-size: small;
+}
+
+tr > td:first-of-type {
+    width: 75%;
+}
