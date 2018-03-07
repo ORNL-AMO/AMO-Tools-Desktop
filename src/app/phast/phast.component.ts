@@ -30,11 +30,8 @@ export class PhastComponent implements OnInit {
     this.getContainerHeight();
   }
 
-
   assessment: Assessment;
-
   saveClicked: boolean = false;
-
   tabs: Array<string> = [
     'system-setup',
     'losses',
@@ -42,23 +39,16 @@ export class PhastComponent implements OnInit {
     'aux-equipment',
     'metered-energy'
   ]
-  tabIndex: number = 0;
-
   settings: Settings;
   isAssessmentSettings: boolean;
-  continueClicked: boolean = true;
   stepTab: StepTab;
   _phast: PHAST;
-
-
-  phast: PHAST;
+  // phast: PHAST;
   modification: PHAST;
   phastOptions: Array<any>;
   phastOptionsLength: number;
   phast1: PHAST;
   phast2: PHAST;
-
-
 
   mainTab: string = 'system-setup';
   init: boolean = true;
@@ -136,22 +126,7 @@ export class PhastComponent implements OnInit {
         this.selectedLossTab = this.lossesService.getTab(tab);
       })
     });
-    // let tmpTab = this.assessmentService.getTab();
-    // if (tmpTab) {
-    //   this.phastService.mainTab.next(tmpTab);
-    // }
-    // this.phastService.mainTab.subscribe(val => {
-    //   this.getContainerHeight();
-    //   this.mainTab = val;
-    // })
 
-    // this.phastService.stepTab.subscribe(val => {
-    //   this.stepTab = val;
-    // })
-
-    // this.phastService.specTab.subscribe(val => {
-    //   this.specTab = val;
-    // })
     this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
