@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
 
-  baseline: BehaviorSubject<PHAST>;
+  //baseline: BehaviorSubject<PHAST>;
   modification: BehaviorSubject<Modification>;
 
   lossesTab: BehaviorSubject<number>;
@@ -25,11 +25,10 @@ export class LossesService {
   efficiencyDone: boolean;
 
   lossesTabs: Array<LossTab>;
-  tabsSet: boolean;
   updateTabs: BehaviorSubject<boolean>;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
-    this.baseline = new BehaviorSubject<PHAST>(null);
+   // this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -140,13 +139,13 @@ export class LossesService {
     this.efficiencyDone = false;
   }
 
-  setBaseline(phast: PHAST) {
-    this.baseline.next(phast);
-  }
+  // setBaseline(phast: PHAST) {
+  //   this.baseline.next(phast);
+  // }
 
-  setModification(modification: Modification) {
-    this.modification.next(modification);
-  }
+  // setModification(modification: Modification) {
+  //   this.modification.next(modification);
+  // }
 
   setLossIndex(num: number) {
     this.lossIndex.next(num);
