@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
@@ -28,6 +28,15 @@ export class PreAssessmentComponent implements OnInit {
   inRollup: boolean;
   @ViewChild('container') container: ElementRef;
 
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   preAssessments: Array<PreAssessment>;
   tabSelect: string = 'results';
   currentField: string;
@@ -55,8 +64,18 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+    
     if (!this.height) {
       this.getHeight();
+    }
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

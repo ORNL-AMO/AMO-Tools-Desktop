@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
@@ -25,6 +25,15 @@ export class SystemCurveComponent implements OnInit {
   @Input()
   inAssessment: boolean;
   curveConstants: any;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   pointOne: any;
   pointTwo: any;
@@ -92,6 +101,18 @@ export class SystemCurveComponent implements OnInit {
         this.showForm = true;
       }
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+      if (this.leftPanelHeader.nativeElement.clientHeight) {
+        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      }
   }
 
   setPointValuesFromCalc(init?: boolean) {
@@ -273,9 +294,9 @@ export class SystemCurveComponent implements OnInit {
       } else {
         this.saving = true;
         this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => { 
-          this.calculator.id = result; 
-          this.calcExists = true; 
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculator.id = result;
+          this.calcExists = true;
           this.saving = false;
         });
       }

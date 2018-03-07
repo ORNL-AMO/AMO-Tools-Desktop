@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CashFlowForm, CashFlowResults } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 
@@ -18,6 +18,14 @@ export class CashFlowComponent implements OnInit {
     payback: 0
   };
 
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
@@ -35,6 +43,18 @@ export class CashFlowComponent implements OnInit {
       operationCost: 500,
       fuelCost: 500,
       junkCost: 500
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
