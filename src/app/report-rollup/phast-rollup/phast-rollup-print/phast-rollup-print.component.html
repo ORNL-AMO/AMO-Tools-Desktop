@@ -6,60 +6,76 @@
     </div>
   </div>
 
-  <div class="row justify-content-center" *ngIf="showPreAssessment">
+  <div class="row justify-content-center print-avoid-break" *ngFor="let calculator of calculators; let i = index">
     <div class="col-12">
-      <div class="header">
-        <h5>Pre Assessment Summary</h5>
+      <div class="row">
+        <div class="col-12">
+          <div class="header">
+            <h5>Pre Assessment Summary</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <!--*ngFor calculators and pass calculator.preAssessments -->
-      <!-- <app-pre-assessment-graph [printView]="true" [settings]="settings" [calculators]="calculators" [inRollup]="true"></app-pre-assessment-graph> -->
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <!-- <app-phast-rollup-pre-assessment-table [printView]="true" [settings]="settings" [calculators]="calculators"></app-phast-rollup-pre-assessment-table> -->
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"></app-pre-assessment-graph>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <app-phast-rollup-pre-assessment-table [printView]="true" [settings]="settings" [calculator]="calculator"></app-phast-rollup-pre-assessment-table>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="row justify-content-center">
+  <div class="row print-avoid-break">
     <div class="col-12">
-      <div class="header">
-        <h5>Summary of Energy Sources Used</h5>
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="header">
+            <h5>Summary of Energy Sources Used</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <app-phast-rollup-energy-table [printView]="true" [settings]="settings"></app-phast-rollup-energy-table>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <div class="header">
-        <h5>Energy Use</h5>
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <app-phast-rollup-energy-table [printView]="true" [settings]="settings"></app-phast-rollup-energy-table>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <app-phast-rollup-graphs [printView]="true" [settings]="settings"></app-phast-rollup-graphs>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <div class="header">
-        <h5>Modification Summary</h5>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col-12">
-      <app-phast-rollup-furnace-summary [printView]="true" [settings]="settings"></app-phast-rollup-furnace-summary>
     </div>
   </div>
 
+  <div class="row print-avoid-break">
+    <div class="col-12">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="header">
+            <h5>Energy Use</h5>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <app-phast-rollup-graphs [printView]="true" [settings]="settings"></app-phast-rollup-graphs>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row print-avoid-break">
+    <div class="col-12">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="header">
+            <h5>Modification Summary</h5>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <app-phast-rollup-furnace-summary [printView]="true" [settings]="settings"></app-phast-rollup-furnace-summary>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

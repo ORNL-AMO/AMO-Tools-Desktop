@@ -38,6 +38,8 @@ export class RollupPieChartComponent implements OnInit {
   @Input()
   assessmentType: string;
 
+  chartContainerHeight: number;
+
   @ViewChild("ngChart") ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
   exportName: string;
@@ -52,7 +54,11 @@ export class RollupPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.printView) {
+      this.chartContainerHeight = 310;
       this.chartContainerWidth = 500;
+    }
+    else {
+      this.chartContainerHeight = 280;
     }
     this.initChart();
   }
@@ -96,7 +102,7 @@ export class RollupPieChartComponent implements OnInit {
       },
       size: {
         width: this.chartContainerWidth,
-        height: 280
+        height: this.chartContainerHeight
       },
       tooltip: {
         contents: function (d, defaultTitleFormat, defaultValueFormat, color) {

@@ -9,7 +9,6 @@
       </div>
     </div>
 
-    <!-- debug -->
     <!-- Right here you are doing an *ngFor that iterates calculators-->
     <div class="card" *ngFor="let calculator of calculators; let i = index">
       <div class="header">
@@ -22,16 +21,11 @@
             <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"></app-pre-assessment-graph>
           </div>
           <div class="col-lg-8 col-md-11">
-            <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator" [ind]="i"></app-phast-rollup-pre-assessment-table>
+            <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator"></app-phast-rollup-pre-assessment-table>
           </div>
         </div>
-
-        <!-- <app-pre-assessment [settings]="settings" [preAssessments]="preAssessments"></app-pre-assessment-graph> -->
-        <!-- <app-pre-assessment-graph [settings]="settings" [calculators]="calculators"></app-pre-assessment-graph> -->
-        <!-- <app-phast-rollup-energy-table [printView]="false" [settings]="settings"></app-phast-rollup-energy-table> -->
       </div>
     </div>
-    <!-- end debug -->
 
     <div class="card">
       <div class="header">
