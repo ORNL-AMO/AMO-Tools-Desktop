@@ -146,66 +146,6 @@ export class PreAssessmentComponent implements OnInit {
     this.toggleCalculate = !this.toggleCalculate;
   }
 
-  calculateMetered(assessment: PreAssessment) {
-    if (assessment.settings.energySourceType == 'Fuel') {
-      let tmpResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    } else if (assessment.settings.energySourceType == 'Steam') {
-      let tmpResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-    else if (assessment.settings.energySourceType == 'Electricity') {
-      let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-  }
-
-  calculateDesigned(assessment: PreAssessment) {
-    if (assessment.settings.energySourceType == 'Fuel') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      tmpResults = tmpResults;
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    } else if (assessment.settings.energySourceType == 'Steam') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-    else if (assessment.settings.energySourceType == 'Electricity') {
-      let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
-      this.addResult(tmpResults, assessment.name, assessment.borderColor);
-    }
-  }
-
-  convertElectrotechResults(val: number) {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kWh').to('kJ');
-    } else {
-      val = this.convertUnitsService.value(val).from('kWh').to('Btu');
-    }
-    return val;
-  }
-
-  addResult(num: number, name: string, color: string) {
-    if (isNaN(num) != true) {
-      this.results.push({
-        name: name,
-        value: num,
-        color: color
-      });
-    }
-  }
-
-  getSum(data: Array<any>): number {
-    let sum = _.sumBy(data, 'value');
-    return sum;
-  }
-
-  getResultPercent(value: number, sum: number): number {
-    let percent = (value / sum) * 100;
-    return percent;
-  }
-
   addPreAssessment() {
     let tmpSettings: Settings = {
       unitsOfMeasure: this.settings.unitsOfMeasure,
