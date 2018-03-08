@@ -1,0 +1,123 @@
+<div class="output-summary">
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Plane #</td>
+        <td *ngIf="showFull">Plane Description</td>
+        <td>Gas Density
+          <br>lbm/ft
+          <sup>3</sup>
+        </td>
+        <td *ngIf="showFull">Planar Area
+          <br>ft
+          <sup>2</sup>
+        </td>
+        <td>Volume Flow
+          <br>cfm</td>
+        <td>Gas Velocity
+          <br>fpm</td>
+        <td *ngIf="showFull">Dry Bulb Temp
+          <br>&#8457;</td>
+        <td>Static Pressure
+          <br>in. wg</td>
+        <td>Velocity Pressure
+          <br>in. wg</td>
+        <td>Total Pressure
+          <br>in. wg</td>
+        <td *ngIf="showFull">Barometric Pressure
+          <br>in. wg</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td *ngIf="showFull">Fan Inlet Flange</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure}}</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td *ngIf="showFull">Fan or Evase Outlet Flange</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure}}</td>
+      </tr>
+      <tr>
+        <td>3a</td>
+        <td *ngIf="showFull">Flow Traverse</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.barometricPressure}}</td>
+      </tr>
+      <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 0">
+        <td>3b</td>
+        <td *ngIf="showFull">Add'l Traverse Plane 1</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].barometricPressure}}</td>
+      </tr>
+      <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 1">
+        <td>3c</td>
+        <td *ngIf="showFull">Add'l Traverse Plane 2</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].barometricPressure}}</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td *ngIf="showFull">Inlet Measurement Plane</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.barometricPressure}}</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td *ngIf="showFull">Outlet Measurement Plane</td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.area}}</td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.dryBulbTemp}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.barometricPressure}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -29,3 +29,8 @@
 .group-label .fa-exclamation-circle{
     color: #B03A2E;
 }
+
+.group-label .fa.fa-calculator{
+    color: black;
+    padding: 5px;
+}

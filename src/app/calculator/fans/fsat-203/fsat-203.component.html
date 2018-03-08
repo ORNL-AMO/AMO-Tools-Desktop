@@ -1,12 +1,13 @@
 <div class="modify-conditions panel-container row fsat">
     <div class="col-12">
         <div class="row align-items-top calculator-panel">
-            <div class="modification panel-column col-6 align-top">
+            <div class="modification panel-column col-6 align-top" [ngClass]="{'col-12': formSelect == 'results'}">
                 <div class="header">
-                    <h3>
+                    <h3 *ngIf="formSelect != 'results'">
                         <!-- <img src="assets/images/pump-eff.png" class="ico-size">-->Operating Points Calculator</h3>
+                    <h3 *ngIf="formSelect == 'results'">Operating Points Calculator - Results</h3>
                 </div>
-                <div class="row" *ngIf="formSelect == 'none'">
+                <div class="row" *ngIf="formSelect == 'none' && formSelect != 'results'">
                     <div class="col-12">
                         <label class="group-label" (click)="goToForm('fsat-basics')">
                             <span class="step-number">1</span>Basic Fan Info
@@ -35,8 +36,13 @@
                             <span class="fa fa-check pull-right" *ngIf="shaftPowerDone"></span>
                         </label>
                     </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('results')">
+                            <span class="fa fa-calculator"></span>View Full Results
+                        </label>
+                    </div>
                 </div>
-                <div class="row" *ngIf="formSelect != 'none'">
+                <div class="row" *ngIf="formSelect != 'none' && formSelect != 'results'">
                     <div class="col-12">
                         <!--forms-->
                         <a class="click-link small pull-left" (click)="goToForm('none')">
@@ -60,8 +66,19 @@
                         </div> -->
                     </div>
                 </div>
+                <div *ngIf="formSelect == 'results'" class="row">
+                    <div class="col-12">
+                        <a class="click-link small pull-left" (click)="goToForm('none')">
+                            <span class="fa fa-chevron-left"></span> Return to Setup</a>
+                        <br>
+                        <label class="group-label">Planar Results Data</label>
+                        <app-planar-results [planarResults]="planarResults" [showFull]="true" [inputs]="inputs"></app-planar-results>
+                        <label class="group-label">Calculator Results Data</label>
+                        <app-fsat-203-results [results]="results"></app-fsat-203-results>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 align-top">
+            <div class="col-6 align-top" *ngIf="formSelect != 'results'">
                 <div class="help-panel">
                     <div class="row">
                         <ul class="tabs primary tab-row">
@@ -76,7 +93,8 @@
                     <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
                         <div class="col-11">
                             <!--results-->
-                            <app-fsat-203-results [results]="results"></app-fsat-203-results>
+                            <app-planar-results *ngIf="formSelect == 'fan-data'" [planarResults]="planarResults" [inputs]="inputs"></app-planar-results>
+                            <app-fsat-203-results *ngIf="formSelect != 'fan-data'" [results]="results"></app-fsat-203-results>
                         </div>
                     </div>
                     <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
