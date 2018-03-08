@@ -37,7 +37,7 @@ export class FanDataComponent implements OnInit {
   plane5Done: boolean;
 
 
-  stepTab: string = '1';
+  stepTab: string = 'plane-info';
   showReadings: boolean = false;
   velocityData: { pv3: number, percent75Rule: number };
   constructor(private fsatService: FsatService) { }

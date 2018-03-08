@@ -23,13 +23,12 @@
   </div>
 
   <div class="form-group">
-    <label for="globalBarometricPressure">Barometric Pressure (Pb)</label>
+    <label for="globalBarometricPressure">Barometric Pressure (P<sub>b</sub>)</label>
     <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
       id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
   </div>
   <div class="form-group">
-    <label for="fanSpeedCorrected">Corrected Fan Speed (N
-      <sub>c</sub>)</label>
+    <label for="fanSpeedCorrected">Corrected Fan Speed (N<sub>c</sub>)</label>
     <div class="input-group">
       <input name="fanSpeedCorrected" type="number" step="any" class="form-control" formControlName="fanSpeedCorrected" id="fanSpeedCorrected"
         (input)="save()" (focus)="focusField('fanSpeedCorrected')" onfocus="this.select();">
@@ -38,8 +37,7 @@
   </div>
   <div class="form-group">
     <!-- don't think "P" is correct, some symbol-->
-    <label for="densityCorrected">Corrected Density (P
-      <sub>c</sub>)</label>
+    <label for="densityCorrected">Corrected Density (P<sub>c</sub>)</label>
     <div class="input-group">
       <input name="densityCorrected" type="number" step="any" class="form-control" formControlName="densityCorrected" id="densityCorrected"
         (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
@@ -49,8 +47,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="pressureBarometricCorrected">Corrected Barometric Pressure (Pb
-      <sub>c</sub>)</label>
+    <label for="pressureBarometricCorrected">Corrected Barometric Pressure (P<sub>bc</sub>)</label>
     <div class="input-group">
       <input name="pressureBarometricCorrected" type="number" step="any" class="form-control" formControlName="pressureBarometricCorrected"
         id="pressureBarometricCorrected" (input)="save()" (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
