@@ -16,7 +16,7 @@ export class SystemCapacityComponent implements OnInit {
 
   ngOnInit() {
     this.inputs = {
-      receiverCapacities: [120, 200, 240, 400, 500, 660, 1060, 1550, 2200, 2560, 3000, 3800],
+      receiverCapacities: [0],
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -31,7 +31,7 @@ export class SystemCapacityComponent implements OnInit {
       six: 0,
     };
     this.outputs = {
-      receiverCapacities: [],
+      receiverCapacities: [0],
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
