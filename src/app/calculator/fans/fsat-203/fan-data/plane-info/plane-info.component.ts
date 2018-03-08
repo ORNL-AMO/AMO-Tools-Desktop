@@ -13,6 +13,8 @@ export class PlaneInfoComponent implements OnInit {
   planeData: PlaneData;
   @Output('emitSave')
   emitSave = new EventEmitter<PlaneData>();
+
+
   planeInfoForm: FormGroup;
   constructor(private fsat203Service: Fsat203Service) { }
 

@@ -16,6 +16,8 @@ export class FsatBasicsComponent implements OnInit {
   basicsDone: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FanRatedInfo>();
+  @Output('updateBarometricPressure')
+  updateBarometricPressure = new EventEmitter<FanRatedInfo>();
 
   ratedInfoForm: FormGroup;
 
@@ -33,7 +35,10 @@ export class FsatBasicsComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
-
+  updatePressure(){
+    this.fanRatedInfo = this.fsat203Service.getBasicsObjectFromForm(this.ratedInfoForm);
+    this.updateBarometricPressure.emit(this.fanRatedInfo);
+  }
   save() {
     this.fanRatedInfo = this.fsat203Service.getBasicsObjectFromForm(this.ratedInfoForm);
     this.emitSave.emit(this.fanRatedInfo);

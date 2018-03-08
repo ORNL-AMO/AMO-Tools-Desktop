@@ -331,7 +331,7 @@ export class Fsat203Service {
         synchronousSpeed: 1200,
         npv: 4160,
         fla: 210,
-        motorShaftPower: 10,
+        motorShaftPower: 1312340,
         phase1: {
           voltage: 4200,
           amps: 205

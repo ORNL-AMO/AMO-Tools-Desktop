@@ -43,7 +43,7 @@
                             <span class="fa fa-chevron-left"></span> Return to Setup</a>
                         <br>
                         <app-fsat-basics *ngIf="formSelect == 'fsat-basics'" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="saveBasics($event)"
-                            [basicsDone]="basicsDone"></app-fsat-basics>
+                            [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)"></app-fsat-basics>
                         <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
                             [gasDone]="gasDone"></app-gas-density>
                         <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
