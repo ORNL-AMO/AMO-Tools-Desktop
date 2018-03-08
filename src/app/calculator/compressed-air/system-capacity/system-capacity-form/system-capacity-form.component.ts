@@ -23,7 +23,7 @@ export class SystemCapacityFormComponent implements OnInit {
     this.calculate.emit(this.inputs);
   }
 
-  addReciever() {
+  addReceiver() {
     this.inputs.receiverCapacities.push(0);
     this.emitChange();
   }
