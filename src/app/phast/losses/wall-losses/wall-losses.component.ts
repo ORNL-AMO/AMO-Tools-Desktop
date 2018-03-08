@@ -18,8 +18,6 @@ export class WallLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -47,10 +45,6 @@ export class WallLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      //toggle save clicked saves losses
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       //toggle add loss adds loss
       if (changes.addLossToggle) {
         this.addLoss();
@@ -97,45 +91,6 @@ export class WallLossesComponent implements OnInit {
         this._wallLosses.push(tmpLoss);
       })
     }
-    //subscribe to deleteLossIndex object in wallLossesService
-    //used to delete from modification and baseline at same time
-    this.wallLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        //remove at index
-        if (this.losses.wallLosses) {
-          this._wallLosses.splice(lossIndex, 1);
-          //remove comparison object as well
-          if (this.wallLossCompareService.differentArray && !this.isBaseline) {
-            this.wallLossCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-
-    //add monitor so both baseline and modification add loss when clicked
-    //ONLY ADDING LOSSSES IN BASELINE NOW
-    // if (this.isBaseline) {
-    //   this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._wallLosses.push({
-    //         form: this.wallLossesService.initForm(),
-    //         name: 'Loss #' + (this._wallLosses.length + 1),
-    //         heatLoss: 0.0
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._wallLosses.push({
-    //         form: this.wallLossesService.initForm(),
-    //         name: 'Loss #' + (this._wallLosses.length + 1),
-    //         heatLoss: 0.0
-    //       })
-    //     }
-    //   })
-    // }
 
     if(this.inSetup && this.modExists){
       this.lossesLocked = true;
@@ -146,13 +101,10 @@ export class WallLossesComponent implements OnInit {
   ngOnDestroy() {
     //clean up subscriptions on destroy
     if (this.isBaseline) {
-     // this.wallLossesService.addLossBaselineMonitor.next(false);
       this.wallLossCompareService.baselineWallLosses = null;
     } else {
       this.wallLossCompareService.modifiedWallLosses = null;
-     // this.wallLossesService.addLossModifiedMonitor.next(false);
     }
-    this.wallLossesService.deleteLossIndex.next(null);
   }
 
   disableForms(){
@@ -162,15 +114,6 @@ export class WallLossesComponent implements OnInit {
   }
 
   addLoss() {
-    //if adding loss in modification signal to baseline to add loss
-    // if (this.isLossesSetup) {
-    //   this.wallLossesService.addLoss(this.isBaseline);
-    // }
-    //check compare service objects has been initialized
-    //have modify conditions view call so that it isn't called twice => (!this.isBaseline)
-    if (this.wallLossCompareService.differentArray) {
-      this.wallLossCompareService.addObject(this.wallLossCompareService.differentArray.length - 1);
-    }
     //add new empty loss to component data
     this._wallLosses.push({
       form: this.wallLossesService.initForm(this._wallLosses.length+1),
@@ -190,8 +133,8 @@ export class WallLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    //signal delete to service
-    this.wallLossesService.setDelete(lossIndex);
+    this._wallLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   //calculate wall loss results
