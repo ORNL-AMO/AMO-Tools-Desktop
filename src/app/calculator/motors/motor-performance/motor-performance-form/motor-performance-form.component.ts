@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PsatService } from '../../../../psat/psat.service';
-import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {PsatService} from '../../../../psat/psat.service';
+import {Settings} from '../../../../shared/models/settings';
+import {FormGroup} from '@angular/forms';
+
 @Component({
   selector: 'app-motor-performance-form',
   templateUrl: './motor-performance-form.component.html',
@@ -36,7 +37,7 @@ export class MotorPerformanceFormComponent implements OnInit {
     'Premium',
     'Specified'
   ];
-  efficiencyError: string=null;
+  efficiencyError: string = null;
   tmpFrequency: string;
   tmpHorsePower: string;
   tmpMotorRpm: number;
@@ -45,7 +46,10 @@ export class MotorPerformanceFormComponent implements OnInit {
   tmpEfficiency: number;
   tmpMotorVoltage: number;
   tmpFullLoadAmps: number;
-  constructor(private psatService: PsatService) { }
+  rpmError: string = null;
+
+  constructor(private psatService: PsatService) {
+  }
 
   ngOnInit() {
     if (this.performanceForm) {
@@ -55,7 +59,7 @@ export class MotorPerformanceFormComponent implements OnInit {
       this.tmpEfficiency = this.performanceForm.controls.efficiency.value;
       this.tmpMotorVoltage = this.performanceForm.controls.motorVoltage.value;
       this.tmpFullLoadAmps = this.performanceForm.controls.fullLoadAmps.value;
-      this.tmpMotorRpm = this.performanceForm.controls.motorRPM.value
+      this.tmpMotorRpm = this.performanceForm.controls.motorRPM.value;
     }
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
@@ -154,6 +158,30 @@ export class MotorPerformanceFormComponent implements OnInit {
       this.efficiencyError = null;
       return true;
     }
+  }
+
+  checkRPM() {
+    if (this.tmpEfficiencyClass == 'Standard Efficiency' || this.tmpEfficiencyClass == 'Energy Efficient') {
+      if (this.tmpFrequency == '60 Hz' && this.tmpMotorRpm < 540) {
+        this.rpmError = 'Motor RPM too small for selected efficiency class';
+        return false;
+      } else if (this.tmpFrequency == '50 Hz' && this.tmpMotorRpm < 450) {
+        this.rpmError = 'Motor RPM too small for selected efficiency class';
+        return false;
+      }
+    }
+    if (this.tmpEfficiencyClass == 'Premium') {
+      if (this.tmpFrequency == '60 Hz' && this.tmpMotorRpm < 1080) {
+        this.rpmError = 'Motor RPM too small for selected efficiency class';
+        return false;
+      } else if (this.tmpFrequency == '50 Hz' && this.tmpMotorRpm < 900) {
+        this.rpmError = 'Motor RPM too small for selected efficiency class';
+        return false;
+      }
+    }
+    this.emitChange();
+    this.rpmError = null;
+    return true;
   }
 
   focusField(str: string) {

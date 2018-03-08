@@ -10,7 +10,7 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('bag-method')">Bag Method</a>
+            <a class="click-item" (click)="showTool('bag-method')">Leak Loss Estimator - Bag Method</a>
             <p>
               Use head tool calculator to calculate pump head.
             </p>
@@ -40,6 +40,7 @@
             </p>
           </div>
         </div>
+
         <h3>Receiver Tank</h3>
         <div class="row calc-item-row">
           <div class="col-1">
@@ -50,6 +51,45 @@
             <a class="click-item" (click)="showTool('general-method')">General Method</a>
             <p>
               Use general method to calculate receiver tank size.
+            <a class="click-item" (click)="showTool('pipe-sizing')">Pipe Sizing</a>
+            <p>
+              Use pipe sizing calculator to calculate pipe size.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('air-velocity')">Air Velocity</a>
+            <p>
+              Use air velocity calculator to calculate compressed air velocity in the piping.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('system-capacity')">System Capacity</a>
+            <p>
+              Use system capacity calculator to calculate capacity of compressed air in system.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('operation-cost')">Operation Cost Calculations</a>
+            <p>
+              Use operation cost calculator to calculate operation cost.
             </p>
           </div>
         </div>
@@ -70,4 +110,16 @@
 </div>
 <div class="stand-alone-calc" *ngIf="getSelectedTool() == 'general-method'">
   <app-general-method></app-general-method>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'pipe-sizing'">
+ <app-pipe-sizing></app-pipe-sizing>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'air-velocity'">
+  <app-air-velocity></app-air-velocity>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'system-capacity'">
+  <app-system-capacity></app-system-capacity>
+</div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'operation-cost'">
+  <app-operating-cost></app-operating-cost>
 </div>

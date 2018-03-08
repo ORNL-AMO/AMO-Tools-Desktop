@@ -119,6 +119,7 @@ export class LossesComponent implements OnInit {
   changeField($event) {
     this.currentField = $event;
   }
+  
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));

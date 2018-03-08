@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -17,7 +17,16 @@ export class MotorPerformanceComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-​
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   currentField: string;
   performanceForm: FormGroup;
 
@@ -47,7 +56,7 @@ export class MotorPerformanceComponent implements OnInit {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
           if (results.length != 0) {
-            if(results[0].powerMeasurement != 'hp'){
+            if (results[0].powerMeasurement != 'hp') {
               this.performanceForm.patchValue({
                 horsePower: '150'
               })
@@ -59,10 +68,22 @@ export class MotorPerformanceComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
   calculate() {
     this.toggleCalculate = !this.toggleCalculate;
   }
-  setTab(str: string){
+  setTab(str: string) {
     this.tabSelect = str;
   }
   changeField(str: string) {

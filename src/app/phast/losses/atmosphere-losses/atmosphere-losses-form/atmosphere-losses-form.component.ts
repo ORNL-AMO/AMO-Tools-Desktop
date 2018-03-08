@@ -71,7 +71,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
     }
 
     this.atmosphereLossForm.patchValue({
@@ -80,18 +80,26 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.startSavePolling();
   }
 
-  checkSpecificHeat(){
-    let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC')
+  checkSpecificHeat() {
+    if (this.atmosphereLossForm.controls.atmosphereGas.value) {
+      let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+      if (material) {
+        let val = material.specificHeat;
+        if (this.settings.unitsOfMeasure == 'Metric') {
+          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C')
+        }
         material.specificHeat = this.roundVal(val, 4);
+        console.log(material.specificHeat);
+        console.log(this.atmosphereLossForm.controls.specificHeat.value);
+        console.log('======')
+        if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
+          return true;
+        } else {
+          return false;
+        }
       }
-      if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
-        return true;
-      } else {
-        return false;
-      }
+    } else {
+      return false;
     }
   }
 
@@ -134,10 +142,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  checkInputErrors(){
-    if(this.temperatureError || this.specificHeatError || this.flowRateError){
+  checkInputErrors() {
+    if (this.temperatureError || this.specificHeatError || this.flowRateError) {
       this.inputError.emit(true);
-    }else{
+    } else {
       this.inputError.emit(false);
     }
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../shared/models/phast/energyEquivalency';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
@@ -14,6 +14,15 @@ export class EnergyEquivalencyComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   energyEquivalencyElectric: EnergyEquivalencyElectric = {
     fuelFiredEfficiency: 60,
     electricallyHeatedEfficiency: 90,
@@ -28,14 +37,14 @@ export class EnergyEquivalencyComponent implements OnInit {
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
 
-  currentField: string = 'fuelFiredEfficiency';
+  currentField: string = 'default';
   tabSelect: string = 'results';
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(results => {
-        if(results){
+        if (results) {
           this.settings = results[0];
           this.initDefaultValues(this.settings);
           this.calculateElectric();
@@ -46,6 +55,18 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.initDefaultValues(this.settings);
       this.calculateElectric();
       this.calculateFuel();
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 

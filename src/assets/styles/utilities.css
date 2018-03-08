@@ -45,3 +45,7 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(0, 0, 0, 0.12);
 }
+
+.loss-results{
+    margin-bottom: 20px;
+}

@@ -28,7 +28,7 @@
     </div>
     <div *ngIf="tabSelect == 'notes'">
         <div *ngIf="modification" class="col-12 no-padding-left"></div>
-        <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab"></app-modify-conditions-notes>
+        <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab" (emitSave)="save()"></app-modify-conditions-notes>
         <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
             You must add a modification to take notes on it.
         </div>

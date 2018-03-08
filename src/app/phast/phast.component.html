@@ -13,7 +13,7 @@
           </a>
         </li>
         <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-          <a (click)="changeAssessmentTab('modify-conditions')">Modify Conditions
+          <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
             <br>
             <span class="help-text psat-view">Expert View</span>
           </a>
@@ -29,7 +29,7 @@
   </div>
 
   <!--Furnace Setup -->
-  <div class="system-setup tab-content" *ngIf="mainTab == 'system-setup'" [ngStyle]="{'height.px': containerHeight}">
+  <div class="system-setup tab-content" *ngIf="mainTab == 'system-setup'" [ngStyle]="{'height.px': containerHeight}" style="margin-bottom:25px">
     <div class="row panel-container" *ngIf="stepTab.step == 1">
       <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen}">
         <!--Step: 1 System Basics (Settings)-->

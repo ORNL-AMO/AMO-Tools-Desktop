@@ -127,12 +127,15 @@
       </div>
       <div class="card" *ngIf="currentField == 'dischargeCoefficient'">
         <div class="card-header">
-          Discharge Coefficient
+          Coefficient of Discharge
         </div>
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            Coefficient to take viscocity and turbulence into account when calculating flow rate.
+            Coefficient to take viscosity and turbulence into account when calculating flow rate. Here, this is based on the Type of Orifice used.<br>
+            Square Edge ~ 0.5<br>
+            Sharp Edge ~ 0.6<br>
+            Venturi ~ 0.8<br>
           </p>
           <label><u>Input:</u></label>
           <p>

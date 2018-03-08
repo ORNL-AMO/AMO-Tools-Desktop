@@ -67,6 +67,9 @@ export class SankeyService {
       results.totalSystemLosses = phastResults.totalSystemLosses;
     }
     results.totalInput = phastResults.grossHeatInput;
+
+    results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
+
     results.nodes = this.getNodes(results, settings);
     return results;
   }
@@ -117,9 +120,8 @@ export class SankeyService {
       unit = 'kW';
     }
 
-
-
-    let tmpNode = this.createNode("Energy Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
+    let tmpNode;
+    tmpNode = this.createNode("Gross Heat", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
     results.nodes.push(tmpNode);
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
@@ -129,10 +131,22 @@ export class SankeyService {
     spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
 
     var scale = d3.scaleLinear()
-                  .domain([2, interIndex + arrowCount + 1])
-                  .range([ventOffsetX, chargeMaterialX]);
+      .domain([2, interIndex + arrowCount + 1])
+      .range([ventOffsetX, chargeMaterialX]);
 
     let top: boolean = false;
+
+
+    // //debug
+    // if (results.availableHeatPercent) {
+    //   tmpNode = this.createNode("Available Heat", results.availableHeatPercent, 0, 0, 400, 735, false, false, false, false, "%", false, true)
+    //   results.nodes.push(tmpNode);
+    //   tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
+    //   results.nodes.push(tmpNode);
+    //   interIndex++;
+    // }
+
+
     // FLUE GAS ARROW
     // one of three
     // Flue Gas
@@ -164,6 +178,7 @@ export class SankeyService {
     }
     // end flue gas arrow
 
+    
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
       spacing = scale(interIndex);
@@ -217,7 +232,7 @@ export class SankeyService {
     // Fixture
     if (results.totalFixtureLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Fixture/Trays Losses", results.totalFixtureLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -227,7 +242,7 @@ export class SankeyService {
     // Leakage
     if (results.totalLeakageLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Hot Gas Leakage Losses", results.totalLeakageLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -265,13 +280,13 @@ export class SankeyService {
       top = !top;
     }
     spacing = scale(interIndex);
-    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
+    tmpNode = this.createNode("Charge Materials", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
   }
 
 
-  createNode(name: string, value: number, displaySize: number, width: number, x: number, y: number, input: boolean, usefulOutput: boolean, inter: boolean, top: boolean, units: string, extSurfaceLoss: boolean): SankeyNode {
+  createNode(name: string, value: number, displaySize: number, width: number, x: number, y: number, input: boolean, usefulOutput: boolean, inter: boolean, top: boolean, units: string, extSurfaceLoss: boolean, availableHeatPercent?: boolean): SankeyNode {
     let newNode: SankeyNode = {
       name: name,
       value: value,
@@ -284,7 +299,11 @@ export class SankeyService {
       inter: inter,
       top: top,
       units: units,
-      extSurfaceLoss: extSurfaceLoss
+      extSurfaceLoss: extSurfaceLoss,
+      availableHeatPercent: false
+    }
+    if (availableHeatPercent) {
+      newNode.availableHeatPercent = true;
     }
     return newNode;
   }
@@ -309,6 +328,7 @@ export class SankeyService {
       totalEnergyInput: 0,
       totalExhaustGas: 0,
       totalSystemLosses: 0,
+      availableHeatPercent: 0,
       nodes: new Array<SankeyNode>()
     }
     return results;
@@ -333,6 +353,7 @@ export interface FuelResults {
   totalEnergyInput: number,
   totalExhaustGas: number,
   totalSystemLosses: number,
+  availableHeatPercent: number,
   nodes: Array<SankeyNode>
 }
 
@@ -348,5 +369,6 @@ export interface SankeyNode {
   inter: boolean,
   top: boolean,
   units: string,
-  extSurfaceLoss: boolean
+  extSurfaceLoss: boolean,
+  availableHeatPercent: boolean
 }

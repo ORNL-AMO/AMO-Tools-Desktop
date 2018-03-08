@@ -56,7 +56,7 @@
         [settings]="settings" (inputError)="setError($event)"></app-flue-gas-losses-form-volume>
     </div>
   </div>
-  <div class="row" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+  <div class="row loss-results" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
     <div class="col-12">
       <div class="form-group">
         <label class="small font-weight-bold">Available Heat</label>
@@ -71,7 +71,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">Gross Heat</label>
         <div *ngIf="loss.grossHeat" class="text-center small font-weight-bold">
-          {{loss.grossHeat | sigFigs:'5'}}
+          {{loss.grossHeat | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.grossHeat" class="text-center small font-weight-bold">
@@ -81,7 +81,7 @@
       <div class="form-group">
         <label class="small font-weight-bold">Flue Gas Losses</label>
         <div *ngIf="loss.systemLosses" class="text-center small font-weight-bold">
-          {{loss.systemLosses | sigFigs:'5'}}
+          {{loss.systemLosses | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.systemLosses" class="text-center small font-weight-bold">

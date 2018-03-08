@@ -261,7 +261,8 @@ export class MotorComponent implements OnInit {
     }
     if (this.psatForm.controls.frequency.value && this.psatForm.controls.motorRPM.value != '') {
       let frequencyEnum = this.psatService.getLineFreqEnum(this.psatForm.controls.frequency.value);
-      let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.controls.motorRPM.value);
+      let effClass = this.psatService.getEfficienyClassEnum(this.psatForm.controls.efficiencyClass.value);
+      let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.controls.motorRPM.value, effClass);
       if (tmp.message) {
         this.rpmError = tmp.message;
       } else {
@@ -399,6 +400,7 @@ export class MotorComponent implements OnInit {
 
   changeEfficiencyClass() {
     this.modifyPowerArrays();
+    this.checkMotorRpm();
     this.startSavePolling();
   }
 

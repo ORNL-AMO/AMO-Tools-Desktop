@@ -611,6 +611,7 @@ export class PsatService {
     }
     return effClass;
   }
+
   getDriveEnum(drive: string): number {
     let driveEnum;
     if (drive == 'Direct Drive') {
@@ -950,39 +951,45 @@ export class PsatService {
     }
   }
 
-  checkMotorRpm(lineFreqEnum: number, motorRPM: number) {
+  checkMotorRpm(lineFreqEnum: number, motorRPM: number, effClass: number) {
     let response = {
       valid: null,
       message: null
     };
-    let range = this.getMotorRpmMinMax(lineFreqEnum);
+    let range = this.getMotorRpmMinMax(lineFreqEnum, effClass);
     if (motorRPM >= range.min && motorRPM <= range.max) {
       response.valid = true;
       return response
     } else if (motorRPM < range.min) {
       response.valid = false;
-      response.message = 'Motor RPM too Small for Selected Line Frequency';
+      response.message = 'Motor RPM too small for selected efficiency class';
       return response;
     } else if (motorRPM > range.max) {
       response.valid = false;
-      response.message = 'Motor RPM too Latge for Selected Line Frequency';
+      response.message = 'Motor RPM too large for selected efficiency class';
       return response;
     } else {
       return response;
     }
   }
 
-  getMotorRpmMinMax(lineFreqEnum: number) {
+  getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {
     let rpmRange = {
       min: 0,
       max: 0
     }
-    if (lineFreqEnum == 0) {
+    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1 )) { // if 60Hz and Standard or Energy Efficiency
       rpmRange.min = 540;
-      rpmRange.max = 3960;
-    } else if (lineFreqEnum == 1) {
+      rpmRange.max = 3600;
+    } else if (lineFreqEnum == 1 && (effClass == 0 ||  effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
       rpmRange.min = 450;
       rpmRange.max = 3300;
+    } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
+      rpmRange.min = 1080;
+      rpmRange.max = 3600;
+    }else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
+      rpmRange.min = 900;
+      rpmRange.max = 3000;
     }
     return rpmRange;
   }

@@ -58,7 +58,7 @@
   <div class="form-group">
     <label class="bold">Valve Flow Factor</label>
     <div class="text-center small">
-      {{ valveFlowFactor}} SCFM
+      <strong>{{ valveFlowFactor | sigFigs:'6'}} SCFM</strong>
     </div>
   </div>
 </form>
