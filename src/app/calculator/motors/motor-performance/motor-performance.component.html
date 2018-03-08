@@ -2,9 +2,13 @@
   <div class="col-12">
     <div class="row align-items-top  calculator-panel">
       <div class="modification panel-column col-6 align-top">
-        <div class="header">
-          <h3><img src="assets/images/performance.png" class="ico-size4">
-            Motor Performance Calculator</h3>
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/performance.png" class="ico-size4">
+          </div>
+          <div class="col">
+            <h3>Motor Performance Calculator</h3>
+          </div>
         </div>
         <div class="row">
           <div class="col-12">
@@ -17,10 +21,10 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Graph</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
               </li><!--
-        --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>
@@ -35,11 +39,11 @@
                 <app-motor-performance-help [currentField]="currentField"></app-motor-performance-help>
                 <!--<h3>Motor Performance Help</h3>-->
                 <!--<p>-->
-                  <!--Plots current, efficiency, power factor vs motor shaft load for a given motor description-->
+                <!--Plots current, efficiency, power factor vs motor shaft load for a given motor description-->
                 <!--</p>-->
                 <!--<p>-->
-                  <!--<u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.-->
-                  <!--A higher power factor signifies that the motor consumes power effectively.-->
+                <!--<u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.-->
+                <!--A higher power factor signifies that the motor consumes power effectively.-->
                 <!--</p>-->
               </div>
             </div>

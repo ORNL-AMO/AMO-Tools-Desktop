@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import {FormBuilder, Validators} from "@angular/forms";
 import {IndexedDbService} from "../../../indexedDb/indexed-db.service";
@@ -12,6 +12,15 @@ import { FormGroup } from '@angular/forms';
 export class PercentLoadEstimationComponent implements OnInit {
   @Input()
   settings: Settings;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   loadEstimationResult: number;
   percentLoadEstimationForm: FormGroup;
@@ -42,6 +51,19 @@ export class PercentLoadEstimationComponent implements OnInit {
       );
     }
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+  
   setTab(str: string) {
     this.tabSelect = str;
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { StandaloneService } from '../../standalone.service';
 import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/standalone';
 
@@ -8,6 +8,15 @@ import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/mode
   styleUrls: ['./combined-heat-power.component.css']
 })
 export class CombinedHeatPowerComponent implements OnInit {
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   inputs: CombinedHeatPower = {
     annualOperatingHours: 0,
@@ -39,6 +48,19 @@ export class CombinedHeatPowerComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+  
   setCurrentField(str: string) {
     this.currentField = str;
   }

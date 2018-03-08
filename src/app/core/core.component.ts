@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, HostListener, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { AssessmentService } from '../assessment/assessment.service';
+import { WindowRefService } from '../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-core',
@@ -14,14 +15,27 @@ import { AssessmentService } from '../assessment/assessment.service';
 export class CoreComponent implements OnInit {
   showUpdateModal: boolean;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getScreenshotHeight();
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    this.getScreenshotHeight();
+  }
+
+  @ViewChild('screenshotBar') screenshotBar: ElementRef;
+  // @ViewChild('coreContainer') coreContainer: ElementRef;
   @ViewChild('updateModal') public updateModal: ModalDirective;
 
   gettingData: boolean = false;
   showFeedback: boolean = true;
 
   showScreenshot: boolean = true;
+  screenshotHeight: number;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef) {
+    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
@@ -52,6 +66,11 @@ export class CoreComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getScreenshotHeight();
+    }, 100);
+  }
   takeScreenShot() {
     this.importExportService.takeScreenShot();
   }
@@ -86,4 +105,19 @@ export class CoreComponent implements OnInit {
     this.showUpdateModal = false;
   }
 
+
+  getScreenshotHeight() {
+    if (this.screenshotBar) {
+      if (this.screenshotHeight != this.screenshotBar.nativeElement.clientHeight) {
+        this.screenshotHeight = this.screenshotBar.nativeElement.clientHeight
+      }
+      if (this.windowRefService.nativeWindow.pageYOffset >> 0) {
+        let scrollTest = this.screenshotBar.nativeElement.clientHeight - this.screenshotBar.nativeElement.scrollHeight;
+        if (scrollTest <= 0) {
+          this.screenshotHeight = 0;
+        }
+      }
+      this.assessmentService.screenShotHeight.next(this.screenshotHeight);
+    }
+  }
 }

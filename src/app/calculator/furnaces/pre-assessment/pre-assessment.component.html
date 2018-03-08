@@ -2,16 +2,20 @@
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top scroll-item" [ngStyle]="{'height.px': height}">
-        <div class="header" *ngIf="!inModal">
-          <h3><img src="assets/images/assessment.png" class="ico-size2">
-            Pre-assessment / Screening Calculator</h3>
+        <div #leftPanelHeader class="row header" *ngIf="!inModal">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/assessment.png" class="ico-size2">
+          </div>
+          <div class="col">
+            <h3>Pre-assessment / Screening Calculator</h3>
+          </div>
         </div>
         <div class="row align-items-center action-row">
           <div class="col-6">
-              <div class="btn-group btn-group-sm align-self-center">
-                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Imperial')" [ngClass]="{'active': settings.unitsOfMeasure == 'Imperial'}">Imperial</button>
-                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Metric')" [ngClass]="{'active':  settings.unitsOfMeasure == 'Metric'}">Metric</button>
-              </div>
+            <div class="btn-group btn-group-sm align-self-center">
+              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Imperial')" [ngClass]="{'active': settings.unitsOfMeasure == 'Imperial'}">Imperial</button>
+              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Metric')" [ngClass]="{'active':  settings.unitsOfMeasure == 'Metric'}">Metric</button>
+            </div>
           </div>
           <div class="col-6">
             <a class="pull-right small align-bottom click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Furnace</a>
@@ -33,18 +37,20 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Results</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a (click)="setTab('help')">Help</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div *ngIf="results.length != 0">
+            <!-- <div *ngIf="results.length != 0"> -->
+              <div>
               <h5>Process Heating Equipment - Energy Distribution</h5>
-              <app-pre-assessment-graph [results]="results" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
+              <app-pre-assessment-graph [toggleCalculate]="toggleCalculate" [settings]="settings" [preAssessments]="preAssessments" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
             </div>
+            <!--probably need to move this to graph component -->
             <div class="col-11 no-data" *ngIf="results.length == 0">
               <h5>Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</h5>
             </div>
@@ -52,7 +58,8 @@
           <div class="row justify-content-center data-row note-row-width">
             <div class=" alert alert-info">
               <p>
-                Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout this tool.
+                Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
+                this tool.
               </p>
             </div>
           </div>

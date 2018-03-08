@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
@@ -27,6 +27,15 @@ export class HeadToolComponent implements OnInit {
   inAssessment: boolean;
   @Input()
   assessment: Assessment;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   results: any = {
     differentialElevationHead: 0.0,
@@ -80,6 +89,18 @@ export class HeadToolComponent implements OnInit {
     //     }
     //   })
     // }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   getFormFromSettings() {

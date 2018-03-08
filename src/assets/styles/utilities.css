@@ -62,3 +62,6 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     padding: 2px;
   }
   
+.loss-results{
+    margin-bottom: 20px;
+}

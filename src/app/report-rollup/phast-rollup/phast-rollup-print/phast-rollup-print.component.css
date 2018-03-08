@@ -3,4 +3,8 @@
         page-break-before: always;
         page-break-inside: avoid;
     }
+
+    .print-avoid-break {
+        page-break-inside: avoid;
+    }
 }

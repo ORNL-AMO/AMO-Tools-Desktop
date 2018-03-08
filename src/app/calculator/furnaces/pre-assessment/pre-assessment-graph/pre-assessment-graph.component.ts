@@ -1,20 +1,34 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { PreAssessment } from '../pre-assessment';
+import { PreAssessmentService } from '../pre-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
+import { Calculator } from '../../../../shared/models/calculators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-pre-assessment-graph',
   templateUrl: './pre-assessment-graph.component.html',
   styleUrls: ['./pre-assessment-graph.component.css']
 })
-export class PreAssessmentGraphComponent implements OnInit {
+export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()
-  results: Array<any>;
+  settings: Settings;
+  @Input()
+  preAssessments: Array<PreAssessment>;
   @Input()
   chartColors: Array<string>;
+  @Input()
+  printView: boolean;
+  @Input()
+  inRollup: boolean;
+  @Input()
+  toggleCalculate: boolean;
+
 
   @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
@@ -25,47 +39,79 @@ export class PreAssessmentGraphComponent implements OnInit {
   chartContainerHeight: number;
   chartContainerWidth: number;
 
+  hideTooltip: boolean = false;
+
+  showLegend: boolean;
+
   window: any;
   doc: any;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
+    if (!this.printView) {
+      this.printView = false;
+    }
+
+    if (this.inRollup) {
+      this.showLegend = false;
+    }
+    else {
+      this.showLegend = true;
+    }
+
+    this.chartColors = graphColors;
     this.getData();
+
 
   }
 
-  ngOnChanges(changes: SimpleChange) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes) {
-      this.getData();
-      if (this.firstChange) {
-        this.firstChange = !this.firstChange;
-      }
-      else {
-        this.initChart();
+      if (changes.toggleCalculate) {
+        this.getData();
+        if (this.firstChange) {
+          this.firstChange = !this.firstChange;
+        }
+        else if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
+          this.initChart();
+        }
       }
     }
   }
 
+
   ngAfterViewInit() {
+
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.chartContainerWidth = this.window.innerWidth * 0.41;
+    this.chartContainerWidth = (this.window.innerWidth - 30) * .28;
     this.chartContainerHeight = 280;
-    this.initChart();
+    if (this.printView) {
+      this.chartContainerWidth = 500;
+    }
+    if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
+      this.initChart();
+    }
   }
 
+  //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
     this.columnData = new Array();
-    this.results.forEach(val => {
-      let tmpArray = new Array();
-      tmpArray.push(val.name + ": " + val.percent.toFixed(2).toString() + "%");
-      tmpArray.push(val.percent.toFixed(2));
-      this.columnData.unshift(tmpArray);
-    });
+    if (this.preAssessments) {
+      let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
+      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
+      for (let i = 0; i < tmpArray.length; i++) {
+        this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
+      }
+    }
   }
 
+
   initChart() {
+
+    this.hideTooltip = true;
+
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
@@ -80,7 +126,7 @@ export class PreAssessmentGraphComponent implements OnInit {
         pattern: this.chartColors
       },
       legend: {
-        show: true,
+        show: this.showLegend,
         position: 'right'
       },
       tooltip: {
