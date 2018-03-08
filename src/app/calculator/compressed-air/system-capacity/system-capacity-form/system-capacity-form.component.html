@@ -1,7 +1,8 @@
 <form>
   <div class="form-section">
+    <label class="bold">Pipe Size (ft)</label>
     <div class="form-group">
-      <label for="oneHalf">1/2</label>
+      <label for="oneHalf"><sup>1</sup>&frasl;<sub>2</sub></label>
       <div class="input-group">
         <input name="oneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneHalf" id="oneHalf"
                (input)="emitChange()" onfocus="this.select();">
@@ -9,7 +10,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="threeFourths">3/2</label>
+      <label for="threeFourths"><sup>3</sup>&frasl;<sub>4</sub></label>
       <div class="input-group">
         <input name="threeFourths" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeFourths"
                id="threeFourths"
@@ -26,7 +27,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="oneAndOneFourth">1.25</label>
+      <label for="oneAndOneFourth">1<sup>1</sup>&frasl;<sub>4</sub></label>
       <div class="input-group">
         <input name="oneAndOneFourth" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneFourth"
                id="oneAndOneFourth"
@@ -35,7 +36,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="oneAndOneHalf">1.5</label>
+      <label for="oneAndOneHalf">1<sup>1</sup>&frasl;<sub>2</sub></label>
       <div class="input-group">
         <input name="oneAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneHalf"
                id="oneAndOneHalf"
@@ -52,7 +53,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="twoAndOneHalf">2.5</label>
+      <label for="twoAndOneHalf">2<sup>1</sup>&frasl;<sub>2</sub></label>
       <div class="input-group">
         <input name="twoAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.twoAndOneHalf"
                id="twoAndOneHalf"
@@ -69,7 +70,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="oneHalf">3.5</label>
+      <label for="oneHalf">3<sup>1</sup>&frasl;<sub>2</sub></label>
       <div class="input-group">
         <input name="threeAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeAndOneHalf"
                id="threeAndOneHalf"
@@ -103,22 +104,14 @@
     </div>
   </div>
   <div class="form-section">
-    <div class="form-group">
-      <label class="bold">Total Pipe Volume</label>
-      <div class="text-center small">
-        <span *ngIf="outputs.totalPipeVolume"><strong>{{outputs.totalPipeVolume | number:'1.0-2'}} ft</strong></span>
-        <span *ngIf="!outputs.totalPipeVolume"><strong>&mdash; &mdash;</strong></span>
-      </div>
-    </div>
-  </div>
-  <div class="form-section">
+    <label class="bold">Enter the Number of Receivers</label>
     <div class="form-group" *ngFor="let capacity of inputs.receiverCapacities; let index=index; trackBy:trackByFn">
       <label for="{{'capacity_'+index}}">Receiver {{index+1}}</label>
       <div class="input-group">
         <input name="{{'capacity_'+index}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.receiverCapacities[index]" id="{{'capacity_'+index}}"
                (input)="emitChange()" onfocus="this.select();">
         <span class="input-group-addon units">gal</span>
-        <span class="input-group-addon"><a class="click-link" (click)="removeCapacity(index)">&times;</a></span>
+        <span class="input-group-addon"><a class="click-link" (click)="removeCapacity(index)"> &times;</a></span>
       </div>
     </div>
     <div class="row">
@@ -128,6 +121,13 @@
     </div>
   </div>
   <div class="form-section">
+    <div class="form-group">
+      <label class="bold">Total Pipe Volume</label>
+      <div class="text-center small">
+        <span *ngIf="outputs.totalPipeVolume"><strong>{{outputs.totalPipeVolume | number:'1.0-2'}} ft</strong></span>
+        <span *ngIf="!outputs.totalPipeVolume"><strong>&mdash; &mdash;</strong></span>
+      </div>
+    </div>
     <div class="form-group">
       <label class="bold">Total Receiver Volume</label>
       <div class="text-center small">

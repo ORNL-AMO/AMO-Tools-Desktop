@@ -18,7 +18,7 @@ export class SystemCapacityFormComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
   emitChange() {
     this.calculate.emit(this.inputs);
   }
@@ -28,7 +28,7 @@ export class SystemCapacityFormComponent implements OnInit {
     this.emitChange();
   }
 
-  removeCapacity(index:number){
+  removeCapacity(index: number) {
     this.inputs.receiverCapacities.splice(index, 1);
     this.emitChange();
   }

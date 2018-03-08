@@ -49,14 +49,9 @@ export class SystemCapacityComponent implements OnInit {
       totalReceiverVolume: 0,
       totalCapacityOfCompressedAirSystem: 0
     };
-    console.log(this.getTotalPipeVolume());
-    console.log(this.outputs);
   }
-  // calculatePipeVolume(inputs: AirSystemCapacityInput) {
-  //   this.outputs = StandaloneService.airSystemCapacity(inputs);
-  // }
+
   getTotalPipeVolume() {
-    console.log(this.inputs);
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
     return this.outputs.totalPipeVolume;
   }
