@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {AirSystemCapacityInput, AirSystemCapacityOutput} from "../../../../shared/models/standalone";
+import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../shared/models/standalone";
 
 @Component({
   selector: 'app-system-capacity-form',
@@ -18,7 +18,24 @@ export class SystemCapacityFormComponent implements OnInit {
 
   ngOnInit() {
   }
-emitChange() {
+  
+  emitChange() {
     this.calculate.emit(this.inputs);
   }
+
+  addReciever() {
+    this.inputs.receiverCapacities.push(0);
+    this.emitChange();
+  }
+
+  removeCapacity(index:number){
+    this.inputs.receiverCapacities.splice(index, 1);
+    this.emitChange();
+  }
+
+  //function used by *ngFor with data binding
+  trackByFn(index: any, item: any) {
+    return index;
+  }
+
 }

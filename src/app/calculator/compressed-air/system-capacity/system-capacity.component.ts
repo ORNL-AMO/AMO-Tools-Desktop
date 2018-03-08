@@ -16,7 +16,7 @@ export class SystemCapacityComponent implements OnInit {
 
   ngOnInit() {
     this.inputs = {
-      receiverCapacities: [0],
+      receiverCapacities: new Array<number>(),
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -30,8 +30,9 @@ export class SystemCapacityComponent implements OnInit {
       five: 0,
       six: 0,
     };
+    this.inputs.receiverCapacities.push(0);
     this.outputs = {
-      receiverCapacities: [0],
+      receiverCapacities: new Array<number>(),
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -55,6 +56,7 @@ export class SystemCapacityComponent implements OnInit {
   //   this.outputs = StandaloneService.airSystemCapacity(inputs);
   // }
   getTotalPipeVolume() {
+    console.log(this.inputs);
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
     return this.outputs.totalPipeVolume;
   }

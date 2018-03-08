@@ -112,12 +112,18 @@
     </div>
   </div>
   <div class="form-section">
-    <div class="form-group">
-      <label for="receiverCapacities">Receiver</label>
+    <div class="form-group" *ngFor="let capacity of inputs.receiverCapacities; let index=index; trackBy:trackByFn">
+      <label for="{{'capacity_'+index}}">Receiver {{index+1}}</label>
       <div class="input-group">
-        <input name="receiverCapacities" class="form-control" type="number" step="any" [(ngModel)]="inputs.receiverCapacities" id="receiverCapacities"
+        <input name="{{'capacity_'+index}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.receiverCapacities[index]" id="{{'capacity_'+index}}"
                (input)="emitChange()" onfocus="this.select();">
         <span class="input-group-addon units">gal</span>
+        <span class="input-group-addon"><a class="click-link" (click)="removeCapacity(index)">&times;</a></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-auto mx-auto">
+        <a class="click-link small" (click)="addReciever()">Add Reciever Capacity</a>
       </div>
     </div>
   </div>
