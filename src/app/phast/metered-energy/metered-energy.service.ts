@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MeteredEnergyResults, MeteredEnergyElectricity, MeteredEnergyFuel, MeteredEnergySteam } from '../../shared/models/phast/meteredEnergy';
-import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -9,7 +8,7 @@ import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class MeteredEnergyService {
 
-  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
   meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use

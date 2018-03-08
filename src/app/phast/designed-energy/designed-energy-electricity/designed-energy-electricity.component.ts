@@ -61,11 +61,13 @@ export class DesignedEnergyElectricityComponent implements OnInit {
       percentOperatingHours: 0
     }
     this.phast.designedEnergy.designedEnergyElectricity.push(tmpZone);
+    this.save();
     this.calculate();
   }
 
   removeZone(index: number) {
     this.phast.designedEnergy.designedEnergyElectricity.splice(index, 1);
+    this.save();
     this.calculate();
   }
 }

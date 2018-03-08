@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
 
 @Component({
@@ -11,16 +11,14 @@ export class OperatingHoursComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-  @Input()
-  saveClicked: boolean;
+
   timeError: string = null;
   weeksPerYearError: string = null;
   daysPerWeekError: string = null;
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
   yearFormat: any;
-  isFirstChange: boolean = true;
-  counter: any;
+
   constructor() { }
 
   ngOnInit() {
@@ -36,13 +34,6 @@ export class OperatingHoursComponent implements OnInit {
       this.calculatHrsPerYear();
     } else if (!this.phast.operatingHours.hoursPerYear) {
       this.calculatHrsPerYear();
-    }
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveClicked && !this.isFirstChange) {
-      this.save.emit(true);
-    } else {
-      this.isFirstChange = false;
     }
   }
 

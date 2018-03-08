@@ -27,7 +27,7 @@ export class MeteredFuelFormComponent implements OnInit {
 
   fuelTypes: FlueGasMaterial[];
   fuelFlowInput: boolean;
-  counter: any;
+
   constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -69,7 +69,6 @@ export class MeteredFuelFormComponent implements OnInit {
       }
       this.inputs.heatingValue = heatingVal;
     }
-    this.calculate();
     this.setFlowRate();
   }
 
@@ -82,12 +81,7 @@ export class MeteredFuelFormComponent implements OnInit {
   }
 
   calculate() {
-    this.startSavePolling();
+    this.emitSave.emit(true);
     this.emitCalculate.emit(true);
   }
-
-  startSavePolling() {
-    this.emitSave.emit(true);
-  }
-
 }

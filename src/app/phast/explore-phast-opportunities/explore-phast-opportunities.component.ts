@@ -21,8 +21,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   @Output('save')
   save = new EventEmitter<boolean>();
-  @Input()
-  saveClicked: boolean;
 
   tabSelect: string = 'results';
   exploreModIndex: number;
@@ -33,8 +31,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     tabName: '',
     componentStr: ''
   };
-  counter: any;
-  isFirstChange: boolean = true;
+
   constructor() { }
 
   ngOnInit() {
@@ -61,16 +58,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         this.exploreModIndex = this.phast.modifications.length - 1;
         this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification'
       }
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.save.emit(true);
-      }
-    } else {
-      this.isFirstChange = false;
     }
   }
 

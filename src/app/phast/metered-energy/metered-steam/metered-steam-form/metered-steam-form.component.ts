@@ -20,7 +20,7 @@ export class MeteredSteamFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
-  counter: any;
+
   constructor() { }
 
   ngOnInit() {
@@ -31,12 +31,8 @@ export class MeteredSteamFormComponent implements OnInit {
   }
 
   calculate() {
-    this.startSavePolling();
-    this.emitCalculate.emit(true);
-  }
-
-  startSavePolling() {
     this.emitSave.emit(true);
+    this.emitCalculate.emit(true);
   }
 
 }

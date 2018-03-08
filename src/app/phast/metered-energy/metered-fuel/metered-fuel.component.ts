@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MeteredEnergyFuel, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
-import { PhastService } from '../../phast.service';
 import { MeteredEnergyService } from '../metered-energy.service';
 import { Settings } from '../../../shared/models/settings';
 
@@ -30,7 +29,7 @@ export class MeteredFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService) { }
 
   ngOnInit() {
     if (!this.phast.meteredEnergy.meteredEnergyFuel) {

@@ -18,7 +18,7 @@ export class DesignedEnergySteamFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  counter: any;
+
 
   constructor() { }
 
@@ -30,11 +30,7 @@ export class DesignedEnergySteamFormComponent implements OnInit {
   }
 
   calculate() {
-    this.startSavePolling();
-    this.emitCalculate.emit(true);
-  }
-
-  startSavePolling() {
     this.emitSave.emit(true);
+    this.emitCalculate.emit(true);
   }
 }
