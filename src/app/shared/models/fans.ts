@@ -40,6 +40,8 @@ export interface PlaneData {
   plane5upstreamOfPlane2: boolean;
   totalPressureLossBtwnPlanes1and4: number;
   totalPressureLossBtwnPlanes2and5: number;
+  inletSEF: number,
+  outletSEF: number,
   //variationInBarometricPressure: boolean;
   // globalBarometricPressure: number;
   estimate2and5TempFrom1: boolean;

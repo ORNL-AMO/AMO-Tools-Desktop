@@ -22,11 +22,11 @@ export class FanShaftPowerComponent implements OnInit {
   shaftPowerForm: FormGroup;
 
 
-  driveTypes: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
+  driveTypes: Array<{ name: string, efficiency: number }> = [
+    { name: 'Direct Drive', efficiency: 100 },
+    { name: 'V-Belt Drive', efficiency: 93 },
+    { name: 'Notched V-Belt Drive', efficiency: 95 },
+    { name: 'Synchronous Belt Drive', efficiency: 98 }
   ];
 
   frequencies: Array<string> = [
@@ -68,15 +68,24 @@ export class FanShaftPowerComponent implements OnInit {
     this.calcMotorShaftPower();
   }
 
-  calcMotorShaftPower(){
+  calcMotorShaftPower() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
     let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * this.fanShaftPower.powerFactorAtLoad;
     this.shaftPowerForm.patchValue({
       motorShaftPower: tmpVal
-    })    
+    })
     this.save();
   }
 
+
+  setBeltEfficiency() {
+    this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
+    let tmpEff: { name: string, efficiency: number } = this.driveTypes.find((type) => { return type.name == this.fanShaftPower.driveType });
+    this.shaftPowerForm.patchValue({
+      efficiencyBelt: tmpEff.efficiency
+    })
+    this.save();
+  }
 
   save() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);

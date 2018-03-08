@@ -188,7 +188,9 @@ export class Fsat203Service {
       // globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
       // estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
       totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, Validators.required],
-      totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required]
+      totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required],
+      inletSEF: [obj.inletSEF, Validators.required],
+      outletSEF: [obj.outletSEF, Validators.required]
     })
     return form;
   }
@@ -197,6 +199,8 @@ export class Fsat203Service {
     // obj.estimate2and5TempFrom1 = form.controls.estimate2and5TempFrom1.value;
     obj.totalPressureLossBtwnPlanes1and4 = form.controls.totalPressureLossBtwnPlanes1and4.value;
     obj.totalPressureLossBtwnPlanes2and5 = form.controls.totalPressureLossBtwnPlanes2and5.value;
+    obj.inletSEF = form.controls.inletSEF.value;
+    obj.outletSEF = form.controls.outletSEF.value;
     return obj;
 
   }
@@ -219,6 +223,8 @@ export class Fsat203Service {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: 0,
         totalPressureLossBtwnPlanes2and5: 0.627,
+        inletSEF: 0,
+        outletSEF: 0,
         //  variationInBarometricPressure: true,
         // globalBarometricPressure: 26.57,
         estimate2and5TempFrom1: false,

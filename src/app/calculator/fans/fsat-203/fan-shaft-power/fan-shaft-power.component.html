@@ -24,8 +24,8 @@
   <label class="group-label group-label-2">Motor Nameplate Details</label>
   <div class="form-group">
     <label for="driveType">Drive Type</label>
-    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="save()" (focus)="focusField('driveType')">
-      <option *ngFor="let drive of driveTypes" [ngValue]="drive">{{drive}}</option>
+    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="setBeltEfficiency()" (focus)="focusField('driveType')">
+      <option *ngFor="let drive of driveTypes" [ngValue]="drive.name">{{drive.name}}</option>
     </select>
   </div>
 

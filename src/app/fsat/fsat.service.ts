@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fan203Inputs, BaseGasDensity, PlaneData, Plane } from '../shared/models/fans';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 declare var fanAddon: any;
 
@@ -10,7 +11,7 @@ export class FsatService {
 
   mainTab: BehaviorSubject<string>
   stepTab: BehaviorSubject<string>;
-  constructor() {
+  constructor(private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
   }
@@ -20,7 +21,12 @@ export class FsatService {
   }
 
   fan203(input: Fan203Inputs) {
-    return fanAddon.fan203(input);
+    let inpCopy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+    if(!input.FanShaftPower.isMethodOne){
+      inpCopy.FanShaftPower.motorShaftPower = this.convertUnitsService.value(inpCopy.FanShaftPower.motorShaftPower).from('W').to('hp');
+    }
+    inpCopy.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
+    return fanAddon.fan203(inpCopy);
   }
 
   getBaseGasDensityDewPoint(inputs: BaseGasDensity): number {

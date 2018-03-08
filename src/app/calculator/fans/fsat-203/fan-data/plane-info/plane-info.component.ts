@@ -14,11 +14,12 @@ export class PlaneInfoComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<PlaneData>();
 
-
   planeInfoForm: FormGroup;
+  sumSEF: number;
   constructor(private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
+    this.getSum(this.planeData);
     this.planeInfoForm = this.fsat203Service.getPlaneInfoFormFromObj(this.planeData);
   }
 
@@ -26,8 +27,12 @@ export class PlaneInfoComponent implements OnInit {
 
   }
 
+  getSum(planeData: PlaneData){
+    this.sumSEF = planeData.inletSEF + planeData.outletSEF;
+  }
   save() {
     this.planeData = this.fsat203Service.getPlaneInfoObjFromForm(this.planeInfoForm, this.planeData);
+    this.getSum(this.planeData);
     this.emitSave.emit(this.planeData);
   }
 
