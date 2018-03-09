@@ -13,3 +13,8 @@ td > span {
 tbody{
     box-shadow: 0 4px 8px 0 grey
 }
+
+
+.group-label{
+    font-weight: bold;
+}

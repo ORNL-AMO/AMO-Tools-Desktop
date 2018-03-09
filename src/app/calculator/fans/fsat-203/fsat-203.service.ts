@@ -320,7 +320,7 @@ export class Fsat203Service {
         wetBulbTemp: 119,
         relativeHumidity: 0,
         dewPoint: 0,
-        specificHeatGas: 10
+        specificHeatGas: .24
       },
       FanShaftPower: {
         isMethodOne: false,

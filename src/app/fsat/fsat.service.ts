@@ -21,12 +21,8 @@ export class FsatService {
   }
 
   fan203(input: Fan203Inputs) {
-    let inpCopy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    if (!input.FanShaftPower.isMethodOne) {
-      inpCopy.FanShaftPower.motorShaftPower = this.convertUnitsService.value(inpCopy.FanShaftPower.motorShaftPower).from('W').to('hp');
-    }
-    inpCopy.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
-    return fanAddon.fan203(inpCopy);
+    input.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
+    return fanAddon.fan203(input);
   }
 
   getBaseGasDensityDewPoint(inputs: BaseGasDensity): number {

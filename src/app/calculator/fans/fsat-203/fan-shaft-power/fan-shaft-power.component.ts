@@ -4,6 +4,7 @@ import { FanShaftPower } from '../../../../shared/models/fans';
 import { Fsat203Service } from '../fsat-203.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fan-shaft-power',
@@ -45,7 +46,7 @@ export class FanShaftPowerComponent implements OnInit {
   //todo: implement logic for premium
   horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
 
-  constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service, private psatService: PsatService) { }
+  constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings.powerMeasurement) {
@@ -71,6 +72,7 @@ export class FanShaftPowerComponent implements OnInit {
   calcMotorShaftPower() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
     let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * this.fanShaftPower.powerFactorAtLoad;
+    tmpVal = this.convertUnitsService.value(tmpVal).from('W').to('hp');
     this.shaftPowerForm.patchValue({
       motorShaftPower: tmpVal
     })

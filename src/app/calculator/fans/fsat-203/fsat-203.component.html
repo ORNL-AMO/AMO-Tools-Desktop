@@ -71,9 +71,7 @@
                         <a class="click-link small pull-left" (click)="goToForm('none')">
                             <span class="fa fa-chevron-left"></span> Return to Setup</a>
                         <br>
-                        <label class="group-label">Planar Results Data</label>
                         <app-planar-results [planeResults]="planeResults" [showFull]="true" [inputs]="inputs"></app-planar-results>
-                        <label class="group-label">Calculator Results Data</label>
                         <app-fsat-203-results [results]="results"></app-fsat-203-results>
                     </div>
                 </div>
@@ -94,7 +92,7 @@
                         <div class="col-12">
                             <!--results-->
                             <app-planar-results *ngIf="formSelect == 'fan-data'" [planeResults]="planeResults" [inputs]="inputs"></app-planar-results>
-                            <app-fsat-203-results *ngIf="formSelect != 'fan-data'" [results]="results"></app-fsat-203-results>
+                            <app-fsat-203-results *ngIf="formSelect == 'fan-shaft-power'" [results]="results"></app-fsat-203-results>
                         </div>
                     </div>
                     <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">

@@ -68,7 +68,7 @@
     <div class="input-group">
       <input name="specificHeatGas" type="number" step="any" class="form-control" formControlName="specificHeatGas" id="specificHeatGas" (input)="calcDensityWetBulb()"
         (focus)="focusField('specificHeatGas')" onfocus="this.select();">
-      <span class="input-group-addon units">&#8457;</span>
+      <span class="input-group-addon units">Btu/lb-&#8457;</span>
     </div>
   </div>
   <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
