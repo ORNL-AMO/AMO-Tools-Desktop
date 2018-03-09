@@ -10,6 +10,9 @@
     </div>
   </div>
 </div>
-<div *ngIf="method == 'General'">
+<div *ngIf="methods.name == 'General'">
 <app-general-method></app-general-method>
+</div>
+<div *ngIf="methods.name == 'Dedicated Storage'">
+  <app-dedicated-storage></app-dedicated-storage>
 </div>

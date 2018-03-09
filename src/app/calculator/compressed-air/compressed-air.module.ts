@@ -20,6 +20,8 @@ import { OperatingCostComponent } from './operating-cost/operating-cost.componen
 import { OperatingCostFormComponent } from './operating-cost/operating-cost-form/operating-cost-form.component';
 import { SystemCapacityComponent } from './system-capacity/system-capacity.component';
 import { SystemCapacityFormComponent } from './system-capacity/system-capacity-form/system-capacity-form.component';
+import { DedicatedStorageComponent } from './receiver-tank/dedicated-storage/dedicated-storage.component';
+import { DedicatedStorageFormComponent } from './receiver-tank/dedicated-storage/dedicated-storage-form/dedicated-storage-form.component';
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { SystemCapacityFormComponent } from './system-capacity/system-capacity-f
     OperatingCostComponent,
     OperatingCostFormComponent,
     SystemCapacityComponent,
-    SystemCapacityFormComponent
+    SystemCapacityFormComponent,
+    DedicatedStorageComponent,
+    DedicatedStorageFormComponent
   ],
   exports: [
     CompressedAirComponent
