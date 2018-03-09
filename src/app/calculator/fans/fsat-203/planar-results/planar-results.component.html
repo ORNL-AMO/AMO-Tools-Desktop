@@ -1,122 +1,122 @@
-<div class="output-summary">
+<div *ngIf="planeResults">
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
-        <td>Plane #</td>
-        <td *ngIf="showFull">Plane Description</td>
-        <td>Gas Density
+        <td><span>Plane #</span></td>
+        <td *ngIf="showFull"><span>Plane Description</span></td>
+        <td><span>Gas Density</span>
           <br>lbm/ft
           <sup>3</sup>
         </td>
-        <td *ngIf="showFull">Planar Area
+        <td *ngIf="showFull"><span>Planar Area</span>
           <br>ft
           <sup>2</sup>
         </td>
-        <td>Volume Flow
+        <td><span>Volume Flow</span>
           <br>cfm</td>
-        <td>Gas Velocity
+        <td><span>Gas Velocity</span>
           <br>fpm</td>
-        <td *ngIf="showFull">Dry Bulb Temp
+        <td *ngIf="showFull"><span>Dry Bulb Temp</span>
           <br>&#8457;</td>
-        <td>Static Pressure
+        <td><span>Static Pressure</span>
           <br>in. wg</td>
-        <td>Velocity Pressure
+        <td><span>Velocity Pressure</span>
           <br>in. wg</td>
-        <td>Total Pressure
+        <td><span>Total Pressure</span>
           <br>in. wg</td>
-        <td *ngIf="showFull">Barometric Pressure
+        <td *ngIf="showFull"><span>Barometric Pressure</span>
           <br>in. wg</td>
       </tr>
       <tr>
         <td>1</td>
         <td *ngIf="showFull">Fan Inlet Flange</td>
-        <td>{{planeResults.FanInletFlange.gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.area}}</td>
-        <td>{{planeResults.FanInletFlange.gasVolumeFlowRate}}</td>
-        <td>{{planeResults.FanInletFlange.gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.dryBulbTemp}}</td>
-        <td>{{planeResults.FanInletFlange.staticPressure}}</td>
-        <td>{{planeResults.FanInletFlange.gasVelocityPressure}}</td>
-        <td>{{planeResults.FanInletFlange.gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure}}</td>
+        <td>{{planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.area | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>
         <td>2</td>
         <td *ngIf="showFull">Fan or Evase Outlet Flange</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.area}}</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.gasVolumeFlowRate}}</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp}}</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.staticPressure}}</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.gasVelocityPressure}}</td>
-        <td>{{planeResults.FanEvaseOrOutletFlange.gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.area | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>
         <td>3a</td>
         <td *ngIf="showFull">Flow Traverse</td>
-        <td>{{planeResults.FlowTraverse.gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.area}}</td>
-        <td>{{planeResults.FlowTraverse.gasVolumeFlowRate}}</td>
-        <td>{{planeResults.FlowTraverse.gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.dryBulbTemp}}</td>
-        <td>{{inputs.PlaneData.FlowTraverse.staticPressure}}</td>
-        <td>{{planeResults.FlowTraverse.gasVelocityPressure}}</td>
-        <td>{{planeResults.FlowTraverse.gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.barometricPressure}}</td>
+        <td>{{planeResults.FlowTraverse.gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.area | sigFigs: '6'}}</td>
+        <td>{{planeResults.FlowTraverse.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.FlowTraverse.gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{inputs.PlaneData.FlowTraverse.staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FlowTraverse.gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.FlowTraverse.gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 0">
         <td>3b</td>
         <td *ngIf="showFull">Add'l Traverse Plane 1</td>
-        <td>{{planeResults.AddlTraversePlanes[0].gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].area}}</td>
-        <td>{{planeResults.AddlTraversePlanes[0].gasVolumeFlowRate}}</td>
-        <td>{{planeResults.AddlTraversePlanes[0].gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].dryBulbTemp}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].staticPressure}}</td>
-        <td>{{planeResults.AddlTraversePlanes[0].gasVelocityPressure}}</td>
-        <td>{{planeResults.AddlTraversePlanes[0].gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].barometricPressure}}</td>
+        <td>{{planeResults.AddlTraversePlanes[0].gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].area | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[0].gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[0].gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{inputs.PlaneData.AddlTraversePlanes[0].staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[0].gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[0].gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 1">
         <td>3c</td>
         <td *ngIf="showFull">Add'l Traverse Plane 2</td>
-        <td>{{planeResults.AddlTraversePlanes[1].gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].area}}</td>
-        <td>{{planeResults.AddlTraversePlanes[1].gasVolumeFlowRate}}</td>
-        <td>{{planeResults.AddlTraversePlanes[1].gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].dryBulbTemp}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].staticPressure}}</td>
-        <td>{{planeResults.AddlTraversePlanes[1].gasVelocityPressure}}</td>
-        <td>{{planeResults.AddlTraversePlanes[1].gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].barometricPressure}}</td>
+        <td>{{planeResults.AddlTraversePlanes[1].gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].area | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[1].gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[1].gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{inputs.PlaneData.AddlTraversePlanes[1].staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[1].gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.AddlTraversePlanes[1].gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>
         <td>4</td>
         <td *ngIf="showFull">Inlet Measurement Plane</td>
-        <td>{{planeResults.InletMstPlane.gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.area}}</td>
-        <td>{{planeResults.InletMstPlane.gasVolumeFlowRate}}</td>
-        <td>{{planeResults.InletMstPlane.gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.dryBulbTemp}}</td>
-        <td>{{inputs.PlaneData.InletMstPlane.staticPressure}}</td>
-        <td>{{planeResults.InletMstPlane.gasVelocityPressure}}</td>
-        <td>{{planeResults.InletMstPlane.gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.barometricPressure}}</td>
+        <td>{{planeResults.InletMstPlane.gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.area | sigFigs: '6'}}</td>
+        <td>{{planeResults.InletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.InletMstPlane.gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{inputs.PlaneData.InletMstPlane.staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.InletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.InletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>
         <td>5</td>
         <td *ngIf="showFull">Outlet Measurement Plane</td>
-        <td>{{planeResults.OutletMstPlane.gasDensity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.area}}</td>
-        <td>{{planeResults.OutletMstPlane.gasVolumeFlowRate}}</td>
-        <td>{{planeResults.OutletMstPlane.gasVelocity}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.dryBulbTemp}}</td>
-        <td>{{inputs.PlaneData.OutletMstPlane.staticPressure}}</td>
-        <td>{{planeResults.OutletMstPlane.gasVelocityPressure}}</td>
-        <td>{{planeResults.OutletMstPlane.gasTotalPressure}}</td>
-        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.barometricPressure}}</td>
+        <td>{{planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.area | sigFigs: '6'}}</td>
+        <td>{{planeResults.OutletMstPlane.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td>{{planeResults.OutletMstPlane.gasVelocity | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.dryBulbTemp | sigFigs: '6'}}</td>
+        <td>{{inputs.PlaneData.OutletMstPlane.staticPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.OutletMstPlane.gasVelocityPressure | sigFigs: '6'}}</td>
+        <td>{{planeResults.OutletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
+        <td *ngIf="showFull">{{inputs.PlaneData.OutletMstPlane.barometricPressure | sigFigs: '6'}}</td>
       </tr>
     </tbody>
   </table>

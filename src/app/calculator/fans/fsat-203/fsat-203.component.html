@@ -91,7 +91,7 @@
                         </ul>
                     </div>
                     <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-                        <div class="col-11">
+                        <div class="col-12">
                             <!--results-->
                             <app-planar-results *ngIf="formSelect == 'fan-data'" [planeResults]="planeResults" [inputs]="inputs"></app-planar-results>
                             <app-fsat-203-results *ngIf="formSelect != 'fan-data'" [results]="results"></app-fsat-203-results>
