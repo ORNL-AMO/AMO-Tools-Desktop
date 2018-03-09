@@ -23,8 +23,6 @@ export class FixtureLossesCompareService {
           })
         }
         this.checkFixtureLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

@@ -37,7 +37,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
-  counter: any;
   showModal: boolean = false;
   dischargeTempError: string = null;
   specificHeatGasError: string = null;
@@ -127,9 +126,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -174,8 +170,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   startSavePolling() {
+    this.saveEmit.emit(true);
     this.calculate.emit(true);
-    this.emitSave();
   }
 
   initDifferenceMonitor() {
@@ -190,13 +186,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
             element.classList.toggle('indicate-different', val);
           });
         })
-        //materialSpecificHeat
-        // this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.subscribe((val) => {
-        //   let materialSpecificHeatElements = doc.getElementsByName('materialSpecificHeat_' + this.lossIndex);
-        //   materialSpecificHeatElements.forEach(element => {
-        //     element.classList.toggle('indicate-different-db', val);
-        //   });
-        // })
         //feedRate
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.feedRate.subscribe((val) => {
           let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);

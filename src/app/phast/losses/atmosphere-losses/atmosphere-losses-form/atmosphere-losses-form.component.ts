@@ -34,7 +34,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
-  counter: any;
   specificHeatError: string = null;
   flowRateError: string = null;
   temperatureError: string = null;
@@ -89,9 +88,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
           val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C')
         }
         material.specificHeat = this.roundVal(val, 4);
-        console.log(material.specificHeat);
-        console.log(this.atmosphereLossForm.controls.specificHeat.value);
-        console.log('======')
         if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
           return true;
         } else {
@@ -162,8 +158,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   startSavePolling() {
     this.checkInputErrors();
+    this.saveEmit.emit(true);
     this.calculate.emit(true);
-    this.emitSave();
   }
 
   initDifferenceMonitor() {
@@ -178,13 +174,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
             element.classList.toggle('indicate-different', val);
           });
         })
-        //specificHeat
-        // this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-        //   specificHeatElements.forEach(element => {
-        //     element.classList.toggle('indicate-different-db', val);
-        //   });
-        // })
         //inletTemp
         this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
           let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);

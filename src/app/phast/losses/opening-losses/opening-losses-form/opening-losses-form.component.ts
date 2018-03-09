@@ -32,7 +32,6 @@ export class OpeningLossesFormComponent implements OnInit {
 
   totalArea: number = 0.0;
 
-  counter: any;
   firstChange: boolean = true;
   temperatureError: string = null;
   emissivityError: string = null;
@@ -205,10 +204,6 @@ export class OpeningLossesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   checkInputError() {
     if (this.temperatureError || this.emissivityError || this.timeOpenError || this.numOpeningsError || this.thicknessError || this.lengthError ||
       this.heightError || this.viewFactorError) {
@@ -222,7 +217,7 @@ export class OpeningLossesFormComponent implements OnInit {
   startSavePolling() {
     this.checkInputError();
     this.calculate.emit(true);
-    this.emitSave();
+    this.saveEmit.emit(true);
   }
 
   initDifferenceMonitor() {

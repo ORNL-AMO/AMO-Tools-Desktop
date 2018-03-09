@@ -37,7 +37,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   unburnedCarbonInAshError: string = null;
   firstChange: boolean = true;
   options: any;
-  counter: any;
   showModal: boolean = false;
 
   calculationMethods: Array<string> = [
@@ -176,9 +175,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     });
     this.checkInputError();
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
@@ -187,7 +183,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
   }
 
   checkInputError(bool?: boolean) {

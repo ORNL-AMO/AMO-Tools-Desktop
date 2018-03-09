@@ -23,7 +23,6 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
   firstChange: boolean = true;
-  counter: any;
   voltageError: string = null;
 
   motorPhases: Array<number> = [
@@ -61,18 +60,11 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     this.auxLossesForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
   focusOut() {
     this.changeField.emit('default');
-  }
-  emitSave() {
-    this.saveEmit.emit(true);
   }
 
   checkVoltageError(bool?: boolean) {
@@ -93,8 +85,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
   initDifferenceMonitor() {

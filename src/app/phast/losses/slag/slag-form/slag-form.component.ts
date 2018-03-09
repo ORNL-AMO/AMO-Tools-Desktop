@@ -26,7 +26,6 @@ export class SlagFormComponent implements OnInit {
   settings: Settings;
 
   firstChange: boolean = true;
-  counter: any;
   constructor(private windowRefService: WindowRefService, private slagCompareService: SlagCompareService) { }
 
   ngOnInit() {
@@ -58,24 +57,17 @@ export class SlagFormComponent implements OnInit {
   enableForm() {
     this.slagLossForm.enable();
   }
-
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
+  
   focusField(str: string) {
     this.changeField.emit(str);
   }
   focusOut() {
     this.changeField.emit('default');
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
 

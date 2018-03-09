@@ -16,8 +16,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   isBaseline: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
@@ -36,8 +34,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   firstChange: boolean = true;
 
   efficiencyForm: FormGroup;
-  counter: any;
-
   systemLosses: number = 0;
   grossHeat: number = 0;
   resultsUnit: string;
@@ -69,9 +65,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (!this.baselineSelected) {
         this.disableForm();
       } else {

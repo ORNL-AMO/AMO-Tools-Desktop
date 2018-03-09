@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -24,8 +24,6 @@ export class OtherLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
-  counter: any;
 
   firstChange: boolean = true;
   resultsUnit: string;
@@ -66,21 +64,14 @@ export class OtherLossesFormComponent implements OnInit {
     this.lossesForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true);
-  }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
   initDifferenceMonitor() {

@@ -37,7 +37,6 @@ export class FixtureLossesFormComponent implements OnInit {
   specificHeatError: string = null;
   feedRateError: string = null;
   firstChange: boolean = true;
-  counter: any;
   materials: Array<any>;
   showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
@@ -74,10 +73,6 @@ export class FixtureLossesFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
-  }
-
-  emitSave() {
-    this.saveEmit.emit(true);
   }
 
   focusOut() {
@@ -138,8 +133,8 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
+    this.saveEmit.emit(true);
     this.calculate.emit(true);
-    this.emitSave();
   }
 
   initDifferenceMonitor() {

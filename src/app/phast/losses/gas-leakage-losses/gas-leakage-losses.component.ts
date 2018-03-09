@@ -17,8 +17,6 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -46,9 +44,6 @@ export class GasLeakageLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -86,42 +81,6 @@ export class GasLeakageLossesComponent implements OnInit {
         this._leakageLosses.push(tmpLoss);
       })
     }
-
-    this.gasLeakageLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.leakageLosses) {
-          this._leakageLosses.splice(lossIndex, 1);
-          if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
-            this.gasLeakageCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.gasLeakageLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._leakageLosses.push({
-    //         form: this.gasLeakageLossesService.initForm(),
-    //         name: 'Loss #' + (this._leakageLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.gasLeakageLossesService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._leakageLosses.push({
-    //         form: this.gasLeakageLossesService.initForm(),
-    //         name: 'Loss #' + (this._leakageLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
-    
     if(this.inSetup && this.modExists){
       this.lossesLocked = true;
       this.disableForms();
@@ -130,13 +89,10 @@ export class GasLeakageLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-     // this.gasLeakageLossesService.addLossBaselineMonitor.next(false);
       this.gasLeakageCompareService.baselineLeakageLoss = null;
     } else {
       this.gasLeakageCompareService.modifiedLeakageLoss = null;
-     // this.gasLeakageLossesService.addLossModificationMonitor.next(false);
     }
-    this.gasLeakageLossesService.deleteLossIndex.next(null);
   }
 
   disableForms(){
@@ -146,12 +102,6 @@ export class GasLeakageLossesComponent implements OnInit {
   }
   
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.gasLeakageLossesService.addLoss(this.isBaseline);
-    // }
-    if (this.gasLeakageCompareService.differentArray) {
-      this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
-    }
     this._leakageLosses.push({
       form: this.gasLeakageLossesService.initForm(this._leakageLosses.length+1),
       heatLoss: 0.0,
@@ -169,7 +119,8 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.gasLeakageLossesService.setDelete(lossIndex);
+    this._leakageLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   calculate(loss: GasLeakageObj) {

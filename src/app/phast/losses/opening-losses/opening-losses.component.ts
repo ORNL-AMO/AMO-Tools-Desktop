@@ -17,8 +17,6 @@ export class OpeningLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -47,9 +45,6 @@ export class OpeningLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -89,41 +84,6 @@ export class OpeningLossesComponent implements OnInit {
       })
     }
 
-    this.openingLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.openingLosses) {
-          this._openingLosses.splice(lossIndex, 1);
-          if (this.openingLossesCompareService.differentArray && !this.isBaseline) {
-            this.openingLossesCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._openingLosses.push({
-    //         form: this.openingLossesService.initForm(),
-    //         name: 'Loss #' + (this._openingLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._openingLosses.push({
-    //         form: this.openingLossesService.initForm(),
-    //         name: 'Loss #' + (this._openingLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
-
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -132,22 +92,13 @@ export class OpeningLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      //    this.openingLossesService.addLossBaselineMonitor.next(false);
       this.openingLossesCompareService.baselineOpeningLosses = null;
     } else {
       this.openingLossesCompareService.modifiedOpeningLosses = null;
-      //      this.openingLossesService.addLossModificationMonitor.next(false);
     };
-    this.openingLossesService.deleteLossIndex.next(null);
   }
 
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.openingLossesService.addLoss(this.isBaseline);
-    // }
-    if (this.openingLossesCompareService.differentArray) {
-      this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
-    }
     this._openingLosses.push({
       form: this.openingLossesService.initForm(this._openingLosses.length + 1),
       totalOpeningLosses: 0.0,
@@ -166,7 +117,8 @@ export class OpeningLossesComponent implements OnInit {
     })
   }
   removeLoss(lossIndex: number) {
-    this.openingLossesService.setDelete(lossIndex);
+    this._openingLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   calculate(loss: OpeningLossObj) {

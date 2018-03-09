@@ -24,8 +24,6 @@ export class CoolingLossesCompareService {
           })
         }
         this.checkCoolingLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

@@ -42,8 +42,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   calculationWarning: string = null;
-
-  counter: any;
   showModal: boolean = false;
   calcMethodExcessAir: boolean;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private phastService: PhastService) { }
@@ -157,9 +155,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         o2InFlueGas: this.calculationFlueGasO2
       });
     }
-    if(this.calculationWarning){
+    if (this.calculationWarning) {
       this.inputError.emit(true);
-    }else{
+    } else {
       this.inputError.emit(false);
     }
   }
@@ -185,13 +183,10 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
     this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
   }
 
   initDifferenceMonitor() {

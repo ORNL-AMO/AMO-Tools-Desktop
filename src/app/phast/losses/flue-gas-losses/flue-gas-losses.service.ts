@@ -1,30 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class FlueGasLossesService {
 
-  deleteLossIndex: BehaviorSubject<number>;
-  // addLossBaselineMonitor: BehaviorSubject<any>;
-  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
-    this.deleteLossIndex = new BehaviorSubject<number>(null);
-    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    //   this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
-
-  setDelete(num: number) {
-    this.deleteLossIndex.next(num);
-  }
-  // addLoss(bool: boolean) {
-  //   if (bool) {
-  //     this.addLossModificationMonitor.next(true);
-  //   } else {
-  //     this.addLossBaselineMonitor.next(true);
-  //   }
-  // }
 
 
   initFormVolume(lossNum: number): FormGroup {
