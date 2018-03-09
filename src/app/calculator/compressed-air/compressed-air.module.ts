@@ -15,6 +15,8 @@ import { AirVelocityComponent } from './air-velocity/air-velocity.component';
 import { AirVelocityFormComponent } from './air-velocity/air-velocity-form/air-velocity-form.component';
 import { OperatingCostComponent } from './operating-cost/operating-cost.component';
 import { OperatingCostFormComponent } from './operating-cost/operating-cost-form/operating-cost-form.component';
+import { SystemCapacityComponent } from './system-capacity/system-capacity.component';
+import { SystemCapacityFormComponent } from './system-capacity/system-capacity-form/system-capacity-form.component';
 
 @NgModule({
   imports: [
@@ -36,7 +38,9 @@ import { OperatingCostFormComponent } from './operating-cost/operating-cost-form
     AirVelocityComponent,
     AirVelocityFormComponent,
     OperatingCostComponent,
-    OperatingCostFormComponent
+    OperatingCostFormComponent,
+    SystemCapacityComponent,
+    SystemCapacityFormComponent
   ],
   exports: [
     CompressedAirComponent
