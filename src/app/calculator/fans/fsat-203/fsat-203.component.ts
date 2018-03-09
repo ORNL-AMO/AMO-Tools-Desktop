@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower, PlaneData } from '../../../shared/models/fans';
+import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower, PlaneData, PlaneResults } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
@@ -28,7 +28,7 @@ export class Fsat203Component implements OnInit {
   shaftPowerDone: boolean = false;
 
   results: Fan203Results;
-
+  planeResults: PlaneResults;
   settings: Settings;
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private indexedDbService: IndexedDbService) { }
 
@@ -36,7 +36,7 @@ export class Fsat203Component implements OnInit {
     this.indexedDbService.getDirectorySettings(1).then(val => {
       this.settings = val;
     })
-    //this.fsatService.test();
+   // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
     this.checkBasics();
     this.checkGasDensity();
@@ -56,6 +56,7 @@ export class Fsat203Component implements OnInit {
 
   calculate() {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
+      this.planeResults = this.fsatService.getPlaneResults(this.inputs);
       this.results = this.fsatService.fan203(this.inputs);
     } else {
       this.results = {
@@ -90,7 +91,7 @@ export class Fsat203Component implements OnInit {
     this.calculate();
   }
 
-  updateBarometricPressure(info: FanRatedInfo){
+  updateBarometricPressure(info: FanRatedInfo) {
     this.saveBasics(info);
     this.inputs.PlaneData.FanInletFlange.barometricPressure = info.globalBarometricPressure;
     this.inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure = info.globalBarometricPressure;
@@ -198,7 +199,7 @@ export class Fsat203Component implements OnInit {
     this.calculate();
   }
 
-  savePlaneData(planeData: PlaneData){
+  savePlaneData(planeData: PlaneData) {
     this.inputs.PlaneData = planeData;
     this.calculate();
   }

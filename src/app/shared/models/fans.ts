@@ -117,3 +117,22 @@ export interface Fan203Results {
   powerCorrected: number;
   kpc: number;
 }
+
+
+export interface PlaneResults {
+  AddlTraversePlanes: Array<PlaneResult>,
+  FanInletFlange: PlaneResult,
+  FanOrEvaseOutletFlange: PlaneResult,
+  FlowTraverse: PlaneResult,
+  InletMstPlane: PlaneResult,
+  OutletMstPlane: PlaneResult
+}
+
+export interface PlaneResult {
+  gasDensity: number,
+  gasTotalPressure: number,
+  gasVelocity: number,
+  gasVelocityPressure: number,
+  gasVolumeFlowRate: number,
+  staticPressure?: number
+}

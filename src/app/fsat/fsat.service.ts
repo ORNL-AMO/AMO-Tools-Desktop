@@ -22,7 +22,7 @@ export class FsatService {
 
   fan203(input: Fan203Inputs) {
     let inpCopy: Fan203Inputs = JSON.parse(JSON.stringify(input));
-    if(!input.FanShaftPower.isMethodOne){
+    if (!input.FanShaftPower.isMethodOne) {
       inpCopy.FanShaftPower.motorShaftPower = this.convertUnitsService.value(inpCopy.FanShaftPower.motorShaftPower).from('W').to('hp');
     }
     inpCopy.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
@@ -38,22 +38,15 @@ export class FsatService {
   }
 
   getBaseGasDensityWetBulb(inputs: BaseGasDensity): number {
-    // let inp = {
-    //   dryBulbTemp: 123,
-    //   staticPressure: -17.6,
-    //   barometricPressure: 26.57,
-    //   gasDensity: 0.0547,
-    //   gasType: 'AIR',
-    //   inputType: 'wetBulb',
-    //   wetBulbTemp: 110,
-    //   specificGravity: 1.05,
-    //   specificHeatGas: 1.03
-    // };
     return fanAddon.getBaseGasDensityWetBulb(inputs);
   }
 
-
-  getVelocityPressureData(inputs: Plane){
+  getVelocityPressureData(inputs: Plane) {
     return fanAddon.getVelocityPressureData(inputs);
   }
+
+  getPlaneResults(input: Fan203Inputs) {
+    return fanAddon.getPlaneResults(input);
+  }
 }
+

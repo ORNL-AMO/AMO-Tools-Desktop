@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Fan203Inputs } from '../../../../shared/models/fans';
+import { Fan203Inputs, PlaneResults } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-planar-results',
@@ -8,7 +8,7 @@ import { Fan203Inputs } from '../../../../shared/models/fans';
 })
 export class PlanarResultsComponent implements OnInit {
   @Input()
-  planarResults: any;
+  planeResults: PlaneResults;
   @Input()
   showFull: boolean;
   @Input()
@@ -16,7 +16,6 @@ export class PlanarResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.inputs)
   }
 
 }
