@@ -1,38 +1,37 @@
 <div #container class="modify-conditions panel-container row phast" *ngIf="settings" [ngClass]="{'in-modal': inModal}">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top scroll-item" [ngStyle]="{'height.px': height}">
-        <div #leftPanelHeader class="row header" *ngIf="!inModal">
+      <div class="panel-column col-6 align-top" [ngStyle]="{'height.px': height}">
+        <div #leftPanelHeader class="row header">
           <div class="col-md-auto ico-col">
             <img src="assets/images/assessment.png" class="ico-size2">
           </div>
           <div class="col">
-            <h3>Pre-assessment / Screening Calculator</h3>
+            <h3 class="pre-assessment-header">Pre-assessment / Screening Calculator</h3>
           </div>
         </div>
-        <div class="row align-items-center action-row">
-          <div class="col-6">
-            <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Imperial')" [ngClass]="{'active': settings.unitsOfMeasure == 'Imperial'}">Imperial</button>
-              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Metric')" [ngClass]="{'active':  settings.unitsOfMeasure == 'Metric'}">Metric</button>
+        <div class="scroll-item" [ngStyle]="{'height.px': contentHeight}">
+          <div class="row align-items-center action-row">
+            <div class="col-6">
+              <div class="btn-group btn-group-sm align-self-center">
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Imperial')" [ngClass]="{'active': settings.unitsOfMeasure == 'Imperial'}">Imperial</button>
+                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setUnitsOfMeasure('Metric')" [ngClass]="{'active':  settings.unitsOfMeasure == 'Metric'}">Metric</button>
+              </div>
+            </div>
+            <div class="col-6">
+              <a class="pull-right small align-bottom click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Furnace</a>
             </div>
           </div>
-          <div class="col-6">
-            <a class="pull-right small align-bottom click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Furnace</a>
-          </div>
-        </div>
-        <div class="row" *ngFor="let assessment of preAssessments; let index = index;">
-          <div class="col-12">
-            <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitCollapse)="collapsePreAssessment(assessment)"
-              (emitDelete)="deletePreAssessment(assessment, index)" (emitChangeField)="setCurrentField($event)" (emitEnergyType)="setEnergySourceType($event)"
-              (emitAssessmentType)="setAssessmentType($event)"></app-pre-assessment-form>
-            <!-- <span class="fa fa-times" (click)="deletePreAssessment(index)"></span>
-            <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed" (click)="collapsePreAssessment(index)"></span>
-            <span class="fa fa-chevron-down" *ngIf="assessment.collapsed" (click)="collapsePreAssessment(index)"></span> -->
+          <div class="row" *ngFor="let assessment of preAssessments; let index = index;">
+            <div class="col-12">
+              <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitCollapse)="collapsePreAssessment(assessment)"
+                (emitDelete)="deletePreAssessment(assessment, index)" (emitChangeField)="setCurrentField($event)" (emitEnergyType)="setEnergySourceType($event)"
+                (emitAssessmentType)="setAssessmentType($event)"></app-pre-assessment-form>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-6 align-top">
+      <div class="col-6 align-top" [ngStyle]="{'height.px': height}">
         <div class="help-panel">
           <div class="row">
             <ul class="tabs primary tab-row">
@@ -44,25 +43,22 @@
               </li>
             </ul>
           </div>
-          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <!-- <div *ngIf="results.length != 0"> -->
-              <div>
-              <h5>Process Heating Equipment - Energy Distribution</h5>
-              <app-pre-assessment-graph [toggleCalculate]="toggleCalculate" [settings]="settings" [preAssessments]="preAssessments" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
-            </div>
+          <div class="row justify-content-center scroll-item" [ngStyle]="{'height.px': contentHeight}" *ngIf="tabSelect == 'results'">
+            <!-- <h5>Process Heating Equipment - Energy Distribution</h5> -->
+            <app-pre-assessment-graph [toggleCalculate]="toggleCalculate" [settings]="settings" [preAssessments]="preAssessments" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
             <!--probably need to move this to graph component -->
-            <div class="col-11 no-data" *ngIf="results.length == 0">
+            <!-- <div class="col-11 no-data" *ngIf="results.length == 0">
               <h5>Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</h5>
-            </div>
+            </div> -->
           </div>
-          <div class="row justify-content-center data-row note-row-width">
-            <div class=" alert alert-info">
+          <!-- <div class="row justify-content-center data-row note-row-width">
+            <div class="alert alert-info">
               <p>
                 Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
                 this tool.
               </p>
             </div>
-          </div>
+          </div> -->
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">
               <div class="calc-help">

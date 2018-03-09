@@ -32,7 +32,7 @@ export class PreAssessmentComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    this.getHeight();
   }
 
   headerHeight: number;
@@ -47,6 +47,7 @@ export class PreAssessmentComponent implements OnInit {
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
+  contentHeight: number = 0;
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -64,25 +65,17 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.resizeTabs();
-    }, 100);
-    
     if (!this.height) {
       this.getHeight();
     }
   }
 
-  resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-    }
-  }
-
   getHeight() {
     setTimeout(() => {
-      if (this.container.nativeElement.clientHeight) {
+      if (this.container.nativeElement) {
+        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
         this.height = this.container.nativeElement.clientHeight;
+        this.contentHeight = this.height - this.headerHeight;
       }
     }, 200);
   }
@@ -142,6 +135,9 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   calculate() {
+    if (this.calculator) {
+      this.calculator.preAssessments = this.preAssessments;
+    }
     //this is fired when forms change
     this.toggleCalculate = !this.toggleCalculate;
   }
@@ -164,6 +160,7 @@ export class PreAssessmentComponent implements OnInit {
     if (this.preAssessments.length >= 20) {
       this.showAdd = false;
     }
+    this.calculate();
   }
 
 

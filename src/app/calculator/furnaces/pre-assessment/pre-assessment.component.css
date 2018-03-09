@@ -53,3 +53,12 @@ td{
   width: 96%;
   margin-left: 2%;
 }
+
+
+.pre-assessment-header{
+    font-size: 15px !important;
+}
+
+.scroll-item{
+    overflow-x: hidden;
+}
