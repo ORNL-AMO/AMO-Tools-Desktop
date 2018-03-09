@@ -77,9 +77,10 @@ export class DesignedEnergyService {
 
   sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number {
     let designedEnergyUsed = 0;
-    let constant = Math.pow(10, 6);
+    //input uses MMBtu or GJ now, previously Btu or J so needed constant for results.
+   // let constant = Math.pow(10, 6);
     inputs.forEach(input => {
-      designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
+      designedEnergyUsed += ((input.totalBurnerCapacity) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
     })
     return designedEnergyUsed || 0;
   }
@@ -127,6 +128,29 @@ export class DesignedEnergyService {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
     }
     return val;
+  }
+
+  sumFuelElectric(fuelResults: DesignedEnergyResults, electricResults: DesignedEnergyResults): DesignedEnergyResults {
+    let results: DesignedEnergyResults = {
+      designedEnergyUsed: fuelResults.designedEnergyUsed + electricResults.designedEnergyUsed,
+      designedEnergyIntensity: fuelResults.designedEnergyIntensity + electricResults.designedEnergyIntensity,
+      designedElectricityUsed: fuelResults.designedElectricityUsed + electricResults.designedElectricityUsed,
+      calculatedFuelEnergyUsed: electricResults.calculatedFuelEnergyUsed,
+      calculatedEnergyIntensity: electricResults.calculatedEnergyIntensity,
+      calculatedElectricityUsed: electricResults.calculatedElectricityUsed
+    }
+    return results;
+  }
+
+  convertFuelToElectric(fuelResults: DesignedEnergyResults, settings: Settings): DesignedEnergyResults {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('MMBtu').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('MMBtu').to('kWh');
+    } else {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('GJ').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('GJ').to('kWh');
+    }
+    return fuelResults;
   }
 }
 

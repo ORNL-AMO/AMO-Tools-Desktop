@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DesignedEnergyElectricity, DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
+import { DesignedEnergyElectricity, DesignedEnergyResults, DesignedEnergyFuel } from '../../../shared/models/phast/designedEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { DesignedEnergyService } from '../designed-energy.service';
@@ -18,16 +18,21 @@ export class DesignedEnergyElectricityComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
-  
-  tabSelect: string = 'results';
-  results: DesignedEnergyResults;
 
+  tabSelect: string = 'results';
+  electricResults: DesignedEnergyResults;
+  fuelResults: DesignedEnergyResults;
+  totalResults: DesignedEnergyResults;
   currentField: string = 'fuelType';
 
   constructor(private designedEnergyService: DesignedEnergyService) { }
 
   ngOnInit() {
     if(this.phast.designedEnergy.designedEnergyElectricity.length == 0){
+      this.addZone();
+    }else if(this.phast.designedEnergy.designedEnergyElectricity.length != this.phast.designedEnergy.designedEnergyFuel.length){
+      this.phast.designedEnergy.designedEnergyElectricity = new Array();
+      this.phast.designedEnergy.designedEnergyFuel = new Array();
       this.addZone();
     }else{
       this.calculate();
@@ -43,13 +48,32 @@ export class DesignedEnergyElectricityComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+    this.electricResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+    this.fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+    this.fuelResults = this.designedEnergyService.convertFuelToElectric(this.fuelResults, this.settings);
+    this.totalResults = this.designedEnergyService.sumFuelElectric(this.fuelResults, this.electricResults);
   }
 
   setField(str: string) {
     this.currentField = str;
   }
-  addZone() {
+
+  addFuelZone(){    
+    let eqNum = 1;
+    if (this.phast.designedEnergy.designedEnergyElectricity) {
+      eqNum = this.phast.designedEnergy.designedEnergyElectricity.length + 1;
+    }
+    let tmpFuelZone: DesignedEnergyFuel = {
+      name: 'Zone #' + eqNum,
+      fuelType: 0,
+      percentCapacityUsed: 0,
+      totalBurnerCapacity: 0,
+      percentOperatingHours: 0
+    }
+    this.phast.designedEnergy.designedEnergyFuel.push(tmpFuelZone);
+  }
+
+  addElectricZone(){
     let eqNum = 1;
     if (this.phast.designedEnergy.designedEnergyElectricity) {
       eqNum = this.phast.designedEnergy.designedEnergyElectricity.length + 1;
@@ -61,11 +85,17 @@ export class DesignedEnergyElectricityComponent implements OnInit {
       percentOperatingHours: 0
     }
     this.phast.designedEnergy.designedEnergyElectricity.push(tmpZone);
+  }
+
+  addZone() {
+    this.addElectricZone();
+    this.addFuelZone();
     this.calculate();
   }
 
   removeZone(index: number) {
     this.phast.designedEnergy.designedEnergyElectricity.splice(index, 1);
+    this.phast.designedEnergy.designedEnergyFuel.splice(index, 1);
     this.calculate();
   }
 }

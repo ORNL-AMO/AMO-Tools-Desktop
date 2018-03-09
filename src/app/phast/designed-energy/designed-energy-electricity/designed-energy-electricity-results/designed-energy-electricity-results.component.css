@@ -6,4 +6,10 @@ tr > th:first-child{
 tr > td:not(:first-child),
 tr > th:not(:first-child){
     width: 25%;
+    text-align: right;
+}
+
+
+.text-center{
+    text-align: center;
 }

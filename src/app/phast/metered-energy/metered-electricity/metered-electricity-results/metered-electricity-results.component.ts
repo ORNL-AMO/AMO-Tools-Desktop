@@ -1,23 +1,28 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
-import { Settings } from '../../../shared/models/settings';
+import { MeteredEnergyResults } from '../../../../shared/models/phast/meteredEnergy';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
-  selector: 'app-metered-energy-results',
-  templateUrl: './metered-energy-results.component.html',
-  styleUrls: ['./metered-energy-results.component.css']
+  selector: 'app-metered-electricity-results',
+  templateUrl: './metered-electricity-results.component.html',
+  styleUrls: ['./metered-electricity-results.component.css']
 })
-export class MeteredEnergyResultsComponent implements OnInit {
+export class MeteredElectricityResultsComponent implements OnInit {
   @Input()
-  results: MeteredEnergyResults;
+  resultsSum: MeteredEnergyResults;
+  @Input()
+  fuelResults: MeteredEnergyResults;
+  @Input()
+  electricResults: MeteredEnergyResults;
   @Input()
   settings: Settings;
-  @Input()
-  label: string;
   resultUnits: { energyPerMassUnit: string, energyPerTimeUnit: string, electricityUsedUnit: string } = {
     energyPerMassUnit: '',
     energyPerTimeUnit: '',
     electricityUsedUnit: ''
   }
+
+
   constructor() { }
 
   ngOnInit() {

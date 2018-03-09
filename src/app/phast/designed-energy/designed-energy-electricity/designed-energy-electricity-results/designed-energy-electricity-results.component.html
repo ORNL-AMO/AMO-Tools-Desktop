@@ -1,0 +1,80 @@
+<div class="output-summary">
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Fuel Energy Used</th>
+        <th>Design Energy Use</th>
+        <th>Calculated By PHAST</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fuel</td>
+        <td>{{fuelResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Electricity</td>
+        <td>{{electricResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td>{{totalResults.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Energy Intensity</th>
+        <th>Design Energy Use</th>
+        <th>Calculated By PHAST</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fuel</td>
+        <td>{{fuelResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Electricity</td>
+        <td>{{electricResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td>{{totalResults.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Electricity Used (Auxiliary)</th>
+        <th>Design Energy Use</th>
+        <th>Calculated By PHAST</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        <td>Fuel</td>
+        <td>{{fuelResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td>Electricity</td>
+        <td>{{electricResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td>&mdash;</td>
+      </tr> -->
+      <tr>
+        <td>Total</td>
+        <td>{{totalResults.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td class="text-center">{{totalResults.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
