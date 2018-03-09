@@ -127,9 +127,9 @@ export class MeteredEnergyService {
     if (settings.energySourceType == 'Electricity') {
       val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
     } else if (settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+      val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
-      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+      val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
     }
     return val;
   }
