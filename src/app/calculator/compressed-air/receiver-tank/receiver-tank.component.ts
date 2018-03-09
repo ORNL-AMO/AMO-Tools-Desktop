@@ -7,7 +7,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./receiver-tank.component.css']
 })
 export class ReceiverTankComponent implements OnInit {
-
+  methods: Array<any> = [
+    {
+      name: 'General',
+      value: 0
+    },
+    {
+      name: 'Dedicated Storage',
+      value: 1
+    },
+    {
+      name: 'Bridging Compressor Reaction Delay',
+      value: 2
+    },
+    {
+      name: 'Metered Storage',
+      value: 3
+    },
+  ];
 
   constructor() {}
 

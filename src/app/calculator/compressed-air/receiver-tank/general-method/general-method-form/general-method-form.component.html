@@ -1,14 +1,13 @@
 <form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="method">Method</label>
-      <div class="input-group">
-        <input name="method" class="form-control" type="number" step="any" [(ngModel)]="inputs.method" id="method"
-               (input)="emitChange()" onfocus="this.select();">
-
-      </div>
-    </div>
-  </div>
+  <!--<div class="form-section">-->
+    <!--<div class="form-group">-->
+      <!--<label for="method">Method</label>-->
+      <!--<div class="input-group">-->
+        <!--<input name="method" class="form-control" type="number" step="any" [(ngModel)]="inputs.method" id="method"-->
+               <!--(input)="emitChange()" onfocus="this.select();">-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
   <div class="form-section">
     <div class="form-group">
       <label for="airDemand">Air Demand</label>
@@ -39,7 +38,9 @@
     <div class="form-group">
       <label class="bold">Required Storage</label>
       <div class="text-center small">
-        {{finalTankPressure  | number:'1.0-2'}} gal
+        <span *ngIf="finalTankPressure"><strong>{{finalTankPressure | number:'1.0-2'}} gal</strong></span>
+        <span *ngIf="!finalTankPressure"><strong>&mdash; &mdash;</strong></span>
+
       </div>
     </div>
   </div>

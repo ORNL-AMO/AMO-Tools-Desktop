@@ -1,1 +1,15 @@
+<div class="form-section">
+  <div class="form-group">
+    <label for="method">Method</label>
+    <div class="input-group">
+      <!--<input name="method" class="form-control" type="number" step="any" [(ngModel)]="inputs.method" id="method"-->
+             <!--(input)="emitChange()" onfocus="this.select();">-->
+      <select name="method" class="form-control" id="method" (change)="emitChange()" [(ngModel)]="inputs.method" >
+        <option *ngFor="let method of methods" [ngValue]="method.value" >{{method.name}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div *ngIf="method == 'General'">
 <app-general-method></app-general-method>
+</div>

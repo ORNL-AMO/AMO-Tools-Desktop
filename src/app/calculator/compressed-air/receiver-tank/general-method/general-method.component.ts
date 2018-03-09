@@ -9,7 +9,7 @@ import {ReceiverTankGeneral} from "../../../../shared/models/standalone";
 })
 export class GeneralMethodComponent implements OnInit {
   inputs: ReceiverTankGeneral;
-  finalTankPressure : number;
+  finalTankPressure: number;
 
   constructor() { }
 
