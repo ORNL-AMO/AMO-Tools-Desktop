@@ -17,15 +17,6 @@ export class GasLeakageSummaryComponent implements OnInit {
   collapse: boolean = true;
   lossData: Array<any>;
 
-
-  //real version
-  // draftPressureDiff: boolean = false;
-  // openingAreaDiff: boolean = false;
-  // leakageGasTemperatureDiff: boolean = false;
-  // specificGravityDiff: boolean = false;
-  // ambientTemperatureDiff: boolean = false;
-
-  //debug
   draftPressureDiff: Array<boolean>;
   openingAreaDiff: Array<boolean>;
   leakageGasTemperatureDiff: Array<boolean>;
@@ -77,28 +68,6 @@ export class GasLeakageSummaryComponent implements OnInit {
     }
   }
 
-  //real version
-  //function used to check if baseline and modification values are different
-  //called from html
-  //diffBool is name of corresponding input boolean to indicate different
-  // checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
-  //   if (baselineVal != modificationVal) {
-  //     //this[diffBool] get's corresponding variable
-  //     //only set true once
-  //     if (this[diffBool] != true) {
-  //       //set true/different
-  //       this[diffBool] = true;
-  //       //tell html to detect change
-  //       this.cd.detectChanges();
-  //     }
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-
-  //debug
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
