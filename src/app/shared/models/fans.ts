@@ -136,3 +136,48 @@ export interface PlaneResult {
   gasVolumeFlowRate: number,
   staticPressure?: number
 }
+
+export interface FanCurveInputData {
+    //baseGasDensity?
+    density: number, 
+    //results density?
+    densityCorrected: number, 
+    //synchronous speed?
+    speed: number, 
+    //Converted Power?
+    speedCorrected: number,
+    //global barometric pressure?
+    pressureBarometric: number, 
+    //
+    pressureBarometricCorrected: number, 
+    //power factor at load?
+    pt1Factor: number,
+    //no idea where these come from
+    gamma: number, 
+    gammaCorrected: number, 
+    area1: number, 
+    area2: number, 
+    
+    curveType: string,
+    //Do array values have a data patern?
+    //[x, y, z] what are x,y,z?
+    //traverse plane data?
+    //BaseCurveData: Array<Array<number>
+    BaseCurveData: [
+        [0, 22.3, 115],
+        [14410, 22.5, 154],
+        [28820, 22.3, 194],
+        [43230, 21.8, 241],
+        [57640, 21.2, 293],
+        [72050, 20.3, 349],
+        [86460, 19.3, 406],
+        [100871, 18, 462],
+        [115281, 16.5, 515],
+        [129691, 14.8, 566],
+        [144101, 12.7, 615],
+        [158511, 10.2, 667],
+        [172921, 7.3, 725],
+        [187331, 3.7, 789],
+        [201741, -0.8, 861]
+    ]
+}
