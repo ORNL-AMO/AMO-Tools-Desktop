@@ -29,7 +29,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
 
   specificHeatError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
   densityLiquidError: string = null;
   liquidFlowError: string = null;
@@ -46,7 +45,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
       this.firstChange = false;
     }
   }
-
 
   ngOnInit() {
     this.checkInputError(true);
@@ -66,21 +64,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   enableForm() {
     this.lossesForm.enable();
   }
-
-  checkForm() {
-    this.calculate.emit(true)
-  }
-
-  // checkTemperature(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-  //     this.temperatureError = 'Inlet temperature is greater than outlet temperature';
-  //   } else {
-  //     this.temperatureError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -118,15 +101,13 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
+
   focusOut() {
     this.changeField.emit('default');
   }
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true)
   }
 
   initDifferenceMonitor() {

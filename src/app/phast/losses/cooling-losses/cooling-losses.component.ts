@@ -17,8 +17,6 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -48,9 +46,6 @@ export class CoolingLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -76,46 +71,6 @@ export class CoolingLossesComponent implements OnInit {
       this.initCoolingLosses();
     }
 
-    this.coolingLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.coolingLosses) {
-          this._coolingLosses.splice(lossIndex, 1);
-          if (this.coolingLossesCompareService.differentArray && !this.isBaseline) {
-            this.coolingLossesCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.coolingLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._coolingLosses.push({
-    //         coolingMedium: 'Gas',
-    //         waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-    //         gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-    //         liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-    //         name: 'Loss #' + (this._coolingLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // } else {
-    //   this.coolingLossesService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._coolingLosses.push({
-    //         coolingMedium: 'Gas',
-    //         waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-    //         gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-    //         liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-    //         name: 'Loss #' + (this._coolingLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // }
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -124,13 +79,10 @@ export class CoolingLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      // this.coolingLossesService.addLossBaselineMonitor.next(false);
       this.coolingLossesCompareService.baselineCoolingLosses = null;
     } else {
-      //this.coolingLossesService.addLossModificationMonitor.next(false);
       this.coolingLossesCompareService.modifiedCoolingLosses = null;
     }
-    this.coolingLossesService.deleteLossIndex.next(null);
   }
   disableForms() {
     this._coolingLosses.forEach(loss => {
@@ -159,7 +111,7 @@ export class CoolingLossesComponent implements OnInit {
           collapse: false
         };
       }
-     
+
       if (!tmpLoss.gasCoolingForm.controls.name.value) {
         tmpLoss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
@@ -177,12 +129,6 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.coolingLossesService.addLoss(this.isBaseline);
-    // }
-    if (this.coolingLossesCompareService.differentArray) {
-      this.coolingLossesCompareService.addObject(this.coolingLossesCompareService.differentArray.length - 1);
-    }
     this._coolingLosses.push({
       coolingMedium: 'Gas',
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, this._coolingLosses.length + 1),
@@ -206,7 +152,8 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex) {
-    this.coolingLossesService.setDelete(lossIndex);
+    this._coolingLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
   calculate(loss: CoolingLossObj) {
     if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
@@ -269,8 +216,7 @@ export class CoolingLossesComponent implements OnInit {
   focusOut() {
     this.fieldChange.emit('default');
   }
-  setError(bool: boolean){
-    console.log(bool)
+  setError(bool: boolean) {
     this.showError = bool;
   }
   setCompareVals() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { WallLossCompareService } from '../wall-loss-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -6,7 +6,6 @@ import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -43,7 +42,7 @@ export class WallLossesFormComponent implements OnInit {
   surfaceEmissivityError: string = null;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnInit() {
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
@@ -81,29 +80,6 @@ export class WallLossesFormComponent implements OnInit {
   enableForm() {
     this.wallLossesForm.enable();
   }
-  //checkSurfaceTemp and ambientTemp for needed warnings
-  // checkSurfaceTemp(bool?: boolean) {
-  //   //bool = true on call from ngOnInit to skip save line
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
-  //     this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
-  //   } else {
-  //     this.surfaceTmpError = null;
-  //   }
-  // }
-  //same as above for emissivity
-  // checkEmissivity(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
-  //     this.emissivityError = 'Surface emissivity must be between 0 and 1';
-  //   } else {
-  //     this.emissivityError = null;
-  //   }
-  // }
 
   //emits to wall-losses.component the focused field changed
   focusField(str: string) {
@@ -113,12 +89,7 @@ export class WallLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-
-  //emit to wall-losses.component to begin saving process
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
+  //check iputs for errors
   checkInputError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
@@ -155,7 +126,7 @@ export class WallLossesFormComponent implements OnInit {
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
     this.calculate.emit(true);
-    this.emitSave();
+    this.saveEmit.emit(true);
   }
 
   //method used to subscribe to service monitoring differences in baseline vs modification forms

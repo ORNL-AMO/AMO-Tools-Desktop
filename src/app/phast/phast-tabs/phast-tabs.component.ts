@@ -7,7 +7,9 @@ import { StepTab, stepTabs, specTabs } from '../tabs';
   styleUrls: ['./phast-tabs.component.css']
 })
 export class PhastTabsComponent implements OnInit {
-
+  //We use BehaviorSubjects for our step and spec tabs in phast.
+  //Other components subscribe to these BehaviorSubjects 
+  //when .next() is set they get those values and updates views
   currentTab: StepTab;
   stepTabs: Array<StepTab>;
   specTab: StepTab;
@@ -17,6 +19,7 @@ export class PhastTabsComponent implements OnInit {
   ngOnInit() {
     this.specTabs = specTabs;
     this.stepTabs = stepTabs;
+    //subscribe here, other components can also change the tabs.
     this.phastService.stepTab.subscribe(val => {
       this.currentTab = val;
     })

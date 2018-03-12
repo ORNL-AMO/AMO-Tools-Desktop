@@ -22,8 +22,6 @@ export class AtmosphereLossesCompareService {
           })
         }
         this.checkAtmosphereLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

@@ -25,8 +25,6 @@ export class OtherLossesCompareService {
           })
         }
         this.checkOtherLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

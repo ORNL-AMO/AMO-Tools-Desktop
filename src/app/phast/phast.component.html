@@ -1,4 +1,5 @@
-<div #content class="phast-container phast" *ngIf="assessment && settings">
+<div #content *ngIf="assessment && settings" class="phast-container phast">
+  <!--header content, sticks to top on scroll-->
   <div #header class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
@@ -20,33 +21,31 @@
         </li>
       </ul>
     </nav>
-
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
-      <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
+      <app-losses-tabs [phast]="_phast" [settings]="settings" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
     </nav>
     <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>
   </div>
 
   <!--Furnace Setup -->
-  <div class="system-setup tab-content" *ngIf="mainTab == 'system-setup'" [ngStyle]="{'height.px': containerHeight}" style="margin-bottom:25px">
-    <div class="row panel-container" *ngIf="stepTab.step == 1">
+  <div *ngIf="mainTab == 'system-setup'" class="system-setup tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <div *ngIf="stepTab.step == 1" class="row panel-container">
       <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen}">
         <!--Step: 1 System Basics (Settings)-->
-        <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
-          [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()" (openModal)="openModal($event)"></app-system-basics>
+        <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"
+          (updateSettings)="getSettings()" (save)="saveDb()"></app-system-basics>
         <!--Step: 2 Operating Hours-->
-        <app-operating-hours *ngIf="specTab.step == 2" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
+        <app-operating-hours *ngIf="specTab.step == 2" [phast]="_phast" (save)="saveDb()"></app-operating-hours>
         <!--Step: 3 Operating Costs-->
-        <app-energy-costs *ngIf="specTab.step == 3" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
+        <app-energy-costs *ngIf="specTab.step == 3" [phast]="_phast" (save)="saveDb()" [settings]="settings"></app-energy-costs>
       </div>
       <div class="col-6">
         <app-help-panel [settingsTab]="specTab"></app-help-panel>
       </div>
     </div>
     <!--Step: 4 Heat Balance-->
-    <app-losses *ngIf="stepTab.step  == 2" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"
-      [inSetup]="true" [containerHeight]="containerHeight"></app-losses>
+    <app-losses *ngIf="stepTab.step  == 2" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true" [containerHeight]="containerHeight"></app-losses>
     <!--Step: 5 Aux Equipment-->
     <app-aux-equipment *ngIf="stepTab.step  == 3" [(phast)]="_phast" (save)="saveDb()" [containerHeight]="containerHeight"></app-aux-equipment>
     <!--Step: 6 Designed Energy-->
@@ -56,44 +55,36 @@
   </div>
 
   <!--Assessment-->
-  <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'assessment'">
+  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
-      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment" (save)="saveDb()" [saveClicked]="saveClicked"></app-explore-phast-opportunities>
+      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
+        (save)="saveDb()"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
-      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
     </div>
   </div>
   <!--Report-->
-  <div *ngIf="mainTab == 'report'" class="row justify-content-center report-container">
-    <div class="col-11 report-column">
+  <div *ngIf="mainTab == 'report'" class="row justify-content-center">
+    <div class="col-11">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-phast-report>
     </div>
   </div>
   <!--Sankey-->
   <div *ngIf="mainTab == 'sankey'" class="row">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 ">
-          <div class="row" *ngIf="phastOptionsLength > 1">
-            <div class="col-1"></div>
-            <div class="col-10">
-              <div class="form-group">
-                <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="phast1">
-                  <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{phast.name}}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <app-sankey [phast]="phast1.phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
-            </div>
-          </div>
-        </div>
+    <div class="col-10 mx-auto">
+      <div class="form-group">
+        <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
+          <option [ngValue]="_phast">Baseline</option>
+          <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
+        </select>
       </div>
     </div>
+    <div *ngIf="sankeyPhast" class="col-12">
+      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+    </div>
   </div>
+
   <!--Diagram-->
   <div *ngIf="mainTab =='diagram'" class="tab-content">
     <app-phast-diagram></app-phast-diagram>
@@ -109,19 +100,15 @@
   </div>
   <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
-      <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
       <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
-      <!-- <button class="btn btn-secondary" (click)="save()">Save</button> -->
-      <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && stepTab.next" (click)="nextStep()">Next</button> -->
       <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next)"
         (click)="nextStep()">Next</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
-      <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="phastService()">Heat Balance Assessment</button> -->
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
     </div>
   </div>
 </div>
-
+<!--disclaimer toast-->
 <ng2-toasty class="disclaimer"></ng2-toasty>

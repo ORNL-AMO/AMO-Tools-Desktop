@@ -17,8 +17,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -47,9 +45,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -90,41 +85,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         this._exhaustGasLosses.push(tmpLoss);
       })
     }
-
-    this.energyInputExhaustGasService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.energyInputExhaustGasLoss) {
-          this._exhaustGasLosses.splice(lossIndex, 1);
-          if (this.energyInputExhaustGasCompareService.differentArray && !this.isBaseline) {
-            this.energyInputExhaustGasCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.energyInputExhaustGasService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.energyInputExhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.energyInputExhaustGasService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.energyInputExhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -134,12 +94,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = null;
-      //  this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
     } else {
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = null;
-      // this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
     }
-    this.energyInputExhaustGasService.deleteLossIndex.next(null);
   }
 
   disableForms() {
@@ -149,12 +106,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.energyInputExhaustGasService.addLoss(this.isBaseline);
-    // }
-    if (this.energyInputExhaustGasCompareService.differentArray) {
-      this.energyInputExhaustGasCompareService.addObject(this.energyInputExhaustGasCompareService.differentArray.length - 1);
-    }
     this._exhaustGasLosses.push({
       form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
@@ -165,7 +116,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.energyInputExhaustGasService.setDelete(lossIndex);
+    this._exhaustGasLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   calculate(loss: EnInputExGasObj) {

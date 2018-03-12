@@ -3,17 +3,12 @@
 }
 
 .system-setup{
-    height: 100%;
+    margin-bottom:25px;
 }
 
 
 .modal-open {
     z-index: initial !important;
-}
-
-
-#phastSelect {
-    margin-top: 25px;
 }
 
 .btn-primary{

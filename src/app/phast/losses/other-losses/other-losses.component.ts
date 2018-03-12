@@ -16,8 +16,6 @@ export class OtherLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -57,36 +55,6 @@ export class OtherLossesComponent implements OnInit {
         this._otherLosses.push(tmpLoss);
       })
     }
-    this.otherLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.otherLosses) {
-          this._otherLosses.splice(lossIndex, 1);
-          if (this.otherLossCompareService.differentArray && !this.isBaseline) {
-            this.otherLossCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._otherLosses.push({
-    //         form: this.otherLossesService.initForm(),
-    //         name: 'Loss #' + (this._otherLosses.length + 1)
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._otherLosses.push({
-    //         form: this.otherLossesService.initForm(),
-    //         name: 'Loss #' + (this._otherLosses.length + 1)
-    //       })
-    //     }
-    //   })
-    // }
 
     if(this.inSetup && this.modExists){
       this.lossesLocked = true;
@@ -119,12 +87,6 @@ export class OtherLossesComponent implements OnInit {
   }
   
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.otherLossesService.addLoss(this.isBaseline);
-    // }
-    if (this.otherLossCompareService.differentArray) {
-      this.otherLossCompareService.addObject(this.otherLossCompareService.differentArray.length - 1);
-    }
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
       name: 'Loss #' + (this._otherLosses.length + 1),
@@ -134,7 +96,8 @@ export class OtherLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.otherLossesService.setDelete(lossIndex);
+    this._otherLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   renameLoss() {

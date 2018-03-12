@@ -7,6 +7,7 @@ import { PhastService } from '../phast.service';
   styleUrls: ['./phast-calculator-tabs.component.css']
 })
 export class PhastCalculatorTabsComponent implements OnInit {
+  //same as PhastTabsComponent, BehaviorSubject for calculator tabs
   calcTab: string;
   constructor(private phastService: PhastService) { }
 

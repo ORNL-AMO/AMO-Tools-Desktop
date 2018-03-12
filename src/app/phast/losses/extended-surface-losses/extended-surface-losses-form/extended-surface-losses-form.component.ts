@@ -28,7 +28,6 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   surfaceAreaError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
   emissivityError: string = null;
   constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private windowRefService: WindowRefService) { }
@@ -63,20 +62,6 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   enableForm() {
     this.lossesForm.enable();
   }
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
-  // checkEmissivity(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
-  //     this.emissivityError = 'Surface emissivity must be between 0 and 1';
-  //   } else {
-  //     this.emissivityError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -107,15 +92,13 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
+
   focusOut() {
     this.changeField.emit('default');
   }
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
   initDifferenceMonitor() {

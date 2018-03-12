@@ -16,8 +16,6 @@ export class SystemBasicsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  saveClicked: boolean;
-  @Input()
   isAssessmentSettings: boolean;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
@@ -27,39 +25,26 @@ export class SystemBasicsComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-  @Output('openModal')
-  openModal = new EventEmitter<boolean>();
-
-  @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
   settingsForm: FormGroup;
-  unitChange: boolean = false;
-
-  isFirstChange: boolean = true;
-  counter: any;
   oldSettings: Settings;
   lossesExist: boolean;
-
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService) { }
 
   ngOnInit() {
+    //get settings form (used as input into shared settings components)
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    //phast need energyResultUnit
     if (this.settingsForm.controls.energyResultUnit.value == '' || !this.settingsForm.controls.energyResultUnit.value) {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges();
     }
+    //oldSettings used for comparing if units update needed
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    //disables portion of form if exists
     this.lossesExist = this.lossExists(this.phast);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveClicked && !this.isFirstChange) {
-      this.saveChanges(false);
-    } else {
-      this.isFirstChange = false;
-    }
   }
 
   lossExists(phast: PHAST) {
@@ -69,27 +54,24 @@ export class SystemBasicsComponent implements OnInit {
       return false;
     }
   }
+  //save changes to settings
   saveChanges(bool?: boolean) {
+    //save id, doesn't persist form
     let id = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
+    //compare to check if data update needed
     if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
       if (this.phast.losses) {
         this.showUpdateData = true;
       }
-      //this.showSettingsModal();
     }
-
+    //used to inform user data updated
     if (this.showUpdateData == false && this.phast.losses && !bool) {
       this.dataUpdated = true;
     }
-    // } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
-    //   this.settings.furnaceType != this.newSettings.furnaceType ||
-    //   this.settings.energyResultUnit != this.newSettings.energyResultUnit ||
-    //   this.settings.customFurnaceName != this.newSettings.customFurnaceName) {
-    //   this.updateData(false);
-    // }
+    //if assessment already has settings, update them
     if (this.isAssessmentSettings) {
       this.indexedDbService.putSettings(this.settings).then(
         results => {
@@ -98,7 +80,8 @@ export class SystemBasicsComponent implements OnInit {
         }
       )
     }
-    //create settings for assessment
+    //else if assessement does not have own settings create settings for assessment
+    //base on setup in phast.component this should probably not occur but keeping for now
     else {
       this.settings.createdDate = new Date();
       this.settings.modifiedDate = new Date();
@@ -111,7 +94,7 @@ export class SystemBasicsComponent implements OnInit {
       )
     }
   }
-
+  //update/convert assessment data for new units
   updateData(bool?: boolean) {
     if (this.phast.losses) {
       this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
@@ -134,23 +117,12 @@ export class SystemBasicsComponent implements OnInit {
           }
         })
       }
+      //tell parent to save new data
       this.save.emit(true);
+      //update oldSettings with currentSettings
       this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
       this.showUpdateData = false;
       this.dataUpdated = true;
     }
   }
-
-  showSettingsModal() {
-    this.openModal.emit(true);
-    this.settingsModal.show();
-  }
-
-  hideSettingsModal() {
-    this.openModal.emit(false);
-    this.settingsModal.hide();
-  }
-  // startSavePolling() {
-  //   this.saveChanges()
-  // }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { PhastService } from '../../phast.service';
 import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -32,14 +31,14 @@ export class ResultsDataComponent implements OnInit {
 
   baseLineResults: PhastResults;
   modificationResults: Array<PhastResults>;
-  phastMods: Array<any>;
+  phastMods: Array<Modification>;
   showResultsCats: ShowResultsCategories;
   lossUnit: string;
   selectedModificationIndex: number;
 
   numMods: number = 0;
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
+  constructor(private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.getResults();

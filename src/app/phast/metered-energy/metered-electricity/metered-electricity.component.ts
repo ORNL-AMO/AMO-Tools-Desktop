@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MeteredEnergyElectricity, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
-import { PhastService } from '../../phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { MeteredEnergyService } from '../metered-energy.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-metered-electricity',

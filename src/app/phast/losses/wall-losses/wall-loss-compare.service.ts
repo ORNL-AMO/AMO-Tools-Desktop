@@ -28,7 +28,6 @@ export class WallLossCompareService {
     }
   }
   //add different object to different array
-  //called when new loss is added in component
   addObject(num: number) {
     this.differentArray.push({
       lossIndex: num,

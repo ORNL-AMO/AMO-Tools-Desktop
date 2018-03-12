@@ -27,7 +27,6 @@ export class OperationsFormComponent implements OnInit {
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
 
-  counter: any;
   firstChange: boolean = true;
   constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
 

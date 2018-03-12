@@ -1,3 +1,4 @@
+<!--step tabs-->
 <nav>
   <ul class="tabs subtabs progress-tabs phast">
     <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
@@ -6,6 +7,7 @@
   </ul>
 </nav>
 
+<!--specTabs for system basics, op hours and op conditions-->
 <nav *ngIf="currentTab.step == 1">
   <ul class="tabs subtabs phast">
     <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab.step == tab.step}">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 import { Settings } from '../../../../shared/models/settings';
@@ -31,7 +31,6 @@ export class GasLeakageLossesFormComponent implements OnInit {
   specificGravityError: string = null;
   draftPressureError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
   constructor(private gasLeakageCompareService: GasLeakageCompareService, private windowRefService: WindowRefService) { }
 
@@ -68,21 +67,6 @@ export class GasLeakageLossesFormComponent implements OnInit {
     this.lossesForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
-  // checkTemperature(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
-  //     this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
-  //   } else {
-  //     this.temperatureError = null;
-  //   }
-  // }
-
   checkInputError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
@@ -117,13 +101,10 @@ export class GasLeakageLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
 

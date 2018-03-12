@@ -24,14 +24,6 @@ export class AtmosphereSummaryComponent implements OnInit {
   collapse: boolean = true;
   //use array to get gas names
   gasOptions: Array<any>;
-
-  
-  // atmosphereGasDiff: boolean = false;
-  // specificHeatDiff: boolean = false;
-  // inletTempDiff: boolean = false;
-  // outletTempDiff: boolean = false;
-  // flowRateDiff: boolean = false;
-  // correctionFactorDiff: boolean = false;
   
   atmosphereGasDiff: Array<boolean>;
   specificHeatDiff: Array<boolean>;
@@ -123,25 +115,6 @@ export class AtmosphereSummaryComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  //real version
-  // //function used to check if baseline and modification values are different
-  // //called from html
-  // //diffBool is name of corresponding input boolean to indicate different
-  // checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
-  //   if (baselineVal != modificationVal) {
-  //     //this[diffBool] get's corresponding variable
-  //     //only set true once
-  //     if (this[diffBool] != true) {
-  //       //set true/different
-  //       this[diffBool] = true;
-  //       //tell html to detect change
-  //       this.cd.detectChanges();
-  //     }
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   getGas(id: number) {
     if (id) {

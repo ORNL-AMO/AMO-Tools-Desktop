@@ -31,7 +31,6 @@ export class GasCoolingLossesFormComponent implements OnInit {
   gasFlowError: string = null;
   gasDensityError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
   constructor(private windowRefService: WindowRefService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
@@ -56,7 +55,6 @@ export class GasCoolingLossesFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-
   disableForm() {
     this.lossesForm.disable();
   }
@@ -64,17 +62,6 @@ export class GasCoolingLossesFormComponent implements OnInit {
   enableForm() {
     this.lossesForm.enable();
   }
-
-  // checkTemperature(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-  //     this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-  //   } else {
-  //     this.temperatureError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -111,15 +98,12 @@ export class GasCoolingLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
   focusOut() {
     this.changeField.emit('default');
   }
   startSavePolling() {
+    this.saveEmit.emit(true);
     this.calculate.emit(true)
-    this.emitSave();
   }
 
   initDifferenceMonitor() {

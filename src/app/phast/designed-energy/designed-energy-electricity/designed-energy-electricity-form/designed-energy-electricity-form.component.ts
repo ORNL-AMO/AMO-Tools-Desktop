@@ -11,13 +11,10 @@ export class DesignedEnergyElectricityFormComponent implements OnInit {
   inputs: DesignedEnergyElectricity;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  // @Input()
-  // settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  counter: any;
 
   constructor() { }
 
@@ -29,13 +26,8 @@ export class DesignedEnergyElectricityFormComponent implements OnInit {
   }
 
   calculate() {
-    this.startSavePolling();
+    this.emitSave.emit(true);
     this.emitCalculate.emit(true);
   }
-
-  startSavePolling() {
-    this.emitSave.emit(true);
-  }
-
 
 }

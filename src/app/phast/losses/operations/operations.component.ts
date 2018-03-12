@@ -15,8 +15,6 @@ import { FormGroup } from '@angular/forms';
 export class OperationsComponent implements OnInit {
   @Input()
   phast: PHAST;
-  @Input()
-  saveClicked: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
   @Input()
@@ -40,17 +38,6 @@ export class OperationsComponent implements OnInit {
     this.operationsCompareService.initCompareObjects();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
-
   ngOnDestroy() {
     if (this.isBaseline) {
       this.operationsCompareService.baseline = null;
@@ -58,7 +45,7 @@ export class OperationsComponent implements OnInit {
       this.operationsCompareService.modification = null;
     }
   }
-debugger
+
   saveLosses() {
     if (this.operationsForm.status == 'VALID') {
       let tmpOpHours: OperatingHours = {

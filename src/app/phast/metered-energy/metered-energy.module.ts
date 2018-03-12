@@ -35,6 +35,7 @@ import { MeteredElectricityResultsComponent } from './metered-electricity/metere
     MeteredEnergyResultsComponent,
     MeteredElectricityResultsComponent
   ],
+  //components exported for use in preAssessments calculator
   exports: [
     MeteredEnergyComponent,
     MeteredElectricityFormComponent,

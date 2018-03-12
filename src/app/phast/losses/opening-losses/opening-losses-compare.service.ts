@@ -25,8 +25,6 @@ export class OpeningLossesCompareService {
           })
         }
         this.checkOpeningLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

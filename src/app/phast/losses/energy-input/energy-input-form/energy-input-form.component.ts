@@ -26,7 +26,6 @@ export class EnergyInputFormComponent implements OnInit {
   settings: Settings;
   flowInput: boolean;
   firstChange: boolean = true;
-  counter: any;
   constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,7 +58,7 @@ export class EnergyInputFormComponent implements OnInit {
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
     })
-    this.checkForm();
+    this.startSavePolling();
   }
 
   disableForm() {
@@ -70,21 +69,13 @@ export class EnergyInputFormComponent implements OnInit {
     this.energyInputForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
   showHideInputField() {

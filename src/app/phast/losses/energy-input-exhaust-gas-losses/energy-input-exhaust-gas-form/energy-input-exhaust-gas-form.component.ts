@@ -37,9 +37,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   combustionError: string = null;
   heatError: string = null;
   firstChange: boolean = true;
-  counter: any;
-
-  //otherLossArray: Array<number>;
   constructor(private windowRefService: WindowRefService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,23 +105,16 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.exhaustGasForm.enable();
   }
 
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
   focusOut() {
     this.changeField.emit('default');
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
   initDifferenceMonitor() {

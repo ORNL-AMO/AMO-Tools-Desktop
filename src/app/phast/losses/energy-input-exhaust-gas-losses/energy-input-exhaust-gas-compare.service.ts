@@ -38,25 +38,13 @@ export class EnergyInputExhaustGasCompareService {
     })
   }
 
-  // addOther() {
-  //   this.differentArray.forEach(diff => {
-  //     diff.different.otherLossObjects.push(new BehaviorSubject<boolean>(null));
-  //   })
-  // }
-
   initDifferentObject(): EnergyInputExhaustGasDifferent {
-    // let tmpBehaviorArray = new Array<BehaviorSubject<boolean>>();
-    // for (let i = 0; i < numOther; i++) {
-    //   tmpBehaviorArray.push(new BehaviorSubject<boolean>(null));
-    // }
-
     let tmpDifferent: EnergyInputExhaustGasDifferent = {
       excessAir: new BehaviorSubject<boolean>(null),
       combustionAirTemp: new BehaviorSubject<boolean>(null),
       exhaustGasTemp: new BehaviorSubject<boolean>(null),
       totalHeatInput: new BehaviorSubject<boolean>(null),
       electricalPowerInput: new BehaviorSubject<boolean>(null),
-      //otherLossObjects: tmpBehaviorArray
     }
     return tmpDifferent;
   }
@@ -75,12 +63,6 @@ export class EnergyInputExhaustGasCompareService {
           this.differentArray[lossIndex].different.totalHeatInput.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].totalHeatInput, this.modifiedEnergyInputExhaustGasLosses[lossIndex].totalHeatInput));
           //electricalPowerInput
           this.differentArray[lossIndex].different.electricalPowerInput.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].electricalPowerInput, this.modifiedEnergyInputExhaustGasLosses[lossIndex].electricalPowerInput));
-          //otherLossObjects
-          // let i = 0;
-          // this.differentArray[lossIndex].different.otherLossObjects.forEach(obj => {
-          //   obj.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].otherLossObjects[i], this.modifiedEnergyInputExhaustGasLosses[lossIndex].otherLossObjects[i]));
-          //   i++;
-          // });
         }
       } else {
         this.disableAll()
@@ -97,11 +79,6 @@ export class EnergyInputExhaustGasCompareService {
       this.differentArray[lossIndex].different.exhaustGasTemp.next(false);
       this.differentArray[lossIndex].different.totalHeatInput.next(false);
       this.differentArray[lossIndex].different.electricalPowerInput.next(false);
-      // let i = 0;
-      // this.differentArray[lossIndex].different.otherLossObjects.forEach(obj => {
-      //   obj.next(false);
-      //   i++;
-      // });
     }
   }
 
@@ -127,5 +104,4 @@ export interface EnergyInputExhaustGasDifferent {
   exhaustGasTemp: BehaviorSubject<boolean>,
   totalHeatInput: BehaviorSubject<boolean>,
   electricalPowerInput: BehaviorSubject<boolean>,
-  //otherLossObjects: Array<BehaviorSubject<boolean>>
 }

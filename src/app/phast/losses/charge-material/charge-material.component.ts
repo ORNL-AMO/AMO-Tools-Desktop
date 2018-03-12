@@ -18,8 +18,6 @@ export class ChargeMaterialComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -49,9 +47,6 @@ export class ChargeMaterialComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addMaterial();
       }
@@ -76,48 +71,6 @@ export class ChargeMaterialComponent implements OnInit {
       this.initChargeMaterial();
     }
 
-    this.chargeMaterialService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.chargeMaterials) {
-          this._chargeMaterial.splice(lossIndex, 1);
-          if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
-            this.chargeMaterialCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.chargeMaterialService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._chargeMaterial.push({
-    //         chargeMaterialType: 'Solid',
-    //         solidForm: this.chargeMaterialService.initSolidForm(),
-    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
-    //         gasForm: this.chargeMaterialService.initGasForm(),
-    //         name: 'Material #' + (this._chargeMaterial.length + 1),
-    //         heatRequired: 0.0,
-    //         modifiedHeatRequired: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // } else {
-    //   this.chargeMaterialService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._chargeMaterial.push({
-    //         chargeMaterialType: 'Solid',
-    //         solidForm: this.chargeMaterialService.initSolidForm(),
-    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
-    //         gasForm: this.chargeMaterialService.initGasForm(),
-    //         name: 'Material #' + (this._chargeMaterial.length + 1),
-    //         heatRequired: 0.0,
-    //         modifiedHeatRequired: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // }
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -127,13 +80,11 @@ export class ChargeMaterialComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.chargeMaterialCompareService.baselineMaterials = null;
-      //  this.chargeMaterialService.addLossBaselineMonitor.next(false);
     } else {
       this.chargeMaterialCompareService.modifiedMaterials = null;
-      // this.chargeMaterialService.addLossModificationMonitor.next(false);
     }
-    this.chargeMaterialService.deleteLossIndex.next(null);
   }
+
   disableForms() {
     this._chargeMaterial.forEach(loss => {
       loss.solidForm.disable();
@@ -190,12 +141,6 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    // if (this.isLossesSetup) {
-    //   this.chargeMaterialService.addLoss(this.isBaseline);
-    // }
-    if (this.chargeMaterialCompareService.differentArray) {
-      this.chargeMaterialCompareService.addObject(this.chargeMaterialCompareService.differentArray.length - 1);
-    }
     this._chargeMaterial.push({
       chargeMaterialType: 'Solid',
       solidForm: this.chargeMaterialService.initSolidForm(this._chargeMaterial.length + 1),
@@ -210,7 +155,8 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   removeMaterial(lossIndex: number) {
-    this.chargeMaterialService.setDelete(lossIndex);
+    this._chargeMaterial.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   collapseLoss(loss: ChargeMaterialObj) {
@@ -318,7 +264,6 @@ export class ChargeMaterialComponent implements OnInit {
       })
     }
   }
-
 
   changeField(str: string) {
     this.fieldChange.emit(str);

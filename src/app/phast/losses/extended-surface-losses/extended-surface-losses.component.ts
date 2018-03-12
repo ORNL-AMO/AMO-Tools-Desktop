@@ -17,8 +17,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -47,9 +45,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -61,13 +56,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      //  this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
       this.extendedSurfaceCompareService.baselineSurface = null;
     } else {
-      // this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
       this.extendedSurfaceCompareService.modifiedSurface = null;
     }
-    this.extendedSurfaceLossesService.deleteLossIndex.next(null);
   }
 
   ngOnInit() {
@@ -100,40 +92,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         this._surfaceLosses.push(tmpLoss);
       })
     }
-    this.extendedSurfaceLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.extendedSurfaces) {
-          this._surfaceLosses.splice(lossIndex, 1);
-          if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
-            this.extendedSurfaceCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.extendedSurfaceLossesService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._surfaceLosses.push({
-    //         form: this.extendedSurfaceLossesService.initForm(),
-    //         name: 'Loss #' + (this._surfaceLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.extendedSurfaceLossesService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._surfaceLosses.push({
-    //         form: this.extendedSurfaceLossesService.initForm(),
-    //         name: 'Loss #' + (this._surfaceLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
+    
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -146,12 +105,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     })
   }
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.extendedSurfaceLossesService.addLoss(this.isBaseline);
-    // }
-    if (this.extendedSurfaceCompareService.differentArray) {
-      this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
-    }
     this._surfaceLosses.push({
       form: this.extendedSurfaceLossesService.initForm(this._surfaceLosses.length + 1),
       heatLoss: 0.0,
@@ -161,7 +114,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.extendedSurfaceLossesService.setDelete(lossIndex);
+    this._surfaceLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   calculate(loss: any) {

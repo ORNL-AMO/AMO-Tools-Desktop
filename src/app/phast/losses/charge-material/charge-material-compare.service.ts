@@ -23,8 +23,6 @@ export class ChargeMaterialCompareService {
           })
         }
         this.checkChargeMaterials();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }

@@ -18,7 +18,7 @@ export class DesignedEnergySteamComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
-  
+
   tabSelect: string = 'results';
   results: DesignedEnergyResults;
   currentField: string = 'fuelType';
@@ -61,11 +61,13 @@ export class DesignedEnergySteamComponent implements OnInit {
       percentOperatingHours: 0
     }
     this.phast.designedEnergy.designedEnergySteam.push(tmpZone);
+    this.save();
     this.calculate();
   }
 
   removeZone(index: number) {
     this.phast.designedEnergy.designedEnergySteam.splice(index, 1);
+    this.save();
     this.calculate();
   }
 }

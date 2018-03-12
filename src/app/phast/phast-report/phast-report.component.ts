@@ -63,9 +63,12 @@ export class PhastReportComponent implements OnInit {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
 
+    //subscribe to print event
     this.phastReportService.showPrint.subscribe(printVal => {
+      //shows loading print view
       this.showPrintDiv = printVal;
       if(printVal == true){
+        //use delay to show loading before print payload starts
         setTimeout(() => {
           this.showPrint = printVal;
         },20)
@@ -128,15 +131,8 @@ export class PhastReportComponent implements OnInit {
 
 
   print() {
-    console.log('clicked');
     //when print clicked set show print value to true
     this.phastReportService.showPrint.next(true);
-    
-
-    //eventually add logic for modal or something to say "building print view"
-
-    //set timeout for delay to print call. May want to do this differently later but for now should work
-    //10000000 is excessive, put it at whatever you want
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
       let doc = this.windowRefService.getDoc();
@@ -144,8 +140,5 @@ export class PhastReportComponent implements OnInit {
       //after printing hide content again
       this.phastReportService.showPrint.next(false);
     }, 2000)
-    // let win = this.windowRefService.nativeWindow;
-    // let doc = this.windowRefService.getDoc();
-    // win.print();
   }
 }
