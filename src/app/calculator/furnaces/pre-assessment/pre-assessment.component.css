@@ -62,3 +62,7 @@ td{
 .scroll-item{
     overflow-x: hidden;
 }
+
+.form-panel{
+    padding-right: 0px;
+}
