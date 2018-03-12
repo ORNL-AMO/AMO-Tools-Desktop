@@ -26,10 +26,17 @@ export class ReceiverTankComponent implements OnInit {
     },
   ];
 
+  inputs: any = {
+    method: 0
+  }
   constructor() {}
 
   ngOnInit() {
 
+  }
+
+  emitChange(){
+    
   }
 
 
