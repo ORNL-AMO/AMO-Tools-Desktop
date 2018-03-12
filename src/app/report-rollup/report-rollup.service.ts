@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { PsatService } from '../psat/psat.service';
 import { SettingsService } from '../settings/settings.service';
 import { Settings } from '../shared/models/settings';
+import { Calculator } from '../shared/models/calculators';
 
 
 @Injectable()
@@ -32,6 +33,10 @@ export class ReportRollupService {
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
 
+
+  calcsArray: Array<Calculator>;
+  selectedCalcs: BehaviorSubject<Array<Calculator>>;
+
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService, private phastResultsService: PhastResultsService) {
     this.initSummary();
   }
@@ -48,6 +53,10 @@ export class ReportRollupService {
     this.selectedPhasts = new BehaviorSubject<Array<PhastCompare>>(new Array<PhastCompare>());
     this.phastResults = new BehaviorSubject<Array<PhastResultsData>>(new Array<PhastResultsData>());
     this.allPhastResults = new BehaviorSubject<Array<AllPhastResultsData>>(new Array<AllPhastResultsData>());
+
+
+    this.calcsArray = new Array<Calculator>();
+    this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
   }
 
 
@@ -95,6 +104,29 @@ export class ReportRollupService {
   }
 
   getChildDirectories(subDir: Directory) {
+
+    //debug
+    this.indexedDbService.getDirectoryCalculator(subDir.id).then(calcs => {
+      if (calcs) {
+
+        // if (!this.calcsArray) {
+        //   this.calcsArray = new Array<Calculator>();
+        // }
+
+        //add me to report
+        // console.log("calcs.length = " + calcs.length);
+        for (let i = 0; i < calcs.length; i++) {
+          // console.log("calcs[" + i + "].preAssessments.length = " + calcs[i].preAssessments.length);
+          if (calcs[i].preAssessments) {
+            this.calcsArray.push(calcs[i]);
+            this.selectedCalcs.next(this.calcsArray);
+          }
+        }
+      }
+    });
+
+
+    //real version
     this.indexedDbService.getChildrenDirectories(subDir.id).then(subDirResults => {
       if (subDirResults) {
         subDirResults.forEach(dir => {
@@ -104,6 +136,7 @@ export class ReportRollupService {
       }
     })
   }
+
 
   getDirectoryAssessments(dirId: number) {
     this.indexedDbService.getDirectoryAssessments(dirId).then(results => {

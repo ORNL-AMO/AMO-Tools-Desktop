@@ -24,6 +24,8 @@ export class MeteredFuelFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
+  @Input()
+  inElectricity: boolean;
 
   fuelTypes: FlueGasMaterial[];
   fuelFlowInput: boolean;

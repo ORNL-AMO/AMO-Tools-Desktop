@@ -1,0 +1,15 @@
+tr > td:first-child,
+tr > th:first-child{
+    width: 50%;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    width: 25%;
+    text-align: right;
+}
+
+
+.text-center{
+    text-align: center;
+}
