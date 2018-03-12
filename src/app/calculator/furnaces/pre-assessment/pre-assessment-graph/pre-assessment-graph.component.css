@@ -11,3 +11,16 @@
         display: none;
     }
 }
+
+
+.pre-assessment-note{
+    margin-top: 15px;
+    background: lightcyan;
+    padding: 15px;
+}
+
+.no-column-data{
+    margin-top: 15px;
+    background: lightgray;
+    padding: 15px;
+}

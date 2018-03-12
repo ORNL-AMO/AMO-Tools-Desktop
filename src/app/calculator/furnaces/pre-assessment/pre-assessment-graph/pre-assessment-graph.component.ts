@@ -42,6 +42,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   hideTooltip: boolean = false;
 
   showLegend: boolean;
+  destroy: boolean;
 
   window: any;
   doc: any;
@@ -49,6 +50,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
+    this.destroy = true;
     if (!this.printView) {
       this.printView = false;
     }
@@ -62,8 +64,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
     this.chartColors = graphColors;
     this.getData();
-
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,12 +74,18 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
           this.firstChange = !this.firstChange;
         }
         else if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
+          this.destroy = false;
           this.initChart();
+        }
+        else {
+          if (!this.destroy) {
+            this.destroyChart();
+
+          }
         }
       }
     }
   }
-
 
   ngAfterViewInit() {
 
@@ -92,6 +98,9 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
     if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
       this.initChart();
+    }
+    else {
+      this.destroy = true;
     }
   }
 
@@ -107,6 +116,12 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
   }
 
+  destroyChart() {
+    if (this.chart) {
+      this.chart.destroy();
+      this.destroy = true;
+    }
+  }
 
   initChart() {
 
