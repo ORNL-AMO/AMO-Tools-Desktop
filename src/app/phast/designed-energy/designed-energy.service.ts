@@ -77,10 +77,9 @@ export class DesignedEnergyService {
 
   sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number {
     let designedEnergyUsed = 0;
-    //input uses MMBtu or GJ now, previously Btu or J so needed constant for results.
-   // let constant = Math.pow(10, 6);
+    let constant = Math.pow(10, 6);
     inputs.forEach(input => {
-      designedEnergyUsed += ((input.totalBurnerCapacity) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
+      designedEnergyUsed += ((input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
     })
     return designedEnergyUsed || 0;
   }
