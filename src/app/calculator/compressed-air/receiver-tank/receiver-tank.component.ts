@@ -24,6 +24,10 @@ export class ReceiverTankComponent implements OnInit {
       name: 'Metered Storage',
       value: 3
     },
+    {
+      name: 'Air Capacity',
+      value: 4
+    },
   ];
 
   inputs: any = {
@@ -36,7 +40,7 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   emitChange(){
-    
+
   }
 
 
