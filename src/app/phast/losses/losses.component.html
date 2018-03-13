@@ -2,11 +2,8 @@
   <div class="scroll-item" [ngClass]="{'col-6': inSetup, 'col-8': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
     <div class="row row-min-height">
       <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'baseline':!inSetup,  'col-12': inSetup, 'col-md-6': !inSetup}">
-        <div class="header">
+        <div class="header d-flex flex-row justify-content-between">
           <h3>Baseline</h3>
-          <!-- <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected">
-        <span class="fa fa-plus"></span>
-      </button> -->
           <h5 class="pull-right panel-add" *ngIf="inSetup && !modificationExists && selectedTab.showAdd">
             <a class="small" [ngClass]="{'disabled': !baselineSelected}">
               <span *ngIf="selectedTab.componentStr != 'charge-material'" (click)="addLoss()">+Add Loss</span>
@@ -90,8 +87,7 @@
         [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
 
         <!-- Modification Header -->
-        <!--<div class="header" *ngIf="!editModification">-->
-        <div class="header">
+        <div class="header d-flex flex-row justify-content-between">
           <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].phast.name}}</h3>
           <h5 class="pull-right add-loss">
             <a class="small click-link" [ngClass]="{'disabled-link': !modificationSelected}">
@@ -99,16 +95,9 @@
               <span *ngIf="isDropdownOpen && !showEditModification" (click)="toggleDropdown()">Cancel</span>
             </a>
           </h5>
-          <!-- <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
-        <span class="changeAdd" *ngIf="!isDropdownOpen">Change / Add</span>
-        <span class="changeAdd" *ngIf="isDropdownOpen">Cancel</span>
-      </button> -->
         </div>
 
         <div class="losses-container phast-losses-container" *ngIf="!isDropdownOpen">
-
-          <!-- <app-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="lossesTab"></app-notes> -->
-
           <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'charge-material'"
             [settings]="settings" [isLossesSetup]="isLossesSetup" [isLossesSetup]="isLossesSetup"></app-charge-material>
@@ -190,7 +179,7 @@
               </button>
             </li>
             <li class="add-modification">
-              <button (click)="addModification()">Add Modified Condition</button>
+              <button class="btn btn-primary" (click)="addModification()">Add Modified Condition</button>
               <p>Data will be copied from
                 <br/> your baseline operating condition</p>
             </li>
@@ -204,7 +193,6 @@
       <div class="no-data col-6" *ngIf="_modifications.length == 0 && !inSetup">
         <h3>Now that your baseline set up, click below to start adding modifications.</h3>
         <button type="button" (click)="openModal()">Add Modified Condition</button>
-        <!--<button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>-->
         <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating
           a modification.</p>
       </div>
@@ -225,7 +213,7 @@
   </div>
 </div>
 
-<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+<div bsModal #addModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addModificationModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">

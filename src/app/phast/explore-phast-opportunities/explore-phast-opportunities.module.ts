@@ -14,13 +14,15 @@ import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    LossesModule
+    LossesModule,
+    ModalModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

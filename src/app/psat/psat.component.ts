@@ -54,7 +54,6 @@ export class PsatComponent implements OnInit {
 
   subTabIndex: number = 0;
 
-  saveClicked: boolean = false;
   adjustment: PSAT;
   isValid;
 
@@ -275,23 +274,6 @@ export class PsatComponent implements OnInit {
       this.subTabIndex++;
       this.subTab = this.subTabs[this.subTabIndex];
     }
-
-    //if (this.subTab != 'system-basics' || bool) {
-    // if (!bool) {
-    //   this.save();
-    // } else {
-    //   this.saveContinue = false;
-    // }
-    //   if (this.subTab == 'field-data') {
-    //     this.psatService.mainTab.next('assessment');
-    //   } else {
-    //     this.subTabIndex++;
-    //     this.subTab = this.subTabs[this.subTabIndex];
-    //   }
-    // } else {
-    //   this.saveContinue = true;
-    //   this.toggleSave();
-    // }
     this.getContainerHeight();
   }
 
@@ -322,10 +304,6 @@ export class PsatComponent implements OnInit {
 
   close() {
     this.location.back();
-  }
-
-  toggleSave() {
-    this.saveClicked = !this.saveClicked;
   }
 
   save() {

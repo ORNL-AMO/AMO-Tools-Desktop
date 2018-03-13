@@ -22,3 +22,7 @@
 .modify-conditions{
     min-height: 100%;
 }
+
+.help-panel{
+    padding-left: 0px;
+}
