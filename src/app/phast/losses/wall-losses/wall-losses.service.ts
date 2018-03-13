@@ -31,7 +31,7 @@ export class WallLossesService {
       'windVelocity': [wallLoss.windVelocity, Validators.required],
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
-      'surfaceShape': [wallLoss.surfaceShape, Validators.required],
+      'surfaceShape': [wallLoss.surfaceShape],
       'name': [wallLoss.name]
     })
   }
