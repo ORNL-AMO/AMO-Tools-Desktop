@@ -290,7 +290,7 @@ export class PhastService {
     const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.chargeReacted / 100 : -input.chargeReacted / 100;
-    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat * (1 - inputs.waterContentCharged / 100)).from('Btu').to(settings.energyResultUnit);
 
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
