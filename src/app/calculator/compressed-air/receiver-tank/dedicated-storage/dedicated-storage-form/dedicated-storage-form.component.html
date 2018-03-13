@@ -1,3 +1,58 @@
-<p>
-  dedicated-storage-form works!
-</p>
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="lengthOfDemand">Length of Demand</label>
+      <div class="input-group">
+        <input name="lengthOfDemand" class="form-control" type="number" step="any" [(ngModel)]="inputs.lengthOfDemand"
+               id="lengthOfDemand"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">min</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="airFlowRequirement">Ar Flow Requirement</label>
+      <div class="input-group">
+        <input name="airFlowRequirement" class="form-control" type="number" step="any"
+               [(ngModel)]="inputs.airFlowRequirement" id="airFlowRequirement"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">cfm</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="atmosphericPressure">Atmospheric Pressure</label>
+      <div class="input-group">
+        <input name="atmosphericPressure" class="form-control" type="number" step="any"
+               [(ngModel)]="inputs.atmosphericPressure" id="atmosphericPressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psia</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="initialTankPressure">Initial Tank Pressure</label>
+      <div class="input-group">
+        <input name="initialTankPressure" class="form-control" type="number" step="any"
+               [(ngModel)]="inputs.initialTankPressure" id="initialTankPressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="finalTankPressure">Initial Tank Pressure</label>
+      <div class="input-group">
+        <input name="finalTankPressure" class="form-control" type="number" step="any"
+               [(ngModel)]="inputs.finalTankPressure" id="finalTankPressure"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="bold">Receiver Volume</label>
+      <div class="text-center small">
+        <span *ngIf="receiverVolume"><strong>{{receiverVolume | number:'1.0-2'}} gal</strong></span>
+        <span *ngIf="!receiverVolume"><strong>&mdash; &mdash;</strong></span>
+      </div>
+    </div>
+  </div>
+</form>

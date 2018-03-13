@@ -1,18 +1,30 @@
-<div class="form-section">
-  <div class="form-group">
-    <label for="method">Method</label>
-    <div class="input-group">
-      <!--<input name="method" class="form-control" type="number" step="any" [(ngModel)]="inputs.method" id="method"-->
-             <!--(input)="emitChange()" onfocus="this.select();">-->
-      <select name="method" class="form-control" id="method" (change)="emitChange()" [(ngModel)]="inputs.method" >
-        <option *ngFor="let method of methods" [ngValue]="method.value" >{{method.name}}</option>
-      </select>
+<div class="panel-container row compressed-air">
+  <div class="col-12">
+    <div class="row align-items-top">
+      <div class=" col-6 align-top panel-receiver">
+        <div class="form-section">
+          <div class="form-group method-padding">
+            <div class="header">
+              <h3>Receiver Tank - Size Calculations</h3>
+            </div>
+            <label class="label-padding" for="method">Method</label>
+            <div class="input-group">
+              <select name="method" class="form-control" id="method" (change)="emitChange()"
+                      [(ngModel)]="inputs.method">
+                <option *ngFor="let method of methods" [ngValue]="method.value">{{method.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 align-top" style="background: white">
+        <div *ngIf="inputs.method == 0">
+          <app-general-method></app-general-method>
+        </div>
+        <div *ngIf="inputs.method == 1">
+          <app-dedicated-storage></app-dedicated-storage>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<div *ngIf="inputs.method == 0">
-<app-general-method></app-general-method>
-</div>
-<div *ngIf="inputs.method == 1">
-  <app-dedicated-storage></app-dedicated-storage>
 </div>
