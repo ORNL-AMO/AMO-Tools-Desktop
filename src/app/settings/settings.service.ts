@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
 declare const packageJson;
 
 @Injectable()
 export class SettingsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  globalSettings: BehaviorSubject<Settings>;
+  constructor(private formBuilder: FormBuilder) {
+    this.globalSettings = new BehaviorSubject<Settings>(null);
+   }
 
   getSettingsForm(): FormGroup {
     return this.formBuilder.group({
@@ -25,7 +29,8 @@ export class SettingsService {
       'energyResultUnit': [''],
       'customFurnaceName': [''],
       'temperatureMeasurement': [''],
-      'phastRollupUnit': ['']
+      'phastRollupUnit': [''],
+      'defaultPanelTab': ['']
     });
   }
 
@@ -46,7 +51,8 @@ export class SettingsService {
       'energyResultUnit': [settings.energyResultUnit],
       'customFurnaceName': [settings.customFurnaceName],
       'temperatureMeasurement': [settings.temperatureMeasurement],
-      'phastRollupUnit': [settings.phastRollupUnit]
+      'phastRollupUnit': [settings.phastRollupUnit],
+      'defaultPanelTab': [settings.defaultPanelTab]
     });
   }
 
@@ -68,7 +74,8 @@ export class SettingsService {
       customFurnaceName: form.controls.customFurnaceName.value,
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
       appVersion: packageJson.version,
-      phastRollupUnit: form.controls.phastRollupUnit.value      
+      phastRollupUnit: form.controls.phastRollupUnit.value,
+      defaultPanelTab: form.controls.defaultPanelTab.value   
     };
     return tmpSettings;
   }
@@ -89,7 +96,8 @@ export class SettingsService {
       furnaceType: settings.furnaceType,
       customFurnaceName: settings.customFurnaceName,
       temperatureMeasurement: settings.temperatureMeasurement,
-      phastRollupUnit: settings.phastRollupUnit
+      phastRollupUnit: settings.phastRollupUnit,
+      defaultPanelTab: settings.defaultPanelTab
     }
     return newSettings;
   }
@@ -170,9 +178,6 @@ export class SettingsService {
     }
     return settings;
   }
-
-
-
 
   setTemperatureUnit(settings: Settings): Settings{
     if(settings.unitsOfMeasure == 'Imperial'){

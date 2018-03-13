@@ -196,6 +196,8 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.createDirectorySettings();
+        }else{
+          this.settingsService.globalSettings.next(results[0]);
         }
       }
     );
@@ -329,6 +331,7 @@ export class DashboardComponent implements OnInit {
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
+        console.log(results);
       }
     )
 
