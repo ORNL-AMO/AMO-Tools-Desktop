@@ -1,6 +1,6 @@
 <div class="container-fluid psat">
 	<div class="row modify-conditions panel-container">
-		<div class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+		<div *ngIf="exploreModExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<div class="header">
 				<h3>Select Potential Adjustment Projects</h3>
 			</div>
@@ -10,6 +10,12 @@
 			</app-explore-opportunities-form>
 
 		</div>
+		<div *ngIf="!exploreModExists" class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+			<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
+				opportunities.</h3>
+			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
+			<p>Data will be copied from your current baseline condition.</p>
+		  </div>
 		<div class="col-md-6 help-panel">
 			<div class="row">
 				<ul class="tabs primary tab-row">
@@ -24,22 +30,25 @@
 					</li>
 				</ul>
 			</div>
-			<div class="explore-help-panel">
-				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
+			<div class="explore-help-panel" *ngIf="tabSelect == 'help'">
+				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat">
 				</app-explore-opportunities-help>
 			</div>
 			
 
 			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-			 *ngIf="tabSelect == 'sankey'">
+			 *ngIf="tabSelect == 'sankey' && exploreModExists">
 			</app-explore-opportunities-sankey>
 
-			<div class="panel-results">
+			<div class="panel-results" *ngIf="exploreModExists">
 				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
 				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[exploreModIndex].psat.name" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results>
 			</div>
-
+			<div  *ngIf="!exploreModExists && tabSelect != 'help'">
+				<!--Placeholder for help text -->
+				<p>Explore Opportunities to view results</p>
+			</div>
 
 			<!-- End .help-panel -->
 		</div>

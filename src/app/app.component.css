@@ -1420,16 +1420,16 @@ Modify Conditions
     z-index: 1;
     background: none;
   }
-    .modification.disabled:hover, .modify-conditions .no-data:hover {
+    .modification.disabled:hover {
       background: #fff;
       cursor: pointer;
     }
 
-    .modify-conditions .no-data {
+    /* .modify-conditions .no-data {
       width: 35%;
-    }
+    } */
 
-    .no-data-phast{
+    /* .no-data-phast{
       width: 100% !important;
     }
 
@@ -1438,7 +1438,7 @@ Modify Conditions
     }
     .modify-conditions app-losses-help  {
       width: 30%;
-    }
+    } */
 
 .modifications-list {
   background: #f1f1f1;
@@ -1617,11 +1617,9 @@ No Data Messaging
 .no-data {
   padding: 26px 50px;
   text-align: center;
-  background: #D5D8DC;
-  border-right: #cacaca solid 1px;
+  background: #fff;
 }
 .no-data h3 {
-  color: #787878;
   font-size: 20px;
   padding: inherit 80px;
 }
@@ -1633,19 +1631,35 @@ No Data Messaging
   text-decoration: underline;
 }
 .no-data button {
-  background: #fff;
-  -webkit-box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
+  /* -webkit-box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
-  box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
-  border: #0099fd solid 1px;
+  box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2); */
   padding: 12px 54px;
-  margin-top: 34px;
   border-radius: 4px;
 }
-.no-data:hover, .no-data:hover button {
-  cursor: pointer;
-  background: #fff;
+
+.phast .no-data button{
+  background-color: #BF3D00;
+  color: white;
 }
+
+.psat .no-data button{
+  background-color: #2980b9;
+  color: white;
+}
+
+.phast-losses-container .no-data{
+  background-color: #ABB2B9;
+}
+
+.phast-losses-container .no-data:hover, .no-data:hover button {
+  cursor: pointer;
+}
+
+.phast-losses-container .no-data:hover{
+  background:#D5D8DC;
+}
+
 .no-data p {
   font-size: 14px;
   color: #a2a2a2;

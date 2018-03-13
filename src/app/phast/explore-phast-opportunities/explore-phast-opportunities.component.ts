@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { LossTab } from '../tabs';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-explore-phast-opportunities',
@@ -18,6 +19,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
+  @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
 
   @Output('save')
   save = new EventEmitter<boolean>();
@@ -32,36 +34,33 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     componentStr: ''
   };
 
+  exploreModExists: boolean = false;
+  modExists: boolean = false;
   constructor() { }
 
   ngOnInit() {
-    if (!this.phast.modifications) {
-      this.phast.modifications = new Array();
-      this.addMod();
-      this.exploreModIndex = 0;
-      this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
-    } else {
-      let i = 0;
-      let exists = false;
-      //find explore opportunites modificiation
-      this.phast.modifications.forEach(mod => {
-        if (mod.exploreOpportunities) {
-          this.exploreModIndex = i;
-          exists = true;
-        } else {
-          i++;
-        }
-      })
-      //none found add one
-      if (!exists) {
-        this.addMod();
-        this.exploreModIndex = this.phast.modifications.length - 1;
-        this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification'
-      }
+    if (this.phast.modifications) {
+      this.modExists = true;
+      this.checkForExploreMod();
     }
   }
 
+  checkForExploreMod() {
+    let i = 0;
+    //find explore opportunites modificiation
+    this.phast.modifications.forEach(mod => {
+      if (mod.exploreOpportunities) {
+        this.exploreModIndex = i;
+        this.exploreModExists = true;
+      } else {
+        i++;
+      }
+    })
+  }
+
   addMod() {
+    let phastCpy: PHAST = JSON.parse(JSON.stringify(this.assessment.phast));
+    phastCpy.name = 'Explore Opportunities';
     this.phast.modifications.push({
       notes: {
         chargeNotes: '',
@@ -81,9 +80,13 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         heatSystemEfficiencyNotes: '',
         operationsNotes: ''
       },
-      phast: JSON.parse(JSON.stringify(this.assessment.phast)),
+      phast: phastCpy,
       exploreOpportunities: true
     });
+    this.modExists = true;
+    this.closeModal();
+    this.getResults();
+    this.checkForExploreMod();
   }
 
   setTab(str: string) {
@@ -107,5 +110,18 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   startSavePolling() {
     this.save.emit(true);
+  }
+
+  closeModal() {
+    this.addModificationModal.hide();
+  }
+
+
+  openModal() {
+    if (!this.modExists) {
+      this.addModificationModal.show();
+    }else{
+      this.addMod();
+    }
   }
 }

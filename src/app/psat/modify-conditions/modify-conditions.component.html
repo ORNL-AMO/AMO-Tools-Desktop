@@ -11,13 +11,13 @@
     </div>
     <div class="losses-container psat-losses-container">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
-      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
-      <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (saved)="save()"
-        [settings]="settings" [baseline]="true"></app-motor>
-      <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (saved)="save()" [settings]="settings" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
-        [baseline]="true" [assessment]="assessment"></app-field-data>
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()" [settings]="settings"
+        [baseline]="true"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()" [settings]="settings"
+        [baseline]="true"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()" [settings]="settings"
+        (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [baseline]="true"
+        [assessment]="assessment"></app-field-data>
     </div>
   </div>
 
@@ -26,7 +26,7 @@
   <div class="modification col-4 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
-    <div class="header" *ngIf="!editModification">
+    <div class="header d-flex flex-row justify-content-between" *ngIf="!editModification">
       <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
       <h5 class="pull-right panel-add">
         <a class="small" [ngClass]="{'disabled': modifiedSelected == false}">
@@ -43,12 +43,12 @@
       <!-- <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes> -->
 
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
-      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [(psat)]="_modifications[modificationIndex].psat"
         (saved)="save()" [settings]="settings"></app-pump-fluid>
-      <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (saved)="save()" [settings]="settings"></app-motor>
-      <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        [selected]="modifiedSelected" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment"></app-field-data>
+      <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [(psat)]="_modifications[modificationIndex].psat" (saved)="save()"
+        [settings]="settings"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="_modifications[modificationIndex].psat" [selected]="modifiedSelected"
+        (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment"></app-field-data>
 
     </div>
 
@@ -84,19 +84,20 @@
     <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
       opportunities.
     </h3>
-    <button type="button">Add Modified Condition</button>
+    <button type="button" class="btn btn-primary">Add Modified Condition</button>
     <p>Data will be copied from your current baseline condition.</p>
   </div>
 
   <!-- Help Panel -->
-  <div class="col-4" style="padding-left: 0px; padding-right: 0px;">
-    <app-help-panel (emitSave)="save()" [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="_modifications[modificationIndex]" [modificationIndex]="modificationIndex"></app-help-panel>
+  <div class="col-4 help-panel">
+    <app-help-panel *ngIf="modExists" (emitSave)="save()" [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="_modifications[modificationIndex]"
+      [modificationIndex]="modificationIndex"></app-help-panel>
+    <div *ngIf="!modExists">
+      <div class="header">
+        <h3>Help</h3>
+      </div>
+      <p>Add Modification to view results</p>
+    </div>
   </div>
 
 </div>
-
-<!--<div class="row justify-content-center report-container" *ngIf="modifyTab == 'report' && settings">
-  <div class="col-10 report-column">
-    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [emitPrint]="emitPrint" [inPsat]="true"></app-psat-report>
-  </div>
-</div>-->

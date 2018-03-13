@@ -25,7 +25,7 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
   lossAdded: boolean;
   @Input()
   containerHeight: number;
@@ -171,7 +171,7 @@ export class LossesComponent implements OnInit {
     this.modificationSelected = true;
     this.baselineSelected = false;
     this.saveModifications();
-    this.materialModal.hide();
+    this.addModificationModal.hide();
   }
 
   deleteModification() {
@@ -246,12 +246,12 @@ export class LossesComponent implements OnInit {
 
   openModal() {
     this.isModalOpen = true;
-    this.materialModal.show();
+    this.addModificationModal.show();
   }
 
   closeModal() {
     this.isModalOpen = false;
-    this.materialModal.hide();
+    this.addModificationModal.hide();
   }
 
   cancelEdit(){

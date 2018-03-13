@@ -16,8 +16,6 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   psat: PSAT;
   @Input()
-  saveClicked: boolean;
-  @Input()
   settings: Settings;
   @Output('saved')
   saved = new EventEmitter<boolean>();
@@ -28,8 +26,8 @@ export class ModifyConditionsComponent implements OnInit {
 
   modifyTab: string = 'field-data';
   _modifications: Array<Modification>;
-  baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
+  baselineSelected: boolean = false;
+  modifiedSelected: boolean = true;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
   isDropdownOpen: boolean = false;
@@ -37,6 +35,7 @@ export class ModifyConditionsComponent implements OnInit {
   showEditModification: boolean = false;
   editModification: Modification;
   isModalOpen: boolean = false;
+  modExists: boolean = false;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -44,8 +43,7 @@ export class ModifyConditionsComponent implements OnInit {
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
       this.togglePanel(false);
-    }else{
-      this.addModification();
+      this.modExists = true;
     }
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
@@ -78,9 +76,11 @@ export class ModifyConditionsComponent implements OnInit {
         fieldDataNotes: ''
       }
     });
+    this.save();
     this.modificationIndex = this._modifications.length - 1;
     this.modifiedSelected = true;
     this.baselineSelected = false;
+    this.modExists = true;
   }
 
   selectModification(modification: Modification) {
@@ -139,6 +139,9 @@ export class ModifyConditionsComponent implements OnInit {
     _.remove(this._modifications, (mod) => {
       return mod.psat.name == this.editModification.psat.name;
     });
+    if(this._modifications.length == 0){
+      this.modExists = false;
+    }
     this.hideEditModification();
     this.editModification = null;
     this.save();
