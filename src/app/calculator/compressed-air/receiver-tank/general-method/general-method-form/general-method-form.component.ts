@@ -14,10 +14,12 @@ export class GeneralMethodFormComponent implements OnInit {
   @Input()
   finalTankPressure: number;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
   emitChange() {
     this.calculate.emit(this.inputs);
   }

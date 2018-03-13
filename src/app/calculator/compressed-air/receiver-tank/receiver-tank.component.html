@@ -18,11 +18,14 @@
         </div>
       </div>
       <div class="col-12 align-top" style="background: white">
-        <div *ngIf="inputs.method == 0">
+        <div class="stand-alone-calc" *ngIf="inputs.method == 0">
           <app-general-method></app-general-method>
         </div>
-        <div *ngIf="inputs.method == 1">
+        <div class="stand-alone-calc" *ngIf="inputs.method == 1">
           <app-dedicated-storage></app-dedicated-storage>
+        </div>
+        <div class="stand-alone-calc" *ngIf="inputs.method == 2">
+          <app-delay-method></app-delay-method>
         </div>
       </div>
     </div>
