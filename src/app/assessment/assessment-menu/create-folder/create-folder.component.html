@@ -14,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-group" [formGroup]="newFolder">
+        <form class="form-group" [formGroup]="newFolder" (ngSubmit)="createFolder()">
           <div class="row">
             <div class="col-12">
                 <label class="form-control-label" for="newFolderName">Folder Name</label>
@@ -29,10 +29,10 @@
           </div>
           <div class="row justify-content-between">
             <div class="col-2">
-              <button class="btn" (click)="hideCreateModal()">Close</button>
+              <button type="button" class="btn" (click)="hideCreateModal()">Close</button>
             </div>
             <div class="col-2">
-              <button class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
             </div>
           </div>
         </form>
