@@ -599,10 +599,11 @@ export class PhastService {
     if (losses.wallLosses) {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
     }
-    if (losses.energyInputExhaustGasLoss) {
-      let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
-      grossHeatRequired += tmpResults.exhaustGasLosses;
-    }
+    //remove per issue 1379
+    // if (losses.energyInputExhaustGasLoss) {
+    //   let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
+    //   grossHeatRequired += tmpResults.exhaustGasLosses;
+    // }
     if (losses.exhaustGasEAF) {
       grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF, settings);
     }

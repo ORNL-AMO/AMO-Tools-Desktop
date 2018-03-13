@@ -119,7 +119,7 @@ export class PhastResultsService {
         let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
         results.energyInputHeatDelivered = tmpResults.heatDelivered;
         results.totalExhaustGas = tmpResults.exhaustGasLosses;
-        results.grossHeatInput = results.totalInput - results.exothermicHeat;
+        results.grossHeatInput = results.totalInput - results.exothermicHeat + tmpResults.exhaustGasLosses;
         results.availableHeatPercent = tmpResults.availableHeat;
       }
     }
