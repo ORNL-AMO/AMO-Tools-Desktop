@@ -38,13 +38,9 @@ export class LossesResultPanelComponent implements OnInit {
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.settingsService.globalSettings.subscribe(val => {
-      if (val) {
-        if (val.defaultPanelTab) {
-          this.tabSelect = val.defaultPanelTab;
-        }
-      }
-    })
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

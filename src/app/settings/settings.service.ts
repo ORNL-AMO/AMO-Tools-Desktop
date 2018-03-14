@@ -7,9 +7,8 @@ declare const packageJson;
 @Injectable()
 export class SettingsService {
 
-  globalSettings: BehaviorSubject<Settings>;
+  globalSettings: Settings;
   constructor(private formBuilder: FormBuilder) {
-    this.globalSettings = new BehaviorSubject<Settings>(null);
    }
 
   getSettingsForm(): FormGroup {

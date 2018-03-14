@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@
 import { O2Enrichment, O2EnrichmentOutput } from '../../../shared/models/phast/o2Enrichment';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-o2-enrichment',
@@ -46,17 +46,13 @@ export class O2EnrichmentComponent implements OnInit {
   lines = [];
   tabSelect: string = 'results';
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(results => {
-        if (results) {
-          this.settings = results[0];
-          this.initDefaultValues(this.settings);
-          this.calculate();
-        }
-      })
+      this.settings = this.settingsService.globalSettings;
+      this.initDefaultValues(this.settings);
+      this.calculate();
     } else {
       this.initDefaultValues(this.settings);
       this.calculate()

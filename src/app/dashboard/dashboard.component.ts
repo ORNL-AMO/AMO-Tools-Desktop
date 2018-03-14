@@ -197,7 +197,7 @@ export class DashboardComponent implements OnInit {
         if (results.length == 0) {
           this.createDirectorySettings();
         }else{
-          this.settingsService.globalSettings.next(results[0]);
+          this.settingsService.globalSettings = results[0];
         }
       }
     );

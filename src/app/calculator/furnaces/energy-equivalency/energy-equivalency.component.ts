@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../shared/models/phast/energyEquivalency';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -39,18 +39,14 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   currentField: string = 'default';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(results => {
-        if (results) {
-          this.settings = results[0];
-          this.initDefaultValues(this.settings);
-          this.calculateElectric();
-          this.calculateFuel();
-        }
-      })
+      this.settings = this.settingsService.globalSettings;
+      this.initDefaultValues(this.settings);
+      this.calculateElectric();
+      this.calculateFuel();
     } else {
       this.initDefaultValues(this.settings);
       this.calculateElectric();

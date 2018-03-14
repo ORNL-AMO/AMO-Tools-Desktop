@@ -125,7 +125,7 @@ export class AssessmentSettingsComponent implements OnInit {
   updateSettings(updateData: boolean) {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if(this.directory.id == 1){
-      this.settingsService.globalSettings.next(tmpSettings);
+      this.settingsService.globalSettings = tmpSettings;
     }
     tmpSettings.directoryId = this.directory.id;
     tmpSettings.id = this.settings.id;

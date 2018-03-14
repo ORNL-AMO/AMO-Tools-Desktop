@@ -7,6 +7,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveService } from './pump-curve.service';
 import { PumpCurveForm, PumpCurveDataRow, Calculator } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
+import { SettingsService } from '../../../settings/settings.service';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -43,16 +44,12 @@ export class PumpCurveComponent implements OnInit {
   calcExists: boolean = false;
   saving: boolean = false;
   pumpFormExists: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
+  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     //get systen settings if using stand alone calculator
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          this.settings = results[0];
-        }
-      )
+      this.settings = this.settingsService.globalSettings;
     }
 
     if (this.inAssessment) {

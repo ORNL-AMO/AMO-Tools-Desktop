@@ -7,8 +7,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import * as _ from 'lodash';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Calculator } from '../../../shared/models/calculators';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -48,17 +48,12 @@ export class PreAssessmentComponent implements OnInit {
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
-  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private indexedDbService: IndexedDbService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results) {
-            this.settings = results[0];
-            this.initAssessments();
-          }
-        })
+      this.settings = this.settingsService.globalSettings;
+      this.initAssessments();
     } else {
       this.initAssessments();
     }
