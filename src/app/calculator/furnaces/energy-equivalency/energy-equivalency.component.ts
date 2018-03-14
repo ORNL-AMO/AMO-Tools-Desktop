@@ -52,6 +52,9 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.calculateElectric();
       this.calculateFuel();
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

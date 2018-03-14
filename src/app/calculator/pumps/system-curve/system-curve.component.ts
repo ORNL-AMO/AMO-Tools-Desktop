@@ -98,6 +98,9 @@ export class SystemCurveComponent implements OnInit {
         this.showForm = true;
       }
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

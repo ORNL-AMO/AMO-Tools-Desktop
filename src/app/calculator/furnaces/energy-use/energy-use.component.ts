@@ -61,6 +61,10 @@ export class EnergyUseComponent implements OnInit {
       this.initDefaultValues(this.settings);
       this.calculate();
     }
+
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

@@ -79,6 +79,9 @@ export class HeadToolComponent implements OnInit {
     } else {
       this.getFormFromSettings();
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

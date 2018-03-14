@@ -57,6 +57,9 @@ export class O2EnrichmentComponent implements OnInit {
       this.initDefaultValues(this.settings);
       this.calculate()
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

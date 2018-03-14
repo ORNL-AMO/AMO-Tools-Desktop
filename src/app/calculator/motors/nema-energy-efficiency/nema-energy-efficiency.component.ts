@@ -53,6 +53,9 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
         })
       }
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

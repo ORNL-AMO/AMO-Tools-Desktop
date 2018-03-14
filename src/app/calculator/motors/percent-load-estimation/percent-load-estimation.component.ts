@@ -44,6 +44,9 @@ export class PercentLoadEstimationComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsService.globalSettings;
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {

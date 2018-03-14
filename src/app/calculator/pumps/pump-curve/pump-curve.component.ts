@@ -51,7 +51,9 @@ export class PumpCurveComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsService.globalSettings;
     }
-
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
     if (this.inAssessment) {
       this.indexedDbService.getAssessmentCalculator(this.assessment.id).then(results => {
         if (results.length != 0) {

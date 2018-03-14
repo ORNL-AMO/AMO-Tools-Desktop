@@ -57,6 +57,9 @@ export class PreAssessmentComponent implements OnInit {
     } else {
       this.initAssessments();
     }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   ngAfterViewInit() {
