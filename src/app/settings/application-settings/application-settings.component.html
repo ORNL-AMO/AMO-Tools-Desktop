@@ -50,9 +50,30 @@
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
       </option>
-      <!-- <option [ngValue]="'assessmentUnits'">
-        Use Assessment Units
-      </option> -->
+    </select>
+  </div>
+  <div class="form-group" *ngIf="generalSettings">
+    <label for="phastRollupFuelUnit">Process Heating Common Result Unit</label>
+    <select class="form-control" formControlName="phastRollupFuelUnit" id="phastRollupFuelUnit" (change)="save()">
+      <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+        <span [innerHTML]="option.displayUnit"></span>
+      </option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="generalSettings">
+    <label for="phastRollupElectricityUnit">Process Heating Common Result Unit</label>
+    <select class="form-control" formControlName="phastRollupElectricityUnit" id="phastRollupElectricityUnit" (change)="save()">
+      <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+        <span [innerHTML]="option.displayUnit"></span>
+      </option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="generalSettings">
+    <label for="phastRollupSteamUnit">Process Heating Common Result Unit</label>
+    <select class="form-control" formControlName="phastRollupSteamUnit" id="phastRollupSteamUnit" (change)="save()">
+      <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+        <span [innerHTML]="option.displayUnit"></span>
+      </option>
     </select>
   </div>
 </form>
