@@ -40,8 +40,10 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   ngOnInit() {
     if (this.phast.modifications) {
-      this.modExists = true;
-      this.checkForExploreMod();
+      if (this.phast.modifications.length != 0) {
+        this.modExists = true;
+        this.checkForExploreMod();
+      }
     }
   }
 
@@ -120,7 +122,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   openModal() {
     if (!this.modExists) {
       this.addModificationModal.show();
-    }else{
+    } else {
       this.addMod();
     }
   }
