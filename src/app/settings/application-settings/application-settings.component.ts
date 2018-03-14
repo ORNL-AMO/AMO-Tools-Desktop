@@ -17,7 +17,7 @@ export class ApplicationSettingsComponent implements OnInit {
   inPsat: boolean;
   @Input()
   generalSettings: boolean;
-  
+
   languages: Array<string> = [
     'English'
   ];
@@ -60,7 +60,6 @@ export class ApplicationSettingsComponent implements OnInit {
   }
 
   save(){
-    console.log(this.settingsForm);
     this.startSavePolling.emit(true);
   }
 

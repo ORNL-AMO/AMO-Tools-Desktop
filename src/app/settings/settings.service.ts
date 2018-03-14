@@ -108,7 +108,9 @@ export class SettingsService {
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi',
-        temperatureMeasurement: 'F'
+        temperatureMeasurement: 'F',
+        energyResultUnit: 'MMBtu',
+        phastRollupUnit: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -120,7 +122,9 @@ export class SettingsService {
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
-        temperatureMeasurement: 'C'
+        temperatureMeasurement: 'C',
+        energyResultUnit: 'GJ',
+        phastRollupUnit: 'GJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

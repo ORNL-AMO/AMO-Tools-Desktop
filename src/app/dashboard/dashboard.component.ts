@@ -327,11 +327,12 @@ export class DashboardComponent implements OnInit {
       energySourceType: 'Fuel',
       appVersion: packageJson.version,
       energyResultUnit: 'MMBtu',
-      temperatureMeasurement: 'F'
+      temperatureMeasurement: 'F',
+      defaultPanelTab: 'help',
+      phastRollupUnit: 'MMBtu'
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
-        console.log(results);
       }
     )
 
