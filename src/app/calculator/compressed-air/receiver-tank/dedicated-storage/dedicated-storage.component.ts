@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ReceiverTankDedicatedStorage} from "../../../../shared/models/standalone";
 import {StandaloneService} from "../../../standalone.service";
 
@@ -11,7 +11,9 @@ export class DedicatedStorageComponent implements OnInit {
 
   inputs: ReceiverTankDedicatedStorage;
   receiverVolume: number;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
     this.inputs = {
@@ -23,7 +25,9 @@ export class DedicatedStorageComponent implements OnInit {
       finalTankPressure: 0
     };
   }
-getReceiverVolume(inputs: ReceiverTankDedicatedStorage) {
+
+  getReceiverVolume(inputs: ReceiverTankDedicatedStorage) {
     this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
-}
+    console.log(this.inputs);
+  }
 }

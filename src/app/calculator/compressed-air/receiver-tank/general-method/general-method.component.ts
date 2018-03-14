@@ -25,5 +25,6 @@ export class GeneralMethodComponent implements OnInit {
 
   getStorage() {
     this.finalTankPressure  = StandaloneService.receiverTankSizeGeneral(this.inputs);
+    console.log(this.inputs);
   }
 }

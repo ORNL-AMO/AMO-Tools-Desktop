@@ -26,6 +26,8 @@ import { AirCapacityComponent } from './receiver-tank/air-capacity/air-capacity.
 import { AirCapacityFormComponent } from './receiver-tank/air-capacity/air-capacity-form/air-capacity-form.component';
 import { DelayMethodComponent } from './receiver-tank/delay-method/delay-method.component';
 import { DelayMethodFormComponent } from './receiver-tank/delay-method/delay-method-form/delay-method-form.component';
+import { MeteredStorageComponent } from './receiver-tank/metered-storage/metered-storage.component';
+import { MeteredStorageFormComponent } from './receiver-tank/metered-storage/metered-storage-form/metered-storage-form.component';
 
 
 @NgModule({
@@ -59,7 +61,9 @@ import { DelayMethodFormComponent } from './receiver-tank/delay-method/delay-met
     AirCapacityComponent,
     AirCapacityFormComponent,
     DelayMethodComponent,
-    DelayMethodFormComponent
+    DelayMethodFormComponent,
+    MeteredStorageComponent,
+    MeteredStorageFormComponent
   ],
   exports: [
     CompressedAirComponent

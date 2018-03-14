@@ -29,5 +29,6 @@ export class DelayMethodComponent implements OnInit {
   getTotalReceiverVolume() {
 
     this.totalReceiverVolume = StandaloneService.receiverTankSizeBridgingCompressor(this.inputs);
+    console.log(this.inputs);
   }
 }
