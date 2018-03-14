@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 
 @Component({
@@ -17,11 +17,11 @@ export class ReceiverTankComponent implements OnInit {
       value: 1
     },
     {
-      name: 'Bridging Compressor Reaction Delay',
+      name: 'Metered Storage',
       value: 2
     },
     {
-      name: 'Metered Storage',
+      name: 'Bridging Compressor Reaction Delay',
       value: 3
     },
     {
@@ -33,16 +33,17 @@ export class ReceiverTankComponent implements OnInit {
   inputs: any = {
     method: 0
   }
-  constructor() {}
+
+  constructor() {
+  }
 
   ngOnInit() {
 
   }
 
-  emitChange(){
+  emitChange() {
 
   }
-
 
 
 }

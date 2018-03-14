@@ -16,16 +16,18 @@ export class DelayMethodComponent implements OnInit {
 
   ngOnInit() {
     this.inputs = {
-      method: 2,
+      method: 3,
       distanceToCompressorRoom: 0,
       speedOfAir: 0,
       airDemand: 0,
       allowablePressureDrop: 0,
       atmosphericPressure: 0
     };
+    console.log(this.inputs);
   }
 
   getTotalReceiverVolume() {
+
     this.totalReceiverVolume = StandaloneService.receiverTankSizeBridgingCompressor(this.inputs);
   }
 }
