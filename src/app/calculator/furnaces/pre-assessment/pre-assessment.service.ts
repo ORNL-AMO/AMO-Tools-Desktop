@@ -46,6 +46,7 @@ export class PreAssessmentService {
       return this.addResult(tmpResults, assessment.name, assessment.borderColor);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
+      tmpResults = this.convertSteamResults(tmpResults);
       return this.addResult(tmpResults, assessment.name, assessment.borderColor);
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
@@ -58,10 +59,10 @@ export class PreAssessmentService {
   calculateDesigned(assessment: PreAssessment): { name: string, percent: number, value: number, color: string } {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      tmpResults = tmpResults;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
+      tmpResults = this.convertSteamResults(tmpResults);
       return this.addResult(tmpResults, assessment.name, assessment.borderColor);
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
@@ -71,11 +72,20 @@ export class PreAssessmentService {
     }
   }
 
+  convertSteamResults(val: number) {
+    if (this.unitOfMeasurement == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to('GJ');
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
+    }
+    return val;
+  }
+
   convertElectrotechResults(val: number) {
     if (this.unitOfMeasurement == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kWh').to('kJ');
+      val = this.convertUnitsService.value(val).from('kWh').to('GJ');
     } else {
-      val = this.convertUnitsService.value(val).from('kWh').to('Btu');
+      val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
     }
     return val;
   }
@@ -92,7 +102,7 @@ export class PreAssessmentService {
         name: name,
         percent: null,
         value: num,
-        color: color  
+        color: color
       }
 
       return result;
