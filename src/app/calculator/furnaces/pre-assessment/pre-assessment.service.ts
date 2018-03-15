@@ -70,6 +70,8 @@ export class PreAssessmentService {
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
       tmpResults = this.convertElectrotechResults(tmpResults);
+      let tmpFuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
+      tmpResults = tmpFuelResults + tmpResults;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor);
     }
   }
