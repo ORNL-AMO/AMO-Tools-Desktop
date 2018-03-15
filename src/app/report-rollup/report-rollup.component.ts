@@ -65,7 +65,9 @@ export class ReportRollupComponent implements OnInit {
       this.setSidebarHeight();
     }, 2500);
 
-    this.settings = this.settingsService.globalSettings
+    this.settings = this.settingsService.globalSettings;
+    this.checkSettings();
+
     this.createdDate = new Date();
     this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
@@ -133,6 +135,26 @@ export class ReportRollupComponent implements OnInit {
   ngOnDestroy() {
     this.assessmentService.showFeedback.next(true);
     this.reportRollupService.initSummary();
+  }
+
+  checkSettings(){
+    if(!this.settings.phastRollupElectricityUnit){
+      this.settings.phastRollupElectricityUnit = 'kWh';
+    }
+    if(!this.settings.phastRollupFuelUnit){
+      if(this.settings.unitsOfMeasure == 'Metric'){
+        this.settings.phastRollupFuelUnit = 'GJ';
+      }else{
+        this.settings.phastRollupFuelUnit = 'MMBtu';
+      }
+    }
+    if(!this.settings.phastRollupSteamUnit){
+      if(this.settings.unitsOfMeasure == 'Metric'){
+        this.settings.phastRollupSteamUnit = 'GJ';
+      }else{
+        this.settings.phastRollupSteamUnit = 'MMBtu';
+      }
+    }
   }
 
   exportToCsv() {
@@ -233,6 +255,7 @@ export class ReportRollupComponent implements OnInit {
   }
 
   hideUnitModal() {
+    console.log(this.settings);
     this.unitModal.hide();
   }
 
