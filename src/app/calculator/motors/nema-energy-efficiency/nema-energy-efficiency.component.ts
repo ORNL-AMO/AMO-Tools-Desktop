@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { SettingsService } from '../../../settings/settings.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   currentField: string;
   nemaForm: FormGroup;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
+  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (!this.psat) {
@@ -46,18 +46,15 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results.length != 0) {
-            this.settings = results[0];
-            if (this.settings.powerMeasurement != 'hp') {
-              this.nemaForm.patchValue({
-                horsePower: 150
-              })
-            }
-          }
-        }
-      )
+      this.settings = this.settingsService.globalSettings;
+      if (this.settings.powerMeasurement != 'hp') {
+        this.nemaForm.patchValue({
+          horsePower: 150
+        })
+      }
+    }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 

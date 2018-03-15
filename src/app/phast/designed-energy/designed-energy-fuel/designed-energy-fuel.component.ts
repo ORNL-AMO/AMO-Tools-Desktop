@@ -3,6 +3,7 @@ import { DesignedEnergyFuel, DesignedEnergyResults } from '../../../shared/model
 import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { DesignedEnergyService } from '../designed-energy.service';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-designed-energy-fuel',
@@ -24,13 +25,17 @@ export class DesignedEnergyFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor(private designedEnergyService: DesignedEnergyService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (this.phast.designedEnergy.designedEnergyFuel.length == 0) {
       this.addZone();
     } else {
       this.calculate();
+    }
+    
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 
@@ -44,6 +49,7 @@ export class DesignedEnergyFuelComponent implements OnInit {
 
   calculate() {
     this.results = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+    console.log(this.results);
   }
 
   setField(str: string) {

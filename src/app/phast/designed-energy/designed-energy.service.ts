@@ -79,7 +79,7 @@ export class DesignedEnergyService {
     let designedEnergyUsed = 0;
     let constant = Math.pow(10, 6);
     inputs.forEach(input => {
-      designedEnergyUsed += ((input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
+      designedEnergyUsed += ((input.totalBurnerCapacity) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
     })
     return designedEnergyUsed || 0;
   }
@@ -95,8 +95,8 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
 
-    designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyUsed = this.convertSteamEnergyUsed(designedEnergyUsed, settings);
+    designedEnergyIntensity = this.convertSteamEnergyUsed(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -122,9 +122,9 @@ export class DesignedEnergyService {
     if (settings.energySourceType == 'Electricity') {
       val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
     } else if (settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+      val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
-      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+      val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
     }
     return val;
   }
@@ -150,6 +150,15 @@ export class DesignedEnergyService {
       fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('GJ').to('kWh');
     }
     return fuelResults;
+  }
+
+  convertSteamEnergyUsed(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+    }
+    return val;
   }
 }
 

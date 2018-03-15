@@ -3,6 +3,7 @@ import { MeteredEnergyFuel, MeteredEnergyResults } from '../../../shared/models/
 import { PHAST } from '../../../shared/models/phast/phast';
 import { MeteredEnergyService } from '../metered-energy.service';
 import { Settings } from '../../../shared/models/settings';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-metered-fuel',
@@ -29,7 +30,7 @@ export class MeteredFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor(private meteredEnergyService: MeteredEnergyService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (!this.phast.meteredEnergy.meteredEnergyFuel) {
@@ -48,6 +49,10 @@ export class MeteredFuelComponent implements OnInit {
       }
     }
     this.calculate();
+    
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   setTab(str: string) {

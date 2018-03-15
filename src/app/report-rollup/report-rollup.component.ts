@@ -4,11 +4,11 @@ import { ReportRollupService, PhastResultsData, ReportItem } from './report-roll
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
 import { setTimeout } from 'timers';
 import { Calculator } from '../shared/models/calculators';
+import { SettingsService } from '../settings/settings.service';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -49,7 +49,7 @@ export class ReportRollupComponent implements OnInit {
   sidebarHeight: number = 0;
   printView: boolean = false;
   constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
-    private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
+    private windowRefService: WindowRefService, private settingsService: SettingsService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
 
@@ -71,9 +71,7 @@ export class ReportRollupComponent implements OnInit {
       this.setSidebarHeight();
     }, 2500);
 
-    this.indexedDbService.getDirectorySettings(1).then(results => {
-      this.settings = this.reportRollupService.checkSettings(results[0]);;
-    });
+    this.settings = this.settingsService.globalSettings
     this.createdDate = new Date();
     this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
