@@ -23,12 +23,9 @@ export class DelayMethodComponent implements OnInit {
       allowablePressureDrop: 0,
       atmosphericPressure: 0
     };
-    console.log(this.inputs);
   }
 
   getTotalReceiverVolume() {
-
     this.totalReceiverVolume = StandaloneService.receiverTankSizeBridgingCompressor(this.inputs);
-    console.log(this.inputs);
   }
 }

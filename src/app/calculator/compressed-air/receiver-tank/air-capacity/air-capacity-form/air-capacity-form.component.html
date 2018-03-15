@@ -1,3 +1,44 @@
-<p>
-  air-capacity-form works!
-</p>
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="tankSize">Receiver Tank Size</label>
+      <div class="input-group">
+        <input name="tankSize" class="form-control" type="number" step="any" [(ngModel)]="inputs.tankSize" id="tankSize"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">gal</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="airPressureIn">Air Pressure In</label>
+      <div class="input-group">
+        <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="airPressureOut">Air Pressure Out</label>
+      <div class="input-group">
+        <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
+               (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">psi</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="bold">Tank Cubic Foot</label>
+      <div class="text-center small">
+        <span *ngIf="tankCubicFoot"><strong>{{tankCubicFoot | number:'1.0-2'}} ft<sup>2</sup></strong></span>
+        <span *ngIf="!tankCubicFoot"><strong>&mdash; &mdash;</strong></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="bold">Air Capacity</label>
+      <div class="text-center small">
+        <span *ngIf="airCapacity"><strong>{{airCapacity | number:'1.0-2'}}</strong></span>
+        <span *ngIf="!airCapacity"><strong>&mdash; &mdash;</strong></span>
+      </div>
+    </div>
+  </div>
+</form>

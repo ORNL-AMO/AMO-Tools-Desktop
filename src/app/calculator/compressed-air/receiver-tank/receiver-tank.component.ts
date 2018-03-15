@@ -25,7 +25,7 @@ export class ReceiverTankComponent implements OnInit {
       value: 3
     },
     {
-      name: 'Air Capacity',
+      name: 'Usable Air Capacity',
       value: 4
     },
   ];

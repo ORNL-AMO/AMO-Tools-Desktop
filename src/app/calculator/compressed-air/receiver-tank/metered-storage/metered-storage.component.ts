@@ -22,14 +22,12 @@ export class MeteredStorageComponent implements OnInit {
       atmosphericPressure: 0,
       initialTankPressure: 0,
       finalTankPressure: 0,
-      meteredControl: 0
+      meteredControl: 0,
     };
   }
 
   getTotalReceiverVolume() {
     this.totalReceiverVolume = StandaloneService.receiverTankSizeMeteredStorage(this.inputs);
-    console.log(this.totalReceiverVolume);
-    console.log(this.inputs);
   }
 
 }

@@ -32,9 +32,7 @@ setUserFlowRate(bool: boolean) {
   getValveFlowFactor() {
     if (!this.userFlowRate) {
       this.getFlowRate();
-      console.log('get');
     }
     this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
-    console.log('calc');
   }
 }

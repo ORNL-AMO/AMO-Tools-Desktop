@@ -28,6 +28,5 @@ export class DedicatedStorageComponent implements OnInit {
 
   getReceiverVolume(inputs: ReceiverTankDedicatedStorage) {
     this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
-    console.log(this.inputs);
   }
 }
