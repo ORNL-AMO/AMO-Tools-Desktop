@@ -51,6 +51,9 @@ export class SettingsService {
       'customFurnaceName': [settings.customFurnaceName],
       'temperatureMeasurement': [settings.temperatureMeasurement],
       'phastRollupUnit': [settings.phastRollupUnit],
+      'phastRollupFuelUnit': [settings.phastRollupFuelUnit],
+      'phastRollupElectricityUnit': [settings.phastRollupElectricityUnit],
+      'phastRollupSteamUnit': [settings.phastRollupSteamUnit],
       'defaultPanelTab': [settings.defaultPanelTab]
     });
   }
@@ -74,12 +77,15 @@ export class SettingsService {
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
       appVersion: packageJson.version,
       phastRollupUnit: form.controls.phastRollupUnit.value,
+      phastRollupFuelUnit: form.controls.phastRollupFuelUnit.value,
+      phastRollupElectricityUnit: form.controls.phastRollupElectricityUnit.value,
+      phastRollupSteamUnit: form.controls.phastRollupSteamUnit.value,
       defaultPanelTab: form.controls.defaultPanelTab.value   
     };
     return tmpSettings;
   }
 
-  getNewSettingFromSetting(settings: Settings): Settings{
+  getNewSettingFromSetting(settings: Settings): Settings {
     let newSettings: Settings = {
       language: settings.language,
       currency: settings.currency,
@@ -96,6 +102,9 @@ export class SettingsService {
       customFurnaceName: settings.customFurnaceName,
       temperatureMeasurement: settings.temperatureMeasurement,
       phastRollupUnit: settings.phastRollupUnit,
+      phastRollupFuelUnit: settings.phastRollupFuelUnit,
+      phastRollupElectricityUnit: settings.phastRollupElectricityUnit,
+      phastRollupSteamUnit: settings.phastRollupSteamUnit,
       defaultPanelTab: settings.defaultPanelTab
     }
     return newSettings;
@@ -134,7 +143,7 @@ export class SettingsService {
     return settingsForm;
   }
 
-  setEnergyResultUnit(settingsForm: FormGroup): FormGroup  {
+  setEnergyResultUnit(settingsForm: FormGroup): FormGroup {
     if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
@@ -185,9 +194,9 @@ export class SettingsService {
   setTemperatureUnit(settings: Settings): Settings{
     if(settings.unitsOfMeasure == 'Imperial'){
       settings.temperatureMeasurement = 'F';
-    }else if(settings.unitsOfMeasure == 'Metric'){
+    } else if (settings.unitsOfMeasure == 'Metric') {
       settings.temperatureMeasurement = 'C';
-    }else{
+    } else {
       settings.temperatureMeasurement = 'F';
     }
     return settings;

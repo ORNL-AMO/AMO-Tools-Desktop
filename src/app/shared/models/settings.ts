@@ -21,6 +21,9 @@ export interface Settings {
     customFurnaceName?: string,
     appVersion?: string,
     phastRollupUnit?: string,
+    phastRollupFuelUnit?: string,
+    phastRollupSteamUnit?: string,
+    phastRollupElectricityUnit?: string,
     facilityInfo?: FacilityInfo,
     defaultPanelTab?: string
 }

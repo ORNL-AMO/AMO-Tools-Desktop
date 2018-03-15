@@ -329,7 +329,10 @@ export class DashboardComponent implements OnInit {
       energyResultUnit: 'MMBtu',
       temperatureMeasurement: 'F',
       defaultPanelTab: 'help',
-      phastRollupUnit: 'MMBtu'
+      phastRollupUnit: 'MMBtu',
+      phastRollupElectricityUnit: 'kWh',
+      phastRollupFuelUnit: 'MMBtu',
+      phastRollupSteamUnit: 'MMBtu'
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
