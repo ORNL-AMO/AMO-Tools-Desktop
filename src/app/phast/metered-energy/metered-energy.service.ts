@@ -102,9 +102,8 @@ export class MeteredEnergyService {
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
-
-    meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
-    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
+    meteredEnergyUsed = this.convertSteamEnergyUsed(meteredEnergyUsed, settings);
+    meteredEnergyIntensity = this.convertSteamEnergyUsed(meteredEnergyIntensity, settings);
     //Calculated By PHAST
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -129,6 +128,15 @@ export class MeteredEnergyService {
       val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
+    }
+    return val;
+  }
+
+  convertSteamEnergyUsed(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
     }
     return val;
   }
