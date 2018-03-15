@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
 import { AuxEquipmentService } from './aux-equipment.service';
+import { SettingsService } from '../../settings/settings.service';
 @Component({
   selector: 'app-aux-equipment',
   templateUrl: 'aux-equipment.component.html',
@@ -20,7 +21,7 @@ export class AuxEquipmentComponent implements OnInit {
 
   results: Array<{name: string, totalPower: number, motorPower: string}>;
   resultsSum: number = 0;
-  constructor(private auxEquipmentService: AuxEquipmentService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (!this.phast.auxEquipment) {
@@ -28,6 +29,10 @@ export class AuxEquipmentComponent implements OnInit {
       this.addEquipment();
     }else {
       this.calculate();
+    }
+    
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 

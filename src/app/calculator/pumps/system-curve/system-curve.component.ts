@@ -8,6 +8,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import * as _ from 'lodash';
+import { SettingsService } from '../../../settings/settings.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -45,7 +46,7 @@ export class SystemCurveComponent implements OnInit {
   calcExists: boolean = false;
   showForm: boolean = false;
   saving: boolean = false;
-  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     //in assesssment
@@ -90,16 +91,15 @@ export class SystemCurveComponent implements OnInit {
       this.initDefault();
       //get system settings if using stand alone calculator
       if (!this.settings) {
-        this.indexedDbService.getDirectorySettings(1).then(
-          results => {
-            this.settings = results[0];
-            this.convertDefaults(this.settings);
-            this.showForm = true;
-          }
-        )
+        this.settings = this.settingsService.globalSettings;
+        this.convertDefaults(this.settings);
+        this.showForm = true;
       } else {
         this.showForm = true;
       }
+    }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 
@@ -110,9 +110,9 @@ export class SystemCurveComponent implements OnInit {
   }
 
   resizeTabs() {
-      if (this.leftPanelHeader.nativeElement.clientHeight) {
-        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-      }
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setPointValuesFromCalc(init?: boolean) {

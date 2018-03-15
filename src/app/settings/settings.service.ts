@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
 declare const packageJson;
 
 @Injectable()
 export class SettingsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  globalSettings: Settings;
+  constructor(private formBuilder: FormBuilder) {
+   }
 
   getSettingsForm(): FormGroup {
     return this.formBuilder.group({
@@ -25,7 +28,8 @@ export class SettingsService {
       'energyResultUnit': [''],
       'customFurnaceName': [''],
       'temperatureMeasurement': [''],
-      'phastRollupUnit': ['']
+      'phastRollupUnit': [''],
+      'defaultPanelTab': ['']
     });
   }
 
@@ -49,7 +53,8 @@ export class SettingsService {
       'phastRollupUnit': [settings.phastRollupUnit],
       'phastRollupFuelUnit': [settings.phastRollupFuelUnit],
       'phastRollupElectricityUnit': [settings.phastRollupElectricityUnit],
-      'phastRollupSteamUnit': [settings.phastRollupSteamUnit]
+      'phastRollupSteamUnit': [settings.phastRollupSteamUnit],
+      'defaultPanelTab': [settings.defaultPanelTab]
     });
   }
 
@@ -74,7 +79,8 @@ export class SettingsService {
       phastRollupUnit: form.controls.phastRollupUnit.value,
       phastRollupFuelUnit: form.controls.phastRollupFuelUnit.value,
       phastRollupElectricityUnit: form.controls.phastRollupElectricityUnit.value,
-      phastRollupSteamUnit: form.controls.phastRollupSteamUnit.value
+      phastRollupSteamUnit: form.controls.phastRollupSteamUnit.value,
+      defaultPanelTab: form.controls.defaultPanelTab.value   
     };
     return tmpSettings;
   }
@@ -98,7 +104,8 @@ export class SettingsService {
       phastRollupUnit: settings.phastRollupUnit,
       phastRollupFuelUnit: settings.phastRollupFuelUnit,
       phastRollupElectricityUnit: settings.phastRollupElectricityUnit,
-      phastRollupSteamUnit: settings.phastRollupSteamUnit
+      phastRollupSteamUnit: settings.phastRollupSteamUnit,
+      defaultPanelTab: settings.defaultPanelTab
     }
     return newSettings;
   }
@@ -110,7 +117,9 @@ export class SettingsService {
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi',
-        temperatureMeasurement: 'F'
+        temperatureMeasurement: 'F',
+        energyResultUnit: 'MMBtu',
+        phastRollupUnit: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -122,7 +131,9 @@ export class SettingsService {
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
-        temperatureMeasurement: 'C'
+        temperatureMeasurement: 'C',
+        energyResultUnit: 'GJ',
+        phastRollupUnit: 'GJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -180,11 +191,8 @@ export class SettingsService {
     return settings;
   }
 
-
-
-
-  setTemperatureUnit(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Imperial') {
+  setTemperatureUnit(settings: Settings): Settings{
+    if(settings.unitsOfMeasure == 'Imperial'){
       settings.temperatureMeasurement = 'F';
     } else if (settings.unitsOfMeasure == 'Metric') {
       settings.temperatureMeasurement = 'C';

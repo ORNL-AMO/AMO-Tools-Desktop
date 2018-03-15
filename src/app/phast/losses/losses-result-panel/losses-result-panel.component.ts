@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
 import { LossTab } from '../../tabs';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-losses-result-panel',
@@ -34,20 +35,23 @@ export class LossesResultPanelComponent implements OnInit {
 
   tabSelect: string = 'results';
   helpHeight: number;
-  constructor() { }
+  constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight){
-      if(!changes.containerHeight.firstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      if (!changes.containerHeight.firstChange) {
         this.getContainerHeight();
       }
     }
@@ -60,11 +64,11 @@ export class LossesResultPanelComponent implements OnInit {
     }
   }
 
-  setTab(str: string){
+  setTab(str: string) {
     this.tabSelect = str;
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

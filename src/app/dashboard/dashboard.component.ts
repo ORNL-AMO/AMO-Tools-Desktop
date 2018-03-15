@@ -196,6 +196,8 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.createDirectorySettings();
+        }else{
+          this.settingsService.globalSettings = results[0];
         }
       }
     );
@@ -325,7 +327,9 @@ export class DashboardComponent implements OnInit {
       energySourceType: 'Fuel',
       appVersion: packageJson.version,
       energyResultUnit: 'MMBtu',
-      temperatureMeasurement: 'F'
+      temperatureMeasurement: 'F',
+      defaultPanelTab: 'help',
+      phastRollupUnit: 'MMBtu'
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {

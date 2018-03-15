@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { MeteredEnergyService } from '../metered-energy.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast.service';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-metered-electricity',
@@ -47,7 +48,7 @@ export class MeteredElectricityComponent implements OnInit {
     calculatedElectricityUsed: 0
   }
   currentField: string = 'fuelType';
-  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService, private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService) { }
 
 
   ngOnInit() {
@@ -71,6 +72,10 @@ export class MeteredElectricityComponent implements OnInit {
       };
     }
     this.calculate();
+    
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    }
   }
 
   setTab(str: string) {

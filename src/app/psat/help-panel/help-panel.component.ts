@@ -3,6 +3,7 @@ import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { Modification, PsatInputs } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
+import { SettingsService } from '../../settings/settings.service';
 @Component({
   selector: 'app-help-panel',
   templateUrl: './help-panel.component.html',
@@ -33,7 +34,7 @@ export class HelpPanelComponent implements OnInit {
   modificationResults: PsatOutputs;
   annualSavings: number;
   percentSavings: number;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.psatService.getResults.subscribe(val => {
@@ -41,6 +42,14 @@ export class HelpPanelComponent implements OnInit {
         this.getResults();
       }
     })
+
+    let globalSettings = this.settingsService.globalSettings;
+    if(globalSettings){
+      if(globalSettings.defaultPanelTab){
+        console.log('set');
+        this.tabSelect = globalSettings.defaultPanelTab;
+      }
+    }
   }
 
   // ngOnChanges(changes: SimpleChanges){

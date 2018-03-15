@@ -53,7 +53,7 @@
     </select>
   </div>
   <div class="form-group" *ngIf="generalSettings">
-    <label for="phastRollupFuelUnit">Process Heating Common Result Unit</label>
+    <label for="phastRollupFuelUnit">Process Heating Common Fuel Unit</label>
     <select class="form-control" formControlName="phastRollupFuelUnit" id="phastRollupFuelUnit" (change)="save()">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
@@ -61,7 +61,7 @@
     </select>
   </div>
   <div class="form-group" *ngIf="generalSettings">
-    <label for="phastRollupElectricityUnit">Process Heating Common Result Unit</label>
+    <label for="phastRollupElectricityUnit">Process Heating Common Electricity Unit</label>
     <select class="form-control" formControlName="phastRollupElectricityUnit" id="phastRollupElectricityUnit" (change)="save()">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
@@ -69,11 +69,22 @@
     </select>
   </div>
   <div class="form-group" *ngIf="generalSettings">
-    <label for="phastRollupSteamUnit">Process Heating Common Result Unit</label>
+    <label for="phastRollupSteamUnit">Process Heating Common Steam Unit</label>
     <select class="form-control" formControlName="phastRollupSteamUnit" id="phastRollupSteamUnit" (change)="save()">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
       </option>
     </select>
+  </div>
+  <div class="form-group" *ngIf="generalSettings">
+    <label>Default Panel Tab</label>
+    <div class="form-check">
+      <label class="form-check-label" style="display: block;">
+        <input class="form-check-input" type="radio" name="defaultPanelTab" formControlName="defaultPanelTab" value="results" (change)="save()">Results
+      </label>
+      <label class="form-check-label" style="display: block;">
+        <input class="form-check-input" type="radio" name="defaultPanelTab" formControlName="defaultPanelTab" value="help" (change)="save()">Help
+      </label>
+    </div>
   </div>
 </form>

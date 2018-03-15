@@ -24,7 +24,8 @@ export interface Settings {
     phastRollupFuelUnit?: string,
     phastRollupSteamUnit?: string,
     phastRollupElectricityUnit?: string,
-    facilityInfo?: FacilityInfo
+    facilityInfo?: FacilityInfo,
+    defaultPanelTab?: string
 }
 
 

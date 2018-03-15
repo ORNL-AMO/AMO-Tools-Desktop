@@ -20,19 +20,19 @@
         <div class="form-section">
           <h3>General Settings</h3>
           <p>These will be default settings for all assessments and folders.</p>
-          <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true"></app-application-settings>
+          <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
         </div>
 
         <div class="form-section">
           <h3>PSAT Settings</h3>
           <p>These settings will be used as the default settings for pump assessments inside this folder.</p>
-          <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+          <app-psat-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-psat-settings>
         </div>
 
         <div class="form-section">
           <h3>PHAST Settings</h3>
           <p>These settings will be used as the default settings for process heating assessments inside this folder.</p>
-          <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
+          <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-phast-settings>
         </div>
 
         <div class="actions">
