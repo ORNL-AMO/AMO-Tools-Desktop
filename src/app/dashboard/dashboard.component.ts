@@ -146,18 +146,18 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  getWorkingDirectoryData(){
+  getWorkingDirectoryData() {
     this.indexedDbService.getDirectorySettings(this.workingDirectory.id).then(results => {
-      if(results.length != 0){
+      if (results.length != 0) {
         this.workingDirectorySettings = results[0];
       }
     })
 
     this.indexedDbService.getDirectoryCalculator(this.workingDirectory.id).then(results => {
-      if(results.length != 0){
+      if (results.length != 0) {
         this.workingDirectoryCalculator = results[0];
         this.calcDataExists = true;
-      }else{
+      } else {
         this.workingDirectoryCalculator = {
           directoryId: this.workingDirectory.id
         }
@@ -166,12 +166,12 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  addCalculatorData(calcualtorData: Calculator){
-    if(this.calcDataExists){
+  addCalculatorData(calcualtorData: Calculator) {
+    if (this.calcDataExists) {
       this.indexedDbService.putCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
       });
-    }else{
+    } else {
       calcualtorData.directoryId = this.workingDirectory.id;
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
@@ -561,6 +561,10 @@ export class DashboardComponent implements OnInit {
         assessment.selected = false;
       }
     )
+    //prevents unneccessary pre assessments in report rollup
+    this.workingDirectory.subDirectory.forEach(dir => {
+      dir.selected = false;
+    });
     this.dashboardView = 'assessment-dashboard';
   }
 

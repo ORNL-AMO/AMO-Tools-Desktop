@@ -32,6 +32,7 @@ export class ReportRollupComponent implements OnInit {
 
   //debug
   selectedCalcs: Array<Calculator>;
+  directoryIds: Array<number>;
 
 
 
@@ -51,9 +52,14 @@ export class ReportRollupComponent implements OnInit {
     private windowRefService: WindowRefService, private settingsService: SettingsService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+
+    console.log("report-rollup init. selectedCalcs is new empty array");
+
+
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
     this.selectedCalcs = new Array<Calculator>();
+    this.directoryIds = new Array<number>();
 
 
     setTimeout(() => {
@@ -119,7 +125,15 @@ export class ReportRollupComponent implements OnInit {
       if (items) {
         if (items.length != 0) {
           this.selectedCalcs = items;
+          // console.log("selectedCalcs[0].name = " + this.selectedCalcs[0].name);
+          // console.log("selectedCalcs[0].id = " + this.selectedCalcs[0].id);
+          // console.log("selectedCalcs[0].directoryId = " + this.selectedCalcs[0].directoryId);
           console.log("selectedCalcs was assigned, selectedCalcs.length = " + this.selectedCalcs.length);
+
+          for (let i = 0; i < this.selectedCalcs.length; i++) {
+            console.log("selectedCalcs[" + i + "].directoryId = " + this.selectedCalcs[i].directoryId);
+            this.directoryIds.push(this.selectedCalcs[i].directoryId);
+          }
         }
       }
     });

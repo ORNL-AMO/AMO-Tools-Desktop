@@ -16,6 +16,7 @@ export class PhastRollupComponent implements OnInit {
   @Input()
   calculators: Array<Calculator>;
 
+  selectedCalcs: Array<Calculator>;
   preAssessments: Array<PreAssessment>;
   showPreAssessment: boolean = true;
 

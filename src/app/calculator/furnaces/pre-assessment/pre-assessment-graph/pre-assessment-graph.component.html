@@ -8,7 +8,7 @@
     <span *ngIf="hideTooltip" class="fa fa-download" (click)="downloadChart()"></span>
   </div>
 </div>
-<p class="mx-auto no-column-data" *ngIf="columnData.length == 0 || destroy">Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</p>
+<p class="mx-auto no-column-data" *ngIf="columnData.length == 0 || destroy && !inRollup">Enter metered or design energy data for multiple process heating systems to compare their energy consumption.</p>
 <p class="mx-auto pre-assessment-note" *ngIf="!inRollup">
   Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
   this tool.
