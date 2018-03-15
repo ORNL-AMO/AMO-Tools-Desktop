@@ -3,6 +3,7 @@ import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -41,9 +42,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modExists: boolean = false;
   exploreModExists: boolean = false;
 
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    let globalSettings = this.settingsService.globalSettings;
+    if(globalSettings){
+      if(globalSettings.defaultPanelTab){
+        this.tabSelect = globalSettings.defaultPanelTab;
+      }
+    }
     if (this.psat.modifications) {
       this.modExists = true;
       this.checkForExploreMod();

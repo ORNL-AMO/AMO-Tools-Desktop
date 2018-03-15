@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import {FormBuilder, Validators} from "@angular/forms";
-import {IndexedDbService} from "../../../indexedDb/indexed-db.service";
+import { FormBuilder, Validators } from "@angular/forms";
 import { FormGroup } from '@angular/forms';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -24,31 +24,28 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   loadEstimationResult: number;
   percentLoadEstimationForm: FormGroup;
-  tabSelect: string = 'results';  
+  tabSelect: string = 'results';
   toggleCalculate = false;
 
-  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (!this.percentLoadEstimationForm) {
       this.percentLoadEstimationForm = this.formBuilder.group({
         // 'lineFrequency': [50, ],
-        'lineFrequency': [60, ],
+        'lineFrequency': [60,],
         'measuredSpeed': ['', Validators.required],
         'nameplateFullLoadSpeed': ['', Validators.required],
-        'synchronousSpeed': ['', ],
-        'loadEstimation': ['', ]
+        'synchronousSpeed': ['',],
+        'loadEstimation': ['',]
       });
     }
 
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results.length !== 0) {
-            this.settings = results[0];
-          }
-        }
-      );
+      this.settings = this.settingsService.globalSettings;
+    }
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 
@@ -63,14 +60,14 @@ export class PercentLoadEstimationComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  
+
   setTab(str: string) {
     this.tabSelect = str;
   }
 
   calculate() {
-    this.loadEstimationResult = ((this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.measuredSpeed.value) 
-                              / (this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value)) * 100;    
+    this.loadEstimationResult = ((this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.measuredSpeed.value)
+      / (this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value)) * 100;
   }
 
 }

@@ -3,6 +3,7 @@ import { DesignedEnergySteam, DesignedEnergyResults } from '../../../shared/mode
 import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { DesignedEnergyService } from '../designed-energy.service';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-designed-energy-steam',
@@ -23,13 +24,17 @@ export class DesignedEnergySteamComponent implements OnInit {
   results: DesignedEnergyResults;
   currentField: string = 'fuelType';
 
-  constructor(private designedEnergyService: DesignedEnergyService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     if (this.phast.designedEnergy.designedEnergySteam.length == 0) {
       this.addZone();
     } else {
       this.calculate();
+    }
+    
+    if (this.settingsService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
   }
 
