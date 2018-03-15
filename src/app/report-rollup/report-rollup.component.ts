@@ -65,7 +65,7 @@ export class ReportRollupComponent implements OnInit {
       this.setSidebarHeight();
     }, 2500);
 
-    this.settings = this.settingsService.globalSettings
+    this.settings = this.settingsService.globalSettings;
     this.createdDate = new Date();
     this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
@@ -233,6 +233,7 @@ export class ReportRollupComponent implements OnInit {
   }
 
   hideUnitModal() {
+    console.log(this.settings);
     this.unitModal.hide();
   }
 

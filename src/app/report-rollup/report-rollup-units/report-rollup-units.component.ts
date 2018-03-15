@@ -46,11 +46,13 @@ export class ReportRollupUnitsComponent implements OnInit {
       this.energyResultOptions.push(tmpPossibility);
     })
   }
+
   getUnitName(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
+  
   getUnitDisplay(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
@@ -59,6 +61,9 @@ export class ReportRollupUnitsComponent implements OnInit {
 
   saveUnits(){
     this.settings.phastRollupUnit = this.tmpSettings.phastRollupUnit;
+    this.settings.phastRollupElectricityUnit = this.tmpSettings.phastRollupElectricityUnit;
+    this.settings.phastRollupFuelUnit = this.tmpSettings.phastRollupFuelUnit;
+    this.settings.phastRollupSteamUnit = this.tmpSettings.phastRollupSteamUnit;
     this.newUnit();
     this.closeUnitModal.emit(true);
   }

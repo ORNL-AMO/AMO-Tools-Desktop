@@ -35,14 +35,16 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
   @Input()
   totalCost: number;
 
+  convertedSumFuel: number;
+  convertedSumElectricity: number;
+  convertedSumSteam: number;
   constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-
   }
 
-  getConvertedValue(val: number, settings: Settings) {
-    return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
+  getConvertedValue(val: number, settings: Settings, convertTo: string) {
+    return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(convertTo);
   }
 
   getResultPercent(value: number, sum: number): number {
@@ -52,9 +54,22 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
-    let convertVal = this.getConvertedValue(value, settings);
+    let convertVal = this.getConvertedValue(value, settings, this.settings.phastRollupUnit);
     let percent = (convertVal / sum) * 100;
     let val = this.reportRollupService.transform(percent, 4)
     return val;
   }
+
+  getFuelTotal() {
+    return this.convertUnitsService.value(this.totalFuelEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupFuelUnit);
+  }
+
+  getElectricityTotal() {
+    return this.convertUnitsService.value(this.totalElectricalEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupElectricityUnit);
+  }
+
+  getSteamTotal() {
+    return this.convertUnitsService.value(this.totalSteamEnergyUsed).from(this.settings.phastRollupUnit).to(this.settings.phastRollupSteamUnit);
+  }
+
 }
