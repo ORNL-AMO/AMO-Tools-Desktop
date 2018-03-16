@@ -16,6 +16,7 @@ export class CreateFolderComponent implements OnInit {
   @Output('newDirectory')
   newDirectory = new EventEmitter<boolean>();
 
+  canAdd: boolean = true;
   newFolder: any;
   constructor(private formBuilder: FormBuilder, private modelService: ModelService, private indexedDbService: IndexedDbService) { }
 
@@ -40,20 +41,24 @@ export class CreateFolderComponent implements OnInit {
   }
 
   createFolder() {
-    this.hideCreateModal();
-    let newDir: DirectoryDbRef = {
-      name: this.newFolder.controls.newFolderName.value,
-      parentDirectoryId: this.directory.id,
-      createdDate: new Date(),
-      modifiedDate: new Date()
-    }
+    if (this.canAdd) {
+      this.canAdd = false;
+      this.hideCreateModal();
+      let newDir: DirectoryDbRef = {
+        name: this.newFolder.controls.newFolderName.value,
+        parentDirectoryId: this.directory.id,
+        createdDate: new Date(),
+        modifiedDate: new Date()
+      }
 
-    this.indexedDbService.addDirectory(newDir).then(newDirId => {
-      this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
-        this.directory.subDirectory = childDirs;
-        this.newDirectory.emit(true);
+      this.indexedDbService.addDirectory(newDir).then(newDirId => {
+        this.canAdd = true;
+        this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
+          this.directory.subDirectory = childDirs;
+          this.newDirectory.emit(true);
+        })
       })
-    })
+    }
   }
 
 }
