@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, SimpleChange } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -58,16 +58,15 @@ export class RollupBarChartComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit() {
-    this.initChart();
+
   }
 
   ngOnChanges() {
-    if (this.isUpdate && !this.printView) {
-      this.initChart();
-    }
+    this.initChart();
   }
 
   initChart() {
@@ -85,7 +84,7 @@ export class RollupBarChartComponent implements OnInit {
     let unit = this.unit;
 
     if (this.allDataColumns) {
-        this.barChart = c3.generate({
+      this.barChart = c3.generate({
         bindto: this.ngChart.nativeElement,
         data: {
           columns: this.allDataColumns,
@@ -155,6 +154,7 @@ export class RollupBarChartComponent implements OnInit {
           }
         }
       });
+
       //formatting chart
       d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
