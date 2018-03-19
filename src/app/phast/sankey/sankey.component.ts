@@ -42,6 +42,11 @@ export class SankeyComponent implements OnInit {
   @Input()
   modIndex: number;
 
+
+  //debug
+  @ViewChild("ngContainer") ngContainer: ElementRef;
+
+  //real version
   @ViewChild("ngChart") ngChart: ElementRef;
   @ViewChild("btnDownload") btnDownload: ElementRef;
 
@@ -217,12 +222,7 @@ export class SankeyComponent implements OnInit {
             return d.x - 70;
           }
           else if (this.location !== 'sankey-diagram') {
-
-            //debug
             return d.x - 35;
-
-            //real version
-            // return d.x + 70;
           }
           return d.x
         }
@@ -285,12 +285,7 @@ export class SankeyComponent implements OnInit {
             return d.x - 70;
           }
           else if (this.location !== 'sankey-diagram') {
-
-            //debug
             return d.x - 35;
-
-            //real version
-            // return d.x + 70;
           }
           return d.x + 70;
         }
@@ -722,13 +717,7 @@ export class SankeyComponent implements OnInit {
         let xVentAnchor = 480;
         let xLeftSideShift = 60;
         let xRightSideShift = 120
-
-
-        //debug
         return (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500);
-
-        //real version
-        // return (580 - 100) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");
