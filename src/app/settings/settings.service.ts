@@ -29,7 +29,10 @@ export class SettingsService {
       'customFurnaceName': [''],
       'temperatureMeasurement': [''],
       'phastRollupUnit': [''],
-      'defaultPanelTab': ['']
+      'defaultPanelTab': [''],
+      'fuelCost': [3.99],
+      'steamCost': [4.69],
+      'electricityCost': [.066]
     });
   }
 
@@ -54,7 +57,10 @@ export class SettingsService {
       'phastRollupFuelUnit': [settings.phastRollupFuelUnit],
       'phastRollupElectricityUnit': [settings.phastRollupElectricityUnit],
       'phastRollupSteamUnit': [settings.phastRollupSteamUnit],
-      'defaultPanelTab': [settings.defaultPanelTab]
+      'defaultPanelTab': [settings.defaultPanelTab],
+      'fuelCost': [settings.fuelCost || 3.99],
+      'steamCost': [settings.steamCost || 4.69],
+      'electricityCost': [settings.electricityCost || .066]
     });
   }
 
@@ -80,7 +86,10 @@ export class SettingsService {
       phastRollupFuelUnit: form.controls.phastRollupFuelUnit.value,
       phastRollupElectricityUnit: form.controls.phastRollupElectricityUnit.value,
       phastRollupSteamUnit: form.controls.phastRollupSteamUnit.value,
-      defaultPanelTab: form.controls.defaultPanelTab.value   
+      defaultPanelTab: form.controls.defaultPanelTab.value,
+      fuelCost: form.controls.fuelCost.value,
+      steamCost: form.controls.steamCost.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return tmpSettings;
   }
@@ -105,7 +114,10 @@ export class SettingsService {
       phastRollupFuelUnit: settings.phastRollupFuelUnit,
       phastRollupElectricityUnit: settings.phastRollupElectricityUnit,
       phastRollupSteamUnit: settings.phastRollupSteamUnit,
-      defaultPanelTab: settings.defaultPanelTab
+      defaultPanelTab: settings.defaultPanelTab,
+      fuelCost: settings.fuelCost,
+      steamCost: settings.steamCost,
+      electricityCost: settings.electricityCost
     }
     return newSettings;
   }
@@ -119,7 +131,10 @@ export class SettingsService {
         pressureMeasurement: 'psi',
         temperatureMeasurement: 'F',
         energyResultUnit: 'MMBtu',
-        phastRollupUnit: 'MMBtu'
+        phastRollupUnit: 'MMBtu',
+        phastRollupFuelUnit: 'MMBtu',
+        phastRollupElectricityUnit: 'MMBtu',
+        phastRollupSteamUnit: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -133,7 +148,10 @@ export class SettingsService {
         pressureMeasurement: 'kPa',
         temperatureMeasurement: 'C',
         energyResultUnit: 'GJ',
-        phastRollupUnit: 'GJ'
+        phastRollupUnit: 'GJ',
+        phastRollupFuelUnit: 'GJ',
+        phastRollupElectricityUnit: 'GJ',
+        phastRollupSteamUnit: 'GJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

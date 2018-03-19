@@ -25,7 +25,10 @@ export interface Settings {
     phastRollupSteamUnit?: string,
     phastRollupElectricityUnit?: string,
     facilityInfo?: FacilityInfo,
-    defaultPanelTab?: string
+    defaultPanelTab?: string,
+    electricityCost?: number,
+    fuelCost?: number,
+    steamCost?: number
 }
 
 

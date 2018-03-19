@@ -2,3 +2,12 @@
     max-height: 100vh;
     overflow-y: scroll;
 }
+
+.group-label{
+    width: 100%;
+    font-size: large;
+}
+
+.group-label.general{
+    border-bottom: groove 2px #808B96;
+}
