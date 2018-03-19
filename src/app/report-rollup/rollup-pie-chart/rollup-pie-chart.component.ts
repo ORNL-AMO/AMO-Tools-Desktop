@@ -142,6 +142,7 @@ export class RollupPieChartComponent implements OnInit {
     }
   }
 
+
   downloadChart() {
     if (!this.title) {
       if (this.assessmentType == "phast") {

@@ -39,6 +39,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       this.addSteamZone();
     } else if (this.assessment.settings.energySourceType == 'Electricity') {
       this.addElectricityZone();
+      this.addFuelZone();
     }
   }
 
