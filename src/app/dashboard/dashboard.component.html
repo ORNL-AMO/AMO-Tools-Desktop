@@ -13,7 +13,8 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator">
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator"
+                [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
         </div>
