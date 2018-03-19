@@ -1,0 +1,27 @@
+
+.summary-card-header{
+    border-bottom: #566573 groove 2px;
+    border-image: linear-gradient(to right, #BF3D00, #F1C40F) 50 / 2;
+
+  }
+ .fa-pie-chart{
+    font-size: large;
+    color: #BF3D00;
+  }
+    
+  
+  .fa-edit:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .fa-edit{
+    padding-top: 4px;
+    font-size: larger;
+  }
+
+  td{
+    padding: 0px;
+    font-size: small;
+}

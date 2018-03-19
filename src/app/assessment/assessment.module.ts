@@ -28,6 +28,7 @@ import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PsatModule } from '../psat/psat.module';
 import { FolderSummaryComponent } from './folder-summary/folder-summary.component';
 import { FolderContactInfoComponent } from './folder-contact-info/folder-contact-info.component';
+import { PreAssessmentCardComponent } from './assessment-grid-view/pre-assessment-card/pre-assessment-card.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { FolderContactInfoComponent } from './folder-contact-info/folder-contact
     PhastSummaryCardComponent,
     PsatSummaryCardComponent,
     FolderSummaryComponent,
-    FolderContactInfoComponent
+    FolderContactInfoComponent,
+    PreAssessmentCardComponent
   ],
   exports: [
     AssessmentDashboardComponent,
