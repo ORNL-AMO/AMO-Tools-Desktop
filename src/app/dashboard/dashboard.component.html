@@ -13,7 +13,8 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator">
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator"
+                [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
         </div>
@@ -85,11 +86,11 @@
     </div>
 </div>
 
-<app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" class="create-container"></app-assessment-create>
+<app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" [settings]="workingDirectorySettings" class="create-container"></app-assessment-create>
 
 <div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteItemsModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg create-assessment-modal">
+    <div class="modal-dialog modal-md create-assessment-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Delete Selected Items</h3>
@@ -107,7 +108,7 @@
 
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg export-modal">
+    <div class="modal-dialog modal-md export-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Assessments to be Exported</h3>
@@ -124,7 +125,7 @@
 
 <div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header" *ngIf="!importInProgress">
                 <h3>Choose .json File to be Imported</h3>

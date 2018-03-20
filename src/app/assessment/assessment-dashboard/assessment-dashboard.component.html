@@ -15,6 +15,11 @@
 			(emitPreAssessment)="preAssessmentEmit()">
 		</app-assessment-menu>
 		
+		<app-folder-summary
+		[directory]="directory"
+		[directorySettings]="directorySettings"
+		[assessments]="directory.assessments"></app-folder-summary>
+
 		<app-assessment-grid-view 
 			*ngIf="view == 'grid'" 
 			[isChecked]="isChecked" 
