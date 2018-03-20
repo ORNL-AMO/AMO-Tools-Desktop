@@ -19,3 +19,12 @@ td, a{
   .modal-dialog{
       max-width: 750px;
   }
+
+.btn{
+  padding: 6px;
+}
+
+.help-text{
+  padding-top:4px;
+  text-align: center;
+}
