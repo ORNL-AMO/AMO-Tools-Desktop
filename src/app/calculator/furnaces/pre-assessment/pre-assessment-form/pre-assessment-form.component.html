@@ -4,7 +4,7 @@
       <label *ngIf="!isEditingName" class="group-label loss-label">
         <span *ngIf="assessment.collapsed" class="fa fa-caret-down" (click)="collapsePreAssessment()"></span>
         <span *ngIf="!assessment.collapsed" class="fa fa-caret-up" (click)="collapsePreAssessment()"></span>
-        <span class="furnace-name"  (click)="collapsePreAssessment()">{{assessment.name}}</span>
+        <span class="furnace-name" (click)="collapsePreAssessment()">{{assessment.name}}</span>
         <span class="fa fa-times pull-right" (click)="deletePreAssessment()"></span>
         <span class="fa fa-pencil pull-right" (click)="editName()"></span>
       </label>
@@ -82,5 +82,13 @@
         <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
       </div>
     </div>
+    <!-- <div class="d-flex">
+      <div class="p-2">Energy Used</div>
+      <div class="p-2">{{getEnergyUsed(assessment) | sigFigs:'6'}}</div>
+    </div>
+    <div class="d-flex">
+      <div class="p-2">Energy Cost</div>
+      <div class="p-2">{{getEnergyCost(assessment) | currency}}</div>
+    </div> -->
   </div>
 </div>

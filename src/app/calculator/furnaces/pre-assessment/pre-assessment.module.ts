@@ -15,6 +15,7 @@ import { PreAssessmentMeteredComponent } from './pre-assessment-form/pre-assessm
 import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assessment-designed/pre-assessment-designed.component';
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { PreAssessmentService } from './pre-assessment.service';
+import { PreAssessmentCostFormComponent } from './pre-assessment-cost-form/pre-assessment-cost-form.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,7 +34,8 @@ import { PreAssessmentService } from './pre-assessment.service';
     PreAssessmentGraphComponent,
     PreAssessmentHelpComponent,
     PreAssessmentDesignedComponent,
-    PreAssessmentMeteredComponent
+    PreAssessmentMeteredComponent,
+    PreAssessmentCostFormComponent
   ],
   exports: [
     PreAssessmentComponent,

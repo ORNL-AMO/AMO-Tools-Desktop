@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { PreAssessment } from '../pre-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { PreAssessmentService } from '../pre-assessment.service';
 @Component({
   selector: 'app-pre-assessment-form',
   templateUrl: './pre-assessment-form.component.html',
@@ -41,7 +42,7 @@ export class PreAssessmentFormComponent implements OnInit {
 
   isEditingName: boolean = false;
 
-  constructor() { }
+  constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
   }
@@ -89,4 +90,20 @@ export class PreAssessmentFormComponent implements OnInit {
   setAssessmentType(str: string){
     this.assessment.type = str;
   }
+
+  // getEnergyUsed(assessment: PreAssessment){
+  //   if(assessment.type == 'Metered'){
+  //     return this.preAssessmentService.calculateMetered(assessment, assessment.settings).value;
+  //   }else if(assessment.type == 'Designed'){
+  //     return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).value;
+  //   }
+  // }
+
+  // getEnergyCost(assessment: PreAssessment){
+  //   if(assessment.type == 'Metered'){
+  //     return this.preAssessmentService.calculateMetered(assessment, assessment.settings).energyCost;
+  //   }else if(assessment.type == 'Designed'){
+  //     return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).energyCost;
+  //   }
+  // }
 }

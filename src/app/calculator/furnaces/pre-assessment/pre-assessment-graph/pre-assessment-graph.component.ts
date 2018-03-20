@@ -46,7 +46,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
   window: any;
   doc: any;
-
+  resultType: string = 'value';
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
@@ -61,7 +61,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     else {
       this.showLegend = true;
     }
-
     this.chartColors = graphColors;
     this.getData();
   }
@@ -80,7 +79,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         else {
           if (!this.destroy) {
             this.destroyChart();
-
           }
         }
       }
@@ -88,7 +86,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   }
 
   ngAfterViewInit() {
-
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
     this.chartContainerWidth = (this.window.innerWidth - 30) * .28;
@@ -104,12 +101,18 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
   }
 
+  setGraphType(str: string){
+    this.resultType = str;
+    this.getData();
+    this.initChart();
+  }
+
   //invoke preAssessment service to calculate result data from Array<PreAssessment>
   getData() {
     this.columnData = new Array();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
+      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
       for (let i = 0; i < tmpArray.length; i++) {
         this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
       }
