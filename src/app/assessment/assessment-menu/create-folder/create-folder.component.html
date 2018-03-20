@@ -5,7 +5,7 @@
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
      [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Create a Folder in {{directory.name}}</h3>
@@ -27,11 +27,11 @@
                </div>
             </div>
           </div>
-          <div class="row justify-content-between">
-            <div class="col-2">
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
               <button type="button" class="btn" (click)="hideCreateModal()">Close</button>
             </div>
-            <div class="col-2">
+            <div class="p-2">
               <button class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
             </div>
           </div>
