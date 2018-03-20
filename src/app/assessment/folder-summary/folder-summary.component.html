@@ -9,7 +9,7 @@
               <td class="bold">Type</td>
               <td class="bold">Assessments</td>
               <td class="bold">Annual Energy Used</td>
-              <td class="bold">Annual Energy Costs</td>
+              <td class="bold">Annual Energy Cost</td>
             </tr>
             <tr>
               <td>Pumps</td>
@@ -24,7 +24,7 @@
               <td>{{phastEnergyCost | currency}}</td>
             </tr>
             <tr>
-              <td class="bold">Totals</td>
+              <td class="bold">Total</td>
               <td class="bold">{{numAssessments}}</td>
               <td class="bold">{{getTotals().totalEnergy | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
               <td class="bold">{{getTotals().totalCost | currency}}</td>
@@ -39,14 +39,14 @@
               <td>{{directorySettings.unitsOfMeasure}}</td>
             </tr>
             <tr>
-              <td class="bold">Fuel Costs</td>
+              <td class="bold">Fuel Cost</td>
               <td>{{directorySettings.fuelCost | currency}}
                 <span *ngIf="directorySettings.unitsOfMeasure == 'Metric'">/GJ</span>
                 <span *ngIf="directorySettings.unitsOfMeasure == 'Imperial'">/MMBtu</span>
               </td>
             </tr>
             <tr>
-              <td class="bold">Units of Measure</td>
+              <td class="bold">Steam Cost</td>
               <td>{{directorySettings.steamCost | currency}}
                 <span *ngIf="directorySettings.unitsOfMeasure == 'Metric'">/GJ</span>
                 <span *ngIf="directorySettings.unitsOfMeasure == 'Imperial'">/MMBtu</span>
