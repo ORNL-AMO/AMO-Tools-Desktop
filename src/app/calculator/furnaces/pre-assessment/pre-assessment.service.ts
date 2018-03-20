@@ -5,17 +5,18 @@ import { DesignedEnergyService } from '../../../phast/designed-energy/designed-e
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class PreAssessmentService {
 
-  unitOfMeasurement: string;
+  //unitOfMeasurement: string;
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getResults(preAssessments: Array<PreAssessment>, unitOfMeasurement: string): Array<{ name: string, percent: number, value: number, color: string }> {
+  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string }> {
 
-    this.unitOfMeasurement = unitOfMeasurement;
+    // this.unitOfMeasurement = unitOfMeasurement;
     let results = new Array<{ name: string, percent: number, value: number, color: string }>();
 
     //calculation logic to get results (in pre-assessment.component.ts)
@@ -23,61 +24,74 @@ export class PreAssessmentService {
     preAssessments.forEach(assessment => {
       if (assessment.type == 'Metered') {
         if (assessment.meteredEnergy) {
-          results.push(this.calculateMetered(assessment));
+          results.push(this.calculateMetered(assessment, settings));
         }
       } else if (assessment.type == 'Designed') {
         if (assessment.designedEnergy) {
-          results.push(this.calculateDesigned(assessment));
+          results.push(this.calculateDesigned(assessment, settings));
         }
       }
     })
-    let sum = this.getSum(results);
+    let sum = this.getSum(results, resultType);
     results.forEach(result => {
-      result.percent = this.getResultPercent(result.value, sum);
+       result.percent = this.getResultPercent(result[resultType], sum);
     });
 
     return results;
   }
 
-  calculateMetered(assessment: PreAssessment): { name: string, percent: number, value: number, color: string } {
+  calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number  } {
 
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+      //may need to convert to MMBtu, fuel /MMBtu
+      let energyCost = tmpResults * settings.fuelCost;
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
-      tmpResults = this.convertSteamResults(tmpResults);
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+      tmpResults = this.convertSteamResults(tmpResults, settings);
+      //May need to convert to MMBtu, steam /MMBtu
+      let energyCost = tmpResults * settings.steamCost;
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
+      tmpResults = this.convertElectrotechResults(tmpResults, settings);
+      //may need conversion
+      let energyCost = tmpResults * settings.electricityCost;
       let tmpFuelResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
+      //may need conversion
+      energyCost = energyCost + (tmpFuelResults * settings.fuelCost);
       tmpResults = tmpFuelResults + tmpResults;
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
   }
 
-  calculateDesigned(assessment: PreAssessment): { name: string, percent: number, value: number, color: string } {
+  calculateDesigned(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+      let energyCost = tmpResults * settings.fuelCost;
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
-      tmpResults = this.convertSteamResults(tmpResults);
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+      tmpResults = this.convertSteamResults(tmpResults, settings);
+      let energyCost = tmpResults * settings.steamCost;
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults);
+      tmpResults = this.convertElectrotechResults(tmpResults, settings);
+      let energyCost = tmpResults * settings.electricityCost;
       let tmpFuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
+      energyCost = energyCost + (tmpFuelResults*settings.fuelCost);
       tmpResults = tmpFuelResults + tmpResults;
-      return this.addResult(tmpResults, assessment.name, assessment.borderColor);
+
+      return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
   }
 
-  convertSteamResults(val: number) {
-    if (this.unitOfMeasurement == 'Metric') {
+  convertSteamResults(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to('GJ');
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
@@ -85,8 +99,8 @@ export class PreAssessmentService {
     return val;
   }
 
-  convertElectrotechResults(val: number) {
-    if (this.unitOfMeasurement == 'Metric') {
+  convertElectrotechResults(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kWh').to('GJ');
     } else {
       val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
@@ -94,27 +108,21 @@ export class PreAssessmentService {
     return val;
   }
 
-  addResult(num: number, name: string, color: string) {
+  addResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (isNaN(num) != true) {
-      // this.results.push({
-      //   name: name,
-      //   value: num,
-      //   color: color
-      // });
-
-      let result = {
+      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = {
         name: name,
         percent: null,
         value: num,
-        color: color
+        color: color,
+        energyCost: energyCost
       }
-
       return result;
     }
   }
 
-  getSum(data: Array<{ name: string, percent: number, value: number, color: string }>): number {
-    let sum = _.sumBy(data, 'value');
+  getSum(data: Array<{ name: string, percent: number, value: number, color: string }>, resultType: string): number {
+    let sum = _.sumBy(data, resultType);
     return sum;
   }
 
