@@ -87,3 +87,7 @@ h5{
     font-weight: bold;
     cursor: pointer;
 }
+
+.form-results{
+    font-size: small;
+}

@@ -3,6 +3,8 @@ import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ImportExportService } from '../../shared/import-export/import-export.service';
 import { AssessmentService } from '../assessment.service';
+import { Calculator } from '../../shared/models/calculators';
+import { Settings } from 'electron';
 
 @Component({
   selector: 'app-assessment-menu',
@@ -34,7 +36,11 @@ export class AssessmentMenuComponent implements OnInit {
   emitMove = new EventEmitter<boolean>();
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
-
+  @Input()
+  directoryCalculator: Calculator;
+  @Input()
+  directorySettings: Settings;
+  
   breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
@@ -140,6 +146,24 @@ export class AssessmentMenuComponent implements OnInit {
       return false;
     }
   }
+
+  calcSelected(){
+    if(this.directoryCalculator){
+      if(this.directoryCalculator.selected){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
+
+  checkDeleteExport(){
+    let test = (this.checkSelected() || this.calcSelected());
+    return test;
+  }
+
 
   showPreAssessment(){
     this.emitPreAssessment.emit(true);
