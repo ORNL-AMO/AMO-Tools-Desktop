@@ -38,7 +38,7 @@ export class PreAssessmentCardComponent implements OnInit {
     if (this.calculator.preAssessments) {
       this.numFurnaces = this.calculator.preAssessments.length;
       let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
-      console.log(tmpResults);
+     // console.log(tmpResults);
       this.energyUsed = _.sumBy(tmpResults, 'value');
       this.energyCost = _.sumBy(tmpResults, 'energyCost');
     }

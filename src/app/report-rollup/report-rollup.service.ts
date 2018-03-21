@@ -80,7 +80,7 @@ export class ReportRollupService {
     this.assessmentsArray = new Array<ReportItem>();
     this.phastArray = new Array<ReportItem>();
     this.psatArray = new Array<ReportItem>();
-    let selected = directory.assessments.filter((val) => { return val.selected })
+    let selected = directory.assessments.filter((val) => { return val.selected });
     let i = selected.length;
     let count = 1;
     selected.forEach(assessment => {
@@ -103,8 +103,15 @@ export class ReportRollupService {
     })
   }
 
-  getChildDirectories(subDir: Directory) {
+  // getDirectoryCalculators(dir: Directory){
+  //   this.indexedDbService.getDirectoryCalculator(dir.id).then(calcs => {
+  //     if(calcs) {
 
+  //     }
+  //   })
+  // }
+
+  getChildDirectories(subDir: Directory) {
     //debug
     this.indexedDbService.getDirectoryCalculator(subDir.id).then(calcs => {
       if (calcs) {

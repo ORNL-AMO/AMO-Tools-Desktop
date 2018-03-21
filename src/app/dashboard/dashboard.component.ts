@@ -528,11 +528,25 @@ export class DashboardComponent implements OnInit {
         )
       })
     }
+
+    if(this.workingDirectoryCalculator){
+      if(this.workingDirectoryCalculator.selected){
+        this.indexedDbService.deleteCalculator(this.workingDirectoryCalculator.id).then(val => {
+          this.workingDirectoryCalculator = undefined;
+        })
+      }
+    }
   }
 
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
+      if(this.workingDirectoryCalculator){
+        if(this.workingDirectoryCalculator.selected){
+          console.log('push calc')
+          this.reportRollupService.calcsArray.push(this.workingDirectoryCalculator);
+        }
+      }
       this.reportRollupService.getReportData(this.workingDirectory);
       //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';

@@ -49,3 +49,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .loss-results{
     margin-bottom: 20px;
 }
+
+
+/*grid view*/
+.summary-card-header{
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 14px;
+}

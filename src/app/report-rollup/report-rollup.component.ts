@@ -269,7 +269,6 @@ export class ReportRollupComponent implements OnInit {
   }
 
   hideUnitModal() {
-    console.log(this.settings);
     this.unitModal.hide();
   }
 
