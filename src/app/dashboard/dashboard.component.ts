@@ -680,6 +680,11 @@ export class DashboardComponent implements OnInit {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
+          if(dir.calculator){
+            dir.calculator.directoryId = results;
+            delete dir.calculator.id;
+            this.indexedDbService.addCalculator(dir.calculator);
+          }
           dir.directorySettings.directoryId = results;
           delete dir.directorySettings.id;
           this.indexedDbService.addSettings(dir.directorySettings);
@@ -703,6 +708,11 @@ export class DashboardComponent implements OnInit {
         }
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
+            if(dataObj.calculator){
+              dataObj.calculator.assessmentId = results;
+              delete dataObj.calculator.id;
+              this.indexedDbService.addCalculator(dataObj.calculator);
+            }
             //check for psat until phast has settings
             let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
             tmpSettings.assessmentId = results;
@@ -730,5 +740,6 @@ export interface ImportDataObjects {
   settings: Settings,
   directory: Directory,
   assessment: Assessment,
-  directorySettings: Settings
+  directorySettings: Settings,
+  calculator?: Calculator
 }
