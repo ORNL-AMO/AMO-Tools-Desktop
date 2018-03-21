@@ -173,6 +173,7 @@ export class DashboardComponent implements OnInit {
       });
     } else {
       calcualtorData.directoryId = this.workingDirectory.id;
+      calcualtorData.name = this.workingDirectory.name + ' Pre Assessment'
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
       });;
