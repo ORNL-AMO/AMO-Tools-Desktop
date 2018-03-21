@@ -18,24 +18,35 @@
   <div class="card-body summary-card-body scroll-item">
     <!-- <a (click)="showPreAssessment()">View or Edit
       <br> PH Pre-Assessment / Screening</a> -->
-      <table class="table">
-        <tr>
-          <td class="bold">
-            Number of Furnaces
-          </td>
-          <td>
-            {{numFurnaces}}
-          </td>
-        </tr>
-        <tr>
-          <td class="bold">
-            Total Energy Used
-          </td>
-          <td>
-            {{energyUsed | number:'1.0-2'}} MMBtu
-          </td>
-        </tr>
-      </table>
+    <table class="table">
+      <tr>
+        <td>
+          Number of Furnaces
+        </td>
+        <td>
+          {{numFurnaces}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Annual Energy Used
+        </td>
+        <td>
+          {{energyUsed | number:'1.0-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Annual Energy Cost
+        </td>
+        <td>
+          {{energyCost | currency}}
+        </td>
+      </tr>
+    </table>
+    <p class="text-center"><a class="click-link small" (click)="showPreAssessment()">Show / Edit</a></p>
   </div>
 </div>
 <div class="card" *ngIf="!calculator.preAssessments">
@@ -69,7 +80,10 @@
           <div class="form-group" *ngIf="directories">
             <label>Change Folder Location</label>
             <select class="form-control" formControlName="directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
             </select>
           </div>
         </form>

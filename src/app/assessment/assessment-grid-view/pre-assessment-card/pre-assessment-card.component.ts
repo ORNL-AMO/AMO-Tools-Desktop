@@ -30,15 +30,17 @@ export class PreAssessmentCardComponent implements OnInit {
   editForm: FormGroup;
   numFurnaces: number = 0;
   energyUsed: number = 0;
+  energyCost: number = 0;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
     this.populateDirArray();
     if (this.calculator.preAssessments) {
       this.numFurnaces = this.calculator.preAssessments.length;
-      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, 'MMBtu');
+      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
       console.log(tmpResults);
       this.energyUsed = _.sumBy(tmpResults, 'value');
+      this.energyCost = _.sumBy(tmpResults, 'energyCost');
     }
   }
 

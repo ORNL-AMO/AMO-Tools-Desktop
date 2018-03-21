@@ -26,7 +26,8 @@
 			[directory]="directory" 
 			(directoryChange)="changeDirectory($event)"
 			[directoryCalculator]="directoryCalculator"
-			(emitPreAssessment)="preAssessmentEmit()">
+			(emitPreAssessment)="preAssessmentEmit()"
+			[directorySettings]="directorySettings">
 		</app-assessment-grid-view>
 		
 		<app-assessment-list-view 
