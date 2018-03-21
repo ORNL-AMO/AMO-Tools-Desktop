@@ -124,9 +124,12 @@ export class FolderContactInfoComponent implements OnInit {
           this.settings = settings[0];
           this.checkShow();
         }
-      } else if (directory.parentDirectoryId) {
-        this.isParentSettings = true;
-        this.getSettings(directory.parentDirectoryId);
+      } else {
+        console.log(directory)
+        // if (directory.parentDirectoryId) {
+        //   this.isParentSettings = true;
+        //   this.getSettings(directory.parentDirectoryId);
+        // }
       }
     })
   }

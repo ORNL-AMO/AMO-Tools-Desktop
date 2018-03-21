@@ -8,7 +8,7 @@
       <br> PH Pre-Assessment / Screening</a>
   </div>
 </div> -->
-<div class="card" *ngIf="calculator.preAssessments">
+<div class="card" *ngIf="checkPreAssessment()">
   <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="calculator.selected">
     <span class="fa fa-pie-chart"></span>
@@ -46,16 +46,23 @@
         </td>
       </tr>
     </table>
-    <p class="text-center"><a class="click-link small" (click)="showPreAssessment()">Show / Edit</a></p>
+    <p class="text-center">
+      <a class="click-link small" (click)="showPreAssessment()">Show / Edit</a>
+    </p>
   </div>
 </div>
-<div class="card" *ngIf="!calculator.preAssessments">
+<div class="card" *ngIf="!checkPreAssessment()">
   <div class="card-header summary-card-header">
-    <a (click)="showPreAssessment()">{{directory.name}} Pre Assessment</a>
+    <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
   </div>
-  <div class="card-body summary-card-body scroll-item">
-    <a (click)="showPreAssessment()">Add
-      <br> PH Pre-Assessment / Screening</a>
+  <div class="card-body summary-card-body scroll-item text-center">
+    <div class="no-assessment-data" (click)="showPreAssessment()">
+      Add PH Pre-Assessment / Screening
+      <br>
+      <span class="fa fa-plus-circle"></span>
+      <br>
+      <p class="small">No Pre-Assessment found for this facility.</p>
+    </div>
   </div>
 </div>
 

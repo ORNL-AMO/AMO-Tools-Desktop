@@ -33,7 +33,7 @@
       <div class="actions">
         <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Assessment</button>
         <!-- <button (click)="showPreAssessment()" type="button" class="btn btn-secondary">Add PH Pre-Assessment</button> -->
-        <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
+        <app-create-folder [(directory)]="directory" [directorySettings]="directorySettings" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
         <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
         <button [disabled]="!checkDeleteExport()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
         <button [disabled]="!checkDeleteExport()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>

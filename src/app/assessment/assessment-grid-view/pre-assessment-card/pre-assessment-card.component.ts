@@ -37,22 +37,43 @@ export class PreAssessmentCardComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    this.populateDirArray();
-    if (this.calculator.preAssessments) {
-      this.numFurnaces = this.calculator.preAssessments.length;
-      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
-     // console.log(tmpResults);
-      this.energyUsed = _.sumBy(tmpResults, 'value');
-      this.energyCost = _.sumBy(tmpResults, 'energyCost');
-    }
+   // this.populateDirArray();
+    this.getData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isChecked && !this.isFirstChange) {
       this.calculator.selected = this.isChecked;
+    } else if (changes.calculator && !this.isFirstChange) {
+      this.getData();
     }
     else {
       this.isFirstChange = false;
+    }
+  }
+
+  getData() {
+    if (this.calculator.preAssessments) {
+      this.numFurnaces = this.calculator.preAssessments.length;
+      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
+      this.energyUsed = _.sumBy(tmpResults, 'value');
+      this.energyCost = _.sumBy(tmpResults, 'energyCost');
+    } else {
+      this.energyCost = 0;
+      this.energyUsed = 0;
+      this.numFurnaces = 0;
+    }
+  }
+
+  checkPreAssessment() {
+    if (this.calculator.preAssessments) {
+      if (this.calculator.preAssessments.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 
@@ -67,6 +88,7 @@ export class PreAssessmentCardComponent implements OnInit {
   }
 
   showEditModal() {
+    this.populateDirArray();
     this.editForm = this.formBuilder.group({
       'name': [this.calculator.name],
       'directoryId': [this.calculator.directoryId]

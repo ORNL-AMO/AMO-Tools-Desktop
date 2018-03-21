@@ -25,3 +25,16 @@
     padding: 0px;
     font-size: small;
 }
+
+
+.no-assessment-data:hover{
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.no-assessment-data{
+  text-align: center;
+  padding-top: 15px;
+  padding-right: 10px;
+  padding-left: 10px;
+}

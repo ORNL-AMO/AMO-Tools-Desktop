@@ -170,12 +170,14 @@ export class DashboardComponent implements OnInit {
     if (this.calcDataExists) {
       this.indexedDbService.putCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
+        this.getWorkingDirectoryData();
       });
     } else {
       calcualtorData.directoryId = this.workingDirectory.id;
-      calcualtorData.name = this.workingDirectory.name + ' Pre Assessment'
+      calcualtorData.name = this.workingDirectory.name + ' Pre-Assessment';
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
+        this.getWorkingDirectoryData();
       });;
     }
   }
@@ -197,7 +199,7 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.createDirectorySettings();
-        }else{
+        } else {
           this.settingsService.globalSettings = results[0];
         }
       }
@@ -454,7 +456,7 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+    if (tmpArray.length != 0 || tmpArray2.length != 0 || this.workingDirectoryCalculator.selected) {
       return true;
     } else {
       return false;
@@ -501,6 +503,12 @@ export class DashboardComponent implements OnInit {
           this.workingDirectory = this.populateDirectories(this.workingDirectory);
         })
 
+        this.indexedDbService.getDirectoryCalculator(dir.id).then(results => {
+          if (results.length != 0) {
+            this.indexedDbService.deleteCalculator(results[0].id).then(() => { console.log('delete dir calculator') });
+          }
+        })
+
         this.indexedDbService.getDirectorySettings(dir.id).then(results => {
           if (results.length != 0) {
             this.indexedDbService.deleteSettings(results[0].id).then(
@@ -529,10 +537,10 @@ export class DashboardComponent implements OnInit {
       })
     }
 
-    if(this.workingDirectoryCalculator){
-      if(this.workingDirectoryCalculator.selected){
+    if (this.workingDirectoryCalculator) {
+      if (this.workingDirectoryCalculator.selected) {
         this.indexedDbService.deleteCalculator(this.workingDirectoryCalculator.id).then(val => {
-          this.workingDirectoryCalculator = undefined;
+          this.getWorkingDirectoryData();
         })
       }
     }
@@ -541,8 +549,8 @@ export class DashboardComponent implements OnInit {
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
-      if(this.workingDirectoryCalculator){
-        if(this.workingDirectoryCalculator.selected){
+      if (this.workingDirectoryCalculator) {
+        if (this.workingDirectoryCalculator.selected) {
           this.reportRollupService.calcsArray.push(this.workingDirectoryCalculator);
           this.reportRollupService.selectedCalcs.next(this.reportRollupService.calcsArray);
         }
