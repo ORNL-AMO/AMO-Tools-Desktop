@@ -4,7 +4,7 @@ import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity
 } from '../shared/models/standalone';
 
 
@@ -83,6 +83,8 @@ export class StandaloneService {
     return standaloneAddon.CHPcalculator(inputs);
   }
 
+  static  usableAirCapacity(input: CalculateUsableCapacity): number {
+    return standaloneAddon.usableAirCapacity(input);
+  }
   constructor() { }
-
 }
