@@ -11,7 +11,7 @@ export class PneumaticAirComponent implements OnInit {
 
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
-
+  currentField: string = 'default';
   constructor() { }
 
   ngOnInit() {
@@ -34,4 +34,8 @@ export class PneumaticAirComponent implements OnInit {
     this.outputs = StandaloneService.pneumaticAirRequirement(inputs);
   }
 
+
+  setField(str: string){
+    this.currentField = str;
+  }
 }

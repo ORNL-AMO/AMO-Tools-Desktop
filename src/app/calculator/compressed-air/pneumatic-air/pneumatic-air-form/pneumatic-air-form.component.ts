@@ -14,6 +14,9 @@ export class PneumaticAirFormComponent implements OnInit {
   outputs: PneumaticAirRequirementOutput;
   @Output('calculate')
   calculate = new EventEmitter<PneumaticAirRequirementInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+  
   pistonTypes: Array<any> = [
     {
       name: 'Single Acting',
@@ -28,8 +31,13 @@ export class PneumaticAirFormComponent implements OnInit {
 
   ngOnInit() {
   }
+
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
   }
 
 }

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { PneumaticAirComponent } from './pneumatic-air.component';
 import { PneumaticAirFormComponent } from './pneumatic-air-form/pneumatic-air-form.component';
+import { PneumaticAirHelpComponent } from './pneumatic-air-help/pneumatic-air-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -13,7 +14,8 @@ import { PneumaticAirFormComponent } from './pneumatic-air-form/pneumatic-air-fo
   ],
   declarations: [
     PneumaticAirComponent,
-    PneumaticAirFormComponent
+    PneumaticAirFormComponent,
+    PneumaticAirHelpComponent
   ],
   exports: [
     PneumaticAirComponent

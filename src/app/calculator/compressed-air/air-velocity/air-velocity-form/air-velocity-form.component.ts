@@ -15,12 +15,17 @@ export class AirVelocityFormComponent implements OnInit {
   calculate = new EventEmitter<AirVelocityInput>();
   @Input()
   airVelocityOutput: number;
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  changeField(str: string){
+
   }
 }

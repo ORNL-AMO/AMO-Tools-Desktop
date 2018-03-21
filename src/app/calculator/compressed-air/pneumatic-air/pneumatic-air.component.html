@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-pneumatic-air-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)"></app-pneumatic-air-form>
+            <app-pneumatic-air-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)" (emitChangeField)="setField($event)"></app-pneumatic-air-form>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Pneumatic Air Help</p>
+            <app-pneumatic-air-help [currentField]="currentField"></app-pneumatic-air-help>
           </div>
         </div>
       </div>
