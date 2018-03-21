@@ -543,8 +543,8 @@ export class DashboardComponent implements OnInit {
       this.selectedItems = new Array();
       if(this.workingDirectoryCalculator){
         if(this.workingDirectoryCalculator.selected){
-          console.log('push calc')
           this.reportRollupService.calcsArray.push(this.workingDirectoryCalculator);
+          this.reportRollupService.selectedCalcs.next(this.reportRollupService.calcsArray);
         }
       }
       this.reportRollupService.getReportData(this.workingDirectory);
@@ -571,6 +571,7 @@ export class DashboardComponent implements OnInit {
 
   closeReport() {
     this.selectedItems = new Array();
+    this.workingDirectoryCalculator.selected = false;
     this.workingDirectory.assessments.forEach(
       assessment => {
         assessment.selected = false;

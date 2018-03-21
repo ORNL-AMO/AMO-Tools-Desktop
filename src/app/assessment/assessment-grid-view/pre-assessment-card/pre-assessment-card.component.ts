@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges } from '@angular/core';
 import { Calculator } from '../../../shared/models/calculators';
 import { Directory } from '../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -24,6 +24,8 @@ export class PreAssessmentCardComponent implements OnInit {
   updateDirectory = new EventEmitter();
   @Input()
   settings: Settings;
+  @Input()
+  isChecked: boolean;
 
   @ViewChild('editModal') public editModal: ModalDirective;
   directories: Array<Directory>;
@@ -31,6 +33,7 @@ export class PreAssessmentCardComponent implements OnInit {
   numFurnaces: number = 0;
   energyUsed: number = 0;
   energyCost: number = 0;
+  isFirstChange: boolean = true;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
@@ -41,6 +44,15 @@ export class PreAssessmentCardComponent implements OnInit {
      // console.log(tmpResults);
       this.energyUsed = _.sumBy(tmpResults, 'value');
       this.energyCost = _.sumBy(tmpResults, 'energyCost');
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isChecked && !this.isFirstChange) {
+      this.calculator.selected = this.isChecked;
+    }
+    else {
+      this.isFirstChange = false;
     }
   }
 

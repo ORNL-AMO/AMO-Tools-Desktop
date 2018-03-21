@@ -122,6 +122,7 @@ export class ReportRollupComponent implements OnInit {
 
     //gets calculators for pre assessment rollup
     this.reportRollupService.selectedCalcs.subscribe(items => {
+      console.log(items)
       if (items) {
         if (items.length != 0) {
           this.selectedCalcs = items;
