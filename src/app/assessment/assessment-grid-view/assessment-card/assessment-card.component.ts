@@ -68,12 +68,12 @@ export class AssessmentCardComponent implements OnInit {
   showEditModal() {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
+      this.editForm = this.formBuilder.group({
+        'name': [this.assessment.name],
+        'directoryId': [this.assessment.directoryId]
+      })
+      this.editModal.show();
     })
-    this.editForm = this.formBuilder.group({
-      'name': [this.assessment.name],
-      'directoryId': [this.assessment.directoryId]
-    })
-    this.editModal.show();
   }
 
   hideEditModal() {

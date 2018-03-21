@@ -89,13 +89,13 @@ export class DirectoryCardComponent implements OnInit {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
       _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
-      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id});
+      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+      this.editForm = this.formBuilder.group({
+        'name': [this.directory.name],
+        'directoryId': [this.directory.parentDirectoryId]
+      })
+      this.editModal.show();
     })
-    this.editForm = this.formBuilder.group({
-      'name': [this.directory.name],
-      'directoryId': [this.directory.parentDirectoryId]
-    })
-    this.editModal.show();
   }
 
   hideEditModal() {

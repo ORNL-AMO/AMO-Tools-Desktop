@@ -37,7 +37,7 @@ export class PreAssessmentCardComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-   // this.populateDirArray();
+  //  this.populateDirArray();
     this.getData();
   }
 
@@ -77,23 +77,25 @@ export class PreAssessmentCardComponent implements OnInit {
     }
   }
 
-  populateDirArray() {
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-    })
-  }
+  // populateDirArray() {
+  //   this.indexedDbService.getAllDirectories().then(dirs => {
+  //     this.directories = dirs;
+  //   })
+  // }
 
   showPreAssessment() {
     this.viewPreAssessment.emit(true);
   }
 
   showEditModal() {
-    this.populateDirArray();
-    this.editForm = this.formBuilder.group({
-      'name': [this.calculator.name],
-      'directoryId': [this.calculator.directoryId]
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.editForm = this.formBuilder.group({
+        'name': [this.calculator.name],
+        'directoryId': [this.calculator.directoryId]
+      })
+      this.editModal.show();
     })
-    this.editModal.show();
   }
 
   hideEditModal() {
@@ -119,7 +121,7 @@ export class PreAssessmentCardComponent implements OnInit {
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putCalculator(this.calculator).then(val => {
       this.updateDirectory.emit(true);
-      this.populateDirArray();
+      //this.populateDirArray();
       this.hideEditModal();
     })
   }
