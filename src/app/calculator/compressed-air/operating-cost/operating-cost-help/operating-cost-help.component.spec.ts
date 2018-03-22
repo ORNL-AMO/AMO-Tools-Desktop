@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PneumaticAirHelpComponent } from './pneumatic-air-help.component';
+import { OperatingCostHelpComponent } from './operating-cost-help.component';
 
-describe('PneumaticAirHelpComponent', () => {
-  let component: PneumaticAirHelpComponent;
-  let fixture: ComponentFixture<PneumaticAirHelpComponent>;
+describe('OperatingCostHelpComponent', () => {
+  let component: OperatingCostHelpComponent;
+  let fixture: ComponentFixture<OperatingCostHelpComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PneumaticAirHelpComponent ]
+      declarations: [ OperatingCostHelpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PneumaticAirHelpComponent);
+    fixture = TestBed.createComponent(OperatingCostHelpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

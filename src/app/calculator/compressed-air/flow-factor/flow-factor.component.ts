@@ -10,7 +10,7 @@ import { PneumaticValve } from "../../../shared/models/standalone";
 export class FlowFactorComponent implements OnInit {
 
   inputs: PneumaticValve;
-  valveFlowFactor: number;
+  valveFlowFactor: number = 0;
   userFlowRate: boolean = false;
   currentField: string = 'default';
   constructor() { }
