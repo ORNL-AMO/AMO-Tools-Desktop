@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { graphColors } from '../graphColors';
-import { PhastReportService } from '../../phast-report.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import * as _ from 'lodash';
 import * as d3 from 'd3';
-// import * as c3 from 'c3';
 @Component({
   selector: 'app-phast-pie-chart',
   templateUrl: './phast-pie-chart.component.html',
@@ -13,106 +10,44 @@ import * as d3 from 'd3';
 })
 export class PhastPieChartComponent implements OnInit {
   @Input()
-  results: PhastResults;
+  graphColors: Array<string>;
   @Input()
-  resultCats: ShowResultsCategories;
+  values: Array<number>;
   @Input()
-  isBaseline: boolean;
-  @Input()
-  modExists: boolean;
-  @Input()
-  printView: boolean;
+  labels: Array<string>;
   @Input()
   chartContainerWidth: number;
   @Input()
-  chartIndex: number;
-
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
-
+  chartContainerHeight: number;
+  @Input()
+  printView: boolean;
+  @Input()
   exportName: string;
 
+  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
 
-
+  htmlElement: any;
+  radius: number;
   host: d3.Selection<any>;
   svg: d3.Selection<any>;
-  chartContainerHeight: number;
   width: number;
   height: number;
-  legendWidthFactor: number;
-  legendWidth: number;
-  radius: number;
-  htmlElement: any;
-  data: Array<number>;
-  labels: Array<string>;
 
-  chartData: any = {
-    pieChartLabels: new Array<string>(),
-    pieChartData: new Array<number>()
-  }
-
-  pieChartData: Array<Array<any>>;
-
-  pieData: Array<{ label: string, val: number }>;
-
-  chartColors: Array<any>;
-
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
-
-  totalWallLoss: number;
-  totalAtmosphereLoss: number;
-  totalOtherLoss: number;
-  totalCoolingLoss: number;
-  totalOpeningLoss: number;
-  totalFixtureLoss: number;
-  totalLeakageLoss: number;
-  totalExtSurfaceLoss: number;
-  totalChargeMaterialLoss: number;
-  totalFlueGas: number;
-  totalAuxPower: number;
-  totalSlag: number;
-  totalExhaustGasEAF: number;
-  totalExhaustGas: number;
-  totalSystemLosses: number;
-
-  doc: any;
-  window: any;
-
-  chart: any;
-  tmpChartData: Array<any>;
-
-
-  constructor(private phastReportService: PhastReportService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    this.getData(this.results, this.resultCats);
-    this.getColors();
   }
-
-  ngAfterViewInit() {
-    this.printPieData();
-    this.setupChart();
-    this.buildPie();
-  }
-
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.results.firstChange) {
-      this.getData(this.results, this.resultCats);
-      // this.updateChart();
-      this.buildPie();
+    if (changes.values && changes.labels) {
+      if (!changes.values.firstChange) {
+        this.updatePie();
+      }
     }
-  }
-
-
-  //debug - native d3
-  printPieData(): void {
-    for (let i = 0; i < this.pieData.length; i++) {
-      console.log("pieData[" + i + "] = " + this.pieData[i].label + ", " + this.pieData[i].val);
+    if (changes.chartContainerWidth) {
+      this.setupChart();
+      this.buildPie();
     }
   }
 
@@ -121,229 +56,427 @@ export class PhastPieChartComponent implements OnInit {
     this.host = d3.select(this.htmlElement);
 
     if (!this.printView) {
-      if (this.modExists) {
-        this.chartContainerWidth = this.chartContainerWidth / 2;
+      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
+        this.chartContainerHeight = 300;
       }
-      this.chartContainerHeight = 400;
+      this.height = this.chartContainerHeight;
     }
     else {
-      this.chartContainerHeight = 450;
-      this.chartContainerWidth = 1000;
+      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
+        this.chartContainerHeight = 450;
+      }
+      this.height = 270;
+      this.chartContainerWidth = 680;
     }
-
-
-
-    //init % of container width that will be dedicated to legend
-    this.legendWidthFactor = 0.4;
-    //factor space for the legend
-    this.legendWidth = this.chartContainerWidth * 0.4;
-
-    this.height = this.chartContainerHeight - 100;
-    this.width = this.chartContainerWidth - this.legendWidth;
-
+    this.width = this.chartContainerWidth;
     //set radius to limiting factor: height or width
     this.radius = Math.min(this.height, this.width) / 2;
-
-    console.log("radius = " + this.radius);
   }
-
-  midAngle(d): number {
-		return d.startAngle + (d.endAngle - d.startAngle)/2;
-	}
 
   buildPie(): void {
     this.host.html('');
-    let innerRadius = this.radius - 50;
-    let outerRadius = this.radius - 10;
-    let xTrans = this.chartContainerWidth / 2;
-    // let xTrans = this.chartContainerWidth * (1 - this.legendWidthFactor) / 2;
-    let yTrans = this.chartContainerHeight / 2;
-    let viewBoxString = '0 0 ' + this.chartContainerWidth.toFixed(0) + ' ' + this.chartContainerHeight.toFixed(0);
-    this.svg = this.host.append('svg')
-      .attr('viewBox', viewBoxString)
-      .data([this.pieData])
-      .attr('width', this.chartContainerWidth)
-      .attr('height', this.chartContainerHeight)
-      .append('g')
-      .attr('transform', 'translate(' + xTrans + ', ' + yTrans + ')');
+    let width = this.width,
+      height = this.height,
+      radius = this.radius;
+    let printView = this.printView;
+    let svgWidth = this.chartContainerWidth;
+    let svgHeight = this.chartContainerHeight;
+    let color = d3.scaleOrdinal(this.graphColors);
+    let pie = d3.pie().sort(null);
+    let pieValues = this.values;
+    let pieLabels = this.labels;
+    let pieValuesData = pie(pieValues);
+    let pieLabelsData = pie(pieLabels);
+    let rightLabelIndexes = [];
+    let leftLabelIndexes = [];
+    let xBound;
+    let fontSize;
+    if (printView) {
+      xBound = radius * (10 / 9);
+      fontSize = "16px";
+    }
+    else {
+      xBound = radius * (3 / 2);
+      fontSize = "12px";
+    }
+    let yBound = height * (5 / 6);
+    let leftLabelSpace, rightLabelSpace;
+    let arc = d3.arc().innerRadius(0).outerRadius(radius);
+    let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
 
-    this.svg.append('g')
-      .attr('class', 'labels');
-    this.svg.append('g')
-      .attr('class', 'lines');
+    this.svg = this.host.append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight)
+      .append("g")
+      .attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
 
-
-    console.log(this.pieData);
-
-    let pie = d3.pie().value((function (d) { return d }));
-    let path = d3.arc().outerRadius(this.radius - 10).innerRadius(0);
-    let innerLabel = d3.arc().outerRadius(this.radius - 30).innerRadius(this.radius - 30);
-    let outerLabel = d3.arc().outerRadius(this.radius + 35).innerRadius(this.radius + 35);
-
-    let values = this.pieData.map(datas => datas.val);
-
-
-
-
-    let arc = this.svg.selectAll('.arc')
-      .data(pie(values))
-      .enter()
-      .append('g')
-      .attr('class', 'arc');
-
-    let pieColor = d3.scaleOrdinal(graphColors);
-
-    arc.append('path')
-      .attr('d', path)
-      .attr('fill', function (d, i) {
-        return pieColor(i);
-      });
-
-    arc.append('text')
-      .attr('transform', (datum: any, index) => {
-        datum.innerRadius = 0;
-        datum.outerRadius = this.radius;
-        return 'translate(' + outerLabel.centroid(datum) + ')';
-      })
-      .text((datum, index) => {
-        if (this.pieData[index].val > 0) {
-          return this.pieData[index].label;
+    let path = this.svg.selectAll("path.slice")
+      .data(pieValuesData)
+      .enter().append("path")
+      .attr("class", "slice")
+      .attr("fill", function (d, i) { return color(i); })
+      .attr("stroke", "#fff")
+      .attr("stroke-width", function (d) {
+        if (d < 0) {
+          return "0px";
         }
-      })
-      .style('text-anchor', 'middle')
-      .style('font-size', '12px');
-
-    let polyline = this.svg.select('.lines').selectAll('polyline')
-      .data([this.pieData]);
-
-    polyline.enter()
-      .append('polyline');
-
-    polyline.transition().duration(1000)
-      .attrTween('points', function (d) {
+        if (printView) {
+          return "1.5px";
+        }
+        else {
+          return "1px";
+        }
+      });
+    path.transition().duration(500)
+      .attrTween("d", function (d) {
         this._current = this._current || d;
         let interpolate = d3.interpolate(this._current, d);
         this._current = interpolate(0);
-        return function(t) {
-          let d2 = interpolate(t);
-          let pos = outerLabel.centroid(d2);
-          pos[0] = this.radius * 0.95 * (this.midAngle(d2) < Math.PI ? 1: -1);
-          return [path.centroid(d2), outerLabel.centroid(d2), pos];
+        return function (t) {
+          return arc(interpolate(t));
+        };
+      });
+    path.exit().remove();
+
+    let text = this.svg.selectAll("text")
+      .data(pieValuesData)
+      .enter()
+      .append("text")
+      .attr('font-size', fontSize)
+      .attr("x", function (d, i) {
+        let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+        d.cx = Math.cos(a) * (radius - 75);
+        d.x = Math.cos(a) * (radius + 10);
+        if (d.x >= 0) {
+          if (pieValues[i] > 0) {
+            rightLabelIndexes.push(i);
+          }
+          d.x = xBound;
+          return d.x;
+        }
+        else if (d.x < 0) {
+          if (pieValues[i] > 0) {
+            leftLabelIndexes.push(i);
+          }
+          d.x = -xBound;
+          return d.x;
+        }
+      });
+    leftLabelSpace = yBound / leftLabelIndexes.length;
+    rightLabelSpace = yBound / rightLabelIndexes.length;
+    text.attr("y", function (d, i) {
+      let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+      d.cy = Math.sin(a) * (radius - 75);
+      d.y = Math.sin(a) * (radius - 10);
+      let left = false;
+      let right = false;
+      let marker = 0;
+      for (let j = 0; j < leftLabelIndexes.length; j++) {
+        if (i === leftLabelIndexes[j]) {
+          right = false;
+          left = true;
+          marker = j;
+        }
+      }
+      for (let j = 0; j < rightLabelIndexes.length; j++) {
+        if (i === rightLabelIndexes[j]) {
+          left = false;
+          right = true;
+          marker = j;
+        }
+      }
+      if (right) {
+        d.y = (-yBound / 2) + (rightLabelSpace * marker);
+        return d.y;
+      }
+      else if (left) {
+        d.y = (yBound / 2) - (leftLabelSpace * (marker + 1));
+        return d.y;
+      }
+    })
+      .text(function (d, i) {
+        if (pieValues[i] > 0) {
+          return pieLabels[i];
         }
       })
+      .attr("text-anchor", function (d, i) {
+        let right = false;
+        let left = false;
+        if (!printView) {
+          return "middle";
+        }
+        else {
+          for (let j = 0; j < leftLabelIndexes.length; j++) {
+            if (i === leftLabelIndexes[j]) {
+              right = false;
+              left = true;
+              return "end";
+            }
+          }
+          if (!left) {
+            for (let j = 0; j < rightLabelIndexes.length; j++) {
+              if (i === rightLabelIndexes[j]) {
+                left = false;
+                right = true;
+                return "start";
+              }
+            }
+          }
+          return "middle";
+        }
+      })
+      .each(function (d) {
+        let bbox = this.getBBox();
+        d.sx = d.x - bbox.width / 2 - 2;
+        d.ox = d.x + bbox.width / 2 + 2;
+        d.sy = d.oy = d.y + 5;
+      });
 
-    // let polyline = this.svg.select()
+    this.svg.append("defs").append("marker")
+      .attr("id", "circ")
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("refX", 3)
+      .attr("refY", 3)
+      .append("circle")
+      .attr("cx", 3)
+      .attr("cy", 3)
+      .attr("r", 3)
+      .style('fill', '#333')
+      .style('stroke', '#333');
 
-
-    // let gLabels = this.svg.append('g')
-    //   .attr('class', 'labels')
-    //   .data([this.pieData])
-    //   .enter();
-
-    // let gLabel = gLabels.append('g')
-    //   .attr('class', 'label');
-
-    // gLabel.append('circle')
-    //   .attr({
-    //     x: 0,
-    //     y: 0,
-    //     r: 2,
-    //     fill: "#000",
-    //     transform: function (d, i) {
-    //       let centroid = this.pieData.centroid(d);
-    //       return "translate(" + this.pieData.centroid()
-    //     }
-    //   });
+    this.svg.selectAll("path.pointer")
+      .data(pieValuesData)
+      .enter()
+      .append("path")
+      .attr("class", "pointer")
+      .style("fill", "none")
+      .style("stroke", function (d, i) {
+        if (pieValues[i] > 0) {
+          return '#333';
+        }
+        else {
+          return 'none';
+        }
+      })
+      .attr("marker-end", "url(#circ)")
+      .attr("d", function (d, i) {
+        if (pieValues[i] > 0) {
+          if (d.cx > d.ox) {
+            return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+          } else {
+            return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+          }
+        }
+        else {
+          return '';
+        }
+      });
   }
 
 
-  updateChart(): void {
-
-  }
-
-
-  getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
-    this.totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
-    this.totalAtmosphereLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAtmosphereLoss);
-    this.totalOtherLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOtherLoss);
-    this.totalCoolingLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalCoolingLoss);
-    this.totalOpeningLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOpeningLoss);
-    this.totalFixtureLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFixtureLoss);
-    this.totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
-    this.totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
-    this.totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
-    this.totalFlueGas = 0;
-    this.totalSlag = 0;
-    this.totalAuxPower = 0;
-    this.totalExhaustGas = 0;
-    this.totalExhaustGasEAF = 0;
-    this.totalSystemLosses = 0;
-
-    if (resultCats.showFlueGas) {
-      this.totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
+  updatePie(): void {
+    let width = this.width,
+      height = this.height,
+      radius = this.radius;
+    let printView = this.printView;
+    let svgWidth = this.chartContainerWidth;
+    let svgHeight = this.chartContainerHeight;
+    let color = d3.scaleOrdinal(this.graphColors);
+    let pie = d3.pie().sort(null);
+    let pieValues = this.values;
+    let pieLabels = this.labels;
+    let pieValuesData = pie(pieValues);
+    let pieLabelsData = pie(pieLabels);
+    let rightLabelIndexes = [];
+    let leftLabelIndexes = [];
+    let xBound;
+    let fontSize;
+    if (printView) {
+      xBound = radius * (10 / 9);
+      fontSize = "16px";
     }
-    if (resultCats.showAuxPower) {
-      this.totalAuxPower = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAuxPower);
+    else {
+      xBound = radius * (3 / 2);
+      fontSize = "12px";
     }
-    if (resultCats.showSlag) {
-      this.totalSlag = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSlag);
-    }
-    if (resultCats.showExGas) {
-      this.totalExhaustGasEAF = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGasEAF);
-    }
-    if (resultCats.showEnInput2) {
-      this.totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
-    }
-    if (resultCats.showSystemEff) {
-      this.totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
-    }
-    if (this.isBaseline) {
-      this.phastReportService.baselineChartLabels.next(this.chartData.pieChartLabels);
-    } else {
-      this.phastReportService.modificationChartLabels.next(this.chartData.pieChartLabels);
-    }
+    let yBound = height * (5 / 6);
+    let leftLabelSpace, rightLabelSpace;
+    let arc = d3.arc().innerRadius(0).outerRadius(radius);
+    let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
 
-    this.pieChartData = new Array<Array<any>>();
-    this.pieData = new Array<{ label: string, val: number }>();
+    let path = this.svg.selectAll("path.slice")
+      .data(pieValuesData);
+    path.enter()
+      .insert("path")
+      .style("fill", function (d, i) {
+        return color(i);
+      })
+      .attr("class", "slice");
+    path.transition().duration(500)
+      .attrTween("d", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          return arc(interpolate(t));
+        };
+      })
+    path.exit().remove();
 
-    this.pieData.push({ label: "Flue Gas: " + this.totalFlueGas.toFixed(0) + "%", val: this.totalFlueGas });
-    this.pieData.push({ label: "Charge Material: " + this.totalChargeMaterialLoss.toFixed(0) + "%", val: this.totalChargeMaterialLoss });
-    this.pieData.push({ label: "Opening: " + this.totalOpeningLoss.toFixed(0) + "%", val: this.totalOpeningLoss });
-    this.pieData.push({ label: "Wall: " + this.totalWallLoss.toFixed(0) + "%", val: this.totalWallLoss });
-    this.pieData.push({ label: "Atmosphere: " + this.totalAtmosphereLoss.toFixed(0) + "%", val: this.totalAtmosphereLoss });
-    this.pieData.push({ label: "Cooling: " + this.totalCoolingLoss.toFixed(0) + "%", val: this.totalCoolingLoss });
-    this.pieData.push({ label: "Fixture: " + this.totalFixtureLoss.toFixed(0) + "%", val: this.totalFixtureLoss });
-    this.pieData.push({ label: "Leakage: " + this.totalLeakageLoss.toFixed(0) + "%", val: this.totalLeakageLoss });
-    this.pieData.push({ label: "Extended Surface: " + this.totalExtSurfaceLoss.toFixed(0) + "%", val: this.totalExtSurfaceLoss });
-    this.pieData.push({ label: "Exhaust Gas (EAF): " + this.totalExhaustGasEAF.toFixed(0) + "%", val: this.totalExhaustGasEAF });
-    this.pieData.push({ label: "Exhaust Gas: " + this.totalExhaustGas.toFixed(0) + "%", val: this.totalExhaustGas });
-    this.pieData.push({ label: "System: " + this.totalSystemLosses.toFixed(0) + "%", val: this.totalSystemLosses });
-    this.pieData.push({ label: "Slag: " + this.totalSlag.toFixed(0) + "%", val: this.totalSlag });
-    this.pieData.push({ label: "Auxiliary: " + this.totalAuxPower.toFixed(0) + "%", val: this.totalAuxPower });
-    this.pieData.push({ label: "Other: " + this.totalFlueGas.toFixed(0) + "%", val: this.totalOtherLoss });
-  }
+    let text = this.svg.selectAll("text").remove();
+    text = this.svg.selectAll("text")
+      .data(pieValuesData)
+      .enter()
+      .append("text");
+    text.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
+    text
+      .attr('font-size', fontSize)
+      .attr("x", function (d, i) {
+        let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+        d.cx = Math.cos(a) * (radius - 75);
+        d.x = Math.cos(a) * (radius + 10);
+        if (d.x >= 0) {
+          if (pieValues[i] > 0) {
+            rightLabelIndexes.push(i);
+          }
+          d.x = xBound;
+          return d.x;
+        }
+        else if (d.x < 0) {
+          if (pieValues[i] > 0) {
+            leftLabelIndexes.push(i);
+          }
+          d.x = -xBound;
+          return d.x;
+        }
+      });
 
-  getLossPercent(totalLosses: number, loss: number): number {
-    let num = (loss / totalLosses) * 100;
-    let percent = this.roundVal(num, 0);
-    return percent;
-  }
-  roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
-  }
+    leftLabelSpace = yBound / leftLabelIndexes.length;
+    rightLabelSpace = yBound / rightLabelIndexes.length;
 
-  getColors() {
-    this.chartColors = [
-      {
-        backgroundColor: graphColors
+    text.attr("y", function (d, i) {
+      let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+      d.cy = Math.sin(a) * (radius - 75);
+      d.y = Math.sin(a) * (radius - 10);
+      let left = false;
+      let right = false;
+      let marker = 0;
+      for (let j = 0; j < leftLabelIndexes.length; j++) {
+        if (i === leftLabelIndexes[j]) {
+          right = false;
+          left = true;
+          marker = j;
+        }
       }
-    ];
+      for (let j = 0; j < rightLabelIndexes.length; j++) {
+        if (i === rightLabelIndexes[j]) {
+          left = false;
+          right = true;
+          marker = j;
+        }
+      }
+      if (right) {
+        d.y = (-yBound / 2) + (rightLabelSpace * marker);
+        return d.y;
+      }
+      else if (left) {
+        d.y = (yBound / 2) - (leftLabelSpace * (marker + 1));
+        return d.y;
+      }
+    })
+      .text(function (d, i) {
+        if (pieValues[i] > 0) {
+          return pieLabels[i];
+        }
+      })
+      .attr("text-anchor", function (d, i) {
+        let right = false;
+        let left = false;
+        if (!printView) {
+          return "middle";
+        }
+        else {
+          for (let j = 0; j < leftLabelIndexes.length; j++) {
+            if (i === leftLabelIndexes[j]) {
+              right = false;
+              left = true;
+              return "end";
+            }
+          }
+          if (!left) {
+            for (let j = 0; j < rightLabelIndexes.length; j++) {
+              if (i === rightLabelIndexes[j]) {
+                left = false;
+                right = true;
+                return "start";
+              }
+            }
+          }
+          return "middle";
+        }
+      })
+      .each(function (d) {
+        let bbox = this.getBBox();
+        d.sx = d.x - bbox.width / 2 - 2;
+        d.ox = d.x + bbox.width / 2 + 2;
+        d.sy = d.oy = d.y + 5;
+      });
+
+    this.svg.selectAll("defs").remove();
+    this.svg.selectAll("path.pointer").remove();
+
+    this.svg.append("defs").append("marker")
+      .attr("id", "circ")
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("refX", 3)
+      .attr("refY", 3)
+      .append("circle")
+      .attr("cx", 3)
+      .attr("cy", 3)
+      .attr("r", 3)
+      .style('fill', '#333')
+      .style('stroke', '#333');
+
+    let pointer = this.svg.selectAll("path.pointer")
+      .data(pieValuesData)
+      .enter()
+      .append("path")
+    pointer.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
+    pointer.attr("class", "pointer")
+      .style("fill", "none")
+      .style("stroke", function (d, i) {
+        if (pieValues[i] > 0) {
+          return '#333';
+        }
+        else {
+          return 'none';
+        }
+      })
+      .attr("marker-end", "url(#circ)")
+      .attr("d", function (d, i) {
+        if (pieValues[i] > 0) {
+          if (d.cx > d.ox) {
+            return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+          } else {
+            return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+          }
+        }
+        else {
+          return '';
+        }
+      });
   }
 
-  downloadChart() {
+  downloadChart(): void {
     if (!this.exportName) {
-      this.exportName = "phast-report-pie-graph-" + this.chartIndex;
+      this.exportName = "phast-report-pie-chart";
     }
+    else {
+      this.exportName = this.exportName + '-pie-chart';
+    }
+    this.exportName = this.exportName.replace(/ /g, '-').toLowerCase();
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
