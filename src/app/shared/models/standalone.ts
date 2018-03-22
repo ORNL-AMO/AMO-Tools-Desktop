@@ -60,6 +60,7 @@ export interface ReceiverTankBridgingCompressor extends ReceiverTankGeneral {
   speedOfAir: number;
 }
 
+
 export interface ReceiverTankMeteredStorage extends ReceiverTankDedicatedStorage {
   meteredControl: number;
 }
@@ -141,4 +142,10 @@ export interface BagMethodInput {
 export interface BagMethodOutput {
   flowRate: number;
   annualConsumption: number;
+}
+
+export interface CalculateUsableCapacity {
+  tankSize: number;
+  airPressureIn: number;
+  airPressureOut: number;
 }

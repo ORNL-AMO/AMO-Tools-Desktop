@@ -24,8 +24,6 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
-  @Input()
-  inRollup: boolean;
   @ViewChild('container') container: ElementRef;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -136,6 +134,7 @@ export class PreAssessmentComponent implements OnInit {
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
     }
+    console.log(this.settings.fuelCost);
     //this is fired when forms change
     this.toggleCalculate = !this.toggleCalculate;
   }

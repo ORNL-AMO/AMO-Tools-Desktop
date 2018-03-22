@@ -1,5 +1,7 @@
 
 
+
+
 .fa-download {
     left: 50px;
     position: initial;
@@ -23,4 +25,17 @@
     margin-top: 15px;
     background: lightgray;
     padding: 15px;
+}
+
+.btn{
+    padding: 6px !important;
+}
+
+.btn-group{
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
+.btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
 }

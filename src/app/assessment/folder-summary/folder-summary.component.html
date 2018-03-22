@@ -1,3 +1,85 @@
-<p>
-  folder-summary works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div class="card panel-container">
+      <div class="card-body summary-rollup d-flex flex-row justify-content-around">
+        <div class="p-2">
+          <label class="group-label">{{directory.name}} Summary</label>
+          <table class="table">
+            <tr>
+              <td class="bold">Type</td>
+              <td class="bold">Assessments</td>
+              <td class="bold">Annual Energy Used</td>
+              <td class="bold">Annual Energy Costs</td>
+            </tr>
+            <tr>
+              <td>Pumps</td>
+              <td>{{numPsats}}</td>
+              <td>{{psatEnergyUsed | sigFigs:'6'}} kWh</td>
+              <td>{{psatEnergyCost | currency}}</td>
+            </tr>
+            <tr>
+              <td>Proces Heating</td>
+              <td>{{numPhasts}}</td>
+              <td>{{phastEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
+              <td>{{phastEnergyCost | currency}}</td>
+            </tr>
+            <tr>
+              <td class="bold">Totals</td>
+              <td class="bold">{{numAssessments}}</td>
+              <td class="bold">{{getTotals().totalEnergy | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
+              <td class="bold">{{getTotals().totalCost | currency}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="p-2">
+          <label class="group-label">{{directory.name}} Settings</label>
+          <table class="table">
+            <tr>
+              <td class="bold">Units of Measure</td>
+              <td>{{directorySettings.unitsOfMeasure}}</td>
+            </tr>
+            <tr>
+              <td class="bold">Fuel Costs</td>
+              <td>{{directorySettings.fuelCost | currency}}
+                <span *ngIf="directorySettings.unitsOfMeasure == 'Metric'">/GJ</span>
+                <span *ngIf="directorySettings.unitsOfMeasure == 'Imperial'">/MMBtu</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="bold">Units of Measure</td>
+              <td>{{directorySettings.steamCost | currency}}
+                <span *ngIf="directorySettings.unitsOfMeasure == 'Metric'">/GJ</span>
+                <span *ngIf="directorySettings.unitsOfMeasure == 'Imperial'">/MMBtu</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="bold">Electricity Cost</td>
+              <td>{{directorySettings.electricityCost | currency}}
+                <span>/kWh</span>
+              </td>
+            </tr>
+          </table>
+          <a class="pull-right click-link" (click)="showSettingsModal()">Edit Settings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="settingsForm">
+      <div class="modal-body tab-content">
+        <app-application-settings [settingsForm]="settingsForm"></app-application-settings>
+        <p class="help-text">Modifying these settings will not effect existing assessments.<br>
+          New assessments in this folder will inherit these settings.</p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button class="btn btn-primary save-btn" (click)="hideSettingsModal(true)">Save to Folder</button>
+        <button class="btn btn-secondary save-btn" (click)="hideSettingsModal(false)">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

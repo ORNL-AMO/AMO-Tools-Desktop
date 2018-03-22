@@ -42,7 +42,7 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
     this.data = new Array<{ name: string, percent: number, color: string }>();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings.unitsOfMeasure);
+      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, 'value');
       for (let i = tmpArray.length - 1; i >= 0; i--) {
         this.data.unshift({
           name: tmpArray[i].name,

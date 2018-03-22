@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-10  mx-auto">
-    <div class="content-container" *ngIf="settingsForm">
+    <div class="tab-content content-container" *ngIf="settingsForm">
       <div class="card-form">
         <div *ngIf="directory.id != 1 && editName">
           <span>
@@ -18,31 +18,26 @@
         </h2>
 
         <div class="form-section">
-          <h3>General Settings</h3>
-          <p>These will be default settings for all assessments and folders.</p>
+          <label class="group-label general">General Settings</label>
+          <p class="help-text">These will be default settings for all assessments and folders.</p>
           <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
         </div>
 
-        <div class="form-section">
-          <h3>PSAT Settings</h3>
-          <p>These settings will be used as the default settings for pump assessments inside this folder.</p>
+        <div class="form-section psat">
+          <label class="group-label">PSAT Settings</label>
+          <p class="help-text">These settings will be used as the default settings for pump assessments inside this folder.</p>
           <app-psat-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-psat-settings>
         </div>
 
-        <div class="form-section">
-          <h3>PHAST Settings</h3>
-          <p>These settings will be used as the default settings for process heating assessments inside this folder.</p>
+        <div class="form-section phast">
+          <label class="group-label">PHAST Settings</label>
+          <p class="help-text">These settings will be used as the default settings for process heating assessments inside this folder.</p>
           <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-phast-settings>
         </div>
 
-        <div class="actions">
-          <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
-        </div>
-
-
         <div class="reset-data" *ngIf="directory.id == 1">
           <h3>Delete Data</h3>
-          <p>Deleting data will reset your application data to it's initial state and delete everything else.</p>
+          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else.</p>
           <button class="btn btn-secondary" (click)="resetData()">Delete Data</button>
         </div>
 

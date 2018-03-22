@@ -1,0 +1,22 @@
+<div class="row align-items-top calculator-panel">
+  <div class=" col-6 align-top">
+    <div class="header">
+      <h3>Receiver Tank - Size Calculation - Bridging Compressor Reaction Delay</h3>
+    </div>
+    <div class="row">
+      <div class="col-12 tab-content">
+        <app-delay-method-form [inputs]="inputs"  [totalReceiverVolume]="totalReceiverVolume" (calculate)="getTotalReceiverVolume($event)"></app-delay-method-form>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 align-top">
+    <div class="help-panel">
+      <div class="header">
+        <h3>Help</h3>
+      </div>
+      <div class="tab-content">
+        <p>Receiver Tank - Size Calculation - Bridging Compressor Reaction Delay</p>
+      </div>
+    </div>
+  </div>
+</div>

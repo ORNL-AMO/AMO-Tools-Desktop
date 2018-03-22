@@ -77,6 +77,15 @@ export class UpdateDataService {
     updateSettings(settings: Settings): Settings {
         settings = this.settingsService.setEnergyResultUnitSetting(settings);
         settings = this.settingsService.setTemperatureUnit(settings);
+        if(!settings.fuelCost){
+            settings.fuelCost = 3.99;
+        }
+        if(!settings.steamCost){
+            settings.steamCost = 4.69;
+        }
+        if(!settings.electricityCost){
+            settings.electricityCost = .066;
+        }
         settings.appVersion = packageJson.version;
         return settings;
     }
