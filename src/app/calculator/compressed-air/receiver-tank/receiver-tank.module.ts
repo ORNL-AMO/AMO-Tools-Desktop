@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { ReceiverTankComponent } from './receiver-tank.component';
-import { GeneralMethodComponent } from './general-method/general-method.component';
-import { GeneralMethodFormComponent } from './general-method/general-method-form/general-method-form.component';
-
-import { DedicatedStorageComponent } from './dedicated-storage/dedicated-storage.component';
-import { DedicatedStorageFormComponent } from './dedicated-storage/dedicated-storage-form/dedicated-storage-form.component';
-import { AirCapacityComponent } from './air-capacity/air-capacity.component';
-import { AirCapacityFormComponent } from './air-capacity/air-capacity-form/air-capacity-form.component';
-import { DelayMethodComponent } from './delay-method/delay-method.component';
-import { DelayMethodFormComponent } from './delay-method/delay-method-form/delay-method-form.component';
-import { MeteredStorageComponent } from './metered-storage/metered-storage.component';
-import { MeteredStorageFormComponent } from './metered-storage/metered-storage-form/metered-storage-form.component';
+import { GeneralMethodFormComponent } from './general-method-form/general-method-form.component';
+import { DedicatedStorageFormComponent } from './dedicated-storage-form/dedicated-storage-form.component';
+import { AirCapacityFormComponent } from './air-capacity-form/air-capacity-form.component';
+import { DelayMethodFormComponent } from './delay-method-form/delay-method-form.component';
+import { MeteredStorageFormComponent } from './metered-storage-form/metered-storage-form.component';
+import { AirCapacityHelpComponent } from './air-capacity-help/air-capacity-help.component';
+import { DedicatedStorageHelpComponent } from './dedicated-storage-help/dedicated-storage-help.component';
+import { DelayMethodHelpComponent } from './delay-method-help/delay-method-help.component';
+import { GeneralMethodHelpComponent } from './general-method-help/general-method-help.component';
+import { MeteredStorageHelpComponent } from './metered-storage-help/metered-storage-help.component';
 
 @NgModule({
   imports: [
@@ -24,16 +23,16 @@ import { MeteredStorageFormComponent } from './metered-storage/metered-storage-f
   ],
   declarations: [
     ReceiverTankComponent,
-    GeneralMethodComponent,
     GeneralMethodFormComponent,
-    DedicatedStorageComponent,
     DedicatedStorageFormComponent,
-    AirCapacityComponent,
     AirCapacityFormComponent,
-    DelayMethodComponent,
     DelayMethodFormComponent,
-    MeteredStorageComponent,
-    MeteredStorageFormComponent
+    MeteredStorageFormComponent,
+    AirCapacityHelpComponent,
+    DedicatedStorageHelpComponent,
+    DelayMethodHelpComponent,
+    GeneralMethodHelpComponent,
+    MeteredStorageHelpComponent
   ],
   exports: [
     ReceiverTankComponent

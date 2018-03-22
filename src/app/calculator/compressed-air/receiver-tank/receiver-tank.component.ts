@@ -29,21 +29,14 @@ export class ReceiverTankComponent implements OnInit {
       value: 4
     },
   ];
+  method: number = 0;
 
-  inputs: any = {
-    method: 0
-  }
-
+  currentField: string = 'default';
   constructor() {
   }
 
   ngOnInit() {
 
   }
-
-  emitChange() {
-
-  }
-
 
 }
