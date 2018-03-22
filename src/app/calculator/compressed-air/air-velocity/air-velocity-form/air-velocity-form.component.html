@@ -4,7 +4,7 @@
       <label for="airFlow">Air Flow</label>
       <div class="input-group">
         <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow" (input)="emitChange()"
-          onfocus="this.select();">
+          onfocus="this.select();" (focus)="changeField('airFlow')">
         <span class="input-group-addon units">SCFM</span>
       </div>
     </div>
@@ -12,7 +12,7 @@
       <label for="pipePressure">Pipe Pressure</label>
       <div class="input-group">
         <input name="pipePressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.pipePressure" id="pipePressure"
-          (input)="emitChange()" onfocus="this.select();">
+          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipePressure')">
         <span class="input-group-addon units">psig</span>
       </div>
     </div>
@@ -20,15 +20,13 @@
       <label for="atmosphericPressure">Atmospheric Pressure</label>
       <div class="input-group">
         <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
-          id="atmosphericPressure" (input)="emitChange()" onfocus="this.select();">
+          id="atmosphericPressure" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
         <span class="input-group-addon units">psi</span>
       </div>
     </div>
   </div>
   <div class="form-section">
-    <div class="header">
-      <h3>Compressed Air Velocity in the Piping</h3>
-    </div>
+    <label class="group-label">Compressed Air Velocity in the Piping</label>
     <div class="row">
       <!--First row-->
       <div class="col-6">

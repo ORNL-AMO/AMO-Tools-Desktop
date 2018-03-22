@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-air-velocity-help',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./air-velocity-help.component.css']
 })
 export class AirVelocityHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
+  
   constructor() { }
 
   ngOnInit() {

@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {PneumaticValve} from '../../../../shared/models/standalone';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PneumaticValve } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-flow-factor-form',
@@ -17,6 +17,8 @@ export class FlowFactorFormComponent implements OnInit {
   userFlowRate: boolean;
   @Input()
   valveFlowFactor: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -27,5 +29,10 @@ export class FlowFactorFormComponent implements OnInit {
 
   setUserFlowRate(bool: boolean) {
     this.setUser.emit(bool);
+  }
+
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 }

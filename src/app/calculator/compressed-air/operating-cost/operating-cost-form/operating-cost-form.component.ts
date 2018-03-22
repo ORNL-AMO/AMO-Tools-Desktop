@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {OperatingCostInput, OperatingCostOutput} from "../../../../shared/models/standalone";
+import { OperatingCostInput, OperatingCostOutput } from "../../../../shared/models/standalone";
 
 @Component({
   selector: 'app-operating-cost-form',
@@ -13,12 +13,18 @@ export class OperatingCostFormComponent implements OnInit {
   outputs: OperatingCostOutput;
   @Output('calculate')
   calculate = new EventEmitter<OperatingCostInput>();
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
+  
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 }

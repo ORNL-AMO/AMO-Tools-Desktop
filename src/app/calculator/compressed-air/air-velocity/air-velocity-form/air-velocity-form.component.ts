@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AirVelocityInput, PipeSizes} from "../../../../shared/models/standalone";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AirVelocityInput, PipeSizes } from "../../../../shared/models/standalone";
 
 @Component({
   selector: 'app-air-velocity-form',
@@ -21,11 +21,12 @@ export class AirVelocityFormComponent implements OnInit {
 
   ngOnInit() {
   }
+  
   emitChange() {
     this.calculate.emit(this.inputs);
   }
 
-  changeField(str: string){
-
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 }

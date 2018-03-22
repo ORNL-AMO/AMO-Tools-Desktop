@@ -37,6 +37,7 @@ export class AirVelocityComponent implements OnInit {
     // this.getAirVelocity();
     // console.log(this.airVelocityOutput);
   }
+  
   getAirVelocity (inputs: AirVelocityInput) {
     this.outputs = StandaloneService.airVelocity(inputs);
   }

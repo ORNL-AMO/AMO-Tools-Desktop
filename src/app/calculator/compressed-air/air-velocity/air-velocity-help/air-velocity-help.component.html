@@ -1,3 +1,34 @@
-<p>
-  air-velocity-help works!
-</p>
+<p>Find the velocity of compressed air through all the different piping involved in the system.</p>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'airFlow'">
+    <div class="card-header">
+      Air Flow
+    </div>
+    <div class="card-block">
+      <p>
+        Volumetric flow rate of the air in the compresser system, referenced to the compresseor inlet conditions.
+      </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'pipePressure'">
+    <div class="card-header">
+      Pipe Pressure
+    </div>
+    <div class="card-block">
+      <p>
+        Pressure of air flowing through the pipe </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'atmosphericPressure'">
+    <div class="card-header">
+      Atmospheric Pressure
+    </div>
+    <div class="card-block">
+      <p>
+        General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+        at that location can be given. </p>
+    </div>
+  </div>
+</div>
