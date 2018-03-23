@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {PipeSizingInput, PipeSizingOutput} from "../../../shared/models/standalone";
+import { Component, OnInit } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-pipe-sizing',
@@ -10,7 +10,7 @@ import {PipeSizingInput, PipeSizingOutput} from "../../../shared/models/standalo
 export class PipeSizingComponent implements OnInit {
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
-
+  currentField: string = 'default';
   constructor() {
   }
 
@@ -18,8 +18,8 @@ export class PipeSizingComponent implements OnInit {
     this.inputs = {
       airFlow: 0,
       airlinePressure: 0,
-      designVelocity: 0,
-      atmosphericPressure: 0
+      designVelocity: 20,
+      atmosphericPressure: 14.7
     };
 
     this.outputs = {
@@ -30,5 +30,9 @@ export class PipeSizingComponent implements OnInit {
 
   calculatePipeSize(inputs: PipeSizingInput) {
     this.outputs = StandaloneService.pipeSizing(inputs);
+  }
+
+  setField(str: string) {
+    this.currentField = str;
   }
 }

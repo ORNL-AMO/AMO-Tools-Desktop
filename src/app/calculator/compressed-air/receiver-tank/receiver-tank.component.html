@@ -1,39 +1,42 @@
 <div class="panel-container row compressed-air">
   <div class="col-12">
-    <div class="row align-items-top">
-      <div class=" col-12 align-top panel-receiver">
-        <div class="form-section">
-          <div class="form-group method-padding">
-            <div class="header">
-              <h3>Receiver Tank - Size Calculations</h3>
-            </div>
-            <div class="col-6">
-              <label class="label-padding" for="method">Method</label>
-              <div class="input-group">
-                <select name="method" class="form-control" id="method" (change)="emitChange()"
-                        [(ngModel)]="inputs.method">
-                  <option *ngFor="let method of methods" [ngValue]="method.value">{{method.name}}</option>
-                </select>
+    <div class="row align-items-top calculator-panel">
+      <div class="panel-column col-6 align-top">
+        <div class="header">
+          <h3>Receiver Tank - Size Calculations</h3>
+        </div>
+        <div class="row">
+          <div class="col-12 tab-content">
+            <form>
+              <div class="form-section">
+                <label for="method">Calculation Method</label>
+                <div class="input-group">
+                  <select name="method" class="form-control" id="method" [(ngModel)]="method">
+                    <option *ngFor="let method of methods" [ngValue]="method.value">{{method.name}}</option>
+                  </select>
+                </div>
               </div>
-            </div>
+              <app-general-method-form *ngIf="method == 0"></app-general-method-form>
+              <app-dedicated-storage-form *ngIf="method == 1"></app-dedicated-storage-form>
+              <app-metered-storage-form *ngIf="method == 2"></app-metered-storage-form>
+              <app-delay-method-form *ngIf="method == 3"></app-delay-method-form>
+              <app-air-capacity-form *ngIf="method == 4"></app-air-capacity-form>
+            </form>
           </div>
         </div>
       </div>
-      <div class="col-12 align-top" style="background: white">
-        <div class="stand-alone-calc" *ngIf="inputs.method == 0">
-          <app-general-method></app-general-method>
-        </div>
-        <div class="stand-alone-calc" *ngIf="inputs.method == 1">
-          <app-dedicated-storage></app-dedicated-storage>
-        </div>
-        <div class="stand-alone-calc" *ngIf="inputs.method == 2">
-          <app-metered-storage></app-metered-storage>
-        </div>
-        <div class="stand-alone-calc" *ngIf="inputs.method == 3">
-          <app-delay-method></app-delay-method>
-        </div>
-        <div class="stand-alone-calc" *ngIf="inputs.method == 4">
-          <app-air-capacity></app-air-capacity>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="header">
+            <h3>Help</h3>
+          </div>
+          <div class="tab-content">
+            <app-general-method-help *ngIf="method == 0"></app-general-method-help>
+            <app-dedicated-storage-help *ngIf="method == 1"></app-dedicated-storage-help>
+            <app-metered-storage-help *ngIf="method == 2"></app-metered-storage-help>
+            <app-delay-method-help *ngIf="method == 3"></app-delay-method-help>
+            <app-air-capacity-help *ngIf="method == 4"></app-air-capacity-help>
+          </div>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-operating-cost-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculateOperationCost($event)"></app-operating-cost-form>
+            <app-operating-cost-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculateOperationCost($event)" (emitChangeField)="setField($event)"></app-operating-cost-form>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Operation Cost Calculations Help</p>
+            <app-operating-cost-help [currentField]="currentField"></app-operating-cost-help>
           </div>
         </div>
       </div>

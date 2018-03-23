@@ -4,7 +4,7 @@
       <label for="airFlow">Airflow</label>
       <div class="input-group">
         <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow"
-               (input)="emitChange()" onfocus="this.select();">
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airFlow')">
         <span class="input-group-addon units">SCFM</span>
       </div>
     </div>
@@ -12,7 +12,7 @@
       <label for="airlinePressure">Airline Pressure</label>
       <div class="input-group">
         <input name="airlinePressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.airlinePressure" id="airlinePressure"
-               (input)="emitChange()" onfocus="this.select();">
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airlinePressure')">
         <span class="input-group-addon units">psi</span>
       </div>
     </div>
@@ -20,7 +20,7 @@
       <label for="designVelocity">Design Velocity</label>
       <div class="input-group">
         <input name="designVelocity" class="form-control" type="number" step="any" [(ngModel)]="inputs.designVelocity" id="designVelocity"
-               (input)="emitChange()" onfocus="this.select();">
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('designVelocity')">
         <span class="input-group-addon units">ft/s</span>
       </div>
     </div>
@@ -28,8 +28,8 @@
       <label for="atmosphericPressure">Atmospheric Pressure</label>
       <div class="input-group">
         <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure" id="atmosphericPressure"
-               (input)="emitChange()" onfocus="this.select();">
-        <span class="input-group-addon units">psia</span>
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
+        <span class="input-group-addon units">psi</span>
       </div>
     </div>
   </div>
