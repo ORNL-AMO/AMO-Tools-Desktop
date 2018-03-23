@@ -12,7 +12,8 @@ export interface Calculator {
     headToolSuction?: HeadToolSuction,
     headToolType?: string,
     systemCurve?: SystemCurve,
-    pumpCurveForm?: PumpCurveForm
+    pumpCurveForm?: PumpCurveForm,
+    selected?: boolean
 }
 
 export interface HeadToolSuction {

@@ -68,21 +68,32 @@ export class ImportExportComponent implements OnInit {
       this.indexedDbService.getDirectorySettings(item.directory.id).then(dirSettings => {
         this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
           results => {
-            if (results.length != 0) {
-              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: dirSettings[0] });
-            } else {
-              //no assessment settings, find dir settings being usd
-              this.exportData.push({ assessment: item.assessment, settings: dirSettings[0], directory: item.directory, directorySettings: dirSettings[0] });
-            }
-          }
-        )
+            this.indexedDbService.getDirectoryCalculator(item.directory.id).then((calc) => {
+              let dirCalculator;
+              if (calc.length != 0) {
+                dirCalculator = calc[0];
+              }
+              if (results.length != 0) {
+                this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
+              } else {
+                //no assessment settings, find dir settings being usd
+                this.exportData.push({ assessment: item.assessment, settings: dirSettings[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
+              }
+            })
+          })
       })
     } else {
       this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
         results => {
-          if (results.length != 0) {
-            this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: undefined });
-          }
+          this.indexedDbService.getAssessmentCalculator(item.assessment.id).then((calc) => {
+            let assessmentCalc;
+            if (calc.length != 0) {
+              assessmentCalc = calc[0];
+            }
+            if (results.length != 0) {
+              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: undefined, calculator: assessmentCalc });
+            }
+          });
         });
     }
   }

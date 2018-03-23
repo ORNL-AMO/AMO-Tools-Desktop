@@ -82,13 +82,21 @@
         <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
       </div>
     </div>
-    <!-- <div class="d-flex">
-      <div class="p-2">Energy Used</div>
-      <div class="p-2">{{getEnergyUsed(assessment) | sigFigs:'6'}}</div>
+    <div class="row form-results">
+      <div class="col-6">
+        <span class="pull-right">Energy Used</span>
+      </div>
+      <div class="col-6">
+        <span class="pull-left">{{getEnergyUsed(assessment) | sigFigs:'6'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMbtu</span>
+        </span>
+      </div>
+      <div class="col-6">
+        <span class="pull-right">Energy Cost</span>
+      </div>
+      <div class="col-6">
+        <span class="pull-left">{{getEnergyCost(assessment) | currency}}</span>
     </div>
-    <div class="d-flex">
-      <div class="p-2">Energy Cost</div>
-      <div class="p-2">{{getEnergyCost(assessment) | currency}}</div>
-    </div> -->
   </div>
 </div>

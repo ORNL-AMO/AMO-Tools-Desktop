@@ -34,14 +34,13 @@ export class PreAssessmentService {
     })
     let sum = this.getSum(results, resultType);
     results.forEach(result => {
-       result.percent = this.getResultPercent(result[resultType], sum);
+      result.percent = this.getResultPercent(result[resultType], sum);
     });
 
     return results;
   }
 
-  calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number  } {
-
+  calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
       //may need to convert to MMBtu, fuel /MMBtu
@@ -56,9 +55,9 @@ export class PreAssessmentService {
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults, settings);
       //may need conversion
       let energyCost = tmpResults * settings.electricityCost;
+      tmpResults = this.convertElectrotechResults(tmpResults, settings);
       let tmpFuelResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
       //may need conversion
       energyCost = energyCost + (tmpFuelResults * settings.fuelCost);
@@ -80,10 +79,10 @@ export class PreAssessmentService {
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      tmpResults = this.convertElectrotechResults(tmpResults, settings);
       let energyCost = tmpResults * settings.electricityCost;
+      tmpResults = this.convertElectrotechResults(tmpResults, settings);
       let tmpFuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      energyCost = energyCost + (tmpFuelResults*settings.fuelCost);
+      energyCost = energyCost + (tmpFuelResults * settings.fuelCost);
       tmpResults = tmpFuelResults + tmpResults;
 
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);

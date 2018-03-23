@@ -35,9 +35,6 @@ export class AssessmentCardComponent implements OnInit {
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;
     }
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,11 +66,14 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   showEditModal() {
-    this.editForm = this.formBuilder.group({
-      'name': [this.assessment.name],
-      'directoryId': [this.assessment.directoryId]
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.editForm = this.formBuilder.group({
+        'name': [this.assessment.name],
+        'directoryId': [this.assessment.directoryId]
+      })
+      this.editModal.show();
     })
-    this.editModal.show();
   }
 
   hideEditModal() {

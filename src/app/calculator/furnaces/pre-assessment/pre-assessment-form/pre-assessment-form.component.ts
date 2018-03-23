@@ -51,7 +51,7 @@ export class PreAssessmentFormComponent implements OnInit {
   editName() {
     this.isEditingName = true;
   }
-  
+
   doneEditingName() {
     this.isEditingName = false;
   }
@@ -82,28 +82,28 @@ export class PreAssessmentFormComponent implements OnInit {
     this.emitAssessmentType.emit(this.assessment.type);
   }
 
-  setFurnaceType(str: string){
+  setFurnaceType(str: string) {
     this.assessment.settings.energySourceType = str;
     this.changeEnergyType();
   }
 
-  setAssessmentType(str: string){
+  setAssessmentType(str: string) {
     this.assessment.type = str;
   }
 
-  // getEnergyUsed(assessment: PreAssessment){
-  //   if(assessment.type == 'Metered'){
-  //     return this.preAssessmentService.calculateMetered(assessment, assessment.settings).value;
-  //   }else if(assessment.type == 'Designed'){
-  //     return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).value;
-  //   }
-  // }
+  getEnergyUsed(assessment: PreAssessment) {
+    if (assessment.type == 'Metered') {
+      return this.preAssessmentService.calculateMetered(assessment, assessment.settings).value;
+    } else if (assessment.type == 'Designed') {
+      return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).value;
+    }
+  }
 
-  // getEnergyCost(assessment: PreAssessment){
-  //   if(assessment.type == 'Metered'){
-  //     return this.preAssessmentService.calculateMetered(assessment, assessment.settings).energyCost;
-  //   }else if(assessment.type == 'Designed'){
-  //     return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).energyCost;
-  //   }
-  // }
+  getEnergyCost(assessment: PreAssessment) {
+    if (assessment.type == 'Metered') {
+      return this.preAssessmentService.calculateMetered(assessment, assessment.settings).energyCost;
+    } else if (assessment.type == 'Designed') {
+      return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).energyCost;
+    }
+  }
 }
