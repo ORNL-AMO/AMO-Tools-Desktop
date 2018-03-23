@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { graphColors } from '../graphColors';
-import { PhastReportService } from '../../phast-report.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import * as _ from 'lodash';
 import * as d3 from 'd3';
-import * as c3 from 'c3';
 @Component({
   selector: 'app-phast-pie-chart',
   templateUrl: './phast-pie-chart.component.html',
@@ -13,454 +10,473 @@ import * as c3 from 'c3';
 })
 export class PhastPieChartComponent implements OnInit {
   @Input()
-  results: PhastResults;
+  graphColors: Array<string>;
   @Input()
-  resultCats: ShowResultsCategories;
+  values: Array<number>;
   @Input()
-  isBaseline: boolean;
-  @Input()
-  modExists: boolean;
-  @Input()
-  printView: boolean;
+  labels: Array<string>;
   @Input()
   chartContainerWidth: number;
   @Input()
-  chartIndex: number;
-
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
-
+  chartContainerHeight: number;
+  @Input()
+  printView: boolean;
+  @Input()
   exportName: string;
 
-  chartContainerHeight: number;
+  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
 
-  chartData: any = {
-    pieChartLabels: new Array<string>(),
-    pieChartData: new Array<number>()
-  }
+  htmlElement: any;
+  radius: number;
+  host: d3.Selection<any>;
+  svg: d3.Selection<any>;
+  width: number;
+  height: number;
 
-  pieChartData: Array<Array<any>>;
-
-  chartColors: Array<any>;
-
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
-
-  totalWallLoss: number;
-  totalAtmosphereLoss: number;
-  totalOtherLoss: number;
-  totalCoolingLoss: number;
-  totalOpeningLoss: number;
-  totalFixtureLoss: number;
-  totalLeakageLoss: number;
-  totalExtSurfaceLoss: number;
-  totalChargeMaterialLoss: number;
-  totalFlueGas: number;
-  totalAuxPower: number;
-  totalSlag: number;
-  totalExhaustGasEAF: number;
-  totalExhaustGas: number;
-  totalSystemLosses: number;
-
-  doc: any;
-  window: any;
-
-  chart: any;
-  tmpChartData: Array<any>;
-
-
-  constructor(private phastReportService: PhastReportService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    this.getData(this.results, this.resultCats);
-    this.getColors();
   }
-
-  ngAfterViewInit() {
-    if (!this.printView) {
-      if (this.modExists) {
-        this.chartContainerWidth = this.chartContainerWidth / 2;
-      }
-      this.chartContainerHeight = 300;
-    }
-    else {
-      this.chartContainerHeight = 450;
-      this.chartContainerWidth = 1000;
-    }
-    this.initChart();
-  }
-
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.results.firstChange) {
-      this.getData(this.results, this.resultCats);
-      this.updateChart();
+    if (changes.values && changes.labels) {
+      if (!changes.values.firstChange) {
+        this.updatePie();
+      }
+    }
+    if (changes.chartContainerWidth) {
+      this.setupChart();
+      this.buildPie();
     }
   }
 
-
-  initChart() {
-
-    if (this.printView) {
-      this.ngChart.nativeElement.className = 'print-pie-chart';
-    }
-
-    //debug
-    this.chart = c3.generate({
-      bindto: this.ngChart.nativeElement,
-      data: {
-        columns: this.pieChartData,
-        type: 'pie',
-        labels: true,
-        order: null
-      },
-      size: {
-        width: this.chartContainerWidth,
-        height: this.chartContainerHeight
-      },
-      color: {
-        pattern: graphColors
-      },
-      legend: {
-        position: 'right'
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
-          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
-          return html;
-        }
-      }
-    });
+  setupChart(): void {
+    this.htmlElement = this.ngChart.nativeElement;
+    this.host = d3.select(this.htmlElement);
 
     if (!this.printView) {
-      setTimeout(() => {
-
-        //debug
-        this.chart.load({
-          names: {
-            wall: "Wall " + this.totalWallLoss + "%",
-            atmosphere: "Atmosphere " + this.totalAtmosphereLoss + "%",
-            other: "Other Loss " + this.totalOtherLoss + "%",
-            cooling: "Cooling " + this.totalCoolingLoss + "%",
-            opening: "Opening " + this.totalOpeningLoss + "%",
-            fixture: "Fixture " + this.totalFixtureLoss + "%",
-            leakage: "Leakage " + this.totalLeakageLoss + "%",
-            extSurface: "Extended Surface " + this.totalExtSurfaceLoss + "%",
-            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-            flue: "Flue Gas " + this.totalFlueGas + "%",
-            aux: "Auxillary Power " + this.totalAuxPower + "%",
-            slag: "Slag " + this.totalSlag + "%",
-            exGasEAF: "Exhaust Gas (EAF) " + this.totalExhaustGasEAF + "%",
-            exGas: "Exhaust Gas " + this.totalExhaustGas + "%",
-            sys: "System " + this.totalSystemLosses + "%"
-          },
-        });
-
-
-        //real version
-        // this.chart.load({
-        //   names: {
-        //     wall: "Wall Losses " + this.totalWallLoss + "%",
-        //     atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-        //     other: "Other Losses " + this.totalOtherLoss + "%",
-        //     cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-        //     opening: "Opening Losses " + this.totalOpeningLoss + "%",
-        //     fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-        //     leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-        //     extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-        //     charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-        //     flue: "Flue Gas Losses " + this.totalFlueGas + "%",
-        //     aux: "Auxillary Power " + this.totalAuxPower + "%",
-        //     slag: "Slag " + this.totalSlag + "%",
-        //     exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
-        //     exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
-        //     sys: "System Losses " + this.totalSystemLosses + "%"
-        //   },
-        // });
-
-        d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
-        d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "13px");
-        d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
-      }, 500);
+      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
+        this.chartContainerHeight = 300;
+      }
+      this.height = this.chartContainerHeight;
     }
     else {
+      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
+        this.chartContainerHeight = 450;
+      }
+      this.height = 270;
+      this.chartContainerWidth = 680;
+    }
+    this.width = this.chartContainerWidth;
+    //set radius to limiting factor: height or width
+    this.radius = Math.min(this.height, this.width) / 2;
+  }
 
-      //debug
-      this.chart.load({
-        names: {
-          wall: "Wall " + this.totalWallLoss + "%",
-          atmosphere: "Atmosphere " + this.totalAtmosphereLoss + "%",
-          other: "Other " + this.totalOtherLoss + "%",
-          cooling: "Cooling " + this.totalCoolingLoss + "%",
-          opening: "Opening " + this.totalOpeningLoss + "%",
-          fixture: "Fixture " + this.totalFixtureLoss + "%",
-          leakage: "Leakage " + this.totalLeakageLoss + "%",
-          extSurface: "Extended Surface " + this.totalExtSurfaceLoss + "%",
-          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-          flue: "Flue Gas " + this.totalFlueGas + "%",
-          aux: "Auxillary Power " + this.totalAuxPower + "%",
-          slag: "Slag " + this.totalSlag + "%",
-          exGasEAF: "Exhaust Gas (EAF) " + this.totalExhaustGasEAF + "%",
-          exGas: "Exhaust Gas " + this.totalExhaustGas + "%",
-          sys: "System " + this.totalSystemLosses + "%"
-        },
+  buildPie(): void {
+    this.host.html('');
+    let width = this.width,
+      height = this.height,
+      radius = this.radius;
+    let printView = this.printView;
+    let svgWidth = this.chartContainerWidth;
+    let svgHeight = this.chartContainerHeight;
+    let color = d3.scaleOrdinal(this.graphColors);
+    let pie = d3.pie().sort(null);
+    let pieValues = this.values;
+    let pieLabels = this.labels;
+    let pieValuesData = pie(pieValues);
+    let pieLabelsData = pie(pieLabels);
+    let rightLabelIndexes = [];
+    let leftLabelIndexes = [];
+    let xBound;
+    let fontSize;
+    if (printView) {
+      xBound = radius * (10 / 9);
+      fontSize = "16px";
+    }
+    else {
+      xBound = radius * (3 / 2);
+      fontSize = "12px";
+    }
+    let yBound = height * (5 / 6);
+    let leftLabelSpace, rightLabelSpace;
+    let arc = d3.arc().innerRadius(0).outerRadius(radius);
+    let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
+
+    this.svg = this.host.append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight)
+      .append("g")
+      .attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
+
+    let path = this.svg.selectAll("path.slice")
+      .data(pieValuesData)
+      .enter().append("path")
+      .attr("class", "slice")
+      .attr("fill", function (d, i) { return color(i); })
+      .attr("stroke", "#fff")
+      .attr("stroke-width", function (d) {
+        if (d < 0) {
+          return "0px";
+        }
+        if (printView) {
+          return "1.5px";
+        }
+        else {
+          return "1px";
+        }
+      });
+    path.transition().duration(500)
+      .attrTween("d", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          return arc(interpolate(t));
+        };
+      });
+    path.exit().remove();
+
+    let text = this.svg.selectAll("text")
+      .data(pieValuesData)
+      .enter()
+      .append("text")
+      .attr('font-size', fontSize)
+      .attr("x", function (d, i) {
+        let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+        d.cx = Math.cos(a) * (radius - 75);
+        d.x = Math.cos(a) * (radius + 10);
+        if (d.x >= 0) {
+          if (pieValues[i] > 0) {
+            rightLabelIndexes.push(i);
+          }
+          d.x = xBound;
+          return d.x;
+        }
+        else if (d.x < 0) {
+          if (pieValues[i] > 0) {
+            leftLabelIndexes.push(i);
+          }
+          d.x = -xBound;
+          return d.x;
+        }
+      });
+    leftLabelSpace = yBound / leftLabelIndexes.length;
+    rightLabelSpace = yBound / rightLabelIndexes.length;
+    text.attr("y", function (d, i) {
+      let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+      d.cy = Math.sin(a) * (radius - 75);
+      d.y = Math.sin(a) * (radius - 10);
+      let left = false;
+      let right = false;
+      let marker = 0;
+      for (let j = 0; j < leftLabelIndexes.length; j++) {
+        if (i === leftLabelIndexes[j]) {
+          right = false;
+          left = true;
+          marker = j;
+        }
+      }
+      for (let j = 0; j < rightLabelIndexes.length; j++) {
+        if (i === rightLabelIndexes[j]) {
+          left = false;
+          right = true;
+          marker = j;
+        }
+      }
+      if (right) {
+        d.y = (-yBound / 2) + (rightLabelSpace * marker);
+        return d.y;
+      }
+      else if (left) {
+        d.y = (yBound / 2) - (leftLabelSpace * (marker + 1));
+        return d.y;
+      }
+    })
+      .text(function (d, i) {
+        if (pieValues[i] > 0) {
+          return pieLabels[i];
+        }
+      })
+      .attr("text-anchor", function (d, i) {
+        let right = false;
+        let left = false;
+        if (!printView) {
+          return "middle";
+        }
+        else {
+          for (let j = 0; j < leftLabelIndexes.length; j++) {
+            if (i === leftLabelIndexes[j]) {
+              right = false;
+              left = true;
+              return "end";
+            }
+          }
+          if (!left) {
+            for (let j = 0; j < rightLabelIndexes.length; j++) {
+              if (i === rightLabelIndexes[j]) {
+                left = false;
+                right = true;
+                return "start";
+              }
+            }
+          }
+          return "middle";
+        }
+      })
+      .each(function (d) {
+        let bbox = this.getBBox();
+        d.sx = d.x - bbox.width / 2 - 2;
+        d.ox = d.x + bbox.width / 2 + 2;
+        d.sy = d.oy = d.y + 5;
       });
 
-      //real version
-      // this.chart.load({
-      //   names: {
-      //     wall: "Wall Losses " + this.totalWallLoss + "%",
-      //     atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-      //     other: "Other Losses " + this.totalOtherLoss + "%",
-      //     cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-      //     opening: "Opening Losses " + this.totalOpeningLoss + "%",
-      //     fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-      //     leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-      //     extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-      //     charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-      //     flue: "Flue Gas Losses " + this.totalFlueGas + "%",
-      //     aux: "Auxillary Power " + this.totalAuxPower + "%",
-      //     slag: "Slag " + this.totalSlag + "%",
-      //     exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
-      //     exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
-      //     sys: "System Losses " + this.totalSystemLosses + "%"
-      //   },
-      // });
-      d3.selectAll(".print-pie-chart .c3-legend-item text").style("font-size", "1.2rem");
-      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1rem");
-      d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
-      // d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "14px");
-      // d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
-    }
+    this.svg.append("defs").append("marker")
+      .attr("id", "circ")
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("refX", 3)
+      .attr("refY", 3)
+      .append("circle")
+      .attr("cx", 3)
+      .attr("cy", 3)
+      .attr("r", 3)
+      .style('fill', '#333')
+      .style('stroke', '#333');
+
+    this.svg.selectAll("path.pointer")
+      .data(pieValuesData)
+      .enter()
+      .append("path")
+      .attr("class", "pointer")
+      .style("fill", "none")
+      .style("stroke", function (d, i) {
+        if (pieValues[i] > 0) {
+          return '#333';
+        }
+        else {
+          return 'none';
+        }
+      })
+      .attr("marker-end", "url(#circ)")
+      .attr("d", function (d, i) {
+        if (pieValues[i] > 0) {
+          if (d.cx > d.ox) {
+            return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+          } else {
+            return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+          }
+        }
+        else {
+          return '';
+        }
+      });
   }
 
-  updateChart() {
 
-    if (this.chart) {
+  updatePie(): void {
+    let width = this.width,
+      height = this.height,
+      radius = this.radius;
+    let printView = this.printView;
+    let svgWidth = this.chartContainerWidth;
+    let svgHeight = this.chartContainerHeight;
+    let color = d3.scaleOrdinal(this.graphColors);
+    let pie = d3.pie().sort(null);
+    let pieValues = this.values;
+    let pieLabels = this.labels;
+    let pieValuesData = pie(pieValues);
+    let pieLabelsData = pie(pieLabels);
+    let rightLabelIndexes = [];
+    let leftLabelIndexes = [];
+    let xBound;
+    let fontSize;
+    if (printView) {
+      xBound = radius * (10 / 9);
+      fontSize = "16px";
+    }
+    else {
+      xBound = radius * (3 / 2);
+      fontSize = "12px";
+    }
+    let yBound = height * (5 / 6);
+    let leftLabelSpace, rightLabelSpace;
+    let arc = d3.arc().innerRadius(0).outerRadius(radius);
+    let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
 
-      this.chart.load({
-        columns: this.pieChartData,
-        names: {
-          wall: "Wall Losses " + this.totalWallLoss + "%",
-          atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-          other: "Other Losses " + this.totalOtherLoss + "%",
-          cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-          opening: "Opening Losses " + this.totalOpeningLoss + "%",
-          fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-          leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-          extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-          charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-          flue: "Flue Gas Losses " + this.totalFlueGas + "%",
-          aux: "Auxillary Power " + this.totalAuxPower + "%",
-          slag: "Slag " + this.totalSlag + "%",
-          exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
-          exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
-          sys: "System Losses " + this.totalSystemLosses + "%"
-        },
-        order: null
+    let path = this.svg.selectAll("path.slice")
+      .data(pieValuesData);
+    path.enter()
+      .insert("path")
+      .style("fill", function (d, i) {
+        return color(i);
+      })
+      .attr("class", "slice");
+    path.transition().duration(500)
+      .attrTween("d", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          return arc(interpolate(t));
+        };
+      })
+    path.exit().remove();
+
+    let text = this.svg.selectAll("text").remove();
+    text = this.svg.selectAll("text")
+      .data(pieValuesData)
+      .enter()
+      .append("text");
+    text.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
+    text
+      .attr('font-size', fontSize)
+      .attr("x", function (d, i) {
+        let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+        d.cx = Math.cos(a) * (radius - 75);
+        d.x = Math.cos(a) * (radius + 10);
+        if (d.x >= 0) {
+          if (pieValues[i] > 0) {
+            rightLabelIndexes.push(i);
+          }
+          d.x = xBound;
+          return d.x;
+        }
+        else if (d.x < 0) {
+          if (pieValues[i] > 0) {
+            leftLabelIndexes.push(i);
+          }
+          d.x = -xBound;
+          return d.x;
+        }
       });
 
-      setTimeout(() => {
-        this.chart.load({
-          names: {
-            wall: "Wall Losses " + this.totalWallLoss + "%",
-            atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-            other: "Other Losses " + this.totalOtherLoss + "%",
-            cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-            opening: "Opening Losses " + this.totalOpeningLoss + "%",
-            fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-            leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-            extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-            flue: "Flue Gas Losses " + this.totalFlueGas + "%",
-            aux: "Auxillary Power " + this.totalAuxPower + "%",
-            slag: "Slag " + this.totalSlag + "%",
-            exGasEAF: "Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%",
-            exGas: "Exhaust Gas Losses " + this.totalExhaustGas + "%",
-            sys: "System Losses " + this.totalSystemLosses + "%"
-          },
-        });
-      }, 300)
+    leftLabelSpace = yBound / leftLabelIndexes.length;
+    rightLabelSpace = yBound / rightLabelIndexes.length;
 
-      if (!this.printView) {
-        setTimeout(() => {
-          d3.selectAll(".c3-chart-arcs").attr("width", this.chartContainerWidth).attr("height", this.chartContainerHeight);
-          d3.selectAll(".pie-chart .c3-legend-item text").style("font-size", "13px");
-          d3.selectAll(".pie-chart .c3-legend-item rect").attr("height", "18");
-        }, 500);
+    text.attr("y", function (d, i) {
+      let a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+      d.cy = Math.sin(a) * (radius - 75);
+      d.y = Math.sin(a) * (radius - 10);
+      let left = false;
+      let right = false;
+      let marker = 0;
+      for (let j = 0; j < leftLabelIndexes.length; j++) {
+        if (i === leftLabelIndexes[j]) {
+          right = false;
+          left = true;
+          marker = j;
+        }
       }
-      else {
-        setTimeout(() => {
-          d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.2rem");
-          d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.2rem");
-        }, 800);
+      for (let j = 0; j < rightLabelIndexes.length; j++) {
+        if (i === rightLabelIndexes[j]) {
+          left = false;
+          right = true;
+          marker = j;
+        }
       }
-    }
-  }
-
-
-  getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
-    this.totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
-    this.totalAtmosphereLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAtmosphereLoss);
-    this.totalOtherLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOtherLoss);
-    this.totalCoolingLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalCoolingLoss);
-    this.totalOpeningLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOpeningLoss);
-    this.totalFixtureLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFixtureLoss);
-    this.totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
-    this.totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
-    this.totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
-    this.totalFlueGas = 0;
-    this.totalSlag = 0;
-    this.totalAuxPower = 0;
-    this.totalExhaustGas = 0;
-    this.totalExhaustGasEAF = 0;
-    this.totalSystemLosses = 0;
-
-    if (resultCats.showFlueGas) {
-      this.totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
-    }
-    if (resultCats.showAuxPower) {
-      this.totalAuxPower = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAuxPower);
-    }
-    if (resultCats.showSlag) {
-      this.totalSlag = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSlag);
-    }
-    if (resultCats.showExGas) {
-      this.totalExhaustGasEAF = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGasEAF);
-    }
-    if (resultCats.showEnInput2) {
-      this.totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
-    }
-    if (resultCats.showSystemEff) {
-      this.totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
-    }
-    if (this.isBaseline) {
-      this.phastReportService.baselineChartLabels.next(this.chartData.pieChartLabels);
-    } else {
-      this.phastReportService.modificationChartLabels.next(this.chartData.pieChartLabels);
-    }
-
-    this.pieChartData = new Array<Array<any>>();
-    let tmpArray = new Array<any>();
-
-    tmpArray = new Array<any>();
-    tmpArray.push("flue");
-    tmpArray.push(this.totalFlueGas);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("charge");
-    tmpArray.push(this.totalChargeMaterialLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("opening");
-    tmpArray.push(this.totalOpeningLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("wall");
-    tmpArray.push(this.totalWallLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("atmosphere");
-    tmpArray.push(this.totalAtmosphereLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("cooling");
-    tmpArray.push(this.totalCoolingLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("fixture");
-    tmpArray.push(this.totalFixtureLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("leakage");
-    tmpArray.push(this.totalLeakageLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("extSurface");
-    tmpArray.push(this.totalExtSurfaceLoss);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("exGasEAF");
-    tmpArray.push(this.totalExhaustGasEAF);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("exGas");
-    tmpArray.push(this.totalExhaustGas);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("sys");
-    tmpArray.push(this.totalSystemLosses);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("slag");
-    tmpArray.push(this.totalSlag);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("aux");
-    tmpArray.push(this.totalAuxPower);
-    this.pieChartData.push(tmpArray);
-
-    tmpArray = new Array<any>();
-    tmpArray.push("other");
-    tmpArray.push(this.totalOtherLoss);
-    this.pieChartData.push(tmpArray);
-  }
-
-  //insertion sort
-  sortPieChartData() {
-    let k = this.pieChartData.length;
-    for (let i = 0; i < k; i++) {
-      let j = i;
-      while (j > 0 && this.pieChartData[j - 1][1] < this.pieChartData[j][1]) {
-        let tmpA = this.pieChartData[j][0];
-        let tmpB = this.pieChartData[j][1];
-        this.pieChartData[j][0] = this.pieChartData[j - 1][0];
-        this.pieChartData[j][1] = this.pieChartData[j - 1][1];
-        this.pieChartData[j - 1][0] = tmpA;
-        this.pieChartData[j - 1][1] = tmpB;
-        j = j - 1;
+      if (right) {
+        d.y = (-yBound / 2) + (rightLabelSpace * marker);
+        return d.y;
       }
-    }
-  }
-
-  getLossPercent(totalLosses: number, loss: number): number {
-    let num = (loss / totalLosses) * 100;
-    let percent = this.roundVal(num, 0);
-    return percent;
-  }
-  roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
-  }
-
-  getColors() {
-    this.chartColors = [
-      {
-        backgroundColor: graphColors
+      else if (left) {
+        d.y = (yBound / 2) - (leftLabelSpace * (marker + 1));
+        return d.y;
       }
-    ];
+    })
+      .text(function (d, i) {
+        if (pieValues[i] > 0) {
+          return pieLabels[i];
+        }
+      })
+      .attr("text-anchor", function (d, i) {
+        let right = false;
+        let left = false;
+        if (!printView) {
+          return "middle";
+        }
+        else {
+          for (let j = 0; j < leftLabelIndexes.length; j++) {
+            if (i === leftLabelIndexes[j]) {
+              right = false;
+              left = true;
+              return "end";
+            }
+          }
+          if (!left) {
+            for (let j = 0; j < rightLabelIndexes.length; j++) {
+              if (i === rightLabelIndexes[j]) {
+                left = false;
+                right = true;
+                return "start";
+              }
+            }
+          }
+          return "middle";
+        }
+      })
+      .each(function (d) {
+        let bbox = this.getBBox();
+        d.sx = d.x - bbox.width / 2 - 2;
+        d.ox = d.x + bbox.width / 2 + 2;
+        d.sy = d.oy = d.y + 5;
+      });
+
+    this.svg.selectAll("defs").remove();
+    this.svg.selectAll("path.pointer").remove();
+
+    this.svg.append("defs").append("marker")
+      .attr("id", "circ")
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("refX", 3)
+      .attr("refY", 3)
+      .append("circle")
+      .attr("cx", 3)
+      .attr("cy", 3)
+      .attr("r", 3)
+      .style('fill', '#333')
+      .style('stroke', '#333');
+
+    let pointer = this.svg.selectAll("path.pointer")
+      .data(pieValuesData)
+      .enter()
+      .append("path")
+    pointer.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
+    pointer.attr("class", "pointer")
+      .style("fill", "none")
+      .style("stroke", function (d, i) {
+        if (pieValues[i] > 0) {
+          return '#333';
+        }
+        else {
+          return 'none';
+        }
+      })
+      .attr("marker-end", "url(#circ)")
+      .attr("d", function (d, i) {
+        if (pieValues[i] > 0) {
+          if (d.cx > d.ox) {
+            return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+          } else {
+            return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+          }
+        }
+        else {
+          return '';
+        }
+      });
   }
 
-  downloadChart() {
+  downloadChart(): void {
     if (!this.exportName) {
-      this.exportName = "phast-report-pie-graph-" + this.chartIndex;
+      this.exportName = "phast-report-pie-chart";
     }
+    else {
+      this.exportName = this.exportName + '-pie-chart';
+    }
+    this.exportName = this.exportName.replace(/ /g, '-').toLowerCase();
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
