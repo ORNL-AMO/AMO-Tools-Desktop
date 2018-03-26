@@ -26,7 +26,7 @@ export class OperationsFormComponent implements OnInit {
   daysPerWeekError: string = null;
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
-
+  hoursPerYearError: string = null;
   firstChange: boolean = true;
   constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
 
@@ -105,9 +105,19 @@ export class OperationsFormComponent implements OnInit {
       hoursPerYear: tmpHoursPerYear.toFixed(0)
     })
     this.isCalculated = true;
+    if(this.operationsForm.controls.hoursPerYear.value > 8760){
+      this.hoursPerYearError = "Number of hours/year is greater then hours in a year."
+    }else{
+      this.hoursPerYearError = null;
+    }
   }
 
   setNotCalculated() {
+    if(this.operationsForm.controls.hoursPerYear.value > 8760){
+      this.hoursPerYearError = "Number of hours/year is greater then hours in a year."
+    }else{
+      this.hoursPerYearError = null;
+    }
     this.startSavePolling();
     this.isCalculated = false;
   }
