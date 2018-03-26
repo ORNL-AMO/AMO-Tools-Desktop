@@ -37,10 +37,24 @@
 				<a class="click-link" (click)="createAssessment()">Create Assessment</a>
 			</h3>
 			<p>Model a system and explore endless optimization scenarios.</p>
-			<a (click)="createAssessment('Pump')" class="click-link">
-				<img class="icon-image" src="assets/images/ico-psat-diagram.png">Create Pump Assessment</a><span class="span-label">(formerly PSAT)</span>
-			<a (click)="createAssessment('Furnace')" class="click-link">
-				<img class="icon-image" src="assets/images/ico-phast-diagram.png">Create Process Heating Assessment</a><span class="span-label">(formerly PHAST)</span>
+			<div class="d-flex">
+				<div class="p-2">
+					<img class="icon-image psat-image" src="assets/images/ico-psat-diagram.png">
+				</div>
+				<div class="p-2 text-center">
+					<a (click)="createAssessment('Pump')" class="click-link text-nowrap">Create Pump Assessment</a>
+					<span class="help-text">(formerly PSAT)</span>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="p-2">
+					<img class="icon-image phast-image" src="assets/images/ico-phast-diagram.png">
+				</div>
+				<div class="p-2 text-center">
+					<a (click)="createAssessment('Pump')" class="click-link text-nowrap">Create Process Heating Assessment</a>
+					<span class="help-text">(formerly PHAST)</span>
+				</div>
+			</div>
 			<a (click)="hideScreen()" class="click-link">
 				<span class="fa fa-folder-o"></span> View All Your Assessments</a>
 		</li>
@@ -49,11 +63,12 @@
 				<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a>
 			</h3>
 			<p>Generate detailed properties and test a variety of adjustments.</p>
-			<div>
-				<a class="icon click-link" style="padding-bottom: 5px" (click)="chooseCalculator('pumps')">
-					<i class="fa fa-calculator"></i> Pumps</a>
-			</div>
-			<!-- <div>
+			<div class="d-flex flex-wrap">
+				<div class="p-2">
+					<a class="icon click-link" style="padding-bottom: 5px" (click)="chooseCalculator('pumps')">
+						<i class="fa fa-calculator"></i> Pumps</a>
+				</div>
+				<!-- <div>
 				<span class="click-link" (click)="chooseCalculator('fans')">
 					<a class="icon click-link">
 						<i class="fa fa-calculator"></i>
@@ -61,28 +76,29 @@
 				</span>
 			</div> -->
 
-			<!-- <div>
+				<!-- <div>
 				<span class="click-link" (click)="chooseCalculator('steam')">
 					<a class="icon click-link">
 						<i class="fa fa-calculator"></i>
 					</span>Steam
 				</span>
 			</div>-->
-      <div>
-        <a class="icon click-link" (click)="chooseCalculator('motors')">
-          <i class="fa fa-calculator"></i> Motors
-        </a>
-      </div>
-      <div>
-        <a class="icon click-link" (click)="chooseCalculator('utilities')">
-          <i class="fa fa-calculator"></i> Utilities
-        </a>
-      </div>
-      <div>
-        <a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
-          <i class="fa fa-calculator"></i> Process Heating
-        </a>
-      </div>
+				<div class="p-2">
+					<a class="icon click-link" (click)="chooseCalculator('motors')">
+						<i class="fa fa-calculator"></i> Motors
+					</a>
+				</div>
+				<div class="p-2">
+					<a class="icon click-link" (click)="chooseCalculator('utilities')">
+						<i class="fa fa-calculator"></i> Utilities
+					</a>
+				</div>
+				<div class="p-2">
+					<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
+						<i class="fa fa-calculator"></i> Process Heating
+					</a>
+				</div>
+			</div>
 		</li>
 	</ul>
 

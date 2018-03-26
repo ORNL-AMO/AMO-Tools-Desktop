@@ -62,7 +62,6 @@
 	}
 	.landing > ul > li > div {
 		display: inline-block;
-		width: 30%;
 	}
 
 .landing .help {
@@ -94,9 +93,16 @@
 }
 
 .icon-image{
-	height: 18px;
     padding-right: 4px;
     padding-bottom: 2px;
+}
+
+.psat-image{
+	height: 6rem;
+}
+
+.phast-image{
+	height: 4rem;
 }
 
 .fa-folder-o{
@@ -112,35 +118,6 @@
   /*margin-top: -7px;*/
 }
 
-  /*.left-rotated {*/
-    /*-ms-transform: rotate(15deg);*/
-    /*-webkit-transform: rotate(15deg);*/
-    /*transform: rotate(15deg);*/
-    /*font-size: 64px;*/
-    /*color: #7cc110;*/
-  /*}*/
-/*.right-rotated {*/
-  /*-ms-transform: rotate(-15deg);*/
-  /*-webkit-transform: rotate(-15deg);*/
-  /*transform: rotate(-15deg);*/
-  /*font-size: 64px;*/
-  /*color: #7cc110;*/
-/*}*/
-
-/*.left-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 117%;*/
-  /*margin-top: -5px;*/
-/*}*/
-/*.right-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 123%;*/
-  /*margin-top: -10px;*/
-  /*margin-left: 45%;*/
-/*}*/
-
 
 .arrow-row{
 	margin-bottom: -20px;
@@ -155,7 +132,3 @@
   white-space: nowrap;
 }
 
-.span-label {
-  font-size: 15px;
-  margin-left: 25px;
-}
