@@ -29,9 +29,9 @@
   </div>
 
   <!--Furnace Setup -->
-  <div *ngIf="mainTab == 'system-setup'" class="system-setup tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'system-setup'" class="system-setup tab-content">
     <div *ngIf="stepTab.step == 1" class="row panel-container">
-      <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen}">
+      <div class="col-6 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'modal-open': isModalOpen}">
         <!--Step: 1 System Basics (Settings)-->
         <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"
           (updateSettings)="getSettings()" (save)="saveDb()"></app-system-basics>

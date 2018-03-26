@@ -25,10 +25,20 @@
     <div class="col-12">
       <form>
         <div class="form-group">
-          <label for="equipmentNotes">Equipment Notes</label>
-          <div class="input-group">
-            <textarea name="equipmentNotes" rows="4" id="equipmentNotes" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
-          </div>
+          <label class="group-label w-100">Equipment Notes</label>
+          <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges()" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form>
+        <div class="form-group">
+          <label class="group-label w-100">
+            Operating Conditions at time of Assessment</label>
+          <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges()" [(ngModel)]="phast.operatingHours.operatingConditions"
+            placeholder="Add note for operating conditions"></textarea>
         </div>
       </form>
     </div>
