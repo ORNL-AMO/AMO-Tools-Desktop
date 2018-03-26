@@ -49,11 +49,11 @@ export class DesignedEnergyResultsComponent implements OnInit {
     if (this.settings.energyResultUnit == 'MMBtu') {
       this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
       this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('MMBtu').to('Btu');
-      this.resultUnits.energyPerMassUnit = 'Btu/hr';
+      this.resultUnits.energyPerMassUnit = 'Btu/lb';
     } else if (this.settings.energyResultUnit == 'GJ') {
       this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
       this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('GJ').to('kJ');
-      this.resultUnits.energyPerMassUnit = 'kJ/hr';
+      this.resultUnits.energyPerMassUnit = 'kJ/kg';
     }else{
       this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
       this.designedEnergyIntensity = this.results.designedEnergyIntensity;
