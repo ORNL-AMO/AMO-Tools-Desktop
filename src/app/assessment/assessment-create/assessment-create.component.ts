@@ -118,9 +118,9 @@ export class AssessmentCreateComponent implements OnInit {
           tmpAssessment.phast.setupDone = false;
           tmpAssessment.directoryId = this.directory.id;
           tmpAssessment.phast.operatingCosts = {
-            electricityCost: this.settings.electricityCost,
-            steamCost: this.settings.steamCost,
-            fuelCost: this.settings.fuelCost
+            electricityCost: this.settings.electricityCost || .066,
+            steamCost: this.settings.steamCost || 4.69,
+            fuelCost: this.settings.fuelCost || 3.99
           }
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             tmpAssessment.id = assessmentId;
