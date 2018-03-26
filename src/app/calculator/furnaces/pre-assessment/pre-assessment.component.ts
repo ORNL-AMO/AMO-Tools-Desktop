@@ -62,9 +62,7 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (!this.height) {
       this.getHeight();
-    }
   }
 
   getHeight() {

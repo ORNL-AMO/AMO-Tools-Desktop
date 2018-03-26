@@ -26,7 +26,7 @@
 				<li [ngClass]="{'active': mainTab == 'sankey','disabled': !assessment.psat.setupDone}" (click)="changeTab('sankey')">
 						<span>Sankey</span>
 					</li>
-				<li [ngClass]="{'active': mainTab == 'calculators','disabled': !assessment.psat.setupDone}" (click)="changeTab('calculators')">
+				<li [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
 					<span>Calculators</span>
 				</li>
 			</ul>
