@@ -41,18 +41,22 @@
 				<div class="p-2">
 					<img class="icon-image psat-image" src="assets/images/ico-psat-diagram.png">
 				</div>
-				<div class="p-2 text-center">
-					<a (click)="createAssessment('Pump')" class="click-link text-nowrap">Create Pump Assessment</a>
-					<span class="help-text">(formerly PSAT)</span>
+				<div class="p-2 text-center d-flex">
+					<div class="d-flex flex-column justify-content-center">
+						<a (click)="createAssessment('Pump')" class="p-0 click-link text-nowrap">Create Pump Assessment</a>
+						<span class="help-text p-0">(formerly PSAT)</span>
+					</div>
 				</div>
 			</div>
 			<div class="d-flex">
 				<div class="p-2">
 					<img class="icon-image phast-image" src="assets/images/ico-phast-diagram.png">
 				</div>
-				<div class="p-2 text-center">
-					<a (click)="createAssessment('Pump')" class="click-link text-nowrap">Create Process Heating Assessment</a>
-					<span class="help-text">(formerly PHAST)</span>
+				<div class="p-2 text-center d-flex">
+					<div class="d-flex flex-column justify-content-center">
+						<a (click)="createAssessment('Pump')" class="click-link text-nowrap p-0">Create Process Heating Assessment</a>
+						<span class="help-text p-0">(formerly PHAST)</span>
+					</div>
 				</div>
 			</div>
 			<a (click)="hideScreen()" class="click-link">
