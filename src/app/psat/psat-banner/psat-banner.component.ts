@@ -22,7 +22,7 @@ export class PsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup') {
+    if (str == 'system-setup' || str == 'calculators') {
       this.psatService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
       this.psatService.mainTab.next(str);
