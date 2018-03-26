@@ -49,9 +49,9 @@ export class UpdateDataService {
         }
         if (!assessment.phast.operatingCosts) {
             assessment.phast.operatingCosts = {
-                fuelCost: 8.00,
-                steamCost: 10.00,
-                electricityCost: .080
+                fuelCost: 3.99,
+                steamCost: 4.69,
+                electricityCost: .066
             }
         }
         assessment.appVersion = packageJson.version;
