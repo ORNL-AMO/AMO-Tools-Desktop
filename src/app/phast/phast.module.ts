@@ -25,7 +25,6 @@ import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
 import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 import { ConvertPhastService } from './convert-phast.service';
-import { LossesTabsComponent } from './losses/losses-tabs/losses-tabs.component';
 import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
 import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
 import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
@@ -33,6 +32,7 @@ import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-i
 import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
 import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
 import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
+import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,6 @@ import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/e
     HelpPanelComponent,
     PhastDiagramComponent,
     EnergyCostsComponent,
-    LossesTabsComponent,
     PhastCalculatorTabsComponent
   ],
   exports: [
@@ -69,7 +68,8 @@ import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/e
     EfficiencyImprovementModule,
     EnergyEquivalencyModule,
     EnergyUseModule,
-    ExplorePhastOpportunitiesModule
+    ExplorePhastOpportunitiesModule,
+    LossesTabsModule
   ],
   providers: [
     PhastService,
