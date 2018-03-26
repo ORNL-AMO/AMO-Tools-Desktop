@@ -14,12 +14,18 @@ export class PipeSizingFormComponent implements OnInit {
   outputs: PipeSizingOutput;
   @Output('calculate')
   calculate = new EventEmitter<PipeSizingInput>();
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+  
   constructor() { }
 
   ngOnInit() {
   }
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
   }
 }

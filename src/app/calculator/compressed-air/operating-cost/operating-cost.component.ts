@@ -12,6 +12,7 @@ export class OperatingCostComponent implements OnInit {
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
   isLoad: boolean;
+  currentField: string = 'default';
   constructor() { }
 
   ngOnInit() {
@@ -35,5 +36,9 @@ export class OperatingCostComponent implements OnInit {
   }
   calculateOperationCost(inputs: OperatingCostInput) {
     this.outputs = StandaloneService.operatingCost(inputs);
+  }
+
+  setField(str: string){
+    this.currentField = str;
   }
 }

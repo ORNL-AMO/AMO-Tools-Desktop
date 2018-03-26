@@ -11,6 +11,7 @@ export class AirVelocityComponent implements OnInit {
 
   inputs: AirVelocityInput;
   outputs: PipeSizes;
+  currentField: string = 'default';
   constructor() { }
 
   ngOnInit() {
@@ -36,8 +37,12 @@ export class AirVelocityComponent implements OnInit {
     // this.getAirVelocity();
     // console.log(this.airVelocityOutput);
   }
+  
   getAirVelocity (inputs: AirVelocityInput) {
     this.outputs = StandaloneService.airVelocity(inputs);
   }
 
+  setField(str: string){
+    this.currentField = str;
+  }
 }

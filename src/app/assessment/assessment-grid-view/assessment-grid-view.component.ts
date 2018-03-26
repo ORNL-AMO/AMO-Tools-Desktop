@@ -18,6 +18,8 @@ export class AssessmentGridViewComponent implements OnInit {
   directoryCalculator: Calculator;
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
+  @Input()
+  directorySettings: Settings;
   constructor() { }
 
   ngOnInit() {

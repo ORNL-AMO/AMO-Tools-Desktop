@@ -58,12 +58,11 @@ export class PreAssessmentComponent implements OnInit {
     if (this.settingsService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
     }
+
   }
 
   ngAfterViewInit() {
-    if (!this.height) {
       this.getHeight();
-    }
   }
 
   getHeight() {
@@ -134,16 +133,12 @@ export class PreAssessmentComponent implements OnInit {
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
     }
-    console.log(this.settings.fuelCost);
     //this is fired when forms change
     this.toggleCalculate = !this.toggleCalculate;
   }
 
   addPreAssessment() {
-    let tmpSettings: Settings = {
-      unitsOfMeasure: this.settings.unitsOfMeasure,
-      energySourceType: 'Fuel'
-    }
+    let tmpSettings: Settings = JSON.parse(JSON.stringify(this.settings));
     this.preAssessments.unshift({
       type: 'Metered',
       name: 'Furnace ' + this.nameIndex,
@@ -164,6 +159,15 @@ export class PreAssessmentComponent implements OnInit {
   deletePreAssessment(assessment: PreAssessment, index: number) {
     this.assessmentGraphColors.push(assessment.borderColor);
     this.preAssessments.splice(index, 1);
+    this.calculate();
+  }
+
+  updateCosts(){
+    this.preAssessments.forEach(assessment => {
+      assessment.settings.fuelCost = this.settings.fuelCost;
+      assessment.settings.steamCost = this.settings.steamCost;
+      assessment.settings.electricityCost = this.settings.electricityCost;
+    })
     this.calculate();
   }
 

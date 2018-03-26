@@ -20,8 +20,6 @@ export class SystemCurveComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  inPsat: boolean;
-  @Input()
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
@@ -250,14 +248,16 @@ export class SystemCurveComponent implements OnInit {
       head: this.psat.inputs.head
     }
     dataPoints.push(baselinePoint)
-    this.psat.modifications.forEach(mod => {
-      let modPoint: CurveData = {
-        modName: mod.psat.name,
-        flowRate: mod.psat.inputs.flow_rate,
-        head: mod.psat.inputs.head
-      }
-      dataPoints.push(modPoint);
-    })
+    if (this.psat.modifications) {
+      this.psat.modifications.forEach(mod => {
+        let modPoint: CurveData = {
+          modName: mod.psat.name,
+          flowRate: mod.psat.inputs.flow_rate,
+          head: mod.psat.inputs.head
+        }
+        dataPoints.push(modPoint);
+      })
+    }
     let systemCurve: SystemCurve = {
       specificGravity: this.psat.inputs.specific_gravity,
       systemLossExponent: 1.9,

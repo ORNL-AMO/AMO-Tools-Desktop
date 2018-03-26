@@ -95,6 +95,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
     if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
       this.initChart();
+      this.destroy = false;
     }
     else {
       this.destroy = true;

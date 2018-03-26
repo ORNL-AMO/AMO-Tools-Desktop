@@ -32,20 +32,19 @@ export const stepTabs: Array<StepTab> = [
 export const specTabs: Array<StepTab> = [
     {
         step: 1,
-        tabName: 'System Basics',
-        next: 2
-    },
-    {
-        step: 2,
-        tabName: 'Operating Hours',
-        next: 3,
-        back: 1
-    },
-    {
-        step: 3,
-        tabName: 'Operating Costs',
-        back: 2
+        tabName: 'System Basics'
     }
+    // {
+    //     step: 2,
+    //     tabName: 'Operating Hours',
+    //     next: 3,
+    //     back: 1
+    // },
+    // {
+    //     step: 3,
+    //     tabName: 'Operating Costs',
+    //     back: 2
+    // }
 ]
 
 

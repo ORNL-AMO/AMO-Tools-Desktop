@@ -4,6 +4,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { ModelService } from '../../../shared/model.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Settings } from '../../../shared/models/settings';
+
 
 @Component({
   selector: 'app-create-folder',
@@ -15,6 +17,8 @@ export class CreateFolderComponent implements OnInit {
   directory: Directory;
   @Output('newDirectory')
   newDirectory = new EventEmitter<boolean>();
+  @Input()
+  directorySettings: Settings;
 
   canAdd: boolean = true;
   newFolder: any;
@@ -52,6 +56,9 @@ export class CreateFolderComponent implements OnInit {
       }
 
       this.indexedDbService.addDirectory(newDir).then(newDirId => {
+        this.directorySettings.directoryId = newDirId;
+        delete this.directorySettings.id;
+        this.indexedDbService.addSettings(this.directorySettings);
         this.canAdd = true;
         this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
           this.directory.subDirectory = childDirs;

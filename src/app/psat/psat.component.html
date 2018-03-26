@@ -56,7 +56,7 @@
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-system-curve>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [psat]="_psat" [settings]="settings" [inAssessment]="assessment.psat.setupDone" [assessment]="assessment"></app-system-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>

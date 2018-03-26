@@ -12,7 +12,7 @@
           <div class="col-11">
             <a class="click-item" (click)="showTool('bag-method')">Leak Loss Estimator - Bag Method</a>
             <p>
-              Use head tool calculator to calculate pump head.
+              Estimate compressed air consumption using the bag method.
             </p>
           </div>
         </div>
@@ -22,9 +22,12 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('flow-factor')">Flow Factor</a>
+            <a class="click-item" (click)="showTool('flow-factor')">Pneumatic Valve Flow Factor</a>
             <p>
-              Use flow factor calculator to calculate gasses flow factor.
+              There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient
+              C
+              <sub>v</sub>=1. The second one is used for calculating C
+              <sub>v</sub> when the flow rate is known.
             </p>
           </div>
         </div>
@@ -34,9 +37,10 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('pneumatic-air')">Pneumatic Air</a>
+            <a class="click-item" (click)="showTool('pneumatic-air')">Pneumatic Air Requirement</a>
             <p>
-              Use pneumatic calculator to calculate pneumatic air factor.
+              Compute the quantity of air required by a specific single acting or a double acting piston cylinder compressor. The design
+              specs of the compressor are entered in the calculator and the quantity of air needed is generated.
             </p>
           </div>
         </div>
@@ -46,9 +50,11 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank</a>
+            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Calculations</a>
             <p>
-              Use general method to calculate receiver tank size.
+              The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line pulsations
+              or frequent loading and unloading of the compressor. There are four methods to calculate the size of the receiver
+              tank required. There is also a method for calculating the quantity of compressed air available for use.
             </p>
           </div>
         </div>
@@ -60,7 +66,7 @@
           <div class="col-11">
             <a class="click-item" (click)="showTool('pipe-sizing')">Pipe Sizing</a>
             <p>
-              Use pipe sizing calculator to calculate pipe size.
+              Find the pipe diameter, when we know the volumetric flow velocity, pressure and design velocity are known.
             </p>
           </div>
         </div>
@@ -70,9 +76,9 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('air-velocity')">Air Velocity</a>
+            <a class="click-item" (click)="showTool('air-velocity')">Velocity in the Piping</a>
             <p>
-              Use air velocity calculator to calculate compressed air velocity in the piping.
+              Find the velocity of compressed air through all the different piping involved in the system.
             </p>
           </div>
         </div>
@@ -82,9 +88,11 @@
             <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
           </div>
           <div class="col-11">
-            <a class="click-item" (click)="showTool('system-capacity')">System Capacity</a>
+            <a class="click-item" (click)="showTool('system-capacity')">System - Capacity</a>
             <p>
-              Use system capacity calculator to calculate capacity of compressed air in system.
+              Find the total air quantity that the compressed air system can contain at any instant of time, including the air in the pipes
+              and receivers. The total capacity of the compressed air system can be obtained by adding the volumes of pipes
+              and receivers.
             </p>
           </div>
         </div>
@@ -96,7 +104,7 @@
           <div class="col-11">
             <a class="click-item" (click)="showTool('operation-cost')">Operation Cost Calculations</a>
             <p>
-              Use operation cost calculator to calculate operation cost.
+              Find the cost of operation of the compressor in both fully and partially load instances.
             </p>
           </div>
         </div>

@@ -170,11 +170,14 @@ export class DashboardComponent implements OnInit {
     if (this.calcDataExists) {
       this.indexedDbService.putCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
+        this.getWorkingDirectoryData();
       });
     } else {
       calcualtorData.directoryId = this.workingDirectory.id;
+      calcualtorData.name = this.workingDirectory.name + ' Pre-Assessment';
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
         this.hidePreAssessmentModal();
+        this.getWorkingDirectoryData();
       });;
     }
   }
@@ -196,7 +199,7 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.createDirectorySettings();
-        }else{
+        } else {
           this.settingsService.globalSettings = results[0];
         }
       }
@@ -453,7 +456,7 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+    if (tmpArray.length != 0 || tmpArray2.length != 0 || this.workingDirectoryCalculator.selected) {
       return true;
     } else {
       return false;
@@ -500,6 +503,12 @@ export class DashboardComponent implements OnInit {
           this.workingDirectory = this.populateDirectories(this.workingDirectory);
         })
 
+        this.indexedDbService.getDirectoryCalculator(dir.id).then(results => {
+          if (results.length != 0) {
+            this.indexedDbService.deleteCalculator(results[0].id).then(() => { console.log('delete dir calculator') });
+          }
+        })
+
         this.indexedDbService.getDirectorySettings(dir.id).then(results => {
           if (results.length != 0) {
             this.indexedDbService.deleteSettings(results[0].id).then(
@@ -527,11 +536,25 @@ export class DashboardComponent implements OnInit {
         )
       })
     }
+
+    if (this.workingDirectoryCalculator) {
+      if (this.workingDirectoryCalculator.selected) {
+        this.indexedDbService.deleteCalculator(this.workingDirectoryCalculator.id).then(val => {
+          this.getWorkingDirectoryData();
+        })
+      }
+    }
   }
 
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
+      if (this.workingDirectoryCalculator) {
+        if (this.workingDirectoryCalculator.selected) {
+          this.reportRollupService.calcsArray.push(this.workingDirectoryCalculator);
+          this.reportRollupService.selectedCalcs.next(this.reportRollupService.calcsArray);
+        }
+      }
       this.reportRollupService.getReportData(this.workingDirectory);
       //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
@@ -556,6 +579,7 @@ export class DashboardComponent implements OnInit {
 
   closeReport() {
     this.selectedItems = new Array();
+    this.workingDirectoryCalculator.selected = false;
     this.workingDirectory.assessments.forEach(
       assessment => {
         assessment.selected = false;
@@ -656,6 +680,11 @@ export class DashboardComponent implements OnInit {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
+          if(dir.calculator){
+            dir.calculator.directoryId = results;
+            delete dir.calculator.id;
+            this.indexedDbService.addCalculator(dir.calculator);
+          }
           dir.directorySettings.directoryId = results;
           delete dir.directorySettings.id;
           this.indexedDbService.addSettings(dir.directorySettings);
@@ -679,6 +708,11 @@ export class DashboardComponent implements OnInit {
         }
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
+            if(dataObj.calculator){
+              dataObj.calculator.assessmentId = results;
+              delete dataObj.calculator.id;
+              this.indexedDbService.addCalculator(dataObj.calculator);
+            }
             //check for psat until phast has settings
             let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
             tmpSettings.assessmentId = results;
@@ -706,5 +740,6 @@ export interface ImportDataObjects {
   settings: Settings,
   directory: Directory,
   assessment: Assessment,
-  directorySettings: Settings
+  directorySettings: Settings,
+  calculator?: Calculator
 }

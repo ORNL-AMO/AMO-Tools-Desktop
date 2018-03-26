@@ -53,14 +53,6 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   populateDirectories(directory: Directory) {
-    // let tmpDirectory: Directory = {
-    //   name: directoryRef.name,
-    //   createdDate: directoryRef.createdDate,
-    //   modifiedDate: directoryRef.modifiedDate,
-    //   id: directoryRef.id,
-    //   collapsed: false,
-    //   parentDirectoryId: directoryRef.id
-    // }
     this.indexedDbService.getDirectoryAssessments(directory.id).then(
       results => {
         directory.assessments = results;
@@ -72,10 +64,6 @@ export class DirectoryCardComponent implements OnInit {
         directory.subDirectory = results;
       }
     );
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
-    })
   }
 
   setDelete() {
@@ -98,11 +86,16 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   showEditModal() {
-    this.editForm = this.formBuilder.group({
-      'name': [this.directory.name],
-      'directoryId': [this.directory.parentDirectoryId]
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
+      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+      this.editForm = this.formBuilder.group({
+        'name': [this.directory.name],
+        'directoryId': [this.directory.parentDirectoryId]
+      })
+      this.editModal.show();
     })
-    this.editModal.show();
   }
 
   hideEditModal() {

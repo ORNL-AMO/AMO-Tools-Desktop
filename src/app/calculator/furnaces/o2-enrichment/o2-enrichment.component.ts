@@ -105,7 +105,6 @@ export class O2EnrichmentComponent implements OnInit {
 
 
   calculate() {
-    console.log(this.settings)
     this.o2EnrichmentOutput = this.phastService.o2Enrichment(this.o2Enrichment, this.settings);
   }
 
