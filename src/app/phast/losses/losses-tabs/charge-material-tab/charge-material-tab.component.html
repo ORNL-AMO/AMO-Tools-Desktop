@@ -1,0 +1,4 @@
+<a class="nav-link small">
+    <span [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>Charge Materials
+    <span class="badge gray-badge" *ngIf="numLosses"><strong>{{numLosses}}</strong></span>
+</a>
