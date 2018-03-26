@@ -68,7 +68,7 @@ export class OperatingHoursComponent implements OnInit {
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
     if(this.phast.operatingHours.hoursPerYear > 8760){
-      this.hoursPerYearError = "Number of hours/year is greater then hours in a year."
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
     }else{
       this.hoursPerYearError = null;
     }

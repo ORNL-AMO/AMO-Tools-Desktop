@@ -106,7 +106,7 @@ export class OperationsFormComponent implements OnInit {
     })
     this.isCalculated = true;
     if(this.operationsForm.controls.hoursPerYear.value > 8760){
-      this.hoursPerYearError = "Number of hours/year is greater then hours in a year."
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
     }else{
       this.hoursPerYearError = null;
     }
@@ -114,7 +114,7 @@ export class OperationsFormComponent implements OnInit {
 
   setNotCalculated() {
     if(this.operationsForm.controls.hoursPerYear.value > 8760){
-      this.hoursPerYearError = "Number of hours/year is greater then hours in a year."
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
     }else{
       this.hoursPerYearError = null;
     }
