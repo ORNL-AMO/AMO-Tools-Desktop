@@ -62,7 +62,6 @@
 	}
 	.landing > ul > li > div {
 		display: inline-block;
-		width: 30%;
 	}
 
 .landing .help {
@@ -93,10 +92,30 @@
 	max-width: 350px;
 }
 
-.icon-image{
-	height: 18px;
-    padding-right: 4px;
-    padding-bottom: 2px;
+.psat-image-background{
+	height: 3.25rem;
+	width: 3.5rem;
+    background-color: #AED6F1;
+    border: solid 2px #3498DB;
+    border-radius: 5px;
+    box-shadow: 4px 0px 4px 0px #ABB2B9;
+}
+
+.psat-image{
+	height: 2.5rem;
+}
+
+.phast-image-background{
+	height: 3.25rem;
+	width: 3.5rem;
+    background-color: #F2D7D5;
+    border: solid 2px #943126;
+    border-radius: 5px;
+    box-shadow: 4px 0px 4px 0px #ABB2B9;
+}
+
+.phast-image{
+	width: 2rem;
 }
 
 .fa-folder-o{
@@ -111,35 +130,6 @@
   line-height: 28px;
   /*margin-top: -7px;*/
 }
-
-  /*.left-rotated {*/
-    /*-ms-transform: rotate(15deg);*/
-    /*-webkit-transform: rotate(15deg);*/
-    /*transform: rotate(15deg);*/
-    /*font-size: 64px;*/
-    /*color: #7cc110;*/
-  /*}*/
-/*.right-rotated {*/
-  /*-ms-transform: rotate(-15deg);*/
-  /*-webkit-transform: rotate(-15deg);*/
-  /*transform: rotate(-15deg);*/
-  /*font-size: 64px;*/
-  /*color: #7cc110;*/
-/*}*/
-
-/*.left-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 117%;*/
-  /*margin-top: -5px;*/
-/*}*/
-/*.right-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 123%;*/
-  /*margin-top: -10px;*/
-  /*margin-left: 45%;*/
-/*}*/
 
 
 .arrow-row{

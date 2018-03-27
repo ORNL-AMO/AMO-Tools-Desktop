@@ -52,54 +52,51 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-6 border-right">
-						<div class="d-flex flex-column p-2">
-							<a (click)="createAssessment('Pump')" class="click-link">
-								<img class="icon-image" src="assets/images/ico-psat-diagram.png">Create Pump Assessment</a>
-							<br>
-							<span class="span-label">(formerly PSAT)</span>
+						<div class="d-flex">
+							<div class="p-2">
+								<div class="psat-image-background d-flex flex-column justify-content-center">
+									<img class="psat-image p-0 align-self-center" src="assets/images/ico-psat-diagram.png">
+								</div>
+							</div>
+							<div class="p-2 text-center d-flex">
+								<div class="d-flex flex-column justify-content-center">
+									<a (click)="createAssessment('Pump')" class="p-0 click-link text-nowrap">Create Pump Assessment</a>
+									<span class="help-text p-0">(formerly PSAT)</span>
+								</div>
+							</div>
 						</div>
-						<div class="d-flex flex-column p-2">
-							<a (click)="createAssessment('Furnace')" class="click-link">
-								<img class="icon-image" src="assets/images/ico-phast-diagram.png">Create Process Heating Assessment</a>
-							<br>
-							<span class="span-label">(formerly PHAST)</span>
+						<div class="d-flex">
+							<div class="p-2">
+								<div class="phast-image-background d-flex flex-column justify-content-center">
+									<img class="phast-image p-0 align-self-center" src="assets/images/ico-phast-diagram.png">
+								</div>
+							</div>
+							<div class="p-2 text-center d-flex">
+								<div class="d-flex flex-column justify-content-center">
+									<a (click)="createAssessment('Pump')" class="click-link text-nowrap p-0">Create Process Heating Assessment</a>
+									<span class="help-text p-0">(formerly PHAST)</span>
+								</div>
+							</div>
 						</div>
-						<div class="d-flex flex-column p-2">
-							<a (click)="hideScreen()" class="click-link">
-								<span class="fa fa-folder-o"></span> View All Your Assessments</a>
-						</div>
+						<a (click)="hideScreen()" class="click-link">
+							<span class="fa fa-folder-o"></span> View All Your Assessments</a>
 					</div>
 					<div class="col-6">
-						<div>
+						<div class="p-2">
 							<a class="icon click-link" style="padding-bottom: 5px" (click)="chooseCalculator('pumps')">
 								<i class="fa fa-calculator"></i> Pumps</a>
 						</div>
-						<!-- <div>
-				<span class="click-link" (click)="chooseCalculator('fans')">
-					<a class="icon click-link">
-						<i class="fa fa-calculator"></i>
-					</span>Fans
-				</span>
-			</div> -->
-
-						<!-- <div>
-				<span class="click-link" (click)="chooseCalculator('steam')">
-					<a class="icon click-link">
-						<i class="fa fa-calculator"></i>
-					</span>Steam
-				</span>
-			</div>-->
-						<div>
+						<div class="p-2">
 							<a class="icon click-link" (click)="chooseCalculator('motors')">
 								<i class="fa fa-calculator"></i> Motors
 							</a>
 						</div>
-						<div>
+						<div class="p-2">
 							<a class="icon click-link" (click)="chooseCalculator('utilities')">
 								<i class="fa fa-calculator"></i> Utilities
 							</a>
 						</div>
-						<div>
+						<div class="p-2">
 							<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
 								<i class="fa fa-calculator"></i> Process Heating
 							</a>
@@ -108,7 +105,6 @@
 				</div>
 			</div>
 		</div>
-
 		<!-- </li>
 </ul> -->
 
