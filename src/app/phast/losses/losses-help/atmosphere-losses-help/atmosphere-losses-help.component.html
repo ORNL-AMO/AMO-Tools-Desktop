@@ -5,7 +5,9 @@
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
   </p> -->
-
+  <p *ngIf="currentField == 'default'">
+    This is used to model replacement or make-up atmosphere gas, not total flow of make-up gas.
+  </p>
 </div>
 
 
@@ -16,11 +18,15 @@
       Atmosphere Gas
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas,
-        click “Add New Gas”.  You can “start with existing gas” and edit the condition factor or add a completely new gas.
-        You cannot use the name of a gas already in the database.
+        Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas, click “Add New
+        Gas”. You can “start with existing gas” and edit the condition factor or add a completely new gas. You cannot use
+        the name of a gas already in the database.
       </p>
     </div>
   </div>
@@ -30,22 +36,34 @@
       Specific heat of gas
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet
-        temperature.
+        Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet temperature.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>Btu/(SCF-&#8457;)</strong> or <strong>kJ/(Nm<sup>3</sup>-&#8451;)</strong><br> Minimum Value Allowed: <strong>0</strong>
+        Units:
+        <strong>Btu/(SCF-&#8457;)</strong> or
+        <strong>kJ/(Nm
+          <sup>3</sup>-&#8451;)</strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
       </p>
     </div>
     <div class="alert alert-info">
       <p>
         This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value,  then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider
-        adding it as a new material by clicking "Add New ... "
+        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
+        as a new material by clicking "Add New ... "
       </p>
     </div>
   </div>
@@ -55,14 +73,24 @@
       Inlet Temperature
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber.
-        Use temperature recorder/indicator reading or actual measurement.
+        Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber. Use temperature
+        recorder/indicator reading or actual measurement.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+        Units:
+        <strong>&#8457;</strong> or
+        <strong>&#8451;</strong>
       </p>
     </div>
   </div>
@@ -72,14 +100,24 @@
       Outlet temperature
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber.
-        Use temperature recorder/indicator reading or actual measurement.
+        Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber. Use temperature
+        recorder/indicator reading or actual measurement.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+        Units:
+        <strong>&#8457;</strong> or
+        <strong>&#8451;</strong>
       </p>
     </div>
   </div>
@@ -89,14 +127,31 @@
       Flow Rate
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard conditions and actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement point.
-        <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour value.
+        Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard conditions and
+        actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement
+        point.
+        <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour
+        value.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>SCF/hr</strong> or <strong>Nm<sup>3</sup></strong><br> Minimum Value Allowed: <strong>0</strong>
+        Units:
+        <strong>SCF/hr</strong> or
+        <strong>Nm
+          <sup>3</sup>
+        </strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
       </p>
     </div>
   </div>
@@ -106,13 +161,22 @@
       Correction Factor
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
         Engineering correction factor multiplied to the result to account for a known systematic error.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-         Minimum Value Allowed: <strong>0</strong>
+        Minimum Value Allowed:
+        <strong>0</strong>
       </p>
     </div>
   </div>
@@ -122,11 +186,18 @@
       Savings Suggestions
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <ul>
         <li class="help-general">Optimize (minimize) use of process atmosphere flow rate</li>
         <li class="help-general">Preheat atmosphere to a higher temperature entering the furnace</li>
-        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+        <li class="help-general">
+          <strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating
+          conditions. There may additional measures when considering specific situations and the user is encouraged to review
+          and apply the appropriate measures</li>
       </ul>
     </div>
   </div>
