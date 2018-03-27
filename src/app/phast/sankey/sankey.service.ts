@@ -121,7 +121,7 @@ export class SankeyService {
     }
 
     let tmpNode;
-    tmpNode = this.createNode("Gross Heat", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
+    tmpNode = this.createNode("Gross Heat", results.totalInput, this.baseSize, 300, 285, 0, true, false, false, false, unit, false)
     results.nodes.push(tmpNode);
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
@@ -140,16 +140,6 @@ export class SankeyService {
       .range([ventOffsetX, chargeMaterialX]);
 
     let top: boolean = false;
-
-
-    // //debug
-    // if (results.availableHeatPercent) {
-    //   tmpNode = this.createNode("Available Heat", results.availableHeatPercent, 0, 0, 400, 735, false, false, false, false, "%", false, true)
-    //   results.nodes.push(tmpNode);
-    //   tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
-    //   results.nodes.push(tmpNode);
-    //   interIndex++;
-    // }
 
 
     // FLUE GAS ARROW

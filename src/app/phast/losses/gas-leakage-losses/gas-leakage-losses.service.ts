@@ -14,7 +14,7 @@ export class GasLeakageLossesService {
       leakageGasTemperature: ['', Validators.required],
       ambientTemperature: ['', Validators.required],
       coefficient: [.8052, Validators.required],
-      specificGravity: ['', Validators.required],
+      specificGravity: [1.0, Validators.required],
       correctionFactor: [1.0, Validators.required],
       name: ['Loss #'+lossNum]
     })
