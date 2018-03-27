@@ -57,7 +57,7 @@ export class PhastCompareService {
 
   setBaseline(losses: Losses) {
     if (losses.atmosphereLosses) {
-      this.chargeMaterialCompareService.baselineMaterials = losses.atmosphereLosses;
+      this.atmosphereLossesCompareService.baselineAtmosphereLosses = losses.atmosphereLosses;
     }
     if (losses.auxiliaryPowerLosses) {
       this.auxiliaryPowerCompareService.baselineAuxLosses = losses.auxiliaryPowerLosses;
@@ -105,7 +105,7 @@ export class PhastCompareService {
 
   setModified(losses: Losses) {
     if (losses.atmosphereLosses) {
-      this.chargeMaterialCompareService.modifiedMaterials = losses.atmosphereLosses;
+      this.atmosphereLossesCompareService.modifiedAtmosphereLosses = losses.atmosphereLosses;
     }
     if (losses.auxiliaryPowerLosses) {
       this.auxiliaryPowerCompareService.modifiedAuxLosses = losses.auxiliaryPowerLosses;
@@ -152,7 +152,7 @@ export class PhastCompareService {
   }
 
   setNoModification() {
-    this.chargeMaterialCompareService.modifiedMaterials = undefined;
+    this.atmosphereLossesCompareService.modifiedAtmosphereLosses = undefined;
     this.auxiliaryPowerCompareService.modifiedAuxLosses = undefined;
     this.chargeMaterialCompareService.modifiedMaterials = undefined;
     this.coolingLossCompareService.modifiedCoolingLosses = undefined;

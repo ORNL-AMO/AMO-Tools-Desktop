@@ -5,7 +5,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
-import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -43,7 +42,7 @@ export class ChargeMaterialComponent implements OnInit {
   lossesLocked: boolean = false;
 
   showError: boolean = false;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -71,14 +70,6 @@ export class ChargeMaterialComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.chargeMaterialCompareService.baselineMaterials = null;
-    } else {
-      this.chargeMaterialCompareService.modifiedMaterials = null;
     }
   }
 
