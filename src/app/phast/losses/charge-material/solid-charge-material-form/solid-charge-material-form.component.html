@@ -6,7 +6,7 @@
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Solid Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()"
-        (focus)="focusField('materialName')" (blur)="focusOut()">
+        (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareSolidMaterialId()}">
         <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
@@ -62,7 +62,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="feedRate">Charge (wet)-Feed Rate</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidChargeFeedRate()}">
         <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="feedRate"
           id="feedRate" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('feedRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
@@ -73,7 +73,7 @@
 
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature()}">
         <input name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
           id="initialTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemperature')"
           (blur)="focusOut()">
@@ -85,7 +85,7 @@
 
     <div class="form-group">
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidDischargeTemperature()}">
         <input name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
           id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('chargeMaterialDischargeTemperature')"
           (blur)="focusOut()">
@@ -97,7 +97,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidWaterContentCharged()}">
         <input name="{{'waterContentAsCharged_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="waterContentAsCharged"
           id="waterContentAsCharged" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('waterContentAsCharged')"
           (blur)="focusOut()">
@@ -108,7 +108,7 @@
 
     <div class="form-group">
       <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidWaterContentDischarged()}">
         <input name="{{'waterContentAsDischarged_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="waterContentAsDischarged"
           id="waterContentAsDischarged" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('waterContentAsDischarged')"
           (blur)="focusOut()">
@@ -119,7 +119,7 @@
 
     <div class="form-group">
       <label class="small" for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidWaterVaporDischargeTemperature()}">
         <input name="{{'waterVaporDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterVaporDischargeTemperature"
           id="waterVaporDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('waterVaporDischargeTemperature')"
           (blur)="focusOut()">
@@ -131,7 +131,7 @@
 
     <div class="form-group">
       <label class="small" for="percentChargeMelted">Charge Melted</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidChargeMelted()}">
         <input name="{{'percentChargeMelted_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="percentChargeMelted"
           id="percentChargeMelted" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('percentChargeMelted')"
           (blur)="focusOut()">
@@ -142,7 +142,7 @@
 
     <div class="form-group">
       <label class="small" for="percentChargeReacted">Charge Reacted</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidChargeReacted()}">
         <input name="{{'percentChargeReacted_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="percentChargeReacted"
           id="percentChargeReacted" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('percentChargeReacted')"
           (blur)="focusOut()">
@@ -153,7 +153,7 @@
 
     <div class="form-group">
       <label class="small" for="heatOfReaction">Heat of Reaction</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidReactionHeat()}">
         <input name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heatOfReaction"
           id="heatOfReaction" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('heatOfReaction')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
@@ -165,7 +165,7 @@
     <div class="form-group">
       <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
       <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic"
-        (change)="checkInputError()" (focus)="focusField('endothermicOrExothermic')" (blur)="focusOut()">
+        (change)="checkInputError()" (focus)="focusField('endothermicOrExothermic')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareSolidThermicReactionType()}">
         <option>Endothermic</option>
         <option>Exothermic</option>
       </select>
@@ -173,7 +173,7 @@
 
     <div class="form-group">
       <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidAdditionalHeat()}">
         <input name="{{'additionalHeatRequired_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="additionalHeatRequired"
           id="additionalHeatRequired" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('additionalHeatRequired')"
           (blur)="focusOut()">
