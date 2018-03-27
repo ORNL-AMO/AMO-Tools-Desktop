@@ -219,10 +219,10 @@ export class SankeyComponent implements OnInit {
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.x - 70;
+            return d.x - 140;
           }
           else if (this.location !== 'sankey-diagram') {
-            return d.x - 35;
+            return d.x - 135;
           }
           return d.x
         }
@@ -233,9 +233,9 @@ export class SankeyComponent implements OnInit {
       .attr("dy", (d) => {
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + labelFontSize + labelPadding;
+            return d.y + (d.displaySize) + labelFontSize + labelPadding - 182;
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize) + reportFontSize + reportPadding;
+            return d.y + (d.displaySize) + reportFontSize + reportPadding - 182;
           }
         }
 
@@ -282,10 +282,10 @@ export class SankeyComponent implements OnInit {
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.x - 70;
+            return d.x - 140;
           }
           else if (this.location !== 'sankey-diagram') {
-            return d.x - 35;
+            return d.x - 135;
           }
           return d.x + 70;
         }
@@ -296,9 +296,9 @@ export class SankeyComponent implements OnInit {
       .attr("dy", (d) => {
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
+            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 182;
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2);
+            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 182;
           }
         }
         if (d.usefulOutput) {
@@ -710,11 +710,12 @@ export class SankeyComponent implements OnInit {
     () => this.changePlaceHolders(nodes);
   }
 
+
   drawFurnace() {
     var furnace = svg.append("g")
       .append("polygon")
       .attr("points", function () {
-        let xVentAnchor = 480;
+        let xVentAnchor = 520;
         let xLeftSideShift = 60;
         let xRightSideShift = 120
         return (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500);
@@ -722,6 +723,7 @@ export class SankeyComponent implements OnInit {
       .style("fill", "#bae4ce")
       .style("stroke", "black");
   }
+
 
   downloadChart() {
     if (!this.exportName) {
