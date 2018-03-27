@@ -373,7 +373,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       return false;
     }
   }
- 
+
   showMaterialModal() {
     this.showModal = true;
     this.lossesService.modalOpen.next(true);
