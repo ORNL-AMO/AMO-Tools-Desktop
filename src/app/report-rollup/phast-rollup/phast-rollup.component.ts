@@ -23,5 +23,12 @@ export class PhastRollupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+    if (this.calculators[0].preAssessments) {
+      this.showPreAssessment = true;
+    }
+    else {
+      this.showPreAssessment = false;
+    }
   }
 }

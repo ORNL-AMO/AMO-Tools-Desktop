@@ -21,155 +21,101 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()
   preAssessments: Array<PreAssessment>;
   @Input()
-  chartColors: Array<string>;
+  graphColors: Array<string>;
   @Input()
   printView: boolean;
   @Input()
   inRollup: boolean;
   @Input()
   toggleCalculate: boolean;
+  @Input()
+  resultType: string;
 
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
 
-  @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
-
-  firstChange: boolean = true;
-  chart: any;
-  columnData: Array<any>;
-  chartContainerHeight: number;
-  chartContainerWidth: number;
-
-  hideTooltip: boolean = false;
-
-  showLegend: boolean;
+  values: Array<number>;
+  labels: Array<string>;
   destroy: boolean;
 
-  window: any;
+  chartContainerWidth: number;
+  chartContainerHeight: number;
+
   doc: any;
-  resultType: string = 'value';
+  window: any;
+
+
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    this.destroy = true;
+    this.graphColors = graphColors;
+    if (!this.resultType) {
+      this.resultType = 'value';
+    }
+
+    this.setExportName();
+
+    this.destroy = false;
     if (!this.printView) {
       this.printView = false;
     }
-
-    if (this.inRollup) {
-      this.showLegend = false;
-    }
-    else {
-      this.showLegend = true;
-    }
-    this.chartColors = graphColors;
     this.getData();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes) {
-      if (changes.toggleCalculate) {
-        this.getData();
-        if (this.firstChange) {
-          this.firstChange = !this.firstChange;
-        }
-        else if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
-          this.destroy = false;
-          this.initChart();
-        }
-        else {
-          if (!this.destroy) {
-            this.destroyChart();
-          }
-        }
-      }
-    }
   }
 
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.chartContainerWidth = (this.window.innerWidth - 30) * .28;
-    this.chartContainerHeight = 280;
-    if (this.printView) {
-      this.chartContainerWidth = 500;
-    }
-    if (this.columnData && this.columnData.length > 0 && !_.includes(this.columnData[0][0], 'NaN')) {
-      this.initChart();
-      this.destroy = false;
+
+    if (this.inRollup) {
+      this.chartContainerHeight = 220;
     }
     else {
-      this.destroy = true;
+      this.chartContainerHeight = 300;
     }
   }
 
-  setGraphType(str: string){
-    this.resultType = str;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleCalculate) {
+      this.getData();
+    }
+    if (changes.resultType) {
+      this.setExportName();
+    }
+  }
+
+  getWidth(): number {
+    if (this.pieChartContainer) {
+      let containerPadding = 30;
+      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  setGraphType(type: string): void {
+    this.resultType = type;
     this.getData();
-    this.initChart();
   }
 
   //invoke preAssessment service to calculate result data from Array<PreAssessment>
-  getData() {
-    this.columnData = new Array();
+  getData(): void {
+    this.values = new Array<number>();
+    this.labels = new Array<string>();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
       tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
       for (let i = 0; i < tmpArray.length; i++) {
-        this.columnData.unshift([tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%", tmpArray[i].percent]);
+        this.values.unshift(tmpArray[i].percent);
+        this.labels.unshift(tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%");
+      }
+      if (this.values.length > 0) {
+        this.destroy = true;
       }
     }
   }
 
-  destroyChart() {
-    if (this.chart) {
-      this.chart.destroy();
-      this.destroy = true;
-    }
-  }
-
-  initChart() {
-
-    this.hideTooltip = true;
-
-    this.chart = c3.generate({
-      bindto: this.ngChart.nativeElement,
-      data: {
-        columns: this.columnData,
-        type: 'pie',
-      },
-      size: {
-        width: this.chartContainerWidth,
-        height: this.chartContainerHeight
-      },
-      color: {
-        pattern: this.chartColors
-      },
-      legend: {
-        show: this.showLegend,
-        position: 'right'
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
-          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
-          return html;
-        }
-      }
-    });
-  }
-
-  updateChart() {
-    if (this.chart) {
-      this.chart.load({
-        columns: this.columnData
-      });
-    }
-  }
-
-  downloadChart() {
-    if (!this.exportName) {
-      this.exportName = "pre-assessment-graph";
-    }
-    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
+  setExportName(): void {
+    this.exportName = 'pre-assessment-' + this.resultType + '-pie-chart';
   }
 }
