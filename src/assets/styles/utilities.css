@@ -57,3 +57,21 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     display: inline-block;
     font-size: 14px;
 }
+
+/*tab badge*/
+.gray-badge.input-error{
+    background-color: orange;
+}
+
+
+.gray-badge.missing-data{
+    background-color: red;
+}
+
+.gray-badge.success{
+    background-color: green;
+}
+
+.gray-badge.loss-different{
+    background-color: blue;
+}

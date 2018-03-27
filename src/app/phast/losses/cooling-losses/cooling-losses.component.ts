@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
-import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -42,7 +41,7 @@ export class CoolingLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   disableType: boolean = false;
-  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
+  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -66,8 +65,6 @@ export class CoolingLossesComponent implements OnInit {
       this._coolingLosses = new Array();
     }
     if (this.losses.coolingLosses) {
-      this.setCompareVals();
-      this.coolingLossesCompareService.initCompareObjects();
       this.initCoolingLosses();
     }
 
@@ -77,13 +74,6 @@ export class CoolingLossesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.coolingLossesCompareService.baselineCoolingLosses = null;
-    } else {
-      this.coolingLossesCompareService.modifiedCoolingLosses = null;
-    }
-  }
   disableForms() {
     this._coolingLosses.forEach(loss => {
       loss.gasCoolingForm.disable();
@@ -204,7 +194,6 @@ export class CoolingLossesComponent implements OnInit {
     })
 
     this.losses.coolingLosses = tmpCoolingLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   collapseLoss(loss: CoolingLossObj) {
@@ -218,18 +207,6 @@ export class CoolingLossesComponent implements OnInit {
   }
   setError(bool: boolean) {
     this.showError = bool;
-  }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.coolingLossesCompareService.baselineCoolingLosses = this.losses.coolingLosses;
-    } else {
-      this.coolingLossesCompareService.modifiedCoolingLosses = this.losses.coolingLosses;
-    }
-    if (this.coolingLossesCompareService.differentArray) {
-      if (this.coolingLossesCompareService.differentArray.length != 0 && !this.isBaseline) {
-        this.coolingLossesCompareService.checkCoolingLosses();
-      }
-    }
   }
 }
 
