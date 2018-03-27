@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
-import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -40,7 +39,7 @@ export class AtmosphereLossesComponent implements OnInit {
   inputError: boolean = false;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -64,8 +63,6 @@ export class AtmosphereLossesComponent implements OnInit {
       this._atmosphereLosses = new Array();
     }
     if (this.losses.atmosphereLosses) {
-      this.setCompareVals();
-      this.atmosphereLossesCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.atmosphereLosses.forEach(loss => {
         let tmpLoss = {
@@ -86,14 +83,6 @@ export class AtmosphereLossesComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
-    } else {
-      this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
     }
   }
 
@@ -144,25 +133,11 @@ export class AtmosphereLossesComponent implements OnInit {
       tmpAtmosphereLosses.push(tmpAtmosphereLoss);
     })
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
-  }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.atmosphereLossesCompareService.baselineAtmosphereLosses = this.losses.atmosphereLosses;
-    } else {
-      this.atmosphereLossesCompareService.modifiedAtmosphereLosses = this.losses.atmosphereLosses;
-    }
-    if (this.atmosphereLossesCompareService.differentArray && !this.isBaseline) {
-      if (this.atmosphereLossesCompareService.differentArray.length != 0) {
-        this.atmosphereLossesCompareService.checkAtmosphereLosses();
-      }
-    }
   }
 
   setInputError(bool: boolean){

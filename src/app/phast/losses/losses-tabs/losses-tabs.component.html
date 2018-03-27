@@ -1,6 +1,7 @@
   <ul class="tabs subtabs phast">
     <li *ngFor="let tab of lossTabs" [ngClass]="{'active': selectedTab.step == tab.step}" (click)="tabChange(tab)">
       <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast"></app-charge-material-tab>
+      <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast"></app-atmosphere-tab>
 
 
       <!-- <a class="nav-link small">

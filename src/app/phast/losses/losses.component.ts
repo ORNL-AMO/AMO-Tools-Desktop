@@ -102,6 +102,7 @@ export class LossesComponent implements OnInit {
   ngOnDestroy() {
     // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
+    this.phastCompareService.setNoModification();
   }
 
   changeField($event) {

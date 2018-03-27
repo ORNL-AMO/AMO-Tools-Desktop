@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LossTab } from '../../../tabs';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { Settings } from '../../../../shared/models/settings';
 import { LossesService } from '../../losses.service';
 import { ChargeMaterialCompareService } from '../../charge-material/charge-material-compare.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
