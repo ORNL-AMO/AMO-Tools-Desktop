@@ -45,7 +45,6 @@ export class LossesTabsComponent implements OnInit {
     this.lossesService.lossesTab.subscribe(val => {
       this.selectedTab = this.lossesService.getTab(val);
     })
-    this.checkDone();
     this.lossesService.updateTabs.subscribe(val => {
       this.checkDone();
       if (this.phast.losses) {
@@ -59,7 +58,6 @@ export class LossesTabsComponent implements OnInit {
       if (this.phast.losses) {
         this.getNumLosses(this.phast.losses);
       }
-      this.checkDone();
     }
   }
 

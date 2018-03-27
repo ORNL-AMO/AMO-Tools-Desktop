@@ -33,6 +33,7 @@ import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalen
 import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
 import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
 import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
+import { PhastCompareService } from './phast-compare.service';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
   providers: [
     PhastService,
     PhastResultsService,
-    ConvertPhastService
+    ConvertPhastService,
+    PhastCompareService
   ]
 })
 

@@ -1,0 +1,16 @@
+.gray-badge.input-error{
+    background-color: orange;
+}
+
+
+.gray-badge.missing-data{
+    background-color: red;
+}
+
+.gray-badge.success{
+    background-color: green;
+}
+
+.gray-badge.loss-different{
+    background-color: blue;
+}
