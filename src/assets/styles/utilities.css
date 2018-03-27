@@ -1,11 +1,11 @@
 a:not([href]):not([tabindex]).click-link{
-    color: blue;
+    color: #007bff;
 }
 
 a:not([href]):not([tabindex]).click-link:hover{
     text-decoration: underline;
     cursor: pointer;
-    color: blue;
+    color: #0056b3;
 }
 
 a:not([href]):not([tabindex]).disabled-link{

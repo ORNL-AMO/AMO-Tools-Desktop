@@ -143,8 +143,8 @@
 
 
 .arrow-row{
+	margin-top: -35px;
 	margin-bottom: -20px;
-	margin-top: -25px;
 }
 
 .arrow-img{
@@ -158,4 +158,34 @@
 .span-label {
   font-size: 15px;
   margin-left: 25px;
+}
+
+
+.card-header{
+	padding: .5rem;
+	background-color: white;
+}
+
+.card-header p{
+	margin-bottom: 0px;
+}
+
+.jumbotron{
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	background-color: rgba(0,0,0,0);
+}
+
+.card-body{
+	padding: .5rem;
+}
+
+.card{
+	-webkit-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+	-moz-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+	box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+}
+
+.text-help{
+	color: gray;
 }
