@@ -61,21 +61,8 @@
 
   <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
-
-    <!-- debug -->
     <div class="col-1"></div>
     <div #barChartContainer class="col-10 mx-auto">
-
-      <!-- real version -->
-    <!-- <div #barChartContainer class="col-7 mx-auto"> -->
-
-      <!-- debug -->
-      <!-- <app-phast-bar-chart [printView]="false" [chartTitle]="barChartTitle" [xAxisTitle]="xAxisTitle" [yAxisTitle]="yAxisTitle"
-        [categories]="barCategories" [data]="reportBarData" [units]="units" [chartContainerWidth]="getBarWidth()" [chartContainerHeight]="barChartContainerHeight"
-        [graphColors]="graphColors" [exportName]="barExportName"></app-phast-bar-chart> -->
-
-
-      <!-- real version -->
       <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
         [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
     </div>
@@ -84,7 +71,6 @@
 
   <!-- if show print then content will init -->
   <div *ngIf="showPrint" class="row show-print print-component">
-    <!-- real version -->
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
       <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
