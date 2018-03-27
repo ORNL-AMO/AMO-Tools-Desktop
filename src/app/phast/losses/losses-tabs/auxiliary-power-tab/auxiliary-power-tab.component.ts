@@ -1,17 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LossesService } from '../../losses.service';
-import { AtmosphereLossesCompareService } from '../../atmosphere-losses/atmosphere-losses-compare.service';
-import { AtmosphereLossesService } from '../../atmosphere-losses/atmosphere-losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { AuxiliaryPowerLossesService } from '../../auxiliary-power-losses/auxiliary-power-losses.service';
+import { AuxiliaryPowerCompareService } from '../../auxiliary-power-losses/auxiliary-power-compare.service';
+import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 
 @Component({
-  selector: 'app-atmosphere-tab',
-  templateUrl: './atmosphere-tab.component.html',
-  styleUrls: ['./atmosphere-tab.component.css']
+  selector: 'app-auxiliary-power-tab',
+  templateUrl: './auxiliary-power-tab.component.html',
+  styleUrls: ['./auxiliary-power-tab.component.css']
 })
-export class AtmosphereTabComponent implements OnInit {
+export class AuxiliaryPowerTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
@@ -20,7 +20,8 @@ export class AtmosphereTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereLossesService: AtmosphereLossesService) { }
+
+  constructor(private lossesService: LossesService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnInit() {
     this.setNumLosses();
@@ -31,7 +32,7 @@ export class AtmosphereTabComponent implements OnInit {
       this.setBadgeClass();
     })
 
-    this.atmosphereLossesCompareService.inputError.subscribe(val => {
+    this.auxiliaryPowerCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
@@ -58,15 +59,15 @@ export class AtmosphereTabComponent implements OnInit {
   }
   checkMissingData(): boolean {
     let testVal = false;
-    if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
-      this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
+    if (this.auxiliaryPowerCompareService.baselineAuxLosses) {
+      this.auxiliaryPowerCompareService.baselineAuxLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;
         }
       })
     }
-    if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
-      this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
+    if (this.auxiliaryPowerCompareService.modifiedAuxLosses) {
+      this.auxiliaryPowerCompareService.modifiedAuxLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;
         }
@@ -76,18 +77,18 @@ export class AtmosphereTabComponent implements OnInit {
   }
 
 
-  checkLossValid(loss: AtmosphereLoss) {
-      let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
-      if (tmpForm.status == 'VALID') {
-        return true;
-      } else {
-        return false;
-      }
+  checkLossValid(loss: AuxiliaryPowerLoss) {
+    let tmpForm: FormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
+    if (tmpForm.status == 'VALID') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   checkDifferent() {
-    if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
-      return this.atmosphereLossesCompareService.compareAllLosses();
+    if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses) {
+      return this.auxiliaryPowerCompareService.compareAllLosses();
     }
   }
 }
