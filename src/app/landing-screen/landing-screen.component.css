@@ -93,29 +93,29 @@
 }
 
 .psat-image-background{
-	height: 3.25rem;
+	/* height: 3.25rem;
 	width: 3.5rem;
     background-color: #AED6F1;
     border: solid 2px #3498DB;
     border-radius: 5px;
-    box-shadow: 4px 0px 4px 0px #ABB2B9;
+    box-shadow: 4px 0px 4px 0px #ABB2B9; */
 }
 
 .psat-image{
-	height: 2.5rem;
+	height: 4rem;
 }
 
 .phast-image-background{
-	height: 3.25rem;
+	/* height: 3.25rem;
 	width: 3.5rem;
     background-color: #F2D7D5;
     border: solid 2px #943126;
     border-radius: 5px;
-    box-shadow: 4px 0px 4px 0px #ABB2B9;
+    box-shadow: 4px 0px 4px 0px #ABB2B9; */
 }
 
 .phast-image{
-	width: 2rem;
+	width: 4rem;
 }
 
 .fa-folder-o{
