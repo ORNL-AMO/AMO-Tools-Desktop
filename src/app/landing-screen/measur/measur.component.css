@@ -23,6 +23,7 @@
   }
   .text.hidden-text li.spaced {
     padding-left: 0;
+    margin-bottom: -50px;
   }
 
   .text.hidden-text .capitol{
@@ -42,6 +43,17 @@
     max-width: 0;
   }
   
+  .app-icon{
+    width: 5rem;
+    box-shadow: 6px 6px #196F3D;
+    border-radius: 32px;
+  }
+
+
+  .text-shown{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 
   @keyframes capitol{
       from {font-size: 3rem}

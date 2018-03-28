@@ -4,13 +4,13 @@
 		<div class="jumbotron">
 			<div class="d-flex flex-column">
 				<div class="p-2">
-			<app-measur>
-			</app-measur>
-			</div>
-			<!-- <h1>MEASUR</h1> -->
-			<p class="p-2 lead text-center">
-				Welcome to the most efficient way to manage and optimize your plant's systems and equipment.
-			</p>
+					<app-measur>
+					</app-measur>
+				</div>
+				<!-- <h1>MEASUR</h1> -->
+				<p class="p-2 lead text-center">
+					Welcome to the most efficient way to manage and optimize your plant's systems and equipment.
+				</p>
 			</div>
 			<hr class="my-2">
 			<p class="text-center text-help">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
@@ -84,8 +84,10 @@
 								</div>
 							</div>
 						</div>
-						<a (click)="hideScreen()" class="click-link text-center">
-							<span class="fa fa-folder-o"></span> View All Your Assessments</a>
+						<div class="d-flex flex-column justify-content-center">
+							<a (click)="hideScreen()" class="click-link align-self-center">
+								<span class="fa fa-folder-o"></span> View All Your Assessments</a>
+						</div>
 					</div>
 					<div class="col-6">
 						<div class="p-2">
@@ -114,14 +116,14 @@
 		<!-- </li>
 </ul> -->
 
-		<div class="help">
+		<!-- <div class="help">
 			<h3 style="padding-bottom: 20px">Need help getting started?</h3>
 			<br>
 			<p>Watch the following tutorial to see how to get started using the tool.</p>
 			<video controls class="tutorial-video">
 				<source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos
 			</video>
-		</div>
+		</div> -->
 
 	</div>
 </div>

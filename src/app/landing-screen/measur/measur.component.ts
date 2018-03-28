@@ -13,7 +13,7 @@ export class MeasurComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.textShow = false;
-    }, 150)
+    }, 1500)
   }
 
   showText(){

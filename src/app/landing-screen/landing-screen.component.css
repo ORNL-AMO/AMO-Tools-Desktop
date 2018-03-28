@@ -156,7 +156,7 @@
 	background-color: white;
 }
 
-.card-header p{
+.card-header p, .jumbotron p{
 	margin-bottom: 0px;
 }
 
