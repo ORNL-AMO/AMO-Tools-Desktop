@@ -4,9 +4,8 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
-import { GasLeakageCompareService } from './gas-leakage-compare.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-gas-leakage-losses',
@@ -40,7 +39,7 @@ export class GasLeakageLossesComponent implements OnInit {
   lossesLocked: boolean = false;
   resultsUnit: string;
   showError: boolean = false;
-  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
+  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -62,8 +61,6 @@ export class GasLeakageLossesComponent implements OnInit {
       this._leakageLosses = new Array<any>();
     }
     if (this.losses.leakageLosses) {
-      this.setCompareVals();
-      this.gasLeakageCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
@@ -84,14 +81,6 @@ export class GasLeakageLossesComponent implements OnInit {
     if(this.inSetup && this.modExists){
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.gasLeakageCompareService.baselineLeakageLoss = null;
-    } else {
-      this.gasLeakageCompareService.modifiedLeakageLoss = null;
     }
   }
 
@@ -148,25 +137,12 @@ export class GasLeakageLossesComponent implements OnInit {
       tmpLeakageLosses.push(tmpLeakageLoss);
     })
     this.losses.leakageLosses = tmpLeakageLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.gasLeakageCompareService.baselineLeakageLoss = this.losses.leakageLosses;
-    } else {
-      this.gasLeakageCompareService.modifiedLeakageLoss = this.losses.leakageLosses;
-    }
-    if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
-      if (this.gasLeakageCompareService.differentArray.length != 0) {
-        this.gasLeakageCompareService.checkLeakageLosses();
-      }
-    }
-  }
 }
 
 export interface GasLeakageObj {
