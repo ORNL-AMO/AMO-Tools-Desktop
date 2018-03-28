@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { FixtureLossesService } from './fixture-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
-import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -40,7 +39,7 @@ export class FixtureLossesComponent implements OnInit {
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
+  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.saveClicked) {
@@ -65,8 +64,6 @@ export class FixtureLossesComponent implements OnInit {
       this._fixtureLosses = new Array();
     }
     if (this.losses.fixtureLosses) {
-      this.setCompareVals();
-      this.fixtureLossesCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
@@ -88,14 +85,6 @@ export class FixtureLossesComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.fixtureLossesCompareService.baselineFixtureLosses = null;
-    } else {
-      this.fixtureLossesCompareService.modifiedFixtureLosses = null;
     }
   }
 
@@ -146,7 +135,6 @@ export class FixtureLossesComponent implements OnInit {
       tmpFixtureLosses.push(tmpFixtureLoss);
     });
     this.losses.fixtureLosses = tmpFixtureLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -156,18 +144,7 @@ export class FixtureLossesComponent implements OnInit {
   setError(bool: boolean) {
     this.showError = bool;
   }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.fixtureLossesCompareService.baselineFixtureLosses = this.losses.fixtureLosses;
-    } else {
-      this.fixtureLossesCompareService.modifiedFixtureLosses = this.losses.fixtureLosses;
-    }
-    if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
-      if (this.fixtureLossesCompareService.differentArray.length != 0) {
-        this.fixtureLossesCompareService.checkFixtureLosses();
-      }
-    }
-  }
+
 
 }
 
