@@ -47,23 +47,12 @@
       <div class="col-12">
         <div class="row">
           <div #pieChartContainer class="col-6">
-<<<<<<< HEAD
-
-            <!-- debug -->
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
-              [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
-          </div>
-          <div class="col-6">
-            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
-              [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-pie-chart>
-=======
             <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
               [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-phast-pie-chart>
           </div>
           <div class="col-6">
             <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
               [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-phast-pie-chart>
->>>>>>> develop
           </div>
         </div>
       </div>
@@ -84,13 +73,8 @@
   <div *ngIf="showPrint" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-<<<<<<< HEAD
-      <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="chartContainerWidth"
-        [pieChartHeight]="chartContainerHeight" [printView]="true" [phast]="phast" [assessment]="assessment" [settings]="settings"
-=======
       <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
         [pieChartHeight]="pieChartContainerHeight" [printView]="true" [phast]="phast" [assessment]="assessment" [settings]="settings"
->>>>>>> develop
         [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
     </div>
   </div>

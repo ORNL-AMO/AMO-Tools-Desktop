@@ -40,29 +40,38 @@ export class PieChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.values && changes.labels) {
+    if (changes.values) {
+      console.log('changes.values');
+    }
+    if (changes.labels) {
+      console.log('changes.labels');
+    }
+
+    if (changes.values || changes.labels) {
       if (!changes.values.firstChange) {
+        console.log("!changes.values.firstChange");
         if (!this.svg) {
-          this.setupChart();
+          this.setupPie();
+          this.buildPie();
         }
         this.updatePie();
       }
     }
     if (changes.chartContainerWidth) {
-      if (this.values && this.labels) {
+      if (this.values || this.labels) {
         if (this.chartContainerWidth > 0) {
-          this.setupChart();
+          this.setupPie();
           this.buildPie();
         }
         else if (this.printView) {
-          this.setupChart();
+          this.setupPie();
           this.buildPie();
         }
       }
     }
   }
 
-  setupChart(): void {
+  setupPie(): void {
     this.htmlElement = this.ngChart.nativeElement;
     this.host = d3.select(this.htmlElement);
 
@@ -85,6 +94,8 @@ export class PieChartComponent implements OnInit {
   }
 
   buildPie(): void {
+    // console.log("buildPie()");
+    // console.log("build this.graphColors.length = " + this.graphColors.length);
     this.host.html('');
     let width = this.width,
       height = this.height,
@@ -286,13 +297,18 @@ export class PieChartComponent implements OnInit {
   }
 
   updatePie(): void {
+    if (!this.svg) {
+      return;
+    }
+
     let width = this.width,
       height = this.height,
       radius = this.radius;
     let printView = this.printView;
     let svgWidth = this.chartContainerWidth;
     let svgHeight = this.chartContainerHeight;
-    let color = d3.scaleOrdinal(this.graphColors);
+    let colors = this.graphColors;
+    let color = d3.scaleOrdinal(colors);
     let pie = d3.pie().sort(null);
     let pieValues = this.values;
     let pieLabels = this.labels;
@@ -302,6 +318,11 @@ export class PieChartComponent implements OnInit {
     let leftLabelIndexes = [];
     let xBound;
     let fontSize;
+
+    for (let i = 0; i < this.graphColors.length; i++) {
+      color(i);
+    }
+
     if (printView) {
       xBound = radius * (10 / 9);
       fontSize = "16px";
@@ -318,11 +339,9 @@ export class PieChartComponent implements OnInit {
     let path = this.svg.selectAll("path.slice")
       .data(pieValuesData);
     path.enter()
-      .insert("path")
-      .style("fill", function (d, i) {
-        return color(i);
-      })
-      .attr("class", "slice");
+      .append("path")
+      .attr("class", "slice")
+      .attr("fill", function (d, i) { return color(i); })
     path.transition().duration(500)
       .attrTween("d", function (d) {
         this._current = this._current || d;
