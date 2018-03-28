@@ -52,14 +52,16 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.checkHeat(true)
+    this.checkHeat(true);
+    if (!this.baselineSelected) {
+      this.disableForm();
+    }
   }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   checkHeat(bool?: boolean) {
@@ -92,8 +94,10 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     }
     if (this.combustionError || this.heatError) {
       this.inputError.emit(true);
+      this.energyInputExhaustGasCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.energyInputExhaustGasCompareService.inputError.next(false);
     }
   }
 
@@ -116,47 +120,47 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+  canCompare() {
+    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  compareExcessAir(): boolean {
+    if (this.canCompare()) {
+      return this.energyInputExhaustGasCompareService.compareExcessAir(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
 
-  initDifferenceMonitor() {
-    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.differentArray.length != 0) {
-      if (this.energyInputExhaustGasCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-        //excessAir
-        this.energyInputExhaustGasCompareService.differentArray[this.lossIndex].different.excessAir.subscribe((val) => {
-          let excessAirElements = doc.getElementsByName('excessAir_' + this.lossIndex);
-          excessAirElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //combustionAirTemp
-        this.energyInputExhaustGasCompareService.differentArray[this.lossIndex].different.combustionAirTemp.subscribe((val) => {
-          let combustionAirTempElements = doc.getElementsByName('combustionAirTemp_' + this.lossIndex);
-          combustionAirTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //exhaustGasTemp
-        this.energyInputExhaustGasCompareService.differentArray[this.lossIndex].different.exhaustGasTemp.subscribe((val) => {
-          let exhaustGasTempElements = doc.getElementsByName('exhaustGasTemp_' + this.lossIndex);
-          exhaustGasTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //totalHeatInput
-        this.energyInputExhaustGasCompareService.differentArray[this.lossIndex].different.totalHeatInput.subscribe((val) => {
-          let totalHeatInputElements = doc.getElementsByName('totalHeatInput_' + this.lossIndex);
-          totalHeatInputElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //electricalPowerInput
-        this.energyInputExhaustGasCompareService.differentArray[this.lossIndex].different.electricalPowerInput.subscribe((val) => {
-          let electricalPowerInputElements = doc.getElementsByName('electricalPowerInput_' + this.lossIndex);
-          electricalPowerInputElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  compareCombustionAirTemp(): boolean {
+    if (this.canCompare()) {
+      return this.energyInputExhaustGasCompareService.compareCombustionAirTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareExhaustGasTemp(): boolean {
+    if (this.canCompare()) {
+      return this.energyInputExhaustGasCompareService.compareExhaustGasTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareTotalHeatInput(): boolean {
+    if (this.canCompare()) {
+      return this.energyInputExhaustGasCompareService.compareTotalHeatInput(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareElectricalPowerInput(): boolean {
+    if (this.canCompare()) {
+      return this.energyInputExhaustGasCompareService.compareElectricalPowerInput(this.lossIndex);
+    } else {
+      return false;
     }
   }
 }
