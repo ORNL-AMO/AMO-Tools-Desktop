@@ -97,6 +97,7 @@ export class LossesComponent implements OnInit {
       this.toastyService.warning(toastOptions);
     }
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    this.lossesService.updateTabs.next(true);
   }
 
   ngOnDestroy() {
