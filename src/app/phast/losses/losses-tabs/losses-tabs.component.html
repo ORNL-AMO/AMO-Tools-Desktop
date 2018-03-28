@@ -15,6 +15,7 @@
     <app-gas-leakage-tab *ngIf="tab.componentStr == 'gas-leakage-losses'" [phast]="phast"></app-gas-leakage-tab>
     <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast"></app-opening-tab>
     <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast"></app-other-tab>
+    <app-slag-tab *ngIf="tab.componentStr == 'slag'" [phast]="phast"></app-slag-tab>
       <!-- <a class="nav-link small">
         <span *ngIf="tab.componentStr == 'charge-material'" [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>
         <span *ngIf="tab.componentStr == 'flue-gas-losses'" [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>
