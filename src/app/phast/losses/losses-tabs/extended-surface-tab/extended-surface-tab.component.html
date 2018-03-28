@@ -1,3 +1,6 @@
-<p>
-  extended-surface-tab works!
-</p>
+<a class="nav-link small">
+  Extended Surface
+  <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+      <strong>{{numLosses}}</strong>
+  </span>
+</a>

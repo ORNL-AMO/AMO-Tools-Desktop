@@ -41,7 +41,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
+  constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -53,15 +53,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this.firstChange = false;
     }
   }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.extendedSurfaceCompareService.baselineSurface = null;
-    } else {
-      this.extendedSurfaceCompareService.modifiedSurface = null;
-    }
-  }
-
   ngOnInit() {
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
@@ -73,8 +64,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this._surfaceLosses = new Array();
     }
     if (this.losses.extendedSurfaces) {
-      this.setCompareVals();
-      this.extendedSurfaceCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.extendedSurfaces.forEach(loss => {
         let tmpLoss = {
@@ -160,7 +149,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       tmpSurfaceLosses.push(tmpSurfaceLoss);
     })
     this.losses.extendedSurfaces = tmpSurfaceLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -170,18 +158,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   setError(bool: boolean){
     this.showError = bool;
   }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.extendedSurfaceCompareService.baselineSurface = this.losses.extendedSurfaces;
-    } else {
-      this.extendedSurfaceCompareService.modifiedSurface = this.losses.extendedSurfaces;
-    }
-    if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
-      if (this.extendedSurfaceCompareService.differentArray.length != 0) {
-        this.extendedSurfaceCompareService.checkExtendedSurfaceLosses();
-      }
-    }
-  }
+
 }
 
 export interface ExtSurfaceObj {
