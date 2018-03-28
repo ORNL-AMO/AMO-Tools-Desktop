@@ -1,3 +1,6 @@
+.pad-top {
+    padding-top: 20px;
+}
 
 @media print {
     .print-rollup-bar-chart-container {
@@ -5,3 +8,5 @@
         page-break-inside: avoid;
     }
 }
+
+

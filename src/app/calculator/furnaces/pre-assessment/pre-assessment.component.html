@@ -45,7 +45,7 @@
           </div>
           <div class="row justify-content-center scroll-item" [ngStyle]="{'height.px': contentHeight}" *ngIf="tabSelect == 'results'">
             <!-- <h5>Process Heating Equipment - Energy Distribution</h5> -->
-            <app-pre-assessment-graph [toggleCalculate]="toggleCalculate" [settings]="settings" [preAssessments]="preAssessments" [chartColors]="assessmentGraphColors"></app-pre-assessment-graph>
+            <app-pre-assessment-graph [settings]="settings" [preAssessments]="preAssessments" [graphColors]="assessmentGraphColors" [printView]="false" [inRollup]="false" [toggleCalculate]="toggleCalculate" [resultType]="'value'"></app-pre-assessment-graph>
             <app-pre-assessment-cost-form [settings]="settings" [inModal]="inModal" (emitCalculate)="calculate()"></app-pre-assessment-cost-form>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
