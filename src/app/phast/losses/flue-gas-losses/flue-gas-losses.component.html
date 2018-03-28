@@ -37,7 +37,7 @@
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
         <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked"
-          (focus)="changeField('measurementType')" (blur)="focusOut()">
+          (focus)="changeField('measurementType')" (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>
         </select>
