@@ -1,0 +1,49 @@
+
+  .text {
+    font-family: 'Muli', sans-serif;
+    list-style: none;
+    /* border-bottom: 0; */
+  }
+  
+  /* .text.hidden-text {
+    border-bottom: 1px solid #16A085;
+  } */
+  ul{
+      padding-left: 0px;
+  }
+  .text li {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 2em;
+    float: left;
+    color: #16A085;
+    opacity: 1;
+    transition: all 3s ease-in-out;
+     max-width: 2em;
+  }
+  .text.hidden-text li.spaced {
+    padding-left: 0;
+  }
+
+  .text.hidden-text .capitol{
+      /* animation-name: capitol;
+      animation-duration: 5s; */
+      font-size: 6rem;
+      text-shadow: 6px 6px #196F3D;
+  }
+
+
+  .text li.spaced {
+    padding-left: 0.5em;
+  }
+  
+  .text.hidden-text li.ghost {
+    opacity: 0;
+    max-width: 0;
+  }
+  
+
+  @keyframes capitol{
+      from {font-size: 3rem}
+      to {font-size: 6rem}
+  }
