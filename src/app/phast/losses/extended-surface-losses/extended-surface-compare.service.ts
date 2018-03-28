@@ -6,74 +6,43 @@ export class ExtendedSurfaceCompareService {
 
   baselineSurface: ExtendedSurface[];
   modifiedSurface: ExtendedSurface[];
+  inputError: BehaviorSubject<boolean>;
+  constructor() { 
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
 
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineSurface && this.modifiedSurface) {
-      if (this.baselineSurface.length == this.modifiedSurface.length) {
-        let numLosses = this.baselineSurface.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkExtendedSurfaceLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
+  compareAllLosses(): boolean{
+    let index = 0;
+    let numLoss = this.baselineSurface.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      if(this.compareLoss(index) == true){
+        isDiff = true;
       }
     }
+    return isDiff;
   }
 
-  checkExtendedSurfaceLosses() {
-    if (this.baselineSurface && this.modifiedSurface) {
-      if (this.baselineSurface.length != 0 && this.modifiedSurface.length && this.baselineSurface.length == this.modifiedSurface.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //surfaceArea
-          this.differentArray[lossIndex].different.surfaceArea.next(this.compare(this.baselineSurface[lossIndex].surfaceArea, this.modifiedSurface[lossIndex].surfaceArea));
-          //ambientTemperature
-          this.differentArray[lossIndex].different.ambientTemperature.next(this.compare(this.baselineSurface[lossIndex].ambientTemperature, this.modifiedSurface[lossIndex].ambientTemperature));
-          //surfaceTemperature
-          this.differentArray[lossIndex].different.surfaceTemperature.next(this.compare(this.baselineSurface[lossIndex].surfaceTemperature, this.modifiedSurface[lossIndex].surfaceTemperature));
-          //surfaceEmissivity
-          this.differentArray[lossIndex].different.surfaceEmissivity.next(this.compare(this.baselineSurface[lossIndex].surfaceEmissivity, this.modifiedSurface[lossIndex].surfaceEmissivity));
-        }
-      } else {
-        this.disableAll();
-      }
-    } else {
-      this.disableAll();
-    }
+  compareLoss(index: number): boolean{
+    return (
+      this.compareSurfaceArea(index) ||
+      this.compareAmbientTemperature(index) ||
+      this.compareSurfaceTemperature(index) ||
+      this.compareSurfaceEmissivity(index)
+    )
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareSurfaceArea(index: number): boolean{
+    return this.compare(this.baselineSurface[index].surfaceArea, this.modifiedSurface[index].surfaceArea);
   }
-
-  initDifferentObject(): ExtendedSurfaceDifferent {
-    let tmpDifferent: ExtendedSurfaceDifferent = {
-      surfaceArea: new BehaviorSubject<boolean>(null),
-      ambientTemperature: new BehaviorSubject<boolean>(null),
-      surfaceTemperature: new BehaviorSubject<boolean>(null),
-      surfaceEmissivity: new BehaviorSubject<boolean>(null)
-    }
-    return tmpDifferent;
+  compareAmbientTemperature(index: number): boolean{
+    return this.compare(this.baselineSurface[index].ambientTemperature, this.modifiedSurface[index].ambientTemperature);
   }
-
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.surfaceArea.next(false);
-      this.differentArray[lossIndex].different.ambientTemperature.next(false);
-      this.differentArray[lossIndex].different.surfaceTemperature.next(false);
-      this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
-    }
+  compareSurfaceTemperature(index: number): boolean{
+    return this.compare(this.baselineSurface[index].surfaceTemperature, this.modifiedSurface[index].surfaceTemperature);
+  }
+  compareSurfaceEmissivity(index: number): boolean{
+    return this.compare(this.baselineSurface[index].surfaceEmissivity, this.modifiedSurface[index].surfaceEmissivity);
   }
 
   compare(a: any, b: any) {
@@ -90,11 +59,4 @@ export class ExtendedSurfaceCompareService {
       return false;
     }
   }
-}
-
-export interface ExtendedSurfaceDifferent {
-  surfaceArea: BehaviorSubject<boolean>,
-  ambientTemperature: BehaviorSubject<boolean>,
-  surfaceTemperature: BehaviorSubject<boolean>,
-  surfaceEmissivity: BehaviorSubject<boolean>
 }

@@ -6,6 +6,7 @@
       <app-cooling-tab *ngIf="tab.componentStr == 'cooling-losses'" [phast]="phast"></app-cooling-tab>
       <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast"></app-energy-input-exhaust-gas-tab>
       <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast"></app-energy-input-tab>
+      <app-extended-surface-tab *ngIf="tab.componentStr == 'extended-surface-losses'" [phast]="phast"></app-extended-surface-tab>
       <!-- <a class="nav-link small">
         <span *ngIf="tab.componentStr == 'charge-material'" [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>
         <span *ngIf="tab.componentStr == 'flue-gas-losses'" [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>
