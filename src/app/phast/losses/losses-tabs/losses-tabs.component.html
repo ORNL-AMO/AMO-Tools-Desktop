@@ -10,6 +10,7 @@
       <app-fixture-tab *ngIf="tab.componentStr == 'fixture-losses'" [phast]="phast"></app-fixture-tab>
       <app-flue-gas-tab *ngIf="tab.componentStr == 'flue-gas-losses'" [phast]="phast"></app-flue-gas-tab>
       <app-gas-leakage-tab *ngIf="tab.componentStr == 'gas-leakage-losses'" [phast]="phast"></app-gas-leakage-tab>
+      <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast"></app-opening-tab>
       <!-- <a class="nav-link small">
         <span *ngIf="tab.componentStr == 'charge-material'" [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>
         <span *ngIf="tab.componentStr == 'flue-gas-losses'" [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>

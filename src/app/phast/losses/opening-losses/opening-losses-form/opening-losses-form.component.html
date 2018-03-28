@@ -3,26 +3,26 @@
     <div class="form-group">
       <label class="small" for="type">Select Type</label>
       <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="openingType" (change)="getArea()"
-        (focus)="focusField('openingType')" (blur)="focusOut()">
-              <option>Round</option>
-              <option>Rectangular (Square)</option>
-              </select>
+        (focus)="focusField('openingType')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareOpeningType()}">
+        <option>Round</option>
+        <option>Rectangular (Square)</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label class="small" for="numberOfOpenings" aria-describedby="numberOfOpeningsHelp">Number of Openings
-    <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
-    </label>
+        <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
+      </label>
 
       <input name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="numberOfOpenings"
-        id="numberOfOpenings" onfocus="this.select();" (input)="getArea()" (focus)="focusField('numberOfOpenings')" (blur)="focusOut()">
+        id="numberOfOpenings" onfocus="this.select();" (input)="getArea()" (focus)="focusField('numberOfOpenings')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': compareNumberOfOpenings()}">
       <span class="alert-warning pull-right small" *ngIf="numOpeningsError !== null">{{numOpeningsError}}</span>
     </div>
 
-
     <div class="form-group">
       <label class="small" for="wallThickness">Furnace Wall Thickness</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareThickness()}">
         <input name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="wallThickness"
           id="wallThickness" onfocus="this.select();" (input)="checkThickness()" (focus)="focusField('wallThickness')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -34,7 +34,7 @@
     <div class="form-group">
       <label *ngIf="openingLossesForm.controls.openingType.value != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
       <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareLengthOfOpening()}">
         <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="lengthOfOpening"
           id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -45,7 +45,7 @@
 
     <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
       <label class="small" for="heightOfOpening">Height of Openings</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareHeightOfOpening()}">
         <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heightOfOpening"
           id="heightOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -58,24 +58,28 @@
       <label class="small">Total Opening Area</label>
       <div class="text-center small">
         {{totalArea | number:'2.2-2'}}
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
+          <sup>2</sup>
+        </span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
+          <sup>2</sup>
+        </span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
         <a id="{{'viewFactor_'+lossIndex}}" class="form-text small click-link" (click)="calculateViewFactor()">Calculate View Factor</a>
-    </label>
+      </label>
 
-      <input name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="viewFactor" id="viewFactor"
-        onfocus="this.select();" (input)="checkViewFactor()" (focus)="focusField('viewFactor')">
+      <input name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="viewFactor"
+        id="viewFactor" onfocus="this.select();" (input)="checkViewFactor()" (focus)="focusField('viewFactor')" [ngClass]="{'indicate-different': compareViewFactor()}">
       <span class="alert-warning pull-right small" *ngIf="viewFactorError !== null">{{viewFactorError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp.</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareInsideTemperature()}">
         <input name="{{'insideTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="insideTemp" id="insideTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('insideTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -86,7 +90,7 @@
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temp.</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature()}">
         <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="ambientTemp" id="ambientTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -97,16 +101,17 @@
 
     <div class="form-group">
       <label class="small" for="emissivity" aria-describedby="emissivityHelp">Emissivity of the Source
-    <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
-    </label>
-      <input name="{{'emissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="emissivity" id="emissivity"
-        onfocus="this.select();" (input)="checkSurfaceEmissivity()" (focus)="focusField('emissivity')" (blur)="focusOut()">
+        <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
+      </label>
+      <input name="{{'emissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="emissivity"
+        id="emissivity" onfocus="this.select();" (input)="checkSurfaceEmissivity()" (focus)="focusField('emissivity')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': compareEmissivity()}">
       <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="percentTimeOpen">% of Time Open</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': comparePercentTimeOpen()}">
         <input name="{{'percentTimeOpen_'+lossIndex}}" type="number" step="1" min="0" max="100" class="form-control" formControlName="percentTimeOpen"
           id="percentTimeOpen" onfocus="this.select();" (input)="checkTimeOpen()" (focus)="focusField('percentTimeOpen')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
