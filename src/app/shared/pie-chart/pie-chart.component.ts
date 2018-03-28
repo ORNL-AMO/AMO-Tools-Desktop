@@ -86,8 +86,6 @@ export class PieChartComponent implements OnInit {
   }
 
   buildPie(): void {
-    // console.log("buildPie()");
-    // console.log("build this.graphColors.length = " + this.graphColors.length);
     this.host.html('');
     let width = this.width,
       height = this.height,
