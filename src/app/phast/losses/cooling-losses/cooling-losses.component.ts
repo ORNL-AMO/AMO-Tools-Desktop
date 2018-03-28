@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 
 @Component({
   selector: 'app-cooling-losses',
@@ -41,7 +42,7 @@ export class CoolingLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   disableType: boolean = false;
-  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
+  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -207,6 +208,14 @@ export class CoolingLossesComponent implements OnInit {
   }
   setError(bool: boolean) {
     this.showError = bool;
+  }
+
+  compareLossType(lossIndex: number): boolean {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+      return this.coolingLossesCompareService.compareLossType(lossIndex);
+    } else {
+      return false;
+    }
   }
 }
 

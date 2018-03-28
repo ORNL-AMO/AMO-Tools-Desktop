@@ -88,8 +88,10 @@ export class GasCoolingLossesFormComponent implements OnInit {
 
     if (this.specificHeatError || this.gasFlowError || this.gasDensityError || this.temperatureError) {
       this.inputError.emit(true);
+      this.coolingLossesCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.coolingLossesCompareService.inputError.next(false);
     }
   }
 
@@ -105,7 +107,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
   canCompare() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
-      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == true) {
+      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
         return true
       } else {
         return false;
@@ -116,7 +118,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
 
   compareCoolingMedium(): boolean {
-    if (this.canCompare()) {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
       return this.coolingLossesCompareService.compareCoolingMedium(this.lossIndex);
     } else {
       return false;
