@@ -55,8 +55,6 @@ export class FlueGasLossesComponent implements OnInit {
       this._flueGasLosses = new Array();
     }
     if (this.losses.flueGasLosses) {
-      this.setCompareVals();
-      this.flueGasCompareService.initCompareObjects();
       this.initFlueGasses()
     }
 
@@ -77,14 +75,6 @@ export class FlueGasLossesComponent implements OnInit {
     }
     else {
       this.firstChange = false;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.flueGasCompareService.baselineFlueGasLoss = null;
-    } else {
-      this.flueGasCompareService.modifiedFlueGasLoss = null;
     }
   }
 
@@ -235,7 +225,6 @@ export class FlueGasLossesComponent implements OnInit {
     })
     lossIndex++;
     this.losses.flueGasLosses = tmpFlueGasLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -249,16 +238,12 @@ export class FlueGasLossesComponent implements OnInit {
   focusOut() {
     this.fieldChange.emit('default');
   }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.flueGasCompareService.baselineFlueGasLoss = this.losses.flueGasLosses;
-    } else {
-      this.flueGasCompareService.modifiedFlueGasLoss = this.losses.flueGasLosses;
-    }
-    if (this.flueGasCompareService.differentArray && !this.isBaseline) {
-      if (this.flueGasCompareService.differentArray.length != 0) {
-        this.flueGasCompareService.checkFlueGasLosses();
-      }
+
+  compareLossType(lossIndex: number) {
+    if(this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss){
+      return this.flueGasCompareService.compareLossType(lossIndex);
+    }else{
+      return false;
     }
   }
 }
