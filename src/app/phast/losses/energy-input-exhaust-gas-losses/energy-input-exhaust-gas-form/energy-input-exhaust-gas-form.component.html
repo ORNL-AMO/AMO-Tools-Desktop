@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="totalHeatInput">Total Heat Input for Burners</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareTotalHeatInput()}">
         <input name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="totalHeatInput"
           id="totalHeatInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="electricalPowerInput">Electrical Power Input</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectricalPowerInput()}">
         <input name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricalPowerInput"
           id="electricalPowerInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('electricalPowerInput')">
         <span class="input-group-addon units">kW</span>
@@ -21,7 +21,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="excessAir">Excess Air</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareExcessAir()}">
         <input name="{{'excessAir_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="excessAir" id="excessAir"
           onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('excessAir')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="combustionAirTemp">Combustion Air Temp</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCombustionAirTemp()}">
         <input name="{{'combustionAirTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="combustionAirTemp"
           id="combustionAirTemp" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('combustionAirTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -39,7 +39,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareExhaustGasTemp()}">
         <input name="{{'exhaustGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="exhaustGasTemp"
           id="exhaustGasTemp" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('exhaustGasTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
