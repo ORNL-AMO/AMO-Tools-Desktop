@@ -24,3 +24,7 @@ th{
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(0, 0, 0, 0.12);
 } */
+
+.pad-top {
+    padding-top: 20px;
+}

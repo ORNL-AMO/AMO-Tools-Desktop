@@ -64,12 +64,10 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
       if (phasts.length != 0) {
         this.resultData = phasts;
         if (this.printView) {
-          // this.chartContainerWidth = 1250;
           this.chartContainerWidth = 1500;
           this.initPrintChartData();
         }
         else {
-          // this.chartContainerWidth = (window.innerWidth - 30) * .60;
           this.buildChartData(this.graphOption, false);
           this.initChartData();
         }
