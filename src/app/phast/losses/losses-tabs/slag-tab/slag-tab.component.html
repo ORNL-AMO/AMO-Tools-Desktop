@@ -1,3 +1,6 @@
-<p>
-  slag-tab works!
-</p>
+<a class="nav-link small">
+    Slag
+    <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+        <strong>{{numLosses}}</strong>
+    </span>
+  </a>

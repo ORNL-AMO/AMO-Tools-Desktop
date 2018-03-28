@@ -26,9 +26,12 @@ export class SlagFormComponent implements OnInit {
   settings: Settings;
 
   firstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private slagCompareService: SlagCompareService) { }
+  constructor(private slagCompareService: SlagCompareService) { }
 
   ngOnInit() {
+    if (!this.baselineSelected) {
+      this.disableForm();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -43,13 +46,6 @@ export class SlagFormComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-    this.initDifferenceMonitor();
-  }
-
   disableForm() {
     this.slagLossForm.disable();
   }
@@ -57,7 +53,7 @@ export class SlagFormComponent implements OnInit {
   enableForm() {
     this.slagLossForm.enable();
   }
-  
+
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -69,49 +65,47 @@ export class SlagFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+  canCompare() {
+    if (this.slagCompareService.baselineSlag && this.slagCompareService.modifiedSlag) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  compareWeight(): boolean {
+    if (this.canCompare()) {
+      return this.slagCompareService.compareWeight(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
 
-
-  initDifferenceMonitor() {
-    if (this.slagCompareService.baselineSlag && this.slagCompareService.modifiedSlag && this.slagCompareService.differentArray.length != 0) {
-      if (this.slagCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //weight
-        this.slagCompareService.differentArray[this.lossIndex].different.weight.subscribe((val) => {
-          let weightElements = doc.getElementsByName('weight_' + this.lossIndex);
-          weightElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //inletTemperature
-        this.slagCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
-          let inletTemperatureElements = doc.getElementsByName('inletTemperature_' + this.lossIndex);
-          inletTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //outletTemperature
-        this.slagCompareService.differentArray[this.lossIndex].different.outletTemperature.subscribe((val) => {
-          let outletTemperatureElements = doc.getElementsByName('outletTemperature_' + this.lossIndex);
-          outletTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //specificHeat
-        this.slagCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-          specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //correctionFactor
-        this.slagCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-          correctionFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  compareInletTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.slagCompareService.compareInletTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareOutletTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.slagCompareService.compareOutletTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSpecificHeat(): boolean {
+    if (this.canCompare()) {
+      return this.slagCompareService.compareSpecificHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareCorrectionFactor(): boolean {
+    if (this.canCompare()) {
+      return this.slagCompareService.compareCorrectionFactor(this.lossIndex);
+    } else {
+      return false;
     }
   }
 }

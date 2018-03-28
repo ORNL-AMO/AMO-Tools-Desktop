@@ -7,69 +7,45 @@ export class SlagCompareService {
 
   baselineSlag: Slag[];
   modifiedSlag: Slag[];
+  inputError: BehaviorSubject<boolean>;
+  constructor() { 
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
 
-  //used to hold behavior subjects for each modification
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineSlag && this.modifiedSlag) {
-      if (this.baselineSlag.length == this.modifiedSlag.length) {
-        let numLosses = this.baselineSlag.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkSlagLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
+  compareAllLosses(): boolean{
+    let index = 0;
+    let numLoss = this.baselineSlag.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      if(this.compareLoss(index) == true){
+        isDiff = true;
       }
     }
+    return isDiff;
   }
-
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareLoss(index: number): boolean{
+    return (
+      this.compareWeight(index) ||
+      this.compareInletTemperature(index) ||
+      this.compareOutletTemperature(index) ||
+      this.compareSpecificHeat(index) ||
+      this.compareCorrectionFactor(index) 
+    )
   }
-
-  checkSlagLosses() {
-    if (this.baselineSlag && this.modifiedSlag) {
-      if (this.baselineSlag.length != 0 && this.modifiedSlag.length != 0 && this.baselineSlag.length == this.modifiedSlag.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //weight
-          this.differentArray[lossIndex].different.weight.next(this.compare(this.baselineSlag[lossIndex].weight, this.modifiedSlag[lossIndex].weight));
-          //inletTemperature
-          this.differentArray[lossIndex].different.inletTemperature.next(this.compare(this.baselineSlag[lossIndex].inletTemperature, this.modifiedSlag[lossIndex].inletTemperature));
-          //outletTemperature
-          this.differentArray[lossIndex].different.outletTemperature.next(this.compare(this.baselineSlag[lossIndex].outletTemperature, this.modifiedSlag[lossIndex].outletTemperature));
-          //specificHeat
-          this.differentArray[lossIndex].different.specificHeat.next(this.compare(this.baselineSlag[lossIndex].specificHeat, this.modifiedSlag[lossIndex].specificHeat));
-          //correctionFactor
-          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineSlag[lossIndex].correctionFactor, this.modifiedSlag[lossIndex].correctionFactor));
-        }
-      } else {
-        this.disableAll();
-      }
-    }
-    else if ((this.baselineSlag && !this.modifiedSlag) || (!this.baselineSlag && this.modifiedSlag)) {
-      this.disableAll();
-    }
+  compareWeight(index: number): boolean{
+    return this.compare(this.baselineSlag[index].weight, this.modifiedSlag[index].weight);
   }
-
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.weight.next(false);
-      this.differentArray[lossIndex].different.inletTemperature.next(false);
-      this.differentArray[lossIndex].different.outletTemperature.next(false);
-      this.differentArray[lossIndex].different.specificHeat.next(false);
-      this.differentArray[lossIndex].different.correctionFactor.next(false);
-    }
+  compareInletTemperature(index: number): boolean{
+    return this.compare(this.baselineSlag[index].inletTemperature, this.modifiedSlag[index].inletTemperature);
+  }
+  compareOutletTemperature(index: number): boolean{
+    return this.compare(this.baselineSlag[index].outletTemperature, this.modifiedSlag[index].outletTemperature);
+  }
+  compareSpecificHeat(index: number): boolean{
+    return this.compare(this.baselineSlag[index].specificHeat, this.modifiedSlag[index].specificHeat);
+  }
+  compareCorrectionFactor(index: number): boolean{
+    return this.compare(this.baselineSlag[index].correctionFactor, this.modifiedSlag[index].correctionFactor);
   }
 
   compare(a: any, b: any) {
@@ -86,23 +62,4 @@ export class SlagCompareService {
       return false;
     }
   }
-
-  initDifferentObject(): SlagDifferent {
-    let tmpDifferent: SlagDifferent = {
-      weight: new BehaviorSubject<boolean>(null),
-      inletTemperature: new BehaviorSubject<boolean>(null),
-      outletTemperature: new BehaviorSubject<boolean>(null),
-      specificHeat: new BehaviorSubject<boolean>(null),
-      correctionFactor: new BehaviorSubject<boolean>(null),
-    }
-    return tmpDifferent;
-  }
-}
-
-export interface SlagDifferent {
-  weight: BehaviorSubject<boolean>,
-  inletTemperature: BehaviorSubject<boolean>,
-  outletTemperature: BehaviorSubject<boolean>,
-  specificHeat: BehaviorSubject<boolean>,
-  correctionFactor: BehaviorSubject<boolean>
 }
