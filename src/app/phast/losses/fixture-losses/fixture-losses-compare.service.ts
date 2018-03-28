@@ -7,79 +7,55 @@ export class FixtureLossesCompareService {
 
   baselineFixtureLosses: FixtureLoss[];
   modifiedFixtureLosses: FixtureLoss[];
+  inputError: BehaviorSubject<boolean>;
+  constructor() { 
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
 
-  differentArray: Array<any>;
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      if (this.baselineFixtureLosses.length == this.modifiedFixtureLosses.length) {
-        let numLosses = this.baselineFixtureLosses.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkFixtureLosses();
+  compareAllLosses(): boolean{
+    let index = 0;
+    let numLoss = this.baselineFixtureLosses.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      if(this.compareLoss(index) == true){
+        isDiff = true;
       }
     }
+    return isDiff;
   }
 
-  initDifferentObject(): FixtureLossDifferent {
-    let tmpDifferent: FixtureLossDifferent = {
-      specificHeat: new BehaviorSubject<boolean>(null),
-      feedRate: new BehaviorSubject<boolean>(null),
-      initialTemperature: new BehaviorSubject<boolean>(null),
-      finalTemperature: new BehaviorSubject<boolean>(null),
-      correctionFactor: new BehaviorSubject<boolean>(null),
-      materialName: new BehaviorSubject<boolean>(null)
-    }
-    return tmpDifferent;
+  compareLoss(index: number): boolean{
+    return (
+      this.compareSpecificHeat(index) ||
+      this.compareFeedRate(index) ||
+      this.compareInitialTemperature(index) ||
+      this.compareFinalTemperature(index) ||
+      this.compareCorrectionFactor(index) ||
+      this.compareMaterialName(index)
+    )
+  }
+  compareSpecificHeat(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].specificHeat, this.modifiedFixtureLosses[index].specificHeat);
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareFeedRate(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].feedRate, this.modifiedFixtureLosses[index].feedRate);
   }
 
-  checkFixtureLosses() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      if (this.baselineFixtureLosses.length != 0 && this.modifiedFixtureLosses.length && this.baselineFixtureLosses.length == this.modifiedFixtureLosses.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //specificHeat
-          this.differentArray[lossIndex].different.specificHeat.next(this.compare(this.baselineFixtureLosses[lossIndex].specificHeat, this.modifiedFixtureLosses[lossIndex].specificHeat));
-          //feedRate
-          this.differentArray[lossIndex].different.feedRate.next(this.compare(this.baselineFixtureLosses[lossIndex].feedRate, this.modifiedFixtureLosses[lossIndex].feedRate));
-          //initialTemperature
-          this.differentArray[lossIndex].different.initialTemperature.next(this.compare(this.baselineFixtureLosses[lossIndex].initialTemperature, this.modifiedFixtureLosses[lossIndex].initialTemperature));
-          //finalTemperature
-          this.differentArray[lossIndex].different.finalTemperature.next(this.compare(this.baselineFixtureLosses[lossIndex].finalTemperature, this.modifiedFixtureLosses[lossIndex].finalTemperature));
-          //correctionFactor
-          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineFixtureLosses[lossIndex].correctionFactor, this.modifiedFixtureLosses[lossIndex].correctionFactor));
-          //materialName
-          this.differentArray[lossIndex].different.materialName.next(this.compare(this.baselineFixtureLosses[lossIndex].materialName, this.modifiedFixtureLosses[lossIndex].materialName));
-        }
-      }else{
-        this.disableAll();
-      }
-    }else{
-      this.disableAll();
-    }
+  compareInitialTemperature(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].initialTemperature, this.modifiedFixtureLosses[index].initialTemperature);
   }
 
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.specificHeat.next(false);
-      this.differentArray[lossIndex].different.feedRate.next(false);
-      this.differentArray[lossIndex].different.initialTemperature.next(false);
-      this.differentArray[lossIndex].different.finalTemperature.next(false);
-      this.differentArray[lossIndex].different.correctionFactor.next(false);
-      this.differentArray[lossIndex].different.materialName.next(false);
-    }
+  compareFinalTemperature(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].finalTemperature, this.modifiedFixtureLosses[index].finalTemperature);
+  }
+
+  compareCorrectionFactor(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].correctionFactor, this.modifiedFixtureLosses[index].correctionFactor);
+  }
+
+  compareMaterialName(index: number): boolean{
+    return this.compare(this.baselineFixtureLosses[index].materialName, this.modifiedFixtureLosses[index].materialName);
   }
 
   compare(a: any, b: any) {
@@ -96,13 +72,4 @@ export class FixtureLossesCompareService {
       return false;
     }
   }
-}
-
-export interface FixtureLossDifferent {
-  specificHeat: BehaviorSubject<boolean>,
-  feedRate: BehaviorSubject<boolean>,
-  initialTemperature: BehaviorSubject<boolean>,
-  finalTemperature: BehaviorSubject<boolean>,
-  correctionFactor: BehaviorSubject<boolean>,
-  materialName: BehaviorSubject<boolean>,
 }

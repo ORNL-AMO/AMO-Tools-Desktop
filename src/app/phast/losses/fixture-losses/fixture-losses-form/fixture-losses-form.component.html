@@ -5,7 +5,7 @@
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="setSpecificHeat()"
-        (focus)="focusField('materialName')" (blur)="focusOut()">
+        (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMaterialName()}">
         <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
@@ -23,7 +23,7 @@
 
     <div class="form-group">
       <label class="small" for="feedRate">Fixture Weight feed rate</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFeedRate()}">
         <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="feedRate"
           id="feedRate" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('feedRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
@@ -34,7 +34,7 @@
 
     <div class="form-group">
       <label class="small" for="initialTemp">Initial Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareInitialTemperature()}">
         <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
           onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -44,7 +44,7 @@
 
     <div class="form-group">
       <label class="small" for="finalTemp">Final Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFinalTemperature()}">
         <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
           onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('finalTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -56,7 +56,7 @@
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
         id="correctionFactor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('correctionFactor')"
-        (blur)="focusOut()">
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor()}">
     </div>
   </div>
 </form>
@@ -67,7 +67,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-load-charge-material>
+        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings"></app-solid-load-charge-material>
       </div>
     </div>
   </div>
