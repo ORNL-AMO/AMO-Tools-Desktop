@@ -52,8 +52,8 @@ export class AuxiliaryPowerTabComponent implements OnInit {
 
   setNumLosses() {
     if (this.phast.losses) {
-      if (this.phast.losses.atmosphereLosses) {
-        this.numLosses = this.phast.losses.atmosphereLosses.length;
+      if (this.phast.losses.auxiliaryPowerLosses) {
+        this.numLosses = this.phast.losses.auxiliaryPowerLosses.length;
       }
     }
   }

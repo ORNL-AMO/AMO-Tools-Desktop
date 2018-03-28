@@ -1,10 +1,10 @@
 <form [formGroup]="auxLossesForm">
 
   <div class="form-section">
-    <div class="form-group" [ngClass]="{'indicate-different': compareMotorPhase()}">
+    <div class="form-group">
       <label class="small" for="motorPhase">Motor Current Phase(s)</label>
       <select name="{{'motorPhase_'+lossIndex}}" class="form-control" id="motorPhase" (change)="startSavePolling()" formControlName="motorPhase"
-        (focus)="focusField('motorPhase')" (blur)="focusOut()">
+        (focus)="focusField('motorPhase')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMotorPhase()}">
         <option *ngFor="let phase of motorPhases" [ngValue]="phase">{{phase}}</option>
       </select>
     </div>
