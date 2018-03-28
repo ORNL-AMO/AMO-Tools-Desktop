@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
-import { EnergyInputCompareService } from './energy-input-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -39,7 +38,7 @@ export class EnergyInputComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
+  constructor(private energyInputService: EnergyInputService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -63,8 +62,6 @@ export class EnergyInputComponent implements OnInit {
       this._energyInputs = new Array();
     }
     if (this.losses.energyInputEAF) {
-      this.setCompareVals();
-      this.energyInputCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
@@ -88,14 +85,6 @@ export class EnergyInputComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.energyInputCompareService.baselineEnergyInput = null;
-    } else {
-      this.energyInputCompareService.modifiedEnergyInput = null;
     }
   }
 
@@ -154,7 +143,6 @@ export class EnergyInputComponent implements OnInit {
       tmpEnergyInputs.push(tmpEnergyInput);
     })
     this.losses.energyInputEAF = tmpEnergyInputs;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -162,18 +150,6 @@ export class EnergyInputComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.energyInputCompareService.baselineEnergyInput = this.losses.energyInputEAF;
-    } else {
-      this.energyInputCompareService.modifiedEnergyInput = this.losses.energyInputEAF;
-    }
-    if (this.energyInputCompareService.differentArray && !this.isBaseline) {
-      if (this.energyInputCompareService.differentArray.length != 0) {
-        this.energyInputCompareService.checkEnergyInputs();
-      }
-    }
-  }
 }
 
 export interface EnInputObj {
