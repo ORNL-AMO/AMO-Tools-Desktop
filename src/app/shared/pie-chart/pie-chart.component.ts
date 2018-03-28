@@ -40,16 +40,8 @@ export class PieChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.values) {
-      console.log('changes.values');
-    }
-    if (changes.labels) {
-      console.log('changes.labels');
-    }
-
     if (changes.values || changes.labels) {
       if (!changes.values.firstChange) {
-        console.log("!changes.values.firstChange");
         if (!this.svg) {
           this.setupPie();
           this.buildPie();
