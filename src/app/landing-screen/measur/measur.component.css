@@ -1,0 +1,75 @@
+
+  .text {
+    font-family: 'Muli', sans-serif;
+    list-style: none;
+    /* border-bottom: 0; */
+  }
+  
+  /* .text.hidden-text {
+    border-bottom: 1px solid #16A085;
+  } */
+  ul{
+      padding-left: 0px;
+  }
+  .text li {
+    float: left;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 2em;
+    color: #16A085;
+    opacity: 1;
+    transition: all 1.5s ease-in-out;
+     max-width: 2em;
+  }
+  .text.hidden-text li.spaced {
+    padding-left: 0;
+  }
+
+  .text.hidden-text .capitol{
+      /* animation-name: capitol;
+      animation-duration: 5s; */
+        font-size: 5rem; 
+      text-shadow: 5px 5px #196F3D;
+      animation-name: capitol;
+      transition: all 2s ease-in-out !important;
+  }
+
+
+  .text li.spaced {
+    padding-left: 0.5em;
+  }
+  
+  .text.hidden-text li.ghost {
+    opacity: 0;
+    max-width: 0;
+  }
+  
+  .app-icon{
+    width: 4.5rem;
+    box-shadow: 5px 5px #196F3D;
+    border-radius: 32px;
+  }
+
+  .text-block{
+    margin-left: 15px;
+  }
+
+  .image-block{
+    margin-right: 15px;
+  }
+
+  /* .text-shown{
+    padding-left: 15px;
+    padding-right: 15px;
+  } */
+
+  .measur-block{
+    height: 150px;
+    max-height: 150px;
+    min-height: 150px;
+  }
+
+  @keyframes capitol{
+      from {font-size: 3rem}
+      to {font-size: 6rem}
+  }

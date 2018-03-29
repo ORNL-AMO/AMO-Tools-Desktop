@@ -62,7 +62,6 @@
 	}
 	.landing > ul > li > div {
 		display: inline-block;
-		width: 30%;
 	}
 
 .landing .help {
@@ -93,10 +92,30 @@
 	max-width: 350px;
 }
 
-.icon-image{
-	height: 18px;
-    padding-right: 4px;
-    padding-bottom: 2px;
+.psat-image-background{
+	/* height: 3.25rem;
+	width: 3.5rem;
+    background-color: #AED6F1;
+    border: solid 2px #3498DB;
+    border-radius: 5px;
+    box-shadow: 4px 0px 4px 0px #ABB2B9; */
+}
+
+.psat-image{
+	height: 4rem;
+}
+
+.phast-image-background{
+	/* height: 3.25rem;
+	width: 3.5rem;
+    background-color: #F2D7D5;
+    border: solid 2px #943126;
+    border-radius: 5px;
+    box-shadow: 4px 0px 4px 0px #ABB2B9; */
+}
+
+.phast-image{
+	width: 4rem;
 }
 
 .fa-folder-o{
@@ -112,43 +131,17 @@
   /*margin-top: -7px;*/
 }
 
-  /*.left-rotated {*/
-    /*-ms-transform: rotate(15deg);*/
-    /*-webkit-transform: rotate(15deg);*/
-    /*transform: rotate(15deg);*/
-    /*font-size: 64px;*/
-    /*color: #7cc110;*/
-  /*}*/
-/*.right-rotated {*/
-  /*-ms-transform: rotate(-15deg);*/
-  /*-webkit-transform: rotate(-15deg);*/
-  /*transform: rotate(-15deg);*/
-  /*font-size: 64px;*/
-  /*color: #7cc110;*/
-/*}*/
-
-/*.left-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 117%;*/
-  /*margin-top: -5px;*/
-/*}*/
-/*.right-arrow {*/
-  /*position: inherit;*/
-  /*width: 66%;*/
-  /*height: 123%;*/
-  /*margin-top: -10px;*/
-  /*margin-left: 45%;*/
-/*}*/
-
+.no-margin-bottom{
+	margin-bottom: 0;
+}
 
 .arrow-row{
+	margin-top: -35px;
 	margin-bottom: -20px;
-	margin-top: -25px;
 }
 
 .arrow-img{
-	width: 60%;
+	width: 8rem;
 }
 
 .furnace {
@@ -158,4 +151,35 @@
 .span-label {
   font-size: 15px;
   margin-left: 25px;
+}
+
+
+.card-header{
+	padding: .5rem;
+	background-color: white;
+}
+
+.card-header p, .jumbotron p{
+	margin-bottom: 0px;
+}
+
+.jumbotron{
+	padding-bottom: 0px;
+	padding-top: 0px;
+	margin-bottom: 0px;
+	background-color: rgba(0,0,0,0);
+}
+
+.card-body{
+	padding: .5rem;
+}
+
+.card{
+	-webkit-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+	-moz-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+	box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
+}
+
+.text-help{
+	color: gray;
 }
