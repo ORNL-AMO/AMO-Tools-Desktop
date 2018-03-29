@@ -1,8 +1,6 @@
 <ul class="tabs subtabs phast">
   <li *ngFor="let tab of lossTabs" [ngClass]="{'active': selectedTab.step == tab.step}" (click)="tabChange(tab)">
-    <a *ngIf="tab.componentStr == 'operations'" class="nav-link small">
-      Operations
-    </a>
+    <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast"></app-operations-tab>
     <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast"></app-charge-material-tab>
     <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast"></app-atmosphere-tab>
     <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast"></app-auxiliary-power-tab>
@@ -16,6 +14,7 @@
     <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast"></app-opening-tab>
     <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast"></app-other-tab>
     <app-slag-tab *ngIf="tab.componentStr == 'slag'" [phast]="phast"></app-slag-tab>
+    <app-system-efficiency-tab *ngIf="tab.componentStr == 'heat-system-efficiency'" [phast]="phast"></app-system-efficiency-tab>
       <!-- <a class="nav-link small">
         <span *ngIf="tab.componentStr == 'charge-material'" [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>
         <span *ngIf="tab.componentStr == 'flue-gas-losses'" [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>
