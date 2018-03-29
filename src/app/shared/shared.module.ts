@@ -13,6 +13,7 @@ import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
   imports: [
@@ -26,14 +27,16 @@ import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkm
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,
-    AnimatedCheckmarkComponent
+    AnimatedCheckmarkComponent,
+    PieChartComponent
   ],
   exports: [
     ControlMessagesComponent,
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,
-    AnimatedCheckmarkComponent
+    AnimatedCheckmarkComponent,
+    PieChartComponent
   ],
   providers: [
     ValidationService,

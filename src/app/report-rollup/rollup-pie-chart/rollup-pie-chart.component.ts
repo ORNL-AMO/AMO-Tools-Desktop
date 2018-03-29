@@ -4,9 +4,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { Settings } from 'electron';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 import { SigFigsPipe } from '../../shared/sig-figs.pipe';
-import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
-import * as c3 from 'c3';
 @Component({
   selector: 'app-rollup-pie-chart',
   templateUrl: './rollup-pie-chart.component.html',
@@ -18,143 +16,62 @@ export class RollupPieChartComponent implements OnInit {
   @Input()
   results: Array<any>;
   @Input()
-  graphColors: Array<string>;
-  @Input()
-  isUpdate: boolean;
-  @Input()
-  showLegend: boolean;
-  @Input()
-  labels: boolean;
-  @Input()
   chartContainerWidth: number;
   @Input()
   printView: boolean;
   @Input()
-  title: string;
-  @Input()
-  showTitle: boolean;
-  @Input()
-  chartIndex: number;
-  @Input()
   assessmentType: string;
 
   chartContainerHeight: number;
-
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
   exportName: string;
 
-  pieChart: any;
+  graphColors: Array<string>;
+  labels: Array<string>;
+  values: Array<number>;
 
-  constructor(private svgToPngService: SvgToPngService) { }
+  constructor() { }
 
   ngOnInit() {
     this.graphColors = graphColors;
+    this.getLabels();
+    this.getValues();
+    this.setExportName();
+    if (!this.printView) {
+      this.chartContainerHeight = 220;
+    }
   }
 
-  ngAfterViewInit() {
-    if (this.printView) {
-      this.chartContainerHeight = 310;
-      this.chartContainerWidth = 500;
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.results) {
+      if (!changes.results.firstChange) {
+        this.getLabels();
+        this.getValues();
+      }
+    }
+  }
+
+  getLabels(): void {
+    this.labels = new Array<string>();
+    for (let i = 0; i < this.results.length; i++) {
+      let p: number = +this.results[i].percent;
+      let label = this.results[i].name + ": " + p.toFixed(2) + "%";
+      this.labels.push(label);
+    }
+  }
+
+  getValues(): void {
+    this.values = new Array<number>();
+    for (let i = 0; i < this.results.length; i++) {
+      this.values.push(this.results[i].percent);
+    }
+  }
+
+  setExportName(): void {
+    if (this.assessmentType) {
+      this.exportName = this.assessmentType + "-energy-use-rollup-pie-chart";
     }
     else {
-      this.chartContainerHeight = 280;
+      this.exportName = "energy-use-rollup-pie-chart";
     }
-    this.initChart();
-  }
-
-  ngOnChanges() {
-    if (this.isUpdate) {
-      this.updateChart();
-    }
-  }
-
-
-  initChart() {
-    let currentChart;
-
-    if (this.assessmentType == "phast") {
-      if (this.printView) {
-        this.ngChart.nativeElement.className = "printing-phast-rollup-pie-chart";
-      }
-
-    }
-    else if (this.assessmentType == "psat") {
-      if (this.printView) {
-
-        this.ngChart.nativeElement.className = "printing-psat-rollup-pie-chart";
-      }
-    }
-
-    this.pieChart = c3.generate({
-      bindto: this.ngChart.nativeElement,
-      data: {
-        columns: [],
-        type: 'pie',
-        labels: this.labels,
-      },
-      legend: {
-        show: this.showLegend,
-        position: 'right'
-      },
-      color: {
-        pattern: this.graphColors
-      },
-      size: {
-        width: this.chartContainerWidth,
-        height: this.chartContainerHeight
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
-          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
-          return html;
-        }
-      }
-    });
-
-    for (let j = 0; j < this.results.length; j++) {
-      this.pieChart.load({
-        columns: [
-          [this.results[j].name, this.results[j].percent]
-        ],
-        labels: this.labels
-      });
-    }
-
-    if (this.printView) {
-      //formatting chart
-      d3.selectAll(".c3-legend-item text").style("font-size", "13px");
-    }
-  }
-
-  updateChart() {
-    if (this.pieChart) {
-      for (let i = 0; i < this.results.length; i++) {
-        this.pieChart.load({
-          columns: [
-            [this.results[i].name, this.results[i].percent]
-          ],
-          type: 'pie',
-          labels: this.labels
-        });
-      }
-    }
-  }
-
-
-  downloadChart() {
-    if (!this.title) {
-      if (this.assessmentType == "phast") {
-        this.exportName = "phast-rollup-pie-graph";
-      }
-      else {
-        this.exportName = "psat-rollup-pie-graph";
-      }
-    }
-    else {
-      this.exportName = this.title + "-graph";
-    }
-    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }
