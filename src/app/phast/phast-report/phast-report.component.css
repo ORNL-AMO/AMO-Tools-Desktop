@@ -37,7 +37,6 @@
     height: 100%;
     width: 93%;
     position: fixed;
-    /* background-color: red; */
 }
 
 .print-col{
@@ -51,4 +50,15 @@
 
 .fa-print{
     font-size: 150px;
+}
+
+
+
+/* modal checklist style */
+.bold-bottom-divider {
+    border-bottom: 2px solid #666;
+}
+
+.bottom-divider {
+    border-bottom: 1px solid #999;
 }

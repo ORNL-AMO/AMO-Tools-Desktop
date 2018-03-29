@@ -12,6 +12,7 @@ import { SigFigsPipe } from './sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
+import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 
 @NgModule({
   imports: [
@@ -24,13 +25,15 @@ import { SvgToPngService } from './svg-to-png/svg-to-png.service';
     ControlMessagesComponent,
     PercentGraphComponent,
     SigFigsPipe,
-    FacilityInfoSummaryComponent
+    FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent
   ],
   exports: [
     ControlMessagesComponent,
     PercentGraphComponent,
     SigFigsPipe,
-    FacilityInfoSummaryComponent
+    FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent
   ],
   providers: [
     ValidationService,
