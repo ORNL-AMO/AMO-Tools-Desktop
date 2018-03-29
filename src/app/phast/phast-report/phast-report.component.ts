@@ -151,6 +151,14 @@ export class PhastReportComponent implements OnInit {
   }
 
   closeModal(): void {
+    this.selectAll = false;
+    this.printFacilityInfo = false;
+    this.printEnergyUsed = false;
+    this.printExecutiveSummary = false;
+    this.printResultsData = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printInputSummary = false;
     this.printMenuModal.hide();
   }
 
@@ -159,6 +167,7 @@ export class PhastReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
+          console.log("selectAll is true");
           this.printFacilityInfo = true;
           this.printEnergyUsed = true;
           this.printExecutiveSummary = true;
@@ -168,10 +177,11 @@ export class PhastReportComponent implements OnInit {
           this.printInputSummary = true;
         }
         else {
+          console.log("selectAll is false");
           this.printFacilityInfo = false;
           this.printEnergyUsed = false;
           this.printExecutiveSummary = false;
-          this.printResultsData = true;
+          this.printResultsData = false;
           this.printReportGraphs = false;
           this.printReportSankey = false;
           this.printInputSummary = false;

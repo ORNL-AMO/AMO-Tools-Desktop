@@ -28,24 +28,29 @@ export class AnimatedCheckmarkComponent implements OnInit {
   radius: number;
   host: d3.Selection<any>;
   svg: d3.Selection<any>;
+  circle: any;
+  // checkMark: any;
 
+  shortLine: any;
+  longLine: any;
+
+  animationTime: number;
 
 
   constructor() { }
 
   ngOnInit() {
+    this.animationTime = 350;
     this.initColors();
     this.setupSvg();
-    this.drawCheckMark();
+    this.initCircles();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.active && !changes.active.firstChange) {
-      console.log("check mark toggle");
       if (this.svg === undefined) {
-        console.log('this.svg is undefined');
         this.setupSvg();
-        this.drawCheckMark();
+        this.initCircles();
       }
       else {
         this.updateCheckMark();
@@ -55,17 +60,16 @@ export class AnimatedCheckmarkComponent implements OnInit {
 
   initColors(): void {
     if (this.inactiveBorderColor === undefined) {
-      console.log("inactiveBorderColor undefined");
       this.inactiveBorderColor = "#888";
     }
     if (this.activeBorderColor === undefined) {
-      this.activeBorderColor = "#04C935";
+      this.activeBorderColor = "#00B52D";
     }
     if (this.inactiveFillColor === undefined) {
       this.inactiveFillColor = "#fff";
     }
     if (this.activeFillColor === undefined) {
-      this.activeFillColor = "#04C935";
+      this.activeFillColor = "#00B52D";
     }
     if (this.checkMarkColor === undefined) {
       this.checkMarkColor = "#fff";
@@ -85,7 +89,7 @@ export class AnimatedCheckmarkComponent implements OnInit {
     this.radius = Math.min(this.svgContainerHeight, this.svgContainerWidth) / 2;
   }
 
-  drawCheckMark(): void {
+  initCircles(): void {
     let r = this.radius;
     let height = this.svgContainerHeight;
     let width = this.svgContainerWidth;
@@ -100,21 +104,94 @@ export class AnimatedCheckmarkComponent implements OnInit {
       .attr('height', height)
       .attr("viewBox", "0 0 " + width + " " + height)
       .attr("preserveAspectRatio", "xMinYMin");
-    // .append('g')
-    // .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-
-    let circle = this.svg.append('circle')
+    this.circle = this.svg.append('circle')
       .attr('cx', width / 2)
       .attr('cy', height / 2)
       .attr('r', r - 2)
       .style('stroke-width', 2)
       .style('stroke', inactiveBorderColor)
       .style('fill', inactiveFillColor);
+
+    this.shortLine = this.svg.append('line')
+      .attr('stroke-width', 3)
+      .attr('stroke', '#fff')
+      .attr('x1', r * 0.33)
+      .attr('y1', r)
+      .attr('x2', r * 0.33)
+      .attr('y2', r);
+
+    this.longLine = this.svg.append('line')
+      .attr('stroke-width', 3)
+      .attr('stroke', '#fff')
+      .attr('x1', r * 0.767)
+      .attr('y1', r * 1.5)
+      .attr('x2', r * 0.767)
+      .attr('y2', r * 1.5);
   }
 
   updateCheckMark(): void {
-    console.log("updating check mark");
+    if (this.svg === undefined || this.circle === undefined) {
+      return;
+    }
+
+    if (this.active) {
+      this.addCheckMark();
+    }
+    else {
+      this.removeCheckMark();
+    }
+  }
+
+
+  addCheckMark(): void {
+    if (this.svg === undefined) {
+      return;
+    }
+    if (this.circle === undefined) {
+      return;
+    }
+
+    let radius = this.radius;
+
+    this.circle.transition()
+      .duration(this.animationTime)
+      .style('fill', this.activeFillColor)
+      .style('stroke', this.activeFillColor);
+
+
+    this.shortLine.transition()
+      .duration(this.animationTime)
+      .attr('x2', radius * 0.8)
+      .attr('y2', radius * 1.5);
+
+    this.longLine.transition()
+      .duration(this.animationTime)
+      .attr('x2', radius * 1.633)
+      .attr('y2', radius * .533);
+
+  }
+
+  removeCheckMark(): void {
+    if (this.svg === undefined) {
+      return;
+    }
+    let r = this.radius;
+
+    this.circle.transition()
+      .duration(this.animationTime)
+      .style('fill', this.inactiveFillColor)
+      .style('stroke', this.inactiveBorderColor);
+
+    this.shortLine.transition()
+      .duration(this.animationTime)
+      .attr('x2', r * 0.33)
+      .attr('y2', r);
+
+    this.longLine.transition()
+      .duration(this.animationTime)
+      .attr('x2', r * 0.767)
+      .attr('y2', r * 1.5);
   }
 
 }
