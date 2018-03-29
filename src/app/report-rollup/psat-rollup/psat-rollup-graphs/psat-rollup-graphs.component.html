@@ -1,6 +1,6 @@
 <div *ngIf="!printView">
   <div class="row justify-content-center">
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-5 col-md-6">
       <div class="row justify-content-center btn-toggle">
         <div class="btn-group btn-group-sm align-self-center">
           <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')" [ngClass]="{'active': dataOption == 'cost'}">Cost</button>
@@ -9,15 +9,15 @@
       </div>
 
       <!-- c3 chart container -->
-      <div class="row justify-content-center align-content-center" *ngIf="pieChartData">
-        <div class="col-12">
-          <app-rollup-pie-chart [settings]="settings" [chartContainerWidth]="chartContainerWidth" [results]="results" [graphColors]="graphColors"
-            [isUpdate]="isUpdate" [labels]="labels" [showLegend]="showLegend" [assessmentType]="'psat'"></app-rollup-pie-chart>
+      <div class="row justify-content-center align-content-center pad-top" *ngIf="pieChartData">
+        <div #pieChartContainer class="col-12">
+          <app-rollup-pie-chart [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="results" [assessmentType]="'psat'"
+            [printView]="printView"></app-rollup-pie-chart>
         </div>
       </div>
 
     </div>
-    <div class="col-lg-8 col-md-11 output-summary">
+    <div class="col-lg-7 col-md-11 output-summary">
       <app-psat-rollup-energy-table [settings]="settings" [resultData]="resultData" [totalEnergyUse]="totalEnergyUse" [totalCost]="totalCost"
         [graphColors]="graphColors"></app-psat-rollup-energy-table>
     </div>
@@ -36,8 +36,8 @@
   <div class="row justify-content-center print-rollup-pie-container">
 
     <div class="col-6" *ngFor="let result of allResults; let i = index">
-      <app-rollup-pie-chart [printView]="true" [settings]="settings" [chartContainerWidth]="chartContainerWidth" [graphColors]="graphColors"
-        [results]="result" [isUpdate]="false" [labels]="labels" [showLegend]="true" [chartIndex]="i" [assessmentType]="'psat'"></app-rollup-pie-chart>
+      <app-rollup-pie-chart [printView]="printView" [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="result"
+        [assessmentType]="'psat'"></app-rollup-pie-chart>
     </div>
   </div>
   <div class="row justify-content-center">

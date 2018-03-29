@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { PsatService } from '../../../psat/psat.service';
@@ -17,6 +17,8 @@ export class PsatRollupGraphsComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
+
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
 
   chartContainerWidth: number;
   isUpdate: boolean = false;
@@ -54,9 +56,6 @@ export class PsatRollupGraphsComponent implements OnInit {
     if (this.printView) {
       this.initPrintChartData();
     }
-    else {
-      this.chartContainerWidth = (window.innerWidth - 30) * .28;
-    }
   }
 
 
@@ -64,7 +63,6 @@ export class PsatRollupGraphsComponent implements OnInit {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
-    this.updateChart();
   }
 
   getResults(resultsData: Array<PsatResultsData>) {
@@ -134,7 +132,13 @@ export class PsatRollupGraphsComponent implements OnInit {
     this.allResults.push(this.results);
   }
 
-  updateChart() {
-    this.isUpdate = true;
+  getPieWidth(): number {
+    if (this.pieChartContainer) {
+      let containerPadding = 30;
+      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
+    }
   }
 }
