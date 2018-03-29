@@ -107,24 +107,24 @@
             </div>
         </div>
 
-        <div class="results" *ngIf="currentTab == 'facility-info' || showPrint">
+        <div class="results" *ngIf="currentTab == 'facility-info' || (printFacilityInfo && showPrint)">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
 
-        <div class="results" *ngIf="currentTab == 'energy-used' || showPrint">
+        <div class="results" *ngIf="currentTab == 'energy-used' || (printEnergyUsed && showPrint)">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
-        <div class="results print-break-before" *ngIf="currentTab == 'executive-summary' || showPrint">
+        <div class="results print-break-before" *ngIf="currentTab == 'executive-summary' || (printExecutiveSummary && showPrint)">
             <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
-        <div class="results" *ngIf="currentTab == 'results-data' || showPrint">
+        <div class="results" *ngIf="currentTab == 'results-data' || (printResultsData && showPrint)">
             <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
         </div>
-        <div class="results" *ngIf="currentTab == 'report-graphs' || showPrint">
-            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrint"></app-report-graphs>
+        <div class="results" *ngIf="currentTab == 'report-graphs' || (printReportGraphs && showPrint)">
+            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportGraphs"></app-report-graphs>
         </div>
-        <div class="results" *ngIf="currentTab == 'report-sankey' || showPrint">
-            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrint"></app-report-sankey>
+        <div class="results" *ngIf="currentTab == 'report-sankey' || (printReportSankey && showPrint)">
+            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportSankey"></app-report-sankey>
         </div>
         <div class="results hide-print" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
@@ -137,13 +137,13 @@
 </div>
 
 
-<div bsModal #printMenuModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
+<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
     aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md hide-print">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Print Report</h3>
-                <button class="close" (click)="closeModal()">
+                <button class="close" (click)="closeModal(true)">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -221,8 +221,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-default btn-primary" (click)="addMod()" data-dismiss="modal">Yes</button> -->
-                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal()" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default btn-primary" (click)="print()" data-dismiss="modal">Print</button>
+                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal(true)" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

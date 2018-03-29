@@ -42,7 +42,6 @@ export class PhastReportComponent implements OnInit {
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
 
-
   selectAll: boolean = false;
   printFacilityInfo: boolean = false;
   printEnergyUsed: boolean = false;
@@ -55,6 +54,7 @@ export class PhastReportComponent implements OnInit {
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    this.initPrintLogic();
     this.createdDate = new Date();
     if (this.settings) {
       if (!this.settings.energyResultUnit) {
@@ -92,6 +92,18 @@ export class PhastReportComponent implements OnInit {
         this.showPrint = printVal;
       }
     });
+  }
+
+  initPrintLogic() {
+    if (this.inRollup) {
+      this.printFacilityInfo = true;
+      this.printEnergyUsed = true;
+      this.printExecutiveSummary = true;
+      this.printResultsData = true;
+      this.printReportGraphs = true;
+      this.printReportSankey = true;
+      this.printInputSummary = true;
+    }
   }
 
   setTab(str: string): void {
@@ -150,7 +162,15 @@ export class PhastReportComponent implements OnInit {
     this.printMenuModal.show();
   }
 
-  closeModal(): void {
+
+  closeModal(reset: boolean): void {
+    if (reset) {
+      this.resetPrintSelection();
+    }
+    this.printMenuModal.hide();
+  }
+
+  resetPrintSelection() {
     this.selectAll = false;
     this.printFacilityInfo = false;
     this.printEnergyUsed = false;
@@ -159,7 +179,6 @@ export class PhastReportComponent implements OnInit {
     this.printReportGraphs = false;
     this.printReportSankey = false;
     this.printInputSummary = false;
-    this.printMenuModal.hide();
   }
 
   togglePrint(section: string): void {
@@ -167,7 +186,6 @@ export class PhastReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
-          console.log("selectAll is true");
           this.printFacilityInfo = true;
           this.printEnergyUsed = true;
           this.printExecutiveSummary = true;
@@ -177,7 +195,6 @@ export class PhastReportComponent implements OnInit {
           this.printInputSummary = true;
         }
         else {
-          console.log("selectAll is false");
           this.printFacilityInfo = false;
           this.printEnergyUsed = false;
           this.printExecutiveSummary = false;
@@ -224,6 +241,7 @@ export class PhastReportComponent implements OnInit {
 
 
   print(): void {
+    this.closeModal(false);
     //when print clicked set show print value to true
     this.phastReportService.showPrint.next(true);
     setTimeout(() => {
@@ -232,6 +250,7 @@ export class PhastReportComponent implements OnInit {
       win.print();
       //after printing hide content again
       this.phastReportService.showPrint.next(false);
-    }, 2000)
+      this.resetPrintSelection();
+    }, 2000);
   }
 }
