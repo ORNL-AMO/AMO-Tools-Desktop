@@ -23,28 +23,6 @@ export class EditConditionPropertiesComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.name = this.modification.phast.name;
-  }
 
-  saveModification() {
-    this.modification.phast.name = this.name;
-    this.saveMod.emit(true);
   }
-
-  deleteModification() {
-    this.deleteMod.emit(true);
-  }
-
-  showDeleteConfirm() {
-    this.deleteConfirm = true;
-  }
-
-  cancelDelete(){
-    this.deleteConfirm = false;
-  }
-
-  cancel() {
-    this.cancelEdit.emit(true);
-  }
-
 }

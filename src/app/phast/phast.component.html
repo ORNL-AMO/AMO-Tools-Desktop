@@ -4,7 +4,15 @@
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
-
+    <nav class="navbar justify-content-start" *ngIf="mainTab == 'assessment'">
+      <select class="form-control nav-item">
+        <option *ngFor="let modification of _phast.modifications">{{modification.phast.name}}</option>
+      </select>
+      <div class="nav-item p-2">
+        <span class="badge badge-primary">Flue</span>
+        <span class="badge badge-primary">ChMat</span>
+      </div>
+    </nav>
     <nav *ngIf="mainTab == 'assessment'">
       <ul class="tabs subtabs phast">
         <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">

@@ -89,12 +89,12 @@
         <!-- Modification Header -->
         <div class="header d-flex flex-row justify-content-between">
           <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].phast.name}}</h3>
-          <h5 class="pull-right add-loss">
+          <!-- <h5 class="pull-right add-loss">
             <a class="small click-link" [ngClass]="{'disabled-link': !modificationSelected}">
               <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
               <span *ngIf="isDropdownOpen && !showEditModification" (click)="toggleDropdown()">Cancel</span>
             </a>
-          </h5>
+          </h5> -->
         </div>
 
         <div class="losses-container phast-losses-container" *ngIf="!isDropdownOpen">
