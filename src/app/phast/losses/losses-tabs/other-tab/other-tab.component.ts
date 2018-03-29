@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { OtherLossesService } from '../../other-losses/other-losses.service';
 import { OtherLossesCompareService } from '../../other-losses/other-losses-compare.service';
 import { OtherLoss } from '../../../../shared/models/phast/losses/otherLoss';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-other-tab',
@@ -20,35 +21,42 @@ export class OtherTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  constructor(private lossesService: LossesService, private otherLossesService: OtherLossesService, private otherLossesCompareService: OtherLossesCompareService) { }
+  compareSubscription: Subscription;
+  lossSubscription: Subscription;
+  constructor(private lossesService: LossesService, private otherLossesService: OtherLossesService, private otherLossesCompareService: OtherLossesCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
 
-    this.otherLossesCompareService.inputError.subscribe(val => {
+    this.compareSubscription = this.otherLossesCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
   }
 
-  setBadgeClass() {
-    if (this.missingData) {
-      this.badgeClass = ['missing-data'];
-    } else if (this.inputError) {
-      this.badgeClass = ['input-error'];
-    } else if (this.isDifferent) {
-      this.badgeClass = ['loss-different'];
-    } else {
-      this.badgeClass = ['success'];
-    }
+  ngOnDestroy(){
+    this.compareSubscription.unsubscribe();
+    this.lossSubscription.unsubscribe();
   }
 
+  setBadgeClass(){
+    let badgeStr: Array<string> = ['success'];
+    if(this.missingData){
+      badgeStr = ['missing-data'];
+    }else if(this.inputError){
+      badgeStr = ['input-error'];
+    }else if(this.isDifferent){
+      badgeStr = ['loss-different'];
+    }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
+  }
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.losses.otherLosses) {

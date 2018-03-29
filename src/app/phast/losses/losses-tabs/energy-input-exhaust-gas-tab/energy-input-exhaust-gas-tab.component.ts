@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { EnergyInputExhaustGasService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasCompareService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-energy-input-exhaust-gas-tab',
   templateUrl: './energy-input-exhaust-gas-tab.component.html',
@@ -21,11 +21,13 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string>;
   enInput2Done: boolean;
-  constructor(private lossesService: LossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService) { }
+  compareSubscription: Subscription;
+  lossSubscription: Subscription;
+  constructor(private lossesService: LossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.enInput2Done = this.lossesService.enInput2Done;
       this.missingData = this.checkMissingData();
@@ -33,22 +35,27 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       this.setBadgeClass();
     })
 
-    this.energyInputExhaustGasCompareService.inputError.subscribe(val => {
+    this.compareSubscription = this.energyInputExhaustGasCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
   }
+  ngOnDestroy() {
+    this.compareSubscription.unsubscribe();
+    this.lossSubscription.unsubscribe();
+  }
 
   setBadgeClass() {
+    let badgeStr: Array<string> = ['success'];
     if (this.missingData) {
-      this.badgeClass = ['missing-data'];
+      badgeStr = ['missing-data'];
     } else if (this.inputError) {
-      this.badgeClass = ['input-error'];
+      badgeStr = ['input-error'];
     } else if (this.isDifferent) {
-      this.badgeClass = ['loss-different'];
-    } else {
-      this.badgeClass = ['success'];
+      badgeStr = ['loss-different'];
     }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
   }
 
   setNumLosses() {

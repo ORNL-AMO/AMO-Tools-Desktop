@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { GasLeakageLossesService } from '../../gas-leakage-losses/gas-leakage-losses.service';
 import { GasLeakageCompareService } from '../../gas-leakage-losses/gas-leakage-compare.service';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -21,33 +22,40 @@ export class GasLeakageTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  constructor(private lossesService: LossesService, private gasLeakageLossesService: GasLeakageLossesService, private gasLeakageCompareService: GasLeakageCompareService) { }
+  compareSubscription: Subscription;
+  lossSubscription: Subscription;
+  constructor(private lossesService: LossesService, private gasLeakageLossesService: GasLeakageLossesService, private gasLeakageCompareService: GasLeakageCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
 
-    this.gasLeakageCompareService.inputError.subscribe(val => {
+    this.compareSubscription = this.gasLeakageCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
   }
+  ngOnDestroy(){
+    this.compareSubscription.unsubscribe();
+    this.lossSubscription.unsubscribe();
+  }
 
-  setBadgeClass() {
-    if (this.missingData) {
-      this.badgeClass = ['missing-data'];
-    } else if (this.inputError) {
-      this.badgeClass = ['input-error'];
-    } else if (this.isDifferent) {
-      this.badgeClass = ['loss-different'];
-    } else {
-      this.badgeClass = ['success'];
+  setBadgeClass(){
+    let badgeStr: Array<string> = ['success'];
+    if(this.missingData){
+      badgeStr = ['missing-data'];
+    }else if(this.inputError){
+      badgeStr = ['input-error'];
+    }else if(this.isDifferent){
+      badgeStr = ['loss-different'];
     }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
   }
 
   setNumLosses() {

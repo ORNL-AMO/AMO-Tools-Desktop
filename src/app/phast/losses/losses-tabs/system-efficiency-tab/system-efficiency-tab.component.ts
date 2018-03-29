@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { HeatSystemEfficiencyCompareService } from '../../heat-system-efficiency/heat-system-efficiency-compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-system-efficiency-tab',
@@ -18,11 +19,13 @@ export class SystemEfficiencyTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string>;
   efficiencyDone: boolean;
-  constructor(private lossesService: LossesService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService) { }
+  lossSubscription: Subscription;
+
+  constructor(private lossesService: LossesService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.efficiencyDone = this.lossesService.efficiencyDone;
@@ -31,21 +34,26 @@ export class SystemEfficiencyTabComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.lossSubscription.unsubscribe();
+  }
+
   setBadgeClass() {
+    let badgeStr: Array<string> = ['success'];
     if (this.missingData) {
-      this.badgeClass = ['missing-data'];
+      badgeStr = ['missing-data'];
     } else if (this.isDifferent) {
-      this.badgeClass = ['loss-different'];
-    } else {
-      this.badgeClass = ['success'];
+      badgeStr = ['loss-different'];
     }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
   }
 
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.systemEfficiency) {
         this.numLosses = 1;
-      }else{
+      } else {
         this.numLosses = 0;
       }
     }
@@ -53,12 +61,12 @@ export class SystemEfficiencyTabComponent implements OnInit {
   checkMissingData(): boolean {
     let testVal = false;
     if (this.heatSystemEfficiencyCompareService.baseline) {
-      if(!this.heatSystemEfficiencyCompareService.baseline.systemEfficiency){
+      if (!this.heatSystemEfficiencyCompareService.baseline.systemEfficiency) {
         testVal = true
       }
     }
     if (this.heatSystemEfficiencyCompareService.modification) {
-      if(!this.heatSystemEfficiencyCompareService.modification.systemEfficiency){
+      if (!this.heatSystemEfficiencyCompareService.modification.systemEfficiency) {
         testVal = true
       }
     }

@@ -5,6 +5,7 @@ import { ChargeMaterialCompareService } from '../../charge-material/charge-mater
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from '../../charge-material/charge-material.service';
 import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-charge-material-tab',
@@ -22,8 +23,8 @@ export class ChargeMaterialTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: any;
-  lossSubscription: any;
+  compareSubscription: Subscription;
+  lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
