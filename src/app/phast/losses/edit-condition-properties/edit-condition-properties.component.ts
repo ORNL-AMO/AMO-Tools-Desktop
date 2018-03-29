@@ -16,7 +16,8 @@ export class EditConditionPropertiesComponent implements OnInit {
   saveMod = new EventEmitter<boolean>();
   @Output('cancelEdit')
   cancelEdit = new EventEmitter<boolean>();
-
+  @Input()
+  modifications: Modification[];
   name: string;
   deleteConfirm: boolean = false;
   constructor() { }

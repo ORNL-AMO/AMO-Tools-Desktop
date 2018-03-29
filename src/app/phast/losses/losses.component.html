@@ -168,7 +168,7 @@
 
         </div>
 
-        <div class="modifications-list" *ngIf="isDropdownOpen">
+        <!-- <div class="modifications-list" *ngIf="isDropdownOpen">
           <ul *ngIf="!showEditModification">
             <li *ngFor="let modification of _modifications">
               <button>
@@ -188,7 +188,7 @@
             <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="saveModifications()"
               (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="no-data col-6" *ngIf="_modifications.length == 0 && !inSetup">
         <h3>Now that your baseline set up, click below to start adding modifications.</h3>
@@ -237,5 +237,31 @@
     </div>
   </div>
 </div>
+
+<div bsModal #editModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Modifications</h3>
+        <button class="close" (click)="hideEditModificaiton()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-edit-condition-properties [modifications]="_modifications" (deleteMod)="deleteModification()" (saveMod)="saveModifications()"
+        (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-default btn-secondary" (click)="hideEditModificaiton()" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <ng2-toasty></ng2-toasty>

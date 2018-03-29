@@ -27,6 +27,8 @@ export class LossesComponent implements OnInit {
   @Input()
   inSetup: boolean;
   @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
+  @ViewChild('editModificationModal') public editModificationModal: ModalDirective;
+
   lossAdded: boolean;
   @Input()
   containerHeight: number;
@@ -180,7 +182,12 @@ export class LossesComponent implements OnInit {
       this.showEditModification = false;
       this.isDropdownOpen = !this.isDropdownOpen;
       this.showNotes = false;
+      this.editModificationModal.show();
     }
+  }
+
+  hideEditModificaiton(){
+    this.editModificationModal.hide();
   }
 
   selectModification(modification: Modification) {
