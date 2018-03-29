@@ -44,13 +44,9 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -72,57 +68,56 @@ export class ExhaustGasFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses && this.exhaustGasCompareService.differentArray.length != 0) {
-      if (this.exhaustGasCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-        //offGasTemp
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.offGasTemp.subscribe((val) => {
-          let offGasTempElements = doc.getElementsByName('offGasTemp_' + this.lossIndex);
-          offGasTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //CO
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.CO.subscribe((val) => {
-          let COElements = doc.getElementsByName('CO_' + this.lossIndex);
-          COElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //H2
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.H2.subscribe((val) => {
-          let H2Elements = doc.getElementsByName('H2_' + this.lossIndex);
-          H2Elements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //combustibleGases
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.combustibleGases.subscribe((val) => {
-          let combustibleGasesElements = doc.getElementsByName('combustibleGases_' + this.lossIndex);
-          combustibleGasesElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //vfr
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.vfr.subscribe((val) => {
-          let vfrElements = doc.getElementsByName('vfr_' + this.lossIndex);
-          vfrElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //dustLoading
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.dustLoading.subscribe((val) => {
-          let dustLoadingElements = doc.getElementsByName('dustLoading_' + this.lossIndex);
-          dustLoadingElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses) {
+      return true;
+    } else {
+      return false;
     }
-
   }
+  compareOffGasTemp(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareOffGasTemp(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareCO(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareCO(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareH2(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareH2(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareCombustibleGases(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareCombustibleGases(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVfr(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareVfr(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareDustLoading(): boolean {
+    if (this.canCompare()) {
+      return this.exhaustGasCompareService.compareDustLoading(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 
 }
 

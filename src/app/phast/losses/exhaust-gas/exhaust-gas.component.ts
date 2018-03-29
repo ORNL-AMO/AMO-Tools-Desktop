@@ -39,7 +39,7 @@ export class ExhaustGasComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private exhaustGasService: ExhaustGasService, private exhaustGasCompareService: ExhaustGasCompareService) { }
+  constructor(private phastService: PhastService, private exhaustGasService: ExhaustGasService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -62,8 +62,6 @@ export class ExhaustGasComponent implements OnInit {
       this._exhaustGasLosses = new Array();
     }
     if (this.losses.exhaustGasEAF) {
-      this.setCompareVals();
-      this.exhaustGasCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.exhaustGasEAF.forEach(loss => {
         let tmpLoss = {
@@ -84,14 +82,6 @@ export class ExhaustGasComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.exhaustGasCompareService.baselineExhaustGasLosses = null;
-    } else {
-      this.exhaustGasCompareService.modifiedExhaustGasLosses = null;
     }
   }
 
@@ -141,7 +131,6 @@ export class ExhaustGasComponent implements OnInit {
       tmpExhaustGases.push(tmpExhaustGas);
     })
     this.losses.exhaustGasEAF = tmpExhaustGases;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -149,18 +138,6 @@ export class ExhaustGasComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.exhaustGasCompareService.baselineExhaustGasLosses = this.losses.exhaustGasEAF;
-    } else {
-      this.exhaustGasCompareService.modifiedExhaustGasLosses = this.losses.exhaustGasEAF;
-    }
-    if (this.exhaustGasCompareService.differentArray && !this.isBaseline) {
-      if (this.exhaustGasCompareService.differentArray.length != 0) {
-        this.exhaustGasCompareService.checkExhaustGasLosses();
-      }
-    }
-  }
 }
 
 export interface ExhaustGasObj {

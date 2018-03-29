@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="offGasTemp">Off (Exhaust) Gas Temp</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareOffGasTemp()}">
         <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="offGasTemp" id="offGasTemp"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -13,7 +13,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="CO">CO</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCO()}">
         <input name="{{'CO_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="CO" id="CO" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('CO')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
@@ -21,7 +21,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="H2">H2</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareH2()}">
         <input name="{{'H2_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="H2" id="H2" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('H2')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="combustibleGases">Combustible Gas as CH4</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCombustibleGases()}">
         <input name="{{'combustibleGases_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="combustibleGases"
           id="combustibleGases" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustibleGases')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
@@ -39,7 +39,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="vfr">Total Volumetric Flow Rate</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareVfr()}">
         <input name="{{'vfr_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="vfr" id="vfr" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('vfr')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>
@@ -48,7 +48,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="dustLoading">Dust Loading</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareDustLoading()}">
         <input name="{{'dustLoading_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="dustLoading" id="dustLoading"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('dustLoading')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/scf</span>
