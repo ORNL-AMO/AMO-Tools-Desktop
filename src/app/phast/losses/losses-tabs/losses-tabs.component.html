@@ -15,24 +15,6 @@
     <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast"></app-other-tab>
     <app-slag-tab *ngIf="tab.componentStr == 'slag'" [phast]="phast"></app-slag-tab>
     <app-system-efficiency-tab *ngIf="tab.componentStr == 'heat-system-efficiency'" [phast]="phast"></app-system-efficiency-tab>
-      <!-- <a class="nav-link small">
-        <span *ngIf="tab.componentStr == 'charge-material'" [ngClass]="{'required-asterisk':!chargeDone, 'required-asterisk-done': chargeDone}">*</span>
-        <span *ngIf="tab.componentStr == 'flue-gas-losses'" [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>
-        <span *ngIf="tab.componentStr == 'heat-system-efficiency'" [ngClass]="{'required-asterisk':!efficiencyDone, 'required-asterisk-done': efficiencyDone}">*</span>
-        <span *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [ngClass]="{'required-asterisk':!enInput2Done, 'required-asterisk-done': enInput2Done}">*</span>
-        <span *ngIf="tab.componentStr == 'energy-input'" [ngClass]="{'required-asterisk':!enInput1Done, 'required-asterisk-done': enInput1Done}">*</span>
-        {{tab.tabName}}
-        <span class="badge gray-badge" *ngIf="numCharge && tab.componentStr == 'charge-material'"><strong>{{numCharge}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numFixture && tab.componentStr == 'fixture-losses'"><strong>{{numFixture}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numWall && tab.componentStr == 'wall-losses'"><strong>{{numWall}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numCooling && tab.componentStr == 'cooling-losses'"><strong>{{numCooling}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numAtmosphere && tab.componentStr == 'atmosphere-losses'"><strong>{{numAtmosphere}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numOpening && tab.componentStr == 'opening-losses'"><strong>{{numOpening}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numLeakage && tab.componentStr == 'gas-leakage-losses'"><strong>{{numLeakage}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numExtended && tab.componentStr == 'extended-surface-losses'"><strong>{{numExtended}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numOther && tab.componentStr == 'other-losses'"><strong>{{numOther}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numSlag && tab.componentStr == 'slag'"><strong>{{numSlag}}</strong></span>
-        <span class="badge gray-badge" *ngIf="numAuxPower && tab.componentStr == 'auxiliary-power'"><strong>{{numAuxPower}}</strong></span>
-      </a> -->
+    <app-wall-tab *ngIf="tab.componentStr == 'wall-losses'" [phast]="phast"></app-wall-tab>
   </li>
 </ul>

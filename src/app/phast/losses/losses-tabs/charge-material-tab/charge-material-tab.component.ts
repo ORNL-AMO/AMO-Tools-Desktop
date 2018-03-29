@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { ChargeMaterialCompareService } from '../../charge-material/charge-material-compare.service';
@@ -22,11 +22,13 @@ export class ChargeMaterialTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  constructor(private lossesService: LossesService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService) { }
+  compareSubscription: any;
+  lossSubscription: any;
+  constructor(private lossesService: LossesService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.chargeDone = this.lossesService.chargeDone;
       this.missingData = this.checkMissingData();
@@ -35,22 +37,28 @@ export class ChargeMaterialTabComponent implements OnInit {
 
     })
 
-    this.chargeMaterialCompareService.inputError.subscribe(val => {
+    this.compareSubscription = this.chargeMaterialCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
   }
 
+  ngOnDestroy(){
+    this.compareSubscription.unsubscribe();
+    this.lossSubscription.unsubscribe();
+  }
+
   setBadgeClass(){
+    let badgeStr: Array<string> = ['success'];
     if(this.missingData){
-      this.badgeClass = ['missing-data'];
+      badgeStr = ['missing-data'];
     }else if(this.inputError){
-      this.badgeClass = ['input-error'];
+      badgeStr = ['input-error'];
     }else if(this.isDifferent){
-      this.badgeClass = ['loss-different'];
-    }else{
-      this.badgeClass = ['success'];
+      badgeStr = ['loss-different'];
     }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
   }
 
   setNumLosses() {
