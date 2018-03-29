@@ -12,13 +12,13 @@
       padding-left: 0px;
   }
   .text li {
+    float: left;
     display: inline-block;
     font-weight: 700;
     font-size: 2em;
-    float: left;
     color: #16A085;
     opacity: 1;
-    transition: all 3s ease-in-out;
+    transition: all 1.5s ease-in-out;
      max-width: 2em;
   }
   .text.hidden-text li.spaced {
@@ -28,8 +28,10 @@
   .text.hidden-text .capitol{
       /* animation-name: capitol;
       animation-duration: 5s; */
-      font-size: 6rem;
-      text-shadow: 6px 6px #196F3D;
+        font-size: 5rem; 
+      text-shadow: 5px 5px #196F3D;
+      animation-name: capitol;
+      transition: all 2s ease-in !important;
   }
 
 
@@ -43,16 +45,23 @@
   }
   
   .app-icon{
-    width: 5rem;
-    box-shadow: 6px 6px #196F3D;
+    width: 4.5rem;
+    box-shadow: 5px 5px #196F3D;
     border-radius: 32px;
   }
 
+  .text-block{
+    margin-left: 15px;
+  }
 
-  .text-shown{
+  .image-block{
+    margin-right: 15px;
+  }
+
+  /* .text-shown{
     padding-left: 15px;
     padding-right: 15px;
-  }
+  } */
 
   @keyframes capitol{
       from {font-size: 3rem}

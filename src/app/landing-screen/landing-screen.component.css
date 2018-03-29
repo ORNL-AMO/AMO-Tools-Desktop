@@ -131,6 +131,9 @@
   /*margin-top: -7px;*/
 }
 
+.no-margin-bottom{
+	margin-bottom: 0;
+}
 
 .arrow-row{
 	margin-top: -35px;
@@ -138,7 +141,7 @@
 }
 
 .arrow-img{
-	width: 60%;
+	width: 8rem;
 }
 
 .furnace {
