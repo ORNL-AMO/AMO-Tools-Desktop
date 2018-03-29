@@ -12,6 +12,7 @@ import { SigFigsPipe } from './sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
+import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent,
     PieChartComponent
   ],
   exports: [
@@ -33,6 +35,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent,
     PieChartComponent
   ],
   providers: [

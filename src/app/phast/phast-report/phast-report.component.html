@@ -18,7 +18,12 @@
     <div class="report-header" [ngClass]="{'hide-print': inPhast}">
 
         <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
-            <button class="btn btn-secondary" (click)="print()">Print</button>
+
+            <!-- debug -->
+            <button class="btn btn-secondary" (click)="showModal()">Print</button>
+
+            <!-- real version -->
+            <!-- <button class="btn btn-secondary" (click)="print()">Print</button> -->
             <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
@@ -56,27 +61,39 @@
         <ul class="tabs primary hide-print">
             <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
                 <a>Energy Used</a>
-            </li><!--
-            --><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
                 <a>Executive Summary</a>
-            </li><!--
-            --><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
                 <a>Result Data</a>
-            </li><!--
-            --><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
                 <a>Report Graphs</a>
-            </li><!--
-            --><li  (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
                 <a>Sankey</a>
-            </li><!--
-            --><li  (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
                 <a>Input Data</a>
-            </li><!--
-            --><li  (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
                 <a>Facility Info</a>
             </li>
         </ul>
-        
+
         <div *ngIf="showPrintDiv" class="print-div row justify-content-center">
             <div class="col-12 print-col">
                 <h4>Building Print View</h4>
@@ -117,4 +134,96 @@
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
     </div>
 
+</div>
+
+
+<div bsModal #printMenuModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Print Report</h3>
+                <button class="close" (click)="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            Select all report items you would like to include in your printed report.
+                        </p>
+                    </div>
+                </div>
+                <div class="row toggle-btn" (click)="togglePrint('select-all')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="selectAll"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Select All
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('facility-info')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printFacilityInfo"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Facility Info
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('energy-used')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printEnergyUsed"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Energy Used
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('executive-summary')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printExecutiveSummary"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Executive Summary
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('results-data')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printResultsData"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Results Data
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('report-graphs')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportGraphs"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Report Graphs
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('report-sankey')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Report Sankey
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('input-summary')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printInputSummary"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8">
+                        Input Summary
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default btn-primary" (click)="addMod()" data-dismiss="modal">Yes</button> -->
+                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal()" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
