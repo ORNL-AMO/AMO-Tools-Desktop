@@ -16,6 +16,7 @@ import { AuxiliaryPowerCompareService } from './losses/auxiliary-power-losses/au
 import { AtmosphereLossesCompareService } from './losses/atmosphere-losses/atmosphere-losses-compare.service';
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { EnergyInputCompareService } from './losses/energy-input/energy-input-compare.service';
+import { OperationsCompareService } from './losses/operations/operations-compare.service';
 
 @Injectable()
 export class PhastCompareService {
@@ -36,22 +37,33 @@ export class PhastCompareService {
     private coolingLossCompareService: CoolingLossesCompareService,
     private chargeMaterialCompareService: ChargeMaterialCompareService,
     private auxiliaryPowerCompareService: AuxiliaryPowerCompareService,
-    private atmosphereLossesCompareService: AtmosphereLossesCompareService
+    private atmosphereLossesCompareService: AtmosphereLossesCompareService,
+    private operationsCompareService: OperationsCompareService
   ) { }
 
 
   setCompareVals(phast: PHAST, selectedModIndex: number) {
     if (phast.losses) {
       this.setBaseline(phast.losses);
+
     }
     if (phast.modifications) {
       if (phast.modifications.length != 0) {
         this.setModified(phast.modifications[selectedModIndex].phast.losses);
+        if(phast.modifications[selectedModIndex].phast){
+          this.heatSystemEfficiencyCompareService.modification = phast.modifications[selectedModIndex].phast;
+          this.operationsCompareService.modification = phast.modifications[selectedModIndex].phast;
+        }
       } else {
         this.setNoModification();
       }
     } else {
       this.setNoModification();
+    }
+
+    if(phast.systemEfficiency){
+      this.heatSystemEfficiencyCompareService.baseline = phast;
+      this.operationsCompareService.baseline = phast;
     }
   }
 
@@ -167,5 +179,7 @@ export class PhastCompareService {
     this.otherLossCompareService.modifiedOtherLoss = undefined;
     this.slagCompareService.modifiedSlag = undefined;
     this.wallLossCompareService.modifiedWallLosses = undefined;
+    this.heatSystemEfficiencyCompareService.modification = undefined;
+    this.operationsCompareService.modification = undefined;
   }
 }

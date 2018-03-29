@@ -16,12 +16,13 @@ import { OpeningTabComponent } from './opening-tab/opening-tab.component';
 import { OtherTabComponent } from './other-tab/other-tab.component';
 import { SlagTabComponent } from './slag-tab/slag-tab.component';
 import { WallTabComponent } from './wall-tab/wall-tab.component';
+import { OperationsTabComponent } from './operations-tab/operations-tab.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [LossesTabsComponent, ChargeMaterialTabComponent, AtmosphereTabComponent, AuxiliaryPowerTabComponent, CoolingTabComponent, EnergyInputTabComponent, EnergyInputExhaustGasTabComponent, ExtendedSurfaceTabComponent, FixtureTabComponent, FlueGasTabComponent, GasLeakageTabComponent, SystemEfficiencyTabComponent, OpeningTabComponent, OtherTabComponent, SlagTabComponent, WallTabComponent],
+  declarations: [LossesTabsComponent, ChargeMaterialTabComponent, AtmosphereTabComponent, AuxiliaryPowerTabComponent, CoolingTabComponent, EnergyInputTabComponent, EnergyInputExhaustGasTabComponent, ExtendedSurfaceTabComponent, FixtureTabComponent, FlueGasTabComponent, GasLeakageTabComponent, SystemEfficiencyTabComponent, OpeningTabComponent, OtherTabComponent, SlagTabComponent, WallTabComponent, OperationsTabComponent],
   exports: [LossesTabsComponent]
 })
 export class LossesTabsModule { }

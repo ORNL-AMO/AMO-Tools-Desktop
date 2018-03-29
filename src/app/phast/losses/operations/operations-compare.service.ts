@@ -8,59 +8,52 @@ export class OperationsCompareService {
   baseline: PHAST;
   modification: PHAST;
 
-  differentObject: OperationsDifferentObject
-
-  constructor() { }
-
-
-  initCompareObjects() {
-    if (this.baseline && this.modification) {
-      this.differentObject = this.initDifferentObject();
-      this.checkDifferent();
-    }
+  inputError: BehaviorSubject<boolean>;
+  constructor() {
+    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  checkDifferent() {
-    if (this.baseline && this.modification) {
-      this.differentObject.weeksPerYear.next(this.compare(this.baseline.operatingHours.weeksPerYear, this.modification.operatingHours.weeksPerYear));
-      this.differentObject.daysPerWeek.next(this.compare(this.baseline.operatingHours.daysPerWeek, this.modification.operatingHours.daysPerWeek));
-      this.differentObject.shiftsPerDay.next(this.compare(this.baseline.operatingHours.shiftsPerDay, this.modification.operatingHours.shiftsPerDay));
-      this.differentObject.hoursPerShift.next(this.compare(this.baseline.operatingHours.hoursPerShift, this.modification.operatingHours.hoursPerShift));
-      this.differentObject.hoursPerYear.next(this.compare(this.baseline.operatingHours.hoursPerYear, this.modification.operatingHours.hoursPerYear));
-      this.differentObject.fuelCost.next(this.compare(this.baseline.operatingCosts.fuelCost, this.modification.operatingCosts.fuelCost));
-      this.differentObject.steamCost.next(this.compare(this.baseline.operatingCosts.steamCost, this.modification.operatingCosts.steamCost));
-      this.differentObject.electricityCost.next(this.compare(this.baseline.operatingCosts.electricityCost, this.modification.operatingCosts.electricityCost));
-    } else {
-      this.disableAll();
-    }
+  compareAllLosses(): boolean {
+    return this.compareLoss();
   }
 
-  disableAll() {
-    this.differentObject.weeksPerYear.next(false);
-    this.differentObject.daysPerWeek.next(false);
-    this.differentObject.shiftsPerDay.next(false);
-    this.differentObject.hoursPerShift.next(false);
-    this.differentObject.hoursPerYear.next(false);
-    this.differentObject.fuelCost.next(false);
-    this.differentObject.steamCost.next(false);
-    this.differentObject.electricityCost.next(false);
+  compareLoss(): boolean {
+    return (
+      this.compareWeeksPerYear() ||
+      this.compareDaysPerWeek() ||
+      this.compareShiftsPerDay() ||
+      this.compareHoursPerShift() ||
+      this.compareHoursPerYear() ||
+      this.compareFuelCost() ||
+      this.compareSteamCost() ||
+      this.compareElectricityCost()
+    )
   }
 
-
-  initDifferentObject(): OperationsDifferentObject {
-    let tmpDifferent: OperationsDifferentObject = {
-      weeksPerYear: new BehaviorSubject<boolean>(null),
-      daysPerWeek: new BehaviorSubject<boolean>(null),
-      shiftsPerDay: new BehaviorSubject<boolean>(null),
-      hoursPerShift: new BehaviorSubject<boolean>(null),
-      hoursPerYear: new BehaviorSubject<boolean>(null),
-      fuelCost: new BehaviorSubject<boolean>(null),
-      steamCost: new BehaviorSubject<boolean>(null),
-      electricityCost: new BehaviorSubject<boolean>(null),
-    }
-    return tmpDifferent;
+  compareWeeksPerYear(): boolean {
+    return this.compare(this.baseline.operatingHours.weeksPerYear, this.modification.operatingHours.weeksPerYear);
   }
-
+  compareDaysPerWeek(): boolean {
+    return this.compare(this.baseline.operatingHours.daysPerWeek, this.modification.operatingHours.daysPerWeek);
+  }
+  compareShiftsPerDay(): boolean {
+    return this.compare(this.baseline.operatingHours.shiftsPerDay, this.modification.operatingHours.shiftsPerDay);
+  }
+  compareHoursPerShift(): boolean {
+    return this.compare(this.baseline.operatingHours.hoursPerShift, this.modification.operatingHours.hoursPerShift);
+  }
+  compareHoursPerYear(): boolean {
+    return this.compare(this.baseline.operatingHours.hoursPerYear, this.modification.operatingHours.hoursPerYear);
+  }
+  compareFuelCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.fuelCost, this.modification.operatingCosts.fuelCost);
+  }
+  compareSteamCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.steamCost, this.modification.operatingCosts.steamCost);
+  }
+  compareElectricityCost(): boolean {
+    return this.compare(this.baseline.operatingCosts.electricityCost, this.modification.operatingCosts.electricityCost);
+  }
 
   compare(a: any, b: any) {
     //if both exist
@@ -83,15 +76,4 @@ export class OperationsCompareService {
       return false;
     }
   }
-}
-
-export interface OperationsDifferentObject {
-  weeksPerYear: BehaviorSubject<boolean>,
-  daysPerWeek: BehaviorSubject<boolean>,
-  shiftsPerDay: BehaviorSubject<boolean>,
-  hoursPerShift: BehaviorSubject<boolean>,
-  hoursPerYear: BehaviorSubject<boolean>,
-  fuelCost: BehaviorSubject<boolean>,
-  steamCost: BehaviorSubject<boolean>,
-  electricityCost: BehaviorSubject<boolean>,
 }

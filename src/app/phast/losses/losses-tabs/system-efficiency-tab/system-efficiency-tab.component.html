@@ -1,3 +1,6 @@
-<p>
-  system-efficiency-tab works!
-</p>
+<a class="nav-link small">
+    <span [ngClass]="{'required-asterisk':!efficiencyDone, 'required-asterisk-done': efficiencyDone}">*</span>System Efficiency
+    <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+        <strong>{{numLosses}}</strong>
+    </span>
+</a>

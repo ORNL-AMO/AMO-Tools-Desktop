@@ -3,7 +3,7 @@
     <label>Operating Hours</label>
     <div class="form-group">
       <label for="weeksPerYear">Weeks / Year</label>
-      <div class="incrementor form-control input-group">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareWeeksPerYear()}">
         <button class="btn input-group-btn" (click)="subtractWeek()">
           <i class="fa fa-minus"></i>
         </button>
@@ -17,7 +17,7 @@
     </div>
     <div class="form-group">
       <label for="daysPerWeek">Days / Week</label>
-      <div class="incrementor form-control input-group">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareDaysPerWeek()}">
         <button class="btn input-group-btn" (click)="subtractWeekDay()">
           <i class="fa fa-minus"></i>
         </button>
@@ -31,7 +31,7 @@
     </div>
     <div class="form-group">
       <label for="shiftsPerDay">Shifts / Day</label>
-      <div class="incrementor form-control input-group">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareShiftsPerDay()}">
         <button class="btn input-group-btn" (click)="subtractShift()">
           <i class="fa fa-minus"></i>
         </button>
@@ -45,7 +45,7 @@
     </div>
     <div class="form-group">
       <label for="hoursPerShift">Hours / Shift</label>
-      <div class="incrementor form-control input-group">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareHoursPerShift()}">
         <button class="btn input-group-btn" (click)="subtractShiftHr()">
           <i class="fa fa-minus"></i>
         </button>
@@ -62,7 +62,7 @@
     <div class="form-group">
       <label for="hoursPerYear">Hours / Year</label>
       <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" formControlName="hoursPerYear"
-        (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        (focus)="focusField('operatingHours')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareHoursPerYear()}">
       <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
     </div>
   </div>
@@ -70,7 +70,7 @@
     <label>Operating Costs</label>
     <div class="form-group">
       <label for="fuelCost">Fuel</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFuelCost()}">
         <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="startSavePolling()" formControlName="fuelCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
@@ -78,7 +78,7 @@
     </div>
     <div class="form-group">
       <label for="steamCost">Steam</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSteamCost()}">
         <input name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="startSavePolling()" formControlName="steamCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
@@ -86,7 +86,7 @@
     </div>
     <div class="form-group">
       <label for="electricityCost">Electricity</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectricityCost()}">
         <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="startSavePolling()"
           formControlName="electricityCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/kWh</span>
