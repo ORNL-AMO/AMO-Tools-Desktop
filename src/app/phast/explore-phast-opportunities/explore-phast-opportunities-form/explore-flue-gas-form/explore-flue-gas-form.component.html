@@ -1,7 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFlueGas">
     <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasTemperature')" (change)="toggleFlueGas()" [(ngModel)]="showFlueGas"
-    /> Adjust Flue Gas Data
+    /> Preheat Combustion Air; Maintain Air / Fuel Ratio
   </label>
 </div>
 <div *ngIf="showFlueGas">
