@@ -4,8 +4,6 @@ import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Losses } from '../../../shared/models/phast/phast';
 import { WallLossesService } from './wall-losses.service';
-import { WallLossCompareService } from './wall-loss-compare.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -41,7 +39,7 @@ export class WallLossesComponent implements OnInit {
   resultsUnit: string
   lossesLocked: boolean = false;
   showError: boolean = false;
-  constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
+  constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -68,9 +66,6 @@ export class WallLossesComponent implements OnInit {
     }
     //convert current wall losses to forms and add to component array
     if (this.losses.wallLosses) {
-      //set our baseline or modification losses for comparisons
-      this.setCompareVals();
-      this.wallLossCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.wallLosses.forEach(loss => {
         //create a temp loss object
@@ -95,15 +90,6 @@ export class WallLossesComponent implements OnInit {
     if(this.inSetup && this.modExists){
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    //clean up subscriptions on destroy
-    if (this.isBaseline) {
-      this.wallLossCompareService.baselineWallLosses = null;
-    } else {
-      this.wallLossCompareService.modifiedWallLosses = null;
     }
   }
 
@@ -165,8 +151,6 @@ export class WallLossesComponent implements OnInit {
     })
     //set input data to equal new data for update
     this.losses.wallLosses = tmpWallLosses;
-    //set values for compare service
-    this.setCompareVals();
     //emit to losses.component that data is updated and should be saved
     this.savedLoss.emit(true);
   }
@@ -174,23 +158,6 @@ export class WallLossesComponent implements OnInit {
   //used for field by field context, send name of current field to losses.component
   changeField(str: string) {
     this.fieldChange.emit(str);
-  }
-  
-  //used for compare service
-  setCompareVals() {
-    //depending on modification/baseline set values for comparison
-    if (this.isBaseline) {
-      this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
-    } else {
-      this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
-    }
-    //if compare objects have been initialized check them
-    //use modify conditions view to call for the check
-    if (this.wallLossCompareService.differentArray && !this.isBaseline) {
-      if (this.wallLossCompareService.differentArray.length != 0) {
-        this.wallLossCompareService.checkWallLosses();
-      }
-    }
   }
 }
 

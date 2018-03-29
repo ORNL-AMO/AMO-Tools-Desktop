@@ -8,65 +8,37 @@ export class OtherLossesCompareService {
   baselineOtherLoss: OtherLoss[];
   modifiedOtherLoss: OtherLoss[];
 
-  //used to hold behavior subjects for each modification
-  differentArray: Array<any>;
+  inputError: BehaviorSubject<boolean>;
+  constructor() { 
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
 
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineOtherLoss && this.modifiedOtherLoss) {
-      if (this.baselineOtherLoss.length == this.modifiedOtherLoss.length) {
-        let numLosses = this.baselineOtherLoss.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkOtherLosses();
+  compareAllLosses(): boolean{
+    let index = 0;
+    let numLoss = this.baselineOtherLoss.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      if(this.compareLoss(index) == true){
+        isDiff = true;
       }
     }
+    return isDiff;
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareLoss(index: number): boolean{
+    return (
+      this.compareDescription(index) ||
+      this.compareHeatLoss(index)
+    )
+  }
+  compareDescription(index: number): boolean{
+    return this.compare(this.baselineOtherLoss[index].description, this.modifiedOtherLoss[index].description);
+  }
+  compareHeatLoss(index: number): boolean{
+    return this.compare(this.baselineOtherLoss[index].heatLoss, this.modifiedOtherLoss[index].heatLoss);
   }
 
-  initDifferentObject(): OtherLossDifferent {
-    let tmpDifferent: OtherLossDifferent = {
-      description: new BehaviorSubject<boolean>(null),
-      heatLoss: new BehaviorSubject<boolean>(null),
-    }
-    return tmpDifferent;
-  }
 
-  checkOtherLosses() {
-    if (this.baselineOtherLoss && this.modifiedOtherLoss) {
-      if (this.baselineOtherLoss.length != 0 && this.modifiedOtherLoss.length != 0 && this.baselineOtherLoss.length == this.modifiedOtherLoss.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //description
-          this.differentArray[lossIndex].different.description.next(this.compare(this.baselineOtherLoss[lossIndex].description, this.modifiedOtherLoss[lossIndex].description));
-          //heatLoss
-          this.differentArray[lossIndex].different.heatLoss.next(this.compare(this.baselineOtherLoss[lossIndex].heatLoss, this.modifiedOtherLoss[lossIndex].heatLoss));
-        }
-      } else {
-        this.disableAll();
-      }
-    } else {
-      this.disableAll();
-    }
-  }
-
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.motorPhase.next(false);
-      this.differentArray[lossIndex].different.heatLoss.next(false);
-    }
-  }
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {
@@ -81,10 +53,4 @@ export class OtherLossesCompareService {
       return false;
     }
   }
-}
-
-
-export interface OtherLossDifferent {
-  description: BehaviorSubject<boolean>,
-  heatLoss: BehaviorSubject<boolean>
 }

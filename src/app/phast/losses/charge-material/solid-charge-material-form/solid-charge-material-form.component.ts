@@ -75,14 +75,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-    this.checkInputError(true);
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
+    this.checkInputError(true);
   }
 
   ngOnDestroy() {
@@ -186,8 +182,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
     if (this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
       this.inputError.emit(true);
+      this.chargeMaterialCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.chargeMaterialCompareService.inputError.next(false);
     }
   }
 
@@ -252,96 +250,127 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       }
     }
   }
-  initDifferenceMonitor() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && this.chargeMaterialCompareService.differentArray.length != 0) {
-      if (this.chargeMaterialCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //materialName
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.materialId.subscribe((val) => {
-          let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
-          materialNameElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //feedRate
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.subscribe((val) => {
-          let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
-          feedRateElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //waterContentAsCharged
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.subscribe((val) => {
-          let waterContentAsChargedElements = doc.getElementsByName('waterContentAsCharged_' + this.lossIndex);
-          waterContentAsChargedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //waterContentAsDischarged
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.subscribe((val) => {
-          let waterContentAsDischargedElements = doc.getElementsByName('waterContentAsDischarged_' + this.lossIndex);
-          waterContentAsDischargedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //initialTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.initialTemperature.subscribe((val) => {
-          let initialTemperatureElements = doc.getElementsByName('initialTemperature_' + this.lossIndex);
-          initialTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //chargeMaterialDischargeTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.subscribe((val) => {
-          let chargeMaterialDischargeTemperatureElements = doc.getElementsByName('chargeMaterialDischargeTemperature_' + this.lossIndex);
-          chargeMaterialDischargeTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //waterVaporDischargeTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.subscribe((val) => {
-          let waterVaporDischargeTemperatureElements = doc.getElementsByName('waterVaporDischargeTemperature_' + this.lossIndex);
-          waterVaporDischargeTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //percentChargeMelted
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeMelted.subscribe((val) => {
-          let percentChargeMeltedElements = doc.getElementsByName('percentChargeMelted_' + this.lossIndex);
-          percentChargeMeltedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //percentChargeReacted
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeReacted.subscribe((val) => {
-          let percentChargeReactedElements = doc.getElementsByName('percentChargeReacted_' + this.lossIndex);
-          percentChargeReactedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heatOfReaction
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.reactionHeat.subscribe((val) => {
-          let heatOfReactionElements = doc.getElementsByName('heatOfReaction_' + this.lossIndex);
-          heatOfReactionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //endothermicOrExothermic
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.subscribe((val) => {
-          let endothermicOrExothermicElements = doc.getElementsByName('endothermicOrExothermic_' + this.lossIndex);
-          endothermicOrExothermicElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //additionalHeatRequired
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.additionalHeat.subscribe((val) => {
-          let additionalHeatRequiredElements = doc.getElementsByName('additionalHeatRequired_' + this.lossIndex);
-          additionalHeatRequiredElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+  canCompare() {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials) {
+      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
+        return true;
+      } else {
+        return false;
       }
+    } else {
+      return false;
+    }
+  }
+  compareSolidMaterialId() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidMaterialId(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidThermicReactionType() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidThermicReactionType(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidSpecificHeatSolid() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidSpecificHeatSolid(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidLatentHeat() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidLatentHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidSpecificHeatLiquid() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidSpecificHeatLiquid(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidMeltingPoint() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidMeltingPoint(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidChargeFeedRate() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidChargeFeedRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidWaterContentCharged() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidWaterContentCharged(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidWaterContentDischarged() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidWaterContentDischarged(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidInitialTemperature() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidDischargeTemperature() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidDischargeTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidWaterVaporDischargeTemperature() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidWaterVaporDischargeTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidChargeMelted() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidChargeMelted(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidChargeReacted() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidChargeReacted(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidReactionHeat() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidReactionHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSolidAdditionalHeat() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareSolidAdditionalHeat(this.lossIndex);
+    } else {
+      return false;
     }
   }
 

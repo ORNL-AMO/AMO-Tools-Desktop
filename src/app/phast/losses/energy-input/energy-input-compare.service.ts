@@ -8,87 +8,58 @@ export class EnergyInputCompareService {
   baselineEnergyInput: EnergyInputEAF[];
   modifiedEnergyInput: EnergyInputEAF[];
 
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      if (this.baselineEnergyInput.length == this.modifiedEnergyInput.length) {
-        let numLosses = this.baselineEnergyInput.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkEnergyInputs();
-      } else {
-        // NO IDEA WHAT TO DO IN THIS CASE
+  inputError: BehaviorSubject<boolean>;
+  constructor() {
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
+  compareAllLosses(): boolean {
+    let index = 0;
+    let numLoss = this.baselineEnergyInput.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      if (this.compareLoss(index) == true) {
+        isDiff = true;
       }
     }
+    return isDiff;
   }
 
-  initDifferentObject(): EnergyInputDifferent {
-    let tmpDifferent: EnergyInputDifferent = {
-      naturalGasHeatInput: new BehaviorSubject<boolean>(null),
-      flowRateInput: new BehaviorSubject<boolean>(null),
-      coalCarbonInjection: new BehaviorSubject<boolean>(null),
-      coalHeatingValue: new BehaviorSubject<boolean>(null),
-      electrodeUse: new BehaviorSubject<boolean>(null),
-      electrodeHeatingValue: new BehaviorSubject<boolean>(null),
-      otherFuels: new BehaviorSubject<boolean>(null),
-      electricityInput: new BehaviorSubject<boolean>(null)
-    }
-    return tmpDifferent;
+  compareLoss(index: number): boolean {
+    return (
+      this.compareNaturalGasHeatInput(index) ||
+      this.compareFlowRateInput(index) ||
+      this.compareCoalCarbonInjection(index) ||
+      this.compareCoalHeatingValue(index) ||
+      this.compareElectrodeUse(index) ||
+      this.compareElectrodeHeatingValue(index) ||
+      this.compareOtherFuels(index) ||
+      this.compareElectricityInput(index)
+    )
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareNaturalGasHeatInput(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].naturalGasHeatInput, this.modifiedEnergyInput[index].naturalGasHeatInput);
   }
-
-  checkEnergyInputs() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      if (this.baselineEnergyInput.length != 0 && this.modifiedEnergyInput.length && this.baselineEnergyInput.length == this.modifiedEnergyInput.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //naturalGasHeatInput
-          this.differentArray[lossIndex].different.naturalGasHeatInput.next(this.compare(this.baselineEnergyInput[lossIndex].naturalGasHeatInput, this.modifiedEnergyInput[lossIndex].naturalGasHeatInput));
-          //coalCarbonInjection
-          this.differentArray[lossIndex].different.coalCarbonInjection.next(this.compare(this.baselineEnergyInput[lossIndex].coalCarbonInjection, this.modifiedEnergyInput[lossIndex].coalCarbonInjection));
-          //coalHeatingValue
-          this.differentArray[lossIndex].different.coalHeatingValue.next(this.compare(this.baselineEnergyInput[lossIndex].coalHeatingValue, this.modifiedEnergyInput[lossIndex].coalHeatingValue));
-          //electrodeUse
-          this.differentArray[lossIndex].different.electrodeUse.next(this.compare(this.baselineEnergyInput[lossIndex].electrodeUse, this.modifiedEnergyInput[lossIndex].electrodeUse));
-          //electrodeHeatingValue
-          this.differentArray[lossIndex].different.electrodeHeatingValue.next(this.compare(this.baselineEnergyInput[lossIndex].electrodeHeatingValue, this.modifiedEnergyInput[lossIndex].electrodeHeatingValue));
-          //otherFuels
-          this.differentArray[lossIndex].different.otherFuels.next(this.compare(this.baselineEnergyInput[lossIndex].otherFuels, this.modifiedEnergyInput[lossIndex].otherFuels));
-          //electricityInput
-          this.differentArray[lossIndex].different.electricityInput.next(this.compare(this.baselineEnergyInput[lossIndex].electricityInput, this.modifiedEnergyInput[lossIndex].electricityInput));
-        }
-      } else {
-        this.disableAll();
-      }
-    }
-    else {
-      this.disableAll();
-    }
+  compareFlowRateInput(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].flowRateInput, this.modifiedEnergyInput[index].flowRateInput);
   }
-
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.naturalGasHeatInput.next(false);
-      this.differentArray[lossIndex].different.coalCarbonInjection.next(false);
-      this.differentArray[lossIndex].different.coalHeatingValue.next(false);
-      this.differentArray[lossIndex].different.electrodeUse.next(false);
-      this.differentArray[lossIndex].different.electrodeHeatingValue.next(false);
-      this.differentArray[lossIndex].different.otherFuels.next(false);
-      this.differentArray[lossIndex].different.electricityInput.next(false);
-    }
+  compareCoalCarbonInjection(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].coalCarbonInjection, this.modifiedEnergyInput[index].coalCarbonInjection);
+  }
+  compareCoalHeatingValue(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].coalHeatingValue, this.modifiedEnergyInput[index].coalHeatingValue);
+  }
+  compareElectrodeUse(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].electrodeUse, this.modifiedEnergyInput[index].electrodeUse);
+  }
+  compareElectrodeHeatingValue(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].electrodeHeatingValue, this.modifiedEnergyInput[index].electrodeHeatingValue);
+  }
+  compareOtherFuels(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].otherFuels, this.modifiedEnergyInput[index].otherFuels);
+  }
+  compareElectricityInput(index: number): boolean {
+    return this.compare(this.baselineEnergyInput[index].electricityInput, this.modifiedEnergyInput[index].electricityInput);
   }
 
   compare(a: any, b: any) {
@@ -105,104 +76,4 @@ export class EnergyInputCompareService {
       return false;
     }
   }
-
-  // naturalGasHeatInput
-  checkNaturalGasHeatInput() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].naturalGasHeatInput != this.modifiedEnergyInput[lossIndex].naturalGasHeatInput) {
-          this.differentArray[lossIndex].different.naturalGasHeatInput.next(true);
-        } else {
-          this.differentArray[lossIndex].different.naturalGasHeatInput.next(false);
-        }
-      }
-    }
-  }
-
-  // coalCarbonInjection
-  checkCoalCarbonInjection() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].coalCarbonInjection != this.modifiedEnergyInput[lossIndex].coalCarbonInjection) {
-          this.differentArray[lossIndex].different.coalCarbonInjection.next(true);
-        } else {
-          this.differentArray[lossIndex].different.coalCarbonInjection.next(false);
-        }
-      }
-    }
-  }
-  // coalHeatingValue
-  checkCoalHeatingValue() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].coalHeatingValue != this.modifiedEnergyInput[lossIndex].coalHeatingValue) {
-          this.differentArray[lossIndex].different.coalHeatingValue.next(true);
-        } else {
-          this.differentArray[lossIndex].different.coalHeatingValue.next(false);
-        }
-      }
-    }
-  }
-  // electrodeUse
-  checkElectrodeUse() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].electrodeUse != this.modifiedEnergyInput[lossIndex].electrodeUse) {
-          this.differentArray[lossIndex].different.electrodeUse.next(true);
-        } else {
-          this.differentArray[lossIndex].different.electrodeUse.next(false);
-        }
-      }
-    }
-  }
-  // electrodeHeatingValue
-  checkElectrodeHeatingValue() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].electrodeHeatingValue != this.modifiedEnergyInput[lossIndex].electrodeHeatingValue) {
-          this.differentArray[lossIndex].different.electrodeHeatingValue.next(true);
-        } else {
-          this.differentArray[lossIndex].different.electrodeHeatingValue.next(false);
-        }
-      }
-    }
-  }
-  // otherFuels
-  checkOtherFuels() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].otherFuels != this.modifiedEnergyInput[lossIndex].otherFuels) {
-          this.differentArray[lossIndex].different.otherFuels.next(true);
-        } else {
-          this.differentArray[lossIndex].different.otherFuels.next(false);
-        }
-      }
-    }
-  }
-  // electricityInput
-  checkElectricityInput() {
-    if (this.baselineEnergyInput && this.modifiedEnergyInput) {
-      for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
-        if (this.baselineEnergyInput[lossIndex].electricityInput != this.modifiedEnergyInput[lossIndex].electricityInput) {
-          this.differentArray[lossIndex].different.electricityInput.next(true);
-        } else {
-          this.differentArray[lossIndex].different.electricityInput.next(false);
-        }
-      }
-    }
-  }
-
-}
-
-export interface EnergyInputDifferent {
-  naturalGasHeatInput: BehaviorSubject<boolean>,
-  flowRateInput: BehaviorSubject<boolean>,
-  // naturalGasFlow: BehaviorSubject<boolean>,
-  // measuredOxygenFlow: BehaviorSubject<boolean>,
-  coalCarbonInjection: BehaviorSubject<boolean>,
-  coalHeatingValue: BehaviorSubject<boolean>,
-  electrodeUse: BehaviorSubject<boolean>,
-  electrodeHeatingValue: BehaviorSubject<boolean>,
-  otherFuels: BehaviorSubject<boolean>,
-  electricityInput: BehaviorSubject<boolean>
 }

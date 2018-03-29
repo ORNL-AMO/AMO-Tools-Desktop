@@ -7,33 +7,11 @@ export class HeatSystemEfficiencyCompareService {
   baseline: PHAST;
   modification: PHAST;
 
-  differentObject: EfficiencyDifferentObject
   constructor() { }
-
-  initCompareObjects() {
-    if (this.baseline && this.modification) {
-      this.differentObject = this.initDifferentObject();
-      this.checkDifferent();
+  compareEfficiency(){
+    if(this.baseline && this.modification){
+      return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency)
     }
-  }
-
-  checkDifferent() {
-    if (this.baseline && this.modification) {
-      this.differentObject.efficiency.next(this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency))
-    } else {
-      this.disableAll();
-    }
-  }
-
-  disableAll() {
-    this.differentObject.efficiency.next(false);
-  }
-
-  initDifferentObject(): EfficiencyDifferentObject {
-    let object: EfficiencyDifferentObject = {
-      efficiency: new BehaviorSubject<boolean>(null)
-    }
-    return object;
   }
 
   compare(a: any, b: any) {
@@ -58,7 +36,4 @@ export class HeatSystemEfficiencyCompareService {
     }
   }
 
-}
-export interface EfficiencyDifferentObject {
-  efficiency: BehaviorSubject<boolean>;
 }

@@ -5,7 +5,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
-import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -43,7 +42,7 @@ export class ChargeMaterialComponent implements OnInit {
   lossesLocked: boolean = false;
 
   showError: boolean = false;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -66,22 +65,11 @@ export class ChargeMaterialComponent implements OnInit {
       this._chargeMaterial = new Array();
     }
     if (this.losses.chargeMaterials) {
-      this.setCompareVals();
-      this.chargeMaterialCompareService.initCompareObjects();
       this.initChargeMaterial();
     }
-
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.chargeMaterialCompareService.baselineMaterials = null;
-    } else {
-      this.chargeMaterialCompareService.modifiedMaterials = null;
     }
   }
 
@@ -236,7 +224,6 @@ export class ChargeMaterialComponent implements OnInit {
       tmpChargeMaterials.push(tmpMaterial);
     });
     this.losses.chargeMaterials = tmpChargeMaterials;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -263,6 +250,7 @@ export class ChargeMaterialComponent implements OnInit {
         name: material.gasForm.controls.name.value
       })
     }
+    this.saveLosses();
   }
 
   changeField(str: string) {
@@ -271,19 +259,6 @@ export class ChargeMaterialComponent implements OnInit {
   focusOut() {
     this.fieldChange.emit('default');
   }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.chargeMaterialCompareService.baselineMaterials = this.losses.chargeMaterials;
-    } else {
-      this.chargeMaterialCompareService.modifiedMaterials = this.losses.chargeMaterials;
-    }
-    if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
-      if (this.chargeMaterialCompareService.differentArray.length != 0) {
-        this.chargeMaterialCompareService.checkChargeMaterials();
-      }
-    }
-  }
-
   setError(bool: boolean){
     this.showError = bool;
   }

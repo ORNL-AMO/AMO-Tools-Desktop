@@ -8,6 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
 import { LossTab } from '../tabs';
+import { PhastCompareService } from '../phast-compare.service';
 
 @Component({
   selector: 'app-losses',
@@ -52,7 +53,7 @@ export class LossesComponent implements OnInit {
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, ) {
+    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService ) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
   }
@@ -74,22 +75,8 @@ export class LossesComponent implements OnInit {
     }
 
     this.lossesService.lossesTab.subscribe(val => {
-      this.changeField('default');
-      
+      this.changeField('default');     
       this.selectedTab = _.find(this.lossesTabs, (t) => {return val == t.step });
-      // if (this.lossesTab == 'heat-system-efficiency'
-      //   || this.lossesTab == 'atmosphere-losses'
-      //   || this.lossesTab == 'exhaust-gas'
-      //   || this.lossesTab == 'heat-system-efficiency'
-      //   || this.lossesTab == 'flue-gas-losses'
-      //   || this.lossesTab == 'energy-input'
-      //   || this.lossesTab == 'energy-input-exhaust-gas'
-      // ) {
-      //   this.showAddBtn = false;
-      // } else {
-
-      //   this.showAddBtn = true;
-      // }
     })
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -109,11 +96,14 @@ export class LossesComponent implements OnInit {
       }
       this.toastyService.warning(toastOptions);
     }
+    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    this.lossesService.updateTabs.next(true);
   }
 
   ngOnDestroy() {
     // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
+    this.phastCompareService.setNoModification();
   }
 
   changeField($event) {
@@ -123,6 +113,7 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+      this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
       this.saved.emit(true);
       this.showEditModification = false;
       this.editModification = null;
@@ -197,6 +188,8 @@ export class LossesComponent implements OnInit {
     this._modifications.forEach(mod => {
       if (mod == modification) {
         this.modificationIndex = tmpIndex;
+        this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+        this.saveModifications();
         return;
       } else {
         tmpIndex++;

@@ -39,7 +39,7 @@ export class FixtureLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   materials: Array<any>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -55,14 +55,11 @@ export class FixtureLossesFormComponent implements OnInit {
 
   ngOnInit() {
     this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
+
   disableForm() {
     this.lossesForm.disable();
   }
@@ -89,7 +86,6 @@ export class FixtureLossesFormComponent implements OnInit {
     })
     this.checkInputError();
   }
-
   checkSpecificHeat() {
     if (this.lossesForm.controls.materialName.value) {
       let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
@@ -109,7 +105,6 @@ export class FixtureLossesFormComponent implements OnInit {
       return false;
     }
   }
-
   checkInputError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
@@ -124,69 +119,18 @@ export class FixtureLossesFormComponent implements OnInit {
     } else {
       this.feedRateError = null;
     }
-
     if (this.specificHeatError || this.feedRateError) {
       this.inputError.emit(true);
+      this.fixtureLossesCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.fixtureLossesCompareService.inputError.next(false);
     }
   }
-
   startSavePolling() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.fixtureLossesCompareService.baselineFixtureLosses && this.fixtureLossesCompareService.modifiedFixtureLosses && this.fixtureLossesCompareService.differentArray.length != 0) {
-      if (this.fixtureLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-        //materialName
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.materialName.subscribe((val) => {
-          let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
-          materialNameElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //specificHeat
-        // this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-        //   let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-        //   specificHeatElements.forEach(element => {
-        //     element.classList.toggle('indicate-different-db', val);
-        //   });
-        // })
-        //feedRate
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.feedRate.subscribe((val) => {
-          let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
-          feedRateElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //initialTemp
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.initialTemperature.subscribe((val) => {
-          let initialTempElements = doc.getElementsByName('initialTemp_' + this.lossIndex);
-          initialTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //finalTemp
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.finalTemperature.subscribe((val) => {
-          let finalTempElements = doc.getElementsByName('finalTemp_' + this.lossIndex);
-          finalTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //correctionFactor
-        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-          correctionFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
-    }
-  }
-
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
@@ -202,13 +146,11 @@ export class FixtureLossesFormComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
-
   showMaterialModal() {
     this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
-
   hideMaterialModal(event?: any) {
     if (event) {
       this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
@@ -224,4 +166,48 @@ export class FixtureLossesFormComponent implements OnInit {
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }
+  canCompare() {
+    if (this.fixtureLossesCompareService.baselineFixtureLosses && this.fixtureLossesCompareService.modifiedFixtureLosses) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  compareFeedRate(): boolean {
+    if (this.canCompare()) {
+      return this.fixtureLossesCompareService.compareFeedRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareInitialTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.fixtureLossesCompareService.compareInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareFinalTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.fixtureLossesCompareService.compareFinalTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareCorrectionFactor(): boolean {
+    if (this.canCompare()) {
+      return this.fixtureLossesCompareService.compareCorrectionFactor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareMaterialName(): boolean {
+    if (this.canCompare()) {
+      return this.fixtureLossesCompareService.compareMaterialName(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+
 }
