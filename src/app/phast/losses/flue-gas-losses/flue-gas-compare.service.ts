@@ -6,143 +6,102 @@ import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 export class FlueGasCompareService {
   baselineFlueGasLoss: FlueGas[];
   modifiedFlueGasLoss: FlueGas[];
-
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      if (this.baselineFlueGasLoss.length == this.modifiedFlueGasLoss.length) {
-        let numLosses = this.baselineFlueGasLoss.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
-        }
-        this.checkFlueGasLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
-      }
-    }
+  inputError: BehaviorSubject<boolean>;
+  constructor() {
+    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
-  }
-
-  initDifferentObject(): FlueGasDifferent {
-    let tmpByVolume: FlueGasVolumeDifferent = {
-      gasTypeId: new BehaviorSubject<boolean>(null),
-      flueGasTemperature: new BehaviorSubject<boolean>(null),
-      excessAirPercentage: new BehaviorSubject<boolean>(null),
-      combustionAirTemperature: new BehaviorSubject<boolean>(null),
-      fuelTemperature: new BehaviorSubject<boolean>(null),
-      oxygenCalculationMethod: new BehaviorSubject<boolean>(null),
-    }
-    let tmpByMass: FlueGasMassDifferent = {
-      gasTypeId: new BehaviorSubject<boolean>(null),
-      flueGasTemperature: new BehaviorSubject<boolean>(null),
-      excessAirPercentage: new BehaviorSubject<boolean>(null),
-      combustionAirTemperature: new BehaviorSubject<boolean>(null),
-      fuelTemperature: new BehaviorSubject<boolean>(null),
-      ashDischargeTemperature: new BehaviorSubject<boolean>(null),
-      moistureInAirComposition: new BehaviorSubject<boolean>(null),
-      unburnedCarbonInAsh: new BehaviorSubject<boolean>(null),
-    }
-    let tmpDifferent: FlueGasDifferent = {
-      flueGasType: new BehaviorSubject<boolean>(null),
-      flueGasVolumeDifferent: tmpByVolume,
-      flueGasMassDifferent: tmpByMass
-    }
-    return tmpDifferent;
-  }
-
-  checkFlueGasLosses() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      if (this.baselineFlueGasLoss.length != 0 && this.modifiedFlueGasLoss.length != 0 && this.baselineFlueGasLoss.length == this.modifiedFlueGasLoss.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //volume
-          if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
-            //gasTypeId
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId))
-            //flueGasTemperature
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature))
-            //excessAirPercentage
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage))
-            //combustionAirTemperature
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature))
+  compareAllLosses() {
+    let index = 0;
+    let numLoss = this.baselineFlueGasLoss.length;
+    let isDiff: boolean = false;
+    for (index; index < numLoss; index++) {
+      let typeCheck = this.compareLossType(index);
+      if (typeCheck == false) {
+        if (this.baselineFlueGasLoss[index].flueGasType == 'By Volume') {
+          if (this.compareByVolumeLoss(index) == true) {
+            isDiff = true;
           }
-          //mass
-          else if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-            //gasTypeId
-            this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.gasTypeId, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.gasTypeId))
-            //flueGasTemperature
-            this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature))
-            //excessAirPercentage
-            this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage))
-            //combustionAirTemperature
-            this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature))
-            //fuelTemperature
-            this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature))
-            //ashDischargeTemperature
-            this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature))
-            //moistureInAirComposition
-            this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition))
-            //unburnedCarbonInAsh
-            this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh))
-          } else {
-            this.disableIndexed(lossIndex);
+        } else if (this.baselineFlueGasLoss[index].flueGasType == 'By Mass') {
+          if (this.compareByMassLoss(index) == true) {
+            isDiff = true;
           }
         }
       } else {
-        this.disableAll();
+        isDiff = true;
       }
     }
-    else if ((this.baselineFlueGasLoss && !this.modifiedFlueGasLoss) || (!this.baselineFlueGasLoss && this.modifiedFlueGasLoss)) {
-      this.disableAll();
-    }
+    return isDiff;
   }
 
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(false);
-      this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
-      this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasVolumeDifferent.fuelTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(false);
-      this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(false);
-    }
+  compareLossType(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasType, this.modifiedFlueGasLoss[index].flueGasType);
   }
-
-  disableIndexed(lossIndex: number) {
-    this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(false);
-    this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
-    this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasVolumeDifferent.fuelTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(false);
-    this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(false);
+  //by mass
+  compareByMassLoss(index: number) {
+    return (this.compareMassGasTypeId(index) ||
+      this.compareMassFlueGasTemperature(index) ||
+      this.compareMassExcessAirPercentage(index) ||
+      this.compareMassCombustionAirTemperature(index) ||
+      this.compareMassFuelTemperature(index) ||
+      this.compareMassAshDischargeTemperature(index) ||
+      this.compareMassMoistureInAirComposition(index) ||
+      this.compareMassUnburnedCarbonInAsh(index))
   }
-
+  compareMassGasTypeId(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.gasTypeId, this.modifiedFlueGasLoss[index].flueGasByMass.gasTypeId);
+  }
+  compareMassFlueGasTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.flueGasTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.flueGasTemperature);
+  }
+  compareMassExcessAirPercentage(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.excessAirPercentage, this.modifiedFlueGasLoss[index].flueGasByMass.excessAirPercentage);
+  }
+  compareMassCombustionAirTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.combustionAirTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.combustionAirTemperature);
+  }
+  compareMassFuelTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.fuelTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.fuelTemperature);
+  }
+  compareMassAshDischargeTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.ashDischargeTemperature, this.modifiedFlueGasLoss[index].flueGasByMass.ashDischargeTemperature);
+  }
+  compareMassMoistureInAirComposition(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.moistureInAirComposition, this.modifiedFlueGasLoss[index].flueGasByMass.moistureInAirComposition);
+  }
+  compareMassUnburnedCarbonInAsh(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh, this.modifiedFlueGasLoss[index].flueGasByMass.unburnedCarbonInAsh);
+  }
+  compareMassOxygenCalculationMethod(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.oxygenCalculationMethod, this.modifiedFlueGasLoss[index].flueGasByMass.oxygenCalculationMethod);
+  }
+  //by volume
+  compareByVolumeLoss(index: number) {
+    return (this.compareVolumeGasTypeId(index) ||
+      this.compareVolumeFlueGasTemperature(index) ||
+      this.compareVolumeExcessAirPercentage(index) ||
+      this.compareVolumeCombustionAirTemperature(index) ||
+      this.compareVolumeFuelTemperature(index) ||
+      this.compareVolumeOxygenCalculationMethod(index))
+  }
+  compareVolumeGasTypeId(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.gasTypeId, this.modifiedFlueGasLoss[index].flueGasByVolume.gasTypeId);
+  }
+  compareVolumeFlueGasTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.flueGasTemperature, this.modifiedFlueGasLoss[index].flueGasByVolume.flueGasTemperature);
+  }
+  compareVolumeExcessAirPercentage(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.excessAirPercentage, this.modifiedFlueGasLoss[index].flueGasByVolume.excessAirPercentage);
+  }
+  compareVolumeCombustionAirTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.combustionAirTemperature, this.modifiedFlueGasLoss[index].flueGasByVolume.combustionAirTemperature);
+  }
+  compareVolumeFuelTemperature(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.fuelTemperature, this.modifiedFlueGasLoss[index].flueGasByVolume.fuelTemperature);
+  }
+  compareVolumeOxygenCalculationMethod(index: number) {
+    return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.oxygenCalculationMethod, this.modifiedFlueGasLoss[index].flueGasByVolume.oxygenCalculationMethod);
+  }
 
   compare(a: any, b: any) {
     if (a && b) {
@@ -159,30 +118,4 @@ export class FlueGasCompareService {
     }
   }
 
-}
-
-export interface FlueGasDifferent {
-  flueGasType: BehaviorSubject<boolean>,
-  flueGasVolumeDifferent: FlueGasVolumeDifferent,
-  flueGasMassDifferent: FlueGasMassDifferent
-}
-
-export interface FlueGasVolumeDifferent {
-  gasTypeId: BehaviorSubject<boolean>,
-  flueGasTemperature: BehaviorSubject<boolean>,
-  excessAirPercentage: BehaviorSubject<boolean>,
-  combustionAirTemperature: BehaviorSubject<boolean>,
-  fuelTemperature: BehaviorSubject<boolean>,
-  oxygenCalculationMethod: BehaviorSubject<boolean>,
-}
-
-export interface FlueGasMassDifferent {
-  gasTypeId: BehaviorSubject<boolean>,
-  flueGasTemperature: BehaviorSubject<boolean>,
-  excessAirPercentage: BehaviorSubject<boolean>,
-  combustionAirTemperature: BehaviorSubject<boolean>,
-  fuelTemperature: BehaviorSubject<boolean>,
-  ashDischargeTemperature: BehaviorSubject<boolean>,
-  moistureInAirComposition: BehaviorSubject<boolean>,
-  unburnedCarbonInAsh: BehaviorSubject<boolean>,
 }

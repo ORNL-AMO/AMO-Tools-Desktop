@@ -9,22 +9,22 @@ export class EnergyInputExhaustGasService {
 
   initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
-      'excessAir': [''],
-      'combustionAirTemp': [''],
-      'exhaustGasTemp': [''],
-      'totalHeatInput': [0],
-      'electricalPowerInput': [''],
+      'excessAir': ['', Validators.required],
+      'combustionAirTemp': ['', Validators.required],
+      'exhaustGasTemp': ['', Validators.required],
+      'totalHeatInput': [0, Validators.required],
+      'electricalPowerInput': ['', Validators.required],
       'name': ['Loss #'+lossNum]
     })
   }
 
   getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): FormGroup {
     let tmpGroup = this.formBuilder.group({
-      'excessAir': [energyInputExhaustGas.excessAir],
-      'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp],
-      'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp],
-      'totalHeatInput': [energyInputExhaustGas.totalHeatInput],
-      'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput],
+      'excessAir': [energyInputExhaustGas.excessAir, Validators.required],
+      'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp, Validators.required],
+      'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp, Validators.required],
+      'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
+      'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput, Validators.required],
       'name': [energyInputExhaustGas.name]
     })
     return tmpGroup;

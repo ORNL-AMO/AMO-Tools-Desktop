@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { HeatSystemEfficiencyCompareService } from './heat-system-efficiency-compare.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-heat-system-efficiency',
   templateUrl: './heat-system-efficiency.component.html',
@@ -37,7 +36,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   systemLosses: number = 0;
   grossHeat: number = 0;
   resultsUnit: string;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService, private windowRefService: WindowRefService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService) { }
 
   ngOnInit() {
     if (this.settings.energyResultUnit != 'kWh') {
@@ -54,9 +53,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       this.enableForm();
     }
     this.calculate(true);
-    this.setCompareVals();
-    this.heatSystemEfficiencyCompareService.initCompareObjects();
-    this.initDifferenceMonitor();
 
     if (this.inSetup && this.modExists) {
       this.disableForm();
@@ -73,14 +69,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     }
     else {
       this.firstChange = false;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.heatSystemEfficiencyCompareService.baseline = null;
-    } else {
-      this.heatSystemEfficiencyCompareService.modification = null;
     }
   }
 
@@ -104,11 +92,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   saveLosses() {
-    if (this.efficiencyForm.status == 'VALID') {
-      this.phast.systemEfficiency = this.efficiencyForm.controls.efficiency.value;
-      this.savedLoss.emit(true);
-      this.setCompareVals();
-    }
+    this.phast.systemEfficiency = this.efficiencyForm.controls.efficiency.value;
+    this.savedLoss.emit(true);
   }
 
   focusField(str: string) {
@@ -128,29 +113,11 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.controls.efficiency.value / 100));
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.heatSystemEfficiencyCompareService.baseline = this.phast;
-    } else {
-      this.heatSystemEfficiencyCompareService.modification = this.phast;
-    }
-    if (this.heatSystemEfficiencyCompareService.differentObject && !this.isBaseline) {
-      this.heatSystemEfficiencyCompareService.checkDifferent();
-    }
-  }
-
-  initDifferenceMonitor() {
+  compareEfficiency() {
     if (this.heatSystemEfficiencyCompareService.baseline && this.heatSystemEfficiencyCompareService.modification) {
-      if (this.heatSystemEfficiencyCompareService.differentObject) {
-        let doc = this.windowRefService.getDoc();
-        this.heatSystemEfficiencyCompareService.differentObject.efficiency.subscribe(val => {
-          let efficiencyElements = doc.getElementsByName('efficiency');
-          efficiencyElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+      return this.heatSystemEfficiencyCompareService.compareEfficiency();
+    } else {
+      return false;
     }
   }
-
 }

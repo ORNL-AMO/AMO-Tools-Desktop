@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
-import { OtherLossesCompareService } from './other-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -37,15 +36,13 @@ export class OtherLossesComponent implements OnInit {
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
+  constructor(private otherLossesService: OtherLossesService) { }
 
   ngOnInit() {
     if (!this._otherLosses) {
       this._otherLosses = new Array();
     }
     if (this.losses.otherLosses) {
-      this.setCompareVals();
-      this.otherLossCompareService.initCompareObjects();
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
           form: this.otherLossesService.getFormFromLoss(loss),
@@ -115,25 +112,11 @@ export class OtherLossesComponent implements OnInit {
       tmpLosses.push(tmpLoss);
     })
     this.losses.otherLosses = tmpLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
-  }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.otherLossCompareService.baselineOtherLoss = this.losses.otherLosses;
-    } else {
-      this.otherLossCompareService.modifiedOtherLoss = this.losses.otherLosses;
-    }
-    if (this.otherLossCompareService.differentArray && !this.isBaseline) {
-      if (this.otherLossCompareService.differentArray.length != 0) {
-        this.otherLossCompareService.checkOtherLosses();
-      }
-    }
   }
 }
 

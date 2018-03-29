@@ -1,0 +1,6 @@
+<a class="nav-link small">
+  <span [ngClass]="{'required-asterisk':!flueGasDone, 'required-asterisk-done': flueGasDone}">*</span>Flue Gas
+  <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+      <strong>{{numLosses}}</strong>
+  </span>
+</a>

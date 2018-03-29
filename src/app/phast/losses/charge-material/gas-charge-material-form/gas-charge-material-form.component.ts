@@ -68,14 +68,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-    this.checkInputError(true);
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
+    this.checkInputError(true);
   }
 
   ngOnDestroy() {
@@ -85,7 +81,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   checkMaterialValues() {
     let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
-      if(this.settings.unitsOfMeasure == 'Metric'){
+      if (this.settings.unitsOfMeasure == 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
         material.specificHeatVapor = this.roundVal(val, 4);
       }
@@ -164,8 +160,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
     if (this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError) {
       this.inputError.emit(true);
+      this.chargeMaterialCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.chargeMaterialCompareService.inputError.next(false);
     }
   }
 
@@ -173,83 +171,92 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && this.chargeMaterialCompareService.differentArray.length != 0) {
-      if (this.chargeMaterialCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //materialName
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.materialId.subscribe((val) => {
-          let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
-          materialNameElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //feedRate
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.feedRate.subscribe((val) => {
-          let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
-          feedRateElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //vaporInGas
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.percentVapor.subscribe((val) => {
-          let vaporInGasElements = doc.getElementsByName('vaporInGas_' + this.lossIndex);
-          vaporInGasElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //initialTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.initialTemperature.subscribe((val) => {
-          let initialTemperatureElements = doc.getElementsByName('initialTemperature_' + this.lossIndex);
-          initialTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //dischargeTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.subscribe((val) => {
-          let dischargeTemperatureElements = doc.getElementsByName('dischargeTemperature_' + this.lossIndex);
-          dischargeTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //specificHeatOfVapor
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.subscribe((val) => {
-          let specificHeatOfVaporElements = doc.getElementsByName('specificHeatOfVapor_' + this.lossIndex);
-          specificHeatOfVaporElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //gasReacted
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.percentReacted.subscribe((val) => {
-          let gasReactedElements = doc.getElementsByName('gasReacted_' + this.lossIndex);
-          gasReactedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heatOfReaction
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.reactionHeat.subscribe((val) => {
-          let heatOfReactionElements = doc.getElementsByName('heatOfReaction_' + this.lossIndex);
-          heatOfReactionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //endothermicOrExothermic
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.subscribe((val) => {
-          let endothermicOrExothermicElements = doc.getElementsByName('endothermicOrExothermic_' + this.lossIndex);
-          endothermicOrExothermicElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //additionalHeatRequired
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.additionalHeat.subscribe((val) => {
-          let additionalHeatRequiredElements = doc.getElementsByName('additionalHeatRequired_' + this.lossIndex);
-          additionalHeatRequiredElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+  canCompare() {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials) {
+      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
+        return true;
+      } else {
+        return false;
       }
+    } else {
+      return false;
+    }
+  }
+  compareGasMaterialId() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasMaterialId(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasThermicReactionType() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasThermicReactionType(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasSpecificHeatGas() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasSpecificHeatGas(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasFeedRate() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasFeedRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasPercentVapor() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasPercentVapor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasInitialTemperature() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasDischargeTemperature() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasDischargeTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasSpecificHeatVapor() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasSpecificHeatVapor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasPercentReacted() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasPercentReacted(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasReactionHeat() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasReactionHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasAdditionalHeat() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareGasAdditionalHeat(this.lossIndex);
+    } else {
+      return false;
     }
   }
 

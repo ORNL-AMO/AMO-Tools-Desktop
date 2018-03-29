@@ -11,24 +11,13 @@ import * as _ from 'lodash';
   styleUrls: ['./losses-tabs.component.css']
 })
 export class LossesTabsComponent implements OnInit {
-  selectedTab: LossTab;
-  @Input()
-  saveDbToggle: boolean;
-  @Input()
-  inSetup: boolean;
   @Input()
   settings: Settings;
   @Input()
   phast: PHAST;
 
-  showSlag: boolean = false;
-  showAuxPower: boolean = false;
-  showSystemEff: boolean = false;
-  showFlueGas: boolean = false;
-  showEnInput1: boolean = false;
-  showEnInput2: boolean = false;
-  showExGas: boolean = false;
-
+  selectedTab: LossTab;
+  
   numCharge: number;
   numFixture: number;
   numWall: number;
@@ -56,7 +45,6 @@ export class LossesTabsComponent implements OnInit {
     this.lossesService.lossesTab.subscribe(val => {
       this.selectedTab = this.lossesService.getTab(val);
     })
-    this.checkDone();
     this.lossesService.updateTabs.subscribe(val => {
       this.checkDone();
       if (this.phast.losses) {
@@ -70,7 +58,6 @@ export class LossesTabsComponent implements OnInit {
       if (this.phast.losses) {
         this.getNumLosses(this.phast.losses);
       }
-      this.checkDone();
     }
   }
 

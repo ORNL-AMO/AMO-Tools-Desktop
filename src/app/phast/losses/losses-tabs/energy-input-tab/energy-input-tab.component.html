@@ -1,0 +1,6 @@
+<a class="nav-link small">
+  <span [ngClass]="{'required-asterisk':!enInput1Done, 'required-asterisk-done': enInput1Done}">*</span>Energy Input
+  <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+      <strong>{{numLosses}}</strong>
+  </span>
+</a>

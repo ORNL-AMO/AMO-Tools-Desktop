@@ -5,7 +5,7 @@
           <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a>
       </label>
       <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="atmosphereGas" formControlName="atmosphereGas" (change)="setProperties()"
-        (focus)="focusField('materialName')" (blur)="focusOut()">
+        (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareAtmosphereGas()}">
         <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
       </select>
     </div>
@@ -26,7 +26,7 @@
 
     <div class="form-group">
       <label class="small" for="inletTemp">Inlet temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareInletTemperature()}">
         <input name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp"
           onfocus="this.select();" (input)="checkTempError()" (focus)="focusField('inletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -37,7 +37,7 @@
 
     <div class="form-group">
       <label class="small" for="outletTemp">Outlet temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareOutletTemperature()}">
         <input name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp"
           onfocus="this.select();" (input)="checkTempError()" (focus)="focusField('outletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -48,7 +48,7 @@
 
     <div class="form-group">
       <label class="small" for="flowRate">Flow Rate</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFlowRate()}">
         <input name="{{'flowRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="flowRate"
           id="flowRate" onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('flowRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
@@ -63,7 +63,7 @@
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="correctionFactor"
         id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')"
-        (blur)="focusOut()">
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor()}">
     </div>
   </div>
 </form>

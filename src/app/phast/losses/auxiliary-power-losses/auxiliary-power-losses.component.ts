@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { Losses } from '../../../shared/models/phast/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
-import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -40,7 +39,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   _auxiliaryPowerLosses: Array<AuxPowLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
+  constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -63,8 +62,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       this._auxiliaryPowerLosses = new Array();
     }
     if (this.losses.auxiliaryPowerLosses) {
-      this.setCompareVals();
-      this.auxiliaryPowerCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
@@ -88,13 +85,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.auxiliaryPowerCompareService.baselineAuxLosses = null;
-    } else {
-      this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
-    }
-  }
   disableForms() {
     this._auxiliaryPowerLosses.forEach(loss => {
       loss.form.disable();
@@ -138,7 +128,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       tmpAuxLosses.push(tmpAuxLoss);
     })
     this.losses.auxiliaryPowerLosses = tmpAuxLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -152,19 +141,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 
   focusOut() {
     this.fieldChange.emit('default');
-  }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.auxiliaryPowerCompareService.baselineAuxLosses = this.losses.auxiliaryPowerLosses;
-    } else {
-      this.auxiliaryPowerCompareService.modifiedAuxLosses = this.losses.auxiliaryPowerLosses;
-    }
-    if (this.auxiliaryPowerCompareService.differentArray && !this.isBaseline) {
-      if (this.auxiliaryPowerCompareService.differentArray.length != 0) {
-        this.auxiliaryPowerCompareService.checkAuxLosses();
-      }
-    }
   }
 
   setInputError(bool: boolean){

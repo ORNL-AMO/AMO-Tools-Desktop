@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
-import { OpeningLossesCompareService } from './opening-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -40,7 +39,7 @@ export class OpeningLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,8 +63,6 @@ export class OpeningLossesComponent implements OnInit {
       this._openingLosses = new Array();
     }
     if (this.losses.openingLosses) {
-      this.setCompareVals();
-      this.openingLossesCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
@@ -88,14 +85,6 @@ export class OpeningLossesComponent implements OnInit {
       this.lossesLocked = true;
       this.disableForms();
     }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.openingLossesCompareService.baselineOpeningLosses = null;
-    } else {
-      this.openingLossesCompareService.modifiedOpeningLosses = null;
-    };
   }
 
   addLoss() {
@@ -154,25 +143,12 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLosses.push(tmpOpeningLoss);
     })
     this.losses.openingLosses = tmpOpeningLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.openingLossesCompareService.baselineOpeningLosses = this.losses.openingLosses;
-    } else {
-      this.openingLossesCompareService.modifiedOpeningLosses = this.losses.openingLosses;
-    }
-    if (this.openingLossesCompareService.differentArray) {
-      if (this.openingLossesCompareService.differentArray.length != 0 && !this.isBaseline) {
-        this.openingLossesCompareService.checkOpeningLosses();
-      }
-    }
-  }
 
   setError(bool: boolean) {
     this.showError = bool;

@@ -4,8 +4,6 @@ import { PhastService } from '../../phast.service';
 import { Slag } from '../../../shared/models/phast/losses/slag';
 import { Losses } from '../../../shared/models/phast/phast';
 import { SlagService } from './slag.service';
-import { SlagCompareService } from './slag-compare.service';
-//import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 @Component({
@@ -39,7 +37,7 @@ export class SlagComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private phastService: PhastService, private slagService: SlagService, private slagCompareService: SlagCompareService) { }
+  constructor(private phastService: PhastService, private slagService: SlagService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -62,8 +60,6 @@ export class SlagComponent implements OnInit {
       this._slagLosses = new Array<SlagLossObj>();
     }
     if (this.losses.slagLosses) {
-      this.setCompareVals();
-      this.slagCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.slagLosses.forEach(loss => {
         let tmpLoss = {
@@ -88,13 +84,6 @@ export class SlagComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.slagCompareService.baselineSlag = null;
-    } else {
-      this.slagCompareService.modifiedSlag = null;
-    }
-  }
 
   disableForms(){
     this._slagLosses.forEach(loss => {
@@ -140,25 +129,11 @@ export class SlagComponent implements OnInit {
       tmpSlagLosses.push(tmpSlag);
     })
     this.losses.slagLosses = tmpSlagLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
-  }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.slagCompareService.baselineSlag = this.losses.slagLosses;
-    } else {
-      this.slagCompareService.modifiedSlag = this.losses.slagLosses;
-    }
-    if (this.slagCompareService.differentArray && !this.isBaseline) {
-      if (this.slagCompareService.differentArray.length != 0) {
-        this.slagCompareService.checkSlagLosses();
-      }
-    }
   }
 }
 
