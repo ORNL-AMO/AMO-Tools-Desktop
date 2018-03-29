@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { FixtureLossesCompareService } from '../../fixture-losses/fixture-losses-compare.service';
 import { FixtureLossesService } from '../../fixture-losses/fixture-losses.service';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fixture-tab',
@@ -20,33 +21,41 @@ export class FixtureTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  constructor(private lossesService: LossesService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
+  compareSubscription: Subscription;
+  lossSubscription: Subscription;
+  constructor(private lossesService: LossesService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setNumLosses();
-    this.lossesService.updateTabs.subscribe(val => {
+    this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
 
-    this.fixtureLossesCompareService.inputError.subscribe(val => {
+    this.compareSubscription = this.fixtureLossesCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
     })
   }
 
-  setBadgeClass() {
-    if (this.missingData) {
-      this.badgeClass = ['missing-data'];
-    } else if (this.inputError) {
-      this.badgeClass = ['input-error'];
-    } else if (this.isDifferent) {
-      this.badgeClass = ['loss-different'];
-    } else {
-      this.badgeClass = ['success'];
+  ngOnDestroy(){
+    this.compareSubscription.unsubscribe();
+    this.lossSubscription.unsubscribe();
+  }
+
+  setBadgeClass(){
+    let badgeStr: Array<string> = ['success'];
+    if(this.missingData){
+      badgeStr = ['missing-data'];
+    }else if(this.inputError){
+      badgeStr = ['input-error'];
+    }else if(this.isDifferent){
+      badgeStr = ['loss-different'];
     }
+    this.badgeClass = badgeStr;
+    this.cd.detectChanges();
   }
 
   setNumLosses() {
@@ -77,12 +86,12 @@ export class FixtureTabComponent implements OnInit {
 
 
   checkLossValid(loss: FixtureLoss) {
-      let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
-        return true;
-      } else {
-        return false;
-      }
+    let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
+    if (tmpForm.status == 'VALID') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   checkDifferent() {
