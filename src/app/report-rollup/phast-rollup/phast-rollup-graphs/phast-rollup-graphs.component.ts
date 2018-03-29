@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -21,6 +21,8 @@ export class PhastRollupGraphsComponent implements OnInit {
   calculator: Calculator;
   // @Input()
   // preAssessmentData: 
+
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
@@ -65,9 +67,6 @@ export class PhastRollupGraphsComponent implements OnInit {
 
     if (this.printView) {
       this.initPrintChartData();
-    }
-    else {
-      this.chartContainerWidth = (window.innerWidth - 30) * .28;
     }
   }
 
@@ -117,7 +116,6 @@ export class PhastRollupGraphsComponent implements OnInit {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
-    this.updateChart();
   }
 
   initPrintChartData() {
@@ -193,7 +191,13 @@ export class PhastRollupGraphsComponent implements OnInit {
     ]
   }
 
-  updateChart() {
-    this.isUpdate = true;
+  getPieWidth(): number {
+    if (this.pieChartContainer) {
+      let containerPadding = 30;
+      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
+    }
   }
 }

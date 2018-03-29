@@ -63,10 +63,17 @@ export class RollupBarChartComponent implements OnInit {
 
   ngAfterViewInit() {
 
+    if (this.printView) {
+      this.initChart();
+    }
   }
 
   ngOnChanges() {
-    this.initChart();
+    if (!this.printView) {
+      if (this.chartContainerWidth > 0) {
+        this.initChart();
+      }
+    }
   }
 
   initChart() {
@@ -156,11 +163,20 @@ export class RollupBarChartComponent implements OnInit {
       });
 
       //formatting chart
-      d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-      d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-      d3.selectAll(".c3-texts").style("font-size", "10px");
-      d3.selectAll(".c3-legend-item text").style("font-size", "15px");
-      d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      if (this.printView) {
+        d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
+        d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+        d3.selectAll(".c3-axis-x .tick text").style("font-size", "1.1rem").style("fill", "none").style("stroke", "#000").style("line-height", "20px");
+        d3.selectAll(".c3-legend-item text").style("font-size", "1.1rem");
+      }
+      else {
+        d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+        d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        d3.selectAll(".c3-texts").style("font-size", "10px");
+        d3.selectAll(".c3-legend-item text").style("font-size", "15px");
+        d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      }
     }
   }
 

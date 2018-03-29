@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -18,6 +18,8 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
   settings: Settings
   @Input()
   printView: boolean;
+
+  @ViewChild('barChartContainer') barChartContainer: ElementRef;
 
   firstLoad: boolean = true;
   isUpdate: boolean = false;
@@ -62,11 +64,10 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
       if (phasts.length != 0) {
         this.resultData = phasts;
         if (this.printView) {
-          this.chartContainerWidth = 1250;
+          this.chartContainerWidth = 1500;
           this.initPrintChartData();
         }
         else {
-          this.chartContainerWidth = (window.innerWidth - 30) * .60;
           this.buildChartData(this.graphOption, false);
           this.initChartData();
         }
@@ -81,6 +82,16 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     else {
       this.buildChartData(this.graphOption, true);
       this.initChartData();
+    }
+  }
+
+  getWidth() {
+    if (this.barChartContainer) {
+      let containerPadding = 30;
+      return this.barChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
     }
   }
 
