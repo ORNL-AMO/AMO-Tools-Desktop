@@ -40,7 +40,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
 
   setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if (this.missingData) {
+    if (this.missingData || !this.efficiencyDone) {
       badgeStr = ['missing-data'];
     } else if (this.isDifferent) {
       badgeStr = ['loss-different'];

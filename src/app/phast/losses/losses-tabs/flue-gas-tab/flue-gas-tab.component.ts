@@ -51,7 +51,7 @@ export class FlueGasTabComponent implements OnInit {
 
   setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if (this.missingData) {
+    if (this.missingData || !this.flueGasDone) {
       badgeStr = ['missing-data'];
     } else if (this.inputError) {
       badgeStr = ['input-error'];
