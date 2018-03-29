@@ -295,7 +295,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     }
   }
 
-  compareMassOxygenCalculationMethod(index: number) {
+  compareMassOxygenCalculationMethod() {
     if (this.canCompare()) {
       return this.flueGasCompareService.compareMassOxygenCalculationMethod(this.lossIndex);
     } else {
