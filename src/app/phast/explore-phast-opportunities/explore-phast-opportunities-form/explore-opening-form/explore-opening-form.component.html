@@ -1,7 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="exploreOpening">
     <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('numberOfOpenings')" (change)="toggleOpening()" [(ngModel)]="showOpening"
-    /> Adjust Opening Loss Data
+    /> Minimize Opening Size
   </label>
 </div>
 <div *ngIf="showOpening">
@@ -198,7 +198,7 @@
 
 
 
-<!-- 
+<!--
 
 
   <div class="form-group">
