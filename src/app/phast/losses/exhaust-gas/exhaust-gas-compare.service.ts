@@ -16,9 +16,11 @@ export class ExhaustGasCompareService {
     let index = 0;
     let numLoss = this.baselineExhaustGasLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if (this.compareLoss(index) == true) {
-        isDiff = true;
+    if (this.modifiedExhaustGasLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;

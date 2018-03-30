@@ -16,6 +16,10 @@ export class LossesService {
 
   lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
+  openModificationModal: BehaviorSubject<boolean>;
+  openRenameModal: BehaviorSubject<boolean>;
+  openDeleteModal: BehaviorSubject<boolean>;
+  openNewModal: BehaviorSubject<boolean>;
 
 
   chargeDone: boolean;
@@ -33,11 +37,10 @@ export class LossesService {
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateTabs = new BehaviorSubject<boolean>(false);
-    // this.chargeDone = new BehaviorSubject<boolean>(false);
-    // this.enInput1Done = new BehaviorSubject<boolean>(false);
-    // this.enInput2Done = new BehaviorSubject<boolean>(false);
-    // this.flueGasDone = new BehaviorSubject<boolean>(false);
-    // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
+    this.openModificationModal = new BehaviorSubject<boolean>(false);
+    this.openRenameModal = new BehaviorSubject<boolean>(false);
+    this.openDeleteModal = new BehaviorSubject<boolean>(false);
+    this.openNewModal = new BehaviorSubject<boolean>(false);
   }
 
   getTab(num: number) {

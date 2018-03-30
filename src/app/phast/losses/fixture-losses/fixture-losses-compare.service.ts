@@ -8,23 +8,25 @@ export class FixtureLossesCompareService {
   baselineFixtureLosses: FixtureLoss[];
   modifiedFixtureLosses: FixtureLoss[];
   inputError: BehaviorSubject<boolean>;
-  constructor() { 
+  constructor() {
     this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  compareAllLosses(): boolean{
+  compareAllLosses(): boolean {
     let index = 0;
     let numLoss = this.baselineFixtureLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if(this.compareLoss(index) == true){
-        isDiff = true;
+    if (this.modifiedFixtureLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
   }
 
-  compareLoss(index: number): boolean{
+  compareLoss(index: number): boolean {
     return (
       this.compareSpecificHeat(index) ||
       this.compareFeedRate(index) ||
@@ -34,27 +36,27 @@ export class FixtureLossesCompareService {
       this.compareMaterialName(index)
     )
   }
-  compareSpecificHeat(index: number): boolean{
+  compareSpecificHeat(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].specificHeat, this.modifiedFixtureLosses[index].specificHeat);
   }
 
-  compareFeedRate(index: number): boolean{
+  compareFeedRate(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].feedRate, this.modifiedFixtureLosses[index].feedRate);
   }
 
-  compareInitialTemperature(index: number): boolean{
+  compareInitialTemperature(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].initialTemperature, this.modifiedFixtureLosses[index].initialTemperature);
   }
 
-  compareFinalTemperature(index: number): boolean{
+  compareFinalTemperature(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].finalTemperature, this.modifiedFixtureLosses[index].finalTemperature);
   }
 
-  compareCorrectionFactor(index: number): boolean{
+  compareCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].correctionFactor, this.modifiedFixtureLosses[index].correctionFactor);
   }
 
-  compareMaterialName(index: number): boolean{
+  compareMaterialName(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].materialName, this.modifiedFixtureLosses[index].materialName);
   }
 

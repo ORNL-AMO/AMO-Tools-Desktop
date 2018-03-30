@@ -4,7 +4,7 @@
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
-    <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
+    <app-modification-navbar *ngIf="mainTab == 'assessment'"></app-modification-navbar>
     <nav *ngIf="mainTab == 'assessment'">
       <ul class="tabs subtabs phast">
         <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">

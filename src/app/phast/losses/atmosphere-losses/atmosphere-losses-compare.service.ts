@@ -7,49 +7,51 @@ export class AtmosphereLossesCompareService {
   baselineAtmosphereLosses: AtmosphereLoss[];
   modifiedAtmosphereLosses: AtmosphereLoss[];
   inputError: BehaviorSubject<boolean>;
-  constructor() { 
+  constructor() {
     this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  compareAllLosses(): boolean{
+  compareAllLosses(): boolean {
     let index = 0;
     let numLoss = this.baselineAtmosphereLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if(this.compareLoss(index) == true){
-        isDiff = true;
+    if (this.modifiedAtmosphereLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
   }
 
-  compareLoss(index: number): boolean{
+  compareLoss(index: number): boolean {
     return (
       this.compareAtmosphereGas(index) ||
       this.compareSpecificHeat(index) ||
       this.compareInletTemperature(index) ||
       this.compareOutletTemperature(index) ||
       this.compareFlowRate(index) ||
-      this.compareCorrectionFactor(index) 
+      this.compareCorrectionFactor(index)
     )
   }
 
-  compareAtmosphereGas(index: number): boolean{
+  compareAtmosphereGas(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].atmosphereGas, this.modifiedAtmosphereLosses[index].atmosphereGas);
   }
-  compareSpecificHeat(index: number): boolean{
+  compareSpecificHeat(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].specificHeat, this.modifiedAtmosphereLosses[index].specificHeat);
   }
-  compareInletTemperature(index: number): boolean{
+  compareInletTemperature(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].inletTemperature, this.modifiedAtmosphereLosses[index].inletTemperature);
   }
-  compareOutletTemperature(index: number): boolean{
+  compareOutletTemperature(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].outletTemperature, this.modifiedAtmosphereLosses[index].outletTemperature);
   }
-  compareFlowRate(index: number): boolean{
+  compareFlowRate(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].flowRate, this.modifiedAtmosphereLosses[index].flowRate);
   }
-  compareCorrectionFactor(index: number): boolean{
+  compareCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].correctionFactor, this.modifiedAtmosphereLosses[index].correctionFactor);
   }
 

@@ -15,20 +15,22 @@ export class FlueGasCompareService {
     let index = 0;
     let numLoss = this.baselineFlueGasLoss.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      let typeCheck = this.compareLossType(index);
-      if (typeCheck == false) {
-        if (this.baselineFlueGasLoss[index].flueGasType == 'By Volume') {
-          if (this.compareByVolumeLoss(index) == true) {
-            isDiff = true;
+    if (this.modifiedFlueGasLoss) {
+      for (index; index < numLoss; index++) {
+        let typeCheck = this.compareLossType(index);
+        if (typeCheck == false) {
+          if (this.baselineFlueGasLoss[index].flueGasType == 'By Volume') {
+            if (this.compareByVolumeLoss(index) == true) {
+              isDiff = true;
+            }
+          } else if (this.baselineFlueGasLoss[index].flueGasType == 'By Mass') {
+            if (this.compareByMassLoss(index) == true) {
+              isDiff = true;
+            }
           }
-        } else if (this.baselineFlueGasLoss[index].flueGasType == 'By Mass') {
-          if (this.compareByMassLoss(index) == true) {
-            isDiff = true;
-          }
+        } else {
+          isDiff = true;
         }
-      } else {
-        isDiff = true;
       }
     }
     return isDiff;

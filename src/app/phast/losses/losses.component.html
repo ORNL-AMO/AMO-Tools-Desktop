@@ -18,9 +18,9 @@
             [isBaseline]="true" [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-charge-material>
 
           <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-            [addLossToggle]="addLossToggle" [(losses)]="phast.losses" *ngIf="selectedTab.componentStr == 'wall-losses'"
-            [isBaseline]="true" (emitDelete)="removeWallLoss($event)" [settings]="settings" [isLossesSetup]="isLossesSetup"
-            [inSetup]="inSetup" [modExists]="modificationExists"></app-wall-losses>
+            [addLossToggle]="addLossToggle" [(losses)]="phast.losses" *ngIf="selectedTab.componentStr == 'wall-losses'" [isBaseline]="true"
+            (emitDelete)="removeWallLoss($event)" [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup"
+            [modExists]="modificationExists"></app-wall-losses>
 
           <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
             [(losses)]="phast.losses" [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'atmosphere-losses'"
@@ -51,16 +51,16 @@
             [isBaseline]="true" [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-extended-surface-losses>
 
           <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-            [(losses)]="phast.losses" [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'other-losses'"
-            [isBaseline]="true" [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-other-losses>
+            [(losses)]="phast.losses" [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'other-losses'" [isBaseline]="true"
+            [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-other-losses>
 
           <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
-            [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'slag'" [isBaseline]="true"
-            [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-slag>
+            [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'slag'" [isBaseline]="true" [settings]="settings"
+            [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-slag>
 
           <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-            [(losses)]="phast.losses" [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'energy-input'"
-            [isBaseline]="true" [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-energy-input>
+            [(losses)]="phast.losses" [addLossToggle]="addLossToggle" *ngIf="selectedTab.componentStr == 'energy-input'" [isBaseline]="true"
+            [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-energy-input>
 
           <app-exhaust-gas (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
             [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [isBaseline]="true" *ngIf="selectedTab.componentStr == 'exhaust-gas'"
@@ -75,11 +75,11 @@
             [settings]="settings" [isLossesSetup]="isLossesSetup" [inSetup]="inSetup" [modExists]="modificationExists"></app-energy-input-exhaust-gas-losses>
 
           <app-heat-system-efficiency *ngIf="selectedTab.componentStr == 'heat-system-efficiency'" [(losses)]="phast.losses" [(phast)]="phast"
-            [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected"
-            (savedLoss)="saveModifications()" [settings]="settings" [inSetup]="inSetup" [modExists]="modificationExists"></app-heat-system-efficiency>
+            [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+            [settings]="settings" [inSetup]="inSetup" [modExists]="modificationExists"></app-heat-system-efficiency>
 
-          <app-operations *ngIf="selectedTab.componentStr == 'operations'" [(phast)]="phast" [isBaseline]="true"
-            (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-operations>
+          <app-operations *ngIf="selectedTab.componentStr == 'operations'" [(phast)]="phast" [isBaseline]="true" (fieldChange)="changeField($event)"
+            [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-operations>
         </div>
       </div>
       <!--Modification Start -->
@@ -103,8 +103,8 @@
             [settings]="settings" [isLossesSetup]="isLossesSetup" [isLossesSetup]="isLossesSetup"></app-charge-material>
 
           <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'wall-losses'"
-            [settings]="settings" [isLossesSetup]="isLossesSetup"></app-wall-losses>
+            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'wall-losses'" [settings]="settings"
+            [isLossesSetup]="isLossesSetup"></app-wall-losses>
 
           <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'atmosphere-losses'"
@@ -139,16 +139,16 @@
             [settings]="settings" [isLossesSetup]="isLossesSetup"></app-other-losses>
 
           <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'slag'"
-            [settings]="settings" [isLossesSetup]="isLossesSetup"></app-slag>
+            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'slag'" [settings]="settings"
+            [isLossesSetup]="isLossesSetup"></app-slag>
 
           <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'energy-input'"
             [settings]="settings" [isLossesSetup]="isLossesSetup"></app-energy-input>
 
           <app-exhaust-gas (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'exhaust-gas'"
-            [settings]="settings" [isLossesSetup]="isLossesSetup"></app-exhaust-gas>
+            [(losses)]="_modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'exhaust-gas'" [settings]="settings"
+            [isLossesSetup]="isLossesSetup"></app-exhaust-gas>
 
           <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="_modifications[modificationIndex].phast.losses" [settings]="settings" *ngIf="selectedTab.componentStr == 'auxiliary-power'"
@@ -159,11 +159,11 @@
             [settings]="settings" [isLossesSetup]="isLossesSetup"></app-energy-input-exhaust-gas-losses>
 
           <app-heat-system-efficiency *ngIf="selectedTab.componentStr == 'heat-system-efficiency'" [(losses)]="_modifications[modificationIndex].phast.losses"
-            [phast]="_modifications[modificationIndex].phast" (fieldChange)="changeField($event)"
-            [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
+            [phast]="_modifications[modificationIndex].phast" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected"
+            (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
 
-          <app-operations *ngIf="selectedTab.componentStr == 'operations'" [(phast)]="_modifications[modificationIndex].phast"
-            [isBaseline]="false" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+          <app-operations *ngIf="selectedTab.componentStr == 'operations'" [(phast)]="_modifications[modificationIndex].phast" [isBaseline]="false"
+            (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [settings]="settings"></app-operations>
 
         </div>
@@ -200,9 +200,10 @@
     <!--end row-->
   </div>
   <!--end col -->
-  <div class="no-padding-left"  [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
+  <div class="no-padding-left" [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
     <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
-      [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]" [containerHeight]="containerHeight" (emitSave)="saveModifications()"></app-losses-result-panel>
+      [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]" [containerHeight]="containerHeight"
+      (emitSave)="saveModifications()"></app-losses-result-panel>
     <app-losses-result-panel *ngIf="inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
       [phast]="phast" [toggleCalculate]="toggleCalculate" [containerHeight]="containerHeight" (emitSave)="saveModifications()"></app-losses-result-panel>
   </div>
@@ -250,7 +251,7 @@
       </div>
       <div class="modal-body">
         <app-edit-condition-properties [modifications]="_modifications" (deleteMod)="deleteModification()" (saveMod)="saveModifications()"
-        (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+          (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Yes</button>
@@ -261,6 +262,85 @@
 </div>
 
 
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="modificationExists">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Modification</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [modifications]="_modifications" [modificationIndex]="modificationIndex" (emitSelectModification)="selectModification($event)"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Modification Modification</h3>
+        <button class="close" (click)="closeNewModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-modification [phast]="phast" [modifications]="_modifications" [modificationExists]="modificationExists" (save)="saveNewMod($event)"></app-add-modification>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" *ngIf="modificationExists">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Are you sure you want to delete {{_modifications[modificationIndex].phast.name}}?</h3>
+        <button class="close" (click)="closeDeleteModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="small">This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger pull-right" (click)="deleteModification()">Yes Delete Modification</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #renameModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="renameModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md" *ngIf="modificationExists">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Rename Modification</h3>
+        <button class="close" (click)="closeRenameModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Modification Name</label>
+            <input name="newAssessmentName" type="text" class="form-control" [(ngModel)]="changeName">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary pull-right" (click)="updateName()">Save Name</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

@@ -11,6 +11,8 @@ export class HeatSystemEfficiencyCompareService {
   compareEfficiency(){
     if(this.baseline && this.modification){
       return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency)
+    }else{
+      return false;
     }
   }
 

@@ -7,23 +7,25 @@ export class GasLeakageCompareService {
   modifiedLeakageLoss: LeakageLoss[];
 
   inputError: BehaviorSubject<boolean>;
-  constructor() { 
+  constructor() {
     this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  compareAllLosses(): boolean{
+  compareAllLosses(): boolean {
     let index = 0;
     let numLoss = this.baselineLeakageLoss.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if(this.compareLoss(index) == true){
-        isDiff = true;
+    if (this.modifiedLeakageLoss) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
   }
 
-  compareLoss(index: number): boolean{
+  compareLoss(index: number): boolean {
     return (
       this.compareDraftPressure(index) ||
       this.compareOpeningArea(index) ||
@@ -32,19 +34,19 @@ export class GasLeakageCompareService {
       this.compareSpecificGravity(index)
     )
   }
-  compareDraftPressure(index: number): boolean{
+  compareDraftPressure(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].draftPressure, this.modifiedLeakageLoss[index].draftPressure);
   }
-  compareOpeningArea(index: number): boolean{
+  compareOpeningArea(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].openingArea, this.modifiedLeakageLoss[index].openingArea);
   }
-  compareLeakageGasTemperature(index: number): boolean{
+  compareLeakageGasTemperature(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].leakageGasTemperature, this.modifiedLeakageLoss[index].leakageGasTemperature);
   }
-  compareAmbientTemperature(index: number): boolean{
+  compareAmbientTemperature(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].ambientTemperature, this.modifiedLeakageLoss[index].ambientTemperature);
   }
-  compareSpecificGravity(index: number): boolean{
+  compareSpecificGravity(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].specificGravity, this.modifiedLeakageLoss[index].specificGravity);
   }
 

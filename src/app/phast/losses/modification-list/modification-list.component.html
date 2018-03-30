@@ -1,0 +1,5 @@
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let modification of modifications; let index = index" [ngClass]="{'active': index == modificationIndex}" (click)="selectModification(index)">
+    {{modification.phast.name}}
+  </li>
+</ul>

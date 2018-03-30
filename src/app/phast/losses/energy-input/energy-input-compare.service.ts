@@ -16,9 +16,11 @@ export class EnergyInputCompareService {
     let index = 0;
     let numLoss = this.baselineEnergyInput.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if (this.compareLoss(index) == true) {
-        isDiff = true;
+    if (this.modifiedEnergyInput) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;

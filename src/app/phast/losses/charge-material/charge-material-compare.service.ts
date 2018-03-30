@@ -16,24 +16,26 @@ export class ChargeMaterialCompareService {
     let index = 0;
     let numLoss = this.baselineMaterials.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      let typeCheck = this.compareMaterialType(index);
-      if (typeCheck == false) {
-        if (this.baselineMaterials[index].chargeMaterialType == 'Liquid') {
-          if (this.compareLiquidMaterial(index) == true) {
-            isDiff = true;
+    if (this.modifiedMaterials) {
+      for (index; index < numLoss; index++) {
+        let typeCheck = this.compareMaterialType(index);
+        if (typeCheck == false) {
+          if (this.baselineMaterials[index].chargeMaterialType == 'Liquid') {
+            if (this.compareLiquidMaterial(index) == true) {
+              isDiff = true;
+            }
+          } else if (this.baselineMaterials[index].chargeMaterialType == 'Solid') {
+            if (this.compareSolidMaterial(index) == true) {
+              isDiff = true;
+            }
+          } else if (this.baselineMaterials[index].chargeMaterialType == 'Gas') {
+            if (this.compareGasMaterial(index) == true) {
+              isDiff = true;
+            }
           }
-        } else if (this.baselineMaterials[index].chargeMaterialType == 'Solid') {
-          if (this.compareSolidMaterial(index) == true) {
-            isDiff = true;
-          }
-        }else if(this.baselineMaterials[index].chargeMaterialType == 'Gas'){
-          if (this.compareGasMaterial(index) == true) {
-            isDiff = true;
-          }
+        } else {
+          isDiff = true;
         }
-      } else {
-        isDiff = true;
       }
     }
     return isDiff;

@@ -15,20 +15,22 @@ export class CoolingLossesCompareService {
     let index = 0;
     let numLoss = this.baselineCoolingLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      let typeCheck = this.compareLossType(index);
-      if (typeCheck == false) {
-        if (this.baselineCoolingLosses[index].coolingLossType == 'Liquid') {
-          if (this.compareLiquidLoss(index) == true) {
-            isDiff = true;
+    if (this.modifiedCoolingLosses) {
+      for (index; index < numLoss; index++) {
+        let typeCheck = this.compareLossType(index);
+        if (typeCheck == false) {
+          if (this.baselineCoolingLosses[index].coolingLossType == 'Liquid') {
+            if (this.compareLiquidLoss(index) == true) {
+              isDiff = true;
+            }
+          } else if (this.baselineCoolingLosses[index].coolingLossType == 'Gas') {
+            if (this.compareGasLoss(index) == true) {
+              isDiff = true;
+            }
           }
-        } else if (this.baselineCoolingLosses[index].coolingLossType == 'Gas') {
-          if (this.compareGasLoss(index) == true) {
-            isDiff = true;
-          }
+        } else {
+          isDiff = true;
         }
-      } else {
-        isDiff = true;
       }
     }
     return isDiff;

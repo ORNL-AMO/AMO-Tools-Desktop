@@ -15,9 +15,11 @@ export class AuxiliaryPowerCompareService {
     let index = 0;
     let numLoss = this.baselineAuxLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if (this.compareLoss(index) == true) {
-        isDiff = true;
+    if (this.modifiedAuxLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
