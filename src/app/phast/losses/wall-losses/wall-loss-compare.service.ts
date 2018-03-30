@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class WallLossCompareService {
@@ -65,6 +66,39 @@ export class WallLossCompareService {
   compareCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineWallLosses[index].correctionFactor, this.modifiedWallLosses[index].correctionFactor);
   }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.wallLosses) {
+        let index = 0;
+        baseline.losses.wallLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.wallLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: WallLoss, modification: WallLoss): boolean {
+    return (
+      this.compare(baseline.surfaceArea, modification.surfaceArea) ||
+      this.compare(baseline.ambientTemperature, modification.ambientTemperature) ||
+      this.compare(baseline.surfaceTemperature, modification.surfaceTemperature) ||
+      this.compare(baseline.windVelocity, modification.windVelocity) ||
+      this.compare(baseline.surfaceEmissivity, modification.surfaceEmissivity) ||
+      this.compare(baseline.surfaceShape, modification.surfaceShape) ||
+      this.compare(baseline.conditionFactor, modification.conditionFactor) ||
+      this.compare(baseline.correctionFactor, modification.correctionFactor)
+    )
+  }
+
+
+
+
   compare(a: any, b: any) {
     //if both exist
     if (a && b) {

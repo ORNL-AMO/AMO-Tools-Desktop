@@ -1,8 +1,25 @@
-<nav class="navbar justify-content-around">
-  <!-- <select class="form-control nav-item">
+<!-- <select class="form-control nav-item">
     <option *ngFor="let modification of _phast.modifications">{{modification.phast.name}}</option>
   </select> -->
-  <div class="nav-item pull-left">
+<div class="row navbar">
+  <div class="col-4">
+    <span *ngFor="let badge of badges" class="badge badge-primary">{{badge}}</span>
+  </div>
+
+  <div class="col-4 text-center">
+    <span class="mod-name" *ngIf="!selectedModification">No Modification Selected</span>
+    <span class="mod-name" *ngIf="selectedModification">{{selectedModification.name}}</span>
+  </div>
+  <div class="col-4">
+    <div class="btn-group pull-right">
+      <button class="btn btn-primary" (click)="selectModification()">Select Modification</button>
+      <button class="btn btn-primary" (click)="renameModification()">Rename</button>
+      <button class="btn btn-primary" (click)="deleteModificaiton()">Delete</button>
+      <button class="btn btn-primary" (click)="newModification()">Add New</button>
+    </div>
+  </div>
+</div>
+<!-- <div class="nav-item pull-left">
     <span *ngFor="let badge of badges" class="badge badge-primary">{{badge}}</span>
   </div>
 
@@ -17,6 +34,4 @@
       <button class="btn btn-primary" (click)="deleteModificaiton()">Delete</button>
       <button class="btn btn-primary" (click)="newModification()">Add New</button>
     </div>
-  </div>
-
-</nav>
+  </div> -->

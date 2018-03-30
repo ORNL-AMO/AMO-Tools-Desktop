@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class OtherLossesCompareService {
@@ -38,6 +39,30 @@ export class OtherLossesCompareService {
   }
   compareHeatLoss(index: number): boolean {
     return this.compare(this.baselineOtherLoss[index].heatLoss, this.modifiedOtherLoss[index].heatLoss);
+  }
+
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.otherLosses) {
+        let index = 0;
+        baseline.losses.otherLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.otherLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: OtherLoss, modification: OtherLoss): boolean {
+    return (
+      this.compare(baseline.description, modification.description) ||
+      this.compare(baseline.heatLoss, modification.heatLoss)
+    )
   }
 
 

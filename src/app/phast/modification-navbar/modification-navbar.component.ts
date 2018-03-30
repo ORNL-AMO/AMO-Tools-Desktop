@@ -10,6 +10,9 @@ import { LossesService } from '../losses/losses.service';
   styleUrls: ['./modification-navbar.component.css']
 })
 export class ModificationNavbarComponent implements OnInit {
+  @Input()
+  phast: PHAST;
+
   selectedModification: PHAST;
   modSubscription: Subscription;
   badges: Array<string>;
@@ -21,11 +24,11 @@ export class ModificationNavbarComponent implements OnInit {
       this.cd.detectChanges();
     })
 
-    // this.lossesService.updateTabs.subscribe(val => {
-    //   if(val){
-    //     this.getBadges();
-    //   }
-    // })
+    this.lossesService.updateTabs.subscribe(val => {
+      if (val) {
+        this.getBadges();
+      }
+    })
   }
 
   selectModification() {
@@ -45,7 +48,7 @@ export class ModificationNavbarComponent implements OnInit {
   getBadges() {
     let tmpBadges = [];
     if (this.selectedModification) {
-      tmpBadges = this.phastCompareService.getBadges();
+      tmpBadges = this.phastCompareService.getBadges(this.phast, this.selectedModification);
     }
     this.badges = tmpBadges;
     this.cd.detectChanges();

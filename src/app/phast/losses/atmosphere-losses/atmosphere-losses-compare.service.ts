@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
+import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
 export class AtmosphereLossesCompareService {
 
@@ -53,6 +54,33 @@ export class AtmosphereLossesCompareService {
   }
   compareCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineAtmosphereLosses[index].correctionFactor, this.modifiedAtmosphereLosses[index].correctionFactor);
+  }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.atmosphereLosses) {
+        let index = 0;
+        baseline.losses.atmosphereLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.atmosphereLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: AtmosphereLoss, modification: AtmosphereLoss): boolean {
+    return (
+      this.compare(baseline.atmosphereGas, modification.atmosphereGas) ||
+      this.compare(baseline.specificHeat, modification.specificHeat) ||
+      this.compare(baseline.inletTemperature, modification.inletTemperature) ||
+      this.compare(baseline.outletTemperature, modification.outletTemperature) ||
+      this.compare(baseline.flowRate, modification.flowRate) ||
+      this.compare(baseline.correctionFactor, modification.correctionFactor)
+    )
   }
 
   compare(a: any, b: any) {

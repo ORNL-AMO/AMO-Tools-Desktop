@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LeakageLoss } from "../../../shared/models/phast/losses/leakageLoss";
+import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
 export class GasLeakageCompareService {
   baselineLeakageLoss: LeakageLoss[];
@@ -50,6 +51,31 @@ export class GasLeakageCompareService {
     return this.compare(this.baselineLeakageLoss[index].specificGravity, this.modifiedLeakageLoss[index].specificGravity);
   }
 
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.leakageLosses) {
+        let index = 0;
+        baseline.losses.leakageLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.leakageLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: LeakageLoss, modification: LeakageLoss): boolean {
+    return (
+      this.compare(baseline.draftPressure, modification.draftPressure) ||
+      this.compare(baseline.openingArea, modification.openingArea) ||
+      this.compare(baseline.leakageGasTemperature, modification.leakageGasTemperature) ||
+      this.compare(baseline.ambientTemperature, modification.ambientTemperature) ||
+      this.compare(baseline.specificGravity, modification.specificGravity)
+    )
+  }
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {

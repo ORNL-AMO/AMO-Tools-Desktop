@@ -1,5 +1,15 @@
 <ul class="list-group">
-  <li class="list-group-item" *ngFor="let modification of modifications; let index = index" [ngClass]="{'active': index == modificationIndex}" (click)="selectModification(index)">
-    {{modification.phast.name}}
+  <li class="list-group-item" *ngFor="let modification of modifications; let index = index" [ngClass]="{'active': index == modificationIndex}"
+    (click)="selectModification(index)">
+    <div class="row">
+      <div class="col-5">
+        {{modification.phast.name}}
+      </div>
+      <div class="col-7">
+        <div class="d-flex flex-wrap">
+          <div *ngFor="let badge of getBadges(modification.phast)" class="badge badge-primary">{{badge}}</div>
+        </div>
+      </div>
+    </div>
   </li>
 </ul>

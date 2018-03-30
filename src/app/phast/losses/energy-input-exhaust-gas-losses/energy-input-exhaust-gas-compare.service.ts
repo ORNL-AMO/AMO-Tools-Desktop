@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class EnergyInputExhaustGasCompareService {
@@ -48,6 +49,32 @@ export class EnergyInputExhaustGasCompareService {
   }
   compareElectricalPowerInput(index: number): boolean {
     return this.compare(this.baselineEnergyInputExhaustGasLosses[index].electricalPowerInput, this.modifiedEnergyInputExhaustGasLosses[index].electricalPowerInput);
+  }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.energyInputExhaustGasLoss) {
+        let index = 0;
+        baseline.losses.energyInputExhaustGasLoss.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.energyInputExhaustGasLoss[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: EnergyInputExhaustGasLoss, modification: EnergyInputExhaustGasLoss): boolean {
+    return (
+      this.compare(baseline.excessAir, modification.excessAir) ||
+      this.compare(baseline.combustionAirTemp, modification.combustionAirTemp) ||
+      this.compare(baseline.exhaustGasTemp, modification.exhaustGasTemp) ||
+      this.compare(baseline.totalHeatInput, modification.totalHeatInput) ||
+      this.compare(baseline.electricalPowerInput, modification.electricalPowerInput)
+    )
   }
 
   compare(a: any, b: any) {

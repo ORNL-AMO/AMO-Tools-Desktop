@@ -18,3 +18,8 @@
     background-color: #fff;
     border-bottom: #BF3D00 groove 2px;
 }
+
+.badge{
+    margin-left: .25rem;
+    margin-right: .25rem;
+}

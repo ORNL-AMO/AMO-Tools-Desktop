@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class FlueGasCompareService {
@@ -104,6 +105,54 @@ export class FlueGasCompareService {
   compareVolumeOxygenCalculationMethod(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.oxygenCalculationMethod, this.modifiedFlueGasLoss[index].flueGasByVolume.oxygenCalculationMethod);
   }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.flueGasLosses) {
+        let index = 0;
+        baseline.losses.flueGasLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.flueGasLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: FlueGas, modification: FlueGas) {
+    let isDiff: boolean = false;
+    if (this.compare(baseline.flueGasType, modification.flueGasType)) {
+      isDiff = true;
+    } else {
+      if (baseline.flueGasType == 'By Volume') {
+        if (this.compare(baseline.flueGasByVolume.gasTypeId, modification.flueGasByVolume.gasTypeId) ||
+          this.compare(baseline.flueGasByVolume.flueGasTemperature, modification.flueGasByVolume.flueGasTemperature) ||
+          this.compare(baseline.flueGasByVolume.excessAirPercentage, modification.flueGasByVolume.excessAirPercentage) ||
+          this.compare(baseline.flueGasByVolume.combustionAirTemperature, modification.flueGasByVolume.combustionAirTemperature) ||
+          this.compare(baseline.flueGasByVolume.fuelTemperature, modification.flueGasByVolume.fuelTemperature) ||
+          this.compare(baseline.flueGasByVolume.oxygenCalculationMethod, modification.flueGasByVolume.oxygenCalculationMethod)) {
+          isDiff = true;
+        }
+      } else if (baseline.flueGasType == 'By Mass') {
+        if (this.compare(baseline.flueGasByMass.gasTypeId, modification.flueGasByMass.gasTypeId) ||
+          this.compare(baseline.flueGasByMass.flueGasTemperature, modification.flueGasByMass.flueGasTemperature) ||
+          this.compare(baseline.flueGasByMass.excessAirPercentage, modification.flueGasByMass.excessAirPercentage) ||
+          this.compare(baseline.flueGasByMass.combustionAirTemperature, modification.flueGasByMass.combustionAirTemperature) ||
+          this.compare(baseline.flueGasByMass.fuelTemperature, modification.flueGasByMass.fuelTemperature) ||
+          this.compare(baseline.flueGasByMass.ashDischargeTemperature, modification.flueGasByMass.ashDischargeTemperature) ||
+          this.compare(baseline.flueGasByMass.moistureInAirComposition, modification.flueGasByMass.moistureInAirComposition) ||
+          this.compare(baseline.flueGasByMass.unburnedCarbonInAsh, modification.flueGasByMass.unburnedCarbonInAsh) ||
+          this.compare(baseline.flueGasByMass.oxygenCalculationMethod, modification.flueGasByMass.oxygenCalculationMethod)) {
+          isDiff = true;
+        }
+      }
+    }
+    return isDiff
+  }
+
 
   compare(a: any, b: any) {
     if (a && b) {

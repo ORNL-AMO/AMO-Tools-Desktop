@@ -10,3 +10,9 @@
     border-color: #ABB2B9;
     transition: all .25s ease-in-out;
 }
+
+.badge-primary{
+    margin-left: 0.1rem;
+    margin-right: .1rem;
+    margin-top: .1rem;
+}

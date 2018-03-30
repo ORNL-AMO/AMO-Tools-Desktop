@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FixtureLoss } from "../../../shared/models/phast/losses/fixtureLoss";
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class FixtureLossesCompareService {
@@ -58,6 +59,32 @@ export class FixtureLossesCompareService {
 
   compareMaterialName(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].materialName, this.modifiedFixtureLosses[index].materialName);
+  }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.fixtureLosses) {
+        let index = 0;
+        baseline.losses.fixtureLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.fixtureLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: FixtureLoss, modification: FixtureLoss): boolean {
+    return (
+      this.compare(baseline.specificHeat, modification.specificHeat) ||
+      this.compare(baseline.feedRate, modification.feedRate) ||
+      this.compare(baseline.initialTemperature, modification.initialTemperature) ||
+      this.compare(baseline.finalTemperature, modification.finalTemperature) ||
+      this.compare(baseline.materialName, modification.correctionFactor)
+    )
   }
 
   compare(a: any, b: any) {

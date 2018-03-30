@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Slag } from '../../../shared/models/phast/losses/slag';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class SlagCompareService {
@@ -50,6 +51,31 @@ export class SlagCompareService {
     return this.compare(this.baselineSlag[index].correctionFactor, this.modifiedSlag[index].correctionFactor);
   }
 
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.slagLosses) {
+        let index = 0;
+        baseline.losses.slagLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.slagLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: Slag, modification: Slag): boolean {
+    return (
+      this.compare(baseline.weight, modification.weight) ||
+      this.compare(baseline.inletTemperature, modification.inletTemperature) ||
+      this.compare(baseline.outletTemperature, modification.outletTemperature) ||
+      this.compare(baseline.specificHeat, modification.specificHeat) ||
+      this.compare(baseline.correctionFactor, modification.correctionFactor)
+    )
+  }
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {

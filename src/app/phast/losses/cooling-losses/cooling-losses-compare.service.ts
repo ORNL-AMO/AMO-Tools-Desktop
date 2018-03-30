@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { CoolingLoss } from "../../../shared/models/phast/losses/coolingLoss";
+import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
 export class CoolingLossesCompareService {
 
@@ -104,6 +105,51 @@ export class CoolingLossesCompareService {
   compareLiquidCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineCoolingLosses[index].liquidCoolingLoss.correctionFactor, this.modifiedCoolingLosses[index].liquidCoolingLoss.correctionFactor);
   }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.coolingLosses) {
+        let index = 0;
+        baseline.losses.coolingLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.coolingLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: CoolingLoss, modification: CoolingLoss) {
+    let isDiff: boolean = false;
+    if (this.compare(baseline.coolingLossType, modification.coolingLossType)) {
+      isDiff = true;
+    } else {
+      if (baseline.coolingLossType == 'Gas') {
+        if (this.compare(baseline.gasCoolingLoss.flowRate, modification.gasCoolingLoss.flowRate) ||
+          this.compare(baseline.gasCoolingLoss.initialTemperature, modification.gasCoolingLoss.initialTemperature) ||
+          this.compare(baseline.gasCoolingLoss.finalTemperature, modification.gasCoolingLoss.finalTemperature) ||
+          this.compare(baseline.gasCoolingLoss.specificHeat, modification.gasCoolingLoss.specificHeat) ||
+          this.compare(baseline.gasCoolingLoss.gasDensity, modification.gasCoolingLoss.gasDensity) ||
+          this.compare(baseline.gasCoolingLoss.correctionFactor, modification.gasCoolingLoss.correctionFactor)) {
+          isDiff = true;
+        }
+      } else if (baseline.coolingLossType == 'Liquid') {
+        if (this.compare(baseline.liquidCoolingLoss.flowRate, modification.liquidCoolingLoss.flowRate) ||
+          this.compare(baseline.liquidCoolingLoss.initialTemperature, modification.liquidCoolingLoss.initialTemperature) ||
+          this.compare(baseline.liquidCoolingLoss.outletTemperature, modification.liquidCoolingLoss.outletTemperature) ||
+          this.compare(baseline.liquidCoolingLoss.specificHeat, modification.liquidCoolingLoss.specificHeat) ||
+          this.compare(baseline.liquidCoolingLoss.specificHeat, modification.liquidCoolingLoss.specificHeat) ||
+          this.compare(baseline.liquidCoolingLoss.correctionFactor, modification.liquidCoolingLoss.correctionFactor)) {
+          isDiff = true;
+        }
+      }
+    }
+    return isDiff
+  }
+
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {

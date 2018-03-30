@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
+import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
 export class ExtendedSurfaceCompareService {
 
@@ -47,6 +48,30 @@ export class ExtendedSurfaceCompareService {
     return this.compare(this.baselineSurface[index].surfaceEmissivity, this.modifiedSurface[index].surfaceEmissivity);
   }
 
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.extendedSurfaces) {
+        let index = 0;
+        baseline.losses.extendedSurfaces.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.extendedSurfaces[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: ExtendedSurface, modification: ExtendedSurface): boolean {
+    return (
+      this.compare(baseline.surfaceArea, modification.surfaceArea) ||
+      this.compare(baseline.ambientTemperature, modification.ambientTemperature) ||
+      this.compare(baseline.surfaceTemperature, modification.surfaceTemperature) ||
+      this.compare(baseline.surfaceEmissivity, modification.surfaceEmissivity)
+    )
+  }
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {

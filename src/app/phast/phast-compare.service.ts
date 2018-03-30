@@ -196,59 +196,93 @@ export class PhastCompareService {
     this.operationsCompareService.modification = undefined;
   }
 
-  getBadges(): Array<string> {
+  getBadges(baseline: PHAST, modification: PHAST): Array<string> {
     let badges: Array<string> = [];
-    if (this.baselineSet && this.modifiedSet) {
-      if (this.atmosphereLossesCompareService.compareAllLosses()) {
-        badges.push('Atmo')
+    if (baseline && modification) {
+      if (baseline.losses.atmosphereLosses) {
+        if (this.atmosphereLossesCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Atmo')
+        }
       }
-      if (this.auxiliaryPowerCompareService.compareAllLosses()) {
-        badges.push('Aux')
+      if (baseline.losses.auxiliaryPowerLosses) {
+        if (this.auxiliaryPowerCompareService.compareBaseModLoss(baseline, modification)) {
+          badges.push('Aux')
+        }
       }
-      if (this.chargeMaterialCompareService.compareAllMaterials()) {
-        badges.push('ChMat')
+      if (baseline.losses.chargeMaterials) {
+        if (this.chargeMaterialCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ChMat')
+        }
       }
-      if (this.coolingLossCompareService.compareAllLosses()) {
-        badges.push('Cool')
+      if (baseline.losses.coolingLosses) {
+        if (this.coolingLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Cool')
+        }
       }
-      if (this.energyInputService.compareAllLosses()) {
-        badges.push('EI')
+      if (baseline.losses.chargeMaterials) {
+        if (this.energyInputService.compareBaselineModification(baseline, modification)) {
+          badges.push('EI')
+        }
       }
-      if (this.energyInputExhaustGasCompareService.compareAllLosses()) {
-        badges.push('ExGas')
+      if (baseline.losses.energyInputExhaustGasLoss) {
+        if (this.energyInputExhaustGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExGas')
+        }
       }
-      if (this.exhaustGasCompareService.compareAllLosses()) {
-        badges.push('ExGas')
+      if (baseline.losses.exhaustGasEAF) {
+        if (this.exhaustGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExGas')
+        }
       }
-      if (this.extendedSurfaceCompareService.compareAllLosses()) {
-        badges.push('ExSur')
+      if (baseline.losses.extendedSurfaces) {
+        if (this.extendedSurfaceCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExSur')
+        }
       }
-      if (this.fixtureLossCompareService.compareAllLosses()) {
-        badges.push('Fix')
+      if (baseline.losses.fixtureLosses) {
+        if (this.fixtureLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Fix')
+        }
       }
-      if (this.flueGasCompareService.compareAllLosses()) {
-        badges.push('Flue')
+      if (baseline.losses.flueGasLosses) {
+        if (this.flueGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Flue')
+        }
       }
-      if (this.gasLeakageCompareService.compareAllLosses()) {
-        badges.push('GasL')
+      if (baseline.losses.leakageLosses) {
+        if (this.gasLeakageCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('GasL')
+        }
       }
-      if (this.openingLossCompareService.compareAllLosses()) {
-        badges.push('Open')
+      if (baseline.losses.openingLosses) {
+        if (this.openingLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Open')
+        }
       }
-      if (this.otherLossCompareService.compareAllLosses()) {
-        badges.push('Other')
+      if (baseline.losses.otherLosses) {
+        if (this.otherLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Other')
+        }
       }
-      if (this.slagCompareService.compareAllLosses()) {
-        badges.push('Slag')
+      if (baseline.losses.slagLosses) {
+        if (this.slagCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Slag')
+        }
       }
-      if (this.wallLossCompareService.compareAllLosses()) {
-        badges.push('Wall')
+      if (baseline.losses.wallLosses) {
+        if (this.wallLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Wall')
+        }
       }
-      if (this.heatSystemEfficiencyCompareService.compareEfficiency()) {
-        badges.push('Eff')
+      if (baseline.systemEfficiency) {
+        if (this.heatSystemEfficiencyCompareService.compareEfficiency()) {
+          badges.push('Eff')
+        }
       }
-      if (this.operationsCompareService.compareAllLosses()) {
-        badges.push('Op')
+      if (baseline) {
+        if (this.operationsCompareService.compareBaseModLoss(baseline, modification)) {
+          badges.push('Op')
+        }
       }
     }
     return badges;

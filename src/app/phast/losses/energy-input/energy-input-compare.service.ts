@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class EnergyInputCompareService {
@@ -63,6 +64,37 @@ export class EnergyInputCompareService {
   compareElectricityInput(index: number): boolean {
     return this.compare(this.baselineEnergyInput[index].electricityInput, this.modifiedEnergyInput[index].electricityInput);
   }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.energyInputEAF) {
+        let index = 0;
+        baseline.losses.energyInputEAF.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.energyInputEAF[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: EnergyInputEAF, modification: EnergyInputEAF): boolean {
+    return (
+      this.compare(baseline.naturalGasHeatInput, modification.naturalGasHeatInput) ||
+      this.compare(baseline.coalCarbonInjection, modification.coalCarbonInjection) ||
+      this.compare(baseline.coalHeatingValue, modification.coalHeatingValue) ||
+      this.compare(baseline.electrodeUse, modification.electrodeUse) ||
+      this.compare(baseline.electrodeHeatingValue, modification.electrodeHeatingValue) ||
+      this.compare(baseline.otherFuels, modification.otherFuels) ||
+      this.compare(baseline.electricityInput, modification.electricityInput) ||
+      this.compare(baseline.flowRateInput, modification.flowRateInput)
+    )
+  }
+
+
 
   compare(a: any, b: any) {
     if (a && b) {
