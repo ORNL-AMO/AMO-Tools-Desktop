@@ -1,10 +1,10 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Flue Gas Losses ({{numLosses}})
-      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
-  <div *ngIf="!collapse">
+  <div *ngIf="!collapse || printView">
     <div class="card-body" *ngFor="let data of lossData; let index = index;">
       <div class="output-summary">
         <table class="table table-hover table-striped">

@@ -12,6 +12,8 @@ export class ExhaustGasSummaryComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   numLosses: number = 0;
   collapse: boolean = true;

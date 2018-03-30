@@ -111,24 +111,26 @@
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
 
-        <div class="results" *ngIf="currentTab == 'energy-used' || (printEnergyUsed && showPrint)">
+        <div class="results" [ngClass]="{'hide-print': !printEnergyUsed}" *ngIf="currentTab == 'energy-used' || (printEnergyUsed && showPrint)">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
-        <div class="results print-break-before" *ngIf="currentTab == 'executive-summary' || (printExecutiveSummary && showPrint)">
+        <div class="results print-break-before" [ngClass]="{'hide-print': !printExecutiveSummary}" *ngIf="currentTab == 'executive-summary' || (printExecutiveSummary && showPrint)">
             <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
-        <div class="results" *ngIf="currentTab == 'results-data' || (printResultsData && showPrint)">
+        <div class="results" [ngClass]="{'hide-print': !printResultsData}" *ngIf="currentTab == 'results-data' || (printResultsData && showPrint)">
             <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
         </div>
-        <div class="results" *ngIf="currentTab == 'report-graphs' || (printReportGraphs && showPrint)">
+        <div class="results" [ngClass]="{'hide-print': !printInputSummary}" *ngIf="currentTab == 'input-summary' || (printInputSummary && showPrint)">
+            <!-- <div class="results hide-print" *ngIf="currentTab == 'input-summary' || (printInputSummary && showPrint)"> -->
+            <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printInputSummary"></app-phast-input-summary>
+        </div>
+        <div class="results" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'report-graphs' || (printReportGraphs && showPrint)">
             <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportGraphs"></app-report-graphs>
         </div>
-        <div class="results" *ngIf="currentTab == 'report-sankey' || (printReportSankey && showPrint)">
+        <div class="results" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'report-sankey' || (printReportSankey && showPrint)">
             <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportSankey"></app-report-sankey>
         </div>
-        <div class="results hide-print" *ngIf="currentTab == 'input-summary'">
-            <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
-        </div>
+
     </div>
     <div *ngIf="!phast.setupDone">
         <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
@@ -207,7 +209,7 @@
                     <div class="col-2">
                         <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
                     </div>
-                    <div class="col-8 bottom-divider">
+                    <div class="col-8 bold-bottom-divider">
                         Report Sankey
                     </div>
                 </div>

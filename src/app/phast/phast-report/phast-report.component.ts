@@ -94,6 +94,10 @@ export class PhastReportComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    console.log("this.showPrint = " + this.showPrint);
+  }
+
   initPrintLogic() {
     if (this.inRollup) {
       this.printFacilityInfo = true;
@@ -102,11 +106,13 @@ export class PhastReportComponent implements OnInit {
       this.printResultsData = true;
       this.printReportGraphs = true;
       this.printReportSankey = true;
-      this.printInputSummary = true;
+      this.printInputSummary = false;
     }
   }
 
   setTab(str: string): void {
+    console.log("this.showPrint = " + this.showPrint);
+
     this.currentTab = str;
   }
 
@@ -192,7 +198,7 @@ export class PhastReportComponent implements OnInit {
           this.printResultsData = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
-          this.printInputSummary = true;
+          // this.printInputSummary = true;
         }
         else {
           this.printFacilityInfo = false;
@@ -201,7 +207,7 @@ export class PhastReportComponent implements OnInit {
           this.printResultsData = false;
           this.printReportGraphs = false;
           this.printReportSankey = false;
-          this.printInputSummary = false;
+          // this.printInputSummary = false;
         }
         break;
       }
