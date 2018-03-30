@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
@@ -14,6 +14,8 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   settings: Settings
   @Input()
   printView: boolean;
+
+  @ViewChild('barChartContainer') barChartContainer: ElementRef;
 
   firstLoad: boolean = true;
   isUpdate: boolean = false;
@@ -163,6 +165,16 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       this.printChartData.push(tmpDataColumns);
       this.titles.push(this.graphOptions[i]);
       this.units.push(this.unit);
+    }
+  }
+
+  getWidth() {
+    if (this.barChartContainer) {
+      let containerPadding = 30;
+      return this.barChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
     }
   }
 }

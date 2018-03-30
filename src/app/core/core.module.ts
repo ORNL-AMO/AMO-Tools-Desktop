@@ -37,6 +37,7 @@ import { VersionModalComponent } from '../version-modal/version-modal.component'
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
 import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { MeasurComponent } from '../landing-screen/measur/measur.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-a
     ContactPageComponent,
     AcknowledgmentsPageComponent,
     UpdateModalComponent,
-    VersionModalComponent
+    VersionModalComponent,
+    MeasurComponent
   ],
   imports: [
     CommonModule,

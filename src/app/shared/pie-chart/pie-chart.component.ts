@@ -244,16 +244,17 @@ export class PieChartComponent implements OnInit {
         d.sy = d.oy = d.y + 5;
       });
 
-    this.svg.append("defs").append("marker")
+
+      this.svg.append("defs").append("marker")
       .attr("id", "circ")
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("refX", 3)
-      .attr("refY", 3)
+      .attr("markerWidth", 4)
+      .attr("markerHeight", 4)
+      .attr("refX", 2)
+      .attr("refY", 2)
       .append("circle")
-      .attr("cx", 3)
-      .attr("cy", 3)
-      .attr("r", 3)
+      .attr("cx", 2)
+      .attr("cy", 2)
+      .attr("r", 2)
       .style('fill', '#333')
       .style('stroke', '#333');
 

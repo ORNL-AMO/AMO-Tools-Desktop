@@ -1,6 +1,6 @@
 <a class="nav-link small">
-    <span [ngClass]="{'required-asterisk':!efficiencyDone, 'required-asterisk-done': efficiencyDone}">*</span>System Efficiency
-    <span class="badge gray-badge" [ngClass]="badgeClass" *ngIf="numLosses">
+    System Efficiency
+    <span class="badge gray-badge" [ngClass]="badgeClass">
         <strong>{{numLosses}}</strong>
     </span>
 </a>

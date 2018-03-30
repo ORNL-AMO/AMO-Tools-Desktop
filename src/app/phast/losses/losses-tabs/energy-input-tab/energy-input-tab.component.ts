@@ -49,7 +49,7 @@ export class EnergyInputTabComponent implements OnInit {
 
   setBadgeClass(){
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if(this.missingData || !this.enInput1Done){
       badgeStr = ['missing-data'];
     }else if(this.inputError){
       badgeStr = ['input-error'];

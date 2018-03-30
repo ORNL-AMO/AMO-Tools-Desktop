@@ -27,7 +27,7 @@ export class DedicatedStorageFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  getReceiverVolume(inputs: ReceiverTankDedicatedStorage) {
+  getReceiverVolume() {
     this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
   }
   changeField(str: string) {
