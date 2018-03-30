@@ -8,8 +8,12 @@
         <h2 class="h2-name">
           {{assessment.name}}
         </h2>
-        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName">
+        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName && settings.furnaceType">
           {{settings.furnaceType}}
+        </h3>
+        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName && !settings.furnaceType">
+          {{settings.energySourceType}}
+          <span *ngIf="settings.energySourceType == 'Fuel'">Fired</span>
         </h3>
         <h3 class="furnace-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:
           <br>{{settings.customFurnaceName}}</h3>

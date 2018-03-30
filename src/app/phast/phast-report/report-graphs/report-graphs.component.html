@@ -34,7 +34,7 @@
       </div>
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
+          <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
             [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-phast-pie-chart>
         </div>
       </div>
@@ -47,11 +47,11 @@
       <div class="col-12">
         <div class="row">
           <div #pieChartContainer class="col-6">
-            <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
+            <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
               [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-phast-pie-chart>
           </div>
           <div class="col-6">
-            <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
+            <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
               [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-phast-pie-chart>
           </div>
         </div>
@@ -61,7 +61,8 @@
 
   <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
-    <div class="col-7 mx-auto">
+    <div class="col-1"></div>
+    <div #barChartContainer class="col-10 mx-auto">
       <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
         [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
     </div>
@@ -72,8 +73,9 @@
   <div *ngIf="showPrint" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-      <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="chartContainerWidth" [pieChartHeight]="chartContainerHeight"
-        [printView]="true" [phast]="phast" [assessment]="assessment" [settings]="settings" [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
+      <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
+        [pieChartHeight]="pieChartContainerHeight" [printView]="true" [phast]="phast" [assessment]="assessment" [settings]="settings"
+        [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
     </div>
   </div>
 </div>

@@ -18,8 +18,6 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
   @Input()
   calculator: Calculator;
 
-
-
   preAssessments: Array<PreAssessment>;
   graphColors: Array<string>;
   data: Array<{ name: string, percent: number, color: string }>;
@@ -27,15 +25,14 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
   constructor(private preAssessmentService: PreAssessmentService) { }
 
   ngOnInit() {
-    this.preAssessments = new Array<PreAssessment>();
     this.graphColors = graphColors;
     this.getData();
   }
 
   getData() {
-
     if (this.calculator) {
       if (this.calculator.preAssessments) {
+
         this.preAssessments = this.calculator.preAssessments;
       }
     }

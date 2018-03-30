@@ -39,3 +39,7 @@
 .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #BF3D00;
 }
+
+.pad-top {
+    padding-top: 20px;
+}

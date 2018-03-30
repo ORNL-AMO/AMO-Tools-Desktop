@@ -47,7 +47,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
 
   setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if (this.missingData) {
+    if (this.missingData || !this.enInput2Done) {
       badgeStr = ['missing-data'];
     } else if (this.inputError) {
       badgeStr = ['input-error'];
