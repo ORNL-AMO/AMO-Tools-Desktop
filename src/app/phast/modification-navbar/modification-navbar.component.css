@@ -1,0 +1,20 @@
+.btn{
+    padding: 6px;
+}
+
+.mod-name{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+    font-weight: bold
+}
+
+.btn-primary{
+    background-color: #BF3D00;
+}
+
+
+.navbar{
+    background-color: #fff;
+    border-bottom: #BF3D00 groove 2px;
+}
