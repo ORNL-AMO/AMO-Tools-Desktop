@@ -12,7 +12,9 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
   @Input()
-  settings: Settings
+  settings: Settings;
+  @Input()
+  printView: boolean;
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;

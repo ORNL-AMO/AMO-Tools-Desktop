@@ -13,7 +13,9 @@ export class FlueGasSummaryComponent implements OnInit {
   phast: PHAST
   @Input()
   settings: Settings;
-
+  @Input()
+  printView: boolean;
+  
   lossData: Array<any>;
   volumeOptions: Array<any>;
   massOptions: Array<any>;

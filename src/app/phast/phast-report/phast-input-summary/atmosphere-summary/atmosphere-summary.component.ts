@@ -16,6 +16,8 @@ export class AtmosphereSummaryComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
   //array holds table data
   lossData: Array<any>;
   //num of atmosphere losses

@@ -13,6 +13,8 @@ export class PhastInputSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   phast: PHAST;
+  @Input()
+  showPrint: boolean;
 
   lossCategories: ShowResultsCategories;
   constructor(private phastResultsService: PhastResultsService) { }
