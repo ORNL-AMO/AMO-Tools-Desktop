@@ -125,7 +125,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [phast]="_phast" [modifications]="_phast.modifications" [modificationIndex]="modificationIndex" (emitSelectModification)="selectModification($event)"></app-modification-list>
+        <app-modification-list [phast]="_phast" [modifications]="_phast.modifications" (save)="saveDb()" [modificationIndex]="modificationIndex" (emitSelectModification)="selectModification($event)"></app-modification-list>
       </div>
     </div>
   </div>
