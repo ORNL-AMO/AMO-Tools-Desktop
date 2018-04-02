@@ -54,7 +54,6 @@ import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-pa
 import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
 import { ToastyModule } from 'ng2-toasty';
 import { AddModificationComponent } from './add-modification/add-modification.component';
-import { ModificationListComponent } from './modification-list/modification-list.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -107,8 +106,7 @@ import { ModificationListComponent } from './modification-list/modification-list
     OperationsHelpComponent,
     LossesSplashPageComponent,
     LossesResultPanelComponent,
-    AddModificationComponent,
-    ModificationListComponent
+    AddModificationComponent
   ],
   providers: [
     LossesService

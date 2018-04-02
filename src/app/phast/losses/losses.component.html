@@ -192,7 +192,7 @@
       </div>
       <div class="no-data col-6" *ngIf="_modifications.length == 0 && !inSetup">
         <h3>Now that your baseline set up, click below to start adding modifications.</h3>
-        <button type="button" (click)="openModal()">Add Modified Condition</button>
+        <button type="button" (click)="newModification()">Add Modified Condition</button>
         <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating
           a modification.</p>
       </div>
@@ -214,7 +214,7 @@
   </div>
 </div>
 
-<div bsModal #addModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addModificationModalLabel"
+<!-- <div bsModal #addModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addModificationModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -237,7 +237,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div bsModal #editModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModificationModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -263,7 +263,7 @@
 
 
 
-<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+<!-- <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="modificationExists">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -278,14 +278,14 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Add New Modification Modification</h3>
+        <h3>Add New Modification</h3>
         <button class="close" (click)="closeNewModification()">
           <span aria-hidden="true">&times;</span>
         </button>

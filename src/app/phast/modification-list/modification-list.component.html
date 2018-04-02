@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-lg-9 col-md-7 col-sm-12">
+    <ul class="list-group">
+      <li class="list-group-item title-item">
+        <div class="row">
+          <div class="col-6 border-right">
+            <span class="bold">Name</span>
+          </div>
+          <div class="col-6">
+            <span class="bold">Modifications</span>
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item modification-item" *ngFor="let modification of modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
+        <div class="row">
+          <div class="col-6 border-right">
+            {{modification.phast.name}}
+            <div class="btn-group pull-right">
+                <button class="btn btn-primary" *ngIf="index != modificationIndex" (click)="selectModification(modification.phast)">Select</button>
+              <button class="btn btn-danger">
+                <span class="fa fa-trash pr-1"></span>Delete</button>
+              <button class="btn btn-rename">Rename</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex flex-wrap pull-right">
+              <div *ngFor="let badge of getBadges(modification.phast)" class="badge badge-primary">{{badge}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-3 col-md-5 col-sm-12">
+    <div class="d-flex flex-column tab-content align-self-center">
+      <div class="p-2 text-center">
+        <p>Add a new modification. Your data will be copied directly from your baseline.</p>
+      </div>
+      <form>
+        <div class="form-section">
+          <div class="form-group">
+            <label>New Modification</label>
+            <input name="newModificationName" class="form-control" type="text" placeholder="New Modification Name" [(ngModel)]="newModificationName">
+          </div>
+        </div>
+      </form>
+      <div class="p-2 text-center">
+        <button class="btn btn-primary" [disabled]="!newModificationName">Add New Modification</button>
+      </div>
+    </div>
+  </div>
+</div>

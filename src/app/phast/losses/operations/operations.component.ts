@@ -30,7 +30,20 @@ export class OperationsComponent implements OnInit {
   isCalculated: boolean;
   constructor(private operationsService: OperationsService) { }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.phast) {
+        this.initForm()
+      }
+    } else {
+      this.firstChange = false;
+    }
+  }
+
   ngOnInit() {
+    this.initForm();
+  }
+  initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast);
     this.isCalculated = this.phast.operatingHours.isCalculated;
   }

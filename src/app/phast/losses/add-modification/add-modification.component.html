@@ -1,9 +1,12 @@
+<p class="small" *ngIf="!modificationExists">You are about to add your first modification to your system. After doing so you will not be able to add or remove losses
+  from your baseline. You will need to delete all of your modifications to add or remove losses from your baseline.</p>
+
 <form>
-  <div class="form-group">
-    <label>Modification Name</label>
-    <input name="newAssessmentName" type="text" class="form-control" [(ngModel)]="newModificationName">
+  <div class="form-section">
+    <div class="form-group">
+      <label>Modification Name</label>
+      <input name="newAssessmentName" type="text" class="form-control" [(ngModel)]="newModificationName">
+    </div>
   </div>
 </form>
-<div class="modal-footer">
-  <button class="btn btn-primary pull-right" (click)="addModification()">Create</button>
-</div>
+<button class="btn btn-primary pull-right" (click)="addModification()">Create</button>

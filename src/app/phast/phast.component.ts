@@ -11,6 +11,9 @@ import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
 import { setTimeout } from 'timers';
+import { ModalDirective } from 'ngx-bootstrap';
+import { PhastCompareService } from './phast-compare.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-phast',
@@ -18,6 +21,7 @@ import { setTimeout } from 'timers';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
   //elementRefs used for getting container height for scrolling
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
@@ -44,6 +48,7 @@ export class PhastComponent implements OnInit {
   assessmentTab: string = 'explore-opportunities';
   screenshotHeight: number = 0;
   sankeyPhast: PHAST;
+  modificationIndex: number;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -52,7 +57,8 @@ export class PhastComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
-    private lossesService: LossesService) {
+    private lossesService: LossesService,
+    private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -98,6 +104,11 @@ export class PhastComponent implements OnInit {
       this.lossesService.lossesTab.subscribe(tab => {
         this.selectedLossTab = this.lossesService.getTab(tab);
       })
+      //modify conditions or explore opps tab
+      this.phastService.assessmentTab.subscribe(tab => {
+        this.assessmentTab = tab;
+        this.getContainerHeight();
+      })
     });
     //calculator tab
     this.phastService.calcTab.subscribe(val => {
@@ -109,7 +120,21 @@ export class PhastComponent implements OnInit {
       this.screenshotHeight = val;
       this.getContainerHeight();
     })
+
+    this.lossesService.openModificationModal.subscribe(val => {
+      if (val) {
+        this.selectModificationModal()
+      }
+    })
+    this.phastCompareService.selectedModification.subscribe(mod => {
+      if (mod && this._phast) {
+        this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
+          return val.phast.name == mod.name
+        })
+      }
+    })
   }
+
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
@@ -257,12 +282,12 @@ export class PhastComponent implements OnInit {
   //end footer navigation functions
 
   //assessment tabs are the only tabs in phast.component.html
-  changeAssessmentTab(str: string) {
-    this.assessmentTab = str;
-    setTimeout(() => {
-      this.getContainerHeight();
-    }, 100);
-  }
+  // changeAssessmentTab(str: string) {
+  //   this.assessmentTab = str;
+  //   setTimeout(() => {
+  //     this.getContainerHeight();
+  //   }, 100);
+  // }
   //isModalOpen is used to set z-index of panels to 0 so modals will show in front
   openModal($event) {
     this.isModalOpen = $event;
@@ -289,5 +314,20 @@ export class PhastComponent implements OnInit {
       theme: 'default'
     }
     this.toastyService.info(toastOptions);
+  }
+
+  selectModification(mod: PHAST) {
+    this.phastCompareService.selectedModification.next(mod);
+    this.closeSelectModification();
+  }
+
+  selectModificationModal() {
+    this.isModalOpen = true;
+    this.changeModificationModal.show();
+  }
+  closeSelectModification() {
+    this.isModalOpen = false;
+    this.lossesService.openModificationModal.next(false);
+    this.changeModificationModal.hide();
   }
 }

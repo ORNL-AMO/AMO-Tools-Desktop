@@ -32,7 +32,7 @@ export class OtherLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-  
+
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
@@ -42,6 +42,28 @@ export class OtherLossesComponent implements OnInit {
     if (!this._otherLosses) {
       this._otherLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.addLossToggle) {
+        this.addLoss();
+      } else if (changes.losses) {
+        this._otherLosses = new Array();
+        this.initForms();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+  }
+
+  initForms() {
     if (this.losses.otherLosses) {
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
@@ -52,37 +74,18 @@ export class OtherLossesComponent implements OnInit {
         this._otherLosses.push(tmpLoss);
       })
     }
-
-    if(this.inSetup && this.modExists){
-      this.lossesLocked = true;
-      this.disableForms();
-    }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
-      if (changes.addLossToggle) {
-        this.addLoss();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
-
-  collapseLoss(loss: OtherLossObj){
+  collapseLoss(loss: OtherLossObj) {
     loss.collapse = !loss.collapse;
   }
-  
-  disableForms(){
+
+  disableForms() {
     this._otherLosses.forEach(loss => {
       loss.form.disable();
     })
   }
-  
+
   addLoss() {
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
@@ -120,7 +123,7 @@ export class OtherLossesComponent implements OnInit {
   }
 }
 
-export interface OtherLossObj{
+export interface OtherLossObj {
   form: FormGroup,
   name: string,
   collapse: boolean

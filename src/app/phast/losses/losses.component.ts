@@ -27,7 +27,7 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
+  // @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
   @ViewChild('editModificationModal') public editModificationModal: ModalDirective;
   @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
@@ -65,6 +65,7 @@ export class LossesComponent implements OnInit {
   openNewModalSubscription: Subscription;
   openDeleteModalSubscription: Subscription;
   openRenameModalSubscription: Subscription;
+  selectedModificationSubscription: Subscription;
   newModificationName: string;
   changeName: string;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
@@ -86,6 +87,14 @@ export class LossesComponent implements OnInit {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
       if (this._modifications.length != 0) {
         this.modificationExists = true;
+        this.selectedModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
+          if (mod) {
+            this.modificationIndex = _.findIndex(this._modifications, (val) => {
+              return val.phast.name == mod.name
+            })
+          }
+        })
+        //tmpSubscription.unsubscribe();
       }
     }
 
@@ -94,6 +103,7 @@ export class LossesComponent implements OnInit {
       this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
     })
     this.modalOpenSubscrition = this.lossesService.modalOpen.subscribe(val => {
+      console.log('open ' + val);
       this.isModalOpen = val;
     })
 
@@ -113,12 +123,14 @@ export class LossesComponent implements OnInit {
     }
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
     this.lossesService.updateTabs.next(true);
+  }
 
-    this.openModificationModalSubscription = this.lossesService.openModificationModal.subscribe(val => {
-      if (val) {
-        this.selectModificationModal();
-      }
-    })
+  ngAfterViewInit() {
+    // this.openModificationModalSubscription = this.lossesService.openModificationModal.subscribe(val => {
+    //   if (val) {
+    //     this.selectModificationModal();
+    //   }
+    // })
     this.openNewModalSubscription = this.lossesService.openNewModal.subscribe(val => {
       if (val) {
         this.newModification();
@@ -136,7 +148,6 @@ export class LossesComponent implements OnInit {
         this.renameModification();
       }
     })
-
   }
 
   ngOnDestroy() {
@@ -145,8 +156,9 @@ export class LossesComponent implements OnInit {
     this.phastCompareService.setNoModification();
     this.lossTabSubscription.unsubscribe();
     this.modalOpenSubscrition.unsubscribe();
-    this.openModificationModalSubscription.unsubscribe();
+  //  this.openModificationModalSubscription.unsubscribe();
     this.openNewModalSubscription.unsubscribe();
+    this.selectedModificationSubscription.unsubscribe();
   }
 
   changeField($event) {
@@ -248,15 +260,15 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  openModal() {
-    this.isModalOpen = true;
-    this.addModificationModal.show();
-  }
+  // openModal() {
+  //   this.isModalOpen = true;
+  //   this.addModificationModal.show();
+  // }
 
-  closeModal() {
-    this.isModalOpen = false;
-    this.addModificationModal.hide();
-  }
+  // closeModal() {
+  //   this.isModalOpen = false;
+  //   this.addModificationModal.hide();
+  // }
 
   cancelEdit() {
     this.showEditModification = false;

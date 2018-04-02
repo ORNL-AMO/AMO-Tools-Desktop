@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidChargeMaterial, LiquidChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
@@ -35,6 +35,13 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.initData();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initData();
+      }
+    }
+  }
   initData(){
     this.showTemp = new Array();
     this.showFeedRate = new Array();
@@ -60,6 +67,8 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
 
       if (!this.showMaterial && checkTemp && checkFeedRate) {
         this.showMaterial = true;
+      }else{
+        this.showMaterial = false;
       }
       this.showFeedRate.push(checkFeedRate);
       this.showTemp.push(checkTemp);

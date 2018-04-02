@@ -66,6 +66,9 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      if(changes.phast){
+        this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
+      }
     }
     else {
       this.firstChange = false;

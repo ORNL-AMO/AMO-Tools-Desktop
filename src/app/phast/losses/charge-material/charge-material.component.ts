@@ -48,6 +48,9 @@ export class ChargeMaterialComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addMaterial();
+      }else if(changes.losses){
+        this._chargeMaterial = new Array();
+        this.initChargeMaterial();
       }
     }
     else {

@@ -48,6 +48,9 @@ export class CoolingLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      }else if(changes.losses){
+        this._coolingLosses = new Array();
+        this.initCoolingLosses();
       }
     }
     else {

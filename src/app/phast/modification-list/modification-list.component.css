@@ -1,0 +1,54 @@
+.list-group-item.modification-item.active-item{
+    border-left: solid 8px #BF3D00;
+    border-right: solid 8px #BF3D00;
+    border-bottom: solid 2px #BF3D00;
+    border-top: solid 2px #BF3D00;
+    background-color: white;
+    font-weight: bold;
+}
+
+/* 
+.list-group-item.modification-item:hover{
+    cursor: pointer;
+    border-left: solid 8px #BF3D00;
+    border-right: solid 8px #BF3D00;
+    border-bottom: solid 2px #BF3D00;
+    border-top: solid 2px #BF3D00;
+    background-color: white;
+    font-weight: bold;
+    transition: all .25s ease-in-out;
+} */
+
+.list-group-item.modification-item{
+    background-color: #D5D8DC;
+}
+
+
+.badge-primary{
+    margin-left: 0.1rem;
+    margin-right: .1rem;
+    margin-top: .1rem;
+}
+
+.title-item{
+    border-bottom: solid black 2px;
+}
+
+.btn-primary{
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background-color: #BF3D00;
+    border-color: #BF3D00;
+    white-space: normal;
+}
+
+.btn-group .btn{
+    padding: 6px;
+    color: white;
+    font-size: small;
+}
+
+.btn-rename{
+    background-color: #99A3A4;
+    border-color: #99A3A4;
+}

@@ -46,6 +46,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      }else if(changes.losses){
+        this._exhaustGasLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -63,6 +66,14 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (!this._exhaustGasLosses) {
       this._exhaustGasLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.energyInputExhaustGasLoss) {
       let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
@@ -81,10 +92,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
       })
-    }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -148,7 +155,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
 
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 }

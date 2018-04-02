@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Modification } from '../../../shared/models/psat';
-import { PHAST } from '../../../shared/models/phast/phast';
-import { PhastCompareService } from '../../phast-compare.service';
+import { Modification } from '../../shared/models/psat';
+import { PHAST } from '../../shared/models/phast/phast';
+import { PhastCompareService } from '../phast-compare.service';
 
 @Component({
   selector: 'app-modification-list',
@@ -16,15 +16,17 @@ export class ModificationListComponent implements OnInit {
   @Input()
   phast: PHAST;
   @Output('emitSelectModification')
-  emitSelectModification = new EventEmitter<number>();
+  emitSelectModification = new EventEmitter<PHAST>();
+
+  newModificationName: string;
   constructor(private phastCompareService: PhastCompareService) { }
 
   ngOnInit() {
   }
 
 
-  selectModification(num: number) {
-    this.emitSelectModification.emit(num);
+  selectModification(mod: PHAST) {
+    this.emitSelectModification.emit(mod);
   }
 
   getBadges(modification: PHAST) {

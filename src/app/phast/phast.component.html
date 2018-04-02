@@ -5,22 +5,21 @@
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
-    <nav *ngIf="mainTab == 'assessment'">
+    <!-- <nav *ngIf="mainTab == 'assessment'">
       <ul class="tabs subtabs phast">
         <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
           <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
             <br>
             <span class="help-text psat-view">Novice View</span>
           </a>
-        </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+        </li><li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
           <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
             <br>
             <span class="help-text psat-view">Expert View</span>
           </a>
         </li>
       </ul>
-    </nav>
+    </nav> -->
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
       <app-losses-tabs [phast]="_phast" [settings]="settings"></app-losses-tabs>
@@ -112,3 +111,22 @@
 </div>
 <!--disclaimer toast-->
 <ng2-toasty class="disclaimer"></ng2-toasty>
+
+
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Modification</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [phast]="_phast" [modifications]="_phast.modifications" [modificationIndex]="modificationIndex" (emitSelectModification)="selectModification($event)"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>

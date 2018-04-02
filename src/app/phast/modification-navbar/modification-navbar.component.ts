@@ -3,6 +3,7 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
 import { Subscription } from 'rxjs';
 import { LossesService } from '../losses/losses.service';
+import { PhastService } from '../phast.service';
 
 @Component({
   selector: 'app-modification-navbar',
@@ -15,8 +16,10 @@ export class ModificationNavbarComponent implements OnInit {
 
   selectedModification: PHAST;
   modSubscription: Subscription;
+  updateTabsSubscription: Subscription;
   badges: Array<string>;
-  constructor(private phastCompareService: PhastCompareService, private cd: ChangeDetectorRef, private lossesService: LossesService) { }
+  assessmentTab: string;
+  constructor(private phastCompareService: PhastCompareService, private cd: ChangeDetectorRef, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.modSubscription = this.phastCompareService.selectedModification.subscribe(val => {
@@ -24,11 +27,20 @@ export class ModificationNavbarComponent implements OnInit {
       this.cd.detectChanges();
     })
 
-    this.lossesService.updateTabs.subscribe(val => {
+    this.updateTabsSubscription = this.lossesService.updateTabs.subscribe(val => {
       if (val) {
         this.getBadges();
       }
     })
+
+    this.phastService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.updateTabsSubscription.unsubscribe();
+    this.modSubscription.unsubscribe();
   }
 
   selectModification() {
@@ -52,5 +64,9 @@ export class ModificationNavbarComponent implements OnInit {
     }
     this.badges = tmpBadges;
     this.cd.detectChanges();
+  }
+
+  changeAssessmentTab(str: string){
+    this.phastService.assessmentTab.next(str);
   }
 }

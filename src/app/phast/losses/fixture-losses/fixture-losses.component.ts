@@ -42,11 +42,11 @@ export class FixtureLossesComponent implements OnInit {
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.losses) {
+        this._fixtureLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -63,6 +63,15 @@ export class FixtureLossesComponent implements OnInit {
     if (!this._fixtureLosses) {
       this._fixtureLosses = new Array();
     }
+    this.initForms();
+
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.fixtureLosses) {
       let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
@@ -80,11 +89,6 @@ export class FixtureLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
       })
-    }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 

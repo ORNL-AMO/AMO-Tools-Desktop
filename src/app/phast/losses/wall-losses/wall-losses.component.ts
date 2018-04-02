@@ -46,6 +46,9 @@ export class WallLossesComponent implements OnInit {
       //toggle add loss adds loss
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.losses) {
+        this._wallLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -54,9 +57,9 @@ export class WallLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energyResultUnit != 'kWh'){
+    if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
-    }else{
+    } else {
       this.resultsUnit = 'kW';
     }
     //initialize component data array
@@ -64,6 +67,16 @@ export class WallLossesComponent implements OnInit {
     if (!this._wallLosses) {
       this._wallLosses = new Array();
     }
+    //convert current wall losses to forms and add to component array
+    this.initForms();
+
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     //convert current wall losses to forms and add to component array
     if (this.losses.wallLosses) {
       let lossIndex = 1;
@@ -74,7 +87,7 @@ export class WallLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -86,14 +99,9 @@ export class WallLossesComponent implements OnInit {
         this._wallLosses.push(tmpLoss);
       })
     }
-
-    if(this.inSetup && this.modExists){
-      this.lossesLocked = true;
-      this.disableForms();
-    }
   }
 
-  disableForms(){
+  disableForms() {
     this._wallLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -102,7 +110,7 @@ export class WallLossesComponent implements OnInit {
   addLoss() {
     //add new empty loss to component data
     this._wallLosses.push({
-      form: this.wallLossesService.initForm(this._wallLosses.length+1),
+      form: this.wallLossesService.initForm(this._wallLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -110,11 +118,11 @@ export class WallLossesComponent implements OnInit {
     this.saveLosses();
   }
 
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 
-  collapseLoss(loss: WallLossObj){
+  collapseLoss(loss: WallLossObj) {
     loss.collapse = !loss.collapse;
   }
 
@@ -139,7 +147,7 @@ export class WallLossesComponent implements OnInit {
     //iterate through component array to build up new data
     let lossIndex = 1;
     this._wallLosses.forEach(loss => {
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
@@ -40,27 +40,52 @@ export class ExploreOperationsFormComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.exploreModIndex){
+      if(!changes.exploreModIndex.isFirstChange()){
+        this.initElectricityCosts();
+        this.initSteamCosts();
+        this.initFuelCosts();
+        this.initOpHours();
+        if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
+          this.showOperations = true;
+        }else{
+          this.showOperations = false;
+        }
+      }
+    }
+  }
+
+
   initElectricityCosts() {
     if (this.phast.operatingCosts.electricityCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost) {
       this.showElectricityCosts = true;
+    }else{
+      this.showElectricityCosts = false;
     }
   }
 
   initSteamCosts() {
     if (this.phast.operatingCosts.steamCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost) {
       this.showSteamCosts = true;
+    }else{
+      this.showSteamCosts = false;
     }
   }
 
   initFuelCosts() {
     if (this.phast.operatingCosts.fuelCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost) {
       this.showFuelCosts = true;
+    }else{
+      this.showFuelCosts = false;
     }
   }
 
   initOpHours() {
     if (this.phast.operatingHours.hoursPerYear != this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear) {
       this.showOpHours = true;
+    }else{
+      this.showOpHours = false;
     }
   }
 

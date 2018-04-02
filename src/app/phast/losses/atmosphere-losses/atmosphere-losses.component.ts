@@ -45,6 +45,9 @@ export class AtmosphereLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.losses) {
+        this._atmosphereLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -62,6 +65,14 @@ export class AtmosphereLossesComponent implements OnInit {
     if (!this._atmosphereLosses) {
       this._atmosphereLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.atmosphereLosses) {
       let lossIndex = 1;
       this.losses.atmosphereLosses.forEach(loss => {
@@ -79,10 +90,6 @@ export class AtmosphereLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._atmosphereLosses.push(tmpLoss);
       })
-    }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -140,7 +147,7 @@ export class AtmosphereLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setInputError(bool: boolean){
+  setInputError(bool: boolean) {
     this.inputError = bool;
   }
 }

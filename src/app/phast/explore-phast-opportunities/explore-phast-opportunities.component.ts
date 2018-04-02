@@ -4,7 +4,9 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { LossTab } from '../tabs';
 import { ModalDirective } from 'ngx-bootstrap';
-
+import { PhastCompareService } from '../phast-compare.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-explore-phast-opportunities',
   templateUrl: './explore-phast-opportunities.component.html',
@@ -36,15 +38,31 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   exploreModExists: boolean = false;
   modExists: boolean = false;
-  constructor() { }
+  selectModificationSubscription: Subscription;
+  constructor(private phastCompareService: PhastCompareService) { }
 
   ngOnInit() {
     if (this.phast.modifications) {
       if (this.phast.modifications.length != 0) {
         this.modExists = true;
-        this.checkForExploreMod();
+        this.selectModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
+          if (mod) {
+            this.exploreModIndex = _.findIndex(this.phast.modifications, (val) => {
+              return val.phast.name == mod.name
+            })
+            if(this.exploreModIndex){
+              this.exploreModExists = true;
+            }
+          }else{
+            this.checkForExploreMod();
+          }
+        })
       }
     }
+  }
+
+  ngOnDestroy(){
+    this.selectModificationSubscription.unsubscribe();
   }
 
   checkForExploreMod() {
@@ -54,6 +72,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
       if (mod.exploreOpportunities) {
         this.exploreModIndex = i;
         this.exploreModExists = true;
+        this.phastCompareService.selectedModification.next(this.phast.modifications[this.exploreModIndex].phast);
       } else {
         i++;
       }

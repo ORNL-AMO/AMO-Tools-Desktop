@@ -47,6 +47,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.losses) {
+        this._surfaceLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -63,6 +66,15 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     if (!this._surfaceLosses) {
       this._surfaceLosses = new Array();
     }
+    this.initForms();
+
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.extendedSurfaces) {
       let lossIndex = 1;
       this.losses.extendedSurfaces.forEach(loss => {
@@ -80,11 +92,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._surfaceLosses.push(tmpLoss);
       })
-    }
-    
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -155,7 +162,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 

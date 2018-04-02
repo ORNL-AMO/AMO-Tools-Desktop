@@ -1,21 +1,42 @@
 <!-- <select class="form-control nav-item">
     <option *ngFor="let modification of _phast.modifications">{{modification.phast.name}}</option>
   </select> -->
-<div class="row navbar">
-  <div class="col-4">
-    <span *ngFor="let badge of badges" class="badge badge-primary">{{badge}}</span>
+<div class="navbar">
+  <div class="col-4 pl-0">
+    <!-- <span *ngFor="let badge of badges" class="badge badge-primary">{{badge}}</span> -->
+    <div class="d-flex tabs subtabs phast">
+      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+        <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+          <br>
+          <span class="help-text psat-view">Novice View</span>
+        </a>
+      </div>
+      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+        <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+          <br>
+          <span class="help-text psat-view">Expert View</span>
+        </a>
+      </div>
+    </div>
   </div>
 
-  <div class="col-4 text-center">
-    <span class="mod-name" *ngIf="!selectedModification">No Modification Selected</span>
-    <span class="mod-name" *ngIf="selectedModification">{{selectedModification.name}}</span>
-  </div>
-  <div class="col-4">
-    <div class="btn-group pull-right">
-      <button class="btn btn-primary" (click)="selectModification()">Select Modification</button>
-      <button class="btn btn-primary" (click)="renameModification()">Rename</button>
+  <div class="col-8 pr-0">
+    <div class="pull-right d-flex align-items-center tabs subtabs phast br-color-white">
+      <!-- <span class="mod-name" *ngIf="!selectedModification">No Modification Selected</span>
+        <span class="mod-name" *ngIf="selectedModification">{{selectedModification.name}}</span> -->
+      <div class="mod-name active border-right" *ngIf="selectedModification">
+        <a>{{selectedModification.name}}
+          <br>
+          <span class="help-text psat-view">Selected Modification</span>
+        </a>
+      </div>
+      <div class="pl-2 pr-2">
+        <!-- <a class="click-link" (click)="selectModification()">Edit / Change Modification</a> -->
+        <button class="btn btn-primary" (click)="selectModification()">View All Modifications</button>
+        <!-- <button class="btn btn-primary" (click)="renameModification()">Rename</button>
       <button class="btn btn-primary" (click)="deleteModificaiton()">Delete</button>
-      <button class="btn btn-primary" (click)="newModification()">Add New</button>
+      <button class="btn btn-primary" (click)="newModification()">Add New</button> -->
+      </div>
     </div>
   </div>
 </div>
