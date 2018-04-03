@@ -188,6 +188,7 @@ export class PhastComponent implements OnInit {
     this.selectedModSubscription.unsubscribe();
     this.phastCompareService.selectedModification.next(undefined);
     this.phastCompareService.setNoModification();
+    this.addNewSubscription.unsubscribe();
   }
   //function used for getting container height, container height used for scrolling
   getContainerHeight() {
@@ -366,11 +367,13 @@ export class PhastComponent implements OnInit {
 
   showAddNewModal() {
     this.isModalOpen = true;
+    console.log('show')
     this.addNewModal.show();
   }
   closeAddNewModal() {
     this.isModalOpen = false;
     this.lossesService.openNewModal.next(false);
+    console.log('hide')
     this.addNewModal.hide();
   }
 

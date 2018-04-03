@@ -87,6 +87,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
   addModification() {
+    console.log('click');
     this.lossesService.openNewModal.next(true);
   }
 }

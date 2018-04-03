@@ -127,5 +127,6 @@ export class ModificationListComponent implements OnInit {
     this.phast.modifications.push(tmpModification);
     this.save.emit(true);
     this.selectModification(this.phast.modifications.length - 1);
+    this.newModificationName = undefined;
   }
 }
