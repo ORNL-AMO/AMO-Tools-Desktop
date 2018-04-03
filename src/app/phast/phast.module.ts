@@ -36,6 +36,7 @@ import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
 import { PhastCompareService } from './phast-compare.service';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ModificationListComponent } from './modification-list/modification-list
     EnergyCostsComponent,
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
-    ModificationListComponent
+    ModificationListComponent,
+    AddModificationComponent
   ],
   exports: [
   ],

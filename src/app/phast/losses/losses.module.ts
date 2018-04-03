@@ -53,7 +53,6 @@ import { OperationsHelpComponent } from './losses-help/operations-help/operation
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
 import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
 import { ToastyModule } from 'ng2-toasty';
-import { AddModificationComponent } from './add-modification/add-modification.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -105,8 +104,7 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     HeatSystemEfficiencyHelpComponent,
     OperationsHelpComponent,
     LossesSplashPageComponent,
-    LossesResultPanelComponent,
-    AddModificationComponent
+    LossesResultPanelComponent
   ],
   providers: [
     LossesService

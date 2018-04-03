@@ -3,10 +3,10 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { LossTab } from '../tabs';
-import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from '../phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { LossesService } from '../losses/losses.service';
 @Component({
   selector: 'app-explore-phast-opportunities',
   templateUrl: './explore-phast-opportunities.component.html',
@@ -21,7 +21,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
 
   @Output('save')
   save = new EventEmitter<boolean>();
@@ -36,84 +35,30 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     componentStr: ''
   };
 
-  exploreModExists: boolean = false;
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
-  constructor(private phastCompareService: PhastCompareService) { }
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService) { }
 
   ngOnInit() {
-    if (this.phast.modifications) {
-      if (this.phast.modifications.length != 0) {
-        this.modExists = true;
-        this.selectModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-          if (mod) {
-            this.exploreModIndex = _.findIndex(this.phast.modifications, (val) => {
-              return val.phast.name == mod.name
-            })
-            if(this.exploreModIndex){
-              this.exploreModExists = true;
-            }
-          }else{
-            this.checkForExploreMod();
-          }
+    this.selectModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
+      if (mod) {
+        this.exploreModIndex = _.findIndex(this.phast.modifications, (val) => {
+          return val.phast.name == mod.name
         })
-      }
-    }
-  }
-
-  ngOnDestroy(){
-    this.selectModificationSubscription.unsubscribe();
-  }
-
-  checkForExploreMod() {
-    let i = 0;
-    //find explore opportunites modificiation
-    this.phast.modifications.forEach(mod => {
-      if (mod.exploreOpportunities) {
-        this.exploreModIndex = i;
-        this.exploreModExists = true;
-        this.phastCompareService.selectedModification.next(this.phast.modifications[this.exploreModIndex].phast);
-      } else {
-        i++;
+        if (this.exploreModIndex != undefined) {
+          this.modExists = true;
+        }
       }
     })
   }
 
-  addMod() {
-    let phastCpy: PHAST = JSON.parse(JSON.stringify(this.assessment.phast));
-    phastCpy.name = 'Explore Opportunities';
-    this.phast.modifications.push({
-      notes: {
-        chargeNotes: '',
-        wallNotes: '',
-        atmosphereNotes: '',
-        fixtureNotes: '',
-        openingNotes: '',
-        coolingNotes: '',
-        flueGasNotes: '',
-        otherNotes: '',
-        leakageNotes: '',
-        extendedNotes: '',
-        slagNotes: '',
-        auxiliaryPowerNotes: '',
-        exhaustGasNotes: '',
-        energyInputExhaustGasNotes: '',
-        heatSystemEfficiencyNotes: '',
-        operationsNotes: ''
-      },
-      phast: phastCpy,
-      exploreOpportunities: true
-    });
-    this.modExists = true;
-    this.closeModal();
-    this.getResults();
-    this.checkForExploreMod();
+  ngOnDestroy() {
+    this.selectModificationSubscription.unsubscribe();
   }
 
   setTab(str: string) {
     this.tabSelect = str;
   }
-
 
   getResults() {
     this.startSavePolling();
@@ -124,7 +69,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.currentField = str;
   }
 
-
   changeTab(tab: LossTab) {
     this.lossTab = tab;
   }
@@ -133,16 +77,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.save.emit(true);
   }
 
-  closeModal() {
-    this.addModificationModal.hide();
-  }
-
-
-  openModal() {
-    if (!this.modExists) {
-      this.addModificationModal.show();
-    } else {
-      this.addMod();
-    }
+  addModification() {
+    this.lossesService.openNewModal.next(true);
   }
 }

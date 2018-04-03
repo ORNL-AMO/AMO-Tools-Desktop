@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PHAST, Modification } from '../../../shared/models/phast/phast';
+import { PHAST, Modification } from '../../shared/models/phast/phast';
 
 @Component({
   selector: 'app-add-modification',

@@ -47,16 +47,6 @@ export class ModificationNavbarComponent implements OnInit {
     this.lossesService.openModificationModal.next(true);
   }
 
-  renameModification() {
-    this.lossesService.openRenameModal.next(true);
-  }
-  deleteModificaiton() {
-    this.lossesService.openDeleteModal.next(true);
-  }
-  newModification() {
-    this.lossesService.openNewModal.next(true);
-  }
-
   getBadges() {
     let tmpBadges = [];
     if (this.selectedModification) {

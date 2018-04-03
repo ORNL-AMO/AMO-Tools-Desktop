@@ -16,14 +16,14 @@
         <div class="row">
           <div class="col-6 border-right">
             <div *ngIf="!rename[index] && !deleteArr[index]">
-              {{modification.phast.name}}
+              <a class="click-link" (click)="selectModification(modification.phast)">{{modification.phast.name}}</a>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
-                  Actions
+
                 </button>
                 <div class="dropdown-menu" [ngClass]="{'shown': dropdown[index]}">
-                  <a class="dropdown-item" (click)="renameMod(index)">Rename</a>
-                  <a class="dropdown-item" (click)="deleteMod(index)">Delete</a>
+                  <span class="dropdown-item" (click)="renameMod(index)">Rename</span>
+                  <span class="dropdown-item" (click)="deleteMod(index)">Delete</span>
                 </div>
               </div>
             </div>
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="col-6">
-            <div class="d-flex flex-wrap pull-right">
+            <div class="d-flex flex-wrap">
               <div *ngFor="let badge of getBadges(modification.phast)" class="badge badge-primary">{{badge}}</div>
             </div>
           </div>

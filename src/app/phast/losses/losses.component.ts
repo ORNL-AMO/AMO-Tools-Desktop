@@ -27,13 +27,7 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  // @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
-  @ViewChild('editModificationModal') public editModificationModal: ModalDirective;
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
-  @ViewChild('renameModal') public renameModal: ModalDirective;
-
   lossAdded: boolean;
   @Input()
   containerHeight: number;
@@ -61,10 +55,6 @@ export class LossesComponent implements OnInit {
   lossesTabs: Array<LossTab>;
   lossTabSubscription: Subscription;
   modalOpenSubscrition: Subscription;
-  openModificationModalSubscription: Subscription;
-  openNewModalSubscription: Subscription;
-  openDeleteModalSubscription: Subscription;
-  openRenameModalSubscription: Subscription;
   selectedModificationSubscription: Subscription;
   newModificationName: string;
   changeName: string;
@@ -94,7 +84,6 @@ export class LossesComponent implements OnInit {
             })
           }
         })
-        //tmpSubscription.unsubscribe();
       }
     }
 
@@ -103,7 +92,6 @@ export class LossesComponent implements OnInit {
       this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
     })
     this.modalOpenSubscrition = this.lossesService.modalOpen.subscribe(val => {
-      console.log('open ' + val);
       this.isModalOpen = val;
     })
 
@@ -125,40 +113,15 @@ export class LossesComponent implements OnInit {
     this.lossesService.updateTabs.next(true);
   }
 
-  ngAfterViewInit() {
-    // this.openModificationModalSubscription = this.lossesService.openModificationModal.subscribe(val => {
-    //   if (val) {
-    //     this.selectModificationModal();
-    //   }
-    // })
-    this.openNewModalSubscription = this.lossesService.openNewModal.subscribe(val => {
-      if (val) {
-        this.newModification();
-      }
-    })
-
-    this.openDeleteModalSubscription = this.lossesService.openDeleteModal.subscribe(val => {
-      if (val) {
-        this.deleteModificaiton();
-      }
-    })
-
-    this.openRenameModalSubscription = this.lossesService.openRenameModal.subscribe(val => {
-      if (val) {
-        this.renameModification();
-      }
-    })
-  }
 
   ngOnDestroy() {
     // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
+
     this.phastCompareService.setNoModification();
-    this.lossTabSubscription.unsubscribe();
-    this.modalOpenSubscrition.unsubscribe();
-  //  this.openModificationModalSubscription.unsubscribe();
-    this.openNewModalSubscription.unsubscribe();
-    this.selectedModificationSubscription.unsubscribe();
+    if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
+    if (this.selectedModificationSubscription) this.selectedModificationSubscription.unsubscribe();
+    if (this.modalOpenSubscrition) this.modalOpenSubscrition.unsubscribe();
   }
 
   changeField($event) {
@@ -190,35 +153,6 @@ export class LossesComponent implements OnInit {
     this.baselineSelected = false;
     this.saveModifications();
     this.closeNewModification();
-  }
-
-  deleteModification() {
-    this._modifications.splice(this.modificationIndex, 1);
-    this.modificationIndex = 0;
-    this.showEditModification = false;
-    this.editModification = null;
-    this.saveModifications();
-    this.closeDeleteModification();
-  }
-
-  toggleDropdown() {
-    if (this.modificationSelected) {
-      this.showEditModification = false;
-      this.isDropdownOpen = !this.isDropdownOpen;
-      this.showNotes = false;
-      this.editModificationModal.show();
-    }
-  }
-
-  hideEditModificaiton() {
-    this.editModificationModal.hide();
-  }
-
-  selectModification(index: number) {
-    this.modificationIndex = index;
-    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
-    this.saveModifications();
-    this.closeSelectModification();
   }
 
   addLoss() {
@@ -260,54 +194,10 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  // openModal() {
-  //   this.isModalOpen = true;
-  //   this.addModificationModal.show();
-  // }
-
-  // closeModal() {
-  //   this.isModalOpen = false;
-  //   this.addModificationModal.hide();
-  // }
-
   cancelEdit() {
     this.showEditModification = false;
   }
 
-
-  selectModificationModal() {
-    this.isModalOpen = true;
-    this.changeModificationModal.show();
-  }
-  closeSelectModification() {
-    this.isModalOpen = false;
-    this.lossesService.openModificationModal.next(false);
-    this.changeModificationModal.hide();
-  }
-  renameModification() {
-    this.changeName = this._modifications[this.modificationIndex].phast.name;
-    this.isModalOpen = true;
-    this.renameModal.show();
-  }
-  updateName() {
-    this._modifications[this.modificationIndex].phast.name = this.changeName;
-    this.saveModifications();
-    this.closeRenameModification();
-  }
-  closeRenameModification() {
-    this.isModalOpen = false;
-    this.lossesService.openRenameModal.next(false);
-    this.renameModal.hide();
-  }
-  deleteModificaiton() {
-    this.isModalOpen = true;
-    this.deleteModal.show();
-  }
-  closeDeleteModification() {
-    this.isModalOpen = false;
-    this.lossesService.openDeleteModal.next(false);
-    this.deleteModal.hide();
-  }
   newModification() {
     this.isModalOpen = true;
     this.addNewModal.show();
