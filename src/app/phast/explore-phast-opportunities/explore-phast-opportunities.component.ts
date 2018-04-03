@@ -7,6 +7,8 @@ import { PhastCompareService } from '../phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { LossesService } from '../losses/losses.service';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 @Component({
   selector: 'app-explore-phast-opportunities',
   templateUrl: './explore-phast-opportunities.component.html',
@@ -38,20 +40,30 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
-  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService) { }
+  toastId:any;
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig,
+  ) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-left';
+  }
 
   ngOnInit() {
     this.checkExists();
+    this.checkExploreOpps();
   }
 
   ngOnDestroy() {
+    this.toastyService.clearAll();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.firstChange) {
         if (changes.exploreModIndex) {
+          this.toastyService.clearAll();
           this.checkExists();
+          this.checkExploreOpps();
         }
       }
     }
@@ -62,6 +74,21 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
       this.modExists = true;
     } else {
       this.modExists = false;
+    }
+  }
+
+  checkExploreOpps() {
+    if (this.modExists) {
+      if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
+        let toastOptions: ToastOptions = {
+          title: 'Explore Opportunites',
+          msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
+          showClose: true,
+          timeout: 10000000,
+          theme: 'default'
+        }
+        this.toastyService.warning(toastOptions);
+      }
     }
   }
 

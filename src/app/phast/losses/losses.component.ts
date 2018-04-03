@@ -34,27 +34,19 @@ export class LossesComponent implements OnInit {
   modificationIndex: number;
 
   // _modifications: Modification[];
-  isDropdownOpen: boolean = false;
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
   selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
-  isFirstChange: boolean = true;
   showNotes: boolean = false;
-
   isLossesSetup: boolean;
-  showModal: boolean = false;
-
-  isModalOpen: boolean = false;
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;
   lossTabSubscription: Subscription;
-  modalOpenSubscrition: Subscription;
-  selectedModificationSubscription: Subscription;
-  changeName: string;
+
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -70,21 +62,6 @@ export class LossesComponent implements OnInit {
     } else {
       this.phast.disableSetupDialog = true;
     }
-    // this.selectedModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-    //   if (this.phast.modifications) {
-    //     this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-    //   }
-    //   if (mod) {
-    //     this.modificationIndex = _.findIndex(this._modifications, (val) => {
-    //       return val.phast.name == mod.name
-    //     })
-    //     if (this.modificationIndex != undefined) {
-    //       this.modificationExists = true;
-    //     }
-    //   } else {
-    //     this.modificationExists = false;
-    //   }
-    // })
 
     this.lossTabSubscription = this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
@@ -105,18 +82,13 @@ export class LossesComponent implements OnInit {
       }
       this.toastyService.warning(toastOptions);
     }
-    // this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
     this.lossesService.updateTabs.next(true);
   }
 
 
   ngOnDestroy() {
-    // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
-    // this.phastCompareService.setNoModification();
     if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
-    if (this.selectedModificationSubscription) this.selectedModificationSubscription.unsubscribe();
-    if (this.modalOpenSubscrition) this.modalOpenSubscrition.unsubscribe();
   }
 
   changeField($event) {
@@ -124,8 +96,11 @@ export class LossesComponent implements OnInit {
   }
 
   saveModifications() {
-    // if (this._modifications) {
-    //   this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    if(this.phast.modifications[this.modificationIndex]){
+      if(this.phast.modifications[this.modificationIndex].exploreOpportunities){
+        this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
+      }
+    }
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
     this.saved.emit(true);
     this.toggleCalculate = !this.toggleCalculate;
@@ -134,19 +109,7 @@ export class LossesComponent implements OnInit {
     } else {
       this.modificationExists = false;
     }
-    // } else {
-    //   this.modificationExists = false;
-    // }
   }
-
-  // saveNewMod(tmpModification: Modification) {
-  //   this._modifications.unshift(tmpModification);
-  //   this.modificationIndex = 0;
-  //   this.modificationSelected = true;
-  //   this.baselineSelected = false;
-  //   this.saveModifications();
-  //   this.closeNewModification();
-  // }
 
   addLoss() {
     this.phast.disableSetupDialog = true;
@@ -158,7 +121,6 @@ export class LossesComponent implements OnInit {
 
   toggleNotes() {
     this.showNotes = !this.showNotes;
-    this.isDropdownOpen = false;
   }
 
   togglePanel(bool: boolean) {
@@ -172,11 +134,6 @@ export class LossesComponent implements OnInit {
     }
   }
 
-  // dispEditModification(modification: Modification) {
-  //   this.editModification = modification;
-  //   this.showEditModification = true;
-  // }
-
   hideSetupDialog() {
     this.saved.emit(true);
     this.phast.disableSetupDialog = true;
@@ -186,10 +143,6 @@ export class LossesComponent implements OnInit {
     this.saved.emit(true);
     this.isLossesSetup = true;
   }
-
-  // cancelEdit() {
-  //   this.showEditModification = false;
-  // }
 
   newModification() {
     this.lossesService.openNewModal.next(true);

@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
 import { LossesService } from '../losses/losses.service';
+import { PhastService } from '../phast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-modification-list',
@@ -24,17 +26,21 @@ export class ModificationListComponent implements OnInit {
   dropdown: Array<boolean>;
   rename: Array<boolean>;
   deleteArr: Array<boolean>;
-  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService) { }
+  asssessmentTab: string;
+  assessmentTabSubscription: Subscription;
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.dropdown = Array<boolean>(this.phast.modifications.length);
     this.rename = Array<boolean>(this.phast.modifications.length);
     this.deleteArr = Array<boolean>(this.phast.modifications.length);
+    this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(val => {
+      this.asssessmentTab = val;
+    })
   }
 
 
   selectModification(index: number) {
-    // this.phastCompareService.selectedModification.next(mod);
     this.phastCompareService.setCompareVals(this.phast, index);
     this.lossesService.updateTabs.next(true);
   }
@@ -115,7 +121,10 @@ export class ModificationListComponent implements OnInit {
         exhaustGasNotes: '',
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
-      }
+      },
+    }
+    if(this.asssessmentTab == 'explore-opportunities'){
+      tmpModification.exploreOpportunities = true;
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));

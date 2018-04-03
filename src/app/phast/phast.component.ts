@@ -75,7 +75,7 @@ export class PhastComponent implements OnInit {
     private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
-    // this.toastyConfig.limit = 1;
+    this.toastyConfig.limit = 3;
   }
 
   ngOnInit() {
@@ -91,6 +91,9 @@ export class PhastComponent implements OnInit {
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
           if (this._phast.modifications.length != 0) {
+            if(!this._phast.modifications[0].exploreOpportunities){
+              this.phastService.assessmentTab.next('modify-conditions');
+            }
             this.phastCompareService.setCompareVals(this._phast, 0);
           }
         }
@@ -330,14 +333,8 @@ export class PhastComponent implements OnInit {
     this.checkSetupDone();
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
-    //this.phastCompareService.setCompareVals(this._phast, this.modificationIndex);
     //update our assessment in the iDb
     this.indexedDbService.putAssessment(this.assessment);
-  }
-
-  saveModList() {
-    if (this._phast.modifications.length != 0) {
-    }
   }
 
   exportData() {
@@ -367,20 +364,17 @@ export class PhastComponent implements OnInit {
 
   showAddNewModal() {
     this.isModalOpen = true;
-    console.log('show')
     this.addNewModal.show();
   }
   closeAddNewModal() {
     this.isModalOpen = false;
     this.lossesService.openNewModal.next(false);
-    console.log('hide')
     this.addNewModal.hide();
   }
 
   saveNewMod(mod: Modification) {
     this._phast.modifications.push(mod);
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1);
-    // this.phastCompareService.selectedModification.next(this._phast.modifications[this._phast.modifications.length - 1].phast);
     this.closeAddNewModal();
   }
 }

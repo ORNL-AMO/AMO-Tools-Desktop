@@ -1,7 +1,7 @@
 <div class="row modify-conditions">
   <div class="scroll-item" [ngClass]="{'col-6': inSetup, 'col-8': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
     <div class="row row-min-height">
-      <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'baseline':!inSetup,  'col-12': inSetup, 'col-md-6': !inSetup}">
+      <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'baseline':!inSetup,  'col-12': inSetup, 'col-md-6': !inSetup}">
         <div class="header d-flex flex-row justify-content-between">
           <h3>Baseline</h3>
           <h5 class="pull-right panel-add" *ngIf="inSetup && !modificationExists && selectedTab.showAdd">
@@ -84,14 +84,14 @@
       </div>
       <!--Modification Start -->
       <div class="modification col-6" *ngIf="phast.modifications.length != 0 && !inSetup" (click)="togglePanel(modificationSelected)"
-        [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+        [ngClass]="{'disabled': modificationSelected == false}">
 
         <!-- Modification Header -->
         <div class="header d-flex flex-row justify-content-between">
           <h3 *ngIf="phast.modifications[modificationIndex]">{{phast.modifications[modificationIndex].phast.name}}</h3>
         </div>
 
-        <div class="losses-container phast-losses-container" *ngIf="!isDropdownOpen">
+        <div class="losses-container phast-losses-container">
           <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="phast.modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'charge-material'"
             [settings]="settings" [isLossesSetup]="isLossesSetup" [modificationIndex]="modificationIndex"></app-charge-material>
