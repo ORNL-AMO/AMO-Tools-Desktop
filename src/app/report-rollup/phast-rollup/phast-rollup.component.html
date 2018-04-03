@@ -19,7 +19,7 @@
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
               <!--you have the calculator object, just pass it's preAssessment with calculator.preAssessments -->
-              <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"></app-pre-assessment-graph>
+              <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments" [directoryId]="calculator.directoryId" [inRollup]="true"></app-pre-assessment-graph>
             </div>
             <div class="col-lg-7 col-md-11">
               <app-phast-rollup-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator"></app-phast-rollup-pre-assessment-table>

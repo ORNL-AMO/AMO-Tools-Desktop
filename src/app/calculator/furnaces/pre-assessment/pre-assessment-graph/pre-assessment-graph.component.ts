@@ -9,6 +9,7 @@ import { PreAssessmentService } from '../pre-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import { Calculator } from '../../../../shared/models/calculators';
 import * as _ from 'lodash';
+import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -30,8 +31,12 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   toggleCalculate: boolean;
   @Input()
   resultType: string;
+  @Input()
+  directoryId: number;
 
   @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
+
+  directorySettings: Settings;
 
   exportName: string;
   values: Array<number>;
@@ -45,9 +50,11 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   window: any;
 
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.values = new Array<number>();
+    this.labels = new Array<string>();
     this.graphColors = graphColors;
     if (!this.resultType) {
       this.resultType = 'value';
@@ -58,6 +65,10 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     this.destroy = false;
     if (!this.printView) {
       this.printView = false;
+    }
+
+    if (this.directoryId !== undefined) {
+      this.getDirectorySettings();
     }
     this.getData();
   }
@@ -83,6 +94,14 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     }
   }
 
+  getDirectorySettings() {
+    this.indexedDbService.getDirectorySettings(this.directoryId).then(results => {
+      if (results.length != 0) {
+        this.directorySettings = results[0];
+      }
+    });
+  }
+
   getWidth(): number {
     if (this.pieChartContainer) {
       let containerPadding = 30;
@@ -104,7 +123,12 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     this.labels = new Array<string>();
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
+      if (this.directorySettings === undefined) {
+        tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
+      }
+      else {
+        tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, this.resultType);
+      }
       for (let i = 0; i < tmpArray.length; i++) {
         this.values.unshift(tmpArray[i].percent);
         this.labels.unshift(tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%");

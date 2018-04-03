@@ -7,12 +7,10 @@
             <tr>
               <th>PH Name</th>
               <th>Category</th>
-              <th>% of Energy Contribution</th>
-              <!-- <th>Type of Fuel</th> -->
-              <!-- <th>Fuel</th> -->
-              <!-- <th>Heating Value - HHV</th>
-              <th>Metered Fuel Energy</th>
-              <th>Data Collection Time</th> -->
+              <th>Energy Use ({{unit}}/hr)</th>
+              <th>% of Energy Use</th>
+              <th>Energy Cost ($/hr)</th>
+              <th>% of Energy Cost</th>
             </tr>
           </thead>
           <tbody>
@@ -21,10 +19,19 @@
                 {{data[i].name}}
               </td>
               <td>
-                {{preAssessment.type}}
+                {{data[i].type}}
               </td>
               <td>
-                {{data[i].percent}}
+                {{data[i].totalEnergyUse | number:0}}
+              </td>
+              <td>
+                {{data[i].percentEnergyUse | percent: '.2'}}
+              </td>
+              <td>
+                {{data[i].totalEnergyCost | currency: 'CAD': 'symbol-narrow': '.2-2'}}
+              </td>
+              <td>
+                {{data[i].percentEnergyCost | percent: '.2'}}
               </td>
             </tr>
           </tbody>
