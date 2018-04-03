@@ -33,6 +33,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _exhaustGasLosses: Array<EnInputExGasObj>;
   firstChange: boolean = true;
@@ -46,7 +48,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      }else if(changes.losses){
+      } else if (changes.modificationIndex) {
         this._exhaustGasLosses = new Array();
         this.initForms();
       }

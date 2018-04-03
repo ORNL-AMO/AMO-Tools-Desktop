@@ -33,6 +33,8 @@ export class FlueGasLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _flueGasLosses: Array<FlueGasObj>;
   firstChange: boolean = true;
@@ -64,7 +66,7 @@ export class FlueGasLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._flueGasLosses = new Array();
         this.initFlueGasses();
       }

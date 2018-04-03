@@ -91,7 +91,7 @@ export class PhastComponent implements OnInit {
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
           if (this._phast.modifications.length != 0) {
-            this.phastCompareService.selectedModification.next(this._phast.modifications[0].phast);
+            this.phastCompareService.setCompareVals(this._phast, 0);
           }
         }
         //get settings
@@ -150,6 +150,8 @@ export class PhastComponent implements OnInit {
         this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
           return val.phast.name == mod.name
         })
+      } else {
+        this.modificationIndex = undefined;
       }
     })
 
@@ -185,6 +187,7 @@ export class PhastComponent implements OnInit {
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.phastCompareService.selectedModification.next(undefined);
+    this.phastCompareService.setNoModification();
   }
   //function used for getting container height, container height used for scrolling
   getContainerHeight() {
@@ -326,8 +329,14 @@ export class PhastComponent implements OnInit {
     this.checkSetupDone();
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
+    //this.phastCompareService.setCompareVals(this._phast, this.modificationIndex);
     //update our assessment in the iDb
     this.indexedDbService.putAssessment(this.assessment);
+  }
+
+  saveModList() {
+    if (this._phast.modifications.length != 0) {
+    }
   }
 
   exportData() {
@@ -343,11 +352,6 @@ export class PhastComponent implements OnInit {
       theme: 'default'
     }
     this.toastyService.info(toastOptions);
-  }
-
-  selectModification(mod: PHAST) {
-    this.phastCompareService.selectedModification.next(mod);
-    this.closeSelectModification();
   }
 
   selectModificationModal() {
@@ -372,7 +376,8 @@ export class PhastComponent implements OnInit {
 
   saveNewMod(mod: Modification) {
     this._phast.modifications.push(mod);
-    this.phastCompareService.selectedModification.next(this._phast.modifications[this._phast.modifications.length -1].phast);
+    this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1);
+    // this.phastCompareService.selectedModification.next(this._phast.modifications[this._phast.modifications.length - 1].phast);
     this.closeAddNewModal();
   }
 }

@@ -12,11 +12,11 @@
         </div>
       </li>
 
-      <li class="list-group-item modification-item" *ngFor="let modification of modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
+      <li class="list-group-item modification-item" *ngFor="let modification of phast.modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
         <div class="row">
           <div class="col-6 border-right">
             <div *ngIf="!rename[index] && !deleteArr[index]">
-              <a class="click-link" (click)="selectModification(modification.phast)">{{modification.phast.name}}</a>
+              <a class="click-link" (click)="selectModification(index)">{{modification.phast.name}}</a>
               <div class="btn-group pull-right">
                 <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
 
@@ -42,7 +42,7 @@
                 <span class="small red">This cannot be undone.</span>
               </div>
               <div class="p-0 w-25 align-self-center small text-center">
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" (click)="deleteModification(index)">
                   <span class="fa fa-trash pr-1"></span>Delete</button>
               </div>
               <div class="p-0 w-25 align-self-center text-center small">
@@ -74,7 +74,7 @@
         </div>
       </form>
       <div class="p-2 text-center">
-        <button class="btn btn-primary" [disabled]="!newModificationName">Add New Modification</button>
+        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New Modification</button>
       </div>
     </div>
   </div>

@@ -26,6 +26,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -66,7 +68,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       } else {
         this.enableForm();
       }
-      if(changes.phast){
+      if (changes.modificationIndex) {
         this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
       }
     }

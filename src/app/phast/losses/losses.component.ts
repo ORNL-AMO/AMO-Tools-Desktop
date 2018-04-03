@@ -27,23 +27,21 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
   lossAdded: boolean;
   @Input()
   containerHeight: number;
+  @Input()
+  modificationIndex: number;
 
-  _modifications: Modification[];
+  // _modifications: Modification[];
   isDropdownOpen: boolean = false;
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
-  modificationIndex: number = 0;
   selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
-  editModification: Modification;
-  showEditModification: boolean = false;
 
   isLossesSetup: boolean;
   showModal: boolean = false;
@@ -56,7 +54,6 @@ export class LossesComponent implements OnInit {
   lossTabSubscription: Subscription;
   modalOpenSubscrition: Subscription;
   selectedModificationSubscription: Subscription;
-  newModificationName: string;
   changeName: string;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
@@ -66,33 +63,32 @@ export class LossesComponent implements OnInit {
 
   ngOnInit() {
     this.lossesTabs = this.lossesService.lossesTabs;
-    this._modifications = new Array<Modification>();
+    // this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
     } else {
       this.phast.disableSetupDialog = true;
     }
-    if (this.phast.modifications) {
-      this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-      if (this._modifications.length != 0) {
-        this.modificationExists = true;
-        this.selectedModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-          if (mod) {
-            this.modificationIndex = _.findIndex(this._modifications, (val) => {
-              return val.phast.name == mod.name
-            })
-          }
-        })
-      }
-    }
+    // this.selectedModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
+    //   if (this.phast.modifications) {
+    //     this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
+    //   }
+    //   if (mod) {
+    //     this.modificationIndex = _.findIndex(this._modifications, (val) => {
+    //       return val.phast.name == mod.name
+    //     })
+    //     if (this.modificationIndex != undefined) {
+    //       this.modificationExists = true;
+    //     }
+    //   } else {
+    //     this.modificationExists = false;
+    //   }
+    // })
 
     this.lossTabSubscription = this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
       this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
-    })
-    this.modalOpenSubscrition = this.lossesService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
     })
 
     if (!this.inSetup) {
@@ -109,7 +105,7 @@ export class LossesComponent implements OnInit {
       }
       this.toastyService.warning(toastOptions);
     }
-    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    // this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
     this.lossesService.updateTabs.next(true);
   }
 
@@ -117,8 +113,7 @@ export class LossesComponent implements OnInit {
   ngOnDestroy() {
     // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
-
-    this.phastCompareService.setNoModification();
+    // this.phastCompareService.setNoModification();
     if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
     if (this.selectedModificationSubscription) this.selectedModificationSubscription.unsubscribe();
     if (this.modalOpenSubscrition) this.modalOpenSubscrition.unsubscribe();
@@ -129,31 +124,29 @@ export class LossesComponent implements OnInit {
   }
 
   saveModifications() {
-    if (this._modifications) {
-      this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
-      this.saved.emit(true);
-      this.showEditModification = false;
-      this.editModification = null;
-      this.toggleCalculate = !this.toggleCalculate;
-      if (this._modifications.length != 0) {
-        this.modificationExists = true;
-      } else {
-        this.modificationExists = false;
-      }
+    // if (this._modifications) {
+    //   this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    this.saved.emit(true);
+    this.toggleCalculate = !this.toggleCalculate;
+    if (this.phast.modifications.length != 0) {
+      this.modificationExists = true;
     } else {
       this.modificationExists = false;
     }
+    // } else {
+    //   this.modificationExists = false;
+    // }
   }
 
-  saveNewMod(tmpModification: Modification) {
-    this._modifications.unshift(tmpModification);
-    this.modificationIndex = 0;
-    this.modificationSelected = true;
-    this.baselineSelected = false;
-    this.saveModifications();
-    this.closeNewModification();
-  }
+  // saveNewMod(tmpModification: Modification) {
+  //   this._modifications.unshift(tmpModification);
+  //   this.modificationIndex = 0;
+  //   this.modificationSelected = true;
+  //   this.baselineSelected = false;
+  //   this.saveModifications();
+  //   this.closeNewModification();
+  // }
 
   addLoss() {
     this.phast.disableSetupDialog = true;
@@ -179,10 +172,10 @@ export class LossesComponent implements OnInit {
     }
   }
 
-  dispEditModification(modification: Modification) {
-    this.editModification = modification;
-    this.showEditModification = true;
-  }
+  // dispEditModification(modification: Modification) {
+  //   this.editModification = modification;
+  //   this.showEditModification = true;
+  // }
 
   hideSetupDialog() {
     this.saved.emit(true);
@@ -194,19 +187,11 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  cancelEdit() {
-    this.showEditModification = false;
-  }
+  // cancelEdit() {
+  //   this.showEditModification = false;
+  // }
 
   newModification() {
-    this.isModalOpen = true;
-    this.addNewModal.show();
+    this.lossesService.openNewModal.next(true);
   }
-  closeNewModification() {
-    this.isModalOpen = false;
-    this.lossesService.openNewModal.next(false);
-    this.addNewModal.hide();
-  }
-
-
 }

@@ -34,6 +34,8 @@ export class ChargeMaterialComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _chargeMaterial: Array<ChargeMaterialObj>;
   firstChange: boolean = true;
@@ -48,7 +50,7 @@ export class ChargeMaterialComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addMaterial();
-      }else if(changes.losses){
+      } else if (changes.modificationIndex) {
         this._chargeMaterial = new Array();
         this.initChargeMaterial();
       }
@@ -262,7 +264,7 @@ export class ChargeMaterialComponent implements OnInit {
   focusOut() {
     this.fieldChange.emit('default');
   }
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 }

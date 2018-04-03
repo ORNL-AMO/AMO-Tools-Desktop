@@ -16,7 +16,7 @@ export class ModificationNavbarComponent implements OnInit {
 
   selectedModification: PHAST;
   modSubscription: Subscription;
-  updateTabsSubscription: Subscription;
+ // updateTabsSubscription: Subscription;
   badges: Array<string>;
   assessmentTab: string;
   constructor(private phastCompareService: PhastCompareService, private cd: ChangeDetectorRef, private lossesService: LossesService, private phastService: PhastService) { }
@@ -27,11 +27,11 @@ export class ModificationNavbarComponent implements OnInit {
       this.cd.detectChanges();
     })
 
-    this.updateTabsSubscription = this.lossesService.updateTabs.subscribe(val => {
-      if (val) {
-        this.getBadges();
-      }
-    })
+    // this.updateTabsSubscription = this.lossesService.updateTabs.subscribe(val => {
+    //   if (val) {
+    //     this.getBadges();
+    //   }
+    // })
 
     this.phastService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
@@ -39,7 +39,7 @@ export class ModificationNavbarComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    this.updateTabsSubscription.unsubscribe();
+   // this.updateTabsSubscription.unsubscribe();
     this.modSubscription.unsubscribe();
   }
 
@@ -47,14 +47,14 @@ export class ModificationNavbarComponent implements OnInit {
     this.lossesService.openModificationModal.next(true);
   }
 
-  getBadges() {
-    let tmpBadges = [];
-    if (this.selectedModification) {
-      tmpBadges = this.phastCompareService.getBadges(this.phast, this.selectedModification);
-    }
-    this.badges = tmpBadges;
-    this.cd.detectChanges();
-  }
+  // getBadges() {
+  //   let tmpBadges = [];
+  //   if (this.selectedModification) {
+  //     tmpBadges = this.phastCompareService.getBadges(this.phast, this.selectedModification);
+  //   }
+  //   this.badges = tmpBadges;
+  //   this.cd.detectChanges();
+  // }
 
   changeAssessmentTab(str: string){
     this.phastService.assessmentTab.next(str);

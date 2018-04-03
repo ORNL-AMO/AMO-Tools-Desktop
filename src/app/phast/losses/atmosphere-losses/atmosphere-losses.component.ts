@@ -2,10 +2,11 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { PhastCompareService } from '../../phast-compare.service';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -33,19 +34,22 @@ export class AtmosphereLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   _atmosphereLosses: Array<AtmoLossObj>;
   firstChange: boolean = true;
   inputError: boolean = false;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  selectedMod: PHAST;
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private phastCompareService: PhastCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._atmosphereLosses = new Array();
         this.initForms();
       }

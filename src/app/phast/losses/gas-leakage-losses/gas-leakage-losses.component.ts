@@ -33,7 +33,9 @@ export class GasLeakageLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
@@ -45,7 +47,7 @@ export class GasLeakageLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._leakageLosses = new Array();
         this.initForms();
       }

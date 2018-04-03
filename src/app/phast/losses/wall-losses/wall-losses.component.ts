@@ -33,6 +33,8 @@ export class WallLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _wallLosses: Array<WallLossObj>;
   firstChange: boolean = true;
@@ -46,7 +48,7 @@ export class WallLossesComponent implements OnInit {
       //toggle add loss adds loss
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._wallLosses = new Array();
         this.initForms();
       }

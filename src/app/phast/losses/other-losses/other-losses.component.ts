@@ -32,6 +32,8 @@ export class OtherLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
@@ -53,7 +55,7 @@ export class OtherLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._otherLosses = new Array();
         this.initForms();
       }

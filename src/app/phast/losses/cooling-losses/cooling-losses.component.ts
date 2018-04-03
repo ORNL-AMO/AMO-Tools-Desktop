@@ -34,9 +34,10 @@ export class CoolingLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
-
   _coolingLosses: Array<CoolingLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -48,7 +49,7 @@ export class CoolingLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      }else if(changes.losses){
+      } else if (changes.modificationIndex) {
         this._coolingLosses = new Array();
         this.initCoolingLosses();
       }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Modification } from '../../shared/models/psat';
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
+import { LossesService } from '../losses/losses.service';
 
 @Component({
   selector: 'app-modification-list',
@@ -9,8 +9,8 @@ import { PhastCompareService } from '../phast-compare.service';
   styleUrls: ['./modification-list.component.css']
 })
 export class ModificationListComponent implements OnInit {
-  @Input()
-  modifications: Array<Modification>;
+  // @Input()
+  // modifications: Array<Modification>;
   @Input()
   modificationIndex: number;
   @Input()
@@ -24,17 +24,19 @@ export class ModificationListComponent implements OnInit {
   dropdown: Array<boolean>;
   rename: Array<boolean>;
   deleteArr: Array<boolean>;
-  constructor(private phastCompareService: PhastCompareService) { }
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService) { }
 
   ngOnInit() {
-    this.dropdown = Array<boolean>(this.modifications.length);
-    this.rename = Array<boolean>(this.modifications.length);
-    this.deleteArr = Array<boolean>(this.modifications.length);
+    this.dropdown = Array<boolean>(this.phast.modifications.length);
+    this.rename = Array<boolean>(this.phast.modifications.length);
+    this.deleteArr = Array<boolean>(this.phast.modifications.length);
   }
 
 
-  selectModification(mod: PHAST) {
-    this.emitSelectModification.emit(mod);
+  selectModification(index: number) {
+    // this.phastCompareService.selectedModification.next(mod);
+    this.phastCompareService.setCompareVals(this.phast, index);
+    this.lossesService.updateTabs.next(true);
   }
 
   getBadges(modification: PHAST) {
@@ -53,7 +55,7 @@ export class ModificationListComponent implements OnInit {
     }
   }
 
-  renameMod(index: number){
+  renameMod(index: number) {
     this.dropdown[index] = false;
     if (!this.rename[index]) {
       this.rename[index] = true;
@@ -62,7 +64,7 @@ export class ModificationListComponent implements OnInit {
     }
   }
 
-  deleteMod(index: number){
+  deleteMod(index: number) {
     this.dropdown[index] = false;
     if (!this.deleteArr[index]) {
       this.deleteArr[index] = true;
@@ -71,8 +73,59 @@ export class ModificationListComponent implements OnInit {
     }
   }
 
-  saveUpdates(index: number){
+  deleteModification(index: number) {
+    this.phast.modifications.splice(index, 1);
+    this.rename.splice(index, 1);
+    this.dropdown.splice(index, 1);
+    this.deleteArr.splice(index, 1);
+    if (this.phast.modifications.length == 0) {
+      this.phastCompareService.setCompareVals(this.phast, 0);
+    } else if (index == this.modificationIndex) {
+      this.selectModification(0);
+    } else if (index < this.modificationIndex) {
+      this.selectModification(this.modificationIndex - 1);
+    }
+    this.save.emit(true);
+  }
+
+  saveUpdates(index: number) {
     this.save.emit(true);
     this.renameMod(index);
+  }
+
+  addNewModification() {
+    let tmpModification: Modification = {
+      phast: {
+        losses: {},
+        name: this.newModificationName,
+      },
+      notes: {
+        chargeNotes: '',
+        wallNotes: '',
+        atmosphereNotes: '',
+        fixtureNotes: '',
+        openingNotes: '',
+        coolingNotes: '',
+        flueGasNotes: '',
+        otherNotes: '',
+        leakageNotes: '',
+        extendedNotes: '',
+        slagNotes: '',
+        auxiliaryPowerNotes: '',
+        exhaustGasNotes: '',
+        energyInputExhaustGasNotes: '',
+        operationsNotes: ''
+      }
+    }
+    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
+    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
+    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
+    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
+    this.dropdown.push(false);
+    this.rename.push(false);
+    this.deleteArr.push(false);
+    this.phast.modifications.push(tmpModification);
+    this.save.emit(true);
+    this.selectModification(this.phast.modifications.length - 1);
   }
 }

@@ -57,10 +57,11 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
-        (save)="saveDb()"></app-explore-phast-opportunities>
+        (save)="saveDb()" [exploreModIndex]="modificationIndex"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
-      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"
+        [modificationIndex]="modificationIndex"></app-losses>
     </div>
   </div>
   <!--Report-->
@@ -125,7 +126,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [phast]="_phast" [modifications]="_phast.modifications" (save)="saveDb()" [modificationIndex]="modificationIndex" (emitSelectModification)="selectModification($event)"></app-modification-list>
+        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
+          (emitSelectModification)="selectModification($event)"></app-modification-list>
       </div>
     </div>
   </div>
@@ -139,7 +141,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3>Add New Modification</h3>
-        <button class="close" (click)="closeNewModification()">
+        <button class="close" (click)="closeAddNewModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

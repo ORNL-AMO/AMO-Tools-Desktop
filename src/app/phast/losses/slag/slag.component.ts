@@ -32,6 +32,8 @@ export class SlagComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _slagLosses: Array<SlagLossObj>;
   firstChange: boolean = true;
@@ -43,7 +45,7 @@ export class SlagComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._slagLosses = new Array();
         this.initForms();
       }

@@ -37,7 +37,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
-      if (!changes.exploreModIndex.isFirstChange()) {
+      if (!changes.exploreModIndex.isFirstChange()) {;
         this.initData();
       }
     }
@@ -49,6 +49,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.feedRateError1 = new Array<string>();
     this.feedRateError2 = new Array<string>();
     let index = 0;
+    this.showMaterial = false;
     this.phast.losses.chargeMaterials.forEach(material => {
       let tmpBaseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       let tmpModified: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
@@ -65,10 +66,9 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       let checkTemp: boolean = this.checkVal(tmpBaseline.initialTemperature, tmpModified.initialTemperature);
       let checkFeedRate: boolean = this.checkVal(tmpBaseline.chargeFeedRate, tmpModified.chargeFeedRate);
 
-      if (!this.showMaterial && checkTemp && checkFeedRate) {
+      let testVal = checkTemp || checkFeedRate;
+      if (!this.showMaterial && testVal) {
         this.showMaterial = true;
-      }else{
-        this.showMaterial = false;
       }
       this.showFeedRate.push(checkFeedRate);
       this.showTemp.push(checkTemp);

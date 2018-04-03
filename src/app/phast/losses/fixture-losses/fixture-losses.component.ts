@@ -33,6 +33,8 @@ export class FixtureLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
   resultsUnit: string;
@@ -44,7 +46,7 @@ export class FixtureLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._fixtureLosses = new Array();
         this.initForms();
       }

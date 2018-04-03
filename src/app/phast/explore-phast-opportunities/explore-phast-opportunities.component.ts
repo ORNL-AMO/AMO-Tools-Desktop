@@ -21,12 +21,13 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
+  @Input()
+  exploreModIndex: number;
 
   @Output('save')
   save = new EventEmitter<boolean>();
 
   tabSelect: string = 'results';
-  exploreModIndex: number;
   currentField: string = 'default';
   toggleCalculate: boolean = false;
   lossTab: LossTab = {
@@ -40,20 +41,28 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService) { }
 
   ngOnInit() {
-    this.selectModificationSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-      if (mod) {
-        this.exploreModIndex = _.findIndex(this.phast.modifications, (val) => {
-          return val.phast.name == mod.name
-        })
-        if (this.exploreModIndex != undefined) {
-          this.modExists = true;
-        }
-      }
-    })
+    this.checkExists();
   }
 
   ngOnDestroy() {
-    this.selectModificationSubscription.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.firstChange) {
+        if (changes.exploreModIndex) {
+          this.checkExists();
+        }
+      }
+    }
+  }
+
+  checkExists() {
+    if (this.exploreModIndex || this.exploreModIndex == 0) {
+      this.modExists = true;
+    } else {
+      this.modExists = false;
+    }
   }
 
   setTab(str: string) {

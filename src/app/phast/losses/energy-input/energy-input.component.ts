@@ -33,6 +33,8 @@ export class EnergyInputComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
@@ -44,7 +46,7 @@ export class EnergyInputComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      }else if(changes.losses){
+      } else if (changes.modificationIndex) {
         this._energyInputs = new Array();
         this.initForms();
       }

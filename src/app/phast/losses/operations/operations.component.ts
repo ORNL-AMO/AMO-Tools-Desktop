@@ -24,22 +24,24 @@ export class OperationsComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  modificationIndex: number;
 
   operationsForm: FormGroup;
-  firstChange: boolean = true;
   isCalculated: boolean;
+  isFirstChange: boolean = true;
   constructor(private operationsService: OperationsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.phast) {
-        this.initForm()
+    if (!this.isFirstChange) {
+      if (changes.modificationIndex) {
+        this.initForm();
       }
-    } else {
-      this.firstChange = false;
+      else {
+        this.isFirstChange = false;
+      }
     }
   }
-
   ngOnInit() {
     this.initForm();
   }

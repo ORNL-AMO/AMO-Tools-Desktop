@@ -33,7 +33,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   inputError: boolean = false;
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<AuxPowLossObj>;
@@ -45,7 +47,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.losses) {
+      } else if (changes.modificationIndex) {
         this._auxiliaryPowerLosses = new Array();
         this.initForms();
       }
