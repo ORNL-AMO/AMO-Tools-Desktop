@@ -44,7 +44,7 @@ export class PhastRollupGraphsComponent implements OnInit {
   backgroundColors: Array<string>;
   graphColors: Array<string>;
   resultData: Array<PhastResultsData>;
-  dataOption: string = 'cost';
+  dataOption: string = 'energy';
   totalSteamEnergyUsed: number = 0;
   totalElectricalEnergyUsed: number = 0;
   totalFuelEnergyUsed: number = 0;
