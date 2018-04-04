@@ -95,7 +95,6 @@ export class PhastReportComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log("this.showPrint = " + this.showPrint);
   }
 
   initPrintLogic() {
@@ -111,8 +110,6 @@ export class PhastReportComponent implements OnInit {
   }
 
   setTab(str: string): void {
-    console.log("this.showPrint = " + this.showPrint);
-
     this.currentTab = str;
   }
 
@@ -228,12 +225,10 @@ export class PhastReportComponent implements OnInit {
         break;
       }
       case "report-graphs": {
-        console.log('swicthing graphs');
         this.printReportGraphs = !this.printReportGraphs;
         break;
       }
       case "report-sankey": {
-        console.log('switching sankey');
         this.printReportSankey = !this.printReportSankey;
         break;
       }
@@ -245,8 +240,6 @@ export class PhastReportComponent implements OnInit {
         break;
       }
     }
-    console.log('this.printReportGraphs = ' + this.printReportGraphs);
-    console.log('this.printReportSankey = ' + this.printReportSankey);
   }
 
 
