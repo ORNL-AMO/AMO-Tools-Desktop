@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
@@ -30,6 +30,13 @@ export class ExploreWallFormComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.exploreModIndex){
+      if(!changes.exploreModIndex.isFirstChange()){
+        this.initData();
+      }
+    }
   }
 
   initData() {

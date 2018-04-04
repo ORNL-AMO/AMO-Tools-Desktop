@@ -12,10 +12,12 @@ export class LossesService {
   lossIndex: BehaviorSubject<number>;
 
   //baseline: BehaviorSubject<PHAST>;
-  modification: BehaviorSubject<Modification>;
+  // modification: BehaviorSubject<Modification>;
 
   lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
+  openModificationModal: BehaviorSubject<boolean>;
+  openNewModal: BehaviorSubject<boolean>;
 
 
   chargeDone: boolean;
@@ -29,15 +31,12 @@ export class LossesService {
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     // this.baseline = new BehaviorSubject<PHAST>(null);
-    this.modification = new BehaviorSubject<Modification>(null);
+    //this.modification = new BehaviorSubject<Modification>(null);
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateTabs = new BehaviorSubject<boolean>(false);
-    // this.chargeDone = new BehaviorSubject<boolean>(false);
-    // this.enInput1Done = new BehaviorSubject<boolean>(false);
-    // this.enInput2Done = new BehaviorSubject<boolean>(false);
-    // this.flueGasDone = new BehaviorSubject<boolean>(false);
-    // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
+    this.openModificationModal = new BehaviorSubject<boolean>(false);
+    this.openNewModal = new BehaviorSubject<boolean>(false);
   }
 
   getTab(num: number) {

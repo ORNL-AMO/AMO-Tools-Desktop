@@ -33,6 +33,8 @@ export class EnergyInputComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
@@ -44,6 +46,9 @@ export class EnergyInputComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._energyInputs = new Array();
+        this.initForms();
       }
     }
     else {
@@ -61,6 +66,14 @@ export class EnergyInputComponent implements OnInit {
     if (!this._energyInputs) {
       this._energyInputs = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.energyInputEAF) {
       let lossIndex = 1;
       this.losses.energyInputEAF.forEach(loss => {
@@ -81,10 +94,6 @@ export class EnergyInputComponent implements OnInit {
         this.calculate(tmpLoss);
         this._energyInputs.push(tmpLoss);
       })
-    }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 

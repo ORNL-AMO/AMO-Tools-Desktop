@@ -51,8 +51,21 @@ export class OperationsCompareService {
   compareSteamCost(): boolean {
     return this.compare(this.baseline.operatingCosts.steamCost, this.modification.operatingCosts.steamCost);
   }
+
   compareElectricityCost(): boolean {
     return this.compare(this.baseline.operatingCosts.electricityCost, this.modification.operatingCosts.electricityCost);
+  }
+
+  compareBaseModLoss(baseline: PHAST, modification: PHAST): boolean {
+    return (
+      this.compare(baseline.operatingHours.weeksPerYear, modification.operatingHours.weeksPerYear) ||
+      this.compare(baseline.operatingHours.daysPerWeek, modification.operatingHours.daysPerWeek) ||
+      this.compare(baseline.operatingHours.shiftsPerDay, modification.operatingHours.shiftsPerDay) ||
+      this.compare(baseline.operatingHours.hoursPerShift, modification.operatingHours.hoursPerShift) ||
+      this.compare(baseline.operatingHours.hoursPerYear, modification.operatingHours.hoursPerYear) ||
+      this.compare(baseline.operatingCosts.fuelCost, modification.operatingCosts.fuelCost) ||
+      this.compare(baseline.operatingCosts.steamCost, modification.operatingCosts.steamCost) ||
+      this.compare(baseline.operatingCosts.electricityCost, modification.operatingCosts.electricityCost))
   }
 
   compare(a: any, b: any) {

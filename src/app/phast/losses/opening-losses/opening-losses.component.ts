@@ -33,6 +33,8 @@ export class OpeningLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
   _openingLosses: Array<OpeningLossObj>;
@@ -47,12 +49,16 @@ export class OpeningLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._openingLosses = new Array();
+        this.initForms();
       }
     }
     else {
       this.firstChange = false;
     }
   }
+
   ngOnInit() {
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
@@ -63,6 +69,14 @@ export class OpeningLossesComponent implements OnInit {
     if (!this._openingLosses) {
       this._openingLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.openingLosses) {
       let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
@@ -81,11 +95,6 @@ export class OpeningLossesComponent implements OnInit {
         this._openingLosses.push(tmpLoss);
       })
       this.total = this.getTotal();
-    }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 

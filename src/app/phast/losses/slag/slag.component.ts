@@ -32,6 +32,8 @@ export class SlagComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _slagLosses: Array<SlagLossObj>;
   firstChange: boolean = true;
@@ -43,6 +45,9 @@ export class SlagComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._slagLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -51,14 +56,21 @@ export class SlagComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energyResultUnit != 'kWh'){
+    if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
-    }else{
+    } else {
       this.resultsUnit = 'kW';
     }
     if (!this._slagLosses) {
       this._slagLosses = new Array<SlagLossObj>();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+  initForms() {
     if (this.losses.slagLosses) {
       let lossIndex = 1;
       this.losses.slagLosses.forEach(loss => {
@@ -67,7 +79,7 @@ export class SlagComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -77,15 +89,9 @@ export class SlagComponent implements OnInit {
         this._slagLosses.push(tmpLoss);
       })
     }
-
-    if(this.inSetup && this.modExists){
-      this.lossesLocked = true;
-      this.disableForms();
-    }
   }
 
-
-  disableForms(){
+  disableForms() {
     this._slagLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -93,7 +99,7 @@ export class SlagComponent implements OnInit {
 
   addLoss() {
     this._slagLosses.push({
-      form: this.slagService.initForm(this._slagLosses.length+1),
+      form: this.slagService.initForm(this._slagLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -118,7 +124,7 @@ export class SlagComponent implements OnInit {
     let tmpSlagLosses = new Array<Slag>();
     let lossIndex = 1;
     this._slagLosses.forEach(loss => {
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

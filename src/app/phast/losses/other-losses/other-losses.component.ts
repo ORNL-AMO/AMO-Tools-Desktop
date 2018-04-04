@@ -32,6 +32,8 @@ export class OtherLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
@@ -43,6 +45,28 @@ export class OtherLossesComponent implements OnInit {
     if (!this._otherLosses) {
       this._otherLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.addLossToggle) {
+        this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._otherLosses = new Array();
+        this.initForms();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+  }
+
+  initForms() {
     if (this.losses.otherLosses) {
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
@@ -52,26 +76,6 @@ export class OtherLossesComponent implements OnInit {
         };
         this._otherLosses.push(tmpLoss);
       })
-      this.total = this.getTotal();
-    }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
-      if (changes.addLossToggle) {
-        this.addLoss();
-      }
-    }
-    else {
-      this.firstChange = false;
     }
   }
 

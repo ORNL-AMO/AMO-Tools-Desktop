@@ -17,10 +17,15 @@ import { AtmosphereLossesCompareService } from './losses/atmosphere-losses/atmos
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { EnergyInputCompareService } from './losses/energy-input/energy-input-compare.service';
 import { OperationsCompareService } from './losses/operations/operations-compare.service';
+import { BehaviorSubject } from 'rxjs';
+import { Modification } from '../shared/models/psat';
 
 @Injectable()
 export class PhastCompareService {
-
+  selectedModification: BehaviorSubject<PHAST>;
+  baseline: PHAST;
+  baselineSet: boolean;
+  modifiedSet: boolean;
   constructor(
     private wallLossCompareService: WallLossCompareService,
     private slagCompareService: SlagCompareService,
@@ -39,7 +44,9 @@ export class PhastCompareService {
     private auxiliaryPowerCompareService: AuxiliaryPowerCompareService,
     private atmosphereLossesCompareService: AtmosphereLossesCompareService,
     private operationsCompareService: OperationsCompareService
-  ) { }
+  ) {
+    this.selectedModification = new BehaviorSubject<PHAST>(undefined);
+  }
 
 
   setCompareVals(phast: PHAST, selectedModIndex: number) {
@@ -49,25 +56,29 @@ export class PhastCompareService {
     }
     if (phast.modifications) {
       if (phast.modifications.length != 0) {
+        this.selectedModification.next(phast.modifications[selectedModIndex].phast);
         this.setModified(phast.modifications[selectedModIndex].phast.losses);
-        if(phast.modifications[selectedModIndex].phast){
+        if (phast.modifications[selectedModIndex].phast) {
           this.heatSystemEfficiencyCompareService.modification = phast.modifications[selectedModIndex].phast;
           this.operationsCompareService.modification = phast.modifications[selectedModIndex].phast;
         }
       } else {
+        this.selectedModification.next(undefined);
         this.setNoModification();
       }
     } else {
+      this.selectedModification.next(undefined);
       this.setNoModification();
     }
 
-    if(phast.systemEfficiency){
+    if (phast.systemEfficiency) {
       this.heatSystemEfficiencyCompareService.baseline = phast;
       this.operationsCompareService.baseline = phast;
     }
   }
 
   setBaseline(losses: Losses) {
+    this.baselineSet = true;
     if (losses.atmosphereLosses) {
       this.atmosphereLossesCompareService.baselineAtmosphereLosses = losses.atmosphereLosses;
     }
@@ -116,6 +127,7 @@ export class PhastCompareService {
   }
 
   setModified(losses: Losses) {
+    this.modifiedSet = true;
     if (losses.atmosphereLosses) {
       this.atmosphereLossesCompareService.modifiedAtmosphereLosses = losses.atmosphereLosses;
     }
@@ -164,6 +176,7 @@ export class PhastCompareService {
   }
 
   setNoModification() {
+    this.modifiedSet = false;
     this.atmosphereLossesCompareService.modifiedAtmosphereLosses = undefined;
     this.auxiliaryPowerCompareService.modifiedAuxLosses = undefined;
     this.chargeMaterialCompareService.modifiedMaterials = undefined;
@@ -181,5 +194,97 @@ export class PhastCompareService {
     this.wallLossCompareService.modifiedWallLosses = undefined;
     this.heatSystemEfficiencyCompareService.modification = undefined;
     this.operationsCompareService.modification = undefined;
+  }
+
+  getBadges(baseline: PHAST, modification: PHAST): Array<string> {
+    let badges: Array<string> = [];
+    if (baseline && modification) {
+      if (baseline.losses.atmosphereLosses) {
+        if (this.atmosphereLossesCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Atmo')
+        }
+      }
+      if (baseline.losses.auxiliaryPowerLosses) {
+        if (this.auxiliaryPowerCompareService.compareBaseModLoss(baseline, modification)) {
+          badges.push('Aux')
+        }
+      }
+      if (baseline.losses.chargeMaterials) {
+        if (this.chargeMaterialCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ChMat')
+        }
+      }
+      if (baseline.losses.coolingLosses) {
+        if (this.coolingLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Cool')
+        }
+      }
+      if (baseline.losses.chargeMaterials) {
+        if (this.energyInputService.compareBaselineModification(baseline, modification)) {
+          badges.push('EI')
+        }
+      }
+      if (baseline.losses.energyInputExhaustGasLoss) {
+        if (this.energyInputExhaustGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExGas')
+        }
+      }
+      if (baseline.losses.exhaustGasEAF) {
+        if (this.exhaustGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExGas')
+        }
+      }
+      if (baseline.losses.extendedSurfaces) {
+        if (this.extendedSurfaceCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('ExSur')
+        }
+      }
+      if (baseline.losses.fixtureLosses) {
+        if (this.fixtureLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Fix')
+        }
+      }
+      if (baseline.losses.flueGasLosses) {
+        if (this.flueGasCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Flue')
+        }
+      }
+      if (baseline.losses.leakageLosses) {
+        if (this.gasLeakageCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('GasL')
+        }
+      }
+      if (baseline.losses.openingLosses) {
+        if (this.openingLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Open')
+        }
+      }
+      if (baseline.losses.otherLosses) {
+        if (this.otherLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Other')
+        }
+      }
+      if (baseline.losses.slagLosses) {
+        if (this.slagCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Slag')
+        }
+      }
+      if (baseline.losses.wallLosses) {
+        if (this.wallLossCompareService.compareBaselineModification(baseline, modification)) {
+          badges.push('Wall')
+        }
+      }
+      if (baseline.systemEfficiency) {
+        if (this.heatSystemEfficiencyCompareService.compareEfficiency()) {
+          badges.push('Eff')
+        }
+      }
+      if (baseline) {
+        if (this.operationsCompareService.compareBaseModLoss(baseline, modification)) {
+          badges.push('Op')
+        }
+      }
+    }
+    return badges;
   }
 }

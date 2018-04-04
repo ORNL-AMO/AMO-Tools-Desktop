@@ -1,3 +1,25 @@
+<div class="modifications-list" *ngIf="modifications">
+    <ul>
+      <li *ngFor="let modification of _modifications">
+        <button>
+          <a (click)="selectModification(modification)">
+            {{modification.phast.name}}
+          </a>
+          <a class="pull-right click-link" (click)="dispEditModification(modification)">Edit / Delete</a>
+        </button>
+      </li>
+      <li class="add-modification">
+        <button class="btn btn-primary" (click)="addModification()">Add Modified Condition</button>
+        <p>Data will be copied from
+          <br/> your baseline operating condition</p>
+      </li>
+    </ul>
+  </div>
+
+
+
+
+<!-- 
 <div class="row">
   <div class="col-12" style="padding-top:15px;">
     <div class="form-group">
@@ -31,4 +53,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

@@ -1,6 +1,6 @@
 <div class="explore-ops-form" *ngIf="phast">
   <ul>
-    <li>
+    <!-- <li>
       <div class="form-group">
         <label for="modificatonName">Modification Name</label>
         <div class="input-group">
@@ -8,7 +8,7 @@
             (input)="startSavePolling()" />
         </div>
       </div>
-    </li>
+    </li> -->
     <li>
       <app-explore-charge-materials-form *ngIf="showCharge" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
         [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-charge-materials-form>

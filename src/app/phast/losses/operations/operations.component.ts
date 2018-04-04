@@ -24,13 +24,28 @@ export class OperationsComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  modificationIndex: number;
 
   operationsForm: FormGroup;
-  firstChange: boolean = true;
   isCalculated: boolean;
+  isFirstChange: boolean = true;
   constructor(private operationsService: OperationsService) { }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.modificationIndex) {
+        this.initForm();
+      }
+      else {
+        this.isFirstChange = false;
+      }
+    }
+  }
   ngOnInit() {
+    this.initForm();
+  }
+  initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast);
     this.isCalculated = this.phast.operatingHours.isCalculated;
   }

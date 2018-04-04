@@ -4,23 +4,22 @@
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
-
-    <nav *ngIf="mainTab == 'assessment'">
+    <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
+    <!-- <nav *ngIf="mainTab == 'assessment'">
       <ul class="tabs subtabs phast">
         <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
           <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
             <br>
             <span class="help-text psat-view">Novice View</span>
           </a>
-        </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+        </li><li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
           <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
             <br>
             <span class="help-text psat-view">Expert View</span>
           </a>
         </li>
       </ul>
-    </nav>
+    </nav> -->
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
       <app-losses-tabs [phast]="_phast" [settings]="settings"></app-losses-tabs>
@@ -58,10 +57,11 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
-        (save)="saveDb()"></app-explore-phast-opportunities>
+        (save)="saveDb()" [exploreModIndex]="modificationIndex"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
-      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"
+        [modificationIndex]="modificationIndex"></app-losses>
     </div>
   </div>
   <!--Report-->
@@ -112,3 +112,42 @@
 </div>
 <!--disclaimer toast-->
 <ng2-toasty class="disclaimer"></ng2-toasty>
+
+
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Modification</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
+          (emitSelectModification)="selectModification($event)"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" *ngIf="_phast">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Modification</h3>
+        <button class="close" (click)="closeAddNewModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-modification [phast]="_phast" [modifications]="_phast.modifications" (save)="saveNewMod($event)"></app-add-modification>
+      </div>
+    </div>
+  </div>
+</div>

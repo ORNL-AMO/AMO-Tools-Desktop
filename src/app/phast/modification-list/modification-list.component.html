@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-lg-9 col-md-7 col-sm-12">
+    <ul class="list-group">
+      <li class="list-group-item title-item">
+        <div class="row">
+          <div class="col-6 border-right">
+            <span class="bold">Name</span>
+          </div>
+          <div class="col-6">
+            <span class="bold">Modifications</span>
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item modification-item" *ngFor="let modification of phast.modifications; let index = index" [ngClass]="{'active-item': index == modificationIndex}">
+        <div class="row">
+          <div class="col-6 border-right">
+            <div *ngIf="!rename[index] && !deleteArr[index]">
+              <a class="click-link" (click)="selectModification(index)">{{modification.phast.name}}</a>
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
+
+                </button>
+                <div class="dropdown-menu" [ngClass]="{'shown': dropdown[index]}">
+                  <span class="dropdown-item" (click)="renameMod(index)">Rename</span>
+                  <span class="dropdown-item" (click)="deleteMod(index)">Delete</span>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="rename[index]">
+              <div class="input-group">
+                <input class="form-control" [(ngModel)]="modification.phast.name">
+                <span class="input-group-addon units" (click)="saveUpdates(index)">
+                  <span class="fa fa-check"></span>
+                </span>
+              </div>
+            </div>
+            <div class="d-flex" *ngIf="deleteArr[index]">
+              <div class="p-0 w-50 text-center small bold">
+                Are you sure you want to delete?
+                <br>
+                <span class="small red">This cannot be undone.</span>
+              </div>
+              <div class="p-0 w-25 align-self-center small text-center">
+                <button class="btn btn-danger" (click)="deleteModification(index)">
+                  <span class="fa fa-trash pr-1"></span>Delete</button>
+              </div>
+              <div class="p-0 w-25 align-self-center text-center small">
+                <button class="btn btn-default" (click)="deleteMod(index)">
+                  Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex flex-wrap">
+              <div *ngFor="let badge of getBadges(modification.phast)" class="badge badge-primary">{{badge}}</div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-3 col-md-5 col-sm-12">
+    <div class="d-flex flex-column tab-content align-self-center">
+      <div class="p-2 text-center">
+        <p>Add a new modification. Your data will be copied directly from your baseline.</p>
+      </div>
+      <form>
+        <div class="form-section">
+          <div class="form-group">
+            <!-- <label>New Modification</label> -->
+            <input name="newModificationName" class="form-control w-100" type="text" placeholder="New Modification Name" [(ngModel)]="newModificationName">
+          </div>
+        </div>
+      </form>
+      <div class="p-2 text-center">
+        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New Modification</button>
+      </div>
+    </div>
+  </div>
+</div>

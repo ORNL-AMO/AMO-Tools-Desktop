@@ -33,6 +33,8 @@ export class FlueGasLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _flueGasLosses: Array<FlueGasObj>;
   firstChange: boolean = true;
@@ -50,14 +52,10 @@ export class FlueGasLossesComponent implements OnInit {
     } else {
       this.resultsUnit = 'kW';
     }
-
     if (!this._flueGasLosses) {
       this._flueGasLosses = new Array();
     }
-    if (this.losses.flueGasLosses) {
-      this.initFlueGasses()
-    }
-
+    this.initFlueGasses()
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
@@ -66,11 +64,11 @@ export class FlueGasLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._flueGasLosses = new Array();
+        this.initFlueGasses();
       }
     }
     else {
@@ -85,42 +83,44 @@ export class FlueGasLossesComponent implements OnInit {
     })
   }
   initFlueGasses() {
-    let lossIndex = 1;
-    this.losses.flueGasLosses.forEach(loss => {
-      let tmpLoss;
-      if (loss.flueGasType == "By Volume") {
-        tmpLoss = {
-          measurementType: 'By Volume',
-          formByVolume: this.flueGasLossesService.initByVolumeFormFromLoss(loss),
-          formByMass: this.flueGasLossesService.initFormMass(lossIndex),
-          heatLoss: 0.0,
-          collapse: false
+    if (this.losses.flueGasLosses) {
+      let lossIndex = 1;
+      this.losses.flueGasLosses.forEach(loss => {
+        let tmpLoss;
+        if (loss.flueGasType == "By Volume") {
+          tmpLoss = {
+            measurementType: 'By Volume',
+            formByVolume: this.flueGasLossesService.initByVolumeFormFromLoss(loss),
+            formByMass: this.flueGasLossesService.initFormMass(lossIndex),
+            heatLoss: 0.0,
+            collapse: false
+          }
+        } else if (loss.flueGasType == "By Mass") {
+          tmpLoss = {
+            measurementType: 'By Mass',
+            formByVolume: this.flueGasLossesService.initFormVolume(lossIndex),
+            formByMass: this.flueGasLossesService.initByMassFormFromLoss(loss),
+            availableHeat: 0.0,
+            grossHeat: 0.0,
+            systemLosses: 0.0,
+            collapse: false
+          }
         }
-      } else if (loss.flueGasType == "By Mass") {
-        tmpLoss = {
-          measurementType: 'By Mass',
-          formByVolume: this.flueGasLossesService.initFormVolume(lossIndex),
-          formByMass: this.flueGasLossesService.initByMassFormFromLoss(loss),
-          availableHeat: 0.0,
-          grossHeat: 0.0,
-          systemLosses: 0.0,
-          collapse: false
+        if (!tmpLoss.formByVolume.controls.name.value) {
+          tmpLoss.formByVolume.patchValue({
+            name: 'Loss #' + lossIndex
+          })
         }
-      }
-      if (!tmpLoss.formByVolume.controls.name.value) {
-        tmpLoss.formByVolume.patchValue({
-          name: 'Loss #' + lossIndex
-        })
-      }
-      if (!tmpLoss.formByMass.controls.name.value) {
-        tmpLoss.formByMass.patchValue({
-          name: 'Loss #' + lossIndex
-        })
-      }
-      lossIndex++;
-      this.calculate(tmpLoss);
-      this._flueGasLosses.push(tmpLoss);
-    })
+        if (!tmpLoss.formByMass.controls.name.value) {
+          tmpLoss.formByMass.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
+        this.calculate(tmpLoss);
+        this._flueGasLosses.push(tmpLoss);
+      })
+    }
   }
 
   addLoss() {
@@ -240,9 +240,9 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   compareLossType(lossIndex: number) {
-    if(this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss){
+    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss) {
       return this.flueGasCompareService.compareLossType(lossIndex);
-    }else{
+    } else {
       return false;
     }
   }

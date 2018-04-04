@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
@@ -48,6 +48,14 @@ export class ExploreOpeningFormComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initData();
+      }
+    }
   }
 
   initData() {
@@ -289,7 +297,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       next: 7,
       back: 5,
       componentStr: 'opening-losses',
-      showAdd: true 
+      showAdd: true
     })
   }
 

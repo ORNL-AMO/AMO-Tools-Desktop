@@ -1,0 +1,38 @@
+<div class="navbar">
+  <div class="col-4 pl-0">
+    <div class="d-flex tabs subtabs phast">
+      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+        <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+          <br>
+          <span class="help-text psat-view">Novice View</span>
+        </a>
+      </div>
+      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+        <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+          <br>
+          <span class="help-text psat-view">Expert View</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-8 pr-0">
+    <div class="pull-right d-flex align-items-center tabs subtabs phast" [ngClass]="{'br-color-white': selectedModification}">
+      <div class="mod-name active border-right" *ngIf="selectedModification">
+        <a>{{selectedModification.name}}
+          <br>
+          <span class="help-text psat-view">Selected Modification</span>
+        </a>
+      </div>
+      <div class="mod-name border-right" *ngIf="!selectedModification">
+        <a>&mdash; &mdash;
+          <br>
+          <span class="help-text psat-view">Selected Modification</span>
+        </a>
+      </div>
+      <div class="pl-2 pr-2">
+        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Modifications</button>
+      </div>
+    </div>
+  </div>
+</div>

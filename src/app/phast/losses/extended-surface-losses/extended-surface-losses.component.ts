@@ -34,7 +34,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
   _surfaceLosses: Array<ExtSurfaceObj>;
@@ -48,6 +49,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._surfaceLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -64,6 +68,15 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     if (!this._surfaceLosses) {
       this._surfaceLosses = new Array();
     }
+    this.initForms();
+
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.extendedSurfaces) {
       let lossIndex = 1;
       this.losses.extendedSurfaces.forEach(loss => {
