@@ -24,6 +24,10 @@ export class ReportGraphsComponent implements OnInit {
   assessment: Assessment;
   @Input()
   showPrint: boolean;
+  @Input()
+  printSankey: boolean;
+  @Input()
+  printGraphs: boolean;
 
   @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
   @ViewChild('barChartContainer') barChartContainer: ElementRef;
