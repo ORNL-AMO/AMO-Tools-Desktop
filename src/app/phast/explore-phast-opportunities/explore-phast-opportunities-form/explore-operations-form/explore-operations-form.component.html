@@ -17,7 +17,7 @@
         <div class="form-group">
           <label for="baselineHours">Baseline Operating Hours</label>
           <div class="input-group">
-            <input name="baseOpHours" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.operatingHours.hoursPerYear"
+            <input name="baseOpHours" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.operatingHours.hoursPerYear"
               id="baseOpHours" onfocus="this.select();" (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
             <span class="input-group-addon units">hrs/yr</span>
           </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
           <label for="baselineFuelCosts">Baseline Fuel Costs</label>
           <div class="input-group">
-            <input name="baselineFuelCosts" type="number" step="any" class="form-control" id="baselineFuelCosts" (input)="calculate()"
+            <input name="baselineFuelCosts" disabled="true" type="number" step="any" class="form-control" id="baselineFuelCosts" (input)="calculate()"
               [(ngModel)]="phast.operatingCosts.fuelCost" (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
@@ -71,7 +71,7 @@
         <div class="form-group">
           <label for="baselineSteamCosts">Baseline Steam Costs</label>
           <div class="input-group">
-            <input name="baselineSteamCosts" type="number" step="any" class="form-control" id="baselineSteamCosts" (input)="calculate()"
+            <input name="baselineSteamCosts" disabled="true" type="number" step="any" class="form-control" id="baselineSteamCosts" (input)="calculate()"
               [(ngModel)]="phast.operatingCosts.steamCost" (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
@@ -98,7 +98,7 @@
         <div class="form-group">
           <label for="baselineElectricityCosts">Baseline Electricity Costs</label>
           <div class="input-group">
-            <input name="baselineElectricityCosts" type="number" step="any" class="form-control" id="baselineElectricityCosts" (input)="calculate()"
+            <input name="baselineElectricityCosts" disabled="true" type="number" step="any" class="form-control" id="baselineElectricityCosts" (input)="calculate()"
               [(ngModel)]="phast.operatingCosts.electricityCost" (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon">$/kWh</span>
           </div>

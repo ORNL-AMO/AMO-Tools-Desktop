@@ -11,7 +11,7 @@
         <div class="form-group">
           <label for="baseEfficiency">Baseline System Efficiency</label>
           <div class="input-group">
-            <input name="baseEfficiency" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.systemEfficiency" id="baseEfficiency" onfocus="this.select();"
+            <input name="baseEfficiency" disabled="true" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.systemEfficiency" id="baseEfficiency" onfocus="this.select();"
               (input)="calculate()" (focus)="focusField('efficiency')">
             <span class="input-group-addon units">%</span>
           </div>
