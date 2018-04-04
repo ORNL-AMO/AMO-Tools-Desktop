@@ -33,6 +33,10 @@
         page-break-inside: avoid;
     }
 
+    .print-only-sankey {
+        page-break-inside: avoid;
+    }
+
     .print-page-title {
         font-size: 40px !important;
         font-weight: bold;

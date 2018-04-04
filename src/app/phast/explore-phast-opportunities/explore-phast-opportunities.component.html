@@ -12,8 +12,10 @@
     <div class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!exploreModExists">
       <h3>Now that your baseline set up, click below to start exploring potential opportunities.</h3>
       <button type="button" class="btn btn-primary" (click)="openModal()">Explore Opportunities</button>
-      <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating
-        a modification.</p>
+      <p>The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+        Notes for each type of loss can be added in the right tab (NOTES), these will be added to your final report.
+        Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.
+      </p>
     </div>
     <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="exploreModExists">
       <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast"
@@ -41,9 +43,9 @@
       </div>
       <div class="modal-body">
         <p>
-          You are about to add your first modification to your system. After doing so you will not be able to add or remove losses
-          from your baseline. You will need to delete all of your modifications to add or remove losses from your baseline.
-          Do you wish to proceed?
+          The Modify All Conditions section is an expert view, allowing you to change any input. You can create many different modifications,
+          to compare changes to your system. Notes for each loss page can be added in the right tab (NOTES), these will be added to your final report.
+          Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.
         </p>
       </div>
       <div class="modal-footer">
