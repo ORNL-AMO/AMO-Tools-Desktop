@@ -46,7 +46,8 @@ export class LossesComponent implements OnInit {
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;
   lossTabSubscription: Subscription;
-
+  modalOpenSubscription: Subscription;
+  isModalOpen: boolean = false;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -82,6 +83,9 @@ export class LossesComponent implements OnInit {
       }
       this.toastyService.warning(toastOptions);
     }
+    this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
     this.lossesService.updateTabs.next(true);
   }
 
@@ -89,6 +93,7 @@ export class LossesComponent implements OnInit {
   ngOnDestroy() {
     this.toastyService.clearAll();
     if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
   }
 
   changeField($event) {
