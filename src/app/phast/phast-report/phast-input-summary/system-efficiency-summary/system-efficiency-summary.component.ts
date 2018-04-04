@@ -9,6 +9,8 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 export class SystemEfficiencySummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  printView: boolean;
 
   collapse: boolean = true;
   numMods: number = 0;

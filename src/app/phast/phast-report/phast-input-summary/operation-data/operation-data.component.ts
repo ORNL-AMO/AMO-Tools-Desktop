@@ -13,6 +13,8 @@ export class OperationDataComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
 
   collapse: boolean = true;
