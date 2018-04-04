@@ -32,10 +32,11 @@ export class OtherLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-  
+
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private otherLossesService: OtherLossesService) { }
 
   ngOnInit() {
@@ -51,9 +52,10 @@ export class OtherLossesComponent implements OnInit {
         };
         this._otherLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
 
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
@@ -73,16 +75,16 @@ export class OtherLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: OtherLossObj){
+  collapseLoss(loss: OtherLossObj) {
     loss.collapse = !loss.collapse;
   }
-  
-  disableForms(){
+
+  disableForms() {
     this._otherLosses.forEach(loss => {
       loss.form.disable();
     })
   }
-  
+
   addLoss() {
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
@@ -111,6 +113,7 @@ export class OtherLossesComponent implements OnInit {
       let tmpLoss = this.otherLossesService.getLossFromForm(loss.form);
       tmpLosses.push(tmpLoss);
     })
+    this.total = this.getTotal();
     this.losses.otherLosses = tmpLosses;
     this.savedLoss.emit(true);
   }
@@ -118,9 +121,13 @@ export class OtherLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
+
+  getTotal() {
+    return _.sumBy(this._otherLosses, 'heatLoss');
+  }
 }
 
-export interface OtherLossObj{
+export interface OtherLossObj {
   form: FormGroup,
   name: string,
   collapse: boolean

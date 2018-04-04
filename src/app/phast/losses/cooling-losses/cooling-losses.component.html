@@ -50,16 +50,15 @@
         [settings]="settings" (inputError)="setError($event)"></app-gas-cooling-losses-form>
     </div>
   </div>
-  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
+  <div class="row loss-total" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Gas'">{{loss.gasCoolingForm.controls.name.value}} Total</label>
-        <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Liquid'">{{loss.liquidCoolingForm.controls.name.value}} Total</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        <label class="bold">Cooling Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center bold">
           {{loss.heatLoss| sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.heatLoss" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>

@@ -50,6 +50,15 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     margin-bottom: 20px;
 }
 
+.loss-total{
+    border-top: 2px groove #bf3d00;
+    padding-top: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+
+
 
 /*grid view*/
 .summary-card-header{

@@ -28,27 +28,27 @@
         [settings]="settings" (inputError)="setError($event)"></app-energy-input-exhaust-gas-form>
     </div>
   </div>
-  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
+  <div class="row loss-total" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">Fuel Heat Delivered</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        <label class="bold">Fuel Heat Delivered</label>
+        <div *ngIf="loss.heatLoss" class="text-center bold">
           {{loss.heatLoss | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.heatLoss" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
     </div>
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
-        <div *ngIf="loss.exhaustGas" class="text-center small font-weight-bold">
+        <label class="bold">Energy Input Total</label>
+        <div *ngIf="loss.exhaustGas" class="text-center bold">
           {{loss.exhaustGas | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.exhaustGas" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.exhaustGas" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
