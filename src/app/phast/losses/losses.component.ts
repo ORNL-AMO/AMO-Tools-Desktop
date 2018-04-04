@@ -9,6 +9,7 @@ import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
 import { LossTab } from '../tabs';
 import { PhastCompareService } from '../phast-compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-losses',
@@ -52,8 +53,9 @@ export class LossesComponent implements OnInit {
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;
+  lossesTabSubscription: Subscription;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService ) {
+    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
   }
@@ -75,8 +77,8 @@ export class LossesComponent implements OnInit {
     }
 
     this.lossesService.lossesTab.subscribe(val => {
-      this.changeField('default');     
-      this.selectedTab = _.find(this.lossesTabs, (t) => {return val == t.step });
+      this.changeField('default');
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
     })
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -109,7 +111,7 @@ export class LossesComponent implements OnInit {
   changeField($event) {
     this.currentField = $event;
   }
-  
+
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
@@ -247,7 +249,7 @@ export class LossesComponent implements OnInit {
     this.addModificationModal.hide();
   }
 
-  cancelEdit(){
+  cancelEdit() {
     this.showEditModification = false;
   }
 }

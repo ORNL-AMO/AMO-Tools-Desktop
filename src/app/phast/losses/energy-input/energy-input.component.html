@@ -27,26 +27,26 @@
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-energy-input-form>
     </div>
   </div>
-  <div class="row loss-results">
+  <div class="row loss-total">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">Heat Delivered</label>
-        <div *ngIf="loss.results.heatDelivered" class="text-center small font-weight-bold">
+        <label class="bold">Heat Delivered</label>
+        <div *ngIf="loss.results.heatDelivered" class="text-center bold">
           {{loss.results.heatDelivered | sigFigs:'6'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
-        <div *ngIf="!loss.results.heatDelivered" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.results.heatDelivered" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
       <div class="form-group">
-        <label class="small font-weight-bold">Total Chemical Energy Input</label>
-        <div *ngIf="loss.results.totalChemicalEnergyInput" class="text-center small font-weight-bold">
+        <label class="bold">Total Chemical Energy Input</label>
+        <div *ngIf="loss.results.totalChemicalEnergyInput" class="text-center bold">
           {{loss.results.totalChemicalEnergyInput | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.results.totalChemicalEnergyInput" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.results.totalChemicalEnergyInput" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>

@@ -16,8 +16,21 @@
   </div>
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
-      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" [lossIndex]="lossIndex"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [settings]="settings"></app-other-losses-form>
+      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" [lossIndex]="lossIndex" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [settings]="settings"></app-other-losses-form>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Other Total
+      </div>
+      <div class="text-center w-50 bold">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
     </div>
   </div>
 </div>
