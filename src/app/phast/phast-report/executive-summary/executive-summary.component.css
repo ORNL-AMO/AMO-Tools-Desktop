@@ -6,6 +6,10 @@
     background: #e5efe9;
 }
 
+.bold-row {
+    font-weight: bold;
+}
+
 
 tr > td:not(:first-child),
 tr > th:not(:first-child){
