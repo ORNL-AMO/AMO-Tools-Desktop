@@ -31,15 +31,15 @@
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setInputError($event)"></app-atmosphere-losses-form>
     </div>
   </div>
-  <div class="row loss-results" [ngClass]="{'input-error': inputError}">
+  <div class="row loss-total" [ngClass]="{'input-error': inputError}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        <label class="bold">Atmosphere Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center bold">
           {{loss.heatLoss | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.heatLoss" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>

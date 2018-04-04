@@ -38,6 +38,7 @@ export class OtherLossesComponent implements OnInit {
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private otherLossesService: OtherLossesService) { }
 
   ngOnInit() {
@@ -116,12 +117,17 @@ export class OtherLossesComponent implements OnInit {
       let tmpLoss = this.otherLossesService.getLossFromForm(loss.form);
       tmpLosses.push(tmpLoss);
     })
+    this.total = this.getTotal();
     this.losses.otherLosses = tmpLosses;
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  getTotal() {
+    return _.sumBy(this._otherLosses, 'heatLoss');
   }
 }
 

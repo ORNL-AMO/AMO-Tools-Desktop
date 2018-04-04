@@ -41,6 +41,7 @@ export class FixtureLossesComponent implements OnInit {
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -91,6 +92,7 @@ export class FixtureLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
   }
 
@@ -140,6 +142,7 @@ export class FixtureLossesComponent implements OnInit {
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
     });
+    this.total = this.getTotal();
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.savedLoss.emit(true);
   }
@@ -150,7 +153,9 @@ export class FixtureLossesComponent implements OnInit {
   setError(bool: boolean) {
     this.showError = bool;
   }
-
+  getTotal() {
+    return _.sumBy(this._fixtureLosses, 'heatLoss');
+  }
 
 }
 

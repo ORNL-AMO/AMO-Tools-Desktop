@@ -109,8 +109,37 @@
         <div *ngIf="!material.heatRequired" class="text-center small font-weight-bold">
           &mdash; &mdash;
         </div>
-
-
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Total Net Heat Loss
+      </div>
+      <div class="text-center w-50 bold">
+        {{total.netHeatLoss | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Total Reaction Heat
+      </div>
+      <div class="text-center w-50 bold">
+        {{total.endoExoHeat | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Total Gross Heat
+      </div>
+      <div class="text-center w-50 bold">
+        {{total.heatRequired | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
       </div>
     </div>
   </div>

@@ -15,6 +15,8 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   phast: PHAST
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   lossData: Array<any>;
   volumeOptions: Array<any>;

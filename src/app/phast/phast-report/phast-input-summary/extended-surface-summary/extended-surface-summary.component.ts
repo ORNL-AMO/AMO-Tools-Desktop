@@ -12,6 +12,8 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   lossData: Array<any>;
   numLosses: number = 0;

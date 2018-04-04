@@ -41,6 +41,7 @@ export class GasLeakageLossesComponent implements OnInit {
   lossesLocked: boolean = false;
   resultsUnit: string;
   showError: boolean = false;
+  total: number = 0;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,6 +90,7 @@ export class GasLeakageLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
   }
 
@@ -144,13 +146,16 @@ export class GasLeakageLossesComponent implements OnInit {
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
     })
+    this.total = this.getTotal();
     this.losses.leakageLosses = tmpLeakageLosses;
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  getTotal() {
+    return _.sumBy(this._leakageLosses, 'heatLoss');
+  }
 }
 
 export interface GasLeakageObj {

@@ -44,6 +44,15 @@ export class ChargeMaterialComponent implements OnInit {
   lossesLocked: boolean = false;
 
   showError: boolean = false;
+  total: {
+    heatRequired: number,
+    netHeatLoss: number,
+    endoExoHeat: number
+  } = {
+      heatRequired: 0,
+      netHeatLoss: 0,
+      endoExoHeat: 0
+    };
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -130,6 +139,7 @@ export class ChargeMaterialComponent implements OnInit {
       }
       this.calculate(tmpLoss);
       this._chargeMaterial.push(tmpLoss);
+      this.total = this.getTotal();
     })
   }
 
@@ -228,8 +238,18 @@ export class ChargeMaterialComponent implements OnInit {
       }
       tmpChargeMaterials.push(tmpMaterial);
     });
+    this.total = this.getTotal();
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.savedLoss.emit(true);
+  }
+
+  getTotal() {
+    let total = {
+      heatRequired: _.sumBy(this._chargeMaterial, 'heatRequired'),
+      netHeatLoss: _.sumBy(this._chargeMaterial, 'netHeatLoss'),
+      endoExoHeat: _.sumBy(this._chargeMaterial, 'endoExoHeat')
+    }
+    return total;
   }
 
   setName(material: any) {
