@@ -124,14 +124,19 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
     if (this.preAssessments) {
       let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
       if (this.directorySettings === undefined) {
+        console.log('NO directory settings');
         tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, this.resultType);
       }
       else {
+        console.log('we have directorySettings');
         tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, this.resultType);
       }
       for (let i = 0; i < tmpArray.length; i++) {
         this.values.unshift(tmpArray[i].percent);
         this.labels.unshift(tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%");
+        console.log('tmpArray[' + i + '].value = ' + tmpArray[i].value);
+        console.log('tmpArray[' + i + '].value = ' + tmpArray[i].percent);
+
       }
       if (this.values.length > 0) {
         this.destroy = true;
