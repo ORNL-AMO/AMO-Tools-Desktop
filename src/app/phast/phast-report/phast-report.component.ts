@@ -43,7 +43,7 @@ export class PhastReportComponent implements OnInit {
   showPrintDiv: boolean = false;
 
   selectAll: boolean = false;
-  printFacilityInfo: boolean = false;
+  // printFacilityInfo: boolean = false;
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
   printResultsData: boolean = false;
@@ -100,7 +100,7 @@ export class PhastReportComponent implements OnInit {
 
   initPrintLogic() {
     if (this.inRollup) {
-      this.printFacilityInfo = true;
+      // this.printFacilityInfo = true;
       this.printEnergyUsed = true;
       this.printExecutiveSummary = true;
       this.printResultsData = true;
@@ -178,7 +178,7 @@ export class PhastReportComponent implements OnInit {
 
   resetPrintSelection() {
     this.selectAll = false;
-    this.printFacilityInfo = false;
+    // this.printFacilityInfo = false;
     this.printEnergyUsed = false;
     this.printExecutiveSummary = false;
     this.printResultsData = false;
@@ -192,7 +192,7 @@ export class PhastReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
-          this.printFacilityInfo = true;
+          // this.printFacilityInfo = true;
           this.printEnergyUsed = true;
           this.printExecutiveSummary = true;
           this.printResultsData = true;
@@ -201,7 +201,7 @@ export class PhastReportComponent implements OnInit {
           // this.printInputSummary = true;
         }
         else {
-          this.printFacilityInfo = false;
+          // this.printFacilityInfo = false;
           this.printEnergyUsed = false;
           this.printExecutiveSummary = false;
           this.printResultsData = false;
@@ -211,10 +211,10 @@ export class PhastReportComponent implements OnInit {
         }
         break;
       }
-      case "facility-info": {
-        this.printFacilityInfo = !this.printFacilityInfo;
-        break;
-      }
+      // case "facility-info": {
+      //   this.printFacilityInfo = !this.printFacilityInfo;
+      //   break;
+      // }
       case "energy-used": {
         this.printEnergyUsed = !this.printEnergyUsed;
         break;
@@ -228,10 +228,12 @@ export class PhastReportComponent implements OnInit {
         break;
       }
       case "report-graphs": {
+        console.log('swicthing graphs');
         this.printReportGraphs = !this.printReportGraphs;
         break;
       }
       case "report-sankey": {
+        console.log('switching sankey');
         this.printReportSankey = !this.printReportSankey;
         break;
       }
@@ -243,6 +245,8 @@ export class PhastReportComponent implements OnInit {
         break;
       }
     }
+    console.log('this.printReportGraphs = ' + this.printReportGraphs);
+    console.log('this.printReportSankey = ' + this.printReportSankey);
   }
 
 
