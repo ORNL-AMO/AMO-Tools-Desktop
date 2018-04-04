@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature()}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature(), 'invalid': wallLossesForm.controls.avgSurfaceTemp.status == 'INVALID'}">
         <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
           id="avgSurfaceTemp" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('avgSurfaceTemp')"
           (blur)="focusOut()">
@@ -14,7 +14,7 @@
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature()}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'invalid': wallLossesForm.controls.ambientTemp.status == 'INVALID'}">
         <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
           onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
@@ -25,7 +25,7 @@
 
     <div class="form-group">
       <label class="small" for="windVelocity">Wind Velocity</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareWindVelocity()}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareWindVelocity(), 'invalid': wallLossesForm.controls.windVelocity.status == 'INVALID'}">
         <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="windVelocity"
           id="windVelocity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('windVelocity')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
@@ -55,13 +55,13 @@
       <label class="small" for="surfaceEmissivity" aria-describedby="emissivityHelp">Surface Emissivity</label>
       <input name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="surfaceEmissivity"
         id="surfaceEmissivity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceEmissivity')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareSurfaceEmissivity()}">
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareSurfaceEmissivity(), 'invalid': wallLossesForm.controls.surfaceEmissivity.status == 'INVALID'}">
       <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea()}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea(), 'invalid': wallLossesForm.controls.surfaceArea.status == 'INVALID'}">
         <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea"
           id="surfaceArea" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft
@@ -78,7 +78,7 @@
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
         id="correctionFactor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('correctionFactor')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor()}">
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': wallLossesForm.controls.correctionFactor.status == 'INVALID'}">
     </div>
   </div>
 
