@@ -50,35 +50,35 @@
         [settings]="settings" (inputError)="setError($event)"></app-flue-gas-losses-form-volume>
     </div>
   </div>
-  <div class="row loss-results" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+  <div class="row loss-total" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">Available Heat</label>
-        <div *ngIf="loss.availableHeat" class="text-center small font-weight-bold">
+        <label class="bold">Available Heat</label>
+        <div *ngIf="loss.availableHeat" class="text-center bold">
           {{loss.availableHeat | number:'2.1-1'}} %
         </div>
-        <div *ngIf="!loss.availableHeat" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.availableHeat" class="text-center bold">
           &mdash; &mdash;
         </div>
         <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
       </div>
       <div class="form-group">
-        <label class="small font-weight-bold">Gross Heat</label>
-        <div *ngIf="loss.grossHeat" class="text-center small font-weight-bold">
+        <label class="bold">Gross Heat</label>
+        <div *ngIf="loss.grossHeat" class="text-center bold">
           {{loss.grossHeat | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.grossHeat" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.grossHeat" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
       <div class="form-group">
-        <label class="small font-weight-bold">Flue Gas Losses</label>
-        <div *ngIf="loss.systemLosses" class="text-center small font-weight-bold">
+        <label class="bold">Flue Gas Losses</label>
+        <div *ngIf="loss.systemLosses" class="text-center bold">
           {{loss.systemLosses | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.systemLosses" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.systemLosses" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>

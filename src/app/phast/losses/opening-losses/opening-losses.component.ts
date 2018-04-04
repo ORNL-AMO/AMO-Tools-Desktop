@@ -39,6 +39,7 @@ export class OpeningLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
 
 
@@ -79,6 +80,7 @@ export class OpeningLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
 
     if (this.inSetup && this.modExists) {
@@ -142,6 +144,7 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
     })
+    this.total = this.getTotal();
     this.losses.openingLosses = tmpOpeningLosses;
     this.savedLoss.emit(true);
   }
@@ -152,6 +155,9 @@ export class OpeningLossesComponent implements OnInit {
 
   setError(bool: boolean) {
     this.showError = bool;
+  }  
+  getTotal() {
+    return _.sumBy(this._openingLosses, 'heatLoss');
   }
 }
 

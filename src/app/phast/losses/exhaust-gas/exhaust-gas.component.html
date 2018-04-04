@@ -27,15 +27,15 @@
         (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-exhaust-gas-form>
     </div>
   </div>
-  <div class="row loss-results">
+  <div class="row loss-total">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Loss</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        <label class="bold">Exhaust Gas Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center bold">
           {{loss.heatLoss | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.heatLoss" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>

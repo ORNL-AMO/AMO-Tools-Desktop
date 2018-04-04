@@ -39,6 +39,7 @@ export class WallLossesComponent implements OnInit {
   resultsUnit: string
   lossesLocked: boolean = false;
   showError: boolean = false;
+  total: number = 0;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,6 +86,7 @@ export class WallLossesComponent implements OnInit {
         //add object to component data array
         this._wallLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
 
     if(this.inSetup && this.modExists){
@@ -149,6 +151,7 @@ export class WallLossesComponent implements OnInit {
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     })
+    this.total = this.getTotal();
     //set input data to equal new data for update
     this.losses.wallLosses = tmpWallLosses;
     //emit to losses.component that data is updated and should be saved
@@ -158,6 +161,10 @@ export class WallLossesComponent implements OnInit {
   //used for field by field context, send name of current field to losses.component
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  getTotal(){
+    return _.sumBy(this._wallLosses, 'heatLoss');
   }
 }
 
