@@ -22,8 +22,7 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
 
   preAssessments: Array<PreAssessment>;
   graphColors: Array<string>;
-
-  data: Array<{ name: string, type: string, totalEnergyUse: number, totalEnergyCost: number, percentEnergyUse: number, percentEnergyCost: number, color: string }>;
+  data: Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>;
   unit: string
   totalEnergyUse: number;
   totalEnergyCost: number;
@@ -54,115 +53,29 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
         this.preAssessments = this.calculator.preAssessments;
       }
     }
-    this.data = new Array<{ name: string, type: string, totalEnergyUse: number, totalEnergyCost: number, percentEnergyUse: number, percentEnergyCost: number, color: string }>();
+    this.data = new Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>();
+    let costResults = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+    let energyResults = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+
     if (this.preAssessments !== undefined) {
+      costResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'energyCost');
+      energyResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'value');
 
-      //USE THIS TO GET COST AND ENERGY RESULTS
-      let costResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'energyCost');
-      console.log(costResults)
-      let energyResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'value');
-      console.log(energyResults);
-      //
-      
-      for (let i = this.preAssessments.length - 1; i >= 0; i--) {
-        let name: string, type: string, totalEnergyUse: number, totalEnergyCost: number, percentEnergyUse: number, percentEnergyCost: number, color: string;
+      for (let i = 0; i < this.preAssessments.length; i++) {
 
-        if (this.preAssessments[i].type == 'Designed') {
-          let tmpResult = this.preAssessmentService.calculateDesigned(this.preAssessments[i], this.directorySettings);
-          let energyCost = this.getEnergyCost(this.preAssessments[i], totalEnergyUse);
-          let tmpData = { name: tmpResult.name, type: 'Designed', totalEnergyUse: tmpResult.value, totalEnergyCost: energyCost, percentEnergyUse: tmpResult.percent, percentEnergyCost: -1, color: this.graphColors[((this.preAssessments.length - 1) - i) % (this.graphColors.length - 1)] };
-          this.data.push(tmpData);
-          this.totalEnergyUse += tmpResult.value;
-          this.totalEnergyCost += energyCost;
+        let tmpData: { name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string };
+
+        tmpData = {
+          name: costResults[i].name,
+          type: this.preAssessments[i].type,
+          energyUse: energyResults[i].value,
+          energyCost: energyResults[i].energyCost,
+          percentEnergy: energyResults[i].percent / 100,
+          percentCost: costResults[i].percent / 100,
+          color: energyResults[i].color
         }
-        else if (this.preAssessments[i].type == 'Metered') {
-          let collectionTime = this.getEnergyCollectionTime(this.preAssessments[i]);
-          let tmpResult = this.preAssessmentService.calculateMetered(this.preAssessments[i], this.directorySettings);
-          let totalEnergyUse = tmpResult.value;
-          let energyCost = this.getEnergyCost(this.preAssessments[i], totalEnergyUse);
-          let tmpData = { name: tmpResult.name, type: 'Metered', totalEnergyUse: totalEnergyUse, totalEnergyCost: energyCost, percentEnergyUse: tmpResult.percent, percentEnergyCost: -1, color: this.graphColors[((this.preAssessments.length - 1) - i) % (this.graphColors.length - 1)] };
-          this.data.push(tmpData);
-          this.totalEnergyUse += tmpResult.value;
-          this.totalEnergyCost += energyCost;
-
-        }
+        this.data.unshift(tmpData);
       }
-      this.getPercentages();
     }
   }
-
-  getEnergyCost(assessment: PreAssessment, energyUse: number): number {
-    let cost: number;
-    if (assessment.settings.energySourceType === 'Fuel') {
-      if (this.directorySettings.fuelCost === undefined) {
-        cost = 0;
-      }
-      else {
-        cost = energyUse * this.directorySettings.fuelCost;
-      }
-    }
-    else if (assessment.settings.energySourceType === 'Steam') {
-      if (this.directorySettings.steamCost === undefined) {
-        cost = 0;
-      }
-      else {
-        cost = energyUse * this.directorySettings.steamCost;
-      }
-    }
-    else if (assessment.settings.energySourceType === 'Electricity') {
-      if (this.directorySettings.electricityCost === undefined) {
-        cost = 0;
-      }
-      else {
-        cost = energyUse * this.directorySettings.electricityCost;
-      }
-    }
-    else {
-      cost = 0;
-    }
-    return cost;
-  }
-
-  getPercentages(): void {
-    for (let i = 0; i < this.data.length; i++) {
-      this.data[i].percentEnergyUse = (this.data[i].totalEnergyUse / this.totalEnergyUse);
-      this.data[i].percentEnergyCost = (this.data[i].totalEnergyCost / this.totalEnergyCost);
-    }
-  }
-
-  getEnergyCollectionTime(source: PreAssessment): number {
-    if (source.meteredEnergy.meteredEnergyFuel) {
-      return source.meteredEnergy.meteredEnergyFuel.collectionTime;
-    }
-    else if (source.meteredEnergy.meteredEnergySteam) {
-      return source.meteredEnergy.meteredEnergySteam.collectionTime;
-    }
-    else if (source.meteredEnergy.meteredEnergyElectricity) {
-      return source.meteredEnergy.meteredEnergyElectricity.electricityCollectionTime;
-    }
-    else {
-      return 0;
-    }
-  }
-
-  // getData() {
-  //   if (this.calculator) {
-  //     if (this.calculator.preAssessments) {
-
-  //       this.preAssessments = this.calculator.preAssessments;
-  //     }
-  //   }
-  //   this.data = new Array<{ name: string, percent: number, color: string }>();
-  //   if (this.preAssessments) {
-  //     let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-  //     tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'value');
-  //     for (let i = tmpArray.length - 1; i >= 0; i--) {
-  //       this.data.unshift({
-  //         name: tmpArray[i].name,
-  //         percent: Math.round(tmpArray[i].percent * 100) / 100,
-  //         color: this.graphColors[(tmpArray.length - 1) - i]
-  //       });
-  //     }
-  //   }
-  // }
 }

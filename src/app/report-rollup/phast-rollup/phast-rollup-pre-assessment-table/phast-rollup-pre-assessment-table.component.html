@@ -22,16 +22,16 @@
                 {{data[i].type}}
               </td>
               <td>
-                {{data[i].totalEnergyUse | number:0}}
+                {{data[i].energyUse | number:0}}
               </td>
               <td>
-                {{data[i].percentEnergyUse | percent: '.2'}}
+                {{data[i].percentEnergy | percent: '.2'}}
               </td>
               <td>
-                {{data[i].totalEnergyCost | currency: 'CAD': 'symbol-narrow': '.2-2'}}
+                {{data[i].energyCost | currency: 'CAD': 'symbol-narrow': '.2-2'}}
               </td>
               <td>
-                {{data[i].percentEnergyCost | percent: '.2'}}
+                {{data[i].percentEnergy | percent: '.2'}}
               </td>
             </tr>
           </tbody>
