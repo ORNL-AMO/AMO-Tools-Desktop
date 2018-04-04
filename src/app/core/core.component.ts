@@ -63,6 +63,7 @@ export class CoreComponent implements OnInit {
 
     this.assessmentService.showFeedback.subscribe(val => {
       this.showFeedback = val;
+      this.changeDetectorRef.detectChanges();
     })
   }
 

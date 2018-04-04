@@ -57,6 +57,13 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
     this.data = new Array<{ name: string, type: string, totalEnergyUse: number, totalEnergyCost: number, percentEnergyUse: number, percentEnergyCost: number, color: string }>();
     if (this.preAssessments !== undefined) {
 
+      //USE THIS TO GET COST AND ENERGY RESULTS
+      let costResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'energyCost');
+      console.log(costResults)
+      let energyResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'value');
+      console.log(energyResults);
+      //
+      
       for (let i = this.preAssessments.length - 1; i >= 0; i--) {
         let name: string, type: string, totalEnergyUse: number, totalEnergyCost: number, percentEnergyUse: number, percentEnergyCost: number, color: string;
 
