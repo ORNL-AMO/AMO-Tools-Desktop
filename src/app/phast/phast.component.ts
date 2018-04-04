@@ -75,7 +75,7 @@ export class PhastComponent implements OnInit {
     private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 3;
+    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {

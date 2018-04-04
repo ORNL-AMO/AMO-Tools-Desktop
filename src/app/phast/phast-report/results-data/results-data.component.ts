@@ -69,6 +69,9 @@ export class ResultsDataComponent implements OnInit {
     if (changes.toggleCalculate) {
       this.getResults();
     }
+    if(changes.modificationIndex){
+      this.getResults();
+    }
   }
   useModification() {
     this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);

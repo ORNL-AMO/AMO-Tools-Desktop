@@ -45,7 +45,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     private toastyConfig: ToastyConfig,
   ) {
     this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-left';
+    this.toastyConfig.position = 'bottom-right';
   }
 
   ngOnInit() {

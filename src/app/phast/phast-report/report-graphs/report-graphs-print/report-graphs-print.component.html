@@ -24,7 +24,7 @@
                 </div>
 
                 <!-- pie chart titles -->
-                <div class="row print-pad-graph-title">
+                <div class="row print-pad-graph-title" *ngIf="printGraphs">
                     <div [ngClass]="modExists ? 'col-6' : 'col-12'">
                         <div align="center" class="print-graph-sub-title print-center-title">
                             Baseline
@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- pie charts -->
-                <div class="row">
+                <div class="row" *ngIf="printGraphs">
                     <div class="col-6 print-pie-chart">
                         <app-phast-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [chartContainerHeight]="pieChartHeight"
                             [labels]="allPieLabels[0]" [values]="allPieValues[0]"></app-phast-pie-chart>
@@ -51,13 +51,13 @@
                 </div>
 
                 <!-- bar chart title -->
-                <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists">
+                <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists && printGraphs">
                     <div align="center" class="print-center-title">
                         Heat Loss ({{energyUnit}}/hr)
                     </div>
                 </div>
                 <!-- bar chart -->
-                <div class="row show-print justify-content-center align-items-center" *ngIf="modExists">
+                <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
                     <div class="col-12">
                         <app-phast-bar-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats"
                             [phast1Name]="baselinePhast.name" [phast2Name]="result.name" [modResults]="result.data" [results]="baselinePhast.data"
@@ -66,7 +66,7 @@
                 </div>
 
                 <!-- sankey -->
-                <div class="row" [ngClass]="{'print-sankey': modExists}">
+                <div class="row" *ngIf='printSankey' [ngClass]="{'print-sankey': modExists && printGraphs, 'print-only-sankey': modExists && !printGraphs }">
                     <div class="col-12">
                         <div class="row show-print">
                             <div align="center" class="print-graph-title print-center-title">

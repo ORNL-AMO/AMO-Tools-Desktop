@@ -17,14 +17,14 @@
   </div>
 
   <div class="col-8 pr-0">
-    <div class="pull-right d-flex align-items-center tabs subtabs phast br-color-white">
+    <div class="pull-right d-flex align-items-center tabs subtabs phast" [ngClass]="{'br-color-white': selectedModification}">
       <div class="mod-name active border-right" *ngIf="selectedModification">
         <a>{{selectedModification.name}}
           <br>
           <span class="help-text psat-view">Selected Modification</span>
         </a>
       </div>
-      <div class="mod-name active border-right" *ngIf="!selectedModification">
+      <div class="mod-name border-right" *ngIf="!selectedModification">
         <a>&mdash; &mdash;
           <br>
           <span class="help-text psat-view">Selected Modification</span>

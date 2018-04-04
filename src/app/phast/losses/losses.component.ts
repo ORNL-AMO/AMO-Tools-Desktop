@@ -96,13 +96,19 @@ export class LossesComponent implements OnInit {
     this.modalOpenSubscription.unsubscribe();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex) {
+      this.toggleCalculate = !this.toggleCalculate;
+    }
+  }
+
   changeField($event) {
     this.currentField = $event;
   }
 
   saveModifications() {
-    if(this.phast.modifications[this.modificationIndex]){
-      if(this.phast.modifications[this.modificationIndex].exploreOpportunities){
+    if (this.phast.modifications[this.modificationIndex]) {
+      if (this.phast.modifications[this.modificationIndex].exploreOpportunities) {
         this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }
     }

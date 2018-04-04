@@ -19,15 +19,19 @@
     <div class="no-data panel-column col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <h3>Now that your baseline set up, click below to start exploring potential opportunities.</h3>
       <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
-      <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating
-        a modification.</p>
+      <!-- <p>The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+        Notes for each type of loss can be added in the right tab (NOTES), these will be added to your final report.
+        Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.
+      </p> -->
     </div>
 
     <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <div class="header">
         <h3>Help</h3>
       </div>
-      <p>Explore Opportunities to view results</p>
+      <p class="p-4">The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+        Notes for each type of loss can be added in the right tab (NOTES), these will be added to your final report.
+        Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.</p>
     </div>
   </div>
 </div>
