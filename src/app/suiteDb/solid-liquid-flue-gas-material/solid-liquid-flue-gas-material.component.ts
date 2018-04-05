@@ -5,7 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
-import {ConvertUnitsService} from "../../shared/convert-units/convert-units.service";
+import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -37,7 +37,10 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   canAdd: boolean;
   isNameValid: boolean;
   currentField: string = 'selectedMaterial';
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService,  private convertUnitsService: ConvertUnitsService) { }
+  difference: number = 0;
+  differenceError: boolean = false;
+
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.canAdd = true;
@@ -86,6 +89,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   setHHV() {
     const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+    this.getDiff();
     if (isNaN(tmpHeatingVals) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = tmpHeatingVals;
@@ -98,7 +102,14 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
-
+  getDiff() {
+    this.difference = 100 - this.newMaterial.carbon - this.newMaterial.hydrogen - this.newMaterial.inertAsh - this.newMaterial.moisture - this.newMaterial.nitrogen - this.newMaterial.o2 - this.newMaterial.sulphur;
+    if (this.difference > .4 || this.difference < -.4) {
+      this.differenceError = true;
+    } else {
+      this.differenceError = false;
+    }
+  }
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
@@ -111,7 +122,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 

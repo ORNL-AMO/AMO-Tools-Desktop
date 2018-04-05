@@ -17,6 +17,7 @@ import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, Sol
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
+import { DashboardService } from './dashboard.service';
 declare const packageJson;
 
 @Component({
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit {
   calcDataExists: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -191,14 +192,14 @@ export class DashboardComponent implements OnInit {
           this.workingDirectory = this.allDirectories
           this.getWorkingDirectoryData();
         } else {
-          this.createExampleAssessments();
+          this.dashboardService.createExamples();
           this.createDirectory();
         }
       })
     this.indexedDbService.getDirectorySettings(1).then(
       results => {
         if (results.length == 0) {
-          this.createDirectorySettings();
+          this.dashboardService.createDirectorySettings();
         } else {
           this.settingsService.globalSettings = results[0];
         }
@@ -301,52 +302,52 @@ export class DashboardComponent implements OnInit {
     this.selectedCalculator = str;
   }
 
-  createExampleAssessments() {
-    let tmpAssessment = MockDirectory.assessments[0];
-    tmpAssessment.directoryId = 1;
-    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+  // createExampleAssessments() {
+  //   let tmpAssessment = MockDirectory.assessments[0];
+  //   tmpAssessment.directoryId = 1;
+  //   this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
 
-    })
+  //   })
 
-    tmpAssessment = MockDirectory.assessments[1];
-    tmpAssessment.directoryId = 1;
-    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+  //   tmpAssessment = MockDirectory.assessments[1];
+  //   tmpAssessment.directoryId = 1;
+  //   this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
 
-    })
-  }
+  //   })
+  // }
 
-  createDirectorySettings() {
-    let tmpSettings: Settings = {
-      language: 'English',
-      currency: '$ - US Dollar',
-      unitsOfMeasure: 'Imperial',
-      directoryId: 1,
-      createdDate: new Date(),
-      modifiedDate: new Date(),
-      distanceMeasurement: 'ft',
-      flowMeasurement: 'gpm',
-      powerMeasurement: 'hp',
-      pressureMeasurement: 'psi',
-      energySourceType: 'Fuel',
-      appVersion: packageJson.version,
-      energyResultUnit: 'MMBtu',
-      temperatureMeasurement: 'F',
-      defaultPanelTab: 'help',
-      phastRollupUnit: 'MMBtu',
-      phastRollupElectricityUnit: 'kWh',
-      phastRollupFuelUnit: 'MMBtu',
-      phastRollupSteamUnit: 'MMBtu'
-    }
-    this.indexedDbService.addSettings(tmpSettings).then(
-      results => {
-      }
-    )
+  // createDirectorySettings() {
+  //   let tmpSettings: Settings = {
+  //     language: 'English',
+  //     currency: '$ - US Dollar',
+  //     unitsOfMeasure: 'Imperial',
+  //     directoryId: 1,
+  //     createdDate: new Date(),
+  //     modifiedDate: new Date(),
+  //     distanceMeasurement: 'ft',
+  //     flowMeasurement: 'gpm',
+  //     powerMeasurement: 'hp',
+  //     pressureMeasurement: 'psi',
+  //     energySourceType: 'Fuel',
+  //     appVersion: packageJson.version,
+  //     energyResultUnit: 'MMBtu',
+  //     temperatureMeasurement: 'F',
+  //     defaultPanelTab: 'help',
+  //     phastRollupUnit: 'MMBtu',
+  //     phastRollupElectricityUnit: 'kWh',
+  //     phastRollupFuelUnit: 'MMBtu',
+  //     phastRollupSteamUnit: 'MMBtu'
+  //   }
+  //   this.indexedDbService.addSettings(tmpSettings).then(
+  //     results => {
+  //     }
+  //   )
 
-    tmpSettings.assessmentId = 1;
-    this.indexedDbService.addSettings(tmpSettings).then(results => { });
-    tmpSettings.assessmentId = 2;
-    this.indexedDbService.addSettings(tmpSettings).then(results => { });
-  }
+  //   tmpSettings.assessmentId = 1;
+  //   this.indexedDbService.addSettings(tmpSettings).then(results => { });
+  //   tmpSettings.assessmentId = 2;
+  //   this.indexedDbService.addSettings(tmpSettings).then(results => { });
+  // }
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
@@ -357,6 +358,9 @@ export class DashboardComponent implements OnInit {
     }
     this.indexedDbService.addDirectory(tmpDirectory).then(
       results => {
+        tmpDirectory.parentDirectoryId = results;
+        tmpDirectory.name = 'Examples';
+        this.indexedDbService.addDirectory(tmpDirectory);
         this.indexedDbService.getDirectory(results).then(result => {
           this.rootDirectoryRef = results;
           this.allDirectories = this.populateDirectories(result);

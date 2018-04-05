@@ -50,7 +50,8 @@ export class FlueGasMaterialComponent implements OnInit {
   isNameValid: boolean;
   currentField: string = 'selectedMaterial';
   totalOfFlueGasses: number = 0;
-
+  difference: number = 0;
+  differenceError: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -66,6 +67,7 @@ export class FlueGasMaterialComponent implements OnInit {
     this.totalOfFlueGasses = this.newMaterial.C2H6 + this.newMaterial.C3H8 + this.newMaterial.C4H10_CnH2n + this.newMaterial.CH4
       + this.newMaterial.CO + this.newMaterial.CO2 + this.newMaterial.H2 + this.newMaterial.H2O
       + this.newMaterial.N2 + this.newMaterial.O2 + this.newMaterial.SO2;
+    this.getDiff();
   }
   addMaterial() {
     if (this.canAdd) {
@@ -80,6 +82,15 @@ export class FlueGasMaterialComponent implements OnInit {
           this.closeModal.emit(this.newMaterial);
         })
       }
+    }
+  }
+
+  getDiff() {
+    this.difference = 100 - this.totalOfFlueGasses;
+    if (this.difference > .4 || this.difference < -.4) {
+      this.differenceError = true;      
+    }else{
+      this.differenceError = false;
     }
   }
 
@@ -193,7 +204,7 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 

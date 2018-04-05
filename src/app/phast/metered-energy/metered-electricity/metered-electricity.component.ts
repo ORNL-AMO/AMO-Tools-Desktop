@@ -19,7 +19,8 @@ export class MeteredElectricityComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-
+  @Input()
+  containerHeight: number;
   tabSelect: string = 'results';
   resultsSum: MeteredEnergyResults = {
     meteredEnergyUsed: 0,
