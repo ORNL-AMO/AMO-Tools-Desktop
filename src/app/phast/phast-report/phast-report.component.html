@@ -18,15 +18,9 @@
     <div class="report-header" [ngClass]="{'hide-print': inPhast}">
 
         <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
-
-            <!-- debug -->
             <button class="btn btn-secondary" (click)="showModal()">Print</button>
-
-            <!-- real version -->
-            <!-- <button class="btn btn-secondary" (click)="print()">Print</button> -->
             <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
         </div>
-        <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
@@ -37,13 +31,19 @@
                         {{directory.name}} /
                     </span>
                     {{assessment.name}}
-                    <!-- {{settings.customFurnaceName}} -->
-                    <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
                 </h2>
             </div>
             <div class="col-12">
-                <h3 class="custom-name" *ngIf="!settings.customFurnaceName">{{settings.furnaceType}}</h3>
-                <h3 class="custom-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:
+                <h3 class="custom-name" *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
+                    {{settings.furnaceType}}
+                </h3>
+                <h3 class="custom-name" *ngIf="settings.energySourceType == 'Fuel'">
+                    {{settings.energySourceType}} Fired
+                </h3>
+                <h3 class="custom-name" *ngIf="settings.energySourceType == 'Steam'">
+                    {{settings.energySourceType}}
+                </h3>
+                <h3 class="custom-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
                     <br>{{settings.customFurnaceName}}</h3>
             </div>
             <div class="col-12">
@@ -59,27 +59,27 @@
     <div class="report-data" *ngIf="phast.setupDone">
 
         <ul class="tabs primary hide-print">
-            <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
-                <a>Energy Used</a>
-            </li><!--
-            --><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
-                <a>Executive Summary</a>
-                        </li><!--
-            --><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
-                <a>Result Data</a>
-                        </li><!--
-            --><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
-                <a>Report Graphs</a>
-                        </li><!--
-            --><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
-                <a>Sankey</a>
-                        </li><!--
-            --><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
-                <a>Input Data</a>
-                        </li><!--
-            --><li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
-                <a>Facility Info</a>
-            </li>
+                <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
+                        <a>Energy Used</a>
+                    </li><!--
+                    --><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                        <a>Executive Summary</a>
+                                </li><!--
+                    --><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+                        <a>Result Data</a>
+                                </li><!--
+                    --><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+                        <a>Report Graphs</a>
+                                </li><!--
+                    --><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+                        <a>Sankey</a>
+                                </li><!--
+                    --><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+                        <a>Input Data</a>
+                                </li><!--
+                    --><li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
+                        <a>Facility Info</a>
+                    </li>
         </ul>
 
         <div *ngIf="showPrintDiv" class="print-div row justify-content-center">
@@ -113,7 +113,8 @@
             <app-phast-input-summary [phast]="phast" [settings]="settings" [showPrint]="printInputSummary"></app-phast-input-summary>
         </div>
         <div class="results" [ngClass]="{'hide-print': !printReportGraphs && !printReportSankey}" *ngIf="currentTab == 'report-graphs' || ((printReportGraphs || printReportSankey) && showPrint)">
-            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrint" [printGraphs]="printReportGraphs" [printSankey]="printReportSankey"></app-report-graphs>
+            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="showPrint" [printGraphs]="printReportGraphs"
+                [printSankey]="printReportSankey"></app-report-graphs>
         </div>
         <div class="results" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'report-sankey' || (printReportSankey && showPrint)">
             <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment" [showPrint]="printReportSankey"></app-report-sankey>
