@@ -49,7 +49,7 @@
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg create-assessment-modal">
+    <div class="modal-dialog modal-md create-assessment-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Delete Data</h3>
@@ -60,9 +60,10 @@
             <div class="modal-body">
                 <div *ngIf="!deleting" class="row">
                     <div class="col-12">
-                        All of your data will be deleted and your database will be reset to the initial state.
+                        All of your data will be deleted and your database will be reset to the initial state. <span class="red">This cannot be undone!</span>
                     </div>
                 </div>
+                <hr>
                 <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>

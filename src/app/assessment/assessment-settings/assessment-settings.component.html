@@ -37,8 +37,8 @@
 
         <div class="reset-data" *ngIf="directory.id == 1">
           <h3>Delete Data</h3>
-          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else.</p>
-          <button class="btn btn-secondary" (click)="resetData()">Delete Data</button>
+          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else. <span class="red">This cannot be undone!</span></p>
+          <button class="btn btn-danger pull-right" (click)="resetData()">Delete Data</button>
         </div>
 
         <!--<div class="reset-data">
