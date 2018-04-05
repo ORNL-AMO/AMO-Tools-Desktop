@@ -42,7 +42,7 @@ export class RollupPieChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.results) {
+    if (this.results !== undefined && changes.results !== undefined) {
       if (!changes.results.firstChange) {
         this.getLabels();
         this.getValues();

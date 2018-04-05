@@ -14,10 +14,10 @@ export class PreAssessmentService {
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
-  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string }> {
+  getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
 
     // this.unitOfMeasurement = unitOfMeasurement;
-    let results = new Array<{ name: string, percent: number, value: number, color: string }>();
+    let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
 
     //calculation logic to get results (in pre-assessment.component.ts)
     let i = preAssessments.length - 1;
