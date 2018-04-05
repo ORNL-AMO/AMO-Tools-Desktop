@@ -166,7 +166,7 @@ export class OpeningLossesComponent implements OnInit {
     this.showError = bool;
   }  
   getTotal() {
-    return _.sumBy(this._openingLosses, 'heatLoss');
+    return _.sumBy(this._openingLosses, 'totalOpeningLosses');
   }
 }
 

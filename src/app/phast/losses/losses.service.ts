@@ -98,6 +98,11 @@ export class LossesService {
       })
     }
     this.lossesTabs.unshift({
+      tabName: 'Charge Material',
+      componentStr: 'charge-material',
+      showAdd: true
+    })
+    this.lossesTabs.unshift({
       tabName: 'Operations',
       componentStr: 'operations'
     })
@@ -107,7 +112,7 @@ export class LossesService {
       if (i == 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].next = i + 2;
-      } else if (i == numTabs-1) {
+      } else if (i == numTabs - 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].back = i;
       } else {

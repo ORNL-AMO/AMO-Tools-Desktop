@@ -39,9 +39,15 @@ export class OtherLossesComponent implements OnInit {
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   total: number = 0;
+  resultsUnit: string;
   constructor(private otherLossesService: OtherLossesService) { }
 
   ngOnInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
     if (!this._otherLosses) {
       this._otherLosses = new Array();
     }
@@ -76,6 +82,7 @@ export class OtherLossesComponent implements OnInit {
         };
         this._otherLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
   }
 
@@ -117,8 +124,8 @@ export class OtherLossesComponent implements OnInit {
       let tmpLoss = this.otherLossesService.getLossFromForm(loss.form);
       tmpLosses.push(tmpLoss);
     })
-    this.total = this.getTotal();
     this.losses.otherLosses = tmpLosses;
+    this.total = this.getTotal();
     this.savedLoss.emit(true);
   }
 
@@ -127,7 +134,7 @@ export class OtherLossesComponent implements OnInit {
   }
 
   getTotal() {
-    return _.sumBy(this._otherLosses, 'heatLoss');
+    return _.sumBy(this.losses.otherLosses, 'heatLoss');
   }
 }
 
