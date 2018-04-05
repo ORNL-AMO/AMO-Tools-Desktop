@@ -183,7 +183,7 @@
   </div>
 
 
-  <div class="setup-dialog" *ngIf="!phast.disableSetupDialog">
+  <div class="setup-dialog scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!phast.disableSetupDialog">
     <app-losses-splash-page (hidePage)="hideSetupDialog()"></app-losses-splash-page>
   </div>
 </div>
