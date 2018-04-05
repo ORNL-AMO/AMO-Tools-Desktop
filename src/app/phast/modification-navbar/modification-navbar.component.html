@@ -21,17 +21,17 @@
       <div class="mod-name active border-right" *ngIf="selectedModification">
         <a>{{selectedModification.name}}
           <br>
-          <span class="help-text psat-view">Selected Modification</span>
+          <span class="help-text psat-view">Selected Scenario</span>
         </a>
       </div>
       <div class="mod-name border-right" *ngIf="!selectedModification">
         <a>&mdash; &mdash;
           <br>
-          <span class="help-text psat-view">Selected Modification</span>
+          <span class="help-text psat-view">Selected Scenario</span>
         </a>
       </div>
       <div class="pl-2 pr-2">
-        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Modifications</button>
+        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
       </div>
     </div>
   </div>
