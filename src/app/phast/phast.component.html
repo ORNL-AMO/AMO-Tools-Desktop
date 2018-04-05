@@ -50,7 +50,7 @@
     <!--Step: 6 Designed Energy-->
     <app-designed-energy *ngIf="stepTab.step  == 4" [(phast)]="_phast" [settings]="settings" (save)="saveDb()" [containerHeight]="containerHeight"></app-designed-energy>
     <!--Step: 7 Metered Energy -->
-    <app-metered-energy *ngIf="stepTab.step  == 5" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-metered-energy>
+    <app-metered-energy *ngIf="stepTab.step  == 5" [(phast)]="_phast" [settings]="settings" (save)="saveDb()" [containerHeight]="containerHeight"></app-metered-energy>
   </div>
 
   <!--Assessment-->
@@ -120,7 +120,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Select Modification</h3>
+        <h3>Select Scenario</h3>
         <button class="close" (click)="closeSelectModification()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -140,7 +140,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Add New Modification</h3>
+        <h3>Add New Scenario</h3>
         <button class="close" (click)="closeAddNewModal()">
           <span aria-hidden="true">&times;</span>
         </button>

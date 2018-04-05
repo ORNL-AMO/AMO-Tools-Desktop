@@ -94,6 +94,12 @@
               <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/kg</span>
             </div>
           </div>
+          <div class="form-group" [ngClass]="{'difference-error': differenceError}">
+            <label class="small" for="difference">Difference</label>
+            <div class="text-center small">
+              {{difference | number:'1.0-3'}} %
+            </div>
+          </div>
         </form>
       </div>
 

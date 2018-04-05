@@ -132,6 +132,12 @@
                 <span>{{totalOfFlueGasses | number:'1.2-2' }} %</span>
               </div>
             </div>
+            <div class="form-group" [ngClass]="{'difference-error': differenceError}">
+              <label class="small" for="difference">Difference</label>
+              <div class="text-center small">
+                {{difference | number:'1.0-3'}} %
+              </div>
+            </div>
             <div class="form-group">
               <label class="small" for="heatingValue">Heating Value
                 <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->

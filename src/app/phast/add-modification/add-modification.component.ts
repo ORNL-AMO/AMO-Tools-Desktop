@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PHAST, Modification } from '../../shared/models/phast/phast';
+import { PhastService } from '../phast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-modification',
@@ -19,16 +21,24 @@ export class AddModificationComponent implements OnInit {
 
 
   newModificationName: string;
-  constructor() { }
+  currentTab: string;
+  tabSubscription: Subscription;
+  constructor(private phastService: PhastService) { }
 
   ngOnInit() {
     if (this.modifications) {
-      this.newModificationName = 'Modification ' + (this.modifications.length + 1);
-    }else{
-      this.newModificationName = 'Modification 1';
+      this.newModificationName = 'Scenario ' + (this.modifications.length + 1);
+    } else {
+      this.newModificationName = 'Scenario 1';
     }
+    this.tabSubscription = this.phastService.assessmentTab.subscribe(val => {
+      this.currentTab = val;
+    })
   }
-
+  
+  ngOnDestroy() {
+    this.tabSubscription.unsubscribe();
+  }
 
   addModification() {
     let tmpModification: Modification = {

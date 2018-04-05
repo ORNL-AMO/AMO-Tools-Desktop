@@ -15,7 +15,8 @@ export class MeteredEnergyComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-
+  @Input()
+  containerHeight: number;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
