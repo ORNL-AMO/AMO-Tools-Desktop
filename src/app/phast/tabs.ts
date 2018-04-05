@@ -56,11 +56,11 @@ export interface StepTab {
 }
 
 export const defaultTabs: Array<LossTab> = [
-    {
-        tabName: 'Charge Material',
-        componentStr: 'charge-material',
-        showAdd: true  
-    },
+    // {
+    //     tabName: 'Charge Material',
+    //     componentStr: 'charge-material',
+    //     showAdd: true  
+    // },
     {
         tabName: 'Fixtures, Trays, etc.',
         componentStr: 'fixture-losses',
