@@ -12,7 +12,7 @@
 
 <div class="navbar" *ngIf="mainTab != 'calculators'">
   <div class="col-4 pl-0">
-    <div class="d-flex tabs subtabs phast">
+    <div class="d-flex tabs subtabs psat">
       <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
         <a (click)="changeTab('explore-opportunities')">Explore Opportunities
           <br>
@@ -29,7 +29,7 @@
   </div>
 
   <div class="col-8 pr-0">
-    <div class="pull-right d-flex align-items-center tabs subtabs phast" [ngClass]="{'br-color-white': selectedModification}">
+    <div class="pull-right d-flex align-items-center tabs subtabs psat" [ngClass]="{'br-color-white': selectedModification}">
       <div class="mod-name active border-right" *ngIf="selectedModification">
         <a>{{selectedModification.name}}
           <br>

@@ -25,7 +25,7 @@
       </nav>
     </div>
     <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
-      <app-psat-tabs [modificationIndex]="modificationIndex"></app-psat-tabs>
+      <app-psat-tabs></app-psat-tabs>
     </div>
   </div>
   <div *ngIf="mainTab == 'system-setup'" class="row tab-content psat" [ngStyle]="{'height.px': containerHeight}">
