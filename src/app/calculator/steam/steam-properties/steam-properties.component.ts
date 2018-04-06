@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-steam-properties',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./steam-properties.component.css']
 })
 export class SteamPropertiesComponent implements OnInit {
+  steamPropertiesForm: FormGroup;
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.steamPropertiesForm = this.formBuilder.group({
+      'pressure': ['', Validators.required],
+      'thermodynamicQuantity': [0],
+      'quantityValue': ['', Validators.required]
+    });
   }
 
 }

@@ -1,0 +1,34 @@
+<div class="form-section">
+  <form [formGroup]="steamPropertiesForm">
+
+    <div class="form-group">
+      <label for="pressure">Pressure</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();">
+      </div>
+      <!--<span class="alert-danger pull-right small" *ngIf="nameplateFullLoadSpeedError !== null">{{nameplateFullLoadSpeedError}}</span>-->
+    </div>
+
+    <div class="form-group">
+      <label for="thermodynamicQuantity">Quantity Type</label>
+      <div class="input-group calc-addon-group">
+        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity" autofocus>
+          <option value=0>Temperature</option>
+          <option value=1>Specific Enthalpy</option>
+          <option value=2>Specific Entropy</option>
+          <option value=3>Specific Quality</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="quantityValue">Quantity Value</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" autofocus>
+      </div>
+      <!--<span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>-->
+    </div>
+
+  </form>
+</div>
