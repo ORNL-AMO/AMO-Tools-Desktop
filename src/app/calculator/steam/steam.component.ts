@@ -14,6 +14,11 @@ export class SteamComponent implements OnInit {
   ngOnInit() {
   }
 
+  showTool(str: string) {
+    this.selectedTool = str;
+  }
+
+
   getSelectedTool() {
     if (this.selectedTool !== undefined) {
       return this.selectedTool;

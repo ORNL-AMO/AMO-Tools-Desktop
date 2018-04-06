@@ -2,7 +2,7 @@
 <app-furnaces [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
 <app-motors [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'motors'"></app-motors>
 <app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
-<app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>
+<app-steam *ngIf="selectedCalculator == 'steam'" [selectedTool]="selectedTool"></app-steam>
 <app-compressed-air [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
 <app-utilities [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
