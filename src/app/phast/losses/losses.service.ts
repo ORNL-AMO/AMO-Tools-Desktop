@@ -12,10 +12,12 @@ export class LossesService {
   lossIndex: BehaviorSubject<number>;
 
   //baseline: BehaviorSubject<PHAST>;
-  modification: BehaviorSubject<Modification>;
+  // modification: BehaviorSubject<Modification>;
 
   lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
+  openModificationModal: BehaviorSubject<boolean>;
+  openNewModal: BehaviorSubject<boolean>;
 
 
   chargeDone: boolean;
@@ -29,15 +31,12 @@ export class LossesService {
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     // this.baseline = new BehaviorSubject<PHAST>(null);
-    this.modification = new BehaviorSubject<Modification>(null);
+    //this.modification = new BehaviorSubject<Modification>(null);
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateTabs = new BehaviorSubject<boolean>(false);
-    // this.chargeDone = new BehaviorSubject<boolean>(false);
-    // this.enInput1Done = new BehaviorSubject<boolean>(false);
-    // this.enInput2Done = new BehaviorSubject<boolean>(false);
-    // this.flueGasDone = new BehaviorSubject<boolean>(false);
-    // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
+    this.openModificationModal = new BehaviorSubject<boolean>(false);
+    this.openNewModal = new BehaviorSubject<boolean>(false);
   }
 
   getTab(num: number) {
@@ -99,6 +98,11 @@ export class LossesService {
       })
     }
     this.lossesTabs.unshift({
+      tabName: 'Charge Material',
+      componentStr: 'charge-material',
+      showAdd: true
+    })
+    this.lossesTabs.unshift({
       tabName: 'Operations',
       componentStr: 'operations'
     })
@@ -108,7 +112,7 @@ export class LossesService {
       if (i == 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].next = i + 2;
-      } else if (i == numTabs-1) {
+      } else if (i == numTabs - 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].back = i;
       } else {
@@ -141,6 +145,12 @@ export class LossesService {
   }
 
   checkSetupDone(phast: PHAST, settings: Settings) {
+    let modExists = false;
+    if(phast.modifications){
+      if(phast.modifications.length != 0){
+        modExists = true;
+      }
+    }
     //used to check if setup is done for an assessment
     let isDone, grossHeat = false;
     if (phast.losses) {
@@ -178,8 +188,9 @@ export class LossesService {
       this.chargeDone = false;
       return false;
     }
+
     grossHeat = (this.efficiencyDone || this.enInput1Done || this.enInput2Done || this.flueGasDone);
-    isDone = (grossHeat && this.chargeDone);
+    isDone = (grossHeat && this.chargeDone) || modExists;
     return isDone;
   }
 

@@ -1,55 +1,40 @@
 <div class="phast">
   <div class="row modify-conditions panel-container">
-    <div *ngIf="exploreModExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <!--modExists-->
+    <div *ngIf="modExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <div class="header">
         <h3>Select Potential Adjustment Projects</h3>
       </div>
       <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your
-        system.</p>
-      <app-explore-phast-opportunities-form *ngIf="exploreModExists" [phast]="phast" (emitCalculate)="getResults()" [settings]="settings"
+        system.
+      </p>
+      <app-explore-phast-opportunities-form *ngIf="modExists" [phast]="phast" (emitCalculate)="getResults()" [settings]="settings"
         [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
     </div>
-    <div class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!exploreModExists">
+    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
+      <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"
+        [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab" [containerHeight]="containerHeight"></app-losses-result-panel>
+    </div>
+    <!--!modExists-->
+    <div class="no-data panel-column col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <h3>Now that your baseline set up, click below to start exploring potential opportunities.</h3>
-      <button type="button" class="btn btn-primary" (click)="openModal()">Explore Opportunities</button>
-      <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating
-        a modification.</p>
+      <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
+      <!-- <p>The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+        Notes for each type of loss can be added in the right tab (NOTES), these will be added to your final report.
+        Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.
+      </p> -->
     </div>
-    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="exploreModExists">
-      <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast"
-        [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab" [containerHeight]="containerHeight"></app-losses-result-panel>
-    </div>
-    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}"  *ngIf="!exploreModExists">
+
+    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <div class="header">
         <h3>Help</h3>
       </div>
-      <p>Explore Opportunities to view results</p>
+      <p class="p-4">The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+        Notes for each type of loss can be added in the right tab (NOTES), these will be added to your final report.
+        Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a scenario.</p>
     </div>
   </div>
 </div>
 
 
-<div bsModal #addModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addModificationModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Warning</h3>
-        <button class="close" (click)="closeModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>
-          You are about to add your first modification to your system. After doing so you will not be able to add or remove losses
-          from your baseline. You will need to delete all of your modifications to add or remove losses from your baseline.
-          Do you wish to proceed?
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary" (click)="addMod()" data-dismiss="modal">Yes</button>
-        <button type="button" class="btn btn-default btn-secondary" (click)="closeModal()" data-dismiss="modal">No</button>
-      </div>
-    </div>
-  </div>
-</div>
+<ng2-toasty></ng2-toasty>

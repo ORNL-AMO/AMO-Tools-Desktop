@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, Modification } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class HeatSystemEfficiencyCompareService {
@@ -11,6 +11,16 @@ export class HeatSystemEfficiencyCompareService {
   compareEfficiency(){
     if(this.baseline && this.modification){
       return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency)
+    }else{
+      return false;
+    }
+  }
+
+  combaseBaseModEfficiency(baseline: PHAST, modification: PHAST){
+    if(baseline && modification){
+      return this.compare(baseline.systemEfficiency, modification.systemEfficiency)
+    }else{
+      return false;
     }
   }
 

@@ -39,6 +39,10 @@ export class ReportGraphsPrintComponent implements OnInit {
     allPieValues: Array<Array<number>>;
     @Input()
     baselinePhast: any;
+    @Input()
+    printSankey: boolean;
+    @Input()
+    printGraphs: boolean;
 
     sankeyBaseline: PHAST;
     modification: PHAST;

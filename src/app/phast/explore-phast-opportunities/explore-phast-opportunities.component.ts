@@ -3,7 +3,11 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { LossTab } from '../tabs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { PhastCompareService } from '../phast-compare.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { LossesService } from '../losses/losses.service';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-explore-phast-opportunities',
@@ -19,13 +23,13 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  @ViewChild('addModificationModal') public addModificationModal: ModalDirective;
+  @Input()
+  exploreModIndex: number;
 
   @Output('save')
   save = new EventEmitter<boolean>();
 
   tabSelect: string = 'results';
-  exploreModIndex: number;
   currentField: string = 'default';
   toggleCalculate: boolean = false;
   lossTab: LossTab = {
@@ -34,67 +38,63 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     componentStr: ''
   };
 
-  exploreModExists: boolean = false;
   modExists: boolean = false;
-  constructor() { }
+  selectModificationSubscription: Subscription;
+  toastId:any;
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig,
+  ) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   ngOnInit() {
-    if (this.phast.modifications) {
-      if (this.phast.modifications.length != 0) {
-        this.modExists = true;
-        this.checkForExploreMod();
+    this.checkExists();
+    this.checkExploreOpps();
+  }
+
+  ngOnDestroy() {
+    this.toastyService.clearAll();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.firstChange) {
+        if (changes.exploreModIndex) {
+          this.toastyService.clearAll();
+          this.checkExists();
+          this.checkExploreOpps();
+        }
       }
     }
   }
 
-  checkForExploreMod() {
-    let i = 0;
-    //find explore opportunites modificiation
-    this.phast.modifications.forEach(mod => {
-      if (mod.exploreOpportunities) {
-        this.exploreModIndex = i;
-        this.exploreModExists = true;
-      } else {
-        i++;
-      }
-    })
+  checkExists() {
+    if (this.exploreModIndex || this.exploreModIndex == 0) {
+      this.modExists = true;
+    } else {
+      this.modExists = false;
+    }
   }
 
-  addMod() {
-    let phastCpy: PHAST = JSON.parse(JSON.stringify(this.assessment.phast));
-    phastCpy.name = 'Explore Opportunities';
-    this.phast.modifications.push({
-      notes: {
-        chargeNotes: '',
-        wallNotes: '',
-        atmosphereNotes: '',
-        fixtureNotes: '',
-        openingNotes: '',
-        coolingNotes: '',
-        flueGasNotes: '',
-        otherNotes: '',
-        leakageNotes: '',
-        extendedNotes: '',
-        slagNotes: '',
-        auxiliaryPowerNotes: '',
-        exhaustGasNotes: '',
-        energyInputExhaustGasNotes: '',
-        heatSystemEfficiencyNotes: '',
-        operationsNotes: ''
-      },
-      phast: phastCpy,
-      exploreOpportunities: true
-    });
-    this.modExists = true;
-    this.closeModal();
-    this.getResults();
-    this.checkForExploreMod();
+  checkExploreOpps() {
+    if (this.modExists) {
+      if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
+        let toastOptions: ToastOptions = {
+          title: 'Explore Opportunites',
+          msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
+          showClose: true,
+          timeout: 10000000,
+          theme: 'default'
+        }
+        this.toastyService.warning(toastOptions);
+      }
+    }
   }
 
   setTab(str: string) {
     this.tabSelect = str;
   }
-
 
   getResults() {
     this.startSavePolling();
@@ -105,7 +105,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.currentField = str;
   }
 
-
   changeTab(tab: LossTab) {
     this.lossTab = tab;
   }
@@ -114,16 +113,8 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.save.emit(true);
   }
 
-  closeModal() {
-    this.addModificationModal.hide();
-  }
-
-
-  openModal() {
-    if (!this.modExists) {
-      this.addModificationModal.show();
-    } else {
-      this.addMod();
-    }
+  addModification() {
+    console.log('click');
+    this.lossesService.openNewModal.next(true);
   }
 }

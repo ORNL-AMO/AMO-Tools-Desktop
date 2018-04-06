@@ -4,6 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { Calculator } from '../../../shared/models/calculators';
 import { PreAssessmentService } from '../../../calculator/furnaces/pre-assessment/pre-assessment.service';
 import { PreAssessment } from '../../../calculator/furnaces/pre-assessment/pre-assessment';
+import { MeteredEnergy } from '../../../shared/models/phast/meteredEnergy';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-phast-rollup-pre-assessment-table',
@@ -20,32 +22,59 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
 
   preAssessments: Array<PreAssessment>;
   graphColors: Array<string>;
-  data: Array<{ name: string, percent: number, color: string }>;
+  data: Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>;
+  unit: string
+  totalEnergyUse: number;
+  totalEnergyCost: number;
+  directorySettings: Settings;
 
-  constructor(private preAssessmentService: PreAssessmentService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.totalEnergyUse = 0;
+    this.totalEnergyCost = 0;
+    this.unit = this.settings.energyResultUnit;
     this.graphColors = graphColors;
-    this.getData();
+    this.getDirectorySettings();
   }
 
-  getData() {
-    if (this.calculator) {
-      if (this.calculator.preAssessments) {
+  getDirectorySettings() {
+    this.indexedDbService.getDirectorySettings(this.calculator.directoryId).then(results => {
+      if (results.length != 0) {
+        this.directorySettings = results[0];
+        this.getData();
+      }
+    });
+  }
 
+  getData(): void {
+    if (this.calculator !== undefined) {
+      if (this.calculator.preAssessments !== undefined) {
         this.preAssessments = this.calculator.preAssessments;
       }
     }
-    this.data = new Array<{ name: string, percent: number, color: string }>();
-    if (this.preAssessments) {
-      let tmpArray = new Array<{ name: string, percent: number, value: number, color: string }>();
-      tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.settings, 'value');
-      for (let i = tmpArray.length - 1; i >= 0; i--) {
-        this.data.unshift({
-          name: tmpArray[i].name,
-          percent: Math.round(tmpArray[i].percent * 100) / 100,
-          color: this.graphColors[(tmpArray.length - 1) - i]
-        });
+    this.data = new Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>();
+    let costResults = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+    let energyResults = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
+
+    if (this.preAssessments !== undefined) {
+      costResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'energyCost');
+      energyResults = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, 'value');
+
+      for (let i = 0; i < this.preAssessments.length; i++) {
+
+        let tmpData: { name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string };
+
+        tmpData = {
+          name: costResults[i].name,
+          type: this.preAssessments[i].type,
+          energyUse: energyResults[i].value,
+          energyCost: energyResults[i].energyCost,
+          percentEnergy: energyResults[i].percent / 100,
+          percentCost: costResults[i].percent / 100,
+          color: energyResults[i].color
+        }
+        this.data.unshift(tmpData);
       }
     }
   }

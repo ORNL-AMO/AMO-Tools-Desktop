@@ -60,8 +60,8 @@ export class GasLeakageTabComponent implements OnInit {
 
   setNumLosses() {
     if (this.phast.losses) {
-      if (this.phast.losses.atmosphereLosses) {
-        this.numLosses = this.phast.losses.atmosphereLosses.length;
+      if (this.phast.losses.leakageLosses) {
+        this.numLosses = this.phast.losses.leakageLosses.length;
       }
     }
   }

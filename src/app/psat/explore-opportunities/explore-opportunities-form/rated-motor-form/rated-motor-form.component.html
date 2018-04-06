@@ -13,7 +13,7 @@
       <form *ngIf="showRatedMotorPower">
         <div class="form-group">
           <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
-          <select name="baselineMotorRatedPower" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
+          <select name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
             (change)="checkRatedPower(1)" [(ngModel)]="psat.inputs.motor_rated_power">
                                         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
                                     </select>
@@ -40,7 +40,7 @@
       <form *ngIf="showEfficiencyClass">
         <div class="form-group">
           <label for="oldEfficiencyClass">Baseline Efficiency Class</label>
-          <select name="oldEfficiencyClass" class="form-control select-input-field" (change)="setEfficiencyClasses()" id="oldEfficiencyClass"
+          <select name="oldEfficiencyClass" [disabled]="true" class="form-control select-input-field" (change)="setEfficiencyClasses()" id="oldEfficiencyClass"
             (focus)="focusField('efficiencyClass')" [(ngModel)]="tmpBaselineEfficiencyClass">
                                           <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
                                     </select>
@@ -64,7 +64,7 @@
         <div class="form-group">
           <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
           <div class="input-group">
-            <input name="baselineMotorEfficiency" [disabled]="tmpBaselineEfficiencyClass != 'Specified'" type="number" step="any" id="baselineMotorEfficiency"
+            <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency"
               class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(psat.inputs.efficiency, 1)"
               [(ngModel)]="psat.inputs.efficiency" />
             <span class="input-group-addon units">(%)</span>

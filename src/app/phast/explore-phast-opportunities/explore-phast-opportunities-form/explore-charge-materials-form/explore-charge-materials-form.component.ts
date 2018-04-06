@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidChargeMaterial, LiquidChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
@@ -35,6 +35,13 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.initData();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {;
+        this.initData();
+      }
+    }
+  }
   initData(){
     this.showTemp = new Array();
     this.showFeedRate = new Array();
@@ -42,6 +49,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.feedRateError1 = new Array<string>();
     this.feedRateError2 = new Array<string>();
     let index = 0;
+    this.showMaterial = false;
     this.phast.losses.chargeMaterials.forEach(material => {
       let tmpBaseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       let tmpModified: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
@@ -58,7 +66,8 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       let checkTemp: boolean = this.checkVal(tmpBaseline.initialTemperature, tmpModified.initialTemperature);
       let checkFeedRate: boolean = this.checkVal(tmpBaseline.chargeFeedRate, tmpModified.chargeFeedRate);
 
-      if (!this.showMaterial && checkTemp && checkFeedRate) {
+      let testVal = checkTemp || checkFeedRate;
+      if (!this.showMaterial && testVal) {
         this.showMaterial = true;
       }
       this.showFeedRate.push(checkFeedRate);

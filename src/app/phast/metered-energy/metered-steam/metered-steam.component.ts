@@ -16,6 +16,8 @@ export class MeteredSteamComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  containerHeight: number;
   tabSelect: string = 'results';
   results: MeteredEnergyResults = {
     meteredEnergyUsed: 0,

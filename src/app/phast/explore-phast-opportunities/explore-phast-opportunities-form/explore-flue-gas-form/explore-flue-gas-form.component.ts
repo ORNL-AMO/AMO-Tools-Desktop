@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
@@ -35,6 +35,19 @@ export class ExploreFlueGasFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.initData();
+  }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initData();
+      }
+    }
+  }
+
+  initData(){
     if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByMass;
       this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByMass;
@@ -52,30 +65,40 @@ export class ExploreFlueGasFormComponent implements OnInit {
   initFuelTemp(){
     if(this.baselineFlueGas.flueGasTemperature != this.modifiedFlueGas.flueGasTemperature){
       this.showFuelTemp = true;
+    }else{
+      this.showFuelTemp = false;
     }
   }
 
   initExcessAir(){
     if(this.baselineFlueGas.excessAirPercentage != this.modifiedFlueGas.excessAirPercentage){
       this.showExcessAir = true;
+    }else{
+       this.showExcessAir = false;
     }
   }
 
   initO2(){
     if(this.baselineFlueGas.o2InFlueGas != this.modifiedFlueGas.o2InFlueGas){
       this.showO2 = true;
+    }else{
+      this.showO2 = false;
     }
   }
 
   initAirTemp(){
     if(this.baselineFlueGas.combustionAirTemperature != this.modifiedFlueGas.combustionAirTemperature){
       this.showAirTemp = true;
+    }else{
+      this.showAirTemp = false;
     }
   }
 
   initFlueGas(){
     if(this.showAirTemp || this.showO2 || this.showExcessAir || this.showFuelTemp){
       this.showFlueGas = true;
+    }else{
+      this.showFlueGas = false;
     }
   }
 

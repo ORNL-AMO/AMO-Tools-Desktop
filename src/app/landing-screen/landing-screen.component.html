@@ -1,4 +1,3 @@
-<!-- <div class="landing"> -->
 <div class="row justify-content-center">
 	<div class="col-12">
 		<div class="d-flex flex-column">
@@ -23,22 +22,6 @@
 				<img class="arrow-img pull-right" src="assets/images/arrow_right.png">
 			</div>
 		</div>
-
-		<!-- <h1>Welcome to the most efficient way to manage and optimize your plant's systems and equipment.</h1>
-	<h3 class="text-adj2" style="border-bottom: none">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
-		property and equipment calculators.</h3>
-	<h3 style="border-bottom: none">Start with one of the following options to get started.</h3> -->
-		<!-- <div class="row justify-content-center">
-			<div class="col-3">
-				<img class="arrow-img" src="assets/images/arrow_left.png">
-			</div>
-			<div class="col-3">
-				<img class="arrow-img pull-right" src="assets/images/arrow_right.png">
-			</div>
-		</div> -->
-
-		<!-- <ul>
-	<li> -->
 		<div class="row justify-content-center">
 			<div class="col-sm-12 col-md-11 col-lg-9">
 				<div class="card">
@@ -46,7 +29,7 @@
 						<div class="row">
 							<div class="col-6 text-center">
 								<a class="click-link" (click)="createAssessment()">Create Assessment</a>
-								<p class="text-help small">Model a system and explore endless optimization scenarios.</p>
+								<p class="text-help small">Model a system and explore multiple optimization scenarios.</p>
 							</div>
 							<div class="col-6 text-center">
 								<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a>
@@ -60,12 +43,12 @@
 							<div class="col-6 border-right">
 								<div class="d-flex">
 									<div class="p-2">
-										<div class="psat-image-background d-flex flex-column justify-content-center">
+										<div class="psat-image-background d-flex flex-column">
 											<img class="psat-image p-0 align-self-center" src="assets/images/pump.png">
 										</div>
 									</div>
-									<div class="p-2 text-center d-flex">
-										<div class="d-flex flex-column justify-content-center">
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
 											<a (click)="createAssessment('Pump')" class="p-0 click-link">Create Pump Assessment</a>
 											<span class="help-text p-0">(formerly PSAT)</span>
 										</div>
@@ -73,40 +56,46 @@
 								</div>
 								<div class="d-flex">
 									<div class="p-2">
-										<div class="phast-image-background d-flex flex-column justify-content-center">
+										<div class="phast-image-background d-flex flex-column">
 											<img class="phast-image p-0 align-self-center" src="assets/images/ph.png">
 										</div>
 									</div>
-									<div class="p-2 text-center d-flex">
-										<div class="d-flex flex-column justify-content-center">
-											<a (click)="createAssessment('Pump')" class="click-link p-0">Create Process Heating Assessment</a>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('Furnace')" class="click-link p-0">Create Process Heating Assessment</a>
 											<span class="help-text p-0">(formerly PHAST)</span>
 										</div>
 									</div>
 								</div>
-								<div class="d-flex flex-column justify-content-center">
+								<hr>
+								<div class="d-flex flex-column">
 									<a (click)="hideScreen()" class="click-link align-self-center">
 										<span class="fa fa-folder-o"></span> View All Your Assessments</a>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('pumps')">
-										<i class="fa fa-calculator"></i> Pumps</a>
-								</div>
-								<div class="p-2">
 									<a class="icon click-link" (click)="chooseCalculator('motors')">
 										<i class="fa fa-calculator"></i> Motors
 									</a>
 								</div>
 								<div class="p-2">
-									<a class="icon click-link" (click)="chooseCalculator('utilities')">
-										<i class="fa fa-calculator"></i> Utilities
-									</a>
+									<a class="icon click-link" (click)="chooseCalculator('pumps')">
+										<i class="fa fa-calculator"></i> Pumps</a>
 								</div>
 								<div class="p-2">
 									<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
 										<i class="fa fa-calculator"></i> Process Heating
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('compressed-air')">
+										<i class="fa fa-calculator"></i> Compressed Air
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('utilities')">
+										<i class="fa fa-calculator"></i> General
 									</a>
 								</div>
 							</div>

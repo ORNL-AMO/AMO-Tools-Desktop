@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class ExhaustGasCompareService {
@@ -16,9 +17,11 @@ export class ExhaustGasCompareService {
     let index = 0;
     let numLoss = this.baselineExhaustGasLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if (this.compareLoss(index) == true) {
-        isDiff = true;
+    if (this.modifiedExhaustGasLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
@@ -54,6 +57,32 @@ export class ExhaustGasCompareService {
     return this.compare(this.baselineExhaustGasLosses[index].dustLoading, this.modifiedExhaustGasLosses[index].dustLoading);
   }
 
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.exhaustGasEAF) {
+        let index = 0;
+        baseline.losses.exhaustGasEAF.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.exhaustGasEAF[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: ExhaustGasEAF, modification: ExhaustGasEAF): boolean {
+    return (
+      this.compare(baseline.offGasTemp, modification.offGasTemp) ||
+      this.compare(baseline.CO, modification.CO) ||
+      this.compare(baseline.H2, modification.H2) ||
+      this.compare(baseline.combustibleGases, modification.combustibleGases) ||
+      this.compare(baseline.vfr, modification.vfr) ||
+      this.compare(baseline.dustLoading, modification.dustLoading)
+    )
+  }
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {

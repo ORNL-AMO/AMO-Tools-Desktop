@@ -20,7 +20,7 @@
         <div class="form-group">
           <label class="small" for="openingArea">Baseline Opening Area</label>
           <div class="input-group">
-            <input name="{{'openingArea_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.openingArea"
+            <input name="{{'openingArea_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.openingArea"
               id="openingArea" onfocus="this.select();" (input)="checkOpening(1, loss.openingArea, index)" (focus)="focusField('openingArea')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">

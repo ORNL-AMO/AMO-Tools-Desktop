@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
@@ -29,10 +29,18 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   ngOnInit() {
     this.initEfficiency();
   }
-
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.exploreModIndex){
+      if(!changes.exploreModIndex.isFirstChange()){
+        this.initEfficiency();
+      }
+    }
+  }
   initEfficiency() {
     if (this.phast.systemEfficiency != this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
       this.showEfficiencyData = true;
+    }else{
+      this.showEfficiencyData = false;
     }
   }
 

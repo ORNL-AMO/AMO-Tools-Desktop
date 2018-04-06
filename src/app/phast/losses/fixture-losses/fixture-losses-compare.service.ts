@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FixtureLoss } from "../../../shared/models/phast/losses/fixtureLoss";
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class FixtureLossesCompareService {
@@ -8,23 +9,25 @@ export class FixtureLossesCompareService {
   baselineFixtureLosses: FixtureLoss[];
   modifiedFixtureLosses: FixtureLoss[];
   inputError: BehaviorSubject<boolean>;
-  constructor() { 
+  constructor() {
     this.inputError = new BehaviorSubject<boolean>(false);
   }
 
-  compareAllLosses(): boolean{
+  compareAllLosses(): boolean {
     let index = 0;
     let numLoss = this.baselineFixtureLosses.length;
     let isDiff: boolean = false;
-    for (index; index < numLoss; index++) {
-      if(this.compareLoss(index) == true){
-        isDiff = true;
+    if (this.modifiedFixtureLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
+        }
       }
     }
     return isDiff;
   }
 
-  compareLoss(index: number): boolean{
+  compareLoss(index: number): boolean {
     return (
       this.compareSpecificHeat(index) ||
       this.compareFeedRate(index) ||
@@ -34,28 +37,54 @@ export class FixtureLossesCompareService {
       this.compareMaterialName(index)
     )
   }
-  compareSpecificHeat(index: number): boolean{
+  compareSpecificHeat(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].specificHeat, this.modifiedFixtureLosses[index].specificHeat);
   }
 
-  compareFeedRate(index: number): boolean{
+  compareFeedRate(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].feedRate, this.modifiedFixtureLosses[index].feedRate);
   }
 
-  compareInitialTemperature(index: number): boolean{
+  compareInitialTemperature(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].initialTemperature, this.modifiedFixtureLosses[index].initialTemperature);
   }
 
-  compareFinalTemperature(index: number): boolean{
+  compareFinalTemperature(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].finalTemperature, this.modifiedFixtureLosses[index].finalTemperature);
   }
 
-  compareCorrectionFactor(index: number): boolean{
+  compareCorrectionFactor(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].correctionFactor, this.modifiedFixtureLosses[index].correctionFactor);
   }
 
-  compareMaterialName(index: number): boolean{
+  compareMaterialName(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].materialName, this.modifiedFixtureLosses[index].materialName);
+  }
+
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.fixtureLosses) {
+        let index = 0;
+        baseline.losses.fixtureLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.fixtureLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
+      }
+    }
+    return isDiff;
+  }
+
+  compareBaseModLoss(baseline: FixtureLoss, modification: FixtureLoss): boolean {
+    return (
+      this.compare(baseline.specificHeat, modification.specificHeat) ||
+      this.compare(baseline.feedRate, modification.feedRate) ||
+      this.compare(baseline.initialTemperature, modification.initialTemperature) ||
+      this.compare(baseline.finalTemperature, modification.finalTemperature) ||
+      this.compare(baseline.materialName, modification.correctionFactor)
+    )
   }
 
   compare(a: any, b: any) {

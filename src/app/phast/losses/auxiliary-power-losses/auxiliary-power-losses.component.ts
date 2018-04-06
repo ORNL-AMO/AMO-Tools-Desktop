@@ -33,7 +33,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   inputError: boolean = false;
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<AuxPowLossObj>;
@@ -45,6 +47,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._auxiliaryPowerLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -61,6 +66,14 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (!this._auxiliaryPowerLosses) {
       this._auxiliaryPowerLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.disableForms();
+      this.lossesLocked = true;
+    }
+  }
+
+  initForms() {
     if (this.losses.auxiliaryPowerLosses) {
       let lossIndex = 1;
       this.losses.auxiliaryPowerLosses.forEach(loss => {
@@ -78,10 +91,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
       })
-    }
-    if (this.inSetup && this.modExists) {
-      this.disableForms();
-      this.lossesLocked = true;
     }
   }
 
@@ -143,7 +152,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.fieldChange.emit('default');
   }
 
-  setInputError(bool: boolean){
+  setInputError(bool: boolean) {
     this.inputError = bool;
   }
 

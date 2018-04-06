@@ -167,7 +167,7 @@ export const MockDirectory: Directory = {
               insideTemperature: 1600,
               percentTimeOpen: 20,
               viewFactor: .64,
-              openingType: 'Rectangular (Square)',
+              openingType: 'Rectangular (or Square)',
               lengthOfOpening: 48.0,
               heightOfOpening: 15.0
             }

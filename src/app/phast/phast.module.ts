@@ -34,6 +34,9 @@ import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.mo
 import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
 import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
 import { PhastCompareService } from './phast-compare.service';
+import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
+import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { PhastCompareService } from './phast-compare.service';
     HelpPanelComponent,
     PhastDiagramComponent,
     EnergyCostsComponent,
-    PhastCalculatorTabsComponent
+    PhastCalculatorTabsComponent,
+    ModificationNavbarComponent,
+    ModificationListComponent,
+    AddModificationComponent
   ],
   exports: [
   ],

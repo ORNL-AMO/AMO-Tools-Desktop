@@ -5,7 +5,7 @@
       <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="openingType" (change)="getArea()"
         (focus)="focusField('openingType')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareOpeningType(), 'invalid': openingLossesForm.controls.openingType.status == 'INVALID'}">
         <option>Round</option>
-        <option>Rectangular (Square)</option>
+        <option>Rectangular (or Square)</option>
       </select>
     </div>
 

@@ -33,18 +33,24 @@ export class GasLeakageLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   resultsUnit: string;
   showError: boolean = false;
+  total: number = 0;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._leakageLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -60,6 +66,13 @@ export class GasLeakageLossesComponent implements OnInit {
     if (!this._leakageLosses) {
       this._leakageLosses = new Array<any>();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+  initForms() {
     if (this.losses.leakageLosses) {
       let lossIndex = 1;
       this.losses.leakageLosses.forEach(loss => {
@@ -68,7 +81,7 @@ export class GasLeakageLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -77,33 +90,30 @@ export class GasLeakageLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
       })
-    }
-    if(this.inSetup && this.modExists){
-      this.lossesLocked = true;
-      this.disableForms();
+      this.total = this.getTotal();
     }
   }
 
-  disableForms(){
+  disableForms() {
     this._leakageLosses.forEach(loss => {
       loss.form.disable();
     })
   }
-  
+
   addLoss() {
     this._leakageLosses.push({
-      form: this.gasLeakageLossesService.initForm(this._leakageLosses.length+1),
+      form: this.gasLeakageLossesService.initForm(this._leakageLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
     this.saveLosses();
   }
-  
-  collapseLoss(loss: GasLeakageObj){
+
+  collapseLoss(loss: GasLeakageObj) {
     loss.collapse = !loss.collapse;
   }
 
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 
@@ -126,7 +136,7 @@ export class GasLeakageLossesComponent implements OnInit {
     let tmpLeakageLosses = new Array<LeakageLoss>();
     let lossIndex = 1;
     this._leakageLosses.forEach(loss => {
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -136,13 +146,16 @@ export class GasLeakageLossesComponent implements OnInit {
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
     })
+    this.total = this.getTotal();
     this.losses.leakageLosses = tmpLeakageLosses;
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  getTotal() {
+    return _.sumBy(this._leakageLosses, 'heatLoss');
+  }
 }
 
 export interface GasLeakageObj {

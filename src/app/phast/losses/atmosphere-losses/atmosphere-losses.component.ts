@@ -2,10 +2,11 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { PhastCompareService } from '../../phast-compare.service';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -33,18 +34,24 @@ export class AtmosphereLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   _atmosphereLosses: Array<AtmoLossObj>;
   firstChange: boolean = true;
   inputError: boolean = false;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  selectedMod: PHAST;
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private phastCompareService: PhastCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._atmosphereLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -62,6 +69,14 @@ export class AtmosphereLossesComponent implements OnInit {
     if (!this._atmosphereLosses) {
       this._atmosphereLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.atmosphereLosses) {
       let lossIndex = 1;
       this.losses.atmosphereLosses.forEach(loss => {
@@ -79,10 +94,6 @@ export class AtmosphereLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._atmosphereLosses.push(tmpLoss);
       })
-    }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -140,7 +151,7 @@ export class AtmosphereLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setInputError(bool: boolean){
+  setInputError(bool: boolean) {
     this.inputError = bool;
   }
 }

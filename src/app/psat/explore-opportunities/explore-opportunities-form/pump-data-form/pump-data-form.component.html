@@ -15,7 +15,7 @@
     <form *ngIf="showPumpType">
       <div class="form-group">
         <label for="baselinePumpType">Baseline Pump Type</label>
-        <select class="form-control" name="pumpType" id="pumpType" (change)="setPumpTypes()" (focus)="focusField('pumpType')" [(ngModel)]="tmpBaselinePumpType">
+        <select class="form-control" name="pumpType" [disabled]="true" id="pumpType" (change)="setPumpTypes()" (focus)="focusField('pumpType')" [(ngModel)]="tmpBaselinePumpType">
           <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
         </select>
       </div>
@@ -68,7 +68,7 @@
     <form *ngIf="showMotorDrive">
       <div class="form-group">
         <label for="baselineMotorDrive">Baseline Motor Drive</label>
-        <select class="form-control" name="drive" id="drive" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="tmpBaselineMotorDrive">
+        <select class="form-control" name="drive" [disabled]="true" id="drive" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="tmpBaselineMotorDrive">
           <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
         </select>
       </div>

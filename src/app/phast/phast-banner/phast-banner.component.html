@@ -1,4 +1,4 @@
-<div class="banner phast row">
+<div class="banner phast navbar">
   <div class="col-3">
     <div class="row" *ngIf="assessment">
       <div class="img-col col-sm-auto col-md-auto col-lg-auto">
@@ -8,14 +8,14 @@
         <h2 class="h2-name">
           {{assessment.name}}
         </h2>
-        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName && settings.furnaceType">
+        <h3 class="furnace-name" *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
           {{settings.furnaceType}}
         </h3>
-        <h3 class="furnace-name" *ngIf="!settings.customFurnaceName && !settings.furnaceType">
+        <h3 class="furnace-name" *ngIf="settings.energySourceType != 'Electricity'">
           {{settings.energySourceType}}
           <span *ngIf="settings.energySourceType == 'Fuel'">Fired</span>
         </h3>
-        <h3 class="furnace-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:
+        <h3 class="furnace-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
           <br>{{settings.customFurnaceName}}</h3>
       </div>
       <!-- <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small> -->
@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  <div class="col-3">
+  <div class="col-3 pr-0">
     <div class="row align-items-center pill-row">
       <div class="col-12">
         <a routerLink="/dashboard" class="btn-dashboard pull-right">

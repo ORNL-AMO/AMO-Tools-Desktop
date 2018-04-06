@@ -87,7 +87,7 @@ export class MeteredEnergyService {
   }
 
   calcFuelUsed(inputs: MeteredEnergyFuel): number {
-    return inputs.fuelEnergy || 0;
+    return (inputs.fuelEnergy / inputs.collectionTime) || 0;
   }
 
   meteredSteam(inputs: MeteredEnergySteam, phast: PHAST, settings: Settings): MeteredEnergyResults {
@@ -119,7 +119,7 @@ export class MeteredEnergyService {
   }
 
   calcSteamEnergyUsed(inputs: MeteredEnergySteam): number {
-    return inputs.totalHeatSteam * inputs.flowRate || 0;
+    return (inputs.totalHeatSteam * inputs.flowRate / inputs.collectionTime) || 0;
   }
   convertResult(val: number, settings: Settings): number {
     if (settings.energySourceType == 'Electricity') {

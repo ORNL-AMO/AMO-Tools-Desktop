@@ -45,6 +45,7 @@ export class PhastService {
   stepTab: BehaviorSubject<StepTab>;
   specTab: BehaviorSubject<StepTab>;
   calcTab: BehaviorSubject<string>;
+  assessmentTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
@@ -66,6 +67,7 @@ export class PhastService {
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
     this.calcTab = new BehaviorSubject<string>('o2-enrichment');
+    this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
   }
 
   goToStep(newStepNum: number) {
@@ -768,7 +770,7 @@ export class PhastService {
         if (loss.openingType == 'Round') {
           let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
-        } else if (loss.openingType == 'Rectangular (Square)') {
+        } else if (loss.openingType == 'Rectangular (or Square)') {
           let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
           sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }

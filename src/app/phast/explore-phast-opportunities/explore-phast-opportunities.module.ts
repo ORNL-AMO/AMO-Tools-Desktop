@@ -15,6 +15,7 @@ import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunit
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { ToastyModule } from 'ng2-toasty';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ModalModule } from 'ngx-bootstrap';
     FormsModule,
     ReactiveFormsModule,
     LossesModule,
-    ModalModule
+    ModalModule,
+    ToastyModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

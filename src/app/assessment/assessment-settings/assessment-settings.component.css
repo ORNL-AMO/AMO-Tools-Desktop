@@ -11,3 +11,11 @@
 .group-label.general{
     border-bottom: groove 2px #808B96;
 }
+
+.btn-danger{
+    padding: 6px;
+}
+
+.red{
+    color: red;
+}

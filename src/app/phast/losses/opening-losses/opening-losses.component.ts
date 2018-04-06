@@ -33,12 +33,15 @@ export class OpeningLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
   _openingLosses: Array<OpeningLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
 
 
@@ -46,12 +49,16 @@ export class OpeningLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._openingLosses = new Array();
+        this.initForms();
       }
     }
     else {
       this.firstChange = false;
     }
   }
+
   ngOnInit() {
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
@@ -62,6 +69,14 @@ export class OpeningLossesComponent implements OnInit {
     if (!this._openingLosses) {
       this._openingLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.openingLosses) {
       let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
@@ -79,11 +94,7 @@ export class OpeningLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
       })
-    }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
+      this.total = this.getTotal();
     }
   }
 
@@ -112,7 +123,7 @@ export class OpeningLossesComponent implements OnInit {
 
   calculate(loss: OpeningLossObj) {
     if (loss.form.status == 'VALID') {
-      if (loss.form.controls.openingType.value == 'Rectangular (Square)' && loss.form.controls.heightOfOpening.value != '') {
+      if (loss.form.controls.openingType.value == 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
@@ -142,6 +153,7 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
     })
+    this.total = this.getTotal();
     this.losses.openingLosses = tmpOpeningLosses;
     this.savedLoss.emit(true);
   }
@@ -152,6 +164,9 @@ export class OpeningLossesComponent implements OnInit {
 
   setError(bool: boolean) {
     this.showError = bool;
+  }  
+  getTotal() {
+    return _.sumBy(this._openingLosses, 'totalOpeningLosses');
   }
 }
 

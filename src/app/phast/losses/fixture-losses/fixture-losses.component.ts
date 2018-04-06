@@ -33,20 +33,23 @@ export class FixtureLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   showError: boolean = false;
   resultsUnit: string;
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
+  total: number = 0;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._fixtureLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -63,6 +66,15 @@ export class FixtureLossesComponent implements OnInit {
     if (!this._fixtureLosses) {
       this._fixtureLosses = new Array();
     }
+    this.initForms();
+
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.fixtureLosses) {
       let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
@@ -80,11 +92,7 @@ export class FixtureLossesComponent implements OnInit {
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
       })
-    }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
+      this.total = this.getTotal();
     }
   }
 
@@ -134,6 +142,7 @@ export class FixtureLossesComponent implements OnInit {
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
     });
+    this.total = this.getTotal();
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.savedLoss.emit(true);
   }
@@ -144,7 +153,9 @@ export class FixtureLossesComponent implements OnInit {
   setError(bool: boolean) {
     this.showError = bool;
   }
-
+  getTotal() {
+    return _.sumBy(this._fixtureLosses, 'heatLoss');
+  }
 
 }
 
