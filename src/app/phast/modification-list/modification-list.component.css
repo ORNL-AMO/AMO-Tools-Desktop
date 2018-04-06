@@ -99,7 +99,7 @@
     bottom: 0;
     left: 110%;
     top: inherit;
-    box-shadow: 0px 0px 0px 5px #BF3D00;
+    box-shadow: 0px 0px 5px 1px #BF3D00;
 }
 
 .scroll-item{
