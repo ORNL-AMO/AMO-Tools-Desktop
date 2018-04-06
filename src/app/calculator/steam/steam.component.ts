@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-steam',
@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./steam.component.css']
 })
 export class SteamComponent implements OnInit {
+  @Input()
+  selectedTool: string;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  getSelectedTool() {
+    if (this.selectedTool !== undefined) {
+      return this.selectedTool;
+    }
   }
 
 }

@@ -7,6 +7,12 @@ import { SteamPropertiesComponent } from './steam-properties.component';
   imports: [
     CommonModule
   ],
-  declarations: [SteamPropertiesGraphComponent, SteamPropertiesComponent]
+  declarations: [
+    SteamPropertiesGraphComponent,
+    SteamPropertiesComponent
+  ],
+  exports: [
+    SteamPropertiesComponent
+  ]
 })
 export class SteamPropertiesModule { }
