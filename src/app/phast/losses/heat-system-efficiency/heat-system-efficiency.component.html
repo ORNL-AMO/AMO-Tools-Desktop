@@ -14,8 +14,8 @@
           <div class="form-group">
             <label *ngIf="isBaseline" class="small" for="efficiency">Heat System Efficiency</label>
             <label *ngIf="!isBaseline" class="small" for="efficiency">Heat System Efficiency Modification</label>
-            <div class="input-group"  [ngClass]="{'indicate-different': compareEfficiency()}">
-              <input name="efficiency" type="number" step="any" min="0" max="100" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
+            <div class="input-group"  [ngClass]="{'indicate-different': compareEfficiency(), 'invalid': efficiencyForm.controls.efficiency.status == 'INVALID'}">
+              <input [readonly]="!baselineSelected" name="efficiency" type="number" step="any" min="0" max="100" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
                 (input)="calculate()" (focus)="focusField('efficiency')">
               <span class="input-group-addon units">%</span>
             </div>

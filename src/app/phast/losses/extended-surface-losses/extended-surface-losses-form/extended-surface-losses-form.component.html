@@ -2,8 +2,8 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea()}">
-        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea"
+      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceArea(), 'error': surfaceAreaError !== null, 'invalid': lossesForm.controls.surfaceArea.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea"
           id="surfaceArea" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
           <span>ft
@@ -21,8 +21,8 @@
 
     <div class="form-group">
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature()}">
-        <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
+      <div class="input-group" [ngClass]="{'indicate-different': compareSurfaceTemperature(), 'error': temperatureError !== null, 'invalid': lossesForm.controls.avgSurfaceTemp.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
           id="avgSurfaceTemp" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('avgSurfaceTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -32,8 +32,8 @@
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature()}">
-        <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
+      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'error': temperatureError !== null, 'invalid': lossesForm.controls.ambientTemp.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
           onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -43,9 +43,9 @@
 
     <div class="form-group">
       <label class="small" for="surfaceEmissivity" aria-describedby="emissivityHelp">Surface Emissivity</label>
-      <input name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="surfaceEmissivity"
+      <input [readonly]="!baselineSelected" name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="surfaceEmissivity"
         id="surfaceEmissivity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceEmissivity')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareSurfaceEmissivity()}">
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareSurfaceEmissivity(), 'error': emissivityError !== null, 'invalid': lossesForm.controls.surfaceEmissivity.status == 'INVALID'}">
       <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
   </div>

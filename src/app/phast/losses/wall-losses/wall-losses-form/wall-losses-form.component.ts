@@ -67,11 +67,13 @@ export class WallLossesFormComponent implements OnInit {
 
   //iterate through form elements and disable
   disableForm() {
-    this.wallLossesForm.disable();
+    this.wallLossesForm.controls.surfaceShape.disable();
+    // this.wallLossesForm.disable();
   }
   //iterate through form elements and enable
   enableForm() {
-    this.wallLossesForm.enable();
+    this.wallLossesForm.controls.surfaceShape.enable();
+    // this.wallLossesForm.enable();
   }
 
   //emits to wall-losses.component the focused field changed

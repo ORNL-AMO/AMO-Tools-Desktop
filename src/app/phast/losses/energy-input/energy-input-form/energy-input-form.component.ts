@@ -59,11 +59,11 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.energyInputForm.disable();
+    // this.energyInputForm.disable();
   }
 
   enableForm() {
-    this.energyInputForm.enable();
+    // this.energyInputForm.enable();
   }
 
   focusField(str: string) {

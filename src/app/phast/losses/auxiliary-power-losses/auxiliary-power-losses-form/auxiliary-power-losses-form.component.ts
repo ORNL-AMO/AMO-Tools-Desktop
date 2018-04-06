@@ -50,11 +50,11 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.auxLossesForm.disable();
+    // this.auxLossesForm.disable();
   }
 
   enableForm() {
-    this.auxLossesForm.enable();
+    // this.auxLossesForm.enable();
   }
 
   focusField(str: string) {

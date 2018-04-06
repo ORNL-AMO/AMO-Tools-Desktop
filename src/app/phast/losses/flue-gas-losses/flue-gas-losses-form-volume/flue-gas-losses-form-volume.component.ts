@@ -78,7 +78,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   disableForm() {
-    this.flueGasLossForm.disable();
+    this.flueGasLossForm.controls.gasTypeId.disable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.disable();
+    // this.flueGasLossForm.disable();
   }
 
   checkForm() {
@@ -91,7 +93,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   enableForm() {
-    this.flueGasLossForm.enable();
+    this.flueGasLossForm.controls.gasTypeId.enable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.enable();
+    // this.flueGasLossForm.enable();
   }
 
   changeMethod() {
