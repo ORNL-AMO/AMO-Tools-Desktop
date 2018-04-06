@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="materialSpecificHeatLiquid">Specific Heat of Liquid</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkSpecificHeatDiffLiquid(), 'error': specificHeatLiquidError !== null, 'invalid': chargeMaterialForm.controls.materialSpecificHeatLiquid.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatDiffLiquid(), 'error': specificHeatLiquidError !== null, 'invalid': chargeMaterialForm.controls.materialSpecificHeatLiquid.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'materialSpecificHeatLiquid_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="materialSpecificHeatLiquid"
           id="materialSpecificHeatLiquid" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeatLiquid')"
           (blur)="focusOut()">
@@ -23,7 +23,7 @@
 
     <div class="form-group">
       <label class="small" for="materialVaporizingTemperature">Vaporizing Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkVaporizingTempDiff(), 'invalid': chargeMaterialForm.controls.materialVaporizingTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkVaporizingTempDiff(), 'invalid': chargeMaterialForm.controls.materialVaporizingTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'materialVaporizingTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialVaporizingTemperature"
           id="materialVaporizingTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialVaporizingTemperature')"
           (blur)="focusOut()">
@@ -34,7 +34,7 @@
 
     <div class="form-group">
       <label class="small" for="materialLatentHeat">Latent Heat of Vaporization</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkLatentHeatDiff(), 'error': materialLatentHeatError !== null, 'invalid': chargeMaterialForm.controls.materialLatentHeat.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkLatentHeatDiff(), 'error': materialLatentHeatError !== null, 'invalid': chargeMaterialForm.controls.materialLatentHeat.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'materialLatentHeat_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="materialLatentHeat"
           id="materialLatentHeat" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialLatentHeat')"
           (blur)="focusOut()">
@@ -46,7 +46,7 @@
 
     <div class="form-group">
       <label class="small" for="materialSpecificHeatVapor">Specific Heat of Vapor</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkSpecificHeatVaporDiff(), 'error': specificHeatVaporError !== null, 'invalid': chargeMaterialForm.controls.materialSpecificHeatVapor.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeatVaporDiff(), 'error': specificHeatVaporError !== null, 'invalid': chargeMaterialForm.controls.materialSpecificHeatVapor.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'materialSpecificHeatVapor_'+lossIndex}}" type="number" min="0" class="form-control" formControlName="materialSpecificHeatVapor"
           id="materialSpecificHeatVapor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeatVapor')"
           (blur)="focusOut()">

@@ -133,6 +133,7 @@ export class WallLossesFormComponent implements OnInit {
       conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     })
     this.calculate.emit(true);
+    this.checkInputError();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));

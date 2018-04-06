@@ -104,6 +104,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAirPercentage: 0
     })
     this.setCalcMethod();
+    this.checkForm();
   }
 
   setCalcMethod() {
@@ -178,7 +179,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       SO2: this.roundVal(tmpFlueGas.SO2, 4),
       O2: this.roundVal(tmpFlueGas.O2, 4)
     });
-    this.checkForm();
+    this.startSavePolling();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
