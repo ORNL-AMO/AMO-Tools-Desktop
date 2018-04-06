@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Testability, ElementRef, SimpleChanges } from '@angular/core';
 import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
 import { LossesService } from '../losses/losses.service';
 import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-modification-list',
@@ -17,10 +18,10 @@ export class ModificationListComponent implements OnInit {
   modificationIndex: number;
   @Input()
   phast: PHAST;
-  @Output('emitSelectModification')
-  emitSelectModification = new EventEmitter<PHAST>();
   @Output('save')
   save = new EventEmitter<boolean>();
+  @Output('close')
+  close = new EventEmitter<boolean>();
 
   newModificationName: string;
   dropdown: Array<boolean>;
@@ -31,18 +32,41 @@ export class ModificationListComponent implements OnInit {
   constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
-    this.dropdown = Array<boolean>(this.phast.modifications.length);
-    this.rename = Array<boolean>(this.phast.modifications.length);
-    this.deleteArr = Array<boolean>(this.phast.modifications.length);
+    this.initDropdown();
     this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(val => {
       this.asssessmentTab = val;
     })
   }
 
+  initDropdown() {
+    this.dropdown = Array<boolean>(this.phast.modifications.length);
+    this.rename = Array<boolean>(this.phast.modifications.length);
+    this.deleteArr = Array<boolean>(this.phast.modifications.length);
+  }
 
   selectModification(index: number) {
     this.phastCompareService.setCompareVals(this.phast, index);
     this.lossesService.updateTabs.next(true);
+    this.initDropdown()
+    this.close.emit(true);
+  }
+
+  goToModification(index: number, componentStr: string) {
+    let tabs = this.lossesService.lossesTabs;
+    let selectedTab = _.find(tabs, (tab) => {
+      return tab.componentStr == componentStr;
+    })
+    this.lossesService.lossesTab.next(selectedTab.step);
+    this.selectModification(index);
+  }
+
+  selectModificationBadge(modifiction: PHAST, index: number) {
+    let testBadges = this.getBadges(modifiction);
+    if (testBadges.length == 1) {
+      this.goToModification(index, testBadges[0].componentStr);
+    } else {
+      this.goToModification(index, 'operations')
+    }
   }
 
   getBadges(modification: PHAST) {
@@ -99,7 +123,18 @@ export class ModificationListComponent implements OnInit {
     this.renameMod(index);
   }
 
-  addNewModification() {
+  addNewModification(phast?: PHAST) {
+    if (phast) {
+      this.newModificationName = phast.name;
+      let testName = _.filter(this.phast.modifications, (mod) => { return mod.phast.name.includes(this.newModificationName) });
+      if (testName) {
+        this.newModificationName = this.newModificationName + '(' + testName.length + ')';
+      }
+    }
+
+    if (!phast) {
+      phast = this.phast;
+    }
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -123,13 +158,13 @@ export class ModificationListComponent implements OnInit {
         operationsNotes: ''
       },
     }
-    if(this.asssessmentTab == 'explore-opportunities'){
+    if (this.asssessmentTab == 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
     }
-    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
-    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
-    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
-    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
+    tmpModification.phast.losses = (JSON.parse(JSON.stringify(phast.losses)));
+    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(phast.operatingCosts)));
+    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(phast.operatingHours)));
+    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(phast.systemEfficiency)));
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);
@@ -138,4 +173,5 @@ export class ModificationListComponent implements OnInit {
     this.selectModification(this.phast.modifications.length - 1);
     this.newModificationName = undefined;
   }
+
 }

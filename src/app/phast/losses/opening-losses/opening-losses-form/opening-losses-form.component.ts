@@ -160,7 +160,7 @@ export class OpeningLossesFormComponent implements OnInit {
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
         this.startSavePolling();
       }
-    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (Square)') {
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
         let lengthInches = this.openingLossesForm.controls.lengthOfOpening.value;
         let heightInches = this.openingLossesForm.controls.heightOfOpening.value;

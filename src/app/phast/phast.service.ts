@@ -770,7 +770,7 @@ export class PhastService {
         if (loss.openingType == 'Round') {
           let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
-        } else if (loss.openingType == 'Rectangular (Square)') {
+        } else if (loss.openingType == 'Rectangular (or Square)') {
           let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
           sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }

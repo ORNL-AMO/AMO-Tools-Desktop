@@ -18,12 +18,18 @@
 
 .dropdown-item{
     padding: .25rem;
+    font-size: small;
 }
 
 .badge-primary{
     margin-left: 0.1rem;
     margin-right: .1rem;
     margin-top: .1rem;
+}
+
+.badge-primary:hover{
+    cursor: pointer;
+    box-shadow: 0 0 0 0.2rem #AED6F1;
 }
 
 .title-item{
@@ -90,4 +96,10 @@
 
 .dropdown-menu{
     min-width: 5rem;
+    bottom: 0;
+    left: 110%;
+}
+
+.scroll-item{
+    max-height: 75vh;
 }

@@ -16,7 +16,7 @@
     display: inline-block;
     font-weight: 700;
     font-size: 2em;
-    color: #16A085;
+    color:#156739;
     opacity: 1;
     transition: all 1.5s ease-in-out;
      max-width: 2em;
@@ -29,7 +29,7 @@
       /* animation-name: capitol;
       animation-duration: 5s; */
         font-size: 5rem; 
-      text-shadow: 5px 5px #196F3D;
+      /* text-shadow: 5px 5px #196F3D; */
       animation-name: capitol;
       transition: all 2s ease-in-out !important;
   }
@@ -46,7 +46,7 @@
   
   .app-icon{
     width: 4.5rem;
-    box-shadow: 5px 5px #196F3D;
+    /* box-shadow: 5px 5px #196F3D; */
     border-radius: 32px;
   }
 
