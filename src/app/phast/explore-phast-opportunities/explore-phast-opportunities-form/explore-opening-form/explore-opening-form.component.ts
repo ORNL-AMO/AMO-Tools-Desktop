@@ -182,7 +182,7 @@ export class ExploreOpeningFormComponent implements OnInit {
           this.totalArea2[index] = 0;
         }
       }
-    } else if (loss.openingType == 'Rectangular (Square)') {
+    } else if (loss.openingType == 'Rectangular (or Square)') {
       if (loss.lengthOfOpening && loss.heightOfOpening) {
         let lengthInches = loss.lengthOfOpening;
         let heightInches = loss.heightOfOpening;
@@ -233,7 +233,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   checkHeight(num: number, loss: OpeningLoss, index: number) {
-    if (loss.openingType == 'Rectangular (Square)') {
+    if (loss.openingType == 'Rectangular (or Square)') {
       if (num = 1) {
         this.heightError1[index] = (loss.heightOfOpening <= 0) ? "Opening Height must be greater than 0" : null;
       } else if (num = 2) {
@@ -255,7 +255,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       } else if (num = 2) {
         this.lengthError2[index] = (loss.lengthOfOpening < 0) ? "Opening Diameter must be greater than 0" : null;
       }
-    } else if (loss.openingType == 'Rectangular (Square)') {
+    } else if (loss.openingType == 'Rectangular (or Square)') {
       if (num = 1) {
         this.lengthError1[index] = (loss.lengthOfOpening < 0) ? "Opening Length must be greater than 0" : null;
       } else if (num = 2) {
