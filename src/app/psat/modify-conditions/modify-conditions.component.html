@@ -28,12 +28,12 @@
     <!-- Modification Header -->
     <div class="header d-flex flex-row justify-content-between" *ngIf="!editModification">
       <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
-      <h5 class="pull-right panel-add">
+      <!-- <h5 class="pull-right panel-add">
         <a class="small" [ngClass]="{'disabled': modifiedSelected == false}">
           <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
           <span *ngIf="isDropdownOpen" (click)="toggleDropdown()">Cancel</span>
         </a>
-      </h5>
+      </h5> -->
     </div>
 
     <!-- Forms -->

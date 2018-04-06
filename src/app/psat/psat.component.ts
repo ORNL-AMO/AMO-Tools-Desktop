@@ -69,6 +69,7 @@ export class PsatComponent implements OnInit {
   mainTab: string = 'system-setup';
   calcTab: string;
   saveContinue: boolean = false;
+  modificationIndex: number = 0;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -277,10 +278,10 @@ export class PsatComponent implements OnInit {
     this.getContainerHeight();
   }
 
-  back(){
-    if(this.mainTab == 'assessment'){
+  back() {
+    if (this.mainTab == 'assessment') {
       this.psatService.mainTab.next('system-setup')
-    }else{
+    } else {
       this.subTabIndex--;
       this.subTab = this.subTabs[this.subTabIndex];
     }
@@ -343,7 +344,7 @@ export class PsatComponent implements OnInit {
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
-  
+
   addToast(msg: string) {
     let toastOptions: ToastOptions = {
       title: msg,

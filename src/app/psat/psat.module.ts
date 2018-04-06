@@ -42,6 +42,9 @@ import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
+import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
+import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
     ModifyConditionsTabsComponent,
     EditConditionPropertiesComponent,
     PsatDiagramComponent,
-    PsatSankeyComponent
+    PsatSankeyComponent,
+    ModificationNavbarComponent,
+    ModificationListComponent,
+    AddModificationComponent
   ],
   exports: [
     PsatReportComponent

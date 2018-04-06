@@ -21,6 +21,8 @@ export class ModifyConditionsComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   assessment: Assessment;
+  @Input()
+  modificationIndex: number;
   // @Input()
   // emitPrint: boolean;
 
@@ -31,7 +33,6 @@ export class ModifyConditionsComponent implements OnInit {
   isFirstChange: boolean = true;
   showNotes: boolean = false;
   isDropdownOpen: boolean = false;
-  modificationIndex: number = 0;
   showEditModification: boolean = false;
   editModification: Modification;
   isModalOpen: boolean = false;
