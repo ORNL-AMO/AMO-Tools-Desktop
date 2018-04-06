@@ -21,6 +21,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   psat: PSAT;
   @Input()
   containerHeight: number;
+  @Input()
+  modificationIndex: number;
 
   annualSavings: number = 0;
   percentSavings: number = 0;
@@ -35,13 +37,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
   isFirstChange: boolean = true;
-  exploreModIndex: number = 0;
 
   tabSelect: string = 'results';
   currentField: string;
   modExists: boolean = false;
-  exploreModExists: boolean = false;
-
   constructor(private psatService: PsatService, private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -52,8 +51,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
     }
     if (this.psat.modifications) {
-      this.modExists = true;
-      this.checkForExploreMod();
+      if(this.psat.modifications.length != 0){
+        this.modExists = true;
+      }
+      //this.checkForExploreMod();
     }
     this.title = 'Potential Adjustment';
     this.unit = '%';
@@ -61,43 +62,43 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.getResults();
   }
 
-  checkForExploreMod() {
-    let i = 0;
-    this.psat.modifications.forEach(mod => {
-      if (mod.exploreOpportunities) {
-        this.exploreModIndex = i;
-        this.exploreModExists = true;
-      } else {
-        i++;
-      }
-    })
-    if(!this.exploreModExists){
-      this.tabSelect = 'help';
-    }
-  }
+  // checkForExploreMod() {
+  //   let i = 0;
+  //   this.psat.modifications.forEach(mod => {
+  //     if (mod.exploreOpportunities) {
+  //       this.exploreModIndex = i;
+  //       this.exploreModExists = true;
+  //     } else {
+  //       i++;
+  //     }
+  //   })
+  //   if(!this.exploreModExists){
+  //     this.tabSelect = 'help';
+  //   }
+  // }
 
-  addExploreOpp() {
-    if (!this.psat.modifications) {
-      this.psat.modifications = new Array();
-    }
-    let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
-    psatCpy.name = 'Opportunities Modification';
-    this.psat.modifications.push({
-      notes: {
-        systemBasicsNotes: '',
-        pumpFluidNotes: '',
-        motorNotes: '',
-        fieldDataNotes: ''
-      },
-      psat: {
-        inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-      },
-      exploreOpportunities: true
-    });
-    this.save();
-    this.checkForExploreMod();
-    this.getResults();
-  }
+  // addExploreOpp() {
+  //   if (!this.psat.modifications) {
+  //     this.psat.modifications = new Array();
+  //   }
+  //   let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
+  //   psatCpy.name = 'Opportunities Modification';
+  //   this.psat.modifications.push({
+  //     notes: {
+  //       systemBasicsNotes: '',
+  //       pumpFluidNotes: '',
+  //       motorNotes: '',
+  //       fieldDataNotes: ''
+  //     },
+  //     psat: {
+  //       inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
+  //     },
+  //     exploreOpportunities: true
+  //   });
+  //   this.save();
+  //   this.checkForExploreMod();
+  //   this.getResults();
+  // }
 
 
   getResults() {
@@ -113,8 +114,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
     } else {
       this.baselineResults = this.psatService.emptyResults();
     }
-    if (this.exploreModExists) {
-      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    if (this.modExists) {
+      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.modificationIndex].psat.inputs));
       tmpForm = this.psatService.getFormFromPsat(modInputs);
       if (tmpForm.status == 'VALID') {
         if (modInputs.optimize_calculation) {
@@ -132,8 +133,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     //this.assessment.psat = this.psat;
-    if (!this.psat.modifications[this.exploreModIndex].psat.name) {
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+    if (!this.psat.modifications[this.modificationIndex].psat.name) {
+      this.psat.modifications[this.modificationIndex].psat.name = 'Opportunities Modification';
     }
     this.saved.emit(true);
   }

@@ -19,8 +19,6 @@ export class FieldDataComponent implements OnInit {
   psat: PSAT;
   // @Output('changeField')
   // changeField = new EventEmitter<string>();
-  @Input()
-  saveClicked: boolean;
   @Output('isValid')
   isValid = new EventEmitter<boolean>();
   @Output('isInvalid')
@@ -94,15 +92,10 @@ export class FieldDataComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.savePsat(this.psatForm);
-      }
       if (changes.selected) {
         if (!this.selected) {
           this.disableForm();
@@ -113,7 +106,6 @@ export class FieldDataComponent implements OnInit {
           this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
         }
       }
-      this.setCompareVals();
     }
     else {
       this.isFirstChange = false;
@@ -152,18 +144,7 @@ export class FieldDataComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.setCompareVals();
     this.saved.emit(true);
-  }
-
-
-  setCompareVals() {
-    if (this.baseline) {
-      this.compareService.baselinePSAT = this.psat;
-    } else {
-      this.compareService.modifiedPSAT = this.psat;
-    }
-    this.compareService.checkFieldDataDifferent();
   }
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
@@ -340,39 +321,68 @@ export class FieldDataComponent implements OnInit {
     });
   }
 
-  //used to add classes to inputs with different baseline vs modification values
-  initDifferenceMonitor() {
-    if (!this.inSetup) {
-      let doc = this.windowRefService.getDoc();
+  canCompare() {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-      //operating fraction
-      this.compareService.operating_fraction_different.subscribe((val) => {
-        let opFractionElements = doc.getElementsByName('operatingFraction');
-        opFractionElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //cost kw hr
-      this.compareService.cost_kw_hour_different.subscribe((val) => {
-        let costElements = doc.getElementsByName('costKwHr');
-        costElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //flow rate
-      this.compareService.flow_rate_different.subscribe((val) => {
-        let flowRateElements = doc.getElementsByName('flowRate');
-        flowRateElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //head
-      this.compareService.head_different.subscribe((val) => {
-        let headElements = doc.getElementsByName('head');
-        headElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
+  isOperatingFractionDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperatingFractionDifferent();
+    } else {
+      return false;
+    }
+  }
+  isCostKwhrDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCostKwhrDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFlowRateDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFlowRateDifferent();
+    } else {
+      return false;
+    }
+  }
+  isHeadDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isHeadDifferent();
+    } else {
+      return false;
+    }
+  }
+  isLoadEstimationMethodDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isLoadEstimationMethodDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldPowerDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldPowerDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldCurrentDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldCurrentDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldVoltageDifferent();
+    } else {
+      return false;
     }
   }
 }

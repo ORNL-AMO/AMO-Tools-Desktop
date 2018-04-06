@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../../../shared/models/psat';
 import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -44,7 +44,7 @@ export class RatedMotorFormComponent implements OnInit {
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {}
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.settings.powerMeasurement == 'hp') {
@@ -52,6 +52,18 @@ export class RatedMotorFormComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
+    this.init();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.init()
+      }
+    }
+  }
+
+  init() {
     this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
     this.modifyPowerArrays(true);

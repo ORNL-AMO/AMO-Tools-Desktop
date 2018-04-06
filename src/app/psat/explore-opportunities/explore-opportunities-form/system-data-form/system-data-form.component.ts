@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../../../shared/models/psat';
 import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -40,6 +40,18 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.init();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.exploreModIndex) {
+            if (!changes.exploreModIndex.isFirstChange()) {
+                this.init()
+            }
+        }
+    }
+
+    init() {
         this.initCost();
         this.initFlowRate();
         this.initHead();

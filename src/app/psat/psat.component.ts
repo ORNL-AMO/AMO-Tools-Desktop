@@ -95,6 +95,12 @@ export class PsatComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        if (this._psat.modifications) {
+          if (this._psat.modifications.length != 0) {
+            this.modificationIndex = 0;
+          }
+        }
+        this.setCompareVal()
         this.isValid = true;
         this.getSettings();
       })
@@ -138,6 +144,14 @@ export class PsatComponent implements OnInit {
     }, 100);
   }
 
+  setCompareVal() {
+    this.compareService.baselinePSAT = this._psat;
+    if (this._psat.modifications) {
+      if (this._psat.modifications) {
+        this.compareService.modifiedPSAT = this._psat.modifications[this.modificationIndex].psat;
+      }
+    }
+  }
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
@@ -171,16 +185,7 @@ export class PsatComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          // if(!this.settings.temperatureMeasurement){
-          //   this.settings = this.settingsService.setTemperatureUnit(this.settings);
-          // }
           this.isAssessmentSettings = true;
-          // if (update) {
-          //   this.addToast('Settings Saved');
-          //   if (this.saveContinue) {
-          //     this.continue(this.saveContinue)
-          //   }
-          // }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -330,7 +335,7 @@ export class PsatComponent implements OnInit {
         mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
       })
     }
-
+    this.setCompareVal()
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {

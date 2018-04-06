@@ -32,9 +32,6 @@ export class ModifyConditionsComponent implements OnInit {
   modifiedSelected: boolean = true;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
-  isDropdownOpen: boolean = false;
-  showEditModification: boolean = false;
-  editModification: Modification;
   isModalOpen: boolean = false;
   modExists: boolean = false;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
@@ -60,55 +57,18 @@ export class ModifyConditionsComponent implements OnInit {
   save() {
     this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
-    this.showEditModification = false;
-    this.editModification = null;
   }
 
-  addModification() {
-    this._modifications.unshift({
-      psat: {
-        name: 'Modification ' + (this._modifications.length + 1),
-        inputs: (JSON.parse(JSON.stringify(this.psat.inputs))),
-      },
-      notes: {
-        systemBasicsNotes: '',
-        pumpFluidNotes: '',
-        motorNotes: '',
-        fieldDataNotes: ''
-      }
-    });
-    this.save();
-    this.modificationIndex = this._modifications.length - 1;
-    this.modifiedSelected = true;
-    this.baselineSelected = false;
-    this.modExists = true;
-  }
-
-  selectModification(modification: Modification) {
-    let tmpIndex = 0;
-    this._modifications.forEach(mod => {
-      if (mod == modification) {
-        this.modificationIndex = tmpIndex;
-        return;
-      } else {
-        tmpIndex++;
-      }
-    });
-    this.changeTab(this.modifyTab);
-    this.isDropdownOpen = false;
-  }
 
   changeTab(str: string) {
     this.modifyTab = str;
   }
 
   toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
     this.showNotes = false;
   }
   toggleNotes() {
     this.showNotes = !this.showNotes;
-    this.isDropdownOpen = false;
   }
 
   togglePanel(bool: boolean) {
@@ -120,32 +80,6 @@ export class ModifyConditionsComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
-  }
-  dispEditModification(mod: Modification) {
-    this.editModification = mod;
-    this.showEditModification = true;
-  }
-
-  hideEditModification() {
-    this.showEditModification = false;
-  }
-
-  cancelEdit() {
-    this.hideEditModification();
-    this.editModification = null;
-  }
-
-  deleteModification() {
-    this.modificationIndex = 0;
-    _.remove(this._modifications, (mod) => {
-      return mod.psat.name == this.editModification.psat.name;
-    });
-    if(this._modifications.length == 0){
-      this.modExists = false;
-    }
-    this.hideEditModification();
-    this.editModification = null;
-    this.save();
   }
 
   modalOpen() {

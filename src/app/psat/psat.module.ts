@@ -37,7 +37,6 @@ import { ModifyConditionsTabsComponent } from './modify-conditions/modify-condit
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
-import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
@@ -60,7 +59,6 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     InputSummaryComponent,
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
-    EditConditionPropertiesComponent,
     PsatDiagramComponent,
     PsatSankeyComponent,
     ModificationNavbarComponent,
