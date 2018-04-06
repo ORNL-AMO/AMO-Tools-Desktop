@@ -117,7 +117,7 @@
 
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg list-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Select Scenario</h3>
@@ -127,7 +127,7 @@
       </div>
       <div class="modal-body">
         <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
-          (close)="closeSelectModification()" ></app-modification-list>
+          (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>
   </div>

@@ -24,12 +24,12 @@ import { Subscription } from 'rxjs';
 export class PhastComponent implements OnInit {
   @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
-
   //elementRefs used for getting container height for scrolling
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -91,10 +91,12 @@ export class PhastComponent implements OnInit {
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
           if (this._phast.modifications.length != 0) {
-            if(!this._phast.modifications[0].exploreOpportunities){
+            if (!this._phast.modifications[0].exploreOpportunities) {
               this.phastService.assessmentTab.next('modify-conditions');
             }
-            this.phastCompareService.setCompareVals(this._phast, 0);
+            if (this._phast.setupDone) {
+              this.phastCompareService.setCompareVals(this._phast, 0);
+            }
           }
         }
         //get settings
@@ -202,7 +204,7 @@ export class PhastComponent implements OnInit {
         let footerHeight = 0;
         if (this.footer) {
           footerHeight = this.footer.nativeElement.clientHeight;
-        }
+        }        
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }

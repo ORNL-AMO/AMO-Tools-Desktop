@@ -145,6 +145,12 @@ export class LossesService {
   }
 
   checkSetupDone(phast: PHAST, settings: Settings) {
+    let modExists = false;
+    if(phast.modifications){
+      if(phast.modifications.length != 0){
+        modExists = true;
+      }
+    }
     //used to check if setup is done for an assessment
     let isDone, grossHeat = false;
     if (phast.losses) {
@@ -182,8 +188,9 @@ export class LossesService {
       this.chargeDone = false;
       return false;
     }
+
     grossHeat = (this.efficiencyDone || this.enInput1Done || this.enInput2Done || this.flueGasDone);
-    isDone = (grossHeat && this.chargeDone);
+    isDone = (grossHeat && this.chargeDone) || modExists;
     return isDone;
   }
 

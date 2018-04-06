@@ -1,12 +1,15 @@
-<div class="row">
-  <div class="col-lg-9 col-md-7 col-sm-12">
+<div class="row phast">
+  <div class="col-lg-9 col-md-7 col-sm-12 scroll-item">
     <ul class="list-group">
       <li class="list-group-item title-item">
         <div class="row">
           <div class="col-6 border-right">
             <span class="bold">Name</span>
           </div>
-          <div class="col-6">
+          <div class="col-1 border-right">
+            
+          </div>
+          <div class="col-5">
             <span class="bold">Modifications</span>
           </div>
         </div>
@@ -16,16 +19,7 @@
         <div class="row">
           <div class="col-6 border-right">
             <div *ngIf="!rename[index] && !deleteArr[index]">
-              <a class="click-link" (click)="selectModificationBadge(modification.phast, index)">{{modification.phast.name}}</a>
-              <div class="btn-group pull-right">
-                <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
-
-                </button>
-                <div class="dropdown-menu" [ngClass]="{'shown': dropdown[index]}">
-                  <span class="dropdown-item" (click)="renameMod(index)">Rename</span>
-                  <span class="dropdown-item" (click)="deleteMod(index)">Delete</span>
-                </div>
-              </div>
+              <a class="click-link small" (click)="selectModificationBadge(modification.phast, index)">{{modification.phast.name}}</a>
             </div>
             <div *ngIf="rename[index]">
               <div class="input-group">
@@ -51,7 +45,18 @@
               </div>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-1 border-right text-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(index)">
+              </button>
+              <div class="dropdown-menu" [ngClass]="{'shown': dropdown[index]}">
+                <span class="dropdown-item" (click)="renameMod(index)">Rename</span>
+                <span class="dropdown-item" (click)="deleteMod(index)">Delete</span>
+                <span class="dropdown-item" (click)="addNewModification(modification.phast)">Create Copy</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-5">
             <div class="d-flex flex-wrap">
               <div *ngFor="let badge of getBadges(modification.phast)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
             </div>
@@ -63,18 +68,20 @@
   <div class="col-lg-3 col-md-5 col-sm-12">
     <div class="d-flex flex-column tab-content align-self-center">
       <div class="p-2 text-center">
-        <p>Add a new modification. Your data will be copied directly from your baseline.</p>
+        <p>Add a new scenario. Your data will be copied directly from your baseline.
+          <span class="small text-help">Please use a unique name.</span>
+        </p>
       </div>
       <form>
         <div class="form-section">
           <div class="form-group">
             <!-- <label>New Modification</label> -->
-            <input name="newModificationName" class="form-control w-100" type="text" placeholder="New Modification Name" [(ngModel)]="newModificationName">
+            <input name="newModificationName" class="form-control w-100" type="text" placeholder="New Scenario Name" [(ngModel)]="newModificationName">
           </div>
         </div>
       </form>
       <div class="p-2 text-center">
-        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New Modification</button>
+        <button class="btn btn-primary" (click)="addNewModification()" [disabled]="!newModificationName">Add New Scenario</button>
       </div>
     </div>
   </div>

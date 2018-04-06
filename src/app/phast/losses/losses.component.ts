@@ -112,6 +112,7 @@ export class LossesComponent implements OnInit {
         this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }
     }
+
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
     this.saved.emit(true);
     this.toggleCalculate = !this.toggleCalculate;
