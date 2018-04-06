@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsService } from "../../../settings/settings.service";
+import { ConvertUnitsService } from "../../../shared/convert-units/convert-units.service";
 
 @Component({
   selector: 'app-steam-properties',
@@ -15,13 +16,13 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesForm: FormGroup;
   tabSelect = 'results';
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.steamPropertiesForm = this.formBuilder.group({
-      'pressure': ['', Validators.required],
-      'thermodynamicQuantity': [0],
-      'quantityValue': ['', Validators.required]
+      'pressure': [25.5, Validators.required],
+      'thermodynamicQuantity': [0, Validators.required],
+      'quantityValue': [650, Validators.required]
     });
 
     if (!this.settings) {

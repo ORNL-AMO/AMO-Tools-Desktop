@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SteamPropertiesModule } from './steam-properties/steam-properties.module';
 import { SteamComponent } from "./steam.component";
-import { SteamPropertiesComponent } from "./steam-properties/steam-properties.component";
+import { SteamService } from "./steam.service";
 
 
 @NgModule({
@@ -15,6 +15,9 @@ import { SteamPropertiesComponent } from "./steam-properties/steam-properties.co
   ],
   exports: [
     SteamComponent
+  ],
+  providers: [
+    SteamService
   ]
 })
 export class SteamModule { }

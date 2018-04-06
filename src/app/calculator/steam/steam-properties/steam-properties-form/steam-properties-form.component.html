@@ -4,15 +4,15 @@
     <div class="form-group">
       <label for="pressure">Pressure</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();">
+        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (input)="calculate()">
+        <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
-      <!--<span class="alert-danger pull-right small" *ngIf="nameplateFullLoadSpeedError !== null">{{nameplateFullLoadSpeedError}}</span>-->
     </div>
 
     <div class="form-group">
       <label for="thermodynamicQuantity">Quantity Type</label>
       <div class="input-group calc-addon-group">
-        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity" autofocus>
+        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity" (change)="calculate()" autofocus>
           <option value=0>Temperature</option>
           <option value=1>Specific Enthalpy</option>
           <option value=2>Specific Entropy</option>
@@ -24,15 +24,30 @@
     <div class="form-group">
       <label for="quantityValue">Quantity Value</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" autofocus>
+        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" (input)="calculate()" autofocus>
+        <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null">{{quantityValueError}}</span>
       </div>
-      <!--<span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>-->
     </div>
 
     <div class="form-group">
       <label class="small">Pressure</label>
-      <div class="small"><strong>{{steamPropertiesOutput.pressure | number:'2.2-2'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.pressure | number:'2.2-4'}}</strong></div>
     </div>
-
+    <div class="form-group">
+      <label class="small">Temperature</label>
+      <div class="small"><strong>{{steamPropertiesOutput.temperature | number:'2.2-4'}}</strong></div>
+    </div>
+    <div class="form-group">
+      <label class="small">Specific Enthalpy</label>
+      <div class="small"><strong>{{steamPropertiesOutput.specificEnthalpy | number:'2.2-4'}}</strong></div>
+    </div>
+    <div class="form-group">
+      <label class="small">Specific Entropy</label>
+      <div class="small"><strong>{{steamPropertiesOutput.specificEntropy | number:'2.2-4'}}</strong></div>
+    </div>
+    <div class="form-group">
+      <label class="small">Specific Volume</label>
+      <div class="small"><strong>{{steamPropertiesOutput.specificVolume | number:'2.2-4'}}</strong></div>
+    </div>
   </form>
 </div>
