@@ -24,6 +24,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   containerHeight: number;
   @Input()
   modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
 
   annualSavings: number = 0;
   percentSavings: number = 0;
@@ -41,7 +43,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
-  modExists: boolean = false;
   constructor(private psatService: PsatService, private settingsService: SettingsService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -50,12 +51,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if(globalSettings.defaultPanelTab){
         this.tabSelect = globalSettings.defaultPanelTab;
       }
-    }
-    if (this.psat.modifications) {
-      if(this.psat.modifications.length != 0){
-        this.modExists = true;
-      }
-      //this.checkForExploreMod();
     }
     this.title = 'Potential Adjustment';
     this.unit = '%';
@@ -117,7 +112,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     } else {
       this.baselineResults = this.psatService.emptyResults();
     }
-    if (this.modExists) {
+    if (this.modificationExists) {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.modificationIndex].psat.inputs));
       tmpForm = this.psatService.getFormFromPsat(modInputs);
       if (tmpForm.status == 'VALID') {

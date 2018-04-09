@@ -1,6 +1,6 @@
 <div class="container-fluid psat">
 	<div class="row modify-conditions panel-container">
-		<div *ngIf="modExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+		<div *ngIf="modificationExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<div class="header">
 				<h3>Select Potential Adjustment Projects</h3>
 			</div>
@@ -10,7 +10,7 @@
 			</app-explore-opportunities-form>
 
 		</div>
-		<div *ngIf="!modExists" class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+		<div *ngIf="!modificationExists" class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
 				opportunities.</h3>
 			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
@@ -37,15 +37,15 @@
 			
 
 			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-			 *ngIf="tabSelect == 'sankey' && modExists">
+			 *ngIf="tabSelect == 'sankey' && modificationExists">
 			</app-explore-opportunities-sankey>
 
-			<div class="panel-results" *ngIf="modExists">
+			<div class="panel-results" *ngIf="modificationExists">
 				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
 				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results>
 			</div>
-			<div  *ngIf="!modExists && tabSelect != 'help'">
+			<div  *ngIf="!modificationExists && tabSelect != 'help'">
 				<!--Placeholder for help text -->
 				<p>Explore Opportunities to view results</p>
 			</div>

@@ -27,23 +27,30 @@ export class ModifyConditionsTabsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
   setBadgeClass() {
     let tmpBaslineForm = this.psatService.getFormFromPsat(this.compareService.baselinePSAT.inputs);
-    let tmpModForm = this.psatService.getFormFromPsat(this.compareService.modifiedPSAT.inputs);
+    let tmpModForm;
+    if (this.compareService.modifiedPSAT) {
+      tmpModForm = this.psatService.getFormFromPsat(this.compareService.modifiedPSAT.inputs);
+    }
     this.fieldDataBadgeClass = this.setFieldDataBadgeClass(tmpBaslineForm, tmpModForm);
     this.pumpFluidBadgeClass = this.setPumpFluidBadgeClass(tmpBaslineForm, tmpModForm);
     this.motorBadgeClass = this.setMotorBadgeClass(tmpBaslineForm, tmpModForm);
   }
 
-  setFieldDataBadgeClass(baselineForm: FormGroup, modifiedForm: FormGroup) {
+  setFieldDataBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.psatService.isFieldDataFormValid(baselineForm);
-    let validModTest = this.psatService.isFieldDataFormValid(modifiedForm)
-    let isDifferent = this.compareService.checkFieldDataDifferent();
+    let validModTest = true;
+    let isDifferent = false;
+    if (modifiedForm) {
+      validModTest = this.psatService.isFieldDataFormValid(modifiedForm)
+      isDifferent = this.compareService.checkFieldDataDifferent();
+    }
     let inputError = false;
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
@@ -55,11 +62,15 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setPumpFluidBadgeClass(baselineForm: FormGroup, modifiedForm: FormGroup) {
+  setPumpFluidBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.psatService.isPumpFluidFormValid(baselineForm);
-    let validModTest = this.psatService.isPumpFluidFormValid(modifiedForm)
-    let isDifferent = this.compareService.checkPumpDifferent();
+    let validModTest = true;
+    let isDifferent = false;
+    if (modifiedForm) {
+      validModTest = this.psatService.isPumpFluidFormValid(modifiedForm)
+      isDifferent = this.compareService.checkPumpDifferent();
+    }
     let inputError = false;
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
@@ -71,12 +82,16 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setMotorBadgeClass(baselineForm: FormGroup, modifiedForm: FormGroup) {
+  setMotorBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.psatService.isMotorFormValid(baselineForm);
-    let validModTest = this.psatService.isMotorFormValid(modifiedForm)
-    let isDifferent = this.compareService.checkMotorDifferent();
     let inputError = false;
+    let validModTest = true;
+    let isDifferent = false;
+    if (modifiedForm) {
+      validModTest = this.psatService.isMotorFormValid(modifiedForm)
+      isDifferent = this.compareService.checkMotorDifferent();
+    }
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {

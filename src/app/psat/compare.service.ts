@@ -39,16 +39,20 @@ export class CompareService {
     if (!modification) {
       modification = this.modifiedPSAT;
     }
-    return (
-      this.isPumpSpecifiedDifferent(baseline, modification) ||
-      this.isPumpStyleDifferent(baseline, modification) ||
-      this.isPumpRpmDifferent(baseline, modification) ||
-      this.isDriveDifferent(baseline, modification) ||
-      this.isKinematicViscosityDifferent(baseline, modification) ||
-      this.isSpecificGravityDifferent(baseline, modification) ||
-      this.isFluidTempDifferent(baseline, modification) ||
-      this.isFluidTypeDifferent(baseline, modification)
-    )
+    if (baseline && modification) {
+      return (
+        this.isPumpSpecifiedDifferent(baseline, modification) ||
+        this.isPumpStyleDifferent(baseline, modification) ||
+        this.isPumpRpmDifferent(baseline, modification) ||
+        this.isDriveDifferent(baseline, modification) ||
+        this.isKinematicViscosityDifferent(baseline, modification) ||
+        this.isSpecificGravityDifferent(baseline, modification) ||
+        this.isFluidTempDifferent(baseline, modification) ||
+        this.isFluidTypeDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
   }
 
   checkMotorDifferent(baseline?: PSAT, modification?: PSAT) {
@@ -58,16 +62,20 @@ export class CompareService {
     if (!modification) {
       modification = this.modifiedPSAT;
     }
-    return (
-      this.isLineFreqDifferent(baseline, modification) ||
-      this.isMotorRatedPowerDifferent(baseline, modification) ||
-      this.isMotorRatedSpeedDifferent(baseline, modification) ||
-      this.isEfficiencyClassDifferent(baseline, modification) ||
-      this.isEfficiencyDifferent(baseline, modification) ||
-      this.isMotorRatedVoltageDifferent(baseline, modification) ||
-      this.isMotorRatedFlaDifferent(baseline, modification) ||
-      this.isMarginDifferent(baseline, modification)
-    )
+    if (baseline && modification) {
+      return (
+        this.isLineFreqDifferent(baseline, modification) ||
+        this.isMotorRatedPowerDifferent(baseline, modification) ||
+        this.isMotorRatedSpeedDifferent(baseline, modification) ||
+        this.isEfficiencyClassDifferent(baseline, modification) ||
+        this.isEfficiencyDifferent(baseline, modification) ||
+        this.isMotorRatedVoltageDifferent(baseline, modification) ||
+        this.isMotorRatedFlaDifferent(baseline, modification) ||
+        this.isMarginDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
   }
 
   checkFieldDataDifferent(baseline?: PSAT, modification?: PSAT) {
@@ -77,12 +85,17 @@ export class CompareService {
     if (!modification) {
       modification = this.modifiedPSAT;
     }
-    return (
-      this.isOperatingFractionDifferent(baseline, modification) ||
-      this.isCostKwhrDifferent(baseline, modification) ||
-      this.isFlowRateDifferent(baseline, modification) ||
-      this.isHeadDifferent(baseline, modification)
-    )
+    if (baseline && modification) {
+      return (
+        this.isOperatingFractionDifferent(baseline, modification) ||
+        this.isCostKwhrDifferent(baseline, modification) ||
+        this.isFlowRateDifferent(baseline, modification) ||
+        this.isHeadDifferent(baseline, modification)
+      )
+    }
+    else {
+      return false;
+    }
   }
 
   //pump style

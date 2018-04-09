@@ -36,7 +36,7 @@ export class ModificationListComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
   }
 
@@ -45,11 +45,13 @@ export class ModificationListComponent implements OnInit {
     this.rename = Array<boolean>(this.psat.modifications.length);
     this.deleteArr = Array<boolean>(this.psat.modifications.length);
   }
-  selectModification(index: number) {
+  selectModification(index: number, close?: boolean) {
     this.compareService.setCompareVals(this.psat, index);
     this.psatService.getResults.next(true);
     this.initDropdown()
-    this.close.emit(true);
+    if (close) {
+      this.close.emit(true);
+    }
   }
   goToModification(index: number, componentStr: string) {
     // let tabs = this.lossesService.lossesTabs;
@@ -57,7 +59,7 @@ export class ModificationListComponent implements OnInit {
     //   return tab.componentStr == componentStr;
     // })
     // this.lossesService.lossesTab.next(selectedTab.step);
-    this.selectModification(index);
+    this.selectModification(index, true);
   }
   selectModificationBadge(modifiction: PSAT, index: number) {
     let testBadges = this.getBadges(modifiction);

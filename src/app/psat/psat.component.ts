@@ -82,6 +82,7 @@ export class PsatComponent implements OnInit {
   secondaryTabSub: Subscription;
   calcTabSub: Subscription;
   openModSub: Subscription;
+  showAdd: boolean;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -164,6 +165,7 @@ export class PsatComponent implements OnInit {
       })
 
       this.addNewSub = this.compareService.openNewModal.subscribe(val => {
+        this.showAdd = val;
         if (val) {
           this.showAddNewModal();
         }
@@ -374,12 +376,19 @@ export class PsatComponent implements OnInit {
       this._psat.setupDone = false;
     }
     if (this._psat.modifications) {
+      if(this._psat.modifications.length == 0){
+        this.modificationExists = false;
+      }else{
+        this.modificationExists = true;
+      }
       this._psat.modifications.forEach(mod => {
         mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
         mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
         mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
         mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
       })
+    }else{
+      this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex)
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
@@ -436,10 +445,9 @@ export class PsatComponent implements OnInit {
   }
 
   saveNewMod(mod: Modification) {
-    this.modificationExists = true;
     this._psat.modifications.push(mod);
     this.compareService.setCompareVals(this._psat, this._psat.modifications.length - 1);
-    this.modificationIndex = 0;
+    this.save();
     this.closeAddNewModal();
   }
 }

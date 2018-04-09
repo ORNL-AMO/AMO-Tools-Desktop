@@ -23,39 +23,29 @@ export class ModifyConditionsComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
   // @Input()
   // emitPrint: boolean;
 
   modifyTab: string = 'field-data';
-  _modifications: Array<Modification>;
+  //_modifications: Array<Modification>;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
   isModalOpen: boolean = false;
-  modExists: boolean = false;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
 
   ngOnInit() {
-    this._modifications = new Array<Modification>();
-    if (this.psat.modifications) {
-      this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
-      this.togglePanel(false);
-      this.modExists = true;
-    }
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
       this.modifyTab = tmpTab;
     }
   }
 
-  ngOnDestroy() {
-    this.compareService.baselinePSAT = null;
-    this.compareService.modifiedPSAT = null;
-  }
-
   save() {
-    this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    // this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
   }
 
