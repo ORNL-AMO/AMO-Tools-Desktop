@@ -7,16 +7,22 @@
   <li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'pump-fluid'}" (click)="tabChange('pump-fluid')">
     <a class="nav-link small">
     Pump Fluid
+      <span class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
+      </span>
     </a>
   </li><!--
   --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'motor'}" (click)="tabChange('motor')">
     <a class="nav-link small">
     Motor
+      <span class="badge gray-badge" [ngClass]="motorBadgeClass">
+      </span>
     </a>
   </li><!--
   --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'field-data'}" (click)="tabChange('field-data')">
     <a class="nav-link small">
     Field Data
+      <span class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
+      </span>
     </a>
   </li>
   <!-- <li [ngClass]="{'active': modifyTab == 'report'}" (click)="tabChange('report')">
