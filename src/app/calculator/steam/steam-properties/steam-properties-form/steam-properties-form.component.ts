@@ -22,12 +22,48 @@ export class SteamPropertiesFormComponent implements OnInit {
   quantityValueError: string = null;
   thermodynamicQuantity: number;
 
-  // contains mins and maxes for all quality types and units that the C++ expects, indexed on thermodynamicQuantity
+  // contains mins and maxes for all quality types, indexed into using thermodynamicQuantity
   checkQuantity = [
-    { min: 273.2, max: 1073.1, type: 'Temperature', units: 'Kelvin' },
-    { min: 50, max: 3700, type: 'Specific Enthalpy', units: 'kJ/kg' }, // specific energy
-    { min: 0, max: 6.52, type: 'Specific Entropy', units: 'kJ/kg/K' }, // specific heat
-    { min: 0, max: 1, type: 'Saturated Quality', units: '' }
+    {
+      Imperial: {
+        min: 32, max: 1472, type: 'Temperature', units: 'Fahrenheit'
+      },
+      Metric: {
+        min: 0, max: 800, type: 'Temperature', units: 'Celsius'
+      }
+    },
+    {
+      Imperial: {
+        min: 50, max: 5000, type: 'Specific Enthalpy', units: 'Btu/lb'
+      },
+      Metric: {
+        min: 50, max: 3700, type: 'Specific Enthalpy', units: 'kJ/kg'
+      }
+    },
+    {
+      Imperial: {
+        min: 0, max: 12.25, type: 'Specific Entropy', units: 'Btu/lb-F'
+      },
+      Metric: {
+        min: 0, max: 6.52, type: 'Specific Entropy', units: 'kJ/kg/K'
+      }
+    },
+    {
+      Imperial: {
+        min: 0, max: 1, type: 'Saturated Quality', units: ''
+      },
+      Metric: {
+        min: 0, max: 1, type: 'Saturated Quality', units: ''
+      }
+    },
+    {
+      Imperial: {
+        min: 0.2, max: 14503.7, type: 'Pressure', units: 'psi'
+      },
+      Metric: {
+        min: 1, max: 100000, type: 'Pressure', units: 'kPa'
+      }
+    }
   ];
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
@@ -47,23 +83,35 @@ export class SteamPropertiesFormComponent implements OnInit {
       quantityValue: this.steamPropertiesForm.controls.quantityValue.value
     };
     this.thermodynamicQuantity = input.thermodynamicQuantity;
+    const unit = this.settings.unitsOfMeasure;
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < 0.001 || input.pressure > 100) {
-      this.pressureError = 'Pressure must be between 0.001 and 100 MPa';
+      const err = this.checkQuantity[4][unit].min + ' and ' + this.checkQuantity[4][unit].max + ' ' + this.checkQuantity[4][unit].units;
+      this.pressureError = 'Pressure must be between ' + err;
     }
-    if (this.steamPropertiesForm.controls.quantityValue.invalid) {
-      this.quantityValueError = 'Check your quantity value';
-    }
+
+    // if (this.steamPropertiesForm.controls.quantityValue.invalid) {
+    //   this.quantityValueError = 'Check your quantity value';
+    // }
+
     const i = input.thermodynamicQuantity;
-    if (input.quantityValue < this.checkQuantity[i].min || input.quantityValue > this.checkQuantity[i].max) {
-      const err = this.checkQuantity[i].min + ' and ' + this.checkQuantity[i].max + ' ' + this.checkQuantity[i].units;
-      this.quantityValueError = 'Check your quantity value, ' + this.checkQuantity[i].type + ' must be between ' + err;
+
+    if (input.quantityValue < this.checkQuantity[i][unit].min || input.quantityValue > this.checkQuantity[i][unit].max) {
+      const err = this.checkQuantity[i][unit].min + ' and ' + this.checkQuantity[i][unit].max + ' ' + this.checkQuantity[i][unit].units;
+      this.quantityValueError = this.checkQuantity[i][unit].type + ' must be between ' + err;
     }
     if (this.pressureError !== null || this.quantityValueError !== null) {
       return;
     }
 
+    if (i === 0) { // convert temperature to Kelvin
+      input.quantityValue = this.convertUnitsService.value(input.quantityValue).from(this.settings.temperatureMeasurement).to('C') + 273.15;
+    }
+
     this.steamPropertiesOutput = SteamService.steamProperties(input);
+
+    this.steamPropertiesOutput.pressure = this.convertUnitsService.value(this.steamPropertiesOutput.pressure).from('MPa').to(this.settings.pressureMeasurement);
+    this.steamPropertiesOutput.temperature = this.convertUnitsService.value(this.steamPropertiesOutput.temperature - 273.15).from('C').to(this.settings.temperatureMeasurement);
   }
 
 }

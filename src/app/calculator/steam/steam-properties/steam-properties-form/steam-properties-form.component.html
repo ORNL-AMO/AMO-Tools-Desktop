@@ -29,30 +29,45 @@
       <!--<label *ngIf="thermodynamicQuantity === 3" for="quantityValue">Quality</label>-->
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" (input)="calculate()" autofocus>
-        <span class="input-group-addon units">{{checkQuantity[thermodynamicQuantity].units}}</span>
+        <span class="input-group-addon units">{{checkQuantity[thermodynamicQuantity][settings.unitsOfMeasure].units}}</span>
         <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null">{{quantityValueError}}</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small">Pressure</label>
-      <div class="small"><strong>{{steamPropertiesOutput.pressure | number:'1.1-4'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.pressure | number:'1.1-4'}}</strong>
+        <!--<span class="input-group-addon units">{{checkQuantity[4][settings.unitsOfMeasure].units}}</span>-->
+        <span>{{checkQuantity[4][settings.unitsOfMeasure].units}}</span>
+      </div>
     </div>
     <div class="form-group">
       <label class="small">Temperature</label>
-      <div class="small"><strong>{{steamPropertiesOutput.temperature | number:'1.1-4'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.temperature | number:'1.1-4'}}</strong>
+        <!--<span class="input-group-addon units">{{checkQuantity[0][settings.unitsOfMeasure].units}}</span>-->
+        <span>{{checkQuantity[0][settings.unitsOfMeasure].units}}</span>
+      </div>
     </div>
     <div class="form-group">
       <label class="small">Specific Enthalpy</label>
-      <div class="small"><strong>{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}</strong>
+        <!--<span class="input-group-addon units">{{checkQuantity[1][settings.unitsOfMeasure].units}}</span>-->
+        <span>{{checkQuantity[1][settings.unitsOfMeasure].units}}</span>
+      </div>
     </div>
     <div class="form-group">
       <label class="small">Specific Entropy</label>
-      <div class="small"><strong>{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}</strong>
+        <!--<span class="input-group-addon units">{{checkQuantity[2][settings.unitsOfMeasure].units}}</span>-->
+        <span>{{checkQuantity[2][settings.unitsOfMeasure].units}}</span>
+      </div>
     </div>
     <div class="form-group">
       <label class="small">Specific Volume</label>
-      <div class="small"><strong>{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}</strong></div>
+      <div class="small"><strong>{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}</strong>
+        <!--<span class="input-group-addon units">cubic ft per lb</span>-->
+        <span>cubic ft per lb</span>
+      </div>
     </div>
   </form>
 </div>
