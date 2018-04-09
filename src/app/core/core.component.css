@@ -65,3 +65,11 @@
 	padding: 8px 10px;
     font-size: 14px;
 }
+
+
+.opening-tutorial{
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1800;
+}

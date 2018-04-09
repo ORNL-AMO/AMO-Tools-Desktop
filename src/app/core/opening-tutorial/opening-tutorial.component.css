@@ -1,0 +1,16 @@
+.showItem{
+    display: inherit;
+}
+
+.tutorial-bg{
+    background-color: #F8F9F9;
+}
+
+
+.carousel-item{
+    box-shadow: 0px 0px 60px 0.5px;
+}
+
+.carousel-control{
+    background-color: gray;
+}

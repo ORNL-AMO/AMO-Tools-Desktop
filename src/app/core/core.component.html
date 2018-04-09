@@ -1,5 +1,5 @@
 <!-- <div #coreContainer> -->
-    <div #screenshotBar class="feedback hide-print" *ngIf="showFeedback">
+    <!-- <div #screenshotBar class="feedback hide-print" *ngIf="showFeedback">
 
         <div class="feedback-header">
             <h2>Provide Feedback: Tell us how we can improve this app!</h2>
@@ -11,6 +11,9 @@
         </div>
         <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()">
             <i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
+    </div> -->
+    <div class="opening-tutorial">
+        <app-opening-tutorial></app-opening-tutorial>
     </div>
 
     <router-outlet></router-outlet>
