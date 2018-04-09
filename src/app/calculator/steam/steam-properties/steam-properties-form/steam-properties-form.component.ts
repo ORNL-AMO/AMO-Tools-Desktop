@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
-import {SteamPropertiesInput, SteamPropertiesOutput} from "../../../../shared/models/steam";
-import {SteamService} from "../../steam.service";
+import { SteamPropertiesInput, SteamPropertiesOutput } from "../../../../shared/models/steam";
+import { SteamService } from "../../steam.service";
+import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
 
 @Component({
   selector: 'app-steam-properties-form',
@@ -19,16 +20,17 @@ export class SteamPropertiesFormComponent implements OnInit {
 
   pressureError: string = null;
   quantityValueError: string = null;
+  thermodynamicQuantity: number;
 
-  // contains mins and maxes for all quality types and units that the C++ expects
+  // contains mins and maxes for all quality types and units that the C++ expects, indexed on thermodynamicQuantity
   checkQuantity = [
     { min: 273.2, max: 1073.1, type: 'Temperature', units: 'Kelvin' },
-    { min: 50, max: 3700, type: 'Specific Enthalpy', units: 'kJ/kg' },
-    { min: 0, max: 6.52, type: 'Specific Entropy', units: 'kJ/kg/K' },
+    { min: 50, max: 3700, type: 'Specific Enthalpy', units: 'kJ/kg' }, // specific energy
+    { min: 0, max: 6.52, type: 'Specific Entropy', units: 'kJ/kg/K' }, // specific heat
     { min: 0, max: 1, type: 'Saturated Quality', units: '' }
   ];
 
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.steamPropertiesOutput = {
@@ -41,9 +43,10 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.pressureError = this.quantityValueError = null;
     const input: SteamPropertiesInput = {
       thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
-      pressure: this.steamPropertiesForm.controls.pressure.value,
+      pressure: this.convertUnitsService.value(this.steamPropertiesForm.controls.pressure.value).from(this.settings.pressureMeasurement).to('MPa'),
       quantityValue: this.steamPropertiesForm.controls.quantityValue.value
     };
+    this.thermodynamicQuantity = input.thermodynamicQuantity;
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < 0.001 || input.pressure > 100) {
       this.pressureError = 'Pressure must be between 0.001 and 100 MPa';
