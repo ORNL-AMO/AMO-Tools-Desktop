@@ -84,3 +84,30 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .gray-badge.loss-different{
     background-color: blue;
 }
+
+
+.indicate-different {
+	border: blue solid 2px;
+    box-shadow: 0px 0px 5px blue;
+}
+
+.indicate-different.form-control {
+    border: 2px solid blue;
+    box-shadow: 0px 0px 5px blue;
+}
+
+.indicate-different.incrementor {
+    border: 2px solid blue;
+    box-shadow: 0px 0px 5px blue;
+}
+
+.invalid, .indicate-different.invalid, input.indicate-different.invalid{
+	border: red solid 2px !important;
+    box-shadow: 0px 0px 5px red !important;
+}
+
+.error, .indicate-different.error, input.indicate-different.error {
+    border: orange solid 2px;
+    box-shadow: 0px 0px 5px orange;
+}
+

@@ -72,10 +72,12 @@ export class OpeningLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.openingLossesForm.disable();
+    this.openingLossesForm.controls.openingType.disable();
+    // this.openingLossesForm.disable();
   }
   enableForm() {
-    this.openingLossesForm.enable();
+    this.openingLossesForm.controls.openingType.enable();
+    // this.openingLossesForm.enable();
   }
   calculateViewFactor() {
     let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);

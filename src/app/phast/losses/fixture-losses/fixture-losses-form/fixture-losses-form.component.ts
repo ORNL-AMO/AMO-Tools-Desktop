@@ -61,11 +61,13 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.lossesForm.disable();
+    this.lossesForm.controls.materialName.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    this.lossesForm.controls.materialName.enable();
+    // this.lossesForm.enable();
   }
 
   focusField(str: string) {

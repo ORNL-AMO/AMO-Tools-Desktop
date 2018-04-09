@@ -52,11 +52,11 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.lossesForm.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    // this.lossesForm.enable();
   }
 
   checkInputError(bool?: boolean) {

@@ -89,11 +89,11 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   disableForm() {
-    this.efficiencyForm.disable();
+    // this.efficiencyForm.disable();
   }
 
   enableForm() {
-    this.efficiencyForm.enable();
+    // this.efficiencyForm.enable();
   }
 
   saveLosses() {

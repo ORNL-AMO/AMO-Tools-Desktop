@@ -50,11 +50,11 @@ export class OperationsFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.operationsForm.disable();
+    // this.operationsForm.disable();
   }
 
   enableForm() {
-    this.operationsForm.enable();
+    // this.operationsForm.enable();
   }
 
   focusField(str: string) {

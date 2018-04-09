@@ -80,11 +80,16 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.chargeMaterialForm.disable();
+    this.chargeMaterialForm.controls.materialId.disable();
+    this.chargeMaterialForm.controls.endothermicOrExothermic.disable();
+
+    // this.chargeMaterialForm.disable();
   }
 
   enableForm() {
-    this.chargeMaterialForm.enable();
+    this.chargeMaterialForm.controls.materialId.enable();
+    this.chargeMaterialForm.controls.endothermicOrExothermic.enable();
+    // this.chargeMaterialForm.enable();
   }
 
   focusField(str: string) {

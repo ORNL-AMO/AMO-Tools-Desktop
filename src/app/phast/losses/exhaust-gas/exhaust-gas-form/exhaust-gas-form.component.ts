@@ -50,11 +50,11 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.exhaustGasForm.disable();
+    // this.exhaustGasForm.disable();
   }
 
   enableForm() {
-    this.exhaustGasForm.enable();
+    // this.exhaustGasForm.enable();
   }
 
   focusField(str: string) {
