@@ -13,6 +13,8 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
+import { Subscription } from 'rxjs';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-psat',
@@ -20,6 +22,8 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
+
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
@@ -70,6 +74,7 @@ export class PsatComponent implements OnInit {
   calcTab: string;
   saveContinue: boolean = false;
   modificationIndex: number = 0;
+  selectedModSubscription: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -99,8 +104,10 @@ export class PsatComponent implements OnInit {
           if (this._psat.modifications.length != 0) {
             this.modificationIndex = 0;
           }
+          if (this._psat.setupDone) {
+            this.compareService.setCompareVals(this._psat, 0);
+          }
         }
-        this.setCompareVal()
         this.isValid = true;
         this.getSettings();
       })
@@ -128,6 +135,22 @@ export class PsatComponent implements OnInit {
       this.psatService.calcTab.subscribe(val => {
         this.calcTab = val;
       })
+
+      this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
+        if (mod && this._psat) {
+          this.modificationIndex = _.findIndex(this._psat.modifications, (val) => {
+            return val.psat.name == mod.name
+          })
+        } else {
+          this.modificationIndex = undefined;
+        }
+      })
+
+      this.compareService.openModificationModal.subscribe(val => {
+        if (val) {
+          this.selectModificationModal()
+        }
+      })
     })
   }
 
@@ -144,14 +167,14 @@ export class PsatComponent implements OnInit {
     }, 100);
   }
 
-  setCompareVal() {
-    this.compareService.baselinePSAT = this._psat;
-    if (this._psat.modifications) {
-      if (this._psat.modifications) {
-        this.compareService.modifiedPSAT = this._psat.modifications[this.modificationIndex].psat;
-      }
-    }
-  }
+  // setCompareVal() {
+  //   this.compareService.baselinePSAT = this._psat;
+  //   if (this._psat.modifications) {
+  //     if (this._psat.modifications) {
+  //       this.compareService.modifiedPSAT = this._psat.modifications[this.modificationIndex].psat;
+  //     }
+  //   }
+  // }
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
@@ -335,7 +358,7 @@ export class PsatComponent implements OnInit {
         mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
       })
     }
-    this.setCompareVal()
+    this.compareService.setCompareVals(this._psat, this.modificationIndex)
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {
@@ -370,4 +393,13 @@ export class PsatComponent implements OnInit {
     this.isModalOpen = false;
   }
 
+  selectModificationModal() {
+    this.isModalOpen = true;
+    this.changeModificationModal.show();
+  }
+  closeSelectModification() {
+    this.isModalOpen = false;
+    this.compareService.openModificationModal.next(false);
+    this.changeModificationModal.hide();
+  }
 }

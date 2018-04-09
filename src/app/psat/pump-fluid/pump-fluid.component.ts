@@ -30,6 +30,8 @@ export class PumpFluidComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modificationIndex: number;
 
   counter: any;
 
@@ -104,6 +106,9 @@ export class PumpFluidComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      if (changes.modificationIndex) {
+        this.init();
+      }
     }
     else {
       this.isFirstChange = false;
@@ -111,9 +116,7 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.checkPumpRpm(true);
+    this.init();
     if (this.settings.temperatureMeasurement == 'C') {
       this.tempUnit = '&#8451';
     } else if (this.settings.temperatureMeasurement == 'F') {
@@ -127,6 +130,12 @@ export class PumpFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+  }
+
+  init() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    this.checkPumpRpm(true);
   }
 
   disableForm() {
@@ -312,6 +321,14 @@ export class PumpFluidComponent implements OnInit {
   isFluidTypeDifferent() {
     if (this.canCompare()) {
       return this.compareService.isFluidTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isStagesDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isStagesDifferent();
     } else {
       return false;
     }

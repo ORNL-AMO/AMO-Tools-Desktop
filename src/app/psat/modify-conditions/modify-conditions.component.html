@@ -38,11 +38,11 @@
 
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [(psat)]="_modifications[modificationIndex].psat"
-        (saved)="save()" [settings]="settings"></app-pump-fluid>
+        (saved)="save()" [settings]="settings" [modificationIndex]="modificationIndex"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [(psat)]="_modifications[modificationIndex].psat" (saved)="save()"
-        [settings]="settings"></app-motor>
+        [settings]="settings" [modificationIndex]="modificationIndex"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="_modifications[modificationIndex].psat" [selected]="modifiedSelected"
-        (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment"></app-field-data>
+        (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment" [modificationIndex]="modificationIndex"></app-field-data>
 
     </div>
   </div>

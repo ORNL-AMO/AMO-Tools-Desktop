@@ -6,9 +6,29 @@ export class CompareService {
 
   baselinePSAT: PSAT;
   modifiedPSAT: PSAT;
+  selectedModification: BehaviorSubject<PSAT>;
+  openModificationModal: BehaviorSubject<boolean>;
+  constructor() {
+    this.selectedModification = new BehaviorSubject<PSAT>(undefined);
+    this.openModificationModal = new BehaviorSubject<boolean>(undefined);
+  }
 
+  setCompareVals(psat: PSAT, selectedModIndex: number) {
+    this.baselinePSAT = psat;
+    if (psat.modifications) {
+      if (psat.modifications.length != 0) {
+        this.selectedModification.next(psat.modifications[selectedModIndex].psat);
+        this.modifiedPSAT = this.selectedModification.value;
+      } else {
+        this.selectedModification.next(undefined);
+        this.modifiedPSAT = undefined;
+      }
+    } else {
+      this.selectedModification.next(undefined);
+      this.modifiedPSAT = undefined;
+    }
+  }
 
-  constructor() { }
 
   checkPumpDifferent() {
     return (
@@ -381,4 +401,8 @@ export class CompareService {
       return false;
     }
   }
+
+  // getBadges(baseline: PSAT, modification: PSAT): Array<{ badge: string, componentStr: string }> {
+
+  // }
 }

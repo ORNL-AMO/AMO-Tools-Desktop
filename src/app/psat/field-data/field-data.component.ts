@@ -39,6 +39,8 @@ export class FieldDataComponent implements OnInit {
   inSetup: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  modificationIndex: number;
 
   counter: any;
 
@@ -70,22 +72,7 @@ export class FieldDataComponent implements OnInit {
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.helpPanelService.currentField.next('operatingFraction');
-    //init warning messages;
-    this.checkCost(true);
-    this.checkFlowRate(true);
-    this.checkOpFraction(true);
-    this.checkRatedPower(true);
-    this.checkVoltage(true);
-    if (this.psatForm.controls.optimizeCalculation.value == true) {
-      this.checkMargin(true);
-    }
-    this.checkHead(true);
-    if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-    }
+    this.init();
   }
 
   ngAfterViewInit() {
@@ -106,9 +93,32 @@ export class FieldDataComponent implements OnInit {
           this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
         }
       }
+
+      if (changes.modificationIndex) {
+        this.init();
+      }
     }
     else {
       this.isFirstChange = false;
+    }
+  }
+
+  init() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    this.helpPanelService.currentField.next('operatingFraction');
+    //init warning messages;
+    this.checkCost(true);
+    this.checkFlowRate(true);
+    this.checkOpFraction(true);
+    this.checkRatedPower(true);
+    this.checkVoltage(true);
+    if (this.psatForm.controls.optimizeCalculation.value == true) {
+      this.checkMargin(true);
+    }
+    this.checkHead(true);
+    if (!this.baseline) {
+      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
     }
   }
 

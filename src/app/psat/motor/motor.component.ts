@@ -31,6 +31,8 @@ export class MotorComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modificationIndex: number;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -64,22 +66,12 @@ export class MotorComponent implements OnInit {
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
+    this.init();
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
     } else {
       this.options = this.kWatts;
     }
-
-    this.helpPanelService.currentField.next('lineFrequency');
-    //init alert meessages
-    this.modifyPowerArrays();
-    this.checkEfficiency(true);
-    this.checkFLA(true);
-    this.checkMotorRpm(true);
-    this.checkMotorVoltage(true);
-    this.checkRatedPower(true);
   }
 
   ngAfterViewInit() {
@@ -98,10 +90,27 @@ export class MotorComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      if (changes.modificationIndex) {
+        this.init();
+      }
     }
     else {
       this.isFirstChange = false;
     }
+  }
+
+  init() {
+
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    this.helpPanelService.currentField.next('lineFrequency');
+    //init alert meessages
+    this.modifyPowerArrays();
+    this.checkEfficiency(true);
+    this.checkFLA(true);
+    this.checkMotorRpm(true);
+    this.checkMotorVoltage(true);
+    this.checkRatedPower(true);
   }
 
   changeLineFreq() {
