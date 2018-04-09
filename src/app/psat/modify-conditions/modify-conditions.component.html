@@ -1,5 +1,5 @@
 <nav class="hide-print">
-  <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
+  <app-modify-conditions-tabs></app-modify-conditions-tabs>
 </nav>
 
 <div class="modify-conditions row psat" *ngIf="settings">
@@ -58,7 +58,7 @@
 
   <!-- Help Panel -->
   <div class="col-4 help-panel">
-    <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="psat.modifications[modificationIndex]"
+    <app-help-panel *ngIf="modificationExists" (emitSave)="save()" [psat]="psat" [settings]="settings" [(modification)]="psat.modifications[modificationIndex]"
       [modificationIndex]="modificationIndex"></app-help-panel>
     <div *ngIf="!modificationExists">
       <div class="header">

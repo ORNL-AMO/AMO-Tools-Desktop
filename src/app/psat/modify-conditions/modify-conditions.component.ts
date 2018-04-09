@@ -28,7 +28,7 @@ export class ModifyConditionsComponent implements OnInit {
   // @Input()
   // emitPrint: boolean;
 
-  modifyTab: string = 'field-data';
+  modifyTab: string;
   //_modifications: Array<Modification>;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
@@ -40,8 +40,12 @@ export class ModifyConditionsComponent implements OnInit {
   ngOnInit() {
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
-      this.modifyTab = tmpTab;
+      this.psatService.modifyConditionsTab.next(tmpTab);
     }
+
+    this.psatService.modifyConditionsTab.subscribe(val => {
+      this.modifyTab = val;
+    })
   }
 
   save() {
@@ -49,10 +53,6 @@ export class ModifyConditionsComponent implements OnInit {
     this.saved.emit(true);
   }
 
-
-  changeTab(str: string) {
-    this.modifyTab = str;
-  }
 
   toggleDropdown() {
     this.showNotes = false;

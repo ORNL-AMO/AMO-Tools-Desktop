@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Modification } from '../../shared/models/psat';
+import { PsatService } from '../psat.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-modification',
@@ -18,8 +20,8 @@ export class AddModificationComponent implements OnInit {
   modificationExists: boolean;
   newModificationName: string;
   currentTab: string;
-  // tabSubscription: Subscription;
-  constructor() { }
+  tabSubscription: Subscription;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
     if (this.modifications) {
@@ -27,13 +29,13 @@ export class AddModificationComponent implements OnInit {
     } else {
       this.newModificationName = 'Scenario 1';
     }
-    // this.tabSubscription = this.phastService.assessmentTab.subscribe(val => {
-    //   this.currentTab = val;
-    // })
+    this.tabSubscription = this.psatService.secondaryTab.subscribe(val => {
+      this.currentTab = val;
+    })
   }
-  
+
   ngOnDestroy() {
-    //this.tabSubscription.unsubscribe();
+    this.tabSubscription.unsubscribe();
   }
 
   addModification() {

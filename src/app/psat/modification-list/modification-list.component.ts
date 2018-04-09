@@ -59,6 +59,7 @@ export class ModificationListComponent implements OnInit {
     //   return tab.componentStr == componentStr;
     // })
     // this.lossesService.lossesTab.next(selectedTab.step);
+    this.psatService.modifyConditionsTab.next(componentStr);
     this.selectModification(index, true);
   }
   selectModificationBadge(modifiction: PSAT, index: number) {

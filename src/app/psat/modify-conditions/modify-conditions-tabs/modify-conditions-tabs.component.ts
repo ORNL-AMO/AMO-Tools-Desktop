@@ -10,25 +10,28 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
-  @Input()
-  modifyTab: string;
-  @Output('changeTab')
-  changeTab = new EventEmitter<string>();
-
   pumpFluidBadgeClass: Array<string>;
   motorBadgeClass: Array<string>;
   fieldDataBadgeClass: Array<string>;
   resultsSub: Subscription;
+  modTabSub: Subscription;
+  modifyTab: string;
   constructor(private compareService: CompareService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
       this.setBadgeClass();
     })
+
+    this.modTabSub = this.psatService.modifyConditionsTab.subscribe(val => {
+      this.modifyTab = val;
+    })
+
   }
 
   ngOnDestroy() {
     this.resultsSub.unsubscribe();
+    this.modTabSub.unsubscribe();
   }
 
   setBadgeClass() {
@@ -103,6 +106,6 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   tabChange(str: string) {
-    this.changeTab.emit(str);
+    this.psatService.modifyConditionsTab.next(str);
   }
 }
