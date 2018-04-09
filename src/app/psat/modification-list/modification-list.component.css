@@ -98,6 +98,7 @@
     min-width: 5rem;
     bottom: 0;
     left: 110%;
+    top: inherit;
 }
 
 .scroll-item{

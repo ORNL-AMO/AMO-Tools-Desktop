@@ -30,45 +30,69 @@ export class CompareService {
   }
 
 
-  checkPumpDifferent() {
+  checkPumpDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
     return (
-      this.isPumpSpecifiedDifferent() ||
-      this.isPumpStyleDifferent() ||
-      this.isPumpRpmDifferent() ||
-      this.isDriveDifferent() ||
-      this.isKinematicViscosityDifferent() ||
-      this.isSpecificGravityDifferent() ||
-      this.isFluidTempDifferent() ||
-      this.isFluidTypeDifferent()
+      this.isPumpSpecifiedDifferent(baseline, modification) ||
+      this.isPumpStyleDifferent(baseline, modification) ||
+      this.isPumpRpmDifferent(baseline, modification) ||
+      this.isDriveDifferent(baseline, modification) ||
+      this.isKinematicViscosityDifferent(baseline, modification) ||
+      this.isSpecificGravityDifferent(baseline, modification) ||
+      this.isFluidTempDifferent(baseline, modification) ||
+      this.isFluidTypeDifferent(baseline, modification)
     )
   }
 
-  checkMotorDifferent() {
+  checkMotorDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
     return (
-      this.isLineFreqDifferent() ||
-      this.isMotorRatedPowerDifferent() ||
-      this.isMotorRatedSpeedDifferent() ||
-      this.isEfficiencyClassDifferent() ||
-      this.isEfficiencyDifferent() ||
-      this.isMotorRatedVoltageDifferent() ||
-      this.isMotorRatedFlaDifferent() ||
-      this.isMarginDifferent()
+      this.isLineFreqDifferent(baseline, modification) ||
+      this.isMotorRatedPowerDifferent(baseline, modification) ||
+      this.isMotorRatedSpeedDifferent(baseline, modification) ||
+      this.isEfficiencyClassDifferent(baseline, modification) ||
+      this.isEfficiencyDifferent(baseline, modification) ||
+      this.isMotorRatedVoltageDifferent(baseline, modification) ||
+      this.isMotorRatedFlaDifferent(baseline, modification) ||
+      this.isMarginDifferent(baseline, modification)
     )
   }
 
-  checkFieldDataDifferent() {
+  checkFieldDataDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
     return (
-      this.isOperatingFractionDifferent() ||
-      this.isCostKwhrDifferent() ||
-      this.isFlowRateDifferent() ||
-      this.isHeadDifferent()
+      this.isOperatingFractionDifferent(baseline, modification) ||
+      this.isCostKwhrDifferent(baseline, modification) ||
+      this.isFlowRateDifferent(baseline, modification) ||
+      this.isHeadDifferent(baseline, modification)
     )
   }
 
   //pump style
-  isPumpStyleDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.pump_style != this.modifiedPSAT.inputs.pump_style) {
+  isPumpStyleDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.pump_style != modification.inputs.pump_style) {
         return true;
       } else {
         return false;
@@ -78,9 +102,15 @@ export class CompareService {
     }
   }
   //pump specified
-  isPumpSpecifiedDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.pump_specified != this.modifiedPSAT.inputs.pump_specified) {
+  isPumpSpecifiedDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
         return true;
       } else {
         return false;
@@ -90,9 +120,15 @@ export class CompareService {
     }
   }
   //pump rpm
-  isPumpRpmDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.pump_rated_speed != this.modifiedPSAT.inputs.pump_rated_speed) {
+  isPumpRpmDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.pump_rated_speed != modification.inputs.pump_rated_speed) {
         return true;
       } else {
         return false;
@@ -102,9 +138,15 @@ export class CompareService {
     }
   }
   //drive
-  isDriveDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.drive != this.modifiedPSAT.inputs.drive) {
+  isDriveDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.drive != modification.inputs.drive) {
         return true;
       } else {
         return false;
@@ -114,9 +156,15 @@ export class CompareService {
     }
   }
   //kinematic viscosity
-  isKinematicViscosityDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.kinematic_viscosity != this.modifiedPSAT.inputs.kinematic_viscosity) {
+  isKinematicViscosityDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.kinematic_viscosity != modification.inputs.kinematic_viscosity) {
         return true;
       } else {
         return false;
@@ -126,9 +174,15 @@ export class CompareService {
     }
   }
   //specific gravity
-  isSpecificGravityDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.specific_gravity != this.modifiedPSAT.inputs.specific_gravity) {
+  isSpecificGravityDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.specific_gravity != modification.inputs.specific_gravity) {
         return true;
       } else {
         return false;
@@ -138,9 +192,15 @@ export class CompareService {
     }
   }
   //stages
-  isStagesDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.stages != this.modifiedPSAT.inputs.stages) {
+  isStagesDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.stages != modification.inputs.stages) {
         return true;
       } else {
         return false;
@@ -150,9 +210,15 @@ export class CompareService {
     }
   }
   //fixed speed
-  isFixedSpeed() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.fixed_speed != this.modifiedPSAT.inputs.fixed_speed) {
+  isFixedSpeed(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.fixed_speed != modification.inputs.fixed_speed) {
         return true;
       } else {
         return false;
@@ -162,9 +228,15 @@ export class CompareService {
     }
   }
   //line freq
-  isLineFreqDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.line_frequency != this.modifiedPSAT.inputs.line_frequency) {
+  isLineFreqDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.line_frequency != modification.inputs.line_frequency) {
         return true;
       } else {
         return false;
@@ -174,9 +246,15 @@ export class CompareService {
     }
   }
   //motor rated power
-  isMotorRatedPowerDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_rated_power != this.modifiedPSAT.inputs.motor_rated_power) {
+  isMotorRatedPowerDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_rated_power != modification.inputs.motor_rated_power) {
         return true;
       } else {
         return false;
@@ -186,9 +264,15 @@ export class CompareService {
     }
   }
   //motor rated speed
-  isMotorRatedSpeedDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_rated_speed != this.modifiedPSAT.inputs.motor_rated_speed) {
+  isMotorRatedSpeedDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_rated_speed != modification.inputs.motor_rated_speed) {
         return true;
       } else {
         return false;
@@ -198,9 +282,15 @@ export class CompareService {
     }
   }
   //efficiency class
-  isEfficiencyClassDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.efficiency_class != this.modifiedPSAT.inputs.efficiency_class) {
+  isEfficiencyClassDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.efficiency_class != modification.inputs.efficiency_class) {
         return true;
       } else {
         return false;
@@ -210,9 +300,15 @@ export class CompareService {
     }
   }
   //efficiency
-  isEfficiencyDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.efficiency != this.modifiedPSAT.inputs.efficiency) {
+  isEfficiencyDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.efficiency != modification.inputs.efficiency) {
         return true;
       } else {
         return false;
@@ -222,9 +318,15 @@ export class CompareService {
     }
   }
   //motor rated voltage
-  isMotorRatedVoltageDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_rated_voltage != this.modifiedPSAT.inputs.motor_rated_voltage) {
+  isMotorRatedVoltageDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_rated_voltage != modification.inputs.motor_rated_voltage) {
         return true;
       } else {
         return false;
@@ -234,9 +336,15 @@ export class CompareService {
     }
   }
   //load estimation method
-  isLoadEstimationMethodDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.load_estimation_method != this.modifiedPSAT.inputs.load_estimation_method) {
+  isLoadEstimationMethodDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.load_estimation_method != modification.inputs.load_estimation_method) {
         return true;
       } else {
         return false;
@@ -246,9 +354,15 @@ export class CompareService {
     }
   }
   //motor rated fla
-  isMotorRatedFlaDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_rated_fla != this.modifiedPSAT.inputs.motor_rated_fla) {
+  isMotorRatedFlaDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_rated_fla != modification.inputs.motor_rated_fla) {
         return true;
       } else {
         return false;
@@ -258,9 +372,15 @@ export class CompareService {
     }
   }
   //margin
-  isMarginDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.margin != this.modifiedPSAT.inputs.margin) {
+  isMarginDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.margin != modification.inputs.margin) {
         return true;
       } else {
         return false;
@@ -270,9 +390,15 @@ export class CompareService {
     }
   }
   //operating fraction
-  isOperatingFractionDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.operating_fraction != this.modifiedPSAT.inputs.operating_fraction) {
+  isOperatingFractionDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.operating_fraction != modification.inputs.operating_fraction) {
         return true;
       } else {
         return false;
@@ -282,9 +408,15 @@ export class CompareService {
     }
   }
   //flow rate
-  isFlowRateDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.flow_rate != this.modifiedPSAT.inputs.flow_rate) {
+  isFlowRateDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.flow_rate != modification.inputs.flow_rate) {
         return true;
       } else {
         return false;
@@ -294,9 +426,15 @@ export class CompareService {
     }
   }
   //head
-  isHeadDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.head != this.modifiedPSAT.inputs.head) {
+  isHeadDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.head != modification.inputs.head) {
         return true;
       } else {
         return false;
@@ -306,9 +444,15 @@ export class CompareService {
     }
   }
   //motor field power
-  isMotorFieldPowerDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_field_power != this.modifiedPSAT.inputs.motor_field_power) {
+  isMotorFieldPowerDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_field_power != modification.inputs.motor_field_power) {
         return true;
       } else {
         return false;
@@ -318,9 +462,15 @@ export class CompareService {
     }
   }
   //motor field current
-  isMotorFieldCurrentDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_field_current != this.modifiedPSAT.inputs.motor_field_current) {
+  isMotorFieldCurrentDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_field_current != modification.inputs.motor_field_current) {
         return true;
       } else {
         return false;
@@ -330,9 +480,15 @@ export class CompareService {
     }
   }
   //motor field voltage
-  isMotorFieldVoltageDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.motor_field_voltage != this.modifiedPSAT.inputs.motor_field_voltage) {
+  isMotorFieldVoltageDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.motor_field_voltage != modification.inputs.motor_field_voltage) {
         return true;
       } else {
         return false;
@@ -342,9 +498,15 @@ export class CompareService {
     }
   }
   //cost kw/hr
-  isCostKwhrDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.cost_kw_hour != this.modifiedPSAT.inputs.cost_kw_hour) {
+  isCostKwhrDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.cost_kw_hour != modification.inputs.cost_kw_hour) {
         return true;
       } else {
         return false;
@@ -354,9 +516,15 @@ export class CompareService {
     }
   }
   //cost
-  isCostDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.cost != this.modifiedPSAT.inputs.cost) {
+  isCostDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.cost != modification.inputs.cost) {
         return true;
       } else {
         return false;
@@ -366,9 +534,15 @@ export class CompareService {
     }
   }
   //load factor
-  isLoadFactorDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.load_factor != this.modifiedPSAT.inputs.load_factor) {
+  isLoadFactorDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.load_factor != modification.inputs.load_factor) {
         return true;
       } else {
         return false;
@@ -378,9 +552,15 @@ export class CompareService {
     }
   }
 
-  isFluidTempDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.fluidTemperature != this.modifiedPSAT.inputs.fluidTemperature) {
+  isFluidTempDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.fluidTemperature != modification.inputs.fluidTemperature) {
         return true;
       } else {
         return false;
@@ -390,9 +570,15 @@ export class CompareService {
     }
   }
 
-  isFluidTypeDifferent() {
-    if (this.baselinePSAT && this.modifiedPSAT) {
-      if (this.baselinePSAT.inputs.fluidType != this.modifiedPSAT.inputs.fluidType) {
+  isFluidTypeDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.fluidType != modification.inputs.fluidType) {
         return true;
       } else {
         return false;
@@ -402,7 +588,19 @@ export class CompareService {
     }
   }
 
-  // getBadges(baseline: PSAT, modification: PSAT): Array<{ badge: string, componentStr: string }> {
-
-  // }
+  getBadges(baseline: PSAT, modification: PSAT): Array<{ badge: string, componentStr: string }> {
+    let badges: Array<{ badge: string, componentStr: string }> = [];
+    if (baseline && modification) {
+      if (this.checkFieldDataDifferent(baseline, modification)) {
+        badges.push({ badge: 'Field Data', componentStr: 'field-data' })
+      }
+      if (this.checkMotorDifferent(baseline, modification)) {
+        badges.push({ badge: 'Motor', componentStr: 'motor' })
+      }
+      if (this.checkPumpDifferent(baseline, modification)) {
+        badges.push({ badge: 'Pump Fluid', componentStr: 'pump-fluid' })
+      }
+    }
+    return badges;
+  }
 }

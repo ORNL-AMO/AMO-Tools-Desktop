@@ -46,7 +46,7 @@ export class ModificationListComponent implements OnInit {
     this.psatService.getResults.next(true);
     this.initDropdown()
     this.close.emit(true);
-  }  
+  }
   goToModification(index: number, componentStr: string) {
     // let tabs = this.lossesService.lossesTabs;
     // let selectedTab = _.find(tabs, (tab) => {
@@ -64,11 +64,11 @@ export class ModificationListComponent implements OnInit {
     }
   }
   getBadges(modification: PSAT) {
-    // if (modification) {
-    //   return this.compareService.getBadges(this.psat, modification);
-    // } else {
+    if (modification) {
+      return this.compareService.getBadges(this.psat, modification);
+    } else {
       return []
- //   }
+    }
   }
 
   showDropdown(index: number) {

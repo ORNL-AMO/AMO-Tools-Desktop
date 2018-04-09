@@ -85,18 +85,24 @@ export class PumpDataFormComponent implements OnInit {
   initPumpType() {
     if (this.tmpModificationPumpType != this.tmpBaselinePumpType) {
       this.showPumpType = true;
+    }else{
+      this.showPumpType = false;
     }
   }
 
   initMotorDrive() {
     if (this.tmpBaselineMotorDrive != this.tmpModificationMotorDrive) {
       this.showMotorDrive = true;
+    }else{
+      this.showMotorDrive = false;
     }
   }
 
   initPumpSpecified() {
     if (this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified != this.psat.inputs.pump_specified) {
       this.showPumpSpecified = true;
+    }else{
+      this.showPumpSpecified = false;
     }
 
   }
@@ -104,6 +110,8 @@ export class PumpDataFormComponent implements OnInit {
   initPumpData() {
     if (this.showMotorDrive || this.showPumpSpecified || this.showPumpType) {
       this.showPumpData = true;
+    }else{
+      this.showPumpData = false;
     }
   }
 

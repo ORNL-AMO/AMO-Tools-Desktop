@@ -121,24 +121,32 @@ export class RatedMotorFormComponent implements OnInit {
   initEfficiencyClass() {
     if (this.tmpBaselineEfficiencyClass != this.tmpModificationEfficiencyClass) {
       this.showEfficiencyClass = true;
+    } else {
+      this.showEfficiencyClass = false;
     }
   }
 
   initMotorEfficiency() {
     if (this.psat.inputs.efficiency != this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency) {
       this.showMotorEfficiency = true;
+    } else {
+      this.showMotorEfficiency = false;
     }
   }
 
   initRatedMotorPower() {
     if (this.psat.inputs.motor_rated_power != this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power) {
       this.showRatedMotorPower = true;
+    } else {
+      this.showRatedMotorPower = false;
     }
   }
 
   initRatedMotorData() {
     if (this.showEfficiencyClass || this.showMotorEfficiency || this.showRatedMotorPower) {
       this.showRatedMotorData = true;
+    } else {
+      this.showRatedMotorData = false;
     }
   }
 
