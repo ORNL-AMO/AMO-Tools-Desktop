@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
@@ -69,13 +69,10 @@ export class FieldDataComponent implements OnInit {
   ratedPowerError: string = null;
   marginError: string = null;
   headError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.init();
-  }
-
-  ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
@@ -120,6 +117,7 @@ export class FieldDataComponent implements OnInit {
     if (!this.baseline) {
       this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
     }
+    //this.cd.detectChanges();
   }
 
   disableForm() {

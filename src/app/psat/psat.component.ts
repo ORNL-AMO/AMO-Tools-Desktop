@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-import { PSAT, PsatInputs } from '../shared/models/psat';
+import { PSAT, PsatInputs, Modification } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -23,6 +23,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class PsatComponent implements OnInit {
   @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
+  @ViewChild('addNewModal') public addNewModal: ModalDirective;
 
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
@@ -75,6 +76,12 @@ export class PsatComponent implements OnInit {
   saveContinue: boolean = false;
   modificationIndex: number = 0;
   selectedModSubscription: Subscription;
+  addNewSub: Subscription;
+  modificationExists: boolean = false;
+  mainTabSub: Subscription;
+  secondaryTabSub: Subscription;
+  calcTabSub: Subscription;
+  openModSub: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -102,11 +109,15 @@ export class PsatComponent implements OnInit {
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         if (this._psat.modifications) {
           if (this._psat.modifications.length != 0) {
+            this.modificationExists = true;
             this.modificationIndex = 0;
           }
           if (this._psat.setupDone) {
             this.compareService.setCompareVals(this._psat, 0);
           }
+        } else {
+          this._psat.modifications = new Array();
+          this.modificationExists = false;
         }
         this.isValid = true;
         this.getSettings();
@@ -115,7 +126,7 @@ export class PsatComponent implements OnInit {
       if (tmpTab) {
         this.psatService.mainTab.next(tmpTab);
       }
-      this.psatService.mainTab.subscribe(val => {
+      this.mainTabSub = this.psatService.mainTab.subscribe(val => {
         this.mainTab = val;
         if (this.mainTab == 'diagram') {
           this.psatService.secondaryTab.next('system-curve');
@@ -127,12 +138,12 @@ export class PsatComponent implements OnInit {
         }
         this.getContainerHeight();
       })
-      this.psatService.secondaryTab.subscribe(val => {
+      this.secondaryTabSub = this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
         this.getContainerHeight();
       })
 
-      this.psatService.calcTab.subscribe(val => {
+      this.calcTabSub = this.psatService.calcTab.subscribe(val => {
         this.calcTab = val;
       })
 
@@ -146,9 +157,15 @@ export class PsatComponent implements OnInit {
         }
       })
 
-      this.compareService.openModificationModal.subscribe(val => {
+      this.openModSub = this.compareService.openModificationModal.subscribe(val => {
         if (val) {
           this.selectModificationModal()
+        }
+      })
+
+      this.addNewSub = this.compareService.openNewModal.subscribe(val => {
+        if (val) {
+          this.showAddNewModal();
         }
       })
     })
@@ -159,6 +176,12 @@ export class PsatComponent implements OnInit {
     this.psatService.mainTab.next('system-setup');
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
+    if(this.addNewSub)this.addNewSub.unsubscribe();
+    if(this.openModSub)this.openModSub.unsubscribe();
+    if(this.selectedModSubscription)this.selectedModSubscription.unsubscribe();
+    if(this.calcTabSub)this.calcTabSub.unsubscribe();
+    if(this.secondaryTabSub)this.secondaryTabSub.unsubscribe();
+    if(this.mainTabSub)this.mainTabSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -401,5 +424,22 @@ export class PsatComponent implements OnInit {
     this.isModalOpen = false;
     this.compareService.openModificationModal.next(false);
     this.changeModificationModal.hide();
+  }
+  showAddNewModal() {
+    this.isModalOpen = true;
+    this.addNewModal.show();
+  }
+  closeAddNewModal() {
+    this.isModalOpen = false;
+    this.compareService.openNewModal.next(false);
+    this.addNewModal.hide();
+  }
+
+  saveNewMod(mod: Modification) {
+    this.modificationExists = true;
+    this._psat.modifications.push(mod);
+    this.compareService.setCompareVals(this._psat, this._psat.modifications.length - 1);
+    this.modificationIndex = 0;
+    this.closeAddNewModal();
   }
 }

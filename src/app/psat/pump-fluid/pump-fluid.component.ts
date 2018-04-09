@@ -124,9 +124,6 @@ export class PumpFluidComponent implements OnInit {
     } else if (this.settings.temperatureMeasurement == 'K') {
       this.tempUnit = '&#8490';
     }
-  }
-
-  ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }

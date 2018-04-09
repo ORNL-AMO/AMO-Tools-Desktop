@@ -36,6 +36,10 @@ export class ModificationListComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(){
+    this.assessmentTabSubscription.unsubscribe();
+  }
+
   initDropdown() {
     this.dropdown = Array<boolean>(this.psat.modifications.length);
     this.rename = Array<boolean>(this.psat.modifications.length);
@@ -147,6 +151,7 @@ export class ModificationListComponent implements OnInit {
     this.rename.push(false);
     this.deleteArr.push(false);
     this.psat.modifications.push(tmpModification);
+    console.log(this.psat.modifications);
     this.save.emit(true);
     this.selectModification(this.psat.modifications.length - 1);
     this.newModificationName = undefined;

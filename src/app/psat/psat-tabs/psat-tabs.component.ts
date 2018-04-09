@@ -15,22 +15,32 @@ export class PsatTabsComponent implements OnInit {
   mainTab: string;
   modSubscription: Subscription;
   selectedModification: PSAT;
+  secondarySub: Subscription;
+  calcSub: Subscription;
+  mainSub: Subscription;
   constructor(private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.psatService.secondaryTab.subscribe(val => {
+    this.secondarySub = this.psatService.secondaryTab.subscribe(val => {
       this.currentTab = val;
     })
-    this.psatService.calcTab.subscribe(val => {
+    this.calcSub = this.psatService.calcTab.subscribe(val => {
       this.calcTab = val;
     })
-    this.psatService.mainTab.subscribe(val => {
+    this.mainSub = this.psatService.mainTab.subscribe(val => {
       this.mainTab = val;
     })
     this.modSubscription = this.compareService.selectedModification.subscribe(val => {
       this.selectedModification = val;
       this.cd.detectChanges();
     })
+  }
+
+  ngOnDestroy(){
+    this.secondarySub.unsubscribe();
+    this.calcSub.unsubscribe();
+    this.mainSub.unsubscribe();
+    this.modSubscription.unsubscribe();
   }
 
   changeTab(str: string) {

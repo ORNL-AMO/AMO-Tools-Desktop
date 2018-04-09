@@ -4,6 +4,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import { SettingsService } from '../../settings/settings.service';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -41,7 +42,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   modExists: boolean = false;
-  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
+  constructor(private psatService: PsatService, private settingsService: SettingsService, private compareService: CompareService) { }
 
   ngOnInit() {
     let globalSettings = this.settingsService.globalSettings;
@@ -100,7 +101,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   //   this.getResults();
   // }
 
-
+  addExploreOpp(){
+    this.compareService.openNewModal.next(true);
+  }
   getResults() {
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));

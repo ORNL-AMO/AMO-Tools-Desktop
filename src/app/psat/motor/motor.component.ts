@@ -72,9 +72,6 @@ export class MotorComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
-  }
-
-  ngAfterViewInit() {
     if (this.psat.inputs.optimize_calculation) {
       this.disableOptimized();
     }
@@ -100,7 +97,6 @@ export class MotorComponent implements OnInit {
   }
 
   init() {
-
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('lineFrequency');

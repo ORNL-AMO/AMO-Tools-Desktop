@@ -88,4 +88,8 @@ export class ModifyConditionsComponent implements OnInit {
   modalClose() {
     this.isModalOpen = false;
   }
+
+  addModification() {
+    this.compareService.openNewModal.next(true);
+  }
 }

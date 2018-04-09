@@ -8,9 +8,11 @@ export class CompareService {
   modifiedPSAT: PSAT;
   selectedModification: BehaviorSubject<PSAT>;
   openModificationModal: BehaviorSubject<boolean>;
+  openNewModal: BehaviorSubject<boolean>;
   constructor() {
     this.selectedModification = new BehaviorSubject<PSAT>(undefined);
     this.openModificationModal = new BehaviorSubject<boolean>(undefined);
+    this.openNewModal = new BehaviorSubject<boolean>(undefined);
   }
 
   setCompareVals(psat: PSAT, selectedModIndex: number) {
