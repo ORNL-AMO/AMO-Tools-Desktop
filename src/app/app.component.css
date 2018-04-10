@@ -1790,6 +1790,10 @@ Toasty Overrides ================================= */
   bottom: 10px;
 }
 
+.rollup-bar-chart-btn {
+  bottom: 10px;
+}
+
 
 #gridToggle .fa-download {
   left: 55px;

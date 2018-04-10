@@ -149,7 +149,7 @@ export class PhastBarChartComponent implements OnInit {
         pattern: graphColors
       },
       legend: {
-        position: 'right'
+        position: 'bottom'
       },
       tooltip: {
         contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
