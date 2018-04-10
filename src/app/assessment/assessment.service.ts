@@ -17,12 +17,14 @@ export class AssessmentService {
   updateAvailable: BehaviorSubject<boolean>;
   showFeedback: BehaviorSubject<boolean>;
   screenShotHeight: BehaviorSubject<number>;
+  openingTutorial: BehaviorSubject<boolean>;
   constructor() {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showFeedback = new BehaviorSubject<boolean>(true);
     this.screenShotHeight = new BehaviorSubject<number>(0);
+    this.openingTutorial = new BehaviorSubject<boolean>(null);
   }
 
   getNewAssessment(assessmentType: string): Assessment {

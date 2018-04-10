@@ -67,6 +67,13 @@ export class CoreComponent implements OnInit {
       this.showFeedback = val;
       this.changeDetectorRef.detectChanges();
     })
+
+    this.assessmentService.openingTutorial.subscribe(val => {
+      if(val){
+        this.showTutorial = true;
+        this.hideTutorial = false;
+      }
+    })
   }
 
   ngAfterViewInit() {
@@ -74,10 +81,10 @@ export class CoreComponent implements OnInit {
       this.getScreenshotHeight();
     }, 100);
 
-    setTimeout(()=> {
-      this.showTutorial = true;
-      this.changeDetectorRef.detectChanges();
-    },2500)
+    // setTimeout(()=> {
+    //   this.showTutorial = true;
+    //   this.changeDetectorRef.detectChanges();
+    // },2500)
   }
   takeScreenShot() {
     this.importExportService.takeScreenShot();
