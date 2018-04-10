@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../../../shared/models/psat';
 import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -40,6 +40,18 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.init();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.exploreModIndex) {
+            if (!changes.exploreModIndex.isFirstChange()) {
+                this.init()
+            }
+        }
+    }
+
+    init() {
         this.initCost();
         this.initFlowRate();
         this.initHead();
@@ -57,30 +69,40 @@ export class SystemDataFormComponent implements OnInit {
     initCost() {
         if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
             this.showCost = true;
+        }else{
+            this.showCost = false;
         }
     }
 
     initFlowRate() {
         if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
             this.showFlowRate = true;
+        }else{
+            this.showFlowRate = false;
         }
     }
 
     initHead() {
         if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
             this.showHead = true;
+        }else{
+            this.showHead = false;
         }
     }
 
     initOpFraction() {
         if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
             this.showOperatingFraction = true;
+        }else{
+            this.showOperatingFraction = false;
         }
     }
 
     initSystemData() {
         if (this.showCost || this.showFlowRate || this.showHead || this.showOperatingFraction) {
             this.showSystemData = true;
+        }else{
+            this.showSystemData = false;
         }
     }
 

@@ -77,6 +77,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   checkSpecificHeat() {
     if (this.atmosphereLossForm.controls.atmosphereGas.value) {
+
+      console.log(this.atmosphereLossForm.controls.atmosphereGas.value);
+
       let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
       if (material) {
         let val = material.specificHeat;
@@ -96,7 +99,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.atmosphereLossForm.disable();
+    this.atmosphereLossForm.controls.atmosphereGas.disable();
+    // this.atmosphereLossForm.disable();
   }
 
   roundVal(val: number, digits: number) {
@@ -105,7 +109,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   enableForm() {
-    this.atmosphereLossForm.enable();
+    this.atmosphereLossForm.controls.atmosphereGas.enable();
+
+    // this.atmosphereLossForm.enable();
   }
 
   checkTempError(bool?: boolean) {
@@ -169,6 +175,14 @@ export class AtmosphereLossesFormComponent implements OnInit {
   compareAtmosphereGas(): boolean {
     if (this.canCompare()) {
       return this.atmosphereLossesCompareService.compareAtmosphereGas(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+  compareSpecificHeat(): boolean {
+    if (this.canCompare()) {
+      return this.atmosphereLossesCompareService.compareSpecificHeat(this.lossIndex);
     } else {
       return false;
     }

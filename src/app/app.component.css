@@ -311,10 +311,6 @@ select.form-control:not([size]):not([multiple]) {
    border-right: solid 1px #9c9c9c !important;
  }
 
-.psat .indicate-different{
-  border: #2980b9 solid 2px;
-  box-shadow: 0px 0px 5px #2980b9;
-}
 
 .indicate-report-field-different-db{
   color: #33CC33;
@@ -330,10 +326,7 @@ select.form-control:not([size]):not([multiple]) {
     border: #2980b9 solid !important;
 }
 
-.phast .indicate-different{
-  border: #BF3D00 solid 2px;
-  box-shadow: 0px 0px 5px #BF3D00;
-}
+
 .indicate-different-db{
   border: #33CC33 solid 2px;
   box-shadow: 0px 0px 5px #33CC33;

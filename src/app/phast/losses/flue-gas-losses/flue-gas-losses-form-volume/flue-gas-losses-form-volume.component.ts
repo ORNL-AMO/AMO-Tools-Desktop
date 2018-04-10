@@ -78,7 +78,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   disableForm() {
-    this.flueGasLossForm.disable();
+    this.flueGasLossForm.controls.gasTypeId.disable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.disable();
+    // this.flueGasLossForm.disable();
   }
 
   checkForm() {
@@ -91,7 +93,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   enableForm() {
-    this.flueGasLossForm.enable();
+    this.flueGasLossForm.controls.gasTypeId.enable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.enable();
+    // this.flueGasLossForm.enable();
   }
 
   changeMethod() {
@@ -100,6 +104,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAirPercentage: 0
     })
     this.setCalcMethod();
+    this.checkForm();
   }
 
   setCalcMethod() {
@@ -174,7 +179,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       SO2: this.roundVal(tmpFlueGas.SO2, 4),
       O2: this.roundVal(tmpFlueGas.O2, 4)
     });
-    this.checkForm();
+    this.startSavePolling();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));

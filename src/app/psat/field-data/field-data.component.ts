@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
@@ -19,8 +19,6 @@ export class FieldDataComponent implements OnInit {
   psat: PSAT;
   // @Output('changeField')
   // changeField = new EventEmitter<string>();
-  @Input()
-  saveClicked: boolean;
   @Output('isValid')
   isValid = new EventEmitter<boolean>();
   @Output('isInvalid')
@@ -41,6 +39,8 @@ export class FieldDataComponent implements OnInit {
   inSetup: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  modificationIndex: number;
 
   counter: any;
 
@@ -69,9 +69,38 @@ export class FieldDataComponent implements OnInit {
   ratedPowerError: string = null;
   marginError: string = null;
   headError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.init();
+    if (!this.selected) {
+      this.disableForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.selected) {
+        if (!this.selected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
+        if (!this.baseline) {
+          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
+        }
+      }
+
+      if (changes.modificationIndex) {
+        this.init();
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
+  init() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('operatingFraction');
@@ -88,36 +117,7 @@ export class FieldDataComponent implements OnInit {
     if (!this.baseline) {
       this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
     }
-  }
-
-  ngAfterViewInit() {
-    if (!this.selected) {
-      this.disableForm();
-    }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.savePsat(this.psatForm);
-      }
-      if (changes.selected) {
-        if (!this.selected) {
-          this.disableForm();
-        } else {
-          this.enableForm();
-        }
-        if (!this.baseline) {
-          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-        }
-      }
-      this.setCompareVals();
-    }
-    else {
-      this.isFirstChange = false;
-    }
+    //this.cd.detectChanges();
   }
 
   disableForm() {
@@ -152,18 +152,7 @@ export class FieldDataComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.setCompareVals();
     this.saved.emit(true);
-  }
-
-
-  setCompareVals() {
-    if (this.baseline) {
-      this.compareService.baselinePSAT = this.psat;
-    } else {
-      this.compareService.modifiedPSAT = this.psat;
-    }
-    this.compareService.checkFieldDataDifferent();
   }
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
@@ -340,39 +329,68 @@ export class FieldDataComponent implements OnInit {
     });
   }
 
-  //used to add classes to inputs with different baseline vs modification values
-  initDifferenceMonitor() {
-    if (!this.inSetup) {
-      let doc = this.windowRefService.getDoc();
+  canCompare() {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-      //operating fraction
-      this.compareService.operating_fraction_different.subscribe((val) => {
-        let opFractionElements = doc.getElementsByName('operatingFraction');
-        opFractionElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //cost kw hr
-      this.compareService.cost_kw_hour_different.subscribe((val) => {
-        let costElements = doc.getElementsByName('costKwHr');
-        costElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //flow rate
-      this.compareService.flow_rate_different.subscribe((val) => {
-        let flowRateElements = doc.getElementsByName('flowRate');
-        flowRateElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //head
-      this.compareService.head_different.subscribe((val) => {
-        let headElements = doc.getElementsByName('head');
-        headElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
+  isOperatingFractionDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperatingFractionDifferent();
+    } else {
+      return false;
+    }
+  }
+  isCostKwhrDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCostKwhrDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFlowRateDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFlowRateDifferent();
+    } else {
+      return false;
+    }
+  }
+  isHeadDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isHeadDifferent();
+    } else {
+      return false;
+    }
+  }
+  isLoadEstimationMethodDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isLoadEstimationMethodDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldPowerDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldPowerDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldCurrentDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldCurrentDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFieldVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFieldVoltageDifferent();
+    } else {
+      return false;
     }
   }
 }

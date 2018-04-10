@@ -1,0 +1,46 @@
+.btn{
+    padding: 6px;
+}
+
+.mod-name a:hover{
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.btn-primary{
+    background-color: #2980b9;
+    font-size: small;
+}
+
+
+.navbar{
+    padding: 0px;
+}
+
+.badge{
+    margin-left: .25rem;
+    margin-right: .25rem;
+}
+
+/* .subtabs .active{
+    background-color: white;
+    font-weight: bold;
+} */
+
+.assessment-tab{
+    width: 50%;
+}
+
+.title-border-right{
+    border-right: #2980b9 groove 2px;
+    border-left: #2980b9 groove 2px;
+    background: #fff;
+}
+
+.click-link{
+    font-size: small;
+}
+
+.br-color-white{
+    background: #fff;
+}
