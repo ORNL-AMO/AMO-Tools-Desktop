@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-opening-tutorial',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./opening-tutorial.component.css']
 })
 export class OpeningTutorialComponent implements OnInit {
+  @Output('closeTutorial')
+  closeTutorial = new EventEmitter<boolean>();
+  
   showItem: Array<boolean> = [true, false, false];
 
   index: number = 0;
@@ -24,5 +27,8 @@ export class OpeningTutorialComponent implements OnInit {
     this.showItem[this.index] = false;
     this.index--;
     this.showItem[this.index] = true;
+  }  
+  close(){
+    this.closeTutorial.emit(true);
   }
 }
