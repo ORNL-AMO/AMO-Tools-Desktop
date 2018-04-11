@@ -30,16 +30,16 @@ export class ModifyConditionsTabsTooltipComponent implements OnInit {
 
   setMessage() {
     if (this.badgeClass[0] == 'loss-different') {
-      this.message = "Different from baseline scenario.";
+      this.message = "different from baseline";
     }
     else if (this.badgeClass[0] == 'input-error') {
-      this.message = "There is an input error.";
+      this.message = "input error";
     }
     else if (this.badgeClass[0] == 'missing-data') {
-      this.message = "There is missing data.";
+      this.message = "missing data";
     }
     else if (this.badgeClass[0] == 'success') {
-      this.message = "Scenario is all good.";
+      this.message = "all good";
     }
   }
 }
