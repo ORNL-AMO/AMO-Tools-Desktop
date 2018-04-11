@@ -14,6 +14,9 @@ export class SystemEfficiencyTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
+
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
@@ -32,6 +35,8 @@ export class SystemEfficiencyTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
 
   ngOnDestroy() {
@@ -76,6 +81,28 @@ export class SystemEfficiencyTabComponent implements OnInit {
   checkDifferent() {
     if (this.heatSystemEfficiencyCompareService.baseline && this.heatSystemEfficiencyCompareService.modification) {
       return this.heatSystemEfficiencyCompareService.compareEfficiency();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 }

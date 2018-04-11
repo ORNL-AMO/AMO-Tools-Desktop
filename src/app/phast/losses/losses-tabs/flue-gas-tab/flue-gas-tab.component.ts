@@ -16,6 +16,8 @@ export class FlueGasTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
 
   numLosses: number = 0;
   flueGasDone: boolean;
@@ -42,6 +44,8 @@ export class FlueGasTabComponent implements OnInit {
       this.inputError = val;
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
 
   ngOnDestroy() {
@@ -113,4 +117,27 @@ export class FlueGasTabComponent implements OnInit {
       return this.flueGasCompareService.compareAllLosses();
     }
   }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
+    }
+  }
+
 }
