@@ -35,7 +35,7 @@ export class CoreComponent implements OnInit {
   showScreenshot: boolean = true;
   screenshotHeight: number;
   showTutorial: boolean = false;
-  hideTutorial: boolean = false;
+  hideTutorial: boolean = true;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService) {
     this.toastyConfig.theme = 'bootstrap';

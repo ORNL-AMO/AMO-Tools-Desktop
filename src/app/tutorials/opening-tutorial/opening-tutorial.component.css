@@ -3,7 +3,7 @@
 }
 
 .tutorial-bg{
-    background-color: #D6DBDF;
+    background-color: #232323;
 }
 
 .tutorial-item{
@@ -64,7 +64,7 @@
     margin: 0 auto;
     letter-spacing: .15em; 
     animation: 
-      typing 10s steps(140, end),
+      typing 10s steps(140, end);
       blink-caret .75s step-end infinite;
   }
 
@@ -80,7 +80,6 @@
 
 
 .carousel-item.active.first-item{
-    opacity: 1;
     visibility: visible;
     height: 100%;
     width: 100%;
@@ -132,19 +131,93 @@
     50% { border-color: black }
 }
 
-h1 { 
+.slide{
+    position: absolute;
+    width: 100%;
+    padding-top: 10%;
+}
+
+.slide-text{
+    font-size: 40px;
+    color: white;
+}
+
+.welcome-content{
+    width: min-content;
+}
+
+.welcome { 
     font-size:150%;
     white-space:nowrap;
     overflow:hidden;
-    border-right: .1em solid white;
+    width: min-content;
+    /* border-right: .1em solid white; */
     color: white;
-    position: absolute;
-    left: 25%;
-    right: 25%;
-    text-align: center;
-    
-    -webkit-animation: typing 4s steps(125, end), /* # of steps = # of characters */
-                        blink-caret 1s step-end infinite;
-    -moz-animation: typing 4s steps(125, end), /* # of steps = # of characters */
-                        blink-caret 1s step-end infinite;
+    /* position: absolute; */
+    /* left: 25%; */
+    /* text-align: center; */
+}
+
+.welcome-1{
+    top: 5%;
+    -webkit-animation: typing 2s steps(20, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+    -moz-animation: typing 2s steps(20, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+}
+
+.welcome-2{
+    top: 9%;
+    -webkit-animation: typing 3s steps(30, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+    -moz-animation: typing 3s steps(30, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+}
+
+.welcome-3{
+    top: 13%;
+    -webkit-animation: typing 3s steps(30, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+    -moz-animation: typing 3s steps(30, end); /* # of steps = # of characters */
+                        /*  /* blink-caret 1s step-end infinite; */
+}
+
+.welcome-4{
+    top: 17%;
+    -webkit-animation: typing 2s steps(20, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+    -moz-animation: typing 2s steps(20, end); /* # of steps = # of characters */
+                         /* blink-caret 1s step-end infinite; */
+}
+
+.circle-div{
+    /* width: min-content; */
+}
+
+.footer h5{
+    margin-bottom: 0px;
+}
+
+.footer{
+    background: none;
+    color: white;
+    border-top: none;
+}
+
+.circle-div h5{
+    font-size: 150%;
+}
+
+.get-started{
+    height: 75%;
+}
+
+input.dont-show{
+    padding: 6px;
+    margin: 6px;
+}
+
+.dont-show{
+    font-size: large;
+    font-weight: bold;
 }

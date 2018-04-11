@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { SettingsService } from '../../settings/settings.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-opening-tutorial',
@@ -9,32 +11,23 @@ export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
 
-  showItem: Array<boolean> = [true, false, false, false, false];
+  showItem: Array<boolean> = [true, false, false, false, false, false];
 
   index: number = 0;
-  show: boolean = false;
+  show: boolean = true;
   showWelcomeText: Array<boolean> = [false, false, false, false];
-  constructor() { }
+  intro1: boolean = false;
+  intro2: boolean = false;
+  intro3: boolean = false;
+  intro4: boolean = false;
+  dontShow: boolean = true;
+  constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
     setTimeout(() => {
-      this.show = true;
-      // this.showWelcomeText[0] = true;
       this.next();
     }, 1000)
-
-    // setTimeout(() => {
-    //   this.showWelcomeText[1] = true;
-    // }, 4000)
-
-    // setTimeout(() => {
-    //   this.showWelcomeText[2] = true;
-    // }, 8000)
-
-    // setTimeout(() => {
-    //   this.showWelcomeText[3] = true;
-    // }, 9000)
-  }
+ }
 
   next() {
     this.showItem[this.index] = false;
@@ -49,5 +42,16 @@ export class OpeningTutorialComponent implements OnInit {
   }
   close() {
     this.closeTutorial.emit(true);
+  }
+
+  sendDontShow(){
+    this.settingsService.setDontShow.next(this.dontShow);
+  }
+
+  getStarted(){
+    if(this.dontShow){
+      this.sendDontShow();
+    }
+    this.close();
   }
 }

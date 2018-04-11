@@ -18,6 +18,7 @@ import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
 import { DashboardService } from './dashboard.service';
+import { Subscription } from 'rxjs';
 declare const packageJson;
 
 @Component({
@@ -59,6 +60,8 @@ export class DashboardComponent implements OnInit {
   workingDirectorySettings: Settings;
   workingDirectoryCalculator: Calculator;
   calcDataExists: boolean = false;
+  dontShowSub: Subscription;
+  tutorialShown: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
     private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService) {
@@ -92,10 +95,28 @@ export class DashboardComponent implements OnInit {
     this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
     })
+    if (this.settingsService.globalSettings) {
+      if (!this.settingsService.globalSettings.disableTutorial) {
+        this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+          if (this.settingsService.globalSettings) {
+            this.settingsService.globalSettings.disableTutorial = val;
+            this.indexedDbService.putSettings(this.settingsService.globalSettings);
+          }
+        })
+      }
+    } else {
+      this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+        if (this.settingsService.globalSettings) {
+          this.settingsService.globalSettings.disableTutorial = val;
+          this.indexedDbService.putSettings(this.settingsService.globalSettings);
+        }
+      })
+    }
   }
 
   ngOnDestroy() {
     this.assessmentService.createAssessment.next(false);
+    if (this.dontShowSub) this.dontShowSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -192,7 +213,6 @@ export class DashboardComponent implements OnInit {
           this.workingDirectory = this.allDirectories
           this.getWorkingDirectoryData();
         } else {
-          this.assessmentService.openingTutorial.next(true);
           this.dashboardService.createExamples();
           this.createDirectory();
         }
@@ -201,10 +221,17 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.dashboardService.createDirectorySettings();
+          if (!this.tutorialShown) {
+            this.assessmentService.openingTutorial.next(true);
+            this.tutorialShown = true;
+          }
         } else {
           this.settingsService.globalSettings = results[0];
-          if(!this.settingsService.globalSettings.disableTutorial){
-            this.assessmentService.openingTutorial.next(true);
+          if (!this.tutorialShown) {
+            if (!this.settingsService.globalSettings.disableTutorial) {
+              this.assessmentService.openingTutorial.next(true);
+              this.tutorialShown = true;
+            }
           }
         }
       }
@@ -641,7 +668,7 @@ export class DashboardComponent implements OnInit {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          if(dir.calculator){
+          if (dir.calculator) {
             dir.calculator.directoryId = results;
             delete dir.calculator.id;
             this.indexedDbService.addCalculator(dir.calculator);
@@ -669,7 +696,7 @@ export class DashboardComponent implements OnInit {
         }
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
-            if(dataObj.calculator){
+            if (dataObj.calculator) {
               dataObj.calculator.assessmentId = results;
               delete dataObj.calculator.id;
               this.indexedDbService.addCalculator(dataObj.calculator);
