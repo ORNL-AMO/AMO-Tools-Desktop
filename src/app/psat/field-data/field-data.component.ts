@@ -327,6 +327,7 @@ export class FieldDataComponent implements OnInit {
     this.psatForm.patchValue({
       optimizeCalculation: bool
     });
+    this.startSavePolling();
   }
 
   canCompare() {
