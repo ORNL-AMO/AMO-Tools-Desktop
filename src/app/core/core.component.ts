@@ -27,13 +27,15 @@ export class CoreComponent implements OnInit {
 
   @ViewChild('screenshotBar') screenshotBar: ElementRef;
   // @ViewChild('coreContainer') coreContainer: ElementRef;
-  @ViewChild('updateModal') public updateModal: ModalDirective;
+  // @ViewChild('tutorialModal') public tutorialModal: ModalDirective;
 
   gettingData: boolean = false;
   showFeedback: boolean = true;
 
   showScreenshot: boolean = true;
   screenshotHeight: number;
+  showTutorial: boolean = false;
+  hideTutorial: boolean = true;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -65,12 +67,24 @@ export class CoreComponent implements OnInit {
       this.showFeedback = val;
       this.changeDetectorRef.detectChanges();
     })
+
+    this.assessmentService.openingTutorial.subscribe(val => {
+      if(val){
+        this.showTutorial = true;
+        this.hideTutorial = false;
+      }
+    })
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getScreenshotHeight();
     }, 100);
+
+    // setTimeout(()=> {
+    //   this.showTutorial = true;
+    //   this.changeDetectorRef.detectChanges();
+    // },2500)
   }
   takeScreenShot() {
     this.importExportService.takeScreenShot();
@@ -120,5 +134,10 @@ export class CoreComponent implements OnInit {
       }
       this.assessmentService.screenShotHeight.next(this.screenshotHeight);
     }
+  }
+
+  closeTutorial(){
+    this.showTutorial = false;
+    this.hideTutorial = true;
   }
 }

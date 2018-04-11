@@ -18,6 +18,7 @@ import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
 import { DashboardService } from './dashboard.service';
+import { Subscription } from 'rxjs';
 declare const packageJson;
 
 @Component({
@@ -59,6 +60,8 @@ export class DashboardComponent implements OnInit {
   workingDirectorySettings: Settings;
   workingDirectoryCalculator: Calculator;
   calcDataExists: boolean = false;
+  dontShowSub: Subscription;
+  tutorialShown: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
     private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService) {
@@ -68,8 +71,42 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init');
     // this.importExportService.test();
     //start toolts suite database if it has not started
+    this.initData();
+
+    this.assessmentService.createAssessment.subscribe(val => {
+      this.createAssessment = val;
+    })
+    if (this.settingsService.globalSettings) {
+      if (!this.settingsService.globalSettings.disableTutorial) {
+        this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+          if (this.settingsService.globalSettings) {
+            this.settingsService.globalSettings.disableTutorial = val;
+            this.indexedDbService.putSettings(this.settingsService.globalSettings);
+          }
+        })
+      }
+    } else {
+      this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+        if (this.settingsService.globalSettings) {
+          this.settingsService.globalSettings.disableTutorial = val;
+          this.indexedDbService.putSettings(this.settingsService.globalSettings);
+        }
+      })
+    }
+  }
+
+  ngOnDestroy() {
+    this.assessmentService.createAssessment.next(false);
+    if (this.dontShowSub) this.dontShowSub.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+  }
+
+  initData() {
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
     }
@@ -88,17 +125,6 @@ export class DashboardComponent implements OnInit {
     } else {
       this.getData();
     }
-
-    this.assessmentService.createAssessment.subscribe(val => {
-      this.createAssessment = val;
-    })
-  }
-
-  ngOnDestroy() {
-    this.assessmentService.createAssessment.next(false);
-  }
-
-  ngAfterViewInit() {
   }
 
   initCustomDbMaterials() {
@@ -200,8 +226,18 @@ export class DashboardComponent implements OnInit {
       results => {
         if (results.length == 0) {
           this.dashboardService.createDirectorySettings();
+          if (!this.tutorialShown) {
+            this.assessmentService.openingTutorial.next(true);
+            this.tutorialShown = true;
+          }
         } else {
           this.settingsService.globalSettings = results[0];
+          if (!this.tutorialShown) {
+            if (!this.settingsService.globalSettings.disableTutorial) {
+              this.assessmentService.openingTutorial.next(true);
+              this.tutorialShown = true;
+            }
+          }
         }
       }
     );
@@ -302,53 +338,6 @@ export class DashboardComponent implements OnInit {
     this.selectedCalculator = str;
   }
 
-  // createExampleAssessments() {
-  //   let tmpAssessment = MockDirectory.assessments[0];
-  //   tmpAssessment.directoryId = 1;
-  //   this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-
-  //   })
-
-  //   tmpAssessment = MockDirectory.assessments[1];
-  //   tmpAssessment.directoryId = 1;
-  //   this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-
-  //   })
-  // }
-
-  // createDirectorySettings() {
-  //   let tmpSettings: Settings = {
-  //     language: 'English',
-  //     currency: '$ - US Dollar',
-  //     unitsOfMeasure: 'Imperial',
-  //     directoryId: 1,
-  //     createdDate: new Date(),
-  //     modifiedDate: new Date(),
-  //     distanceMeasurement: 'ft',
-  //     flowMeasurement: 'gpm',
-  //     powerMeasurement: 'hp',
-  //     pressureMeasurement: 'psi',
-  //     energySourceType: 'Fuel',
-  //     appVersion: packageJson.version,
-  //     energyResultUnit: 'MMBtu',
-  //     temperatureMeasurement: 'F',
-  //     defaultPanelTab: 'help',
-  //     phastRollupUnit: 'MMBtu',
-  //     phastRollupElectricityUnit: 'kWh',
-  //     phastRollupFuelUnit: 'MMBtu',
-  //     phastRollupSteamUnit: 'MMBtu'
-  //   }
-  //   this.indexedDbService.addSettings(tmpSettings).then(
-  //     results => {
-  //     }
-  //   )
-
-  //   tmpSettings.assessmentId = 1;
-  //   this.indexedDbService.addSettings(tmpSettings).then(results => { });
-  //   tmpSettings.assessmentId = 2;
-  //   this.indexedDbService.addSettings(tmpSettings).then(results => { });
-  // }
-
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
       name: 'All Assessments',
@@ -433,7 +422,8 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.deleteDb().then(
       results => {
         this.suiteDbService.startup();
-        this.ngOnInit();
+        this.tutorialShown = false;
+        this.initData();
         this.hideDeleteModal()
       }
     )
@@ -684,7 +674,7 @@ export class DashboardComponent implements OnInit {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          if(dir.calculator){
+          if (dir.calculator) {
             dir.calculator.directoryId = results;
             delete dir.calculator.id;
             this.indexedDbService.addCalculator(dir.calculator);
@@ -712,7 +702,7 @@ export class DashboardComponent implements OnInit {
         }
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
-            if(dataObj.calculator){
+            if (dataObj.calculator) {
               dataObj.calculator.assessmentId = results;
               delete dataObj.calculator.id;
               this.indexedDbService.addCalculator(dataObj.calculator);

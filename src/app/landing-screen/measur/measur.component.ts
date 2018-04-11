@@ -7,13 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MeasurComponent implements OnInit {
 
-  textShow: boolean = true;
+  textShow: boolean = false;
   constructor() { }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.textShow = false;
-    }, 300)
   }
 
   showText(){

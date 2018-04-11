@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-tutorials',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TutorialsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+  }
+
+  viewOpeningTutorial(){
+    this.assessmentService.openingTutorial.next(true);
   }
 
 }
