@@ -20,58 +20,57 @@ export class SteamPropertiesFormComponent implements OnInit {
 
   pressureError: string = null;
   quantityValueError: string = null;
-  thermodynamicQuantity: number;
+  quantityValueUnits: string = null;
 
   // contains mins and maxes for all quality types, indexed into using thermodynamicQuantity
   checkQuantity = [
     {
-      Imperial: {
-        min: 32, max: 1472, type: 'Temperature', units: 'Fahrenheit'
+      'F': {
+        min: 32, max: 1472, type: 'Temperature', displayUnits: 'Fahrenheit'
       },
-      Metric: {
-        min: 0, max: 800, type: 'Temperature', units: 'Celsius'
+      'C': {
+        min: 0, max: 800, type: 'Temperature', displayUnits: 'Celsius'
       }
     },
     {
-      Imperial: {
-        min: 50, max: 5000, type: 'Specific Enthalpy', units: 'Btu/lb'
+      'btuLb': {
+        min: 21.5, max: 1590.7, type: 'Specific Enthalpy', displayUnits: 'Btu/lb'
       },
-      Metric: {
-        min: 50, max: 3700, type: 'Specific Enthalpy', units: 'kJ/kg'
+      'kJkg': {
+        min: 50, max: 3700, type: 'Specific Enthalpy', displayUnits: 'kJ/kg'
       }
     },
     {
-      Imperial: {
-        min: 0, max: 12.25, type: 'Specific Entropy', units: 'Btu/lb-F'
+      'btulbF': {
+        min: 0, max: 1.557, type: 'Specific Entropy', displayUnits: 'Btu/lb-F'
       },
-      Metric: {
-        min: 0, max: 6.52, type: 'Specific Entropy', units: 'kJ/kg/K'
+      'kJkgK': {
+        min: 0, max: 6.52, type: 'Specific Entropy', displayUnits: 'kJ/kg/K'
       }
     },
     {
-      Imperial: {
-        min: 0, max: 1, type: 'Saturated Quality', units: ''
-      },
-      Metric: {
-        min: 0, max: 1, type: 'Saturated Quality', units: ''
+      '': {
+        min: 0, max: 1, type: 'Saturated Quality', displayUnits: ''
       }
     },
-    {
-      Imperial: {
-        min: 0.2, max: 14503.7, type: 'Pressure', units: 'psi'
-      },
-      Metric: {
-        min: 1, max: 100000, type: 'Pressure', units: 'kPa'
-      }
-    }
   ];
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  pressureCheck = {
+    'psi': {
+      min: 0.2, max: 14503.7, displayUnits: 'psi'
+    },
+    'kPa': {
+      min: 1, max: 100000, displayUnits: 'kPa'
+    }
+  };
+
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.steamPropertiesOutput = {
       pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
     };
+    this.quantityValueUnits = this.settings.temperatureMeasurement;
     this.calculate();
   }
 
@@ -79,39 +78,40 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.pressureError = this.quantityValueError = null;
     const input: SteamPropertiesInput = {
       thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
-      pressure: this.convertUnitsService.value(this.steamPropertiesForm.controls.pressure.value).from(this.settings.pressureMeasurement).to('MPa'),
+      pressure: this.steamPropertiesForm.controls.pressure.value,
       quantityValue: this.steamPropertiesForm.controls.quantityValue.value
     };
-    this.thermodynamicQuantity = input.thermodynamicQuantity;
-    const unit = this.settings.unitsOfMeasure;
 
-    if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < 0.001 || input.pressure > 100) {
-      const err = this.checkQuantity[4][unit].min + ' and ' + this.checkQuantity[4][unit].max + ' ' + this.checkQuantity[4][unit].units;
+    const pressureObj = this.pressureCheck[this.settings.pressureMeasurement];
+    let quantityObj = this.checkQuantity[0]['F'];
+
+    if (input.thermodynamicQuantity === 0) {
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.temperatureMeasurement];
+    } else if (input.thermodynamicQuantity === 1) {
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEnthalpyMeasurement];
+    } else if (input.thermodynamicQuantity === 2) {
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEntropyMeasurement];
+    } else {
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][''];
+    }
+    this.quantityValueUnits = quantityObj.displayUnits;
+
+
+    if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
+      const err = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.pressureMeasurement;
       this.pressureError = 'Pressure must be between ' + err;
     }
 
-    // if (this.steamPropertiesForm.controls.quantityValue.invalid) {
-    //   this.quantityValueError = 'Check your quantity value';
-    // }
 
-    const i = input.thermodynamicQuantity;
-
-    if (input.quantityValue < this.checkQuantity[i][unit].min || input.quantityValue > this.checkQuantity[i][unit].max) {
-      const err = this.checkQuantity[i][unit].min + ' and ' + this.checkQuantity[i][unit].max + ' ' + this.checkQuantity[i][unit].units;
-      this.quantityValueError = this.checkQuantity[i][unit].type + ' must be between ' + err;
+    if (input.quantityValue < quantityObj.min || input.quantityValue > quantityObj.max) {
+      const err = quantityObj.min + ' and ' + quantityObj.max + ' ' + quantityObj.displayUnits;
+      this.quantityValueError = quantityObj.type + ' must be between ' + err;
     }
     if (this.pressureError !== null || this.quantityValueError !== null) {
       return;
     }
 
-    if (i === 0) { // convert temperature to Kelvin
-      input.quantityValue = this.convertUnitsService.value(input.quantityValue).from(this.settings.temperatureMeasurement).to('C') + 273.15;
-    }
-
-    this.steamPropertiesOutput = SteamService.steamProperties(input);
-
-    this.steamPropertiesOutput.pressure = this.convertUnitsService.value(this.steamPropertiesOutput.pressure).from('MPa').to(this.settings.pressureMeasurement);
-    this.steamPropertiesOutput.temperature = this.convertUnitsService.value(this.steamPropertiesOutput.temperature - 273.15).from('C').to(this.settings.temperatureMeasurement);
+    this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
   }
 
 }
