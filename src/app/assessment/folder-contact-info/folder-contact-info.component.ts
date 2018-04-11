@@ -111,7 +111,6 @@ export class FolderContactInfoComponent implements OnInit {
   }
 
   getSettings(id: number, directory?: Directory) {
-    console.log('getSettings()');
     this.indexedDbService.getDirectorySettings(id).then(settings => {
       if (settings && settings.length != 0) {
         if (this.isParentSettings) {
