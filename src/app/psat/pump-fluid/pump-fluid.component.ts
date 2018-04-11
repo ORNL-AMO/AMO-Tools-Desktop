@@ -150,6 +150,7 @@ export class PumpFluidComponent implements OnInit {
       })
     }
     this.checkForm(this.psatForm);
+    this.startSavePolling();
   }
 
   subtractNum(str: string) {
@@ -161,6 +162,7 @@ export class PumpFluidComponent implements OnInit {
       }
     }
     this.checkForm(this.psatForm);
+    this.startSavePolling();
   }
 
   focusField(str: string) {

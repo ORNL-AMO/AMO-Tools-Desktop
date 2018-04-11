@@ -48,7 +48,8 @@ export class CompareService {
         this.isKinematicViscosityDifferent(baseline, modification) ||
         this.isSpecificGravityDifferent(baseline, modification) ||
         this.isFluidTempDifferent(baseline, modification) ||
-        this.isFluidTypeDifferent(baseline, modification)
+        this.isFluidTypeDifferent(baseline, modification) ||
+        this.isStagesDifferent(baseline, modification)
       )
     } else {
       return false;
@@ -70,8 +71,7 @@ export class CompareService {
         this.isEfficiencyClassDifferent(baseline, modification) ||
         this.isEfficiencyDifferent(baseline, modification) ||
         this.isMotorRatedVoltageDifferent(baseline, modification) ||
-        this.isMotorRatedFlaDifferent(baseline, modification) ||
-        this.isMarginDifferent(baseline, modification)
+        this.isMotorRatedFlaDifferent(baseline, modification)
       )
     } else {
       return false;

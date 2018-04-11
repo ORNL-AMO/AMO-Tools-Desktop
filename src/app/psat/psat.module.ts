@@ -41,7 +41,6 @@ import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
-import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { ModifyConditionsTabsTooltipComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
@@ -62,7 +61,6 @@ import { ModifyConditionsTabsTooltipComponent } from './modify-conditions/modify
     ModifyConditionsTabsComponent,
     PsatDiagramComponent,
     PsatSankeyComponent,
-    ModificationNavbarComponent,
     ModificationListComponent,
     AddModificationComponent,
     ModifyConditionsTabsTooltipComponent
