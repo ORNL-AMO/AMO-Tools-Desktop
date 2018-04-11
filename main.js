@@ -7,10 +7,6 @@ const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 
-require('electron-reload')(path.join(__dirname, 'dist/index.html'), {
-  electron: require(path.join(__dirname, '/node_modules/electron'))
-});
-
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 };
@@ -23,6 +19,13 @@ log.info('App starting...');
 require('dotenv').config();
 let win = null;
 let available = null;
+
+
+if (isDev()) {
+  require('electron-reload')(path.join(__dirname, 'dist/index.html'), {
+    electron: require(path.join(__dirname, '/node_modules/electron'))
+  });
+}
 
 app.on('ready', function () {
 

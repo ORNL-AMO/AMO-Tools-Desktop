@@ -71,26 +71,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init');
     // this.importExportService.test();
     //start toolts suite database if it has not started
-    if (this.suiteDbService.hasStarted == false) {
-      this.suiteDbService.startup();
-    }
-    this.selectedItems = new Array();
-    this.showLandingScreen = this.assessmentService.getLandingScreen();
-    //open DB and get directories
-    if (this.indexedDbService.db == undefined) {
-      this.indexedDbService.db = this.indexedDbService.initDb().then(
-        results => {
-          this.getData();
-          if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
-            this.initCustomDbMaterials();
-          }
-        }
-      )
-    } else {
-      this.getData();
-    }
+    this.initData();
 
     this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
@@ -120,6 +104,27 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  initData() {
+    if (this.suiteDbService.hasStarted == false) {
+      this.suiteDbService.startup();
+    }
+    this.selectedItems = new Array();
+    this.showLandingScreen = this.assessmentService.getLandingScreen();
+    //open DB and get directories
+    if (this.indexedDbService.db == undefined) {
+      this.indexedDbService.db = this.indexedDbService.initDb().then(
+        results => {
+          this.getData();
+          if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
+            this.initCustomDbMaterials();
+          }
+        }
+      )
+    } else {
+      this.getData();
+    }
   }
 
   initCustomDbMaterials() {
@@ -417,7 +422,8 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.deleteDb().then(
       results => {
         this.suiteDbService.startup();
-        this.ngOnInit();
+        this.tutorialShown = false;
+        this.initData();
         this.hideDeleteModal()
       }
     )
