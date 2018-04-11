@@ -1,3 +1,18 @@
+
+<div class="print-legend">
+  <table>
+    <tr>
+      <td class="legend-item-baseline">
+        Baseline
+      </td>
+      <td class="legend-item-pad"></td>
+      <td class="legend-item-modification">
+        Modification
+      </td>
+    </tr>
+  </table>
+</div>
+
 <div *ngIf="!printView && assessmentType == 'phast'">
   <div class="phast-rollup bar-chart-container chart-container">
     <div #ngChart class="phast-rollup-bar-chart">
@@ -29,4 +44,4 @@
     </div>
   </div>
 </div>
-<span #btnDownload class="bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>
+<span #btnDownload class="rollup-bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

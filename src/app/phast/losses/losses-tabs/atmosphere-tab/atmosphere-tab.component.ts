@@ -16,6 +16,9 @@ export class AtmosphereTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
+
   numLosses: number = 0;
   inputError: boolean;
   missingData: boolean;
@@ -38,20 +41,22 @@ export class AtmosphereTabComponent implements OnInit {
       this.inputError = val;
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    } else if (this.isDifferent) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -87,17 +92,39 @@ export class AtmosphereTabComponent implements OnInit {
 
 
   checkLossValid(loss: AtmosphereLoss) {
-      let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
-      if (tmpForm.status == 'VALID') {
-        return true;
-      } else {
-        return false;
-      }
+    let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
+    if (tmpForm.status == 'VALID') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   checkDifferent() {
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
       return this.atmosphereLossesCompareService.compareAllLosses();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 }

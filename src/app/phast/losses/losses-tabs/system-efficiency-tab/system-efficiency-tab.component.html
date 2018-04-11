@@ -1,6 +1,10 @@
 <a class="nav-link small">
     System Efficiency
-    <span class="badge gray-badge" [ngClass]="badgeClass">
+    <span (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()" class="badge gray-badge" [ngClass]="badgeClass">
         <strong>{{numLosses}}</strong>
     </span>
 </a>
+
+<div>
+    <app-losses-tabs-tooltip [display]="badgeHover" [reveal]="displayTooltip" [numLosses]="numLosses" [badgeClass]="badgeClass"></app-losses-tabs-tooltip>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
@@ -14,6 +14,9 @@ import { Subscription } from 'rxjs';
 export class CoolingTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+
+  badgeHover: boolean;
+  displayTooltip: boolean;
 
   numLosses: number = 0;
   inputError: boolean;
@@ -31,13 +34,16 @@ export class CoolingTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
+    });
 
     this.compareSubscription = this.coolingLossesCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
-    })
+    });
+
+    this.badgeHover = false;
   }
+ 
   ngOnDestroy(){
     this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
@@ -100,10 +106,31 @@ export class CoolingTabComponent implements OnInit {
     }
   }
 
-
   checkDifferent() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
       return this.coolingLossesCompareService.compareAllLosses();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 

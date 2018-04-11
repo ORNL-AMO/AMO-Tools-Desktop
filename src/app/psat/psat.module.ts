@@ -44,6 +44,7 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
+import { ModifyConditionsTabsTooltipComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     PsatSankeyComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent
+    AddModificationComponent,
+    ModifyConditionsTabsTooltipComponent
   ],
   exports: [
     PsatReportComponent

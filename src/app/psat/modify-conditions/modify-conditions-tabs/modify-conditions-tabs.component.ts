@@ -10,6 +10,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
+
+  displayPumpFluidTooltip: boolean;
+  pumpFluidBadgeHover: boolean;
+  displayMotorTooltip: boolean;
+  motorBadgeHover: boolean;
+  displayFieldDataTooltip: boolean;
+  fieldDataBadgeHover: boolean;
+
   pumpFluidBadgeClass: Array<string>;
   motorBadgeClass: Array<string>;
   fieldDataBadgeClass: Array<string>;
@@ -27,6 +35,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
       this.modifyTab = val;
     })
 
+    this.displayPumpFluidTooltip = false;
+    this.pumpFluidBadgeHover = false;
+    this.displayMotorTooltip = false;
+    this.motorBadgeHover = false;
+    this.displayFieldDataTooltip = false;
+    this.fieldDataBadgeHover = false;
   }
 
   ngOnDestroy() {
@@ -107,5 +121,58 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   tabChange(str: string) {
     this.psatService.modifyConditionsTab.next(str);
+  }
+
+
+  showTooltip(badge: string) {
+    if (badge === 'pumpFluid') {
+      this.pumpFluidBadgeHover = true;
+    }
+    else if (badge === 'motor') {
+      this.motorBadgeHover = true;
+    }
+    else if (badge === 'fieldData') {
+      this.fieldDataBadgeHover = true;
+    }
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip(badge: string) {
+    if (badge === 'pumpFluid') {
+      this.pumpFluidBadgeHover = false;
+      this.displayPumpFluidTooltip = false;
+    }
+    else if (badge === 'motor') {
+      this.motorBadgeHover = false;
+      this.displayMotorTooltip = false;
+    }
+    else if (badge === 'fieldData') {
+      this.fieldDataBadgeHover = false;
+      this.displayFieldDataTooltip = false;
+    }
+  }
+
+  checkHover() {
+    if (this.pumpFluidBadgeHover) {
+      this.displayPumpFluidTooltip = true;
+    }
+    else {
+      this.displayPumpFluidTooltip = false;
+    }
+    if (this.motorBadgeHover) {
+      this.displayMotorTooltip = true;
+    }
+    else {
+      this.displayMotorTooltip = false;
+    }
+    if (this.fieldDataBadgeHover) {
+      this.displayFieldDataTooltip = true;
+    }
+    else {
+      this.displayFieldDataTooltip = false;
+    }
   }
 }
