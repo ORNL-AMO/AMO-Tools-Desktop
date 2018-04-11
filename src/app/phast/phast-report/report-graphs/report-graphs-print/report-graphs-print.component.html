@@ -5,7 +5,7 @@
 
             <!-- page title -->
             <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-                Modification: {{result.name}}
+                Scenario: {{result.name}}
             </div>
             <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
                 Baseline
@@ -81,7 +81,7 @@
                         </div>
                         <div class="row show-print print-pad-graph-title" *ngIf="modExists">
                             <div align="center" class="print-graph-title print-center-title">
-                                Modification: {{result.name}}
+                                Scenario: {{result.name}}
                             </div>
                         </div>
                         <div class="row show-print" *ngIf="modExists">
