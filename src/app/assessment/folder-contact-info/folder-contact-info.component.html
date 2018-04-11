@@ -1,50 +1,88 @@
-<div class="row contact-info contact-section-header">
-  <div class="col">
-    <h5>
-      <i class="fa fa-address-card"></i>
-      Contact Information
-    </h5>
-  </div>
-</div>
-<div class="row contact-info-row" *ngIf="settings && !showNoData">
+<div class="row" *ngIf="settingsReady && !showNoData">
   <div class="col-12">
-    <h5>Company: {{settings.facilityInfo.companyName}}</h5>
-    <h5>Facility: {{settings.facilityInfo.facilityName}}</h5>
-    <h5>Date: {{settings.facilityInfo.date}}</h5>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Address</h5>
-    <h6>Street: {{settings.facilityInfo.address.street}}</h6>
-    <h6>City: {{settings.facilityInfo.address.city}}</h6>
-    <h6>State: {{settings.facilityInfo.address.state}}</h6>
-    <h6>Country: {{settings.facilityInfo.address.country}}</h6>
-    <h6>Zip: {{settings.facilityInfo.address.zip}}</h6>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Facility Contact</h5>
-    <h6>Name: {{settings.facilityInfo.facilityContact.contactName}}</h6>
-    <h6>Phone: {{settings.facilityInfo.facilityContact.phoneNumber}}</h6>
-    <h6>Email: {{settings.facilityInfo.facilityContact.email}}</h6>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Assessment Contact</h5>
-    <h6>Name: {{settings.facilityInfo.assessmentContact.contactName}}</h6>
-    <h6>Phone: {{settings.facilityInfo.assessmentContact.phoneNumber}}</h6>
-    <h6>Email: {{settings.facilityInfo.assessmentContact.email}}</h6>
-  </div>
-  <div class="col-12 edit-info">
-    <a (click)="showFacilityModal()">Edit Info</a>
+    <div class="card panel-container">
+      <div class="card-body summary-rollup d-flex flex-row justify-content-around">
+        <div class="p-2">
+          <label class="group-label">Facility Information</label>
+          <table class="table">
+            <tr>
+              <td>Company:</td>
+              <td class="bold">{{settings.facilityInfo.companyName}}</td>
+            </tr>
+            <tr>
+              <td>Facility:</td>
+              <td class="bold">{{settings.facilityInfo.facilityName}}</td>
+            </tr>
+            <tr>
+              <td>Date:</td>
+              <td>{{settings.facilityInfo.date}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="p-2" *ngIf="showFacilityContact">
+          <label class="group-label">Facility Contact</label>
+          <table class="table">
+            <tr>
+              <td>Name:</td>
+              <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
+            </tr>
+            <tr>
+              <td>Phone:</td>
+              <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td>{{settings.facilityInfo.facilityContact.email}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="p-2" *ngIf="showAddress">
+          <label class="group-label">Address</label>
+          <table class="table">
+            <tr>
+              <td>Street:</td>
+              <td>{{settings.facilityInfo.address.street}}</td>
+            </tr>
+            <tr>
+              <td>City:</td>
+              <td>{{settings.facilityInfo.address.city}}</td>
+            </tr>
+            <tr>
+              <td>State:</td>
+              <td>{{settings.facilityInfo.address.state}}</td>
+            </tr>
+            <tr>
+              <td>Country:</td>
+              <td>{{settings.facilityInfo.address.country}}</td>
+            </tr>
+            <tr>
+              <td>Zip:</td>
+              <td>{{settings.facilityInfo.address.zip}}</td>
+            </tr>
+          </table>
+          <a class="pull-right click-link" (click)="showFacilityModal()">Edit Info</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
-  Add Facility Info
-  <br>
-  <span class="fa fa-plus-circle"></span>
-  <br>
-  <p class="small">You have no facility information for this directory.</p>
-</div>
 
+<div class="row" *ngIf="showNoData">
+  <div class="col-12 justify-content-center">
+    <div class="card panel-container">
+      <div class="card-body summary-rollup d-flex flex-row justify-content-center">
+        <div (click)="showFacilityModal()" class="p-2 text-center btn-add-facility-info">
+          Add Facility Info
+          <br>
+          <span class="fa fa-plus-circle"></span>
+          <br>
+          <p class="small">No Facility Info found for this directory.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

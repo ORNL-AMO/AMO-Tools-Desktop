@@ -1,68 +1,35 @@
-h4{
-    font-size: 18px;
-}
-
-h5{
-    font-size: 16px;
-}
-
-h6{
-    font-size: 14px;
-}
-.contact-info{
-    padding-top: 15px;
-}
-
-
-.contact-section-header{
-    border-bottom: 1px groove;
-    text-transform: uppercase;
-	letter-spacing: 4px;
-}
-
-.fa-col{
-    font-size: x-large;
-}
-
-.header-col{
-    font-size: 14px;
-}
-
-
-.no-facility-data:hover{
-    background-color: #efefef;
-    cursor: pointer;
-}
-
-.no-facility-data{
-    text-align: center;
-    padding-top: 15px;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-.modal-dialog{
-    top: 0px;
-    max-width: 750px;
-}
-
-.modal-header, .modal-body{
-    padding: 6px;
-}
-
-.contact-info-row .col-12{
-    padding-top: 5px;
-    border-bottom: 1px grey dashed;
-}
-
-.edit-info{
-    text-align: center;
-}
-
-.edit-info:hover{
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-a:not([href]):not([tabindex]){
-    color: blue;
+td, a{
+    font-size: small;
   }
+  
+  td{
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  
+.summary-rollup{
+    padding: 6px;
+  }
+
+  .group-label{
+    border-bottom: #566573 groove 2px;
+  }
+  
+  .modal-dialog{
+      max-width: 750px;
+  }
+
+.btn{
+  padding: 6px;
+}
+
+.help-text{
+  padding-top:4px;
+  text-align: center;
+}
+
+.btn-add-facility-info:hover {
+    cursor: pointer;
+    background-color: #ececec;
+}

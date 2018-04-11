@@ -1,5 +1,7 @@
 <div class="row justify-content-center dashboard-content">
-	<div class="col-10 assessment-dashboard scroll-item">
+	<div class="col-12 assessment-dashboard scroll-item">
+
+		<!-- <div class="col-10 assessment-dashboard scroll-item"> -->
 		<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
 		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
 		 [view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"
@@ -21,8 +23,8 @@
 		</app-assessment-settings>
 
 	</div>
-	<div class="col-2 dashboard-summary">
-		<!-- <app-folder-summary [directory]="directory"></app-folder-summary> -->
-		<app-folder-contact-info [directory]="directory"></app-folder-contact-info>
-	</div>
+	<!-- <div class="col-2 dashboard-summary"> -->
+	<!-- <app-folder-summary [directory]="directory"></app-folder-summary> -->
+	<!-- <app-folder-contact-info [directory]="directory"></app-folder-contact-info> -->
+	<!-- </div> -->
 </div>
