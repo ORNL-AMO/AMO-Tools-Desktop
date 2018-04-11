@@ -1,0 +1,30 @@
+
+
+.print-legend {
+    display: none;
+    width: 100%;
+    font-size: 18px;
+}
+
+.print-legend table {
+    width: 20%;
+    float: right;
+}
+
+.print-legend td {
+    width: 33.3%;
+}
+
+.legend-item-baseline {
+    border-left: 25px solid #1E7640;
+}
+
+.legend-item-modification {
+    border-left: 25px solid #2ABDDA;
+}
+
+@media print {
+    .print-legend {
+        display: initial;
+    }
+}
