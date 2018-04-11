@@ -16,6 +16,8 @@ export class ChargeMaterialTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
 
   numLosses: number = 0;
   chargeDone: boolean;
@@ -42,20 +44,22 @@ export class ChargeMaterialTabComponent implements OnInit {
       this.inputError = val;
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData || !this.chargeDone){
+    if (this.missingData || !this.chargeDone) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    } else if (this.isDifferent) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -118,6 +122,28 @@ export class ChargeMaterialTabComponent implements OnInit {
   checkDifferent() {
     if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials) {
       return this.chargeMaterialCompareService.compareAllMaterials();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 }
