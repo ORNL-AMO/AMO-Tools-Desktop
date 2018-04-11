@@ -19,6 +19,8 @@ export class FolderContactInfoComponent implements OnInit {
   showModal: boolean = false;
   isParentSettings: boolean = false;
 
+  settingsReady: boolean = false;
+
   showAddress: boolean = false;
   showFacilityContact: boolean = false;
   showAssessmentContact: boolean = false;
@@ -119,13 +121,15 @@ export class FolderContactInfoComponent implements OnInit {
           tmpSettings.directoryId = this.directory.id;
           tmpSettings.facilityInfo = settings[0].facilityInfo;
           this.settings = tmpSettings;
+          this.settingsReady = true;
           this.checkShow();
         } else {
           this.settings = settings[0];
+          this.settingsReady = true;
           this.checkShow();
         }
       } else {
-        console.log(directory)
+        this.settingsReady = false;
         // if (directory.parentDirectoryId) {
         //   this.isParentSettings = true;
         //   this.getSettings(directory.parentDirectoryId);
