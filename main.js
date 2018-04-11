@@ -7,9 +7,9 @@ const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 
-// require('electron-reload')(path.join(__dirname, 'dist/index.html'), {
-//    electron: require(path.join(__dirname, '/node_modules/electron'))
-//  });
+require('electron-reload')(path.join(__dirname, 'dist/index.html'), {
+  electron: require(path.join(__dirname, '/node_modules/electron'))
+});
 
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
@@ -38,7 +38,7 @@ app.on('ready', function () {
   }));
 
   if (isDev()) {
-   win.toggleDevTools();
+    win.toggleDevTools();
   };
   // Remove window once app is closed
   win.on('closed', function () {
@@ -48,16 +48,16 @@ app.on('ready', function () {
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
     if (!isDev()) {
-    autoUpdater.checkForUpdates();
-    log.info('checking for update..');
-    autoUpdater.on('update-available', (event, info) => {
-      coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
-  });
-    autoUpdater.on('update-not-available', (event, info) => {
-      log.info('no update available..');
-  });
-  }
-})
+      autoUpdater.checkForUpdates();
+      log.info('checking for update..');
+      autoUpdater.on('update-available', (event, info) => {
+        coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
+      });
+      autoUpdater.on('update-not-available', (event, info) => {
+        log.info('no update available..');
+      });
+    }
+  })
 
   autoUpdater.on('error', (event, error) => {
   });

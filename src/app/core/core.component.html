@@ -12,7 +12,7 @@
     <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()">
         <i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
 </div>
-<div *ngIf="!hideTutorial" class="opening-tutorial-closed" [ngClass]="{'opening-tutorial': showTutorial}">
+<div *ngIf="!hideTutorial" class="opening-tutorial">
     <app-opening-tutorial (closeTutorial)="closeTutorial()"></app-opening-tutorial>
 </div>
 

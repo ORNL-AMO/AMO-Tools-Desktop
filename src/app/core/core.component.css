@@ -66,16 +66,9 @@
     font-size: 14px;
 }
 
-.opening-tutorial-closed{
+.opening-tutorial{
   position: fixed;
   height: 100vh;
   width: 100vw;
-  opacity: 0;
-  transition: visibility .5s, opacity 1s linear;
-}
-
-.opening-tutorial-closed.opening-tutorial{
   z-index: 1800;
-  visibility: visible;
-  opacity: 1;
 }

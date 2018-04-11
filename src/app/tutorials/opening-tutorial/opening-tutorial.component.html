@@ -1,0 +1,75 @@
+<div class="d-flex flex-column justify-content-center align-items-center h-100 w-100 tutorial-bg">
+  <div class="carousel">
+    <div class="close pull-right click-item" (click)="close()">&times;</div>
+    <ol class="carousel-indicators">
+      <li [ngClass]="{'active': showItem[1]}"></li>
+      <li [ngClass]="{'active': showItem[2]}"></li>
+      <li [ngClass]="{'active': showItem[3]}"></li>
+      <li [ngClass]="{'active': showItem[4]}"></li>
+      <li [ngClass]="{'active': showItem[5]}"></li>
+    </ol>
+    <div class="d-flex">
+      <!-- 1 -->
+      <div class="carousel-item first-item" [ngClass]="{'active': !show}">
+        <img class="d-block img-fluid" src="assets/images/tutorial/1-landing-screen.PNG">
+        <div class="carousel-caption d-none d-md-block">
+          <!-- <h3 class="mx-auto">Welcome
+          </h3> -->
+        </div>
+      </div>
+      <!-- 1.5 -->
+      <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
+        <div class="typewriter text-center" *ngIf="showItem[1]">
+            <h1 class="welcome-0" *ngIf="showItem[1]">Welcome to MEASURE,
+              <br>the new DOE Software Suite
+              <br>for analyzing and identifying energy savings opportunities.
+              <br>Let’s get started!</h1>
+        </div>
+        <img class="d-block img-fluid" src="assets/images/tutorial/2-dark-landing.jpg">
+        <div class="carousel-caption d-none d-md-block">
+          <h3 class="mx-auto">Welcome
+          </h3>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="carousel-item active" [ngClass]="{'show-img': showItem[2]}">
+        <img class="d-block img-fluid" src="assets/images/tutorial/3-create-assessment.PNG">
+        <div class="carousel-caption d-none d-md-block">
+          <h3 class="mx-auto">Start an assessment
+          </h3>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="carousel-item active" [ngClass]="{'show-img': showItem[3]}">
+        <img class="d-block img-fluid" src="assets/images/tutorial/4-view-assessments.PNG">
+        <div class="carousel-caption d-none d-md-block">
+          <h3>View and manage existing assessments</h3>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="carousel-item active" [ngClass]="{'show-img': showItem[4]}">
+        <img class="d-block img-fluid" src="assets/images/tutorial/5-calculators.PNG">
+        <div class="carousel-caption d-none d-md-block">
+          <h3>Access different types property calculators</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <a class="carousel-control carousel-control-prev" role="button" (click)="prev()">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control carousel-control-next" role="button" (click)="next()">
+    <span class="carousel-control-next-icon"></span>
+  </a> -->
+  <div class="carousel-caption d-flex" [ngClass]="{'justify-content-between': index != 0, 'justify-content-end': index == 0}">
+    <h5 class="pull-left caption-control click-item" (click)="prev()" *ngIf="index != 0">
+      <span class="fa fa-caret-left"></span>
+      Prev</h5>
+    <h5 class="pull-right caption-control click-item" (click)="next()" *ngIf="index != 5">Next
+      <span class="fa fa-caret-right"></span>
+    </h5>
+    <h5 class="pull-right caption-control click-item" (click)="close()" *ngIf="index == 5">Get Started
+      <span class="fa fa-caret-right"></span>
+    </h5>
+  </div>
+</div>
