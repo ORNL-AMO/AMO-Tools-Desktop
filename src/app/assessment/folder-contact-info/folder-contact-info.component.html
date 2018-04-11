@@ -36,36 +36,39 @@
             </tr>
           </table>
         </div>
-        <div class="p-2" *ngIf="showAddress">
-          <label class="group-label">Address</label>
-          <table class="table">
-            <tr>
-              <td>Street:</td>
-              <td>{{settings.facilityInfo.address.street}}</td>
-            </tr>
-            <tr>
-              <td>City:</td>
-              <td>{{settings.facilityInfo.address.city}}</td>
-            </tr>
-            <tr>
-              <td>State:</td>
-              <td>{{settings.facilityInfo.address.state}}</td>
-            </tr>
-            <tr>
-              <td>Country:</td>
-              <td>{{settings.facilityInfo.address.country}}</td>
-            </tr>
-            <tr>
-              <td>Zip:</td>
-              <td>{{settings.facilityInfo.address.zip}}</td>
-            </tr>
-          </table>
+        <div class="p-2">
+          <div *ngIf="showAddress">
+            <label class="group-label">Address</label>
+            <table class="table">
+              <tr>
+                <td>Street:</td>
+                <td>{{settings.facilityInfo.address.street}}</td>
+              </tr>
+              <tr>
+                <td>City:</td>
+                <td>{{settings.facilityInfo.address.city}}</td>
+              </tr>
+              <tr>
+                <td>State:</td>
+                <td>{{settings.facilityInfo.address.state}}</td>
+              </tr>
+              <tr>
+                <td>Country:</td>
+                <td>{{settings.facilityInfo.address.country}}</td>
+              </tr>
+              <tr>
+                <td>Zip:</td>
+                <td>{{settings.facilityInfo.address.zip}}</td>
+              </tr>
+            </table>
+          </div>
           <a class="pull-right click-link" (click)="showFacilityModal()">Edit Info</a>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <div class="row" *ngIf="showNoData">
