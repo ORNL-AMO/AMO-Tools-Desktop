@@ -30,7 +30,9 @@ export class ImportExportService {
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
     dlLink.setAttribute("href", dataStr);
-    dlLink.setAttribute("download", "exportData.json");
+    const date = new Date();
+    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+    dlLink.setAttribute('download', 'ExportedData_' + dateStr + '.json');
     dlLink.click();
   }
 
