@@ -85,7 +85,7 @@
                 </div>
                 <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
                     <div class="col-12">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true" (selectModification)="updateSummary($event)"
+                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true" [printView]="printView" (selectModification)="updateSummary($event)"
                             [settings]="item.settings">
                         </app-psat-report>
                     </div>

@@ -28,5 +28,4 @@ export class FacilityInfoSummaryComponent implements OnInit {
       }
     })
   }
-
 }

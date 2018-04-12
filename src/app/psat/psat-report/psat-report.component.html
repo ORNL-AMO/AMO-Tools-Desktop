@@ -13,12 +13,10 @@
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
-
-    <!-- debug -->
     <div class="report-header" [ngClass]="{'hide-print': inPsat}">
 
         <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
-            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <button class="btn btn-secondary" (click)="showModal()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
@@ -48,6 +46,18 @@
     </div>
     <!-- End .report-header -->
 
+    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+        <div class="col-12 print-col">
+            <h4>Building Print View</h4>
+            <h5>One Moment Please</h5>
+            <span class="fa fa-print"></span>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- real version -->
     <!-- <div class="report-header" [ngClass]="{'hide-print': inPsat}">
@@ -79,18 +89,39 @@
         <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Results</a>
-            </li><!--
-            --><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Data</a>
-            </li><!--
-            --><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
                 <a>Facility Info</a>
             </li>
         </ul>
+
+        <div class="results" *ngIf="currentTab == 'facilityInfo' || showPrint">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+
+        <div class="results" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
+            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
+            </app-output-summary>
+
+        </div>
+        <div class="input-data results" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)">
+            <app-input-summary [psat]="psat" [settings]="settings">
+            </app-input-summary>
+        </div>
+
+
+
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
-        <div class="results" [ngClass]="{'show-print':currentTab != 'facility-info'}">
+        <!-- <div class="results" [ngClass]="{'show-print':currentTab != 'facilityInfo'}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
 
@@ -102,7 +133,7 @@
         <div class="input-data results" [ngClass]="{'show-print': currentTab != 'inputData'}">
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
-        </div>
+        </div> -->
         <!-- <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
             <app-facility-info-summary [assessment]="assessment">
             </app-facility-info-summary>
@@ -115,4 +146,57 @@
     </div>
 
 
+</div>
+
+
+
+<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md hide-print">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Print Report</h3>
+                <button class="close" (click)="closeModal(true)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            Select all report items you would like to include in your printed report.
+                        </p>
+                    </div>
+                </div>
+                <div class="row toggle-btn" (click)="togglePrint('select-all')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="selectAll"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Select All
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printResults"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Results
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Input Data
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" (click)="print()" data-dismiss="modal">Print</button>
+                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal(true)" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
