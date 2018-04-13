@@ -51,6 +51,11 @@ export class HelpPanelComponent implements OnInit {
         this.tabSelect = globalSettings.defaultPanelTab;
       }
     }
+
+    this.psatService.modifyConditionsTab.subscribe(val => {
+      this.currentTab = val;
+      console.log(this.currentTab);
+    })
   }
 
   ngOnDestroy(){
