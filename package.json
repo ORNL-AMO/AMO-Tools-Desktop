@@ -1,9 +1,9 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.2.6-beta",
+  "version": "0.2.7-beta",
   "main": "main.js",
   "license": "MIT",
-  "description": "AMO-Tools-Desktop",
+  "description": "MEASUR",
   "author": "Advanced Manufacturing Office",
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
