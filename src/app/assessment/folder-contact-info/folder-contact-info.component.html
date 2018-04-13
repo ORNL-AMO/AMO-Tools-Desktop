@@ -2,73 +2,78 @@
   <div class="col-12">
     <div class="card panel-container">
       <div class="card-body summary-rollup d-flex flex-row justify-content-around">
-        <div class="p-2">
-          <label class="group-label">Facility Information</label>
-          <table class="table">
-            <tr>
-              <td>Company:</td>
-              <td class="bold">{{settings.facilityInfo.companyName}}</td>
-            </tr>
-            <tr>
-              <td>Facility:</td>
-              <td class="bold">{{settings.facilityInfo.facilityName}}</td>
-            </tr>
-            <tr>
-              <td>Date:</td>
-              <td>{{settings.facilityInfo.date}}</td>
-            </tr>
-          </table>
-        </div>
-        <div class="p-2" *ngIf="showFacilityContact">
-          <label class="group-label">Facility Contact</label>
-          <table class="table">
-            <tr>
-              <td>Name:</td>
-              <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
-            </tr>
-            <tr>
-              <td>Phone:</td>
-              <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
-            </tr>
-            <tr>
-              <td>Email:</td>
-              <td>{{settings.facilityInfo.facilityContact.email}}</td>
-            </tr>
-          </table>
-        </div>
-        <div class="p-2">
-          <div *ngIf="showAddress">
-            <label class="group-label">Address</label>
-            <table class="table">
-              <tr>
-                <td>Street:</td>
-                <td>{{settings.facilityInfo.address.street}}</td>
-              </tr>
-              <tr>
-                <td>City:</td>
-                <td>{{settings.facilityInfo.address.city}}</td>
-              </tr>
-              <tr>
-                <td>State:</td>
-                <td>{{settings.facilityInfo.address.state}}</td>
-              </tr>
-              <tr>
-                <td>Country:</td>
-                <td>{{settings.facilityInfo.address.country}}</td>
-              </tr>
-              <tr>
-                <td>Zip:</td>
-                <td>{{settings.facilityInfo.address.zip}}</td>
-              </tr>
-            </table>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4 text-center">
+              <label>Company</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Facility</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Date</label>
+            </div>
           </div>
-          <a class="pull-right click-link" (click)="showFacilityModal()">Edit Info</a>
+          <div class="row info-row">
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.companyName}}
+            </div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.facilityName}}
+            </div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.date}}
+            </div>
+          </div>
+          <div *ngIf="showAddress || showFacilityContact" class="row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row label-row': isExpanded}">
+            <div class="col-4 text-center">
+              <label>Facility Contact</label>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 text-center">
+              <label>Address</label>
+            </div>
+          </div>
+          <div *ngIf="showAddress || showFacilityContact" class="row info-row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+            <div class="col-4 text-center bold">
+                {{settings.facilityInfo.facilityContact.contactName}}<br *ngIf="settings.facilityInfo.facilityContact.contactName !== undefined">
+                {{settings.facilityInfo.facilityContact.phoneNumber}}<br *ngIf="settings.facilityInfo.facilityContact.phoneNumber !== undefined">
+                {{settings.facilityInfo.facilityContact.email}}
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 text-justify address-col bold">
+                {{settings.facilityInfo.address.street}},<br>
+                {{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}<br>
+                {{settings.facilityInfo.address.country}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5"></div>
+            <div class="col-2 text-center">
+              <a class="click-link" (click)="showFacilityModal()">Edit Info</a>
+            </div>
+            <div class="col-5"></div>
+          </div>
+          <div #btnExpand (click)="toggleExpand()" class="row btn-expand">
+            <div class="col-12">
+              <!-- <div class="row">
+                <div class="col-12 text-center">
+                  {{btnExpandText}}
+                </div>
+              </div> -->
+              <div class="row">
+                <div class="col-12 text-center">
+                  <div *ngIf="!isExpanded" class="arrow-down"></div>
+                  <div *ngIf="isExpanded" class="arrow-up"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 
 <div class="row" *ngIf="showNoData">

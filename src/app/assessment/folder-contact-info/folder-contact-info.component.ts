@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
@@ -18,6 +18,9 @@ export class FolderContactInfoComponent implements OnInit {
   settings: Settings;
   showModal: boolean = false;
   isParentSettings: boolean = false;
+
+  isExpanded: boolean = false;
+  // btnExpandText: string = "More Info";
 
   settingsReady: boolean = false;
 
@@ -137,4 +140,22 @@ export class FolderContactInfoComponent implements OnInit {
       }
     })
   }
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
+    // if (this.isExpanded) {
+    //   this.revealFacilityInfo();
+    // }
+    // else {
+    //   this.hideFacilityInfo();
+    // }
+  }
+
+  // revealFacilityInfo() {
+  //   this.btnExpandText = "Less Info";
+  // }
+
+  // hideFacilityInfo() {
+  //   this.btnExpandText = "More Info";
+  // }
 }
