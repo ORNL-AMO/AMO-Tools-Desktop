@@ -27,24 +27,30 @@
           </div>
           <div *ngIf="showAddress || showFacilityContact" class="row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row label-row': isExpanded}">
             <div class="col-4 text-center">
+              <label>Assessment Contact</label>
+            </div>
+            <div class="col-4 text-center">
               <label>Facility Contact</label>
             </div>
-            <div class="col-4"></div>
             <div class="col-4 text-center">
               <label>Address</label>
             </div>
           </div>
-          <div *ngIf="showAddress || showFacilityContact" class="row info-row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+          <div *ngIf="showAddress || showFacilityContact || showAssessmentContact" class="row info-row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
             <div class="col-4 text-center bold">
-                {{settings.facilityInfo.facilityContact.contactName}}<br *ngIf="settings.facilityInfo.facilityContact.contactName !== undefined">
-                {{settings.facilityInfo.facilityContact.phoneNumber}}<br *ngIf="settings.facilityInfo.facilityContact.phoneNumber !== undefined">
-                {{settings.facilityInfo.facilityContact.email}}
+              {{settings.facilityInfo.assessmentContact.contactName}}
+              <br>{{settings.facilityInfo.assessmentContact.phoneNumber}}
+              <br>{{settings.facilityInfo.assessmentContact.email}}
             </div>
-            <div class="col-4"></div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.facilityContact.contactName}}
+              <br>{{settings.facilityInfo.facilityContact.phoneNumber}}
+              <br>{{settings.facilityInfo.facilityContact.email}}
+            </div>
             <div class="col-4 text-justify address-col bold">
-                {{settings.facilityInfo.address.street}},<br>
-                {{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}<br>
-                {{settings.facilityInfo.address.country}}
+              {{settings.facilityInfo.address.street}},
+              <br>{{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}
+              <br>{{settings.facilityInfo.address.country}}
             </div>
           </div>
           <div class="row">
