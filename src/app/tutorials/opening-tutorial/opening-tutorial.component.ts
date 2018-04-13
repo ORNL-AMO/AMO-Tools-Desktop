@@ -14,13 +14,9 @@ export class OpeningTutorialComponent implements OnInit {
   showItem: Array<boolean> = [true, false, false, false, false, false];
 
   index: number = 0;
-  show: boolean = true;
   showWelcomeText: Array<boolean> = [false, false, false, false];
-  intro1: boolean = false;
-  intro2: boolean = false;
-  intro3: boolean = false;
-  intro4: boolean = false;
   dontShow: boolean = true;
+  show: boolean = true;
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -41,17 +37,13 @@ export class OpeningTutorialComponent implements OnInit {
     this.showItem[this.index] = true;
   }
   close() {
+    if(this.dontShow){
+      this.sendDontShow();
+    }
     this.closeTutorial.emit(true);
   }
 
   sendDontShow(){
     this.settingsService.setDontShow.next(this.dontShow);
-  }
-
-  getStarted(){
-    if(this.dontShow){
-      this.sendDontShow();
-    }
-    this.close();
   }
 }
