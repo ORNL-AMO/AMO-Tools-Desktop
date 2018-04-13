@@ -421,6 +421,7 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.deleteDb().then(
       results => {
         this.suiteDbService.startup();
+        this.assessmentService.tutorialShown = false;
         this.tutorialShown = false;
         this.initData();
         this.hideDeleteModal()

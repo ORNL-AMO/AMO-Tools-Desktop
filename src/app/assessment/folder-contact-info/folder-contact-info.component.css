@@ -33,3 +33,69 @@ td, a{
     cursor: pointer;
     background-color: #ececec;
 }
+
+
+.expanded-row {
+  height: initial;
+  overflow: initial;
+  color: rgba(0,0,0,1);
+  transition: all ease 0.5s;
+}
+
+.collapsed-row {
+  height: 0;
+  overflow: hidden;
+  color: rgba(0,0,0,0);
+  transition: all ease 0.5s;
+}
+
+
+.btn-expand {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 12px;
+  transition: all ease 0.2s;
+}
+
+.btn-expand:hover {
+  cursor: pointer;
+  background-color: #ececec;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 10px solid #acacac;
+  margin: auto;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 10px solid #acacac;
+  margin: auto;
+}
+
+.btn-expand:hover .arrow-down {
+  border-top: 10px solid #fff;
+}
+
+.btn-expand:hover .arrow-up {
+  border-bottom: 10px solid #fff;
+}
+
+.info-row {
+  font-size: 16px;
+}
+
+.address-col {
+  padding-left: 13%;
+}
+
+.label-row {
+  padding-top: 10px;
+}
