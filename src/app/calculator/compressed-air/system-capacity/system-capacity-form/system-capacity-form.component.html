@@ -104,7 +104,7 @@
     </div>
   </div>
   <div class="form-section">
-    <label class="bold">Enter the Number of Receivers</label>
+    <label class="bold">Enter the Receiver Capacities</label>
     <div class="form-group" *ngFor="let capacity of inputs.receiverCapacities; let index=index; trackBy:trackByFn">
       <label for="{{'capacity_'+index}}">Receiver {{index+1}}</label>
       <div class="input-group">
@@ -116,7 +116,7 @@
     </div>
     <div class="row">
       <div class="col-md-auto mx-auto">
-        <a class="click-link small" (click)="addReceiver()">Add Receiver Capacity</a>
+        <a class="click-link small" (click)="addReceiver()">Add Receiver Tank</a>
       </div>
     </div>
   </div>
