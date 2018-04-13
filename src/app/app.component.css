@@ -1666,6 +1666,26 @@ Toasty Overrides ================================= */
   right: 12px;
 }
 
+.explore-opps #toasty.toasty-position-bottom-right .toast{
+  width: 400px;
+  animation-name: explore-opps-toast;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.explore-opps #toasty.toasty-position-bottom-right .toast-title{
+  font-size: 20px !important;
+}
+
+.explore-opps #toasty.toasty-position-bottom-right .toast-msg{
+  font-size: 18px !important;
+}
+
+@keyframes explore-opps-toast{
+  from {background-color: #db281b;}
+  to {background-color: #F97A1F;}
+}
 
 
 
