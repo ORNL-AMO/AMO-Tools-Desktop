@@ -68,10 +68,7 @@ export class PieChartComponent implements OnInit {
     this.host = d3.select(this.htmlElement);
 
     if (!this.printView) {
-      if (this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
-        // this.chartContainerHeight = 260;
-        this.chartContainerHeight = Math.min(this.chartContainerWidth * 0.45, 280);
-      }
+      this.chartContainerHeight = Math.min(this.chartContainerWidth * 0.45, 280);
       this.height = this.chartContainerHeight;
     }
     else {

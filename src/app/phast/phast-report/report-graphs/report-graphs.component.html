@@ -34,8 +34,8 @@
       </div>
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-            [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-phast-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
+            [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
         </div>
       </div>
     </div>
@@ -49,12 +49,10 @@
           <div #pieChartContainer class="col-6">
               <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
               [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
-            <!-- <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-              [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-phast-pie-chart> -->
           </div>
           <div class="col-6">
-            <app-phast-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
-              [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-phast-pie-chart>
+            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
+              [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-pie-chart>
           </div>
         </div>
       </div>
