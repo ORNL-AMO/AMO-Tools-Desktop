@@ -14,6 +14,7 @@ export class TutorialsComponent implements OnInit {
   }
 
   viewOpeningTutorial(){
+    this.assessmentService.tutorialShown = false;
     this.assessmentService.openingTutorial.next(true);
   }
 
