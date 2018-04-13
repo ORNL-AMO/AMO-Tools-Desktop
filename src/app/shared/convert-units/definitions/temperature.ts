@@ -8,16 +8,16 @@ export const temperature = {
             }
             , to_anchor: 1
             , anchor_shift: 0
-        },
-        K: {
-            name: {
-                singular: 'Degree Kelvin'
-                , plural: 'Degrees Kelvin' ,
-                 display:  '(K)'
-            }
-            , to_anchor: 1
-            , anchor_shift: 273.15
         }
+        // K: {
+        //     name: {
+        //         singular: 'Degree Kelvin'
+        //         , plural: 'Degrees Kelvin' ,
+        //          display:  '(K)'
+        //     }
+        //     , to_anchor: 1
+        //     , anchor_shift: 273.15
+        // }
     },
     imperial: {
         F: {
