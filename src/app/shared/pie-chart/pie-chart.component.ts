@@ -42,7 +42,7 @@ export class PieChartComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.values || changes.labels) {
       if (!changes.values.firstChange) {
-        if (!this.svg) {
+        if (!this.svg || this.svg === undefined) {
           this.setupPie();
           this.buildPie();
         }
@@ -68,13 +68,14 @@ export class PieChartComponent implements OnInit {
     this.host = d3.select(this.htmlElement);
 
     if (!this.printView) {
-      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
-        this.chartContainerHeight = 300;
+      if (this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
+        // this.chartContainerHeight = 260;
+        this.chartContainerHeight = Math.min(this.chartContainerWidth * 0.45, 280);
       }
       this.height = this.chartContainerHeight;
     }
     else {
-      if (!this.chartContainerHeight || this.chartContainerHeight <= 0) {
+      if (this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
         this.chartContainerHeight = 450;
       }
       this.height = 270;
