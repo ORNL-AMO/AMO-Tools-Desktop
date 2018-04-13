@@ -43,6 +43,9 @@ export class PhastComponent implements OnInit {
   stepTab: StepTab;
   _phast: PHAST;
 
+  tab1Status: string;
+  tab2Status: string;
+
   mainTab: string = 'system-setup';
   specTab: StepTab;
   isModalOpen: boolean = false;
@@ -81,6 +84,9 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.tab1Status = '';
+    this.tab2Status = '';
+
     //initialize booleans indicating assessment setup or 'done'
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
@@ -215,25 +221,54 @@ export class PhastComponent implements OnInit {
   checkSetupDone() {
     //use copy so we don't modify existing
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    console.log('this._phast.setupDone = ' + this._phast.setupDone);
     this.lossesService.updateTabs.next(true);
     //set current phast as selected sankey in sankey tab
     this.sankeyPhast = this._phast;
+
+    if (this._phast.setupDone) {
+      this.tab2Status = 'success';
+    }
+    else {
+      this.tab2Status = 'missing-data';
+    }
+  }
+
+  validateSettings(): string {
+    if (this.settings === undefined) {
+      return '';
+    }
+    if ((this.settings.electricityCost === null || !this.settings.electricityCost) || (this.settings.fuelCost === null || !this.settings.fuelCost) || (this.settings.steamCost === null || !this.settings.steamCost)) {
+      return 'missing-data';
+    }
+    if (this.settings.electricityCost < 0 || this.settings.fuelCost < 0 || this.settings.steamCost < 0) {
+      return 'input-error';
+    }
+    else {
+      return 'success';
+    }
   }
 
   getSettings() {
+    console.log('getSettings()');
     //get assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
       results => {
         if (results.length != 0) {
           this.settings = results[0];
+          console.log("settings = ");
+          console.log(this.settings);
           //sets which tabs will be used based on settings
           this.lossesService.setTabs(this.settings);
           this.isAssessmentSettings = true;
           this.checkSetupDone();
+          this.tab1Status = this.validateSettings();
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
+          this.tab1Status = this.validateSettings();
         }
+        console.log('tab1Status = ' + this.tab1Status);
       }
     )
   }
