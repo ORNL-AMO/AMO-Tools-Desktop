@@ -57,7 +57,7 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
-        (save)="saveDb()" [exploreModIndex]="modificationIndex"></app-explore-phast-opportunities>
+        (save)="saveDb()" [exploreModIndex]="modificationIndex" (exploreOppsToast)="setExploreOppsToast($event)"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"
@@ -111,7 +111,7 @@
   </div>
 </div>
 <!--disclaimer toast-->
-<ng2-toasty class="disclaimer"></ng2-toasty>
+<ng2-toasty class="disclaimer" [ngClass]="{'explore-opps':exploreOppsToast}"></ng2-toasty>
 
 
 
@@ -126,8 +126,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex"
-          (close)="closeSelectModification()"></app-modification-list>
+        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>
   </div>

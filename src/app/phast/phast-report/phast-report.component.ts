@@ -99,7 +99,6 @@ export class PhastReportComponent implements OnInit {
 
   initPrintLogic() {
     if (this.inRollup) {
-      // this.printFacilityInfo = true;
       this.printEnergyUsed = true;
       this.printExecutiveSummary = true;
       this.printResultsData = true;
@@ -175,7 +174,6 @@ export class PhastReportComponent implements OnInit {
 
   resetPrintSelection() {
     this.selectAll = false;
-    // this.printFacilityInfo = false;
     this.printEnergyUsed = false;
     this.printExecutiveSummary = false;
     this.printResultsData = false;
@@ -189,29 +187,21 @@ export class PhastReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
-          // this.printFacilityInfo = true;
           this.printEnergyUsed = true;
           this.printExecutiveSummary = true;
           this.printResultsData = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
-          // this.printInputSummary = true;
         }
         else {
-          // this.printFacilityInfo = false;
           this.printEnergyUsed = false;
           this.printExecutiveSummary = false;
           this.printResultsData = false;
           this.printReportGraphs = false;
           this.printReportSankey = false;
-          // this.printInputSummary = false;
         }
         break;
       }
-      // case "facility-info": {
-      //   this.printFacilityInfo = !this.printFacilityInfo;
-      //   break;
-      // }
       case "energy-used": {
         this.printEnergyUsed = !this.printEnergyUsed;
         break;

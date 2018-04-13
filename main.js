@@ -21,12 +21,6 @@ let win = null;
 let available = null;
 
 
-if (isDev()) {
-  require('electron-reload')(path.join(__dirname, 'dist/index.html'), {
-    electron: require(path.join(__dirname, '/node_modules/electron'))
-  });
-}
-
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions

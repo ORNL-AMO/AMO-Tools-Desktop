@@ -2,8 +2,8 @@ export const temperature = {
     metric: {
         C: {
             name: {
-                singular: 'degree Celsius'
-                , plural: 'degrees Celsius' ,
+                singular: 'Degree Celsius'
+                , plural: 'Degrees Celsius' ,
                  display:  '(C)'
             }
             , to_anchor: 1
@@ -11,8 +11,8 @@ export const temperature = {
         },
         K: {
             name: {
-                singular: 'degree Kelvin'
-                , plural: 'degrees Kelvin' ,
+                singular: 'Degree Kelvin'
+                , plural: 'Degrees Kelvin' ,
                  display:  '(K)'
             }
             , to_anchor: 1
@@ -22,8 +22,8 @@ export const temperature = {
     imperial: {
         F: {
             name: {
-                singular: 'degree Fahrenheit'
-                , plural: 'degrees Fahrenheit' ,
+                singular: 'Degree Fahrenheit'
+                , plural: 'Degrees Fahrenheit' ,
                  display:  '(F)'
             }
             , to_anchor: 1

@@ -25,7 +25,8 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   containerHeight: number;
   @Input()
   exploreModIndex: number;
-
+  @Output('exploreOppsToast')
+  exploreOppsToast = new EventEmitter<boolean>();
   @Output('save')
   save = new EventEmitter<boolean>();
 
@@ -40,7 +41,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
-  toastId:any;
+  toastId: any;
   constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
   ) {
@@ -55,6 +56,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   ngOnDestroy() {
     this.toastyService.clearAll();
+    this.exploreOppsToast.emit(false);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -80,6 +82,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   checkExploreOpps() {
     if (this.modExists) {
       if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
+        this.exploreOppsToast.emit(true);
         let toastOptions: ToastOptions = {
           title: 'Explore Opportunites',
           msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
@@ -88,6 +91,8 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
           theme: 'default'
         }
         this.toastyService.warning(toastOptions);
+      } else {
+        this.exploreOppsToast.emit(false);
       }
     }
   }

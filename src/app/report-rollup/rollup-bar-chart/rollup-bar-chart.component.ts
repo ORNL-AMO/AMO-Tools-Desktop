@@ -216,10 +216,16 @@ export class RollupBarChartComponent implements OnInit {
 
       //formatting chart
       if (this.printView) {
+
         d3.selectAll(".c3-axis-x .tick text").style("font-size", "1.1rem").style("fill", "none").style("stroke", "#000");
-        d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
-        d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-        d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+        d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+        d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+
+        // d3.selectAll(".c3-axis-x .tick text").style("font-size", "1.1rem").style("fill", "none").style("stroke", "#000");
+        // d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
+        // d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        // d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
       }
       else {
         d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
