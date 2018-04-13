@@ -71,7 +71,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init');
     // this.importExportService.test();
     //start toolts suite database if it has not started
     this.initData();

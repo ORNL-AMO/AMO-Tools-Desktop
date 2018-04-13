@@ -18,6 +18,7 @@ export class AssessmentService {
   showFeedback: BehaviorSubject<boolean>;
   screenShotHeight: BehaviorSubject<number>;
   openingTutorial: BehaviorSubject<boolean>;
+  tutorialShown: boolean = false;
   constructor() {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);

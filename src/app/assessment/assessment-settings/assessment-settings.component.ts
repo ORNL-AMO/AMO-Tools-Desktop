@@ -3,7 +3,6 @@ import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -32,8 +31,7 @@ export class AssessmentSettingsComponent implements OnInit {
 
   //does directory have settings
   isDirectorySettings: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private toastyService: ToastyService, private toastyConfig: ToastyConfig, private convertUnitsService: ConvertUnitsService) {
-    this.toastyConfig.theme = 'bootstrap';
+  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) {
   }
 
   @ViewChild('settingsModal') public settingsModal: ModalDirective;
@@ -134,7 +132,6 @@ export class AssessmentSettingsComponent implements OnInit {
         this.indexedDbService.getDirectorySettings(this.directory.id).then(
           results => {
             if (results.length != 0) {
-              this.addToast('Settings Updated');
               this.settings = results[0];
               if (updateData) {
                 this.updateAssessments(this.directory, oldSettings, this.settings);
@@ -162,7 +159,6 @@ export class AssessmentSettingsComponent implements OnInit {
         this.indexedDbService.getDirectorySettings(this.directory.id).then(
           results => {
             if (results.length != 0) {
-              this.addToast('Settings Created for this folder');
               this.settings = results[0];
               this.showSettingsModal(oldSettings, this.settings);
               this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -196,7 +192,7 @@ export class AssessmentSettingsComponent implements OnInit {
                 }
                 if (tmpResults.updated) {
                   //update assessment
-                  this.indexedDbService.putAssessment(assessment).then(results => { this.addToast('Assessment Updated') });
+                  this.indexedDbService.putAssessment(assessment);
                 }
               } else {
                 //TODO PHAST
@@ -229,7 +225,7 @@ export class AssessmentSettingsComponent implements OnInit {
                       }
                       if (tmpResults.updated) {
                         //update assessment
-                        this.indexedDbService.putAssessment(assessment).then(results => { this.addToast('Assessment Data Updated') });
+                        this.indexedDbService.putAssessment(assessment);
                       }
                     } else {
                       //TODO PHAST
@@ -318,17 +314,6 @@ export class AssessmentSettingsComponent implements OnInit {
     } else {
       return false;
     }
-  }
-
-
-  addToast(str: string) {
-    let toastOptions: ToastOptions = {
-      title: str,
-      timeout: 2000,
-      showClose: true,
-      theme: 'default'
-    }
-    this.toastyService.success(toastOptions);
   }
 
   resetData() {
