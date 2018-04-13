@@ -12,8 +12,8 @@
           {{settings.furnaceType}}
         </h3>
         <h3 class="furnace-name" *ngIf="settings.energySourceType != 'Electricity'">
-          {{settings.energySourceType}}
-          <span *ngIf="settings.energySourceType == 'Fuel'">Fired</span>
+          <span *ngIf="settings.energySourceType == 'Fuel'">{{settings.energySourceType}}-fired</span>
+          <span *ngIf="settings.energySourceType == 'Steam'">{{settings.energySourceType}}-based</span>
         </h3>
         <h3 class="furnace-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
           <br>{{settings.customFurnaceName}}</h3>
