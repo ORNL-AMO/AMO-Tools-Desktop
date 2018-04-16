@@ -83,3 +83,10 @@
 .text-help{
 	color: gray;
 }
+
+
+.former-name{
+	font-style: italic;
+	font-size: smaller;
+	padding-left: 15px;
+}

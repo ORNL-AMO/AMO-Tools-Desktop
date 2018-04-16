@@ -12,8 +12,8 @@
           {{settings.furnaceType}}
         </h3>
         <h3 class="furnace-name" *ngIf="settings.energySourceType != 'Electricity'">
-          {{settings.energySourceType}}
-          <span *ngIf="settings.energySourceType == 'Fuel'">Fired</span>
+          <span *ngIf="settings.energySourceType == 'Fuel'">{{settings.energySourceType}}-fired</span>
+          <span *ngIf="settings.energySourceType == 'Steam'">{{settings.energySourceType}}-based</span>
         </h3>
         <h3 class="furnace-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
           <br>{{settings.customFurnaceName}}</h3>
@@ -26,7 +26,7 @@
     <div class="row justify-content-center align-items-center pill-row">
       <ul class="pills-nav">
         <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
-          <span>PH System Setup</span>
+          <span>System Setup</span>
         </li>
         <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('assessment')">
           <span>Assessment</span>

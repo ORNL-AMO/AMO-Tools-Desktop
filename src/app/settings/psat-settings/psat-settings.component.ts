@@ -86,8 +86,8 @@ export class PsatSettingsComponent implements OnInit {
 
     tmpList = [
       'C',
-      'F',
-      'K'
+      'F'
+      // 'K'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {

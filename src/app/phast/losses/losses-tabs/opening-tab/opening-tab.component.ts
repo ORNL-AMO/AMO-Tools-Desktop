@@ -16,6 +16,9 @@ export class OpeningTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
+
   numLosses: number = 0;
   inputError: boolean;
   missingData: boolean;
@@ -38,6 +41,8 @@ export class OpeningTabComponent implements OnInit {
       this.inputError = val;
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
   ngOnDestroy(){
     this.compareSubscription.unsubscribe();
@@ -96,6 +101,28 @@ export class OpeningTabComponent implements OnInit {
   checkDifferent() {
     if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses) {
       return this.openingLossesCompareService.compareAllLosses();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 }

@@ -341,7 +341,6 @@ export class ConvertPhastService {
   }
   //energyInputExhaustGasLoss
   convertEnergyInputExhaustGasLoss(loss: EnergyInputExhaustGasLoss, oldSettings: Settings, newSettings: Settings): EnergyInputExhaustGasLoss {
-  console.log('called');
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       loss.combustionAirTemp = this.convertVal(loss.combustionAirTemp, 'C', 'F');
       loss.exhaustGasTemp = this.convertVal(loss.exhaustGasTemp, 'C', 'F');

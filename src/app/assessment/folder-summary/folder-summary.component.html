@@ -1,3 +1,11 @@
+
+<div class="row">
+  <div class="col-12">
+      <app-folder-contact-info [directory]="directory"></app-folder-contact-info>
+  </div>
+</div>
+
+
 <div class="row">
   <div class="col-12">
     <div class="card panel-container">
@@ -18,7 +26,7 @@
               <td>{{psatEnergyCost | currency}}</td>
             </tr>
             <tr>
-              <td>Proces Heating</td>
+              <td>Process Heating</td>
               <td>{{numPhasts}}</td>
               <td>{{phastEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
               <td>{{phastEnergyCost | currency}}</td>

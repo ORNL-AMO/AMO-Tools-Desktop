@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 import { PhastService } from './phast.service';
@@ -24,12 +24,12 @@ import { Subscription } from 'rxjs';
 export class PhastComponent implements OnInit {
   @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
-
   //elementRefs used for getting container height for scrolling
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -63,6 +63,7 @@ export class PhastComponent implements OnInit {
   openModListSubscription: Subscription;
   selectedModSubscription: Subscription;
   addNewSubscription: Subscription;
+  exploreOppsToast: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
@@ -72,7 +73,8 @@ export class PhastComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
     private lossesService: LossesService,
-    private phastCompareService: PhastCompareService) {
+    private phastCompareService: PhastCompareService,
+    private cd: ChangeDetectorRef) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -91,10 +93,12 @@ export class PhastComponent implements OnInit {
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
           if (this._phast.modifications.length != 0) {
-            if(!this._phast.modifications[0].exploreOpportunities){
+            if (!this._phast.modifications[0].exploreOpportunities) {
               this.phastService.assessmentTab.next('modify-conditions');
             }
-            this.phastCompareService.setCompareVals(this._phast, 0);
+            if (this._phast.setupDone) {
+              this.phastCompareService.setCompareVals(this._phast, 0);
+            }
           }
         }
         //get settings
@@ -376,5 +380,11 @@ export class PhastComponent implements OnInit {
     this._phast.modifications.push(mod);
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1);
     this.closeAddNewModal();
+  }
+
+  setExploreOppsToast(bool: boolean) {
+    this.exploreOppsToast = bool;
+    this.cd.detectChanges();
+    console.log(this.exploreOppsToast);
   }
 }

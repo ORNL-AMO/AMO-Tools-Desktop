@@ -20,7 +20,7 @@
 <div class="sidebar-group secondary">
   <ul>
     <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}">
-      <span (click)="toggleSelected(directory)"><i class="fa fa-folder" aria-hidden="true"></i> All Assets</span>
+      <span (click)="toggleSelected(directory)"><i class="fa fa-folder" aria-hidden="true"></i> All Assessments</span>
     </li>
     <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
@@ -52,7 +52,7 @@
     </li>
     <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}">
       <span (click)="chooseCalculator('compressed-air')">Compressed Air</span>
-    </li> 
+    </li>
 
     <li [ngClass]="{'selected': selectedCalculator == 'utilities'}">
       <span (click)="chooseCalculator('utilities')">General</span>

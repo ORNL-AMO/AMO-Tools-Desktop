@@ -1,15 +1,6 @@
 <div class="explore-ops-form" *ngIf="psat">
   <ul>
     <li>
-      <div class="form-group">
-        <label for="modificatonName">Modification Name</label>
-        <div class="input-group">
-          <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="psat.modifications[exploreModIndex].psat.name"
-            (input)="startSavePolling()" />
-        </div>
-      </div>
-    </li>
-    <li>
       <app-system-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
         [exploreModIndex]="exploreModIndex"></app-system-data-form>
     </li>

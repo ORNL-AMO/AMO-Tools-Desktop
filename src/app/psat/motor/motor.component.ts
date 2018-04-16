@@ -17,8 +17,6 @@ export class MotorComponent implements OnInit {
   psat: PSAT;
   // @Output('changeField')
   // changeField = new EventEmitter<string>();
-  @Input()
-  saveClicked: boolean;
   @Output('isValid')
   isValid = new EventEmitter<boolean>();
   @Output('isInvalid')
@@ -33,6 +31,8 @@ export class MotorComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modificationIndex: number;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -66,14 +66,39 @@ export class MotorComponent implements OnInit {
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
+    this.init();
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
     } else {
       this.options = this.kWatts;
     }
+    if (this.psat.inputs.optimize_calculation) {
+      this.disableOptimized();
+    }
+    if (!this.selected) {
+      this.disableForm();
+    }
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+      if (changes.modificationIndex) {
+        this.init();
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
+  init() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
     this.modifyPowerArrays();
@@ -84,33 +109,9 @@ export class MotorComponent implements OnInit {
     this.checkRatedPower(true);
   }
 
-  ngAfterViewInit() {
-    if (this.psat.inputs.optimize_calculation) {
-      this.disableOptimized();
-    }
-
-    if (!this.selected) {
-      this.disableForm();
-    }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.savePsat(this.psatForm);
-      }
-      if (!this.selected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-      this.setCompareVals();
-    }
-    else {
-      this.isFirstChange = false;
-    }
+  changeLineFreq() {
+    this.defaultRpm();
+    this.startSavePolling();
   }
 
   modifyPowerArrays() {
@@ -203,28 +204,6 @@ export class MotorComponent implements OnInit {
       this.disableOptimized();
     }
   }
-
-  // addNum(str: string) {
-  //   if (str == 'motorRPM') {
-  //     this.psatForm.controls.motorRPM++;
-  //   } else if (str == 'sizeMargin') {
-  //     this.psatForm.controls.sizeMargin++;
-  //   }
-  //   this.checkForm(this.psatForm);
-  // }
-  //
-  // subtractNum(str: string) {
-  //   if (str == 'motorRPM') {
-  //     if (this.psatForm.controls.motorRPM != 0) {
-  //       this.psatForm.controls.motorRPM--;
-  //     }
-  //   } else if (str == 'sizeMargin') {
-  //     if (this.psatForm.controls.sizeMargin != 0) {
-  //       this.psatForm.controls.sizeMargin--;
-  //     }
-  //   }
-  //   this.checkForm(this.psatForm);
-  // }
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
@@ -385,17 +364,7 @@ export class MotorComponent implements OnInit {
 
   savePsat(form: FormGroup) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.setCompareVals();
     this.saved.emit(this.selected);
-  }
-
-  setCompareVals() {
-    if (this.baseline) {
-      this.compareService.baselinePSAT = this.psat;
-    } else {
-      this.compareService.modifiedPSAT = this.psat;
-    }
-    this.compareService.checkMotorDifferent();
   }
 
   changeEfficiencyClass() {
@@ -409,65 +378,61 @@ export class MotorComponent implements OnInit {
     this.savePsat(this.psatForm)
   }
 
-  initDifferenceMonitor() {
-    if (!this.inSetup) {
-      let doc = this.windowRefService.getDoc();
-      //line frequency
-      this.compareService.line_frequency_different.subscribe((val) => {
-        let lineFreqElements = doc.getElementsByName('frequency');
-        lineFreqElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //motor power
-      this.compareService.motor_rated_power_different.subscribe((val) => {
-        let horsePowerElements = doc.getElementsByName('horsePower');
-        horsePowerElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //motor rpm
-      this.compareService.motor_rated_speed_different.subscribe((val) => {
-        let motorRpmElements = doc.getElementsByName('motorRPM');
-        motorRpmElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //efficiency class
-      this.compareService.efficiency_class_different.subscribe((val) => {
-        let efficiencyClassElements = doc.getElementsByName('efficiencyClass');
-        efficiencyClassElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //efficiency
-      this.compareService.efficiency_different.subscribe((val) => {
-        let efficiencyElements = doc.getElementsByName('efficiency');
-        efficiencyElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //rated voltage
-      this.compareService.motor_rated_voltage_different.subscribe((val) => {
-        let motorVoltageElements = doc.getElementsByName('motorVoltage');
-        motorVoltageElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //full load amps
-      this.compareService.motor_rated_fla_different.subscribe((val) => {
-        let motorFlaElements = doc.getElementsByName('fullLoadAmps');
-        motorFlaElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //size margin
-      this.compareService.margin_different.subscribe((val) => {
-        let marginElements = doc.getElementsByName('sizeMargin');
-        marginElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+  canCompare() {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isLineFreqDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isLineFreqDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedPowerDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedPowerDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedSpeedDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedSpeedDifferent();
+    } else {
+      return false;
+    }
+  }
+  isEfficiencyClassDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isEfficiencyClassDifferent();
+    } else {
+      return false;
+    }
+  }
+  isEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isEfficiencyDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedVoltageDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedFlaDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedFlaDifferent();
+    } else {
+      return false;
     }
   }
 }

@@ -164,7 +164,7 @@ export class ReportGraphsComponent implements OnInit {
 
   getPieWidth(): number {
     if (this.pieChartContainer) {
-      let containerPadding = 30;
+      let containerPadding = 50;
       return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
     }
     else {

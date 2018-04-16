@@ -10,13 +10,14 @@
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-        id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();">
+        id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
+        [ngClass]="{'indicate-different': isOperatingFractionDifferent()}">
       <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
     </div>
 
     <div class="form-group">
       <label for="costKwHr">Cost</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isCostKwhrDifferent()}">
         <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
           (input)="checkCost()" (focus)="focusField('costKwHr')" onfocus="this.select();">
         <span class="input-group-addon units">$/kWh</span>
@@ -26,7 +27,7 @@
 
     <div class="form-group">
       <label for="flowRate">Flow Rate</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkFlowRate()"
           (focus)="focusField('flowRate')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
@@ -42,7 +43,7 @@
         Head
         <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" (click)="showHeadToolModal()">Calculate Head</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isHeadDifferent()}">
         <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="checkHead()"
           (focus)="focusField('head')" onfocus="this.select();">
         <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
@@ -151,7 +152,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true" [assessment]="assessment"></app-head-tool>
+        <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true"
+          [assessment]="assessment"></app-head-tool>
       </div>
     </div>
   </div>

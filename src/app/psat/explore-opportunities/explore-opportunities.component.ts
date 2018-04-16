@@ -4,6 +4,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import { SettingsService } from '../../settings/settings.service';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -21,6 +22,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   psat: PSAT;
   @Input()
   containerHeight: number;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
 
   annualSavings: number = 0;
   percentSavings: number = 0;
@@ -35,14 +40,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
   isFirstChange: boolean = true;
-  exploreModIndex: number = 0;
 
   tabSelect: string = 'results';
   currentField: string;
-  modExists: boolean = false;
-  exploreModExists: boolean = false;
-
-  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
+  constructor(private psatService: PsatService, private settingsService: SettingsService, private compareService: CompareService) { }
 
   ngOnInit() {
     let globalSettings = this.settingsService.globalSettings;
@@ -51,55 +52,53 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.tabSelect = globalSettings.defaultPanelTab;
       }
     }
-    if (this.psat.modifications) {
-      this.modExists = true;
-      this.checkForExploreMod();
-    }
     this.title = 'Potential Adjustment';
     this.unit = '%';
     this.titlePlacement = 'top';
     this.getResults();
   }
 
-  checkForExploreMod() {
-    let i = 0;
-    this.psat.modifications.forEach(mod => {
-      if (mod.exploreOpportunities) {
-        this.exploreModIndex = i;
-        this.exploreModExists = true;
-      } else {
-        i++;
-      }
-    })
-    if(!this.exploreModExists){
-      this.tabSelect = 'help';
-    }
+  // checkForExploreMod() {
+  //   let i = 0;
+  //   this.psat.modifications.forEach(mod => {
+  //     if (mod.exploreOpportunities) {
+  //       this.exploreModIndex = i;
+  //       this.exploreModExists = true;
+  //     } else {
+  //       i++;
+  //     }
+  //   })
+  //   if(!this.exploreModExists){
+  //     this.tabSelect = 'help';
+  //   }
+  // }
+
+  // addExploreOpp() {
+  //   if (!this.psat.modifications) {
+  //     this.psat.modifications = new Array();
+  //   }
+  //   let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
+  //   psatCpy.name = 'Opportunities Modification';
+  //   this.psat.modifications.push({
+  //     notes: {
+  //       systemBasicsNotes: '',
+  //       pumpFluidNotes: '',
+  //       motorNotes: '',
+  //       fieldDataNotes: ''
+  //     },
+  //     psat: {
+  //       inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
+  //     },
+  //     exploreOpportunities: true
+  //   });
+  //   this.save();
+  //   this.checkForExploreMod();
+  //   this.getResults();
+  // }
+
+  addExploreOpp(){
+    this.compareService.openNewModal.next(true);
   }
-
-  addExploreOpp() {
-    if (!this.psat.modifications) {
-      this.psat.modifications = new Array();
-    }
-    let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
-    psatCpy.name = 'Opportunities Modification';
-    this.psat.modifications.push({
-      notes: {
-        systemBasicsNotes: '',
-        pumpFluidNotes: '',
-        motorNotes: '',
-        fieldDataNotes: ''
-      },
-      psat: {
-        inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-      },
-      exploreOpportunities: true
-    });
-    this.save();
-    this.checkForExploreMod();
-    this.getResults();
-  }
-
-
   getResults() {
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
@@ -113,8 +112,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
     } else {
       this.baselineResults = this.psatService.emptyResults();
     }
-    if (this.exploreModExists) {
-      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    if (this.modificationExists) {
+      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.modificationIndex].psat.inputs));
       tmpForm = this.psatService.getFormFromPsat(modInputs);
       if (tmpForm.status == 'VALID') {
         if (modInputs.optimize_calculation) {
@@ -132,8 +131,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     //this.assessment.psat = this.psat;
-    if (!this.psat.modifications[this.exploreModIndex].psat.name) {
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+    if (!this.psat.modifications[this.modificationIndex].psat.name) {
+      this.psat.modifications[this.modificationIndex].psat.name = 'Opportunities Modification';
     }
     this.saved.emit(true);
   }

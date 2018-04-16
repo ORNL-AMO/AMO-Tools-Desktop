@@ -37,11 +37,14 @@ import { ModifyConditionsTabsComponent } from './modify-conditions/modify-condit
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
-import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
+import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
+import { ModifyConditionsTabsTooltipComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
+import { PsatReportService } from './psat-report/psat-report.service';
 
 @NgModule({
   declarations: [
@@ -57,9 +60,11 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
     InputSummaryComponent,
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
-    EditConditionPropertiesComponent,
     PsatDiagramComponent,
-    PsatSankeyComponent
+    PsatSankeyComponent,
+    ModificationListComponent,
+    AddModificationComponent,
+    ModifyConditionsTabsTooltipComponent
   ],
   exports: [
     PsatReportComponent
@@ -88,7 +93,8 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
   ],
   providers: [
     PsatService,
-    CompareService
+    CompareService,
+    PsatReportService
   ]
 })
 

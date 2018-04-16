@@ -67,11 +67,13 @@ export class WallLossesFormComponent implements OnInit {
 
   //iterate through form elements and disable
   disableForm() {
-    this.wallLossesForm.disable();
+    this.wallLossesForm.controls.surfaceShape.disable();
+    // this.wallLossesForm.disable();
   }
   //iterate through form elements and enable
   enableForm() {
-    this.wallLossesForm.enable();
+    this.wallLossesForm.controls.surfaceShape.enable();
+    // this.wallLossesForm.enable();
   }
 
   //emits to wall-losses.component the focused field changed
@@ -131,6 +133,7 @@ export class WallLossesFormComponent implements OnInit {
       conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     })
     this.calculate.emit(true);
+    this.checkInputError();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));

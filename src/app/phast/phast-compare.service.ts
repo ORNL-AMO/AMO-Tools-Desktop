@@ -196,92 +196,92 @@ export class PhastCompareService {
     this.operationsCompareService.modification = undefined;
   }
 
-  getBadges(baseline: PHAST, modification: PHAST): Array<string> {
-    let badges: Array<string> = [];
+  getBadges(baseline: PHAST, modification: PHAST): Array<{ badge: string, componentStr: string }> {
+    let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
       if (baseline.losses.atmosphereLosses) {
         if (this.atmosphereLossesCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Atmo')
+          badges.push({ badge: 'Atmo', componentStr: 'atmosphere-losses' })
         }
       }
       if (baseline.losses.auxiliaryPowerLosses) {
         if (this.auxiliaryPowerCompareService.compareBaseModLoss(baseline, modification)) {
-          badges.push('Aux')
+          badges.push({ badge: 'Aux', componentStr: 'auxiliary-power' })
         }
       }
       if (baseline.losses.chargeMaterials) {
         if (this.chargeMaterialCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('ChMat')
+          badges.push({ badge: 'ChMat', componentStr: 'charge-material' })
         }
       }
       if (baseline.losses.coolingLosses) {
         if (this.coolingLossCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Cool')
+          badges.push({ badge: 'Cool', componentStr: 'cooling-losses' })
         }
       }
       if (baseline.losses.chargeMaterials) {
         if (this.energyInputService.compareBaselineModification(baseline, modification)) {
-          badges.push('EI')
+          badges.push({ badge: 'EI', componentStr: 'energy-input' })
         }
       }
       if (baseline.losses.energyInputExhaustGasLoss) {
         if (this.energyInputExhaustGasCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('ExGas')
+          badges.push({ badge: 'ExGas', componentStr: 'energy-input-exhaust-gas' })
         }
       }
       if (baseline.losses.exhaustGasEAF) {
         if (this.exhaustGasCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('ExGas')
+          badges.push({ badge: 'ExGas', componentStr: 'exhaust-gas' })
         }
       }
       if (baseline.losses.extendedSurfaces) {
         if (this.extendedSurfaceCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('ExSur')
+          badges.push({ badge: 'ExSur', componentStr: 'extended-surface-losses' })
         }
       }
       if (baseline.losses.fixtureLosses) {
         if (this.fixtureLossCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Fix')
+          badges.push({ badge: 'Fix', componentStr: 'fixture-losses' })
         }
       }
       if (baseline.losses.flueGasLosses) {
         if (this.flueGasCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Flue')
+          badges.push({ badge: 'Flue', componentStr: 'flue-gas-losses' })
         }
       }
       if (baseline.losses.leakageLosses) {
         if (this.gasLeakageCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('GasL')
+          badges.push({ badge: 'GasL', componentStr: 'gas-leakage-losses' })
         }
       }
       if (baseline.losses.openingLosses) {
         if (this.openingLossCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Open')
+          badges.push({ badge: 'Open', componentStr: 'opening-losses' })
         }
       }
       if (baseline.losses.otherLosses) {
         if (this.otherLossCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Other')
+          badges.push({ badge: 'Other', componentStr: 'other-losses' })
         }
       }
       if (baseline.losses.slagLosses) {
         if (this.slagCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Slag')
+          badges.push({ badge: 'Slag', componentStr: 'slag' })
         }
       }
       if (baseline.losses.wallLosses) {
         if (this.wallLossCompareService.compareBaselineModification(baseline, modification)) {
-          badges.push('Wall')
+          badges.push({ badge: 'Wall', componentStr: 'wall-losses' })
         }
       }
       if (baseline.systemEfficiency) {
         if (this.heatSystemEfficiencyCompareService.compareEfficiency()) {
-          badges.push('Eff')
+          badges.push({ badge: 'Eff', componentStr: 'heat-system-efficiency' })
         }
       }
       if (baseline) {
         if (this.operationsCompareService.compareBaseModLoss(baseline, modification)) {
-          badges.push('Op')
+          badges.push({ badge: 'Op', componentStr: 'operations' })
         }
       }
     }

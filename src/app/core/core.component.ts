@@ -5,6 +5,7 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { AssessmentService } from '../assessment/assessment.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-core',
@@ -27,13 +28,19 @@ export class CoreComponent implements OnInit {
 
   @ViewChild('screenshotBar') screenshotBar: ElementRef;
   // @ViewChild('coreContainer') coreContainer: ElementRef;
-  @ViewChild('updateModal') public updateModal: ModalDirective;
+  // @ViewChild('tutorialModal') public tutorialModal: ModalDirective;
 
   gettingData: boolean = false;
   showFeedback: boolean = true;
 
   showScreenshot: boolean = true;
   screenshotHeight: number;
+  showTutorial: boolean = false;
+  hideTutorial: boolean = true;
+  toggleDownloadSub: Subscription;
+  showFeedbackSub: Subscription;
+  openingTutorialSub: Subscription;
+
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -52,7 +59,7 @@ export class CoreComponent implements OnInit {
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 
-    this.importExportService.toggleDownload.subscribe((val) => {
+    this.toggleDownloadSub = this.importExportService.toggleDownload.subscribe((val) => {
       if (val == true) {
         this.downloadData();
       }
@@ -61,16 +68,34 @@ export class CoreComponent implements OnInit {
       this.showScreenshot = false;
     }
 
-    this.assessmentService.showFeedback.subscribe(val => {
+    this.showFeedbackSub = this.assessmentService.showFeedback.subscribe(val => {
       this.showFeedback = val;
       this.changeDetectorRef.detectChanges();
     })
+    this.openingTutorialSub = this.assessmentService.openingTutorial.subscribe(val => {
+      if (val && !this.assessmentService.tutorialShown) {
+        this.showTutorial = true;
+        this.hideTutorial = false;
+      }
+    })
+
+  }
+
+  ngOnDestroy() {
+    if (this.showFeedbackSub) this.showFeedbackSub.unsubscribe();
+    if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
+    if (this.toggleDownloadSub) this.toggleDownloadSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getScreenshotHeight();
     }, 100);
+
+    // setTimeout(()=> {
+    //   this.showTutorial = true;
+    //   this.changeDetectorRef.detectChanges();
+    // },2500)
   }
   takeScreenShot() {
     this.importExportService.takeScreenShot();
@@ -120,5 +145,11 @@ export class CoreComponent implements OnInit {
       }
       this.assessmentService.screenShotHeight.next(this.screenshotHeight);
     }
+  }
+
+  closeTutorial() {
+    this.assessmentService.tutorialShown = true;
+    this.showTutorial = false;
+    this.hideTutorial = true;
   }
 }

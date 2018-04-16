@@ -21,93 +21,44 @@ export class ModifyConditionsComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   assessment: Assessment;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
   // @Input()
   // emitPrint: boolean;
 
-  modifyTab: string = 'field-data';
-  _modifications: Array<Modification>;
+  modifyTab: string;
+  //_modifications: Array<Modification>;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
-  isDropdownOpen: boolean = false;
-  modificationIndex: number = 0;
-  showEditModification: boolean = false;
-  editModification: Modification;
   isModalOpen: boolean = false;
-  modExists: boolean = false;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
 
   ngOnInit() {
-    this._modifications = new Array<Modification>();
-    if (this.psat.modifications) {
-      this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
-      this.togglePanel(false);
-      this.modExists = true;
-    }
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
-      this.modifyTab = tmpTab;
+      this.psatService.modifyConditionsTab.next(tmpTab);
     }
-  }
 
-  ngOnDestroy() {
-    this.compareService.baselinePSAT = null;
-    this.compareService.modifiedPSAT = null;
+    this.psatService.modifyConditionsTab.subscribe(val => {
+      this.modifyTab = val;
+    })
   }
 
   save() {
-    this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    // this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
-    this.showEditModification = false;
-    this.editModification = null;
   }
 
-  addModification() {
-    this._modifications.unshift({
-      psat: {
-        name: 'Modification ' + (this._modifications.length + 1),
-        inputs: (JSON.parse(JSON.stringify(this.psat.inputs))),
-      },
-      notes: {
-        systemBasicsNotes: '',
-        pumpFluidNotes: '',
-        motorNotes: '',
-        fieldDataNotes: ''
-      }
-    });
-    this.save();
-    this.modificationIndex = this._modifications.length - 1;
-    this.modifiedSelected = true;
-    this.baselineSelected = false;
-    this.modExists = true;
-  }
-
-  selectModification(modification: Modification) {
-    let tmpIndex = 0;
-    this._modifications.forEach(mod => {
-      if (mod == modification) {
-        this.modificationIndex = tmpIndex;
-        return;
-      } else {
-        tmpIndex++;
-      }
-    });
-    this.changeTab(this.modifyTab);
-    this.isDropdownOpen = false;
-  }
-
-  changeTab(str: string) {
-    this.modifyTab = str;
-  }
 
   toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
     this.showNotes = false;
   }
   toggleNotes() {
     this.showNotes = !this.showNotes;
-    this.isDropdownOpen = false;
   }
 
   togglePanel(bool: boolean) {
@@ -120,37 +71,15 @@ export class ModifyConditionsComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
-  dispEditModification(mod: Modification) {
-    this.editModification = mod;
-    this.showEditModification = true;
-  }
-
-  hideEditModification() {
-    this.showEditModification = false;
-  }
-
-  cancelEdit() {
-    this.hideEditModification();
-    this.editModification = null;
-  }
-
-  deleteModification() {
-    this.modificationIndex = 0;
-    _.remove(this._modifications, (mod) => {
-      return mod.psat.name == this.editModification.psat.name;
-    });
-    if(this._modifications.length == 0){
-      this.modExists = false;
-    }
-    this.hideEditModification();
-    this.editModification = null;
-    this.save();
-  }
 
   modalOpen() {
     this.isModalOpen = true;
   }
   modalClose() {
     this.isModalOpen = false;
+  }
+
+  addModification() {
+    this.compareService.openNewModal.next(true);
   }
 }

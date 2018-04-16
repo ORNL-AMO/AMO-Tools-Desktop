@@ -55,11 +55,11 @@ export class GasLeakageLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.lossesForm.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    // this.lossesForm.enable();
   }
 
   checkInputError(bool?: boolean) {

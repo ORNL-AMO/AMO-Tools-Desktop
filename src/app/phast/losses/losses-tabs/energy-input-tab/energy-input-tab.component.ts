@@ -16,6 +16,9 @@ export class EnergyInputTabComponent implements OnInit {
   @Input()
   phast: PHAST;
 
+  badgeHover: boolean;
+  displayTooltip: boolean;
+
   numLosses: number = 0;
   inputError: boolean;
   missingData: boolean;
@@ -40,20 +43,22 @@ export class EnergyInputTabComponent implements OnInit {
       this.inputError = val;
       this.setBadgeClass();
     })
+
+    this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData || !this.enInput1Done){
+    if (this.missingData || !this.enInput1Done) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    } else if (this.isDifferent) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -99,6 +104,28 @@ export class EnergyInputTabComponent implements OnInit {
   checkDifferent() {
     if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput) {
       return this.energyInputCompareService.compareAllLosses();
+    }
+  }
+
+  showTooltip() {
+    this.badgeHover = true;
+
+    setTimeout(() => {
+      this.checkHover();
+    }, 1000);
+  }
+
+  hideTooltip() {
+    this.badgeHover = false;
+    this.displayTooltip = false;
+  }
+
+  checkHover() {
+    if (this.badgeHover) {
+      this.displayTooltip = true;
+    }
+    else {
+      this.displayTooltip = false;
     }
   }
 }

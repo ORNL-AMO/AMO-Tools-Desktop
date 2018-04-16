@@ -84,11 +84,15 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.flueGasLossForm.disable();
+    this.flueGasLossForm.controls.gasTypeId.disable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.disable();
+    // this.flueGasLossForm.disable();
   }
 
   enableForm() {
-    this.flueGasLossForm.enable();
+    this.flueGasLossForm.controls.gasTypeId.enable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.enable();
+    // this.flueGasLossForm.enable();
   }
 
   checkForm() {

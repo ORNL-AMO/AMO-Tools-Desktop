@@ -89,7 +89,6 @@ export class FolderSummaryComponent implements OnInit {
         }
       })
     }
-
   }
 
   getTotals() {

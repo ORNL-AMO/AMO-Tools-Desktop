@@ -39,6 +39,7 @@ import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledg
 import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
 import { MeasurComponent } from '../landing-screen/measur/measur.component';
 import { DashboardService } from '../dashboard/dashboard.service';
+import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { DashboardService } from '../dashboard/dashboard.service';
     AcknowledgmentsPageComponent,
     UpdateModalComponent,
     VersionModalComponent,
-    MeasurComponent
+    MeasurComponent,
+    OpeningTutorialComponent
   ],
   imports: [
     CommonModule,

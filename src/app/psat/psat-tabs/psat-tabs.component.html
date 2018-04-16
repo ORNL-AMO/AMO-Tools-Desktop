@@ -1,15 +1,53 @@
-<ul class="tabs subtabs psat" *ngIf="mainTab != 'calculators'">
+<!-- <ul class="tabs subtabs psat" *ngIf="mainTab != 'calculators'">
   <li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities<br>
         <span class="help-text psat-view">Novice View</span>
     </a>
-  </li><!--
-  --><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'modify-conditions'}">
+  </li><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'modify-conditions'}">
   <a (click)="changeTab('modify-conditions')">Modify All Conditions<br>
       <span class="help-text psat-view">Expert View</span>
   </a>
   </li>
-</ul>
+</ul> -->
+
+<div class="navbar" *ngIf="mainTab != 'calculators'">
+  <div class="col-4 pl-0">
+    <div class="d-flex tabs subtabs psat">
+      <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
+        <a (click)="changeTab('explore-opportunities')">Explore Opportunities
+          <br>
+          <span class="help-text psat-view">Novice View</span>
+        </a>
+      </div>
+      <div class="assessment-tab" [ngClass]="{'active': currentTab == 'modify-conditions'}">
+        <a (click)="changeTab('modify-conditions')">Modify All Conditions
+          <br>
+          <span class="help-text psat-view">Expert View</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-8 pr-0">
+    <div class="pull-right d-flex align-items-center tabs subtabs psat" [ngClass]="{'br-color-white': selectedModification}">
+      <div class="mod-name active border-right" *ngIf="selectedModification">
+        <a>{{selectedModification.name}}
+          <br>
+          <span class="help-text psat-view">Selected Scenario</span>
+        </a>
+      </div>
+      <div class="mod-name border-right" *ngIf="!selectedModification">
+        <a>&mdash; &mdash;
+          <br>
+          <span class="help-text psat-view">Selected Scenario</span>
+        </a>
+      </div>
+      <div class="pl-2 pr-2">
+        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <ul class="tabs subtabs psat" *ngIf="mainTab == 'calculators'">

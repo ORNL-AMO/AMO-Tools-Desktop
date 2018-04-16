@@ -30,7 +30,8 @@ export interface Settings {
     defaultPanelTab?: string,
     electricityCost?: number,
     fuelCost?: number,
-    steamCost?: number
+    steamCost?: number,
+    disableTutorial?: boolean
 }
 
 

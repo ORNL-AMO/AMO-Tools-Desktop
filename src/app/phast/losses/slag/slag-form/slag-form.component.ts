@@ -47,11 +47,11 @@ export class SlagFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.slagLossForm.disable();
+    // this.slagLossForm.disable();
   }
 
   enableForm() {
-    this.slagLossForm.enable();
+    // this.slagLossForm.enable();
   }
 
   focusField(str: string) {

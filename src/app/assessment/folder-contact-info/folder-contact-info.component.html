@@ -1,50 +1,102 @@
-<div class="row contact-info contact-section-header">
-  <div class="col">
-    <h5>
-      <i class="fa fa-address-card"></i>
-      Contact Information
-    </h5>
-  </div>
-</div>
-<div class="row contact-info-row" *ngIf="settings && !showNoData">
+<div class="row" *ngIf="settingsReady && !showNoData">
   <div class="col-12">
-    <h5>Company: {{settings.facilityInfo.companyName}}</h5>
-    <h5>Facility: {{settings.facilityInfo.facilityName}}</h5>
-    <h5>Date: {{settings.facilityInfo.date}}</h5>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Address</h5>
-    <h6>Street: {{settings.facilityInfo.address.street}}</h6>
-    <h6>City: {{settings.facilityInfo.address.city}}</h6>
-    <h6>State: {{settings.facilityInfo.address.state}}</h6>
-    <h6>Country: {{settings.facilityInfo.address.country}}</h6>
-    <h6>Zip: {{settings.facilityInfo.address.zip}}</h6>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Facility Contact</h5>
-    <h6>Name: {{settings.facilityInfo.facilityContact.contactName}}</h6>
-    <h6>Phone: {{settings.facilityInfo.facilityContact.phoneNumber}}</h6>
-    <h6>Email: {{settings.facilityInfo.facilityContact.email}}</h6>
-  </div>
-  <div class="col-12">
-    <h5 class="bold">Assessment Contact</h5>
-    <h6>Name: {{settings.facilityInfo.assessmentContact.contactName}}</h6>
-    <h6>Phone: {{settings.facilityInfo.assessmentContact.phoneNumber}}</h6>
-    <h6>Email: {{settings.facilityInfo.assessmentContact.email}}</h6>
-  </div>
-  <div class="col-12 edit-info">
-    <a (click)="showFacilityModal()">Edit Info</a>
+    <div class="card panel-container">
+      <div class="card-body summary-rollup d-flex flex-row justify-content-around">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4 text-center">
+              <label>Company</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Facility</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Date</label>
+            </div>
+          </div>
+          <div class="row info-row">
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.companyName}}
+            </div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.facilityName}}
+            </div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.date}}
+            </div>
+          </div>
+          <div *ngIf="showAddress || showFacilityContact" class="row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row label-row': isExpanded}">
+            <div class="col-4 text-center">
+              <label>Assessment Contact</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Facility Contact</label>
+            </div>
+            <div class="col-4 text-center">
+              <label>Address</label>
+            </div>
+          </div>
+          <div *ngIf="showAddress || showFacilityContact || showAssessmentContact" class="row info-row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.assessmentContact.contactName}}
+              <br>{{settings.facilityInfo.assessmentContact.phoneNumber}}
+              <br>{{settings.facilityInfo.assessmentContact.email}}
+            </div>
+            <div class="col-4 text-center bold">
+              {{settings.facilityInfo.facilityContact.contactName}}
+              <br>{{settings.facilityInfo.facilityContact.phoneNumber}}
+              <br>{{settings.facilityInfo.facilityContact.email}}
+            </div>
+            <div class="col-4 text-justify address-col bold">
+              {{settings.facilityInfo.address.street}},
+              <br>{{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}
+              <br>{{settings.facilityInfo.address.country}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5"></div>
+            <div class="col-2 text-center">
+              <a class="click-link" (click)="showFacilityModal()">Edit Info</a>
+            </div>
+            <div class="col-5"></div>
+          </div>
+          <div #btnExpand (click)="toggleExpand()" class="row btn-expand">
+            <div class="col-12">
+              <!-- <div class="row">
+                <div class="col-12 text-center">
+                  {{btnExpandText}}
+                </div>
+              </div> -->
+              <div class="row">
+                <div class="col-12 text-center">
+                  <div *ngIf="!isExpanded" class="arrow-down"></div>
+                  <div *ngIf="isExpanded" class="arrow-up"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
-  Add Facility Info
-  <br>
-  <span class="fa fa-plus-circle"></span>
-  <br>
-  <p class="small">You have no facility information for this directory.</p>
-</div>
 
+<div class="row" *ngIf="showNoData">
+  <div class="col-12 justify-content-center">
+    <div class="card panel-container">
+      <div class="card-body summary-rollup d-flex flex-row justify-content-center">
+        <div (click)="showFacilityModal()" class="p-2 text-center btn-add-facility-info">
+          Add Facility Info
+          <br>
+          <span class="fa fa-plus-circle"></span>
+          <br>
+          <p class="small">No Facility Info found for this directory.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

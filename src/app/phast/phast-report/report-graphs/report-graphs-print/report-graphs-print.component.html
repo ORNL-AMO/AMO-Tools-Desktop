@@ -5,7 +5,7 @@
 
             <!-- page title -->
             <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-                Modification: {{result.name}}
+                Scenario: {{result.name}}
             </div>
             <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
                 Baseline
@@ -40,12 +40,12 @@
                 <!-- pie charts -->
                 <div class="row" *ngIf="printGraphs">
                     <div class="col-6 print-pie-chart">
-                        <app-phast-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [chartContainerHeight]="pieChartHeight"
-                            [labels]="allPieLabels[0]" [values]="allPieValues[0]"></app-phast-pie-chart>
+                        <app-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [chartContainerHeight]="pieChartHeight"
+                            [labels]="allPieLabels[0]" [values]="allPieValues[0]"></app-pie-chart>
                     </div>
                     <div class="col-6" *ngIf="modExists">
-                        <app-phast-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [chartContainerHeight]="pieChartHeight"
-                            [labels]="allPieLabels[i]" [values]="allPieValues[i]"></app-phast-pie-chart>
+                        <app-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [chartContainerHeight]="pieChartHeight"
+                            [labels]="allPieLabels[i]" [values]="allPieValues[i]"></app-pie-chart>
 
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="row show-print print-pad-graph-title" *ngIf="modExists">
                             <div align="center" class="print-graph-title print-center-title">
-                                Modification: {{result.name}}
+                                Scenario: {{result.name}}
                             </div>
                         </div>
                         <div class="row show-print" *ngIf="modExists">

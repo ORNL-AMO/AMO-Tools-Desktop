@@ -123,7 +123,7 @@ export class OpeningLossesComponent implements OnInit {
 
   calculate(loss: OpeningLossObj) {
     if (loss.form.status == 'VALID') {
-      if (loss.form.controls.openingType.value == 'Rectangular (Square)' && loss.form.controls.heightOfOpening.value != '') {
+      if (loss.form.controls.openingType.value == 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
