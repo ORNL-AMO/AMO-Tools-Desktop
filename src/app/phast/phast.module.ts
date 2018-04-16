@@ -37,6 +37,7 @@ import { PhastCompareService } from './phast-compare.service';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
+import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent
+    AddModificationComponent,
+    PhastTabsTooltipComponent,
   ],
   exports: [
   ],
