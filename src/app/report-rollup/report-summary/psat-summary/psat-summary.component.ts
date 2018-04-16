@@ -13,11 +13,10 @@ import { Subscription } from 'rxjs';
 })
 export class PsatSummaryComponent implements OnInit {
 
-  // @Input()
-  // psats: Array<Assessment>;
+  @Input()
+  numPsats: number;
 
   pumpSavingsPotential: number = 0;
-  numPsats: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;

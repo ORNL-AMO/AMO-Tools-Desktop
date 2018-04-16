@@ -20,6 +20,9 @@ export class ReportSummaryComponent implements OnInit {
   phastResults: Array<PhastResultsData>;
   @Input()
   numPhasts: number;
+  @Input()
+  numPsats: number;
+
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
   // @ViewChild('rollupModal') public rollupModal: ModalDirective;
