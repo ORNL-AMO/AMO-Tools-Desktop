@@ -23,7 +23,7 @@ export class SteamPropertiesFormComponent implements OnInit {
   quantityValueUnits: string = null;
 
   // contains mins and maxes for all quality types, indexed into using thermodynamicQuantity
-  checkQuantity = [
+  readonly checkQuantity: Array<TemperatureProperties | SpecificEnthalpyProperties | SpecificEntropyProperties | Properties> = [
     {
       'F': {
         min: 32, max: 1472, type: 'Temperature', displayUnits: 'Fahrenheit'
@@ -49,13 +49,11 @@ export class SteamPropertiesFormComponent implements OnInit {
       }
     },
     {
-      '': {
-        min: 0, max: 1, type: 'Saturated Quality', displayUnits: ''
-      }
+      min: 0, max: 1, type: 'Saturated Quality', displayUnits: ''
     },
   ];
 
-  pressureCheck = {
+  readonly pressureCheck: PressureProperties = {
     'psi': {
       min: 0.2, max: 14503.7, displayUnits: 'psi'
     },
@@ -95,7 +93,7 @@ export class SteamPropertiesFormComponent implements OnInit {
     } else if (input.thermodynamicQuantity === 2) {
       quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEntropyMeasurement];
     } else {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][''];
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity];
     }
     this.quantityValueUnits = quantityObj.displayUnits;
 
@@ -117,4 +115,32 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
   }
 
+}
+
+interface Properties {
+  min: number;
+  max: number;
+  displayUnits: string;
+  type?: string;
+}
+
+interface TemperatureProperties {
+  F: Properties;
+  C: Properties;
+}
+
+interface SpecificEnthalpyProperties {
+  btuLb: Properties;
+  kJkg: Properties;
+}
+
+interface SpecificEntropyProperties {
+  btulbF: Properties;
+  kJkgK: Properties;
+}
+
+interface PressureProperties {
+  psi: Properties;
+  kPa: Properties;
+  bar: Properties;
 }

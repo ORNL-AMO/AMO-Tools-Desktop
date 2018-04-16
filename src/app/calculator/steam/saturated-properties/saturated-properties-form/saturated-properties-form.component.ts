@@ -46,8 +46,6 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    console.log(this.settings.specificEntropyMeasurement);
-    console.log(this.settings.specificEnthalpyMeasurement);
     this.input = {
       saturatedPressure: 0
     };
