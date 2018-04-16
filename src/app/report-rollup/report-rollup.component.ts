@@ -76,7 +76,7 @@ export class ReportRollupComponent implements OnInit {
       if (items) {
         if (items.length != 0) {
           this._reportAssessments = items;
-          this.focusedAssessment = this._reportAssessments[0].assessment;
+          this.focusedAssessment = this._reportAssessments[this._reportAssessments.length -1].assessment;
         }
       }
     });
