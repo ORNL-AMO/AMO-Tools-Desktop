@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImportExportService } from './import-export.service';
 import { ImportExportComponent } from './import-export.component';
+import { ImportExport2Service } from './import-export-2.service';
 
 @NgModule({
   imports: [
@@ -9,7 +10,8 @@ import { ImportExportComponent } from './import-export.component';
   ],
   declarations: [ImportExportComponent],
   providers: [
-    ImportExportService
+    ImportExportService,
+    ImportExport2Service
   ],
   exports: [  
     ImportExportComponent

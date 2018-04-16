@@ -19,6 +19,7 @@ import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
 import { DashboardService } from './dashboard.service';
 import { Subscription } from 'rxjs';
+import { ImportExport2Service } from '../shared/import-export/import-export-2.service';
 declare const packageJson;
 
 @Component({
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit {
   tutorialShown: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService) {
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService, private importExport2Service: ImportExport2Service) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -173,6 +174,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getWorkingDirectoryData() {
+    this.importExport2Service.updateData();
     this.indexedDbService.getDirectorySettings(this.workingDirectory.id).then(results => {
       if (results.length != 0) {
         this.workingDirectorySettings = results[0];
@@ -560,6 +562,8 @@ export class DashboardComponent implements OnInit {
   exportSelected() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
+      // let test = this.importExport2Service.getSelected(this.workingDirectory);
+      // console.log(test)
       this.getSelected(this.workingDirectory);
       this.showExportModal();
     } else {
