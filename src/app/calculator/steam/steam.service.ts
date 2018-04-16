@@ -54,13 +54,22 @@ export class SteamService {
     }
 
     // TODO may need to do both of these conversions in both cases
-    if (pressureOrTemperature === 0) {
+    // if (pressureOrTemperature === 0) {
       output.saturatedPressure = this.convertUnitsService.value(output.saturatedPressure).from('MPa').to(settings.pressureMeasurement);
-    } else {
+    // } else {
       output.saturatedTemperature = this.convertUnitsService.value(output.saturatedTemperature - 273.15).from('C').to(settings.temperatureMeasurement);
-    }
+    // }
 
     return output;
+  }
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 
   constructor(private convertUnitsService: ConvertUnitsService) { }

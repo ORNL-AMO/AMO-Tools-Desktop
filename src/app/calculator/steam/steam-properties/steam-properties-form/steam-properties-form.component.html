@@ -43,19 +43,19 @@
     <div class="form-group">
       <label class="small"><strong>Temperature</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.temperature | number:'1.1-4'}}</strong>
-        <span><strong>{{checkQuantity[0][settings.temperatureMeasurement].displayUnits}}</strong></span>
+        <span><strong>{{steamService.getDisplayUnit(settings.temperatureMeasurement)}}</strong></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small"><strong>Specific Enthalpy</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}</strong>
-        <span><strong>{{checkQuantity[1][settings.specificEnthalpyMeasurement].displayUnits}}</strong></span>
+        <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small"><strong>Specific Entropy</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}</strong>
-        <span><strong>{{checkQuantity[2][settings.specificEntropyMeasurement].displayUnits}}</strong></span>
+        <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
       </div>
     </div>
     <div class="form-group">

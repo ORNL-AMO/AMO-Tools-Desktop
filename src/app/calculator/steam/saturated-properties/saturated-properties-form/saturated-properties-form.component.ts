@@ -22,6 +22,9 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     },
     'kPa': {
       min: 1, max: 22064, displayUnits: 'kPa'
+    },
+    'bar': {
+      min: 0.01, max: 220.64, displayUnits: 'Bar'
     }
   };
 
@@ -40,9 +43,11 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   input: SaturatedPropertiesInput;
   output: SaturatedPropertiesOutput;
 
-  constructor(private steamService: SteamService, convertUnitService: ConvertUnitsService) { }
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    console.log(this.settings.specificEntropyMeasurement);
+    console.log(this.settings.specificEnthalpyMeasurement);
     this.input = {
       saturatedPressure: 0
     };
@@ -65,7 +70,6 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   calculate() {
     this.temperatureError = this.pressureError = null;
 
-    // pressure
     if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
       const pressure = this.saturatedPropertiesForm.controls.saturatedPressure.value;
       const properties = this.pressureCheck[this.settings.pressureMeasurement];

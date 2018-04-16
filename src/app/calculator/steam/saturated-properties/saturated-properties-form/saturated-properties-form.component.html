@@ -28,47 +28,101 @@
         <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
       </div>
     </div>
-
-
-    <!--<table style="width:100%">-->
-      <!--<tr>-->
-        <!--<th>Pressure</th>-->
-        <!--<th>Temperature</th>-->
-        <!--<th>Specific Enthalpy</th>-->
-        <!--<th>Specific Entropy</th>-->
-        <!--<th>Specific Volume</th>-->
-      <!--</tr>-->
-
-    <!--<div class="form-group">-->
-      <!--<label class="small"><strong>Pressure</strong></label>-->
-      <!--<div class="small text-center"><strong>{{steamPropertiesOutput.pressure | number:'1.1-4'}}</strong>-->
-        <!--<span><strong>{{settings.pressureMeasurement}}</strong></span>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-      <!--<label class="small"><strong>Temperature</strong></label>-->
-      <!--<div class="small text-center"><strong>{{steamPropertiesOutput.temperature | number:'1.1-4'}}</strong>-->
-        <!--<span><strong>{{checkQuantity[0][settings.temperatureMeasurement].displayUnits}}</strong></span>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-      <!--<label class="small"><strong>Specific Enthalpy</strong></label>-->
-      <!--<div class="small text-center"><strong>{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}</strong>-->
-        <!--<span><strong>{{checkQuantity[1][settings.specificEnthalpyMeasurement].displayUnits}}</strong></span>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-      <!--<label class="small"><strong>Specific Entropy</strong></label>-->
-      <!--<div class="small text-center"><strong>{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}</strong>-->
-        <!--<span><strong>{{checkQuantity[2][settings.specificEntropyMeasurement].displayUnits}}</strong></span>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-      <!--<label class="small"><strong>Specific Volume</strong></label>-->
-      <!--<div class="small text-center"><strong>{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}</strong>-->
-        <!--<span><strong>cubic ft per lb</strong></span>-->
-      <!--</div>-->
-    <!--</div>-->
-
   </form>
 </div>
+
+<div class="form-section">
+  <div class="form-group">
+    <label class="small"><strong>Pressure</strong></label>
+    <div class="small text-center"><strong>{{output.saturatedPressure | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.pressureMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Temperature</strong></label>
+    <div class="small text-center"><strong>{{output.saturatedTemperature | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.temperatureMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Enthalpy</strong></label>
+    <div class="small text-center"><strong>{{output.liquidEnthalpy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Enthalpy</strong></label>
+    <div class="small text-center"><strong>{{output.gasEnthalpy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Enthalpy</strong></label>
+    <div class="small text-center"><strong>{{output.evaporationEnthalpy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Entropy</strong></label>
+    <div class="small text-center"><strong>{{output.liquidEntropy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Entropy</strong></label>
+    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Entropy</strong></label>
+    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Volume</strong></label>
+    <div class="small text-center"><strong>{{output.liquidVolume | number:'1.1-4'}}</strong>
+      <span><strong>cubic ft per lb</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Volume</strong></label>
+    <div class="small text-center"><strong>{{output.gasVolume | number:'1.1-4'}}</strong>
+      <span><strong>cubic ft per lb</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Specific Volume</strong></label>
+    <div class="small text-center"><strong>{{output.evaporationVolume | number:'1.1-4'}}</strong>
+      <span><strong>cubic ft per lb</strong></span>
+    </div>
+  </div>
+</div>
+
+<!--<div>-->
+  <!--&lt;!&ndash;<col>&ndash;&gt;-->
+  <!--<colgroup span="3"></colgroup>-->
+  <!--<table class="output-summary">-->
+    <!--<tr>-->
+      <!--<th rowspan="2">Pressure</th>-->
+      <!--<th rowspan="2">Temperature</th>-->
+      <!--<th colspan="3">Specific Enthalpy</th>-->
+      <!--<th colspan="3">Specific Entropy</th>-->
+      <!--<th colspan="3">Specific Volume</th>-->
+    <!--</tr>-->
+    <!--<tr>-->
+      <!--<td colspan="2"></td>-->
+      <!--<th scope="col">liquid</th>-->
+      <!--<th scope="col">gas</th>-->
+      <!--<th scope="col">evaporation</th>-->
+      <!--<th scope="col">liquid</th>-->
+      <!--<th scope="col">gas</th>-->
+      <!--<th scope="col">evaporation</th>-->
+      <!--<th scope="col">liquid</th>-->
+      <!--<th scope="col">gas</th>-->
+      <!--<th scope="col">evaporation</th>-->
+    <!--</tr>-->
+  <!--</table>-->
+<!--</div>-->
+

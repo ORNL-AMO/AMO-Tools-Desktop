@@ -61,6 +61,9 @@ export class SteamPropertiesFormComponent implements OnInit {
     },
     'kPa': {
       min: 1, max: 100000, displayUnits: 'kPa'
+    },
+    'bar': {
+      min: 0.01, max: 1000, displayUnits: 'Bar'
     }
   };
 
