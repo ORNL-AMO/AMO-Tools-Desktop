@@ -120,15 +120,21 @@ Tabs
     }
 
     .tabs.subtabs.phast .active.missing-data .step-number,
-    .tabs.subtabs.phast .missing-data .step-number {
+    .tabs.subtabs.phast .missing-data .step-number,
+    .tabs.subtabs.psat .active.missing-data .step-number,
+    .tabs.subtabs.psat .missing-data .step-number {
       background: red;
     }
     .tabs.subtabs.phast .active.input-error .step-number,
-    .tabs.subtabs.phast .input-error .step-number {
+    .tabs.subtabs.phast .input-error .step-number,
+    .tabs.subtabs.psat .active.input-error .step-number,
+    .tabs.subtabs.psat .input-error .step-number {
       background: orange;
     }
     .tabs.subtabs.phast .active.success .step-number,
-    .tabs.subtabs.phast .success .step-number {
+    .tabs.subtabs.phast .success .step-number,
+    .tabs.subtabs.psat .active.success .step-number,
+    .tabs.subtabs.psat .success .step-number {
       background: green;
     }
 
