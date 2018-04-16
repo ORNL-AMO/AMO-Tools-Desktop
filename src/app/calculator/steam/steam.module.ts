@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { SteamPropertiesModule } from './steam-properties/steam-properties.module';
 import { SteamComponent } from "./steam.component";
 import { SteamService } from "./steam.service";
+import { SaturatedPropertiesModule } from "./saturated-properties/saturated-properties.module";
 
 
 @NgModule({
   imports: [
     CommonModule,
-    SteamPropertiesModule
+    SteamPropertiesModule,
+    SaturatedPropertiesModule
   ],
   declarations: [
     SteamComponent

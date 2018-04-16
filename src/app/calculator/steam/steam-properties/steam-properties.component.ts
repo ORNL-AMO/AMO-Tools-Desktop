@@ -16,7 +16,7 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesForm: FormGroup;
   tabSelect = 'results';
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.steamPropertiesForm = this.formBuilder.group({
