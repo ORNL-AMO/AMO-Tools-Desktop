@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
