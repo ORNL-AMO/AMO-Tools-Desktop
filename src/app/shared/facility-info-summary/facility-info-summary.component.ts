@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { FacilityInfo } from '../models/settings';
+import { PhonePipe } from '../pipes/phone.pipe';
 
 @Component({
   selector: 'app-facility-info-summary',

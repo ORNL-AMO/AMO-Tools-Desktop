@@ -28,12 +28,12 @@
           <div *ngIf="showAddress || showFacilityContact || showAssessmentContact" class="row info-row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
             <div class="col-4 text-center bold">
               {{settings.facilityInfo.assessmentContact.contactName}}
-              <br>{{settings.facilityInfo.assessmentContact.phoneNumber}}
+              <br>{{settings.facilityInfo.assessmentContact.phoneNumber | phone}}
               <br>{{settings.facilityInfo.assessmentContact.email}}
             </div>
             <div class="col-4 text-center bold">
               {{settings.facilityInfo.facilityContact.contactName}}
-              <br>{{settings.facilityInfo.facilityContact.phoneNumber}}
+              <br>{{settings.facilityInfo.facilityContact.phoneNumber | phone}}
               <br>{{settings.facilityInfo.facilityContact.email}}
             </div>
             <div class="col-4 text-justify address-col bold">
