@@ -12,11 +12,10 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 })
 export class PsatSummaryComponent implements OnInit {
 
-  // @Input()
-  // psats: Array<Assessment>;
+  @Input()
+  numPsats: number;
 
   pumpSavingsPotential: number = 0;
-  numPsats: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
@@ -24,7 +23,6 @@ export class PsatSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.reportRollupService.psatAssessments.subscribe(val => {
-      this.numPsats = val.length
       if (val.length != 0) {
         this.reportRollupService.initResultsArr(val);
       }

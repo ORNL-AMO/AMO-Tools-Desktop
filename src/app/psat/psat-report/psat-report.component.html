@@ -1,4 +1,4 @@
-<div class="assessment-report report-in-psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-psat psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inPsat" class="report-cover">
@@ -89,55 +89,28 @@
         <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Results</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+            </li><!--
+            --><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Data</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+            </li><!--
+            --><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
                 <a>Facility Info</a>
             </li>
         </ul>
 
-        <div class="results" *ngIf="currentTab == 'facilityInfo' || showPrint">
+        <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' || showPrint">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
 
-        <div class="results" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
+        <div class="results scroll-item" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
             <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
             </app-output-summary>
 
         </div>
-        <div class="input-data results" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)">
+        <div class="input-data results scroll-item" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)">
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
-
-
-
-        <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
-            <app-chart-summary [psat]="psat"></app-chart-summary>
-        </div>-->
-        <!-- <div class="results" [ngClass]="{'show-print':currentTab != 'facilityInfo'}">
-            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
-        </div>
-
-        <div class="results" [ngClass]="{'show-print': currentTab != 'results'}">
-            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
-            </app-output-summary>
-
-        </div>
-        <div class="input-data results" [ngClass]="{'show-print': currentTab != 'inputData'}">
-            <app-input-summary [psat]="psat" [settings]="settings">
-            </app-input-summary>
-        </div> -->
-        <!-- <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
-            <app-facility-info-summary [assessment]="assessment">
-            </app-facility-info-summary>
-        </div> -->
     </div>
     <!-- End .report-data -->
 
