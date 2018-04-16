@@ -4,6 +4,7 @@ import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
 import { ElectronService } from 'ngx-electron';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -46,15 +47,20 @@ export class SidebarComponent implements OnInit {
   isUpdateAvailable: boolean;
   showModal: boolean;
   showVersionModal: boolean;
+  updateSub: Subscription;
   constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
-    this.assessmentService.updateAvailable.subscribe(val => {
+    this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
     })
+  }
+
+  ngOnDestroy(){
+    this.updateSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {

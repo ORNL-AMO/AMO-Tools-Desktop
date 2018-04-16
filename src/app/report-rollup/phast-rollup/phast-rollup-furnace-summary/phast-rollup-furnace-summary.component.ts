@@ -8,6 +8,7 @@ import { PhastResults, ShowResultsCategories } from '../../../shared/models/phas
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { Subscriber, Subscription } from 'rxjs';
 @Component({
   selector: 'app-phast-rollup-furnace-summary',
   templateUrl: './phast-rollup-furnace-summary.component.html',
@@ -56,11 +57,12 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     'Energy Intensity'
   ]
   graphOption: string = 'Energy Use';
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.resultData = new Array();
-    this.reportRollupService.phastResults.subscribe((phasts: Array<PhastResultsData>) => {
+    this.resultsSub = this.reportRollupService.phastResults.subscribe((phasts: Array<PhastResultsData>) => {
       if (phasts.length != 0) {
         this.resultData = phasts;
         if (this.printView) {
@@ -83,6 +85,10 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
       this.buildChartData(this.graphOption, true);
       this.initChartData();
     }
+  }
+
+  ngOnDestory(){
+    this.resultsSub.unsubscribe();
   }
 
   getWidth() {

@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
-import { MockDirectory } from '../shared/mocks/mock-directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
@@ -62,6 +61,7 @@ export class DashboardComponent implements OnInit {
   calcDataExists: boolean = false;
   dontShowSub: Subscription;
   tutorialShown: boolean = false;
+  createAssessmentSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
     private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService) {
@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit {
     //start toolts suite database if it has not started
     this.initData();
 
-    this.assessmentService.createAssessment.subscribe(val => {
+    this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
     })
     if (this.settingsService.globalSettings) {
@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnDestroy() {
     this.assessmentService.createAssessment.next(false);
+    this.createAssessmentSub.unsubscribe();
     if (this.dontShowSub) this.dontShowSub.unsubscribe();
   }
 

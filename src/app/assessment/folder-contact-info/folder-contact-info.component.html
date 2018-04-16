@@ -5,24 +5,13 @@
         <div class="col-12">
           <div class="row">
             <div class="col-4 text-center">
-              <label>Company</label>
+              <label>Company:</label> {{settings.facilityInfo.companyName}}
             </div>
             <div class="col-4 text-center">
-              <label>Facility</label>
+              <label>Facility:</label> {{settings.facilityInfo.facilityName}}
             </div>
             <div class="col-4 text-center">
-              <label>Date</label>
-            </div>
-          </div>
-          <div class="row info-row">
-            <div class="col-4 text-center bold">
-              {{settings.facilityInfo.companyName}}
-            </div>
-            <div class="col-4 text-center bold">
-              {{settings.facilityInfo.facilityName}}
-            </div>
-            <div class="col-4 text-center bold">
-              {{settings.facilityInfo.date}}
+              <label>Date:</label> {{settings.facilityInfo.date}}
             </div>
           </div>
           <div *ngIf="showAddress || showFacilityContact" class="row" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row label-row': isExpanded}">
