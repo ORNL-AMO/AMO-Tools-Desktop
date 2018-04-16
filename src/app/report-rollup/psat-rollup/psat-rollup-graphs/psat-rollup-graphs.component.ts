@@ -7,6 +7,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',
@@ -38,12 +39,12 @@ export class PsatRollupGraphsComponent implements OnInit {
 
   // contains results for every option to build print view charts
   allResults: Array<any>;
-
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
+    this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
         this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy });
         this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost });
@@ -58,6 +59,9 @@ export class PsatRollupGraphsComponent implements OnInit {
     }
   }
 
+  ngOnDestory() {
+    this.resultsSub.unsubscribe();
+  }
 
   setDataOption(str: string) {
     this.dataOption = str;

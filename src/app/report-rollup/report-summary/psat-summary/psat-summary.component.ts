@@ -4,6 +4,7 @@ import { ReportRollupService, PsatCompare, PsatResultsData } from '../../report-
 import * as _ from 'lodash';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-psat-summary',
@@ -20,34 +21,44 @@ export class PsatSummaryComponent implements OnInit {
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
+  assessmentSub: Subscription;
+  allSub: Subscription;
+  selectedSub: Subscription;
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private psatService: PsatService) { }
 
   ngOnInit() {
-    this.reportRollupService.psatAssessments.subscribe(val => {
+    this.assessmentSub = this.reportRollupService.psatAssessments.subscribe(val => {
       this.numPsats = val.length
       if (val.length != 0) {
         this.reportRollupService.initResultsArr(val);
       }
     })
 
-    this.reportRollupService.allPsatResults.subscribe(val => {
+    this.allSub = this.reportRollupService.allPsatResults.subscribe(val => {
       if (val.length != 0) {
         this.reportRollupService.initPsatCompare(val);
       }
     })
-    this.reportRollupService.selectedPsats.subscribe(val => {
+    this.selectedSub = this.reportRollupService.selectedPsats.subscribe(val => {
       if (val.length != 0) {
         this.reportRollupService.getResultsFromSelected(val);
       }
     })
 
-    this.reportRollupService.psatResults.subscribe(val => {
+    this.resultsSub = this.reportRollupService.psatResults.subscribe(val => {
       if (val.length != 0) {
         this.calcPsatSums(val);
       }
     })
   }
 
+  ngOnDestroy(){
+    this.assessmentSub.unsubscribe();
+    this.allSub.unsubscribe();
+    this.selectedSub.unsubscribe();
+    this.resultsSub.unsubscribe();
+  }
 
   calcPsatSums(resultsData: Array<PsatResultsData>) {
     let sumSavings = 0;
