@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { PsatService } from '../../psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../help-panel.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-field-data-help',
   templateUrl: './field-data-help.component.html',
@@ -18,15 +19,20 @@ export class FieldDataHelpComponent implements OnInit {
   currentField: string;
   maxFlowRate: number;
   minFlowRate: number;
+  currentFieldSub: Subscription;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
 
 
   ngOnInit() {
     this.minFlowRate = this.getMinFlowRate();
     this.maxFlowRate = this.getMaxFlowRate();
-    this.helpPanelService.currentField.subscribe((val) => {
+    this.currentFieldSub = this.helpPanelService.currentField.subscribe((val) => {
       this.currentField = val;
     })
+  }
+
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
   }
 
   getMinFlowRate() {
