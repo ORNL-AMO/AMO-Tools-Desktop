@@ -15,6 +15,9 @@ import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { Directory } from '../shared/models/directory';
 
 @Component({
   selector: 'app-psat',
@@ -106,7 +109,9 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -280,46 +285,39 @@ export class PsatComponent implements OnInit {
 
   getSettings(update?: boolean) {
     //get assessment settings
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          this.isAssessmentSettings = true;
-        } else {
-          //if no settings found for assessment, check directory settings
-          this.getParentDirectorySettings(this.assessment.directoryId);
-        }
-        this.tab1Status = this.validateSettings();
-      }
-    )
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    if (tmpSettings) {
+      this.settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+      this.isAssessmentSettings = true;
+    } else {
+      //if no settings found for assessment, check directory settings
+      this.getParentDirectorySettings(this.assessment.directoryId);
+    }
+    this.tab1Status = this.validateSettings();
   }
 
   getParentDirectorySettings(parentId: number) {
-    this.indexedDbService.getDirectorySettings(parentId).then(
-      results => {
-        if (results.length != 0) {
-          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
-          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-          tmpSettings.createdDate = new Date();
-          tmpSettings.modifiedDate = new Date();
-          tmpSettings.assessmentId = this.assessment.id;
-          //create settings for assessment
-          this.indexedDbService.addSettings(tmpSettings).then(
-            results => {
-              this.addToast('Settings Saved');
-              this.getSettings();
-            })
-        }
-        else {
-          //if no settings for directory check parent directory
-          this.indexedDbService.getDirectory(parentId).then(
-            results => {
-              this.getParentDirectorySettings(results.parentDirectoryId);
-            }
-          )
-        }
-      })
-
+    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
+    if (dirSettings) {
+      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
+      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
+      tmpSettings.assessmentId = this.assessment.id;
+      //create settings for assessment
+      this.indexedDbService.addSettings(tmpSettings).then(
+        results => {
+          this.settingsDbService.setAll().then(() => {
+            this.addToast('Settings Saved');
+            this.getSettings();
+          })
+        })
+    }
+    else {
+      //if no settings for directory check parent directory
+      let tmpDir: Directory = this.directoryDbService.getById(parentId);
+      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    }
   }
 
   checkPumpFluid() {

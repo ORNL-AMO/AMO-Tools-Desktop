@@ -12,6 +12,10 @@ import { PsatService } from '../psat/psat.service';
 import { SettingsService } from '../settings/settings.service';
 import { Settings } from '../shared/models/settings';
 import { Calculator } from '../shared/models/calculators';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 
 
 @Injectable()
@@ -37,7 +41,16 @@ export class ReportRollupService {
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
 
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService, private phastResultsService: PhastResultsService) {
+  constructor(
+    private psatService: PsatService,
+    private executiveSummaryService: ExecutiveSummaryService,
+    private settingsService: SettingsService,
+    private phastResultsService: PhastResultsService,
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService,
+    private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService
+  ) {
     this.initSummary();
   }
 
@@ -60,20 +73,15 @@ export class ReportRollupService {
   }
 
 
-  pushAssessment(assessment: Assessment): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.indexedDbService.getAssessmentSettings(assessment.id).then(settings => {
-        let tmpSettings = this.checkSettings(settings[0]);
-        this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
-        if (assessment.psat) {
-          this.psatArray.push({ assessment: assessment, settings: tmpSettings });
-          resolve(true);
-        } else if (assessment.phast) {
-          this.phastArray.push({ assessment: assessment, settings: tmpSettings });
-          resolve(true);
-        }
-      })
-    })
+  pushAssessment(assessment: Assessment) {
+    let settings = this.settingsDbService.getByAssessmentId(assessment.id)
+    let tmpSettings = this.checkSettings(settings);
+    this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
+    if (assessment.psat) {
+      this.psatArray.push({ assessment: assessment, settings: tmpSettings });
+    } else if (assessment.phast) {
+      this.phastArray.push({ assessment: assessment, settings: tmpSettings });
+    }
   }
 
   getReportData(directory: Directory) {
@@ -88,11 +96,10 @@ export class ReportRollupService {
         this.pushAssessment(assessment);
         count++;
       } else {
-        this.pushAssessment(assessment).then(() => {
-          this.phastAssessments.next(this.phastArray);
-          this.psatAssessments.next(this.psatArray);
-          this.reportAssessments.next(this.assessmentsArray);
-        })
+        this.pushAssessment(assessment)
+        this.phastAssessments.next(this.phastArray);
+        this.psatAssessments.next(this.psatArray);
+        this.reportAssessments.next(this.assessmentsArray);
       }
     });
     directory.subDirectory.forEach(subDir => {
@@ -113,56 +120,50 @@ export class ReportRollupService {
 
   getChildDirectories(subDir: Directory) {
     //debug
-    this.indexedDbService.getDirectoryCalculator(subDir.id).then(calcs => {
-      if (calcs) {
+    let calcs = this.calculatorDbService.getByDirectoryId(subDir.id);
+    if (calcs) {
 
-        // if (!this.calcsArray) {
-        //   this.calcsArray = new Array<Calculator>();
-        // }
+      // if (!this.calcsArray) {
+      //   this.calcsArray = new Array<Calculator>();
+      // }
 
-        //add me to report
-        // console.log("calcs.length = " + calcs.length);
-        for (let i = 0; i < calcs.length; i++) {
-          // console.log("calcs[" + i + "].preAssessments.length = " + calcs[i].preAssessments.length);
-          if (calcs[i].preAssessments) {
-            this.calcsArray.push(calcs[i]);
-            this.selectedCalcs.next(this.calcsArray);
-          }
+      //add me to report
+      // console.log("calcs.length = " + calcs.length);
+      for (let i = 0; i < calcs.length; i++) {
+        // console.log("calcs[" + i + "].preAssessments.length = " + calcs[i].preAssessments.length);
+        if (calcs[i].preAssessments) {
+          this.calcsArray.push(calcs[i]);
+          this.selectedCalcs.next(this.calcsArray);
         }
       }
-    });
-
-
+    }
     //real version
-    this.indexedDbService.getChildrenDirectories(subDir.id).then(subDirResults => {
-      if (subDirResults) {
-        subDirResults.forEach(dir => {
-          this.getDirectoryAssessments(dir.id);
-          this.getChildDirectories(dir);
-        })
-      }
-    })
+    let subDirResults = this.directoryDbService.getSubDirectoriesById(subDir.id);
+    if (subDirResults) {
+      subDirResults.forEach(dir => {
+        this.getDirectoryAssessments(dir.id);
+        this.getChildDirectories(dir);
+      })
+    }
   }
 
 
   getDirectoryAssessments(dirId: number) {
-    this.indexedDbService.getDirectoryAssessments(dirId).then(results => {
-      //let selected = results.assessments.filter((val) => { return val.selected })
-      let i = results.length;
-      let count = 1;
-      results.forEach(assessment => {
-        if (count != i) {
-          this.pushAssessment(assessment);
-          count++;
-        } else {
-          this.pushAssessment(assessment).then(() => {
-            this.phastAssessments.next(this.phastArray);
-            this.psatAssessments.next(this.psatArray);
-            this.reportAssessments.next(this.assessmentsArray);
-          })
-        }
-      });
-    })
+    let results = this.assessmentDbService.getByDirectoryId(dirId);
+    //let selected = results.assessments.filter((val) => { return val.selected })
+    let i = results.length;
+    let count = 1;
+    results.forEach(assessment => {
+      if (count != i) {
+        this.pushAssessment(assessment);
+        count++;
+      } else {
+        this.pushAssessment(assessment);
+        this.phastAssessments.next(this.phastArray);
+        this.psatAssessments.next(this.psatArray);
+        this.reportAssessments.next(this.assessmentsArray);
+      }
+    });
   }
 
 

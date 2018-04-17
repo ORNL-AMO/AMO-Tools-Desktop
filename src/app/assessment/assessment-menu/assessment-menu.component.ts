@@ -5,6 +5,7 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
 import { AssessmentService } from '../assessment.service';
 import { Calculator } from '../../shared/models/calculators';
 import { Settings } from 'electron';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-assessment-menu',
@@ -40,14 +41,14 @@ export class AssessmentMenuComponent implements OnInit {
   directoryCalculator: Calculator;
   @Input()
   directorySettings: Settings;
-  
+
   breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
 
   isAllSelected: boolean;
   createAssessment: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private assessmentService: AssessmentService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.firstChange = true;
@@ -91,16 +92,13 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   getBreadcrumbs(dirId: number) {
-    this.indexedDbService.getDirectory(dirId).then(
-      resultDir => {
-        if (resultDir.id != this.directory.id) {
-          this.breadCrumbs.unshift(resultDir);
-        }
-        if (resultDir.parentDirectoryId) {
-          this.getBreadcrumbs(resultDir.parentDirectoryId);
-        }
-      }
-    )
+    let resultDir = this.directoryDbService.getById(dirId);
+    if (resultDir.id != this.directory.id) {
+      this.breadCrumbs.unshift(resultDir);
+    }
+    if (resultDir.parentDirectoryId) {
+      this.getBreadcrumbs(resultDir.parentDirectoryId);
+    }
   }
 
   signalDeleteItems() {
@@ -147,25 +145,25 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
 
-  calcSelected(){
-    if(this.directoryCalculator){
-      if(this.directoryCalculator.selected){
+  calcSelected() {
+    if (this.directoryCalculator) {
+      if (this.directoryCalculator.selected) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   }
 
-  checkDeleteExport(){
+  checkDeleteExport() {
     let test = (this.checkSelected() || this.calcSelected());
     return test;
   }
 
 
-  showPreAssessment(){
+  showPreAssessment() {
     this.emitPreAssessment.emit(true);
   }
 }

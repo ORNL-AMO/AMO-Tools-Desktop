@@ -10,6 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { Calculator } from '../../../../shared/models/calculators';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -50,7 +51,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   window: any;
 
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private indexedDbService: IndexedDbService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.values = new Array<number>();
@@ -95,11 +96,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   }
 
   getDirectorySettings() {
-    this.indexedDbService.getDirectorySettings(this.directoryId).then(results => {
-      if (results.length != 0) {
-        this.directorySettings = results[0];
-      }
-    });
+    this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
   }
 
   getWidth(): number {

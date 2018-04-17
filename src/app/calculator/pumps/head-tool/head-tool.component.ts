@@ -9,6 +9,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { FormGroup } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator, HeadTool, HeadToolSuction } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -57,25 +58,23 @@ export class HeadToolComponent implements OnInit {
   canSave: boolean = false;
   isSavedCalc: boolean = false;
   calculator: Calculator;
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.inAssessment) {
-      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
-        if (results.length != 0) {
-          this.calculator = results[0];
-          if (this.calculator.headTool) {
-            this.isSavedCalc = true;
-            this.headToolForm = this.getHeadToolFormFromObj(this.calculator.headTool);
-            this.headToolSuctionForm = this.getHeadToolSuctionFormFromObj(this.calculator.headToolSuction);
-            this.headToolType = this.calculator.headToolType;
-          } else {
-            this.getFormFromSettings();
-          }
+      this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+      if (this.calculator) {
+        if (this.calculator.headTool) {
+          this.isSavedCalc = true;
+          this.headToolForm = this.getHeadToolFormFromObj(this.calculator.headTool);
+          this.headToolSuctionForm = this.getHeadToolSuctionFormFromObj(this.calculator.headToolSuction);
+          this.headToolType = this.calculator.headToolType;
         } else {
           this.getFormFromSettings();
         }
-      })
+      } else {
+        this.getFormFromSettings();
+      }
     } else {
       this.getFormFromSettings();
     }
@@ -153,7 +152,9 @@ export class HeadToolComponent implements OnInit {
         this.calculator.headToolSuction = this.getHeadToolSuctionFromForm(this.headToolSuctionForm);
         this.calculator.headToolType = this.headToolType;
         this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.closeTool();
+          this.calculatorDbService.setAll().then(()=> {
+            this.closeTool();
+          })
         });
       } else {
         this.calculator = {
@@ -163,7 +164,9 @@ export class HeadToolComponent implements OnInit {
           assessmentId: this.assessment.id
         }
         this.indexedDbService.addCalculator(this.calculator).then(() => {
-          this.closeTool();
+          this.calculatorDbService.setAll().then(()=> {
+            this.closeTool();
+          })
         });;
       }
     } else {

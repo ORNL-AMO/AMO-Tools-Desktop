@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 // import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 
@@ -79,7 +78,6 @@ import { PsatTabsTooltipComponent } from './psat-tabs-tooltip/psat-tabs-tooltip.
     SharedModule,
     // ChartsModule,
     ModalModule.forRoot(),
-    IndexedDbModule,
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,

@@ -6,6 +6,12 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 import { AssessmentService } from '../assessment/assessment.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Subscription } from 'rxjs';
+import { SuiteDbService } from '../suiteDb/suite-db.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 
 @Component({
   selector: 'app-core',
@@ -40,14 +46,20 @@ export class CoreComponent implements OnInit {
   toggleDownloadSub: Subscription;
   showFeedbackSub: Subscription;
   openingTutorialSub: Subscription;
-
+  idbStarted: boolean = false;
+  dirSub: Subscription;
+  calcSub: Subscription;
+  assessmentSub: Subscription;
+  settingsSub: Subscription;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService) {
+    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
+    console.log('init');
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg == true) {
         this.showUpdateModal = true;
@@ -79,24 +91,48 @@ export class CoreComponent implements OnInit {
       }
     })
 
+    if (this.suiteDbService.hasStarted == false) {
+      this.suiteDbService.startup();
+    }
+    if (this.indexedDbService.db == undefined) {
+      this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
+        this.directoryDbService.setAll().then(() => {
+          this.setDirectorySub();
+          this.assessmentDbService.setAll().then(() => {
+            this.setAssessmentSub();
+            this.settingsDbService.setAll().then(() => {
+              this.setSettingSub();
+              this.calculatorDbService.setAll().then(() => {
+                this.setCalcSub();
+                this.idbStarted = true;
+                this.changeDetectorRef.detectChanges();
+              })
+            })
+          })
+        })
+      })
+    }
   }
 
   ngOnDestroy() {
     if (this.showFeedbackSub) this.showFeedbackSub.unsubscribe();
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
     if (this.toggleDownloadSub) this.toggleDownloadSub.unsubscribe();
+    if (this.dirSub) this.dirSub.unsubscribe();
+    if (this.calcSub) this.calcSub.unsubscribe();
+    if (this.assessmentSub) this.assessmentSub.unsubscribe();
+    if (this.settingsSub) this.settingsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getScreenshotHeight();
     }, 100);
-
-    // setTimeout(()=> {
-    //   this.showTutorial = true;
-    //   this.changeDetectorRef.detectChanges();
-    // },2500)
   }
+
+
+
+
   takeScreenShot() {
     this.importExportService.takeScreenShot();
   }
@@ -152,4 +188,39 @@ export class CoreComponent implements OnInit {
     this.showTutorial = false;
     this.hideTutorial = true;
   }
+
+
+  setDirectorySub() {
+    this.dirSub = this.indexedDbService.setAllDirs.subscribe(val => {
+      if (val) {
+        this.directoryDbService.setAll();
+      }
+    })
+  }
+
+  setCalcSub() {
+    this.calcSub = this.indexedDbService.setAllCalcs.subscribe(val => {
+      if (val) {
+        this.calculatorDbService.setAll();
+      }
+    })
+  }
+
+  setAssessmentSub() {
+    this.assessmentSub = this.indexedDbService.setAllAssessments.subscribe(val => {
+      if (val) {
+        this.assessmentDbService.setAll();
+      }
+    })
+  }
+
+  setSettingSub() {
+    this.settingsSub = this.indexedDbService.setAllSettings.subscribe(val => {
+      if (val) {
+        this.settingsDbService.setAll();
+      }
+    })
+  }
+
+
 }

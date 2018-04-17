@@ -15,6 +15,10 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { Directory } from '../shared/models/directory';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-phast',
@@ -77,7 +81,10 @@ export class PhastComponent implements OnInit {
     private settingsService: SettingsService,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -250,51 +257,43 @@ export class PhastComponent implements OnInit {
 
   getSettings() {
     //get assessment settings
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          //sets which tabs will be used based on settings
-          this.lossesService.setTabs(this.settings);
-          this.isAssessmentSettings = true;
-          this.checkSetupDone();
-          this.tab1Status = this.validateSettings();
-        } else {
-          //if no settings found for assessment, check directory settings
-          this.getParentDirectorySettings(this.assessment.directoryId);
-          this.tab1Status = this.validateSettings();
-        }
-      }
-    )
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    if (tmpSettings) {
+      this.settings = tmpSettings;
+      //sets which tabs will be used based on settings
+      this.lossesService.setTabs(this.settings);
+      this.isAssessmentSettings = true;
+      this.checkSetupDone();
+      this.tab1Status = this.validateSettings();
+    } else {
+      //if no settings found for assessment, check directory settings
+      this.getParentDirectorySettings(this.assessment.directoryId);
+      this.tab1Status = this.validateSettings();
+    }
   }
   //assessment doesn't have it's own settings, get directory settings to start
   getParentDirectorySettings(parentId: number) {
-    this.indexedDbService.getDirectorySettings(parentId).then(
-      results => {
-        if (results.length != 0) {
-          //create new settings for this assessment
-          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
-          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-          tmpSettings.createdDate = new Date();
-          tmpSettings.modifiedDate = new Date();
-          tmpSettings.assessmentId = this.assessment.id;
-          this.indexedDbService.addSettings(tmpSettings).then(
-            results => {
-              //try getting assessment settings again
-              this.getSettings();
-            })
-        }
-        else {
-          //if no settings for directory check parent directory
-          this.indexedDbService.getDirectory(parentId).then(
-            results => {
-              //get parent directory and recursively call this function until you have settings
-              this.getParentDirectorySettings(results.parentDirectoryId);
-            }
-          )
-        }
-      }
-    )
+    let tmpParentSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
+    if (tmpParentSettings) {
+      //create new settings for this assessment
+      let settingsForm = this.settingsService.getFormFromSettings(tmpParentSettings);
+      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
+      tmpSettings.assessmentId = this.assessment.id;
+      this.indexedDbService.addSettings(tmpSettings).then(
+        results => {
+          this.settingsDbService.setAll().then(() => {
+            this.getSettings();
+          })
+        })
+    }
+    else {
+      //if no settings for directory check parent directory
+      let tmpDir: Directory = this.directoryDbService.getById(parentId);
+      //get parent directory and recursively call this function until you have settings
+      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    }
   }
 
   //start footer navigation functions
@@ -368,7 +367,9 @@ export class PhastComponent implements OnInit {
     //set assessment.phast to _phast (object used in forms)
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     //update our assessment in the iDb
-    this.indexedDbService.putAssessment(this.assessment);
+    this.indexedDbService.putAssessment(this.assessment).then(() => {
+      this.assessmentDbService.setAll();
+    });
   }
 
   exportData() {
@@ -415,6 +416,5 @@ export class PhastComponent implements OnInit {
   setExploreOppsToast(bool: boolean) {
     this.exploreOppsToast = bool;
     this.cd.detectChanges();
-    console.log(this.exploreOppsToast);
   }
 }

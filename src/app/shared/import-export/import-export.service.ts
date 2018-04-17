@@ -101,13 +101,13 @@ export class ImportExportService {
   //EXPORT DATA FUNCTIONS
   initAllDirectories(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indexedDbService.getDirectory(1).then(
-        results => {
-          if (results) {
-            this.allDirectories = this.populateDirectories(results);
-            resolve(this.allDirectories);
-          }
-        })
+      // this.indexedDbService.getDirectory(1).then(
+      //   results => {
+      //     if (results) {
+      //       this.allDirectories = this.populateDirectories(results);
+      //       resolve(this.allDirectories);
+      //     }
+      //   })
     })
   }
 
@@ -121,86 +121,86 @@ export class ImportExportService {
       collapsed: false,
       parentDirectoryId: directoryRef.parentDirectoryId
     }
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
-      results => {
-        tmpDirectory.assessments = results;
-      }
-    );
+    // this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
+    //   results => {
+    //     tmpDirectory.assessments = results;
+    //   }
+    // );
 
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
-      results => {
-        tmpDirectory.subDirectory = results;
-      }
-    )
+    // this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
+    //   results => {
+    //     tmpDirectory.subDirectory = results;
+    //   }
+    // )
     return tmpDirectory;
   }
 
   getSelected(dir: Directory) {
-    if (dir.assessments) {
-      dir.assessments.forEach(
-        assessment => {
-           let assessmentDir;
-          if (dir.id != this.allDirectories.id) {
-            assessmentDir = dir;
-          }
-          if (this.allDirectories.id == dir.id) {
-            this.selectedItems.push({ assessment: assessment, directory: this.allDirectories.id });
-          } else if (dir.id != this.allDirectories.id) {
-            this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
-          }
-        }
-      )
-    } else {
-      this.indexedDbService.getDirectoryAssessments(dir.id).then(
-        resultAssessments => {
-          if (resultAssessments.length != 0) {
-            resultAssessments.forEach(assessment => { this.selectedItems.push({ assessment: assessment, directory: dir }) })
-          }
-        }
-      )
-    }
-    this.indexedDbService.getChildrenDirectories(dir.id).then(
-      resultDir => {
-        if (resultDir.length != 0) {
-          resultDir.forEach(dir => this.getSelected(dir));
-        }
-      }
-    )
+    // if (dir.assessments) {
+    //   dir.assessments.forEach(
+    //     assessment => {
+    //        let assessmentDir;
+    //       if (dir.id != this.allDirectories.id) {
+    //         assessmentDir = dir;
+    //       }
+    //       if (this.allDirectories.id == dir.id) {
+    //         this.selectedItems.push({ assessment: assessment, directory: this.allDirectories.id });
+    //       } else if (dir.id != this.allDirectories.id) {
+    //         this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
+    //       }
+    //     }
+    //   )
+    // } else {
+    //   this.indexedDbService.getDirectoryAssessments(dir.id).then(
+    //     resultAssessments => {
+    //       if (resultAssessments.length != 0) {
+    //         resultAssessments.forEach(assessment => { this.selectedItems.push({ assessment: assessment, directory: dir }) })
+    //       }
+    //     }
+    //   )
+    // }
+    // this.indexedDbService.getChildrenDirectories(dir.id).then(
+    //   resultDir => {
+    //     if (resultDir.length != 0) {
+    //       resultDir.forEach(dir => this.getSelected(dir));
+    //     }
+    //   }
+    // )
   }
 
 
 
   getAssessmentSettings(item: any) {
     //check for assessment settings
-    this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
-        } else {
-          //no assessment settings, find dir settings being usd
-          this.getParentDirSettingsThenResults(item.assessment.directoryId, item);
-        }
-      }
-    )
+    // this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
+    //   results => {
+    //     if (results.length != 0) {
+    //       this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
+    //     } else {
+    //       //no assessment settings, find dir settings being usd
+    //       this.getParentDirSettingsThenResults(item.assessment.directoryId, item);
+    //     }
+    //   }
+    // )
   }
 
   getParentDirSettingsThenResults(parentDirectoryId: number, item: any) {
     //get parent directory
-    this.indexedDbService.getDirectory(parentDirectoryId).then(
-      results => {
-        let parentDirectory = results;
-        //get parent directory settings
-        this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
-          results => {
-            if (results.length != 0) {
-              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
-            } else {
-              //no settings try again with parents parent directory
-              this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
-            }
-          })
-      }
-    )
+    // this.indexedDbService.getDirectory(parentDirectoryId).then(
+    //   results => {
+    //     let parentDirectory = results;
+    //     //get parent directory settings
+    //     this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
+    //       results => {
+    //         if (results.length != 0) {
+    //           this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
+    //         } else {
+    //           //no settings try again with parents parent directory
+    //           this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
+    //         }
+    //       })
+    //   }
+    // )
   }
 
 }

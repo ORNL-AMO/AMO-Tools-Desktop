@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 @Component({
   selector: 'app-directory-card',
   templateUrl: './directory-card.component.html',
@@ -26,7 +28,7 @@ export class DirectoryCardComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal') public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.populateDirectories(this.directory);
@@ -53,17 +55,18 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   populateDirectories(directory: Directory) {
-    this.indexedDbService.getDirectoryAssessments(directory.id).then(
-      results => {
-        directory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directory.id).then(
-      results => {
-        directory.subDirectory = results;
-      }
-    );
+    directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
+    // this.indexedDbService.getDirectoryAssessments(directory.id).then(
+    //   results => {
+    //     directory.assessments = results;
+    //   }
+    // );
+    directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
+    // this.indexedDbService.getChildrenDirectories(directory.id).then(
+    //   results => {
+    //     directory.subDirectory = results;
+    //   }
+    // );
   }
 
   setDelete() {
