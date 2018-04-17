@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, Pipe } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsService } from '../../settings/settings.service';
+import { PhonePipe } from '../../shared/pipes/phone.pipe';
 
 @Component({
   selector: 'app-folder-contact-info',

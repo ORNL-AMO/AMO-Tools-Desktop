@@ -29,12 +29,12 @@
 
 .furnace-summary:hover{
     cursor: pointer;
-    border: #BF3D00 solid 2px;
+    box-shadow: 0px 0px 6px 0px #BF3D00 !important;
 }
 
 .pump-summary:hover{
     cursor: pointer;
-    border: #2980b9 solid 2px;
+    box-shadow: 0px 0px 6px 0px #2980b9 !important;
 }
 
 

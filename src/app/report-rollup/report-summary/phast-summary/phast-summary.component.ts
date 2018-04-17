@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-phast-summary',
   templateUrl: './phast-summary.component.html',
@@ -20,6 +21,7 @@ export class PhastSummaryComponent implements OnInit {
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -40,11 +42,15 @@ export class PhastSummaryComponent implements OnInit {
     //   }
     // })
 
-     this.reportRollupService.phastResults.subscribe(val => {
+    this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
        if (val.length != 0) {
          this.calcPhastSums(val);
        }
      })
+  }
+
+  ngOnDestroy(){
+    this.resultsSub.unsubscribe();
   }
 
   calcPhastSums(resultsData: Array<PhastResultsData>) {

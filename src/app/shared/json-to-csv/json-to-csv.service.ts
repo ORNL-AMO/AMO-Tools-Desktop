@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 //declare var json2csv: any;
-import { MockDirectory } from '../mocks/mock-directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Assessment } from '../models/assessment';
 import { PsatService } from '../../psat/psat.service';

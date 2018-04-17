@@ -43,6 +43,9 @@ export class PhastComponent implements OnInit {
   stepTab: StepTab;
   _phast: PHAST;
 
+  tab1Status: string;
+  tab2Status: string;
+
   mainTab: string = 'system-setup';
   specTab: StepTab;
   isModalOpen: boolean = false;
@@ -81,6 +84,9 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.tab1Status = '';
+    this.tab2Status = '';
+
     //initialize booleans indicating assessment setup or 'done'
     this.lossesService.initDone();
     //get assessmentId from route phast/:id
@@ -218,6 +224,28 @@ export class PhastComponent implements OnInit {
     this.lossesService.updateTabs.next(true);
     //set current phast as selected sankey in sankey tab
     this.sankeyPhast = this._phast;
+
+    if (this._phast.setupDone) {
+      this.tab2Status = 'success';
+    }
+    else {
+      this.tab2Status = 'missing-data';
+    }
+  }
+
+  validateSettings(): string {
+    if (this.settings === undefined) {
+      return 'input-error';
+    }
+    if ((this.settings.electricityCost === null || !this.settings.electricityCost) || (this.settings.fuelCost === null || !this.settings.fuelCost) || (this.settings.steamCost === null || !this.settings.steamCost)) {
+      return 'missing-data';
+    }
+    if (this.settings.electricityCost < 0 || this.settings.fuelCost < 0 || this.settings.steamCost < 0) {
+      return 'input-error';
+    }
+    else {
+      return 'success';
+    }
   }
 
   getSettings() {
@@ -230,9 +258,11 @@ export class PhastComponent implements OnInit {
           this.lossesService.setTabs(this.settings);
           this.isAssessmentSettings = true;
           this.checkSetupDone();
+          this.tab1Status = this.validateSettings();
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
+          this.tab1Status = this.validateSettings();
         }
       }
     )
