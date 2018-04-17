@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesInput, SaturatedPropertiesOutput } from "../../../../shared/models/steam";
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
-import {SteamService} from "../../steam.service";
+import { SteamService } from "../../steam.service";
 
 @Component({
   selector: 'app-saturated-properties-form',
@@ -16,7 +16,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  pressureCheck = {
+  readonly pressureCheck: PressureProperties = {
     'psi': {
       min: 0.2, max: 3200.1, displayUnits: 'psi'
     },
@@ -28,7 +28,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     }
   };
 
-  temperatureCheck = {
+  readonly temperatureCheck: TemperatureProperties = {
     'F': {
       min: 32, max: 705.1, displayUnits: 'Degrees F'
     },
@@ -93,4 +93,23 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     return 0;
   }
 
+}
+
+
+interface Properties {
+  readonly min: number;
+  readonly max: number;
+  readonly displayUnits: string;
+  readonly type?: string;
+}
+
+interface TemperatureProperties {
+  readonly F: Properties;
+  readonly C: Properties;
+}
+
+interface PressureProperties {
+  readonly psi: Properties;
+  readonly kPa: Properties;
+  readonly bar: Properties;
 }

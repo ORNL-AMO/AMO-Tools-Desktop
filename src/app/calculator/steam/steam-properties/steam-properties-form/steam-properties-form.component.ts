@@ -83,7 +83,7 @@ export class SteamPropertiesFormComponent implements OnInit {
       quantityValue: this.steamPropertiesForm.controls.quantityValue.value
     };
 
-    const pressureObj = this.pressureCheck[this.settings.pressureMeasurement];
+    const pressureObj: Properties = this.pressureCheck[this.settings.pressureMeasurement];
     let quantityObj = this.checkQuantity[0]['F'];
 
     if (input.thermodynamicQuantity === 0) {
@@ -99,13 +99,13 @@ export class SteamPropertiesFormComponent implements OnInit {
 
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
-      const err = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.pressureMeasurement;
+      const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.pressureMeasurement;
       this.pressureError = 'Pressure must be between ' + err;
     }
 
 
     if (input.quantityValue < quantityObj.min || input.quantityValue > quantityObj.max) {
-      const err = quantityObj.min + ' and ' + quantityObj.max + ' ' + quantityObj.displayUnits;
+      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + quantityObj.displayUnits;
       this.quantityValueError = quantityObj.type + ' must be between ' + err;
     }
     if (this.pressureError !== null || this.quantityValueError !== null) {
@@ -118,29 +118,29 @@ export class SteamPropertiesFormComponent implements OnInit {
 }
 
 interface Properties {
-  min: number;
-  max: number;
-  displayUnits: string;
-  type?: string;
+  readonly min: number;
+  readonly max: number;
+  readonly displayUnits: string;
+  readonly type?: string;
 }
 
 interface TemperatureProperties {
-  F: Properties;
-  C: Properties;
+  readonly F: Properties;
+  readonly C: Properties;
 }
 
 interface SpecificEnthalpyProperties {
-  btuLb: Properties;
-  kJkg: Properties;
+  readonly btuLb: Properties;
+  readonly kJkg: Properties;
 }
 
 interface SpecificEntropyProperties {
-  btulbF: Properties;
-  kJkgK: Properties;
+  readonly btulbF: Properties;
+  readonly kJkgK: Properties;
 }
 
 interface PressureProperties {
-  psi: Properties;
-  kPa: Properties;
-  bar: Properties;
+  readonly psi: Properties;
+  readonly kPa: Properties;
+  readonly bar: Properties;
 }

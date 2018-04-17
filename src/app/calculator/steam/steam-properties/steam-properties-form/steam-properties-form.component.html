@@ -23,10 +23,10 @@
     </div>
 
     <div class="form-group">
-      <!--<label *ngIf="thermodynamicQuantity === 0" for="quantityValue">Temperature</label>-->
-      <!--<label *ngIf="thermodynamicQuantity === 1" for="quantityValue">Specific Enthalpy</label>-->
-      <!--<label *ngIf="thermodynamicQuantity === 2" for="quantityValue">Specific Entropy</label>-->
-      <!--<label *ngIf="thermodynamicQuantity === 3" for="quantityValue">Quality</label>-->
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 0" for="quantityValue">Temperature</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 1" for="quantityValue">Specific Enthalpy</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 2" for="quantityValue">Specific Entropy</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">Quality</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" (input)="calculate()" autofocus>
         <span class="input-group-addon units">{{quantityValueUnits}}</span>
