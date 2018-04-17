@@ -8,46 +8,14 @@ import { reject } from 'q';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Calculator } from '../models/calculators';
 import { Settings } from '../models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 
 @Injectable()
 export class ImportExport2Service {
-
-  allDirectories: Array<Directory>;
-  allAssessments: Array<Assessment>;
-  allCalculators: Array<Calculator>;
-  allSettings: Array<Settings>;
-
-  constructor(private indexedDbService: IndexedDbService) { }
-
-  updateData() {
-    this.getAllAssessments();
-    this.getAllDirs();
-    this.getAllCalculators();
-    this.getAllSettings();
-  }
-
-  getAllDirs() {
-    this.indexedDbService.getAllDirectories().then(vals => {
-      this.allDirectories = vals;
-    })
-  }
-
-  getAllAssessments() {
-    this.indexedDbService.getAllAssessments().then(vals => {
-      this.allAssessments = vals;
-    })
-  }
-
-  getAllCalculators() {
-
-  }
-
-  getAllSettings() {
-    this.indexedDbService.getAllSettings().then(vals => {
-      this.allSettings = vals;
-    })
-  }
+  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService) { }
 
 
   getSelected(dir: Directory) {
@@ -70,8 +38,8 @@ export class ImportExport2Service {
   }
 
   getAssessmentObj(assessment: Assessment): ImportExportModel {
-    let settings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId == assessment.id })
-    let directory: Directory = _.find(this.allDirectories, (dir) => { return dir.id == assessment.directoryId });
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
+    let directory: Directory = this.directoryDbService.getById(assessment.directoryId);
     let model: ImportExportModel = {
       assessment: assessment,
       settings: settings,
@@ -92,7 +60,7 @@ export class ImportExport2Service {
         assessmentObjs.push(obj);
       })
     } else {
-      let assessments = _.filter(this.allAssessments, (assessment) => { return assessment.directoryId == dir.id })
+      let assessments = this.assessmentDbService.getByDirectoryId(dir.id);
       if (assessments) {
         assessments.forEach(assessment => {
           let obj = this.getAssessmentObj(assessment);
@@ -106,7 +74,7 @@ export class ImportExport2Service {
         assessmentObjs.concat(objs);
       })
     }else{
-      let subDirs = _.filter(this.allDirectories, (subDir)=> {return subDir.parentDirectoryId == dir.id});
+      let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
       if(subDirs){
         subDirs.forEach(subDir => {
           let objs = this.getSubDirSelected(subDir, assessmentObjs);
