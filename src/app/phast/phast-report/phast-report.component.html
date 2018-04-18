@@ -75,7 +75,7 @@
                         <a>Sankey</a>
                                 </li><!--
                     --><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
-                        <a>Input Data</a>
+                        <a>Input Summary</a>
                                 </li><!--
                     --><li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
                         <a>Facility Info</a>
@@ -153,14 +153,6 @@
                         Select All
                     </div>
                 </div>
-                <!-- <div class="row toggle-btn pad-top-10" (click)="togglePrint('facility-info')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printFacilityInfo"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Facility Info
-                    </div>
-                </div> -->
                 <div class="row toggle-btn pad-top-10" (click)="togglePrint('energy-used')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printEnergyUsed"></app-animated-checkmark>

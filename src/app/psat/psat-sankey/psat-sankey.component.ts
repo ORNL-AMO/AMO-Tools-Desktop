@@ -12,7 +12,7 @@ const width = 2650,
   height = 1400,
   labelFontSize = 28,
   labelPadding = 4,
-  reportFontSize = 30,
+  reportFontSize = 34,
   reportPadding = 4,
   topLabelPositionY = 150,
   bottomLabelPositionY = 1250,
@@ -327,10 +327,10 @@ export class PsatSankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
         if (d.input) {
-          return d.x - 100;
+          return d.x - 150;
         }
         else if (d.output) {
-          return d.x + 130;
+          return d.x + 200;
         }
         else {
           return d.x;
@@ -338,14 +338,29 @@ export class PsatSankeyComponent implements OnInit {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize) + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize) + labelFontSize + labelPadding - 170;
+          }
+          else {
+            return d.y + (d.displaySize) + reportFontSize + reportPadding - 170;
+          }
         }
         else {
           if (d.top) {
-            return topLabelPositionY;
+            if (this.location === 'sankey-diagram') {
+              return topLabelPositionY;
+            }
+            else {
+              return topReportPositionY;
+            }
           }
           else {
-            return bottomLabelPositionY;
+            if (this.location === 'sankey-diagram') {
+              return bottomLabelPositionY;
+            }
+            else {
+              return bottomReportPositionY;
+            }
           }
         }
       })
@@ -354,7 +369,7 @@ export class PsatSankeyComponent implements OnInit {
           return d.name;
         }
       })
-      .style("font-size", labelFontSize + "px");
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
 
     var twoDecimalFormat = d3.format(".3");
 
@@ -365,10 +380,10 @@ export class PsatSankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
         if (d.input) {
-          return d.x - 100;
+          return d.x - 150;
         }
         else if (d.output) {
-          return d.x + 130;
+          return d.x + 200;
         }
         else {
           return d.x;
@@ -376,13 +391,28 @@ export class PsatSankeyComponent implements OnInit {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 170;
+          }
+          else {
+            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 170;
+          }
         }
         else if (d.top) {
-          return topLabelPositionY + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return topLabelPositionY + labelFontSize + labelPadding;
+          }
+          else {
+            return topReportPositionY + reportFontSize + reportPadding;
+          }
         }
         else {
-          return bottomLabelPositionY + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return bottomLabelPositionY + labelFontSize + labelPadding;
+          }
+          else {
+            return bottomReportPositionY + reportFontSize + reportPadding;
+          }
         }
       })
       .text(function (d) {
@@ -390,7 +420,7 @@ export class PsatSankeyComponent implements OnInit {
           return twoDecimalFormat(d.value) + " kW";
         }
       })
-      .style("font-size", labelFontSize + "px");
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
   }
 
 
