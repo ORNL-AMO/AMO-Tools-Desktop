@@ -16,6 +16,7 @@ export class AssessmentDbService {
     return new Promise((resolve, reject) => {
       this.indexedDbService.getAllAssessments().then(assessments => {
         this.allAssessments = assessments;
+        console.log('set assessments');
         resolve(true)
       })
     })

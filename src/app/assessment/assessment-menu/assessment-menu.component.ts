@@ -43,33 +43,21 @@ export class AssessmentMenuComponent implements OnInit {
   directorySettings: Settings;
 
   breadCrumbs: Array<Directory>;
-
-  firstChange: boolean = true;
-
   isAllSelected: boolean;
   createAssessment: boolean = false;
   constructor(private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.firstChange = true;
     this.breadCrumbs = new Array();
     this.getBreadcrumbs(this.directory.id);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes.directory) && !this.firstChange) {
-      if (changes.directory.currentValue.id != changes.directory.previousValue.id || changes.directory.currentValue.name != changes.directory.previousValue.name) {
-        this.breadCrumbs = new Array();
-        this.getBreadcrumbs(changes.directory.currentValue.id);
-      }
-    } else {
-      this.firstChange = false;
+    if (changes.directory) {
+      this.breadCrumbs = new Array();
+      this.getBreadcrumbs(changes.directory.currentValue.id);
     }
   }
-
-  // hideModal() {
-  //   this.createAssessment = false;
-  // }
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);

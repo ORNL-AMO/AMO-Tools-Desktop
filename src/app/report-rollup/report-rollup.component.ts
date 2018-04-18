@@ -33,7 +33,7 @@ export class ReportRollupComponent implements OnInit {
   selectedCalcs: Array<Calculator>;
   directoryIds: Array<number>;
   bannerHeight: number;
-  assessmentsGathered: boolean = false;
+  assessmentsGathered: boolean = true;
   isSummaryVisible: boolean = true;
   createdDate: Date;
   settings: Settings;
@@ -60,13 +60,13 @@ export class ReportRollupComponent implements OnInit {
     this.selectedCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
 
-    setTimeout(() => {
-      this.assessmentsGathered = true;
-    }, 2000);
+    // setTimeout(() => {
+    //   this.assessmentsGathered = true;
+    // }, 2000);
 
-    setTimeout(() => {
-      this.setSidebarHeight();
-    }, 2500);
+    // setTimeout(() => {
+      // this.setSidebarHeight();
+    // }, 2500);
 
     this.settings = this.settingsService.globalSettings;
     this.checkSettings();
@@ -119,6 +119,12 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngAfterViewInit(){
+    setTimeout(()=> {
+      this.setSidebarHeight();
+    },500)
   }
 
   ngOnDestroy() {

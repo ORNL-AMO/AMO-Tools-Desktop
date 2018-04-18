@@ -17,7 +17,7 @@ export class DirectoryDbService {
     return new Promise((resolve, reject) => {
       this.indexedDbService.getAllDirectories().then(directories => {
         this.allDirectories = directories;
-        console.log('set all dirs 2')
+        console.log('set directoriess')
         resolve(true)
       })
     })

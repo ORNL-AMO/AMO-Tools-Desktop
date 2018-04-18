@@ -97,13 +97,9 @@ export class CoreComponent implements OnInit {
     if (this.indexedDbService.db == undefined) {
       this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
         this.directoryDbService.setAll().then(() => {
-          this.setDirectorySub();
           this.assessmentDbService.setAll().then(() => {
-            this.setAssessmentSub();
             this.settingsDbService.setAll().then(() => {
-              this.setSettingSub();
               this.calculatorDbService.setAll().then(() => {
-                this.setCalcSub();
                 this.idbStarted = true;
                 this.changeDetectorRef.detectChanges();
               })
@@ -190,37 +186,37 @@ export class CoreComponent implements OnInit {
   }
 
 
-  setDirectorySub() {
-    this.dirSub = this.indexedDbService.setAllDirs.subscribe(val => {
-      if (val) {
-        this.directoryDbService.setAll();
-      }
-    })
-  }
+  // setDirectorySub() {
+  //   this.dirSub = this.indexedDbService.setAllDirs.subscribe(val => {
+  //     if (val) {
+  //       this.directoryDbService.setAll();
+  //     }
+  //   })
+  // }
 
-  setCalcSub() {
-    this.calcSub = this.indexedDbService.setAllCalcs.subscribe(val => {
-      if (val) {
-        this.calculatorDbService.setAll();
-      }
-    })
-  }
+  // setCalcSub() {
+  //   this.calcSub = this.indexedDbService.setAllCalcs.subscribe(val => {
+  //     if (val) {
+  //       this.calculatorDbService.setAll();
+  //     }
+  //   })
+  // }
 
-  setAssessmentSub() {
-    this.assessmentSub = this.indexedDbService.setAllAssessments.subscribe(val => {
-      if (val) {
-        this.assessmentDbService.setAll();
-      }
-    })
-  }
+  // setAssessmentSub() {
+  //   this.assessmentSub = this.indexedDbService.setAllAssessments.subscribe(val => {
+  //     if (val) {
+  //       this.assessmentDbService.setAll();
+  //     }
+  //   })
+  // }
 
-  setSettingSub() {
-    this.settingsSub = this.indexedDbService.setAllSettings.subscribe(val => {
-      if (val) {
-        this.settingsDbService.setAll();
-      }
-    })
-  }
+  // setSettingSub() {
+  //   this.settingsSub = this.indexedDbService.setAllSettings.subscribe(val => {
+  //     if (val) {
+  //       this.settingsDbService.setAll();
+  //     }
+  //   })
+  // }
 
 
 }

@@ -61,10 +61,13 @@ export class CreateFolderComponent implements OnInit {
         this.directoryDbService.setAll().then(() => {
           this.directorySettings.directoryId = newDirId;
           delete this.directorySettings.id;
-          this.indexedDbService.addSettings(this.directorySettings).then(() => { this.settingsDbService.setAll() });
-          this.canAdd = true;
-          this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
-          this.newDirectory.emit(true);
+          this.indexedDbService.addSettings(this.directorySettings).then(() => { 
+            this.settingsDbService.setAll().then(()=> {
+              this.canAdd = true;
+              this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
+              this.newDirectory.emit(true);
+            })
+          });
         })
       })
     }

@@ -51,7 +51,8 @@ import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-
   ],
   exports: [
     AssessmentCreateComponent,
-    AssessmentSettingsComponent
+    AssessmentSettingsComponent,
+    AssessmentDashboardComponent
   ],
   imports: [
     CommonModule,

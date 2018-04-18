@@ -13,7 +13,7 @@ export class CalculatorDbService {
     return new Promise((resolve, reject) => {
       this.indexedDbService.getAllCalculator().then(calculators => {
         this.allCalculators = calculators;
-        console.log('got all');
+        console.log('set calculators')
         resolve(true)
       })
     })

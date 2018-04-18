@@ -49,16 +49,8 @@ export class IndexedDbService {
   private _window: Window;
 
   initCustomObjects: boolean = true;
-  setAllDirs: BehaviorSubject<boolean>;
-  setAllCalcs: BehaviorSubject<boolean>;
-  setAllAssessments: BehaviorSubject<boolean>;
-  setAllSettings: BehaviorSubject<boolean>;
   constructor(private windowRef: WindowRefService, private updateDataService: UpdateDataService) {
     this._window = windowRef.nativeWindow;
-    this.setAllDirs = new BehaviorSubject<boolean>(false);
-    this.setAllAssessments = new BehaviorSubject<boolean>(false);
-    this.setAllCalcs  = new BehaviorSubject<boolean>(false);
-    this.setAllSettings = new BehaviorSubject<boolean>(false);
   }
 
   initDb(): Promise<any> {
@@ -315,7 +307,6 @@ export class IndexedDbService {
       let addRequest = store.add(directoryRef);
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = function (e) {
-        this.setAllDirs.next(true);
         resolve(e.target.result);
       }
       addRequest.onerror = (error) => {
@@ -381,7 +372,6 @@ export class IndexedDbService {
         tmpDirectory.modifiedDate = new Date();
         let updateRequest = store.put(tmpDirectory);
         updateRequest.onsuccess = (event) => {
-          this.setAllDirs.next(true);
           resolve(event);
         }
         updateRequest.onerror = (event) => {
@@ -400,7 +390,6 @@ export class IndexedDbService {
       let store = transaction.objectStore(myDb.storeNames.directories);
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
-        this.setAllDirs.next(true);
         resolve(event.target.result);
       }
       deleteRequest.onerror = (event) => {

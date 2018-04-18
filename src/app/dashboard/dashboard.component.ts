@@ -126,7 +126,7 @@ export class DashboardComponent implements OnInit {
     // this.updateDbData();
     this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
     let tmpCalcs = this.calculatorDbService.getByDirectoryId(this.workingDirectory.id);
-    if (tmpCalcs) {
+    if (tmpCalcs.length != 0) {
       this.workingDirectoryCalculator = tmpCalcs[0];
       this.calcDataExists = true;
     } else {
@@ -140,16 +140,20 @@ export class DashboardComponent implements OnInit {
   addCalculatorData(calcualtorData: Calculator) {
     if (this.calcDataExists) {
       this.indexedDbService.putCalculator(calcualtorData).then(() => {
-        this.hidePreAssessmentModal();
-        this.getWorkingDirectoryData();
+        this.calculatorDbService.setAll().then(() => {
+          this.hidePreAssessmentModal();
+          this.getWorkingDirectoryData();
+        })
       });
     } else {
       calcualtorData.directoryId = this.workingDirectory.id;
       calcualtorData.name = this.workingDirectory.name + ' Pre-Assessment';
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
-        this.hidePreAssessmentModal();
-        this.getWorkingDirectoryData();
-      });;
+        this.calculatorDbService.setAll().then(() => {
+          this.hidePreAssessmentModal();
+          this.getWorkingDirectoryData();
+        });
+      });
     }
   }
 
@@ -278,7 +282,7 @@ export class DashboardComponent implements OnInit {
   }
 
   newDir() {
-    this.allDirectories = this.populateDirectories(this.allDirectories[1]);
+    this.allDirectories = this.populateDirectories(this.allDirectories);
     this.workingDirectory = this.populateDirectories(this.workingDirectory);
     this.newDirEventToggle = !this.newDirEventToggle;
   }
@@ -538,7 +542,7 @@ export class DashboardComponent implements OnInit {
     this.importing = setTimeout(() => {
       this.hideImportModal();
       this.importInProgress = false;
-      this.allDirectories = this.populateDirectories(this.allDirectories[0]);
+      this.allDirectories = this.populateDirectories(this.allDirectories);
       this.workingDirectory = this.populateDirectories(this.workingDirectory);
     }, 2500)
 

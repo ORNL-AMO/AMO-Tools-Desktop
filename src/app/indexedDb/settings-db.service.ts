@@ -11,6 +11,7 @@ export class SettingsDbService {
     return new Promise((resolve, reject) => {
       this.indexedDbService.getAllSettings().then(settings => {
         this.allSettings = settings;
+        console.log('set settings');
         resolve(true)
       })
     })
