@@ -1064,6 +1064,8 @@ export const MockPhastSettings: Settings = {
     energySourceType: "Fuel",
     customFurnaceName: null,
     temperatureMeasurement: "F",
+    specificEnthalpyMeasurement: "btuLb",
+    specificEntropyMeasurement: "btulbF",
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,
