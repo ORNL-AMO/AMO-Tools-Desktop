@@ -220,12 +220,12 @@ export class PhastComponent implements OnInit {
         if (this.footer) {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
         console.log(contentHeight);
         console.log(headerHeight);
         console.log(footerHeight);
         console.log(this.containerHeight);
         console.log('==============')
-        this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
   }

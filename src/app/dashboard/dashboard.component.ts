@@ -91,7 +91,9 @@ export class DashboardComponent implements OnInit {
         this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
           if (this.settingsService.globalSettings) {
             this.settingsService.globalSettings.disableTutorial = val;
-            this.indexedDbService.putSettings(this.settingsService.globalSettings);
+            this.indexedDbService.putSettings(this.settingsService.globalSettings).then(() => {
+              this.settingsDbService.setAll();
+            });
           }
         })
       }
@@ -99,7 +101,9 @@ export class DashboardComponent implements OnInit {
       this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
         if (this.settingsService.globalSettings) {
           this.settingsService.globalSettings.disableTutorial = val;
-          this.indexedDbService.putSettings(this.settingsService.globalSettings);
+          this.indexedDbService.putSettings(this.settingsService.globalSettings).then(() => {
+            this.settingsDbService.setAll();
+          });
         }
       })
     }

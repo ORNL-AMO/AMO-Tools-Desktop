@@ -123,8 +123,10 @@ export class DirectoryCardComponent implements OnInit {
     this.directory.name = this.editForm.controls.name.value;
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putDirectory(this.directory).then(val => {
-      this.updateDirectory.emit(true);
-      this.hideEditModal();
+      this.directoryDbService.setAll().then(()=> {
+        this.updateDirectory.emit(true);
+        this.hideEditModal();
+      })
     })
   }
 }

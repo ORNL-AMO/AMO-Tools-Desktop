@@ -18,6 +18,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { Directory } from '../shared/models/directory';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-psat',
@@ -111,7 +112,8 @@ export class PsatComponent implements OnInit {
     private compareService: CompareService,
     private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
-    private directoryDbService: DirectoryDbService) {
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -465,11 +467,11 @@ export class PsatComponent implements OnInit {
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex)
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.indexedDbService.putAssessment(this.assessment).then(
-      results => {
+    this.indexedDbService.putAssessment(this.assessment).then(results => {
+      this.assessmentDbService.setAll().then(() => {
         this.psatService.getResults.next(true);
-      }
-    )
+      })
+    })
   }
 
   exportData() {
