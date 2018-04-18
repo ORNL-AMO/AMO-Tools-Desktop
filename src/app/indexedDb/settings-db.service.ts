@@ -9,11 +9,15 @@ export class SettingsDbService {
 
   setAll(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indexedDbService.getAllSettings().then(settings => {
-        this.allSettings = settings;
-        console.log('set settings');
-        resolve(true)
-      })
+      if (this.indexedDbService.db) {
+        this.indexedDbService.getAllSettings().then(settings => {
+          this.allSettings = settings;
+          resolve(true)
+        })
+      } else {
+        this.allSettings = [];
+        resolve(false);
+      }
     })
   }
 

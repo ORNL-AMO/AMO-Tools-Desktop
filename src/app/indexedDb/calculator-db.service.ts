@@ -5,17 +5,21 @@ import * as _ from 'lodash';
 @Injectable()
 export class CalculatorDbService {
   allCalculators: Array<Calculator>;
-  constructor(private indexedDbService: IndexedDbService) { 
+  constructor(private indexedDbService: IndexedDbService) {
     // this.indexedDbService.setAllCalcs.subscribe()
   }
 
   setAll(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indexedDbService.getAllCalculator().then(calculators => {
-        this.allCalculators = calculators;
-        console.log('set calculators')
-        resolve(true)
-      })
+      if (this.indexedDbService.db) {
+        this.indexedDbService.getAllCalculator().then(calculators => {
+          this.allCalculators = calculators;
+          resolve(true)
+        })
+      } else {
+        this.allCalculators = [];
+        resolve(false);
+      }
     })
   }
 

@@ -16,7 +16,6 @@ import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, Sol
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
-import { DashboardService } from './dashboard.service';
 import { Subscription } from 'rxjs';
 import { ImportExport2Service } from '../shared/import-export/import-export-2.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -24,6 +23,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from '../core/core.service';
 declare const packageJson;
 
 @Component({
@@ -70,9 +70,9 @@ export class DashboardComponent implements OnInit {
   createAssessmentSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private dashboardService: DashboardService, private importExport2Service: ImportExport2Service,
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private importExport2Service: ImportExport2Service,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService) {
+    private deleteDataService: DeleteDataService, private coreService: CoreService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -167,9 +167,11 @@ export class DashboardComponent implements OnInit {
     this.workingDirectory = this.allDirectories;
     this.settingsService.globalSettings = this.settingsDbService.getByDirectoryId(1);
     if (!this.tutorialShown) {
-      if (!this.settingsService.globalSettings.disableTutorial) {
-        this.assessmentService.openingTutorial.next(true);
-        this.tutorialShown = true;
+      if (this.settingsService.globalSettings) {
+        if (!this.settingsService.globalSettings.disableTutorial) {
+          this.assessmentService.openingTutorial.next(true);
+          this.tutorialShown = true;
+        }
       }
     }
     this.getWorkingDirectoryData();
@@ -264,27 +266,6 @@ export class DashboardComponent implements OnInit {
     this.selectedCalculator = str;
   }
 
-  createDirectory() {
-    let tmpDirectory: DirectoryDbRef = {
-      name: 'All Assessments',
-      createdDate: new Date(),
-      modifiedDate: new Date(),
-      parentDirectoryId: null,
-    }
-    this.indexedDbService.addDirectory(tmpDirectory).then(
-      results => {
-        this.directoryDbService.setAll().then(() => {
-          tmpDirectory.parentDirectoryId = results;
-          tmpDirectory.name = 'Examples';
-          this.indexedDbService.addDirectory(tmpDirectory);
-          let result = this.directoryDbService.getById(results);
-          this.rootDirectoryRef = results;
-          this.allDirectories = this.populateDirectories(result);
-          this.workingDirectory = this.allDirectories;
-        })
-      })
-  }
-
   newDir() {
     this.allDirectories = this.populateDirectories(this.allDirectories);
     this.workingDirectory = this.populateDirectories(this.workingDirectory);
@@ -348,14 +329,31 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.deleteDb().then(
       results => {
         this.suiteDbService.startup();
-        this.assessmentService.tutorialShown = false;
-        this.tutorialShown = false;
-        this.initData();
-        this.hideDeleteModal()
-      }
-    )
+        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
+          this.coreService.createDirectory().then(() => {
+            this.coreService.createDirectorySettings().then(() => {
+              this.coreService.createExamples().then(() => {
+                this.setAllDbData();
+              });
+            });
+          });
+        });
+      });
   }
-
+  setAllDbData() {
+    this.directoryDbService.setAll().then(() => {
+      this.assessmentDbService.setAll().then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentService.tutorialShown = false;
+            this.tutorialShown = false;
+            this.initData();
+            this.hideDeleteModal();
+          })
+        })
+      })
+    })
+  }
   checkSelected() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();

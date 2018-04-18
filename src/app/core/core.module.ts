@@ -37,7 +37,6 @@ import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
 import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
 import { MeasurComponent } from '../landing-screen/measur/measur.component';
-import { DashboardService } from '../dashboard/dashboard.service';
 import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-tutorial.component';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -46,6 +45,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from './core.service';
 
 @NgModule({
   declarations: [
@@ -85,7 +85,7 @@ import { DeleteDataService } from '../indexedDb/delete-data.service';
   ],
   providers: [
     AssessmentService,
-    DashboardService,
+    CoreService,
     WindowRefService,
     IndexedDbService,
     AssessmentDbService,

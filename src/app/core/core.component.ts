@@ -12,6 +12,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { CoreService } from './core.service';
 
 @Component({
   selector: 'app-core',
@@ -53,13 +54,13 @@ export class CoreComponent implements OnInit {
   settingsSub: Subscription;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
-    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
-    console.log('init');
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg == true) {
         this.showUpdateModal = true;
@@ -95,18 +96,7 @@ export class CoreComponent implements OnInit {
       this.suiteDbService.startup();
     }
     if (this.indexedDbService.db == undefined) {
-      this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
-        this.directoryDbService.setAll().then(() => {
-          this.assessmentDbService.setAll().then(() => {
-            this.settingsDbService.setAll().then(() => {
-              this.calculatorDbService.setAll().then(() => {
-                this.idbStarted = true;
-                this.changeDetectorRef.detectChanges();
-              })
-            })
-          })
-        })
-      })
+      this.initData();
     }
   }
 
@@ -126,8 +116,36 @@ export class CoreComponent implements OnInit {
     }, 100);
   }
 
+  initData() {
+    this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
+      this.indexedDbService.getAllDirectories().then(val => {
+        if (val.length == 0) {
+          this.coreService.createDirectory().then(() => {
+            this.coreService.createDirectorySettings().then(() => {
+              this.coreService.createExamples().then(() => {
+                this.setAllDbData();
+              });
+            });
+          });
+        } else {
+          this.setAllDbData();
+        }
+      })
+    })
+  }
 
-
+  setAllDbData() {
+    this.directoryDbService.setAll().then(() => {
+      this.assessmentDbService.setAll().then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.idbStarted = true;
+            this.changeDetectorRef.detectChanges();
+          })
+        })
+      })
+    })
+  }
 
   takeScreenShot() {
     this.importExportService.takeScreenShot();

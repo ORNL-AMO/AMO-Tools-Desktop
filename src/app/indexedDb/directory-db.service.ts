@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 export class DirectoryDbService {
 
   allDirectories: Array<Directory>;
-  constructor(private indexedDbService: IndexedDbService) { 
+  constructor(private indexedDbService: IndexedDbService) {
     // this.indexedDbService.setAllDirs.subscribe(val => {
     //   console.log('set all dirs 1')
     //   this.setAll();
@@ -15,11 +15,15 @@ export class DirectoryDbService {
 
   setAll(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.indexedDbService.getAllDirectories().then(directories => {
-        this.allDirectories = directories;
-        console.log('set directoriess')
-        resolve(true)
-      })
+      if (this.indexedDbService.db) {
+        this.indexedDbService.getAllDirectories().then(directories => {
+          this.allDirectories = directories;
+          resolve(true)
+        })
+      } else {
+        this.allDirectories = [];
+        resolve(false);
+      }
     })
   }
 
