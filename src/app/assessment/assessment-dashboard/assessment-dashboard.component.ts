@@ -32,8 +32,6 @@ export class AssessmentDashboardComponent implements OnInit {
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
   @Input()
-  directoryCalculator: Calculator;
-  @Input()
   directorySettings: Settings;
 
 

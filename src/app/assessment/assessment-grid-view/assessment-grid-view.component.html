@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-4 summary-card" *ngIf="directoryCalculator">
-    <app-pre-assessment-card [settings]="directorySettings" [isChecked]="isChecked" [directory]="directory" [calculator]="directoryCalculator"
+  <div class="col-4 summary-card" *ngIf="directory.calculators">
+    <app-pre-assessment-card [settings]="directorySettings" [isChecked]="isChecked" [directory]="directory" [calculator]="directory.calculators[0]"
       (viewPreAssessment)="viewPreAssessment()" (updateDirectory)="changeDirectory()"></app-pre-assessment-card>
   </div>
   <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">

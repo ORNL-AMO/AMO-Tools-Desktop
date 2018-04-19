@@ -1,9 +1,9 @@
 <div class="list-view" style="padding-bottom: 20px;">
-	<div class="list-item" *ngIf="directoryCalculator" (click)="viewPreAssessment()">
-		<div class="list-row calc-item" *ngIf="directoryCalculator.preAssessments">
+	<div class="list-item" *ngIf="directory.calculators" (click)="viewPreAssessment()">
+		<div class="list-row calc-item" *ngIf="directory.calculators[0].preAssessments">
 			<a>View or Edit PH Pre-Assessment / Screening</a>
 		</div>
-		<div class="list-row calc-item" *ngIf="!directoryCalculator.preAssessments">
+		<div class="list-row calc-item" *ngIf="!directory.calculators[0].preAssessments">
 			<a>Add PH Pre-Assessment / Screening</a>
 		</div>
 	</div>

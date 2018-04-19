@@ -17,13 +17,16 @@ import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
-import { ImportExport2Service } from '../shared/import-export/import-export-2.service';
+
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
 import { CoreService } from '../core/core.service';
+import { ExportService } from '../shared/import-export/export.service';
+import { ImportExportData } from '../shared/import-export/importExportModel';
+import { ImportService } from '../shared/import-export/import.service';
 declare const packageJson;
 
 @Component({
@@ -68,11 +71,12 @@ export class DashboardComponent implements OnInit {
   dontShowSub: Subscription;
   tutorialShown: boolean = false;
   createAssessmentSub: Subscription;
+  exportData: ImportExportData;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private importExport2Service: ImportExport2Service,
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService, private coreService: CoreService) {
+    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -139,6 +143,7 @@ export class DashboardComponent implements OnInit {
       }
       this.calcDataExists = false;
     }
+    this.workingDirectory.calculators = [this.workingDirectoryCalculator];
   }
 
   addCalculatorData(calcualtorData: Calculator) {
@@ -269,6 +274,7 @@ export class DashboardComponent implements OnInit {
   newDir() {
     this.allDirectories = this.populateDirectories(this.allDirectories);
     this.workingDirectory = this.populateDirectories(this.workingDirectory);
+    this.getWorkingDirectoryData();
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 
@@ -383,98 +389,20 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  // deleteSelected(dir: Directory) {
-  //   this.hideDeleteItemsModal();
-  //   if (dir.subDirectory) {
-  //     dir.subDirectory.forEach(subDir => {
-  //       if (subDir.selected || subDir.parentDirectoryId != 1) {
-  //         this.indexedDbService.getChildrenDirectories(subDir.id).then(results => {
-  //           if (results) {
-  //             subDir.subDirectory = results;
-  //             this.deleteSelected(subDir);
-  //           }
-  //         })
-  //       }
-  //     });
-  //   }
-  //   if (dir != this.workingDirectory) {
-  //     if (dir.parentDirectoryId != this.workingDirectory.id || dir.selected) {
-  //       this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
-  //         let childDirAssessments = results;
-  //         childDirAssessments.forEach(assessment => {
-  //           this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-  //             this.allDirectories = this.populateDirectories(this.allDirectories[0]);
-  //             this.workingDirectory = this.populateDirectories(this.workingDirectory);
-  //           });
-  //           this.indexedDbService.getAssessmentSettings(assessment.id).then(
-  //             results => {
-  //               if (results.length != 0) {
-  //                 this.indexedDbService.deleteSettings(results[0].id).then(
-  //                   results => { console.log('assessment setting deleted'); }
-  //                 )
-  //               }
-  //             }
-  //           )
-  //         })
-  //       })
-  //       this.indexedDbService.deleteDirectory(dir.id).then(results => {
-  //         this.allDirectories = this.populateDirectories(this.allDirectories[0]);
-  //         this.workingDirectory = this.populateDirectories(this.workingDirectory);
-  //       })
-
-  //       this.indexedDbService.getDirectoryCalculator(dir.id).then(results => {
-  //         if (results.length != 0) {
-  //           this.indexedDbService.deleteCalculator(results[0].id).then(() => { console.log('delete dir calculator') });
-  //         }
-  //       })
-
-  //       this.indexedDbService.getDirectorySettings(dir.id).then(results => {
-  //         if (results.length != 0) {
-  //           this.indexedDbService.deleteSettings(results[0].id).then(
-  //             results => { console.log('dir setting deleted'); }
-  //           )
-  //         }
-  //       })
-  //     }
-  //   }
-  //   if (dir == this.workingDirectory) {
-  //     let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'selected': true });
-  //     checkedAssessments.forEach(assessment => {
-  //       this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-  //         this.allDirectories = this.populateDirectories(this.allDirectories[0]);
-  //         this.workingDirectory = this.populateDirectories(this.workingDirectory);
-  //       });
-  //       this.indexedDbService.getAssessmentSettings(assessment.id).then(
-  //         results => {
-  //           if (results.length != 0) {
-  //             this.indexedDbService.deleteSettings(results[0].id).then(
-  //               results => { console.log('assessment setting deleted'); }
-  //             )
-  //           }
-  //         }
-  //       )
-  //     })
-  //   }
-
-  //   if (this.workingDirectoryCalculator) {
-  //     if (this.workingDirectoryCalculator.selected) {
-  //       this.indexedDbService.deleteCalculator(this.workingDirectoryCalculator.id).then(val => {
-  //         this.getWorkingDirectoryData();
-  //       })
-  //     }
-  //   }
-  // }
-
   deleteSelected(dir: Directory) {
-    this.hideDeleteItemsModal();
+    this.deleting = true;
     let isWorkingDir;
     if (dir.id == this.workingDirectory.id) {
       isWorkingDir = true;
-      console.log(true);
     } else {
       isWorkingDir = false;
     }
     this.deleteDataService.deleteDirectory(dir, isWorkingDir);
+    setTimeout(() => {
+      this.newDir();
+      this.hideDeleteItemsModal();
+      this.deleting = false;
+    }, 1500)
   }
 
   generateReport() {
@@ -495,12 +423,11 @@ export class DashboardComponent implements OnInit {
   }
 
   exportSelected() {
-    if (this.checkSelected()) {
-      this.selectedItems = new Array();
-      let test = this.importExport2Service.getSelected(this.workingDirectory);
-      console.log(test)
+    let test = this.exportService.getSelected(this.workingDirectory);
+    if (test.assessments || test.directories) {
+      this.exportData = test;
       //this.getSelected(this.workingDirectory);
-      //this.showExportModal();
+      this.showExportModal();
     } else {
       this.addToast('No items have been selected');
     }
@@ -525,85 +452,21 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
-  checkImportData(data: any) {
-    if (data[data.length - 1].origin == "AMO-TOOLS-DESKTOP") {
-      data.pop();
+  checkImportData(data: ImportExportData) {
+    if (data.origin == "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
-      this.runImport(data);
-
+      this.importService.importData(data, this.workingDirectory.id);
+      setTimeout(() => {
+        this.hideImportModal();
+        this.importInProgress = false;
+        this.allDirectories = this.populateDirectories(this.allDirectories);
+        this.workingDirectory = this.populateDirectories(this.workingDirectory);
+        this.getWorkingDirectoryData();
+      }, 1500)
     }
     else {
       this.addToast('INVALID FILE');
     }
-  }
-
-  runImport(data: ImportDataObjects[]) {
-    if (this.importing) {
-      clearTimeout(this.importing)
-    }
-    this.importing = setTimeout(() => {
-      this.hideImportModal();
-      this.importInProgress = false;
-      this.allDirectories = this.populateDirectories(this.allDirectories);
-      this.workingDirectory = this.populateDirectories(this.workingDirectory);
-    }, 2500)
-
-    let uniqDirs = _.uniqBy(data, 'directory.id');
-    let dirIdPairs = new Array();
-    uniqDirs.forEach(dir => {
-      if (dir.directory) {
-        let tmpDirDbRef: DirectoryDbRef = {
-          name: dir.directory.name,
-          parentDirectoryId: this.workingDirectory.id
-        }
-        let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
-        if (checkParentArr.length != 0) {
-          tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
-        }
-        this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          if (dir.calculator) {
-            dir.calculator.directoryId = results;
-            delete dir.calculator.id;
-            this.indexedDbService.addCalculator(dir.calculator);
-          }
-          dir.directorySettings.directoryId = results;
-          delete dir.directorySettings.id;
-          this.indexedDbService.addSettings(dir.directorySettings);
-          dirIdPairs.push({ oldId: dir.directory.id, newId: results });
-        });
-      }
-    })
-    setTimeout(() => {
-      data.forEach(dataObj => {
-        let tmpDirectoryIdArr = dirIdPairs.filter(pair => { return pair.oldId == dataObj.assessment.directoryId });
-        let tmpDirectoryId = this.workingDirectory.id;
-        if (tmpDirectoryIdArr.length != 0) {
-          tmpDirectoryId = tmpDirectoryIdArr[0].newId;
-        }
-        let tmpAssessment: Assessment = {
-          type: dataObj.assessment.type,
-          name: dataObj.assessment.name,
-          psat: dataObj.assessment.psat,
-          phast: dataObj.assessment.phast,
-          directoryId: tmpDirectoryId
-        }
-        this.indexedDbService.addAssessment(tmpAssessment).then(
-          results => {
-            if (dataObj.calculator) {
-              dataObj.calculator.assessmentId = results;
-              delete dataObj.calculator.id;
-              this.indexedDbService.addCalculator(dataObj.calculator);
-            }
-            //check for psat until phast has settings
-            let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
-            tmpSettings.assessmentId = results;
-            this.indexedDbService.addSettings(tmpSettings).then(
-              results => { }
-            )
-          }
-        )
-      })
-    }, 1000);
   }
 
   addToast(msg: string) {

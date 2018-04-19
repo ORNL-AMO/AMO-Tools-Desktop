@@ -3,9 +3,20 @@ import { Assessment } from "../models/assessment";
 import { Directory } from "../models/directory";
 import { Calculator } from "../models/calculators";
 
-export interface ImportExportModel {
+export interface ImportExportAssessment {
     settings: Settings;
-    assessment?: Assessment;
-    directory: Directory;
+    assessment: Assessment;
     calculator?: Calculator;
+}
+
+export interface ImportExportDirectory {
+    settings: Settings,
+    directory: Directory,
+    calculator?: Array<Calculator>
+}
+
+export interface ImportExportData {
+    directories: Array<ImportExportDirectory>,
+    assessments: Array<ImportExportAssessment>,
+    origin?: string
 }

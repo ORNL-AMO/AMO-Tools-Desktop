@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../models/settings';
 import { ImportExportService } from './import-export.service';
 import { ImportDataObjects } from '../../dashboard/dashboard.component';
+import { ImportExportData, ImportExportAssessment } from './importExportModel';
 
 @Component({
   selector: 'app-import-export',
@@ -15,7 +16,7 @@ import { ImportDataObjects } from '../../dashboard/dashboard.component';
 })
 export class ImportExportComponent implements OnInit {
   @Input()
-  selectedItems: Array<any>;
+  exportData: ImportExportData;
   @Output('closeExportModal')
   closeExportModal = new EventEmitter<boolean>();
   @Input()
@@ -26,96 +27,30 @@ export class ImportExportComponent implements OnInit {
   importData = new EventEmitter<any>();
 
 
-  exportData: Array<ImportDataObjects>;
+  // exportData: Array<ImportDataObjects>;
   isDataGathered: boolean;
   gatheringData: any;
   fileReference: any;
   validFile: boolean;
   gatheringSettings: any;
+  noDirAssessmentItems: Array<ImportExportAssessment>;
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
 
   ngOnInit() {
-    if (this.export) {
-      this.exportData = new Array();
+    console.log(this.exportData);
+    this.noDirAssessmentItems = new Array();
+    if(this.exportData.directories){
+      this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
+      this.exportData.directories.forEach(dir => {
+        _.remove(this.noDirAssessmentItems, (assessmentItem) => {return assessmentItem.assessment.directoryId == dir.directory.id});
+      })
     }
   }
 
-  ngOnChanges() {
-    if (this.export) {
-      if (this.gatheringData) {
-        clearTimeout(this.gatheringData);
-      }
-      this.gatheringData = setTimeout(() => {
-        if (this.gatheringSettings) {
-          clearTimeout(this.gatheringSettings);
-        }
-        //used to make sure all assessments proccessed (gotten outputs)
-        this.selectedItems.forEach(item => {
-          this.getAssessmentSettings(item);
-        });
-        this.gatheringSettings = setTimeout(() => {
-          this.isDataGathered = true;
-        }, 500)
-      }, 500)
-    }
+  getDirAssessments(id: number){
+    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => {return assessmentItem.assessment.directoryId == id});
+    return assessments;
   }
-
-
-
-  getAssessmentSettings(item: any) {
-    // if (item.directory) {
-    //   //check for assessment settings
-    //   this.indexedDbService.getDirectorySettings(item.directory.id).then(dirSettings => {
-    //     this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-    //       results => {
-    //         this.indexedDbService.getDirectoryCalculator(item.directory.id).then((calc) => {
-    //           let dirCalculator;
-    //           if (calc.length != 0) {
-    //             dirCalculator = calc[0];
-    //           }
-    //           if (results.length != 0) {
-    //             this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
-    //           } else {
-    //             //no assessment settings, find dir settings being usd
-    //             this.exportData.push({ assessment: item.assessment, settings: dirSettings[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
-    //           }
-    //         })
-    //       })
-    //   })
-    // } else {
-    //   this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-    //     results => {
-    //       this.indexedDbService.getAssessmentCalculator(item.assessment.id).then((calc) => {
-    //         let assessmentCalc;
-    //         if (calc.length != 0) {
-    //           assessmentCalc = calc[0];
-    //         }
-    //         if (results.length != 0) {
-    //           this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: undefined, calculator: assessmentCalc });
-    //         }
-    //       });
-    //     });
-    //}
-  }
-
-  // getParentDirSettingsThenResults(parentDirectoryId: number, item: any) {
-  //   //get parent directory
-  //   this.indexedDbService.getDirectory(parentDirectoryId).then(
-  //     results => {
-  //       let parentDirectory = results;
-  //       //get parent directory settings
-  //       this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
-  //         results => {
-  //           if (results.length != 0) {
-  //             this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
-  //           } else {
-  //             //no settings try again with parents parent directory
-  //             this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
-  //           }
-  //         })
-  //     }
-  //   )
-  // }
 
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData);

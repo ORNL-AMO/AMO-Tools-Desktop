@@ -24,7 +24,7 @@ export class ImportExportService {
   test() { }
 
   downloadData(data: any) {
-    data.push({ origin: 'AMO-TOOLS-DESKTOP' });
+    data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");

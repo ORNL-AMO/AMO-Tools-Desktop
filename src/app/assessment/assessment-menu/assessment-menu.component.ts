@@ -38,8 +38,6 @@ export class AssessmentMenuComponent implements OnInit {
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
   @Input()
-  directoryCalculator: Calculator;
-  @Input()
   directorySettings: Settings;
 
   breadCrumbs: Array<Directory>;
@@ -126,27 +124,21 @@ export class AssessmentMenuComponent implements OnInit {
         }
       )
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+    let calcTest;
+    if(this.directory.calculators){
+      if(this.directory.calculators[0].selected){
+        calcTest = true;
+      }
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0 || calcTest) {
       return true;
     } else {
       return false;
     }
   }
 
-  calcSelected() {
-    if (this.directoryCalculator) {
-      if (this.directoryCalculator.selected) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
   checkDeleteExport() {
-    let test = (this.checkSelected() || this.calcSelected());
+    let test = this.checkSelected();
     return test;
   }
 

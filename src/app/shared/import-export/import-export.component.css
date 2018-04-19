@@ -1,8 +1,12 @@
 .export-content{
     max-height: 50vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .btn{
     padding: 6px;
+}
+
+.export-content li {
+    list-style: none;
 }
