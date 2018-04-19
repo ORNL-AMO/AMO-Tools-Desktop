@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -35,7 +35,12 @@ export class PsatSankeyComponent implements OnInit {
   location: string;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
+  @Input()
+  modIndex: number;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
 
   //debug, set false when finished
   debugFlag: boolean = true;
@@ -103,7 +108,7 @@ export class PsatSankeyComponent implements OnInit {
       this.selectedResults = this.psatService.emptyResults();
     }
   }
-  
+
 
   makeSankey() {
     let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
@@ -120,19 +125,35 @@ export class PsatSankeyComponent implements OnInit {
 
   sankey(results: PsatOutputs) {
 
-    this.closeSankey();
+    // this.closeSankey();
+
+    // real version
     // Remove  all Sankeys
-    d3.select('#' + this.location).selectAll('svg').remove();
+    // d3.select('#' + this.location).selectAll('svg').remove();
+
+    //debug
+    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
     this.width = width;
     this.height = height;
 
-    svg = d3.select('#' + this.location).append('svg')
+
+    //debug
+    svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", "100%")
       .attr("height", "80%")
       .attr("viewBox", "0 0 " + width + " " + height)
       .attr("preserveAspectRatio", "xMinYMin")
       .append("g");
+
+
+    //real version 
+    // svg = d3.select('#' + this.location).append('svg')
+    //   .attr("width", "100%")
+    //   .attr("height", "80%")
+    //   .attr("viewBox", "0 0 " + width + " " + height)
+    //   .attr("preserveAspectRatio", "xMinYMin")
+    //   .append("g");
 
     this.calcLosses(results);
 

@@ -27,7 +27,7 @@
   <!-- if no mod, only 1 pie chart -->
   <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
     <div class="col-12">
-      <div class="row show-print">
+      <div class="row">
         <div class="col-6">
           {{selectedPhast1.name}}
         </div>
@@ -63,19 +63,20 @@
   <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
     <div #barChartContainer class="col-10 mx-auto">
-      <app-psat-bar-chart [settings]="settings" [printView]="false" [graphColors]="graphColors" [labels]="barLabels" [psat1Name]="selectedPsat1.name"
-        [psat2Name]="selectedPsat2.name" [psat1Values]="selectedPsat1BarValues" [psat2Values]="selectedPsat2BarValues" [chartContainerWidth]="getBarWidth()"></app-psat-bar-chart>
+      <app-psat-bar-chart [settings]="settings" [printView]="false" [graphColors]="graphColors" [labels]="allChartData.barLabels"
+        [psat1Name]="selectedPsat1.name" [psat2Name]="selectedPsat2.name" [psat1Values]="selectedPsat1BarValues" [psat2Values]="selectedPsat2BarValues"
+        [chartContainerWidth]="getBarWidth()"></app-psat-bar-chart>
     </div>
   </div>
 
 
   <!-- if show print then content will init -->
-  <div *ngIf="showPrint" class="row show-print print-component">
+  <div *ngIf="printView" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-      <app-psat-report-graphs-print [settings]="settings" [psat]="psat" [barLabels]="barLabels"
-        [barChartWidth]="getBarWidth()" [pieChartWidth]="getPieWidth()" [printView]="true"
-        [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs"></app-psat-report-graphs-print>
+      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions" [barChartWidth]="getBarWidth()"
+        [pieChartWidth]="getPieWidth()" [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs"
+        [allChartData]="allChartData"></app-psat-report-graphs-print>
     </div>
   </div>
 

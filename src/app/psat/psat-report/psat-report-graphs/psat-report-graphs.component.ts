@@ -37,10 +37,10 @@ export class PsatReportGraphsComponent implements OnInit {
   selectedResults: PsatOutputs;
   selectedInputs: PsatInputs;
 
-  selectedPsat1: { name: string, psat: PSAT };
-  selectedPsat2: { name: string, psat: PSAT };
+  selectedPsat1: { name: string, psat: PSAT, index: number };
+  selectedPsat2: { name: string, psat: PSAT, index: number };
   baselinePsat: any;
-  psatOptions: Array<{ name: string, psat: PSAT }>;
+  psatOptions: Array<{ name: string, psat: PSAT, index: number }>;
   pieChartContainerWidth: number;
   pieChartContainerHeight: number;
   barChartContainerWidth: number;
@@ -62,6 +62,9 @@ export class PsatReportGraphsComponent implements OnInit {
   barChartTitle: string;
   barExportName: string;
 
+
+  allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> };
+
   // resultsArray: Array<{ name: string, data: PsatResultsData }>;
   modExists: boolean = false;
   graphColors: Array<string>;
@@ -77,9 +80,10 @@ export class PsatReportGraphsComponent implements OnInit {
     this.selectedPsat1BarValues = new Array<number>();
     this.selectedPsat2BarValues = new Array<number>();
     this.barLabels = new Array<string>();
-    this.psatOptions = new Array<{ name, psat }>();
+    this.psatOptions = new Array<{ name: string, psat: PSAT, index: number }>();
     this.prepPsatOptions();
     this.setBarLabels();
+    this.allChartData = this.getAllChartData();
     this.selectNewPsat(1);
     if (this.modExists) {
       this.selectNewPsat(2);
@@ -87,13 +91,15 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   prepPsatOptions(): void {
-    this.psatOptions.push({ name: 'Baseline', psat: this.psat });
+    this.psatOptions.push({ name: 'Baseline', psat: this.psat, index: 0 });
     this.selectedPsat1 = this.psatOptions[0];
 
     if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
       this.modExists = true;
+      let i = 1;
       this.psat.modifications.forEach(mod => {
-        this.psatOptions.push({ name: mod.psat.name, psat: mod.psat });
+        this.psatOptions.push({ name: mod.psat.name, psat: mod.psat, index: i });
+        i++;
       });
       this.selectedPsat2 = this.psatOptions[1];
     }
@@ -105,7 +111,7 @@ export class PsatReportGraphsComponent implements OnInit {
     this.barLabels.push('Motor Losses');
     this.barLabels.push('Drive Losses');
     this.barLabels.push('Pump Losses');
-    this.barLabels.push('Useful Output');
+    this.barLabels.push('Output');
   }
 
   // sets loss data and percentages for selected psats
@@ -157,7 +163,7 @@ export class PsatReportGraphsComponent implements OnInit {
       selectedPieValues.push(pumpLoss);
     }
     if (usefulOutput > 0) {
-      selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
+      selectedPieLabels.push('Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(usefulOutput);
     }
     selectedBarValues.push(energyInput);
@@ -167,21 +173,47 @@ export class PsatReportGraphsComponent implements OnInit {
     selectedBarValues.push(usefulOutput);
   }
 
-  selectNewPsat(index: number): void {
-    if (index === 1) {
-      this.selectedPsat1PieLabels = new Array<string>();
-      this.selectedPsat1PieValues = new Array<number>();
-      this.selectedPsat1BarValues = new Array<number>();
+  selectNewPsat(dropDownIndex: number): void {
+    if (dropDownIndex == 1) {
+      this.selectedPsat1PieLabels = this.allChartData.pieLabels[this.selectedPsat1.index];
+      this.selectedPsat1PieValues = this.allChartData.pieValues[this.selectedPsat1.index];
+      this.selectedPsat1BarValues = this.allChartData.barValues[this.selectedPsat1.index];
       this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
-      this.getPsatData(this.selectedPsat1.psat, this.selectedPsat1PieLabels, this.selectedPsat1PieValues, this.selectedPsat1BarValues);
     }
-    else if (index === 2) {
-      this.selectedPsat2PieLabels = new Array<string>();
-      this.selectedPsat2PieValues = new Array<number>();
-      this.selectedPsat2BarValues = new Array<number>();
+    else if (dropDownIndex == 2) {
+      this.selectedPsat2PieLabels = this.allChartData.pieLabels[this.selectedPsat2.index];
+      this.selectedPsat2PieValues = this.allChartData.pieValues[this.selectedPsat2.index];
+      this.selectedPsat2BarValues = this.allChartData.barValues[this.selectedPsat2.index];
       this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
-      this.getPsatData(this.selectedPsat2.psat, this.selectedPsat2PieLabels, this.selectedPsat2PieValues, this.selectedPsat2BarValues);
     }
+
+    // if (dropDownIndex === 1) {
+    //   this.selectedPsat1PieLabels = this.allChartData.pieLabels[selectedIndex];
+    //   this.selectedPsat1PieValues = this.allChartData.pieValues[selectedIndex];
+    //   this.selectedPsat1BarValues = this.allChartData.barValues[selectedIndex];
+    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
+    // }
+    // else if (dropDownIndex === 2) {
+    //   this.selectedPsat2PieLabels = this.allChartData.pieLabels[selectedIndex];
+    //   this.selectedPsat2PieValues = this.allChartData.pieValues[selectedIndex];
+    //   this.selectedPsat2BarValues = this.allChartData.barValues[selectedIndex];
+    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
+    // }
+
+    // if (index === 1) {
+    //   this.selectedPsat1PieLabels = new Array<string>();
+    //   this.selectedPsat1PieValues = new Array<number>();
+    //   this.selectedPsat1BarValues = new Array<number>();
+    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
+    //   this.getPsatData(this.selectedPsat1.psat, this.selectedPsat1PieLabels, this.selectedPsat1PieValues, this.selectedPsat1BarValues);
+    // }
+    // else if (index === 2) {
+    //   this.selectedPsat2PieLabels = new Array<string>();
+    //   this.selectedPsat2PieValues = new Array<number>();
+    //   this.selectedPsat2BarValues = new Array<number>();
+    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
+    //   this.getPsatData(this.selectedPsat2.psat, this.selectedPsat2PieLabels, this.selectedPsat2PieValues, this.selectedPsat2BarValues);
+    // }
   }
 
   getPieWidth(): number {
@@ -202,5 +234,32 @@ export class PsatReportGraphsComponent implements OnInit {
     else {
       return 0;
     }
+  }
+
+
+  getAllChartData(): { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> } {
+    let allPieLabels = new Array<Array<string>>();
+    let allPieValues = new Array<Array<number>>();
+    let allBarValues = new Array<Array<number>>();
+    let allPieData;
+
+    for (let i = 0; i < this.psatOptions.length; i++) {
+      let tmpPieLabels = new Array<string>();
+      let tmpPieValues = new Array<number>();
+      let tmpBarValues = new Array<number>();
+      let tmpPsat = this.psatOptions[i].psat;
+      this.getPsatData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+      allPieLabels.push(tmpPieLabels);
+      allPieValues.push(tmpPieValues);
+      allBarValues.push(tmpBarValues);
+    }
+
+    allPieData = {
+      pieLabels: allPieLabels,
+      pieValues: allPieValues,
+      barLabels: this.barLabels,
+      barValues: allBarValues
+    }
+    return allPieData;
   }
 }

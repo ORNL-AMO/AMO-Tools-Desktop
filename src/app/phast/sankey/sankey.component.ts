@@ -42,10 +42,6 @@ export class SankeyComponent implements OnInit {
   @Input()
   modIndex: number;
 
-
-  //debug
-  @ViewChild("ngContainer") ngContainer: ElementRef;
-
   //real version
   @ViewChild("ngChart") ngChart: ElementRef;
   @ViewChild("btnDownload") btnDownload: ElementRef;

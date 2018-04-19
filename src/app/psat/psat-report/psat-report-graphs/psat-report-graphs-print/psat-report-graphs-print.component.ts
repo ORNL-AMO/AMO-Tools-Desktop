@@ -11,9 +11,9 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  psat: PSAT;
+  graphColors: Array<string>;
   @Input()
-  barLabels: Array<string>;
+  psatOptions: Array<{ name: string, psat: PSAT }>;
   @Input()
   barChartWidth: number;
   @Input()
@@ -26,13 +26,32 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   printSankey: boolean;
   @Input()
   printGraphs: boolean;
+  @Input()
+  allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
+  // @Input()
+  // allPieLabels: Array<Array<string>>;
+  // @Input()
+  // allPieValues: Array<Array<number>>;
 
-  baselinePsat: PSAT;
+  baselinePsat: { name: string, psat: PSAT };
+  allNotes: Array<Array<string>>;
 
 
   constructor() { }
 
   ngOnInit() {
+    if (this.psatOptions === null || this.psatOptions === undefined) {
+      console.error('psat print error');
+      return;
+    }
+    this.setBaseline();
   }
+
+
+  setBaseline(): void {
+    this.baselinePsat = this.psatOptions[0];
+  }
+
+
 
 }

@@ -69,15 +69,12 @@ export class PieChartComponent implements OnInit {
 
     if (!this.printView) {
       this.chartContainerHeight = Math.min(this.chartContainerWidth * 0.45, 280);
-      this.height = this.chartContainerHeight;
     }
     else {
-      if (this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
-        this.chartContainerHeight = 450;
-      }
-      this.height = 270;
-      this.chartContainerWidth = 680;
+      this.chartContainerHeight = 215;
+      this.chartContainerWidth = 475;
     }
+    this.height = this.chartContainerHeight;
     this.width = this.chartContainerWidth;
     //set radius to limiting factor: height or width
     this.radius = Math.min(this.height, this.width) / 2;
@@ -102,8 +99,8 @@ export class PieChartComponent implements OnInit {
     let xBound;
     let fontSize;
     if (printView) {
-      xBound = radius * (10 / 9);
-      fontSize = "16px";
+      xBound = radius * (30 / 29);
+      fontSize = "13px";
     }
     else {
       xBound = radius * (3 / 2);
