@@ -17,19 +17,22 @@ export class ExportService {
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
+  workingDirId: number;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) { }
 
 
-  getSelected(dir: Directory) {
+  getSelected(dir: Directory, workingDirId: number) {
+    this.workingDirId = workingDirId;
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     let assessments: Array<Assessment> = _.filter(dir.assessments, (assessment) => { return assessment.selected == true });
     let subDirs: Array<Directory> = _.filter(dir.subDirectory, (subDir) => { return subDir.selected == true });
-    let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => {return calc.selected == true});
+    let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => { return calc.selected == true });
     //ToDo: make sure these calcs are exported
     //  need to add multiple calcs functionality
     if (assessments) {
       assessments.forEach(assessment => {
+        console.log('1')
         let obj = this.getAssessmentObj(assessment);
         this.exportAssessments.push(obj);
       })
@@ -45,6 +48,7 @@ export class ExportService {
       directories: this.exportDirectories,
       assessments: this.exportAssessments
     }
+    console.log(this.exportData);
     return this.exportData;
   }
 
@@ -80,35 +84,20 @@ export class ExportService {
   }
 
   getSubDirSelected(dir: Directory, assessmentObjs: Array<ImportExportAssessment>) {
-    if (dir.assessments) {
-      dir.assessments.forEach(assessment => {
+    let assessments = this.assessmentDbService.getByDirectoryId(dir.id);
+    if (assessments) {
+      assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
         assessmentObjs.push(obj);
       })
-    } else {
-      let assessments = this.assessmentDbService.getByDirectoryId(dir.id);
-      if (assessments) {
-        assessments.forEach(assessment => {
-          let obj = this.getAssessmentObj(assessment);
-          assessmentObjs.push(obj);
-        })
-      }
     }
-    if (dir.subDirectory) {
-      dir.subDirectory.forEach(subDir => {
+    let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
+    if (subDirs) {
+      subDirs.forEach(subDir => {
         this.addDirectoryObj(subDir);
         let objs = this.getSubDirSelected(subDir, assessmentObjs);
         assessmentObjs.concat(objs);
       })
-    } else {
-      let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
-      if (subDirs) {
-        subDirs.forEach(subDir => {
-          this.addDirectoryObj(subDir);
-          let objs = this.getSubDirSelected(subDir, assessmentObjs);
-          assessmentObjs.concat(objs);
-        })
-      }
     }
     return assessmentObjs;
   }

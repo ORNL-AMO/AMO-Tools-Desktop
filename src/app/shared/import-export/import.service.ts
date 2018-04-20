@@ -14,7 +14,6 @@ export class ImportService {
 
   directoryItems: Array<ImportExportDirectory>;
   assessmentItems: Array<ImportExportAssessment>;
-
   constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService) { }
 
@@ -22,76 +21,102 @@ export class ImportService {
     this.assessmentItems = data.assessments;
     this.directoryItems = data.directories;
     let tmpAssessmentArr: Array<ImportExportAssessment> = data.assessments;
-    // data.directories.forEach(dir => {
-    //   tmpAssessmentArr = _.remove(tmpAssessmentArr, (assessmentItem) => {
-    //     return dir.directory.id == assessmentItem.assessment.directoryId;
-    //   })
-    // })
-    this.addDirectory(data.directories[0], this.assessmentItems, this.directoryItems, workingDirectoryId);
-    // tmpAssessmentArr.forEach(assessmentItem => {
-    //   assessmentItem.assessment.directoryId = workingDirectoryId;
-    //   this.addAssessment(assessmentItem);
-    // })
+    let tmpDirectory: ImportDirectory = {
+      id: data.directories[0].directory.parentDirectoryId,
+      directoryItem: undefined,
+      assessments: new Array(),
+      subDirectories: new Array()
+    };
+    tmpDirectory = this.buildDir(tmpDirectory, true, workingDirectoryId);
+    this.addDirectory(tmpDirectory);
   }
 
-  addDirectory(directoryItem: ImportExportDirectory, assessments: Array<ImportExportAssessment>, directories: Array<ImportExportDirectory>, workingDirectoryId: number) {
-    let dirAssessments = _.filter(assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId == directoryItem.directory.id });
-    let subDirs = _.filter(directories, (dir) => { return dir.directory.parentDirectoryId == directoryItem.directory.id });
-    let parentDir = _.find(directories, (dir) => { return dir.directory.id == directoryItem.directory.parentDirectoryId });
-    if (!parentDir) {
-      directoryItem.directory.parentDirectoryId = workingDirectoryId;
+  buildDir(directory: ImportDirectory, first?: boolean, workingDirectoryId?: number): ImportDirectory {
+    let tmpDirs: Array<ImportExportDirectory> = _.filter(this.directoryItems, (dir) => { return dir.directory.parentDirectoryId == directory.id });
+    if(first){
+      tmpDirs.forEach(dir => {
+        dir.directory.parentDirectoryId = workingDirectoryId;
+      })
     }
-    delete directoryItem.directory.id;
-    this.indexedDbService.addDirectory(directoryItem.directory).then(newDirId => {
-      this.directoryDbService.setAll();
-      console.log('dir added: ')
-      directoryItem.settings.directoryId = newDirId;
-      delete directoryItem.settings.id;
-      this.indexedDbService.addSettings(directoryItem.settings).then(() => {
-        this.settingsDbService.setAll();
-        console.log('dir settings added')
-      });
-      if (directoryItem.calculator) {
-        directoryItem.calculator.forEach(calc => {
-          delete calc.id;
-          calc.directoryId = newDirId;
-          this.indexedDbService.addCalculator(calc).then(() => {
-            this.calculatorDbService.setAll();
-            console.log('dir calc added')
+    let subDirs: Array<ImportDirectory> = new Array<ImportDirectory>();
+    tmpDirs.forEach(dir => {
+      let tmpSubDir: ImportDirectory = {
+        id: dir.directory.id,
+        directoryItem: dir,
+        subDirectories: new Array(),
+        assessments: new Array()
+      }
+      tmpSubDir = this.buildDir(tmpSubDir);
+      subDirs.push(tmpSubDir);
+
+    })
+    let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId == directory.id });
+    directory.subDirectories = subDirs;
+    directory.assessments = dirAssessments;
+    return directory
+  }
+
+  addDirectory(importDir: ImportDirectory) {
+    if (importDir.directoryItem) {
+      delete importDir.directoryItem.directory.id;
+      this.indexedDbService.addDirectory(importDir.directoryItem.directory).then(newId => {
+        this.directoryDbService.setAll();
+        importDir.directoryItem.settings.directoryId = newId;
+        delete importDir.directoryItem.settings.id;
+        this.indexedDbService.addSettings(importDir.directoryItem.settings).then(() => {
+          this.settingsDbService.setAll();
+        });
+
+        if (importDir.directoryItem.calculator) {
+          if (importDir.directoryItem.calculator.length != 0) {
+            importDir.directoryItem.calculator[0].directoryId = newId;
+            delete importDir.directoryItem.calculator[0].id;
+            this.indexedDbService.addCalculator(importDir.directoryItem.calculator[0]).then(() => {
+              this.calculatorDbService.setAll();
+            });
+          }
+        }
+
+        importDir.assessments.forEach(assessmentItem => {
+          assessmentItem.assessment.directoryId = newId;
+          delete assessmentItem.assessment.id;
+          this.indexedDbService.addAssessment(assessmentItem.assessment).then(newAssessmentId => {
+            this.assessmentDbService.setAll();
+            assessmentItem.settings.assessmentId = newAssessmentId;
+            delete assessmentItem.settings.id;
+            this.indexedDbService.addSettings(assessmentItem.settings).then(() => {
+              this.settingsDbService.setAll();
+            });
+
+            if (assessmentItem.calculator) {
+              assessmentItem.calculator.directoryId = newId;
+              delete assessmentItem.calculator.id;
+              this.indexedDbService.addCalculator(assessmentItem.calculator).then(() => {
+                this.calculatorDbService.setAll();
+              });
+
+            }
           })
         })
-      }
-      dirAssessments.forEach(assessment => {
-        assessment.assessment.directoryId = newDirId;
-        this.addAssessment(assessment);
-      })
-      subDirs.forEach(dir => {
-        dir.directory.parentDirectoryId = newDirId;
-        this.addDirectory(dir, this.assessmentItems, this.directoryItems, workingDirectoryId);
-      })
-    })
-  }
 
-  addAssessment(assessmentItem: ImportExportAssessment) {
-    delete assessmentItem.assessment.id;
-    this.indexedDbService.addAssessment(assessmentItem.assessment).then(newAssessmentId => {
-      this.assessmentDbService.setAll();
-      console.log('assessment added');
-      assessmentItem.settings.assessmentId = newAssessmentId;
-      delete assessmentItem.settings.id;
-      this.indexedDbService.addSettings(assessmentItem.settings).then(() => {
-        this.settingsDbService.setAll();
-        console.log('assessment settings added')
-      });
-      if (assessmentItem.calculator) {
-        assessmentItem.calculator.assessmentId = newAssessmentId;
-        delete assessmentItem.calculator.id;
-        this.indexedDbService.addCalculator(assessmentItem.calculator).then(() => {
-          this.calculatorDbService.setAll();
-          console.log('assessment calc added')
-        });
-      }
-    })
-  }
+        importDir.subDirectories.forEach(subDir => {
+          if (subDir.directoryItem.directory) {
+            subDir.directoryItem.directory.parentDirectoryId = newId;
+          }
+          this.addDirectory(subDir);
+        })
 
+      })
+    } else {
+      importDir.subDirectories.forEach(subDir => { this.addDirectory(subDir) })
+    }
+  }
+}
+
+
+export interface ImportDirectory {
+  id: number,
+  directoryItem: ImportExportDirectory,
+  subDirectories: Array<ImportDirectory>,
+  assessments: Array<ImportExportAssessment>
 }

@@ -37,14 +37,7 @@ export class ImportExportComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
 
   ngOnInit() {
-    console.log(this.exportData);
     this.noDirAssessmentItems = new Array();
-    if(this.exportData.directories){
-      this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
-      this.exportData.directories.forEach(dir => {
-        _.remove(this.noDirAssessmentItems, (assessmentItem) => {return assessmentItem.assessment.directoryId == dir.directory.id});
-      })
-    }
   }
 
   getDirAssessments(id: number){

@@ -1,9 +1,13 @@
 <div *ngIf="export">
   <div class="export-content scroll-item">
     <ul>
-      <li *ngFor="let dirItem of exportData.directories"><span class="fa fa-folder p-1"></span>{{dirItem.directory.name}}
+      <li *ngFor="let dirItem of exportData.directories"><span class="fa fa-folder p-1"></span>{{dirItem.directory.name}} /
         <ul>
-            <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">{{assessmentItem.assessment.name}}</li>
+            <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">
+              <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+              <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+              {{assessmentItem.assessment.name}}
+            </li>
         </ul>
       </li>
       <li *ngFor="let assessmentItem of noDirAssessmentItems">{{assessmentItem.assessment.name}}</li>

@@ -423,7 +423,7 @@ export class DashboardComponent implements OnInit {
   }
 
   exportSelected() {
-    let test = this.exportService.getSelected(this.workingDirectory);
+    let test = this.exportService.getSelected(JSON.parse(JSON.stringify(this.workingDirectory)), this.workingDirectory.id);
     if (test.assessments || test.directories) {
       this.exportData = test;
       //this.getSelected(this.workingDirectory);
