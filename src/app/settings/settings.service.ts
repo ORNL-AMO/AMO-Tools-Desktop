@@ -24,8 +24,10 @@ export class SettingsService {
       'pressureMeasurement': [''],
       'steamPressureMeasurement': [''],
       'steamTemperatureMeasurement': [''],
-      'specificEnthalpyMeasurement': [''],
-      'specificEntropyMeasurement': [''],
+      'steamSpecificEnthalpyMeasurement': [''],
+      'steamSpecificEntropyMeasurement': [''],
+      'steamSpecificVolumeMeasurement': [''],
+      'steamMassFlowMeasurement': [''],
       'currentMeasurement': [''],
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
@@ -53,8 +55,10 @@ export class SettingsService {
       'pressureMeasurement': [settings.pressureMeasurement],
       'steamPressureMeasurement': [settings.steamPressureMeasurement],
       'steamTemperatureMeasurement': [settings.steamTemperatureMeasurement],
-      'specificEnthalpyMeasurement': [settings.specificEnthalpyMeasurement],
-      'specificEntropyMeasurement': [settings.specificEntropyMeasurement],
+      'steamSpecificEnthalpyMeasurement': [settings.steamSpecificEnthalpyMeasurement],
+      'steamSpecificEntropyMeasurement': [settings.steamSpecificEntropyMeasurement],
+      'steamSpecificVolumeMeasurement': [settings.steamSpecificVolumeMeasurement],
+      'steamMassFlowMeasurement': [settings.steamMassFlowMeasurement],
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
@@ -85,8 +89,10 @@ export class SettingsService {
       pressureMeasurement: form.controls.pressureMeasurement.value,
       steamPressureMeasurement: form.controls.steamPressureMeasurement.value,
       steamTemperatureMeasurement: form.controls.steamTemperatureMeasurement.value,
-      specificEnthalpyMeasurement: form.controls.specificEnthalpyMeasurement.value,
-      specificEntropyMeasurement: form.controls.specificEntropyMeasurement.value,
+      steamSpecificEnthalpyMeasurement: form.controls.steamSpecificEnthalpyMeasurement.value,
+      steamSpecificEntropyMeasurement: form.controls.steamSpecificEntropyMeasurement.value,
+      steamSpecificVolumeMeasurement: form.controls.steamSpecificVolumeMeasurement.value,
+      steamMassFlowMeasurement: form.controls.steamMassFlowMeasurement.value,
       currentMeasurement: form.controls.currentMeasurement.value,
       viscosityMeasurement: form.controls.viscosityMeasurement.value,
       voltageMeasurement: form.controls.voltageMeasurement.value,
@@ -119,8 +125,10 @@ export class SettingsService {
       pressureMeasurement: settings.pressureMeasurement,
       steamPressureMeasurement: settings.steamPressureMeasurement,
       steamTemperatureMeasurement: settings.steamTemperatureMeasurement,
-      specificEnthalpyMeasurement: settings.specificEnthalpyMeasurement,
-      specificEntropyMeasurement: settings.specificEntropyMeasurement,
+      steamSpecificEnthalpyMeasurement: settings.steamSpecificEnthalpyMeasurement,
+      steamSpecificEntropyMeasurement: settings.steamSpecificEntropyMeasurement,
+      steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
+      steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -150,8 +158,10 @@ export class SettingsService {
         temperatureMeasurement: 'F',
         steamTemperatureMeasurement: 'F',
         steamPressureMeasurement: 'psi',
-        specificEnthalpyMeasurement: 'Btu/lb',
-        specificEntropyMeasurement: 'Btu/lb-F',
+        steamSpecificEnthalpyMeasurement: 'Btu/lb',
+        steamSpecificEntropyMeasurement: 'Btu/lb-F',
+        steamSpecificVolumeMeasurement: 'ft3/lb',
+        steamMassFlowMeasurement: 'lb/hr',
         energyResultUnit: 'MMBtu',
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
@@ -171,8 +181,10 @@ export class SettingsService {
         temperatureMeasurement: 'C',
         steamPressureMeasurement: 'kPa',
         steamTemperatureMeasurement: 'C',
-        specificEnthalpyMeasurement: 'kJ/kg',
-        specificEntropyMeasurement: 'kJ/kg/K',
+        steamSpecificEnthalpyMeasurement: 'kJ/kg',
+        steamSpecificEntropyMeasurement: 'kJ/kg/K',
+        steamSpecificVolumeMeasurement: 'm3/kg',
+        steamMassFlowMeasurement: 'kg/hr',
         energyResultUnit: 'GJ',
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
@@ -240,8 +252,10 @@ export class SettingsService {
       settings.temperatureMeasurement = 'F';
     } else if (settings.unitsOfMeasure == 'Metric') {
       settings.temperatureMeasurement = 'C';
+      settings.steamTemperatureMeasurement = 'C';
     } else {
       settings.temperatureMeasurement = 'F';
+      settings.steamTemperatureMeasurement = 'F';
     }
     return settings;
   }

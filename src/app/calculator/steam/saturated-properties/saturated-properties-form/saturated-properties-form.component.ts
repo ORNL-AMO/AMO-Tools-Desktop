@@ -88,7 +88,6 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     // pressure min 0.001 max 22.064 MPa
     // temp min 273.2 max 657 K
     this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
-    console.log(this.output);
 
     return 0;
   }

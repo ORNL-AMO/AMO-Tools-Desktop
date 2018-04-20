@@ -89,9 +89,9 @@ export class SteamPropertiesFormComponent implements OnInit {
     if (input.thermodynamicQuantity === 0) {
       quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamTemperatureMeasurement];
     } else if (input.thermodynamicQuantity === 1) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEnthalpyMeasurement];
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamSpecificEnthalpyMeasurement];
     } else if (input.thermodynamicQuantity === 2) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEntropyMeasurement];
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamSpecificEntropyMeasurement];
     } else {
       quantityObj = this.checkQuantity[input.thermodynamicQuantity];
     }

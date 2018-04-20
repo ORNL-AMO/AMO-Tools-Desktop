@@ -13,9 +13,9 @@ export class SteamService {
       if (steamPropertiesInput.thermodynamicQuantity === 0) { // convert temperature to kelvin
         return this.convertUnitsService.value(steamPropertiesInput.quantityValue).from(settings.steamTemperatureMeasurement).to('C') + 273.15;
       } else if (steamPropertiesInput.thermodynamicQuantity === 1) { // convert specific Enthalpy
-        return this.convertUnitsService.value(steamPropertiesInput.quantityValue).from(settings.specificEnthalpyMeasurement).to('kJkg');
+        return this.convertUnitsService.value(steamPropertiesInput.quantityValue).from(settings.steamSpecificEnthalpyMeasurement).to('kJkg');
       } else if (steamPropertiesInput.thermodynamicQuantity === 2) {
-        return this.convertUnitsService.value(steamPropertiesInput.quantityValue).from(settings.specificEntropyMeasurement).to('kJkgK');
+        return this.convertUnitsService.value(steamPropertiesInput.quantityValue).from(settings.steamSpecificEntropyMeasurement).to('kJkgK');
       } else {
         return steamPropertiesInput.quantityValue;
       }
@@ -23,9 +23,9 @@ export class SteamService {
       if (steamPropertiesInput.thermodynamicQuantity === 0) { // convert temperature back to original user-chosen unit
         output.temperature = this.convertUnitsService.value(steamPropertiesInput.quantityValue - 273.15).from('C').to(settings.steamTemperatureMeasurement);
       } else if (steamPropertiesInput.thermodynamicQuantity === 1) { // convert specific Enthalpy
-        output.specificEnthalpy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkg').to(settings.specificEnthalpyMeasurement);
+        output.specificEnthalpy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
       } else if (steamPropertiesInput.thermodynamicQuantity === 2) {
-        output.specificEntropy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkgK').to(settings.specificEntropyMeasurement);
+        output.specificEntropy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
       }
     }
   }

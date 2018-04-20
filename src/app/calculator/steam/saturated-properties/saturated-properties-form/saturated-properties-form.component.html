@@ -45,57 +45,59 @@
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Specific Enthalpy</strong></label>
+    <label class="small"><strong>Liquid Specific Enthalpy</strong></label>
     <div class="small text-center"><strong>{{output.liquidEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Specific Enthalpy</strong></label>
-    <div class="small text-center"><strong>{{output.gasEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="small"><strong>Specific Enthalpy</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEnthalpyMeasurement)}}</strong></span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="small"><strong>Specific Entropy</strong></label>
+    <label class="small"><strong>Liquid Specific Entropy</strong></label>
     <div class="small text-center"><strong>{{output.liquidEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="small"><strong>Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.specificEntropyMeasurement)}}</strong></span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="small"><strong>Specific Volume</strong></label>
+    <label class="small"><strong>Liquid Specific Volume</strong></label>
     <div class="small text-center"><strong>{{output.liquidVolume | number:'1.1-4'}}</strong>
-      <span><strong>cubic ft per lb</strong></span>
+      <span><strong>{{settings.steamSpecificVolumeMeasurement}}</strong></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="small"><strong>Gas Specific Enthalpy</strong></label>
+    <div class="small text-center"><strong>{{output.gasEnthalpy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Specific Volume</strong></label>
+    <label class="small"><strong>Gas Specific Entropy</strong></label>
+    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Gas Specific Volume</strong></label>
     <div class="small text-center"><strong>{{output.gasVolume | number:'1.1-4'}}</strong>
-      <span><strong>cubic ft per lb</strong></span>
+      <span><strong>{{settings.steamSpecificVolumeMeasurement}}</strong></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="small"><strong>Evaporation Specific Enthalpy</strong></label>
+    <div class="small text-center"><strong>{{output.evaporationEnthalpy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Specific Volume</strong></label>
+    <label class="small"><strong>Evaporation Specific Entropy</strong></label>
+    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}</strong>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small"><strong>Evaporation Specific Volume</strong></label>
     <div class="small text-center"><strong>{{output.evaporationVolume | number:'1.1-4'}}</strong>
-      <span><strong>cubic ft per lb</strong></span>
+      <span><strong>{{settings.steamSpecificVolumeMeasurement}}</strong></span>
     </div>
   </div>
 </div>
