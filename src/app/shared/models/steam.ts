@@ -31,3 +31,41 @@ export interface SaturatedPropertiesOutput {
   gasVolume: number;
   evaporationVolume: number;
 }
+
+export interface BoilerInput {
+  deaeratorPressure: number;
+  combustionEfficiency: number;
+  blowdownRate: number;
+  steamPressure: number;
+  quantityType: number;
+  quantityValue: number;
+  steamMassFlow: number;
+}
+
+export interface BoilerOutput {
+  steamPressure: number;
+  steamTemperature: number;
+  steamSpecificEnthalpy: number;
+  steamSpecificEntropy: number;
+  steamQuality: number;
+  steamMassFlow: number;
+  steamEnergyFlow: number;
+
+  blowdownPressure: number;
+  blowdownTemperature: number;
+  blowdownSpecificEnthalpy: number;
+  blowdownSpecificEntropy: number;
+  blowdownQuality: number;
+  blowdownMassFlow: number;
+  blowdownEnergyFlow: number;
+
+  feedwaterPressure: number;
+  feedwaterTemperature: number;
+  feedwaterSpecificEnthalpy: number;
+  feedwaterSpecificEntropy: number;
+  feedwaterQuality: number;
+  feedwaterMassFlow: number;
+  feedwaterEnergyFlow: number;
+  boilerEnergy: number;
+  fuelEnergy: number;
+}
