@@ -1,16 +1,28 @@
 <form [formGroup]="settingsForm">
-  <!--<div class="form-group">-->
-    <!--<label for="distanceMeasurement">Head Measurement</label>-->
-    <!--<select class="form-control" formControlName="distanceMeasurement" id="distanceMeasurement" (change)="setCustom()">-->
-      <!--<option *ngFor="let measurement of distanceMeasurements" [ngValue]="measurement.unit">{{measurement.display}} ( {{measurement.unit}} )</option>-->
-    <!--</select>-->
-  <!--</div>-->
+  <div class="form-group">
+    <label for="pressureMeasurement">Pressure Measurement</label>
+    <select class="form-control" formControlName="steamPressureMeasurement" id="pressureMeasurement" (change)="save()">
+      <!--<option value='mPa'>MPa</option>-->
+      <option value='kPa'>Kilopascals ( kPa )</option>
+      <option value='psi'>Pounds per Square Inch ( psi )</option>
+      <option value='bar'>Bar ( bar )</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="temperatureMeasurement">Temperature Measurement</label>
+    <select class="form-control" formControlName="steamTemperatureMeasurement" id="temperatureMeasurement" (change)="save()">
+      <option value='F'>Degrees Fahrenheit ( F )</option>
+      <option value='C'>Degrees Celsius ( C )</option>
+    </select>
+  </div>
+
   <div class="form-group">
     <label for="specificEnthalpyMeasurement">Specific Enthalpy</label>
     <div class="input-group calc-addon-group">
       <select name="specificEnthalpyMeasurement" class="form-control" formControlName="specificEnthalpyMeasurement" id="specificEnthalpyMeasurement" (change)="save()" autofocus>
-        <option value='btuLb'>Btu/lb</option>
-        <option value='kJkg'>kJ/kg</option>
+        <option value='btuLb'>British thermal units per Pound ( Btu/lb )</option>
+        <option value='kJkg'>Kilojoules per Kilogram ( kJ/kg )</option>
       </select>
     </div>
   </div>
@@ -19,8 +31,8 @@
     <label for="specificEntropyMeasurement">Specific Entropy</label>
     <div class="input-group calc-addon-group">
       <select name="specificEntropyMeasurement" class="form-control" formControlName="specificEntropyMeasurement" id="specificEntropyMeasurement" (change)="save()" autofocus>
-        <option value='btulbF'>Btu/lb-F</option>
-        <option value='kJkgK'>kJ/kg/K</option>
+        <option value='btulbF'>British thermal units per Pound Fahrenheit (Btu/lb-F)</option>
+        <option value='kJkgK'>Kilojoules per Kilogram Kelvin ( kJ/kg/K )</option>
       </select>
     </div>
   </div>

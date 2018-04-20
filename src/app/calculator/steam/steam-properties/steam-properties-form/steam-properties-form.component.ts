@@ -71,7 +71,7 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.steamPropertiesOutput = {
       pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
     };
-    this.quantityValueUnits = this.settings.temperatureMeasurement;
+    this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
     this.calculate();
   }
 
@@ -83,11 +83,11 @@ export class SteamPropertiesFormComponent implements OnInit {
       quantityValue: this.steamPropertiesForm.controls.quantityValue.value
     };
 
-    const pressureObj: Properties = this.pressureCheck[this.settings.pressureMeasurement];
+    const pressureObj: Properties = this.pressureCheck[this.settings.steamPressureMeasurement];
     let quantityObj = this.checkQuantity[0]['F'];
 
     if (input.thermodynamicQuantity === 0) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.temperatureMeasurement];
+      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamTemperatureMeasurement];
     } else if (input.thermodynamicQuantity === 1) {
       quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.specificEnthalpyMeasurement];
     } else if (input.thermodynamicQuantity === 2) {
@@ -99,7 +99,7 @@ export class SteamPropertiesFormComponent implements OnInit {
 
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
-      const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.pressureMeasurement;
+      const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.steamPressureMeasurement;
       this.pressureError = 'Pressure must be between ' + err;
     }
 

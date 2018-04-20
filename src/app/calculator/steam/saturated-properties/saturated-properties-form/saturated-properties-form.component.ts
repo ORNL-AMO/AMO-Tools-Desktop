@@ -70,7 +70,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
 
     if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
       const pressure = this.saturatedPropertiesForm.controls.saturatedPressure.value;
-      const properties = this.pressureCheck[this.settings.pressureMeasurement];
+      const properties = this.pressureCheck[this.settings.steamPressureMeasurement];
       if (pressure < properties.min || pressure > properties.max) {
         this.pressureError = 'Pressure must be between ' + properties.min + ' and ' + properties.max + ' ' + properties.displayUnits;
         return;
@@ -78,7 +78,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
       this.input.saturatedPressure = pressure;
     } else {
       const temperature = this.saturatedPropertiesForm.controls.saturatedTemperature.value;
-      const properties = this.temperatureCheck[this.settings.temperatureMeasurement];
+      const properties = this.temperatureCheck[this.settings.steamTemperatureMeasurement];
       if (temperature < properties.min || temperature > properties.max) {
         this.temperatureError = 'Temperature must be between ' + properties.min + ' and ' + properties.max + ' ' + properties.displayUnits;
         return;

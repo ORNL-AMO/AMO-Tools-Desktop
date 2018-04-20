@@ -5,7 +5,7 @@
       <label for="pressure">Pressure</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (input)="calculate()">
-        <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
+        <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
         <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
     </div>
@@ -37,13 +37,13 @@
     <div class="form-group">
       <label class="small"><strong>Pressure</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.pressure | number:'1.1-4'}}</strong>
-        <span><strong>{{settings.pressureMeasurement}}</strong></span>
+        <span><strong>{{settings.steamPressureMeasurement}}</strong></span>
       </div>
     </div>
     <div class="form-group">
       <label class="small"><strong>Temperature</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.temperature | number:'1.1-4'}}</strong>
-        <span><strong>{{steamService.getDisplayUnit(settings.temperatureMeasurement)}}</strong></span>
+        <span><strong>{{steamService.getDisplayUnit(settings.steamTemperatureMeasurement)}}</strong></span>
       </div>
     </div>
     <div class="form-group">

@@ -10,6 +10,8 @@ export interface Settings {
     powerMeasurement?: string,
     distanceMeasurement?: string,
     pressureMeasurement?: string,
+    steamPressureMeasurement?: string,
+    steamTemperatureMeasurement?: string,
     specificEnthalpyMeasurement?: string,
     specificEntropyMeasurement?: string,
     currentMeasurement?: string,

@@ -224,6 +224,8 @@ export const MockPsatSettings: Settings = {
     energySourceType: "Fuel",
     energyResultUnit: "MMBtu",
     temperatureMeasurement: "F",
+    steamTemperatureMeasurement: "F",
+    steamPressureMeasurement: "psi",
     specificEnthalpyMeasurement: "btuLb",
     specificEntropyMeasurement: "btulbF",
     fuelCost: 3.99,

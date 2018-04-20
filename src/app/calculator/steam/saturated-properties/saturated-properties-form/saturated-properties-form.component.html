@@ -24,7 +24,7 @@
       <label for="saturatedTemperature">Saturated Temperature</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="saturatedTemperature" id="saturatedTemperature" onfocus="this.select();" (input)="calculate()">
-        <span class="input-group-addon units">{{settings.temperatureMeasurement}}</span>
+        <span class="input-group-addon units">{{settings.steamTemperatureMeasurement}}</span>
         <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
       </div>
     </div>
@@ -35,13 +35,13 @@
   <div class="form-group">
     <label class="small"><strong>Pressure</strong></label>
     <div class="small text-center"><strong>{{output.saturatedPressure | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.pressureMeasurement)}}</strong></span>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamPressureMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Temperature</strong></label>
     <div class="small text-center"><strong>{{output.saturatedTemperature | number:'1.1-4'}}</strong>
-      <span><strong>{{steamService.getDisplayUnit(settings.temperatureMeasurement)}}</strong></span>
+      <span><strong>{{steamService.getDisplayUnit(settings.steamTemperatureMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
