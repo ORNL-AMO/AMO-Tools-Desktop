@@ -300,7 +300,7 @@ export class PsatSankeyComponent implements OnInit {
       .data(links)
       .enter().append('svg:marker')
       .attr('id', function (d) {
-        return 'end-' + d.target;
+        return 'psat-end-' + d.target;
       })
       .attr('orient', 'auto')
       .attr('refX', .1)
@@ -323,7 +323,7 @@ export class PsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")";
+        return "url(" + window.location + "#psat-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -544,7 +544,7 @@ export class PsatSankeyComponent implements OnInit {
       var link_data = d;
       svg.append("linearGradient")
         .attr("id", function () {
-          return "linear-gradient-" + i;
+          return "psat-linear-gradient-" + i;
         })
         .attr("gradientUnits", "userSpaceOnUse")
         .attr("x1", nodes[link_data.source].x)
@@ -587,7 +587,7 @@ export class PsatSankeyComponent implements OnInit {
 
   getEndMarker(d, nodes) {
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#end-" + d.target + ")";
+      return "url(" + window.location + "#psat-end-" + d.target + ")";
     }
     else {
       return "";
@@ -602,7 +602,7 @@ export class PsatSankeyComponent implements OnInit {
     nodes.forEach(function (d, i) {
       var node_data = d;
       if (!d.inter || d.output) {
-        svg.select("#end-" + i)
+        svg.select("#psat-end-" + i)
           .attr("fill", function () {
             return color(node_data.value);
           })
@@ -611,7 +611,7 @@ export class PsatSankeyComponent implements OnInit {
 
     links.forEach(function (d, i) {
       var link_data = d;
-      svg.select("#linear-gradient-" + i)
+      svg.select("#psat-linear-gradient-" + i)
         .attr("x1", nodes[link_data.source].x)
         .attr("y1", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].output) {
@@ -731,7 +731,7 @@ export class PsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")"
+        return "url(" + window.location + "#psat-linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {

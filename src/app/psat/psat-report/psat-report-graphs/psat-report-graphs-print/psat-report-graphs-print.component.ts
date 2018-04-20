@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PSAT } from '../../../../shared/models/psat';
+import { PSAT, Modification } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -35,16 +35,23 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   baselinePsat: { name: string, psat: PSAT };
   allNotes: Array<Array<string>>;
+  modifications: Array<Modification>;
 
 
   constructor() { }
 
   ngOnInit() {
+    this.modifications = new Array<Modification>();
+    this.allNotes = new Array<Array<string>>();
     if (this.psatOptions === null || this.psatOptions === undefined) {
       console.error('psat print error');
       return;
     }
     this.setBaseline();
+    if (this.modExists) {
+      this.getAllModifications();
+      this.getAllNotes();
+    }
   }
 
 
@@ -52,6 +59,33 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     this.baselinePsat = this.psatOptions[0];
   }
 
+  getAllModifications() {
+    this.modifications = (JSON.parse(JSON.stringify(this.baselinePsat.psat.modifications)))
+    console.log('modifications.length = ' + this.modifications.length);
+    console.log('psatOptions.length = ' + this.psatOptions.length);
+  }
+
+  getAllNotes() {
+    for (let i = 0; i < this.modifications.length; i++) {
+      let notes = new Array<string>();
+
+      if (this.modifications[i].notes) {
+        if (this.modifications[i].notes.systemBasicsNotes) {
+          notes.push("Charge Material - " + this.modifications[i].notes.systemBasicsNotes);
+        }
+        if (this.modifications[i].notes.pumpFluidNotes) {
+          notes.push("Wall Loss - " + this.modifications[i].notes.pumpFluidNotes);
+        }
+        if (this.modifications[i].notes.motorNotes) {
+          notes.push("Atmosphere Loss - " + this.modifications[i].notes.motorNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fixture Loss - " + this.modifications[i].notes.fieldDataNotes);
+        }
+      }
+      this.allNotes.push(notes);
+    }
+  }
 
 
 }

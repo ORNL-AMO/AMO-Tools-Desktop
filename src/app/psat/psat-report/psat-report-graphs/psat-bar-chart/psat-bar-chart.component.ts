@@ -175,6 +175,7 @@ export class PsatBarChartComponent implements OnInit {
       }
     });
     if (this.printView) {
+      d3.selectAll(".print-bar-chart .c3-legend-item text").style('font-size', '1.0rem');
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");

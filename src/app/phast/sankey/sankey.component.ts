@@ -134,8 +134,13 @@ export class SankeyComponent implements OnInit {
         .call(() => {
           this.calcSankey(results.nodes);
         })
-        .attr("width", "2400px")
-        .attr("height", "800px")
+        //debug
+        .attr("width", "100%")
+        .attr("height", "80%")
+
+        //real version
+        // .attr("width", "2400px")
+        // .attr("height", "800px")
         .attr("viewBox", "0 0 " + width + " " + height)
         .attr("preserveAspectRatio", "xMinYMin")
         .append("g");
