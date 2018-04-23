@@ -10,15 +10,19 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ExportService {
 
+  exportAllClick: BehaviorSubject<boolean>;
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
   workingDirId: number;
-  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
+    this.exportAllClick = new BehaviorSubject<boolean>(false);
+   }
 
 
   getSelected(dir: Directory, workingDirId: number) {
@@ -48,7 +52,6 @@ export class ExportService {
       directories: this.exportDirectories,
       assessments: this.exportAssessments
     }
-    console.log(this.exportData);
     return this.exportData;
   }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ImportExportService } from '../../shared/import-export/import-export.service';
 import { AssessmentService } from '../assessment.service';
 import { Calculator } from '../../shared/models/calculators';
 import { Settings } from 'electron';

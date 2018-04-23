@@ -35,9 +35,7 @@ export class DirectoryCardComponent implements OnInit {
     // this.directory.assessments = tmpDirectory.assessments;
     // this.directory.subDirectory = tmpDirectory.subDirectory;
     // this.directory.collapsed = tmpDirectory.collapsed;
-    if (this.isChecked) {
-      this.directory.selected = this.isChecked;
-    }
+    this.directory.selected = false;
   }
 
 
@@ -56,22 +54,12 @@ export class DirectoryCardComponent implements OnInit {
 
   populateDirectories(directory: Directory) {
     directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
-    // this.indexedDbService.getDirectoryAssessments(directory.id).then(
-    //   results => {
-    //     directory.assessments = results;
-    //   }
-    // );
     directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
-    // this.indexedDbService.getChildrenDirectories(directory.id).then(
-    //   results => {
-    //     directory.subDirectory = results;
-    //   }
-    // );
   }
 
-  setDelete() {
-    this.directory.selected = this.isChecked;
-  }
+  // setDelete() {
+  //   this.directory.selected = this.isChecked;
+  // }
 
   goToAssessment(assessment: Assessment) {
     this.assessmentService.tab = 'system-setup';
@@ -123,7 +111,7 @@ export class DirectoryCardComponent implements OnInit {
     this.directory.name = this.editForm.controls.name.value;
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putDirectory(this.directory).then(val => {
-      this.directoryDbService.setAll().then(()=> {
+      this.directoryDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideEditModal();
       })

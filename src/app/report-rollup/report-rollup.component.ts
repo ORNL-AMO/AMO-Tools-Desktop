@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
@@ -33,7 +33,7 @@ export class ReportRollupComponent implements OnInit {
   selectedCalcs: Array<Calculator>;
   directoryIds: Array<number>;
   bannerHeight: number;
-  assessmentsGathered: boolean = true;
+  assessmentsGathered: boolean = false;
   isSummaryVisible: boolean = true;
   createdDate: Date;
   settings: Settings;
@@ -52,7 +52,7 @@ export class ReportRollupComponent implements OnInit {
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
-    private windowRefService: WindowRefService, private settingsService: SettingsService, private assessmentService: AssessmentService) { }
+    private windowRefService: WindowRefService, private settingsService: SettingsService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -60,13 +60,13 @@ export class ReportRollupComponent implements OnInit {
     this.selectedCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
 
-    // setTimeout(() => {
-    //   this.assessmentsGathered = true;
-    // }, 2000);
-
-    // setTimeout(() => {
-      // this.setSidebarHeight();
-    // }, 2500);
+    setTimeout(() => {
+      this.assessmentsGathered = true;
+      this.cd.detectChanges();
+    }, 2000);
+    setTimeout(() => {
+      this.setSidebarHeight();
+    }, 2100);
 
     this.settings = this.settingsService.globalSettings;
     this.checkSettings();
@@ -76,7 +76,7 @@ export class ReportRollupComponent implements OnInit {
       if (items) {
         if (items.length != 0) {
           this._reportAssessments = items;
-          this.focusedAssessment = this._reportAssessments[this._reportAssessments.length -1].assessment;
+          this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
         }
       }
     });
@@ -121,10 +121,10 @@ export class ReportRollupComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit(){
-    setTimeout(()=> {
-      this.setSidebarHeight();
-    },500)
+  ngAfterViewInit() {
+    // setTimeout(() => {
+    //   this.setSidebarHeight();
+    // }, 500)
   }
 
   ngOnDestroy() {

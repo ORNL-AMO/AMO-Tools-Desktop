@@ -89,18 +89,8 @@ export class ReportRollupService {
     this.phastArray = new Array<ReportItem>();
     this.psatArray = new Array<ReportItem>();
     let selected = directory.assessments.filter((val) => { return val.selected });
-    let i = selected.length;
-    let count = 1;
     selected.forEach(assessment => {
-      if (count != i) {
         this.pushAssessment(assessment);
-        count++;
-      } else {
-        this.pushAssessment(assessment)
-        this.phastAssessments.next(this.phastArray);
-        this.psatAssessments.next(this.psatArray);
-        this.reportAssessments.next(this.assessmentsArray);
-      }
     });
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
@@ -108,6 +98,9 @@ export class ReportRollupService {
         this.getChildDirectories(subDir);
       }
     })
+    this.phastAssessments.next(this.phastArray);
+    this.psatAssessments.next(this.psatArray);
+    this.reportAssessments.next(this.assessmentsArray);
   }
 
   // getDirectoryCalculators(dir: Directory){
@@ -151,18 +144,8 @@ export class ReportRollupService {
   getDirectoryAssessments(dirId: number) {
     let results = this.assessmentDbService.getByDirectoryId(dirId);
     //let selected = results.assessments.filter((val) => { return val.selected })
-    let i = results.length;
-    let count = 1;
     results.forEach(assessment => {
-      if (count != i) {
         this.pushAssessment(assessment);
-        count++;
-      } else {
-        this.pushAssessment(assessment);
-        this.phastAssessments.next(this.phastArray);
-        this.psatAssessments.next(this.psatArray);
-        this.reportAssessments.next(this.assessmentsArray);
-      }
     });
   }
 
@@ -225,9 +208,9 @@ export class ReportRollupService {
           modResultsArr.push(baselineResults);
           tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
         }
-        this.allPsatResults.next(tmpResultsArr);
       }
     })
+    this.allPsatResults.next(tmpResultsArr);
   }
 
   getResultsFromSelected(selectedPsats: Array<PsatCompare>) {

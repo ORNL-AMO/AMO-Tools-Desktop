@@ -11,7 +11,6 @@ import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
@@ -72,9 +71,9 @@ export class DashboardComponent implements OnInit {
   tutorialShown: boolean = false;
   createAssessmentSub: Subscription;
   exportData: ImportExportData;
+  exportAllSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -83,7 +82,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.importExportService.test();
     //start toolts suite database if it has not started
     this.initData();
 
@@ -111,12 +109,19 @@ export class DashboardComponent implements OnInit {
         }
       })
     }
+
+    this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
+      if (val) {
+        this.exportAll();
+      }
+    })
   }
 
   ngOnDestroy() {
     this.assessmentService.createAssessment.next(false);
     this.createAssessmentSub.unsubscribe();
     if (this.dontShowSub) this.dontShowSub.unsubscribe();
+    this.exportAllSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -431,6 +436,11 @@ export class DashboardComponent implements OnInit {
     } else {
       this.addToast('No items have been selected');
     }
+  }
+
+  exportAll() {
+    this.exportData = this.exportService.getSelected(JSON.parse(JSON.stringify(this.allDirectories)), 1);
+    this.showExportModal();
   }
 
   returnSelected() {

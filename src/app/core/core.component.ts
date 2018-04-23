@@ -13,6 +13,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
+import { ExportService } from '../shared/import-export/export.service';
 
 @Component({
   selector: 'app-core',
@@ -55,7 +56,7 @@ export class CoreComponent implements OnInit {
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
@@ -108,6 +109,7 @@ export class CoreComponent implements OnInit {
     if (this.calcSub) this.calcSub.unsubscribe();
     if (this.assessmentSub) this.assessmentSub.unsubscribe();
     if (this.settingsSub) this.settingsSub.unsubscribe();
+    this.exportService.exportAllClick.next(false);
   }
 
   ngAfterViewInit() {
@@ -156,21 +158,22 @@ export class CoreComponent implements OnInit {
   }
 
   downloadData() {
-    this.gettingData = true;
-    this.importExportService.initAllDirectories().then((allDirs) => {
-      this.importExportService.selectedItems = new Array<any>();
-      this.importExportService.getSelected(allDirs);
-      setTimeout(() => {
-        this.importExportService.exportData = new Array();
-        this.importExportService.selectedItems.forEach(item => {
-          this.importExportService.getAssessmentSettings(item);
-        })
-        setTimeout(() => {
-          this.gettingData = false;
-          this.importExportService.downloadData(this.importExportService.exportData);
-        }, 1000)
-      }, 500)
-    });
+    // this.gettingData = true;
+    // this.importExportService.initAllDirectories().then((allDirs) => {
+    //   this.importExportService.selectedItems = new Array<any>();
+    //   this.importExportService.getSelected(allDirs);
+    //   setTimeout(() => {
+    //     this.importExportService.exportData = new Array();
+    //     this.importExportService.selectedItems.forEach(item => {
+    //       this.importExportService.getAssessmentSettings(item);
+    //     })
+    //     setTimeout(() => {
+    //       this.gettingData = false;
+    //       this.importExportService.downloadData(this.importExportService.exportData);
+    //     }, 1000)
+    //   }, 500)
+    // });
+    this.exportService.exportAllClick.next(true);
   }
 
   mailTo() {
