@@ -2,13 +2,16 @@
 	<div class="col-12 assessment-dashboard scroll-item">
 
 		<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
-		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
-		 [view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"
-		 (exportEmit)="emitExport()" (importEmit)="emitImport()" (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
-		</app-assessment-menu>
-
-		<app-folder-summary [directory]="directory" [directorySettings]="directorySettings" [assessments]="directory.assessments"></app-folder-summary>
-
+		<div class="card card-item">
+			<div class="card-body">
+				<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
+				 [view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"
+				 (exportEmit)="emitExport()" (importEmit)="emitImport()" (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
+				</app-assessment-menu>
+				<hr class="my-1">
+				<app-folder-summary [directory]="directory" [directorySettings]="directorySettings" [assessments]="directory.assessments"></app-folder-summary>
+			</div>
+		</div>
 		<app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
 		 (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
 		</app-assessment-grid-view>

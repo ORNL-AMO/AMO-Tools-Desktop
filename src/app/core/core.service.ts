@@ -28,9 +28,11 @@ export class CoreService {
 
   createDirectorySettings(): Promise<any> {
     return new Promise((resolve, reject) => {
-      MockPhastSettings.directoryId = 1;
-      MockPhastSettings.facilityInfo.date = new Date().toDateString();
-      this.indexedDbService.addSettings(MockPhastSettings).then(() => {
+      let tmpSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
+      tmpSettings.directoryId = 1;
+      delete tmpSettings.facilityInfo;
+      this.indexedDbService.addSettings(tmpSettings).then(() => {
+        MockPhastSettings.facilityInfo.date = new Date().toDateString();
         MockPhastSettings.directoryId = 2;
         this.indexedDbService.addSettings(MockPhastSettings).then(() => {
           delete MockPhastSettings.directoryId;

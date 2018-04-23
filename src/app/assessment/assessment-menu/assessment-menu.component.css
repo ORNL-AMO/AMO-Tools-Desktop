@@ -1,36 +1,10 @@
-/* .breadcrumb-item{
-    padding-left: 6px;
-}
 
-.breadcrumb-item{
-    font-size: large;
-}
-
-.breadcrumb-item{
-    cursor: pointer;
-    text-decoration: underline;
-    font-weight: bold;
-}
- */
-
-.btn-default.active{
-    background-color: gray;
-}
-
-.btn-default{
-    padding: 6px;
-}
-.btn-secondary{
-    padding: 8px 10px 6px;
-    font-size: 15px;
-    /* width: 100%; */
-}
-
-/* .col{
-    text-align: center;
-} */
 .no-margin{
     margin: 0;
+}
+
+.btn{
+    padding: 6px;
 }
 
 
@@ -45,4 +19,22 @@ a:not([href]):not([tabindex]) {
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
+}
+
+
+.actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+
+.select-all{
+    font-size: 16px;
+}
+
+
+
+.btn-default.active{
+    background-color: gray;
 }
