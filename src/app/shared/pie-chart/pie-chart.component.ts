@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as _ from 'lodash';
@@ -34,7 +34,7 @@ export class PieChartComponent implements OnInit {
   width: number;
   height: number;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -81,6 +81,7 @@ export class PieChartComponent implements OnInit {
     this.width = this.chartContainerWidth;
     //set radius to limiting factor: height or width
     this.radius = Math.min(this.height, this.width) / 2;
+    this.cd.detectChanges();
   }
 
   buildPie(): void {

@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -31,7 +32,7 @@ export class SystemBasicsComponent implements OnInit {
   lossesExist: boolean;
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService) { }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     //get settings form (used as input into shared settings components)
@@ -75,8 +76,10 @@ export class SystemBasicsComponent implements OnInit {
     if (this.isAssessmentSettings) {
       this.indexedDbService.putSettings(this.settings).then(
         results => {
-          //get updated settings
-          this.updateSettings.emit(true);
+          this.settingsDbService.setAll().then(() => {
+            //get updated settings
+            this.updateSettings.emit(true);
+          })
         }
       )
     }
@@ -87,9 +90,11 @@ export class SystemBasicsComponent implements OnInit {
       this.settings.modifiedDate = new Date();
       this.indexedDbService.addSettings(this.settings).then(
         results => {
-          this.isAssessmentSettings = true;
-          //get updated settings
-          this.updateSettings.emit(true);
+          this.settingsDbService.setAll().then(() => {
+            this.isAssessmentSettings = true;
+            //get updated settings
+            this.updateSettings.emit(true);
+          })
         }
       )
     }

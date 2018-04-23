@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { ExportService } from '../shared/import-export/export.service';
 @Component({
   selector: 'app-contact-page',
   templateUrl: './contact-page.component.html',
@@ -7,13 +8,13 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 })
 export class ContactPageComponent implements OnInit {
 
-  constructor(private importExportService: ImportExportService) { }
+  constructor(private importExportService: ImportExportService, private exportService: ExportService) { }
 
   ngOnInit() {
   }
 
   ngOnDestroy(){
-    this.importExportService.toggleDownload.next(null);
+    this.exportService.exportAllClick.next(null);
   }
 
   sendMail(){
@@ -21,7 +22,7 @@ export class ContactPageComponent implements OnInit {
   }
 
   downloadData(){
-    this.importExportService.toggleDownload.next(true);
+    this.exportService.exportAllClick.next(true);
   }
 
 }

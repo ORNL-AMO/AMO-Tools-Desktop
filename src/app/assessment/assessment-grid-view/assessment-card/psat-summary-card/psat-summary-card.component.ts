@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 
 @Component({
     selector: 'app-psat-summary-card',
@@ -28,27 +29,25 @@ export class PsatSummaryCardComponent implements OnInit {
 
     @ViewChild('reportModal') public reportModal: ModalDirective;
 
-    constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+    constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private router: Router) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.psat.setupDone;
         if (this.setupDone) {
-            this.indexedDbService.getAssessmentSettings(this.assessment.id).then(settings => {
-                this.settings = settings[0];
-                this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings);
-                if (this.assessment.psat.modifications) {
-                    this.numMods = this.assessment.psat.modifications.length;
-                    this.assessment.psat.modifications.forEach(mod => {
-                        mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
-                        let tmpSavingCalc = this.psatResults.annual_cost - mod.psat.outputs.annual_cost;
-                        let tmpSavingEnergy = this.psatResults.annual_energy - mod.psat.outputs.annual_energy;
-                        if (tmpSavingCalc > this.maxCostSavings) {
-                            this.maxCostSavings = tmpSavingCalc;
-                            this.maxEnergySavings = tmpSavingEnergy;
-                        }
-                    })
-                }
-            })
+            this.settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+            this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings);
+            if (this.assessment.psat.modifications) {
+                this.numMods = this.assessment.psat.modifications.length;
+                this.assessment.psat.modifications.forEach(mod => {
+                    mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
+                    let tmpSavingCalc = this.psatResults.annual_cost - mod.psat.outputs.annual_cost;
+                    let tmpSavingEnergy = this.psatResults.annual_energy - mod.psat.outputs.annual_energy;
+                    if (tmpSavingCalc > this.maxCostSavings) {
+                        this.maxCostSavings = tmpSavingCalc;
+                        this.maxEnergySavings = tmpSavingEnergy;
+                    }
+                })
+            }
         }
     }
 

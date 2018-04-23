@@ -1,8 +1,17 @@
-<div *ngIf="isDataGathered && export">
-  <div class="export-content">
-  <ul>
-    <li *ngFor="let data of exportData">{{data.assessment.name}}</li>
-  </ul>
+<div *ngIf="export">
+  <div class="export-content scroll-item">
+    <ul>
+      <li *ngFor="let dirItem of exportData.directories"><span class="fa fa-folder p-1"></span>{{dirItem.directory.name}} /
+        <ul>
+            <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">
+              <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+              <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+              {{assessmentItem.assessment.name}}
+            </li>
+        </ul>
+      </li>
+      <li *ngFor="let assessmentItem of noDirAssessmentItems">{{assessmentItem.assessment.name}}</li>
+    </ul>
   </div>
   <div class="row">
     <div class="col-12">
@@ -12,7 +21,7 @@
   </div>
 </div>
 
- <div class="row justify-content-center" *ngIf="!isDataGathered && export">
+<!-- <div class="row justify-content-center" *ngIf="!isDataGathered && export">
    	<div class="col-md-10">
 			<div class="main-content" style="text-align: center;">
 				<div class="spinner">
@@ -23,7 +32,7 @@
 			<h1>Gathering Data</h1>
     </div>
 	</div>
-</div>
+</div>-->
 
 <div *ngIf="import">
   <div class="row">
@@ -39,4 +48,3 @@
     </div>
   </div>
 </div>
-

@@ -1,4 +1,4 @@
-.breadcrumb-item{
+/* .breadcrumb-item{
     padding-left: 6px;
 }
 
@@ -11,7 +11,7 @@
     text-decoration: underline;
     font-weight: bold;
 }
-
+ */
 
 .btn-default.active{
     background-color: gray;
@@ -31,4 +31,18 @@
 } */
 .no-margin{
     margin: 0;
+}
+
+
+a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus {
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:not([href]):not([tabindex]) {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
 }
