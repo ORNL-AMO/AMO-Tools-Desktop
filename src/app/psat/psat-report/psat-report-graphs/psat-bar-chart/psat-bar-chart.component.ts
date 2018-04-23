@@ -43,11 +43,11 @@ export class PsatBarChartComponent implements OnInit {
 
   barData1: Array<any>;
   barData2: Array<any>;
+  chartData: Array<any>;
 
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-
   }
 
   ngAfterViewInit() {
@@ -64,17 +64,28 @@ export class PsatBarChartComponent implements OnInit {
       this.chartContainerWidth = 950;
       this.chartContainerHeight = 370;
     }
+    this.setBarLabels();
     this.prepBarData();
     this.initChart();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // if (!changes.psat1Values.firstChange || !changes.psat2Values.firstChange || !changes.psat1Name.firstChange || !changes.psat2Name.firstChange) {
-    if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
-      this.prepBarData();
-      this.updateChart();
+    if (!this.printView) {
+      if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
+        this.prepBarData();
+        this.updateChart();
+      }
     }
+  }
 
+  setBarLabels() {
+    this.labels = new Array<string>();
+    this.labels.push('Energy Input');
+    this.labels.push('Motor Losses');
+    this.labels.push('Drive Losses');
+    this.labels.push('Pump Losses');
+    this.labels.push('Useful Output');
   }
 
   prepBarData() {
@@ -90,6 +101,8 @@ export class PsatBarChartComponent implements OnInit {
     for (let i = 0; i < this.psat2Values.length; i++) {
       this.barData2.push(this.psat2Values[i].toFixed(2));
     }
+
+    this.chartData = [this.barData1, this.barData2];
   }
 
 
@@ -108,7 +121,8 @@ export class PsatBarChartComponent implements OnInit {
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
-        columns: [this.barData1, this.barData2],
+        // columns: [this.barData1, this.barData2],
+        columns: this.chartData,
         type: 'bar',
       },
       axis: {
@@ -179,7 +193,7 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+      // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
       d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.9rem");
     }
     else {
@@ -191,11 +205,12 @@ export class PsatBarChartComponent implements OnInit {
   }
 
   updateChart() {
-    if (this.chart) {
+    if (this.chart !== undefined && this.chart !== null) {
       this.chart.load({
         unload: true,
         columns: [this.barData1, this.barData2]
       });
+      
     }
   }
 

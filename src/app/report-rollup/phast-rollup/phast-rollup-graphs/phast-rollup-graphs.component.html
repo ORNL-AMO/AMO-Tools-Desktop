@@ -25,18 +25,20 @@
 </div>
 
 <div *ngIf="printView">
-  <div class="row justify-content-center">
-    <div class="col-6">
-      Energy Cost
+  <div *ngFor="let result of allResults; let i = index">
+    <div class="row justify-content-center">
+      <div *ngIf="i == 0" class="col-12 text-center">
+        Energy Cost
+      </div>
+      <div *ngIf="i == 1" class="col-12 text-center">
+        Energy Use
+      </div>
     </div>
-    <div class="col-6">
-      Energy Use
-    </div>
-  </div>
-  <div class="row justify-content-center print-rollup-pie-container">
-    <div class="col-6" *ngFor="let result of allResults; let i = index">
-      <app-rollup-pie-chart [printView]="printView" [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="result"
-        [assessmentType]="'phast'"></app-rollup-pie-chart>
+    <div class="row justify-content-center print-rollup-pie-container">
+      <div class="col-12">
+        <app-rollup-pie-chart [printView]="printView" [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="result"
+          [assessmentType]="'phast'"></app-rollup-pie-chart>
+      </div>
     </div>
   </div>
 

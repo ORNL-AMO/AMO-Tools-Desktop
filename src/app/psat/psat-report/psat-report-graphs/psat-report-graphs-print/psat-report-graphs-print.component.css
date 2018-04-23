@@ -3,6 +3,11 @@
 
 @media print {
 
+    .print-pie-chart {
+        left: -10px;
+    }
+
+
     .custom-row {
         display: block;
     }

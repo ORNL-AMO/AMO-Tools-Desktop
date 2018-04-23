@@ -61,8 +61,6 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
   getAllModifications() {
     this.modifications = (JSON.parse(JSON.stringify(this.baselinePsat.psat.modifications)))
-    console.log('modifications.length = ' + this.modifications.length);
-    console.log('psatOptions.length = ' + this.psatOptions.length);
   }
 
   getAllNotes() {
@@ -86,6 +84,4 @@ export class PsatReportGraphsPrintComponent implements OnInit {
       this.allNotes.push(notes);
     }
   }
-
-
 }

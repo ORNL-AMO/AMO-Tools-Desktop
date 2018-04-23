@@ -36,11 +36,11 @@
         <!-- pie charts -->
         <div class="row" *ngIf="printGraphs">
           <div class="col-6 print-pie-chart">
-            <app-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[0]"
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[0]"
               [values]="allChartData.pieValues[0]"></app-pie-chart>
           </div>
           <div class="col-6 print-pie-chart" *ngIf="modExists">
-            <app-pie-chart [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[i]"
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[i]"
               [values]="allChartData.pieValues[i]"></app-pie-chart>
           </div>
         </div>
@@ -87,10 +87,7 @@
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
-
 </div>

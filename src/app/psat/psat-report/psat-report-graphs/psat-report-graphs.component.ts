@@ -111,7 +111,7 @@ export class PsatReportGraphsComponent implements OnInit {
     this.barLabels.push('Motor Losses');
     this.barLabels.push('Drive Losses');
     this.barLabels.push('Pump Losses');
-    this.barLabels.push('Output');
+    this.barLabels.push('Useful Output');
   }
 
   // sets loss data and percentages for selected psats
@@ -163,7 +163,7 @@ export class PsatReportGraphsComponent implements OnInit {
       selectedPieValues.push(pumpLoss);
     }
     if (usefulOutput > 0) {
-      selectedPieLabels.push('Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
+      selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(usefulOutput);
     }
     selectedBarValues.push(energyInput);

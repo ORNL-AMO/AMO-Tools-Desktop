@@ -23,6 +23,8 @@ export class PieChartComponent implements OnInit {
   printView: boolean;
   @Input()
   exportName: string;
+  @Input()
+  sideBySide: boolean;
 
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
@@ -71,8 +73,14 @@ export class PieChartComponent implements OnInit {
       this.chartContainerHeight = Math.min(this.chartContainerWidth * 0.45, 280);
     }
     else {
-      this.chartContainerHeight = 215;
-      this.chartContainerWidth = 475;
+      if (this.sideBySide) {
+        this.chartContainerHeight = 215;
+        this.chartContainerWidth = 505;
+      }
+      else {
+        this.chartContainerHeight = 300;
+        this.chartContainerWidth = 975;
+      }
     }
     this.height = this.chartContainerHeight;
     this.width = this.chartContainerWidth;
@@ -98,14 +106,23 @@ export class PieChartComponent implements OnInit {
     let leftLabelIndexes = [];
     let xBound;
     let fontSize;
+
+
     if (printView) {
-      xBound = radius * (30 / 29);
-      fontSize = "13px";
+      if (this.sideBySide) {
+        xBound = radius * (15 / 14);
+        fontSize = "13px";
+      }
+      else {
+        xBound = radius * (9 / 7);
+        fontSize = "16px";
+      }
     }
     else {
       xBound = radius * (3 / 2);
       fontSize = "12px";
     }
+    
     let yBound = height * (5 / 6);
     let leftLabelSpace, rightLabelSpace;
     let arc = d3.arc().innerRadius(0).outerRadius(radius);
@@ -291,6 +308,7 @@ export class PieChartComponent implements OnInit {
       height = this.height,
       radius = this.radius;
     let printView = this.printView;
+    let sideBySide = this.sideBySide;
     let svgWidth = this.chartContainerWidth;
     let svgHeight = this.chartContainerHeight;
     let colors = this.graphColors;
@@ -310,8 +328,14 @@ export class PieChartComponent implements OnInit {
     }
 
     if (printView) {
-      xBound = radius * (10 / 9);
-      fontSize = "16px";
+      if (sideBySide) {
+        xBound = radius * (10 / 9);
+        fontSize = "16px";
+      }
+      else {
+        xBound = radius * (3 / 2);
+        fontSize = "20px";
+      }
     }
     else {
       xBound = radius * (3 / 2);
