@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator"
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()"
                 [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
@@ -60,7 +60,8 @@
             <div class="modal-body">
                 <div *ngIf="!deleting" class="row">
                     <div class="col-12">
-                        All of your data will be deleted and your database will be reset to the initial state. <span class="red">This cannot be undone!</span>
+                        All of your data will be deleted and your database will be reset to the initial state.
+                        <span class="red">This cannot be undone!</span>
                     </div>
                 </div>
                 <hr>
@@ -87,7 +88,8 @@
     </div>
 </div>
 
-<app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" [settings]="workingDirectorySettings" class="create-container"></app-assessment-create>
+<app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" [settings]="workingDirectorySettings"
+    class="create-container"></app-assessment-create>
 
 <div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteItemsModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -100,8 +102,32 @@
                 </button>
             </div>
             <div class="modal-body">
-                <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
-                <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected Items</button>
+                <div *ngIf="!deleting" class="row">
+                    <div class="col-12">
+                        Selected items will be deleted from application.
+                        <span class="red">This cannot be undone!</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="row justify-content-center" *ngIf="deleting">
+                    <div class="col-10">
+                        <div class="main-content" style="text-align: center;">
+                            <div class="spinner">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                            <h1>Deleting Data...</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!deleting" class="row">
+                    <div class="col-12">
+                        <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
+                        <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected Items</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -118,7 +144,7 @@
                 </button>
             </div>
             <div class="modal-body" *ngIf="showImportExport && isExportView">
-                <app-import-export [export]="true" [selectedItems]="returnSelected()" (closeExportModal)="hideExportModal()"></app-import-export>
+                <app-import-export [export]="true" [exportData]="exportData" (closeExportModal)="hideExportModal()"></app-import-export>
             </div>
         </div>
     </div>
@@ -158,10 +184,10 @@
     </div>
 </div>
 
-<div bsModal #preAssessmentModal="bs-modal" class="modal fade pre-assessment-modal" tabindex="-1" role="dialog" aria-labelledby="preAssessmentModalLabel" aria-hidden="true"
-    [config]="{backdrop: 'static'}">
+<div bsModal #preAssessmentModal="bs-modal" class="modal fade pre-assessment-modal" tabindex="-1" role="dialog" aria-labelledby="preAssessmentModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" *ngIf="workingDirectoryCalculator">
+        <div class="modal-content" *ngIf="workingDirectory.calculators">
             <!-- <div class="modal-header">
                 <h3>Pre-assessment / Screening Calculator</h3>
                 <button class="close" aria-label="Close" (click)="hidePreAssessmentModal()">
@@ -169,10 +195,10 @@
                 </button>
             </div> -->
             <div class="modal-body" *ngIf="showPreAssessment">
-                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectoryCalculator" [settings]="workingDirectorySettings"></app-pre-assessment>
+                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[0]" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
             <div class="modal-footer justify-content-center">
-                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectoryCalculator)">Save to Folder</button>
+                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[0])">Save to Folder</button>
                 <button class="btn btn-secondary save-btn" (click)="hidePreAssessmentModal()">Cancel</button>
             </div>
         </div>

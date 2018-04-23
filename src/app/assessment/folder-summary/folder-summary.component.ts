@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PsatService } from '../../psat/psat.service';
 import { ExecutiveSummaryService } from '../../phast/phast-report/executive-summary.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-folder-summary',
@@ -37,20 +38,22 @@ export class FolderSummaryComponent implements OnInit {
   totalCost: number = 0;
   totalEnergy: number = 0;
   counter: any;
-  constructor(private settingsService: SettingsService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService) { }
+  constructor(private settingsService: SettingsService, private psatService: PsatService,
+    private convertUnitsService: ConvertUnitsService, private executiveSummaryService: ExecutiveSummaryService,
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
   }
 
   ngOnChanges() {
-    if(this.counter){
+    if (this.counter) {
       clearTimeout(this.counter);
     }
 
     this.counter = setTimeout(() => {
       this.getData();
       this.getForm();
-    },150)
+    }, 150)
   }
 
   getForm() {
@@ -80,11 +83,10 @@ export class FolderSummaryComponent implements OnInit {
           }
         } else if (assessment.type == 'PHAST') {
           if (assessment.phast.setupDone) {
-            this.indexedDbService.getAssessmentSettings(assessment.id).then(settings => {
-              let result = this.executiveSummaryService.getSummary(assessment.phast, false, settings[0], assessment.phast);
-              this.phastEnergyUsed = this.phastEnergyUsed + this.convertUnitsService.value(result.annualEnergyUsed).from(settings[0].energyResultUnit).to(this.directorySettings.energyResultUnit);
-              this.phastEnergyCost = this.phastEnergyCost + result.annualCost;
-            })
+            let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
+            let result = this.executiveSummaryService.getSummary(assessment.phast, false, settings, assessment.phast);
+            this.phastEnergyUsed = this.phastEnergyUsed + this.convertUnitsService.value(result.annualEnergyUsed).from(settings.energyResultUnit).to(this.directorySettings.energyResultUnit);
+            this.phastEnergyCost = this.phastEnergyCost + result.annualCost;
           }
         }
       })
@@ -107,10 +109,17 @@ export class FolderSummaryComponent implements OnInit {
       this.directorySettings = this.settingsService.getSettingsFromForm(this.settingsForm);
       this.directorySettings.directoryId = this.directory.id;
       this.directorySettings.id = id;
-      this.indexedDbService.putSettings(this.directorySettings);
+      this.indexedDbService.putSettings(this.directorySettings).then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.getForm();
+          this.getData();
+          this.settingsModal.hide();
+        })
+      });
+    } else {
+      this.getForm();
+      this.getData();
+      this.settingsModal.hide();
     }
-    this.getForm();
-    this.getData();
-    this.settingsModal.hide();
   }
 }

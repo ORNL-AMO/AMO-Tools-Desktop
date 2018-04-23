@@ -111,6 +111,7 @@ export class ExploreLeakageFormComponent implements OnInit {
       } else if (num == 2) {
         this.openingAreaError2[index] = null;
       }
+      this.calculate();
     }
   }
 

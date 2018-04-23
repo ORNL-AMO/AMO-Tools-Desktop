@@ -1,17 +1,18 @@
 <div class="row">
   <div class="col-10">
-
-    <ol class="breadcrumb">
-      <li *ngFor="let crumb of breadCrumbs; let first = first;">
-        <a class="breadcrumb-item" *ngIf="first" (click)="goToDirectory(crumb)">
-          All Assessments /
-        </a>
-        <a class="breadcrumb-item" *ngIf="!first" (click)="goToDirectory(crumb)">
-          {{crumb.name}} /
-        </a>
-      </li>
-      <li class="breadcrumb-item">{{directory.name}}</li>
-    </ol>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+          <a *ngIf="first" (click)="goToDirectory(crumb)">
+            All Assessments
+          </a>
+          <a *ngIf="!first" (click)="goToDirectory(crumb)">
+            {{crumb.name}}
+          </a>
+        </li>
+        <li class="breadcrumb-item active">{{directory.name}}</li>
+      </ol>
+    </nav>
   </div>
   <div class="col-2">
     <div class="btn-group pull-right" role="group">
@@ -44,7 +45,7 @@
 
       <div class="header" *ngIf="view != 'settings'">
         <label>
-          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/>Select all</label>
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />Select all</label>
       </div>
 
     </div>

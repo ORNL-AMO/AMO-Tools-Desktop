@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { AssessmentService } from '../../../assessment.service';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 
 
 @Component({
@@ -27,26 +28,24 @@ export class PhastSummaryCardComponent implements OnInit {
     numMods: number = 0;
     setupDone: boolean;
     showReport: boolean = false;
-    constructor(private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+    constructor(private executiveSummaryService: ExecutiveSummaryService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private router: Router) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.phast.setupDone;
         if (this.setupDone) {
-            this.indexedDbService.getAssessmentSettings(this.assessment.id).then(settings => {
-                this.settings = settings[0];
-                this.phastResults = this.executiveSummaryService.getSummary(this.assessment.phast, false, this.settings, this.assessment.phast);
-                let tmpSavings = 0;
-                if (this.assessment.phast.modifications) {
-                    this.numMods = this.assessment.phast.modifications.length;
-                    this.assessment.phast.modifications.forEach(mod => {
-                        let tempVal = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.assessment.phast, this.phastResults);
-                        if (tempVal.annualCostSavings > tmpSavings) {
-                            tmpSavings = tempVal.annualCostSavings;
-                            this.modResults = tempVal;
-                        }
-                    })
-                }
-            })
+            this.settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+            this.phastResults = this.executiveSummaryService.getSummary(this.assessment.phast, false, this.settings, this.assessment.phast);
+            let tmpSavings = 0;
+            if (this.assessment.phast.modifications) {
+                this.numMods = this.assessment.phast.modifications.length;
+                this.assessment.phast.modifications.forEach(mod => {
+                    let tempVal = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.assessment.phast, this.phastResults);
+                    if (tempVal.annualCostSavings > tmpSavings) {
+                        tmpSavings = tempVal.annualCostSavings;
+                        this.modResults = tempVal;
+                    }
+                })
+            }
         }
     }
 

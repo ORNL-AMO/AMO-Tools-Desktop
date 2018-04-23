@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
@@ -10,6 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { Calculator } from '../../../../shared/models/calculators';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-pre-assessment-graph',
@@ -50,7 +51,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   window: any;
 
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private indexedDbService: IndexedDbService) { }
+  constructor(private cd: ChangeDetectorRef, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.values = new Array<number>();
@@ -79,9 +80,11 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
 
     if (this.inRollup) {
       this.chartContainerHeight = 220;
+      this.cd.detectChanges();
     }
     else {
       this.chartContainerHeight = 300;
+      this.cd.detectChanges();
     }
   }
 
@@ -95,11 +98,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   }
 
   getDirectorySettings() {
-    this.indexedDbService.getDirectorySettings(this.directoryId).then(results => {
-      if (results.length != 0) {
-        this.directorySettings = results[0];
-      }
-    });
+    this.directorySettings = this.settingsDbService.getByDirectoryId(this.directoryId);
   }
 
   getWidth(): number {

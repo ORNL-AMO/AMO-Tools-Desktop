@@ -6,6 +6,8 @@ import { PreAssessmentService } from '../../../calculator/furnaces/pre-assessmen
 import { PreAssessment } from '../../../calculator/furnaces/pre-assessment/pre-assessment';
 import { MeteredEnergy } from '../../../shared/models/phast/meteredEnergy';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-phast-rollup-pre-assessment-table',
@@ -28,7 +30,7 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
   totalEnergyCost: number;
   directorySettings: Settings;
 
-  constructor(private preAssessmentService: PreAssessmentService, private indexedDbService: IndexedDbService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.totalEnergyUse = 0;
@@ -39,12 +41,11 @@ export class PhastRollupPreAssessmentTableComponent implements OnInit {
   }
 
   getDirectorySettings() {
-    this.indexedDbService.getDirectorySettings(this.calculator.directoryId).then(results => {
-      if (results.length != 0) {
-        this.directorySettings = results[0];
-        this.getData();
-      }
-    });
+    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.calculator.directoryId);
+    if (tmpSettings) {
+      this.directorySettings = tmpSettings;
+      this.getData();
+    }
   }
 
   getData(): void {

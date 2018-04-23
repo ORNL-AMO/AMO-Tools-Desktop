@@ -14,6 +14,7 @@ import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-i
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { PhonePipe } from './pipes/phone.pipe';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     SigFigsPipe,
     FacilityInfoSummaryComponent,
     AnimatedCheckmarkComponent,
-    PieChartComponent
+    PieChartComponent,
+    PhonePipe
   ],
   exports: [
     ControlMessagesComponent,
@@ -36,7 +38,8 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     SigFigsPipe,
     FacilityInfoSummaryComponent,
     AnimatedCheckmarkComponent,
-    PieChartComponent
+    PieChartComponent,
+    PhonePipe
   ],
   providers: [
     ValidationService,

@@ -14,8 +14,6 @@ export class AssessmentGridViewComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Input()
   isChecked: boolean;
-  @Input()
-  directoryCalculator: Calculator;
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
   @Input()

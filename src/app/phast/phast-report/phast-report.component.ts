@@ -11,6 +11,8 @@ import { SettingsService } from '../../settings/settings.service';
 import { PhastReportService } from './phast-report.service';
 import { setTimeout } from 'timers';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -51,7 +53,7 @@ export class PhastReportComponent implements OnInit {
   printReportSankey: boolean = false;
   printInputSummary: boolean = false;
 
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.initPrintLogic();
@@ -114,52 +116,44 @@ export class PhastReportComponent implements OnInit {
 
 
   getSettings(): void {
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(results => {
-      if (results.length != 0) {
-        if (!results[0].energyResultUnit) {
-          results[0] = this.settingsService.setEnergyResultUnitSetting(results[0]);
-        }
-        this.settings = results[0];
-      } else {
-        this.getParentDirectorySettings(this.assessment.directoryId);
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    if (tmpSettings) {
+      if (!tmpSettings.energyResultUnit) {
+        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
       }
-    })
-  }
-
-
-  getParentDirectorySettings(dirId: number): void {
-    this.indexedDbService.getDirectorySettings(dirId).then(
-      resultSettings => {
-        if (resultSettings.length != 0) {
-          if (resultSettings[0].energyResultUnit) {
-            resultSettings[0] = this.settingsService.setEnergyResultUnitSetting(resultSettings[0]);
-          }
-          this.settings = resultSettings[0];
-        } else {
-          this.indexedDbService.getDirectory(dirId).then(
-            results => {
-              let parentDirectory = results;
-              //get parent directory settings
-              this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
-            })
-        }
-      })
-  }
-
-  getDirectoryList(id: number): void {
-    if (id && id != 1) {
-      this.indexedDbService.getDirectory(id).then(
-        results => {
-          this.assessmentDirectories.push(results);
-          if (results.parentDirectoryId != 1) {
-            this.getDirectoryList(results.parentDirectoryId);
-          }
-        }
-      )
+      this.settings = tmpSettings;
+    } else {
+      this.getParentDirectorySettings(this.assessment.directoryId);
     }
   }
 
 
+  getParentDirectorySettings(dirId: number): void {
+    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(dirId);
+    if (tmpSettings) {
+      if (!tmpSettings.energyResultUnit) {
+        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
+      }
+      this.settings = tmpSettings;
+    } else {
+      let parentDirectory = this.directoryDbService.getById(dirId);
+      //get parent directory settings
+      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
+    }
+  }
+
+  getDirectoryList(id: number): void {
+    if (id && id != 1) {
+      let tmpDir: Directory = this.directoryDbService.getById(id);
+      if (tmpDir) {
+        this.assessmentDirectories.push(tmpDir);
+        if (tmpDir.parentDirectoryId != 1) {
+          this.getDirectoryList(tmpDir.parentDirectoryId);
+        }
+      }
+    }
+  }
+  
   showModal(): void {
     this.printMenuModal.show();
   }

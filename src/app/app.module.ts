@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
-import { IndexedDbModule } from './indexedDb/indexedDb.module';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { IndexedDbModule } from './indexedDb/indexedDb.module';
     HttpModule,
     SharedModule,
     CoreModule,
-    routing,
-    IndexedDbModule
+    routing
   ],
   providers: [
     appRoutingProviders

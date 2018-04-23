@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PreAssessmentService } from '../../../calculator/furnaces/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 
 @Component({
   selector: 'app-pre-assessment-card',
@@ -34,7 +35,7 @@ export class PreAssessmentCardComponent implements OnInit {
   energyUsed: number = 0;
   energyCost: number = 0;
   isFirstChange: boolean = true;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
   //  this.populateDirArray();
@@ -120,9 +121,10 @@ export class PreAssessmentCardComponent implements OnInit {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putCalculator(this.calculator).then(val => {
-      this.updateDirectory.emit(true);
-      //this.populateDirArray();
-      this.hideEditModal();
+      this.calculatorDbService.setAll().then(()=> {
+        this.updateDirectory.emit(true);
+        this.hideEditModal();
+      })
     })
   }
 }

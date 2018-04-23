@@ -4,18 +4,17 @@
 		<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
 		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
 		 [view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"
-		 (exportEmit)="emitExport()" (importEmit)="emitImport()" (emitPreAssessment)="preAssessmentEmit()" [directoryCalculator]="directoryCalculator"
-		 [directorySettings]="directorySettings">
+		 (exportEmit)="emitExport()" (importEmit)="emitImport()" (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
 		</app-assessment-menu>
 
 		<app-folder-summary [directory]="directory" [directorySettings]="directorySettings" [assessments]="directory.assessments"></app-folder-summary>
 
 		<app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
-		 [directoryCalculator]="directoryCalculator" (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
+		 (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
 		</app-assessment-grid-view>
 
 		<app-assessment-list-view *ngIf="view == 'list'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
-		 [directoryCalculator]="directoryCalculator" (emitPreAssessment)="preAssessmentEmit()">
+		 (emitPreAssessment)="preAssessmentEmit()">
 		</app-assessment-list-view>
 
 		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()" (emitUpdateDirectory)="newDir()">

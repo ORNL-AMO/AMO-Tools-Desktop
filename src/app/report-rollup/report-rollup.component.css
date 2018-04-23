@@ -185,3 +185,9 @@ padding-top: 15%;
 .fa-print{
 font-size: 150px;
 }
+
+.assessment-padding{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+}

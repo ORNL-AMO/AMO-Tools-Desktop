@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 // import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 
@@ -49,6 +48,7 @@ import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat
 import { PsatReportGraphsComponent } from './psat-report/psat-report-graphs/psat-report-graphs.component';
 import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar-chart/psat-bar-chart.component';
 import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs/psat-report-graphs-print/psat-report-graphs-print.component';
+import { PsatTabsTooltipComponent } from './psat-tabs-tooltip/psat-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,8 @@ import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
     PsatBarChartComponent,
-    PsatReportGraphsPrintComponent
+    PsatReportGraphsPrintComponent,
+    PsatTabsTooltipComponent
   ],
   exports: [
     PsatReportComponent
@@ -85,7 +86,6 @@ import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs
     SharedModule,
     // ChartsModule,
     ModalModule.forRoot(),
-    IndexedDbModule,
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,
