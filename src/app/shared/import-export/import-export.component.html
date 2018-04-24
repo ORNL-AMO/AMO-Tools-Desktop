@@ -1,16 +1,38 @@
 <div *ngIf="export">
   <div class="export-content scroll-item">
     <ul>
-      <li *ngFor="let dirItem of exportData.directories"><span class="fa fa-folder p-1"></span>{{dirItem.directory.name}} /
+      <li *ngIf="showCalcs">
+        <span class="bold">Pre-Assessments</span>
         <ul>
-            <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">
-              <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-              <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
-              {{assessmentItem.assessment.name}}
-            </li>
+          <li *ngFor="let calculator of exportData.calculators">
+            <span class="fa fa-pie-chart"></span>
+            {{calculator.name}}
+          </li>
         </ul>
       </li>
-      <li *ngFor="let assessmentItem of noDirAssessmentItems">{{assessmentItem.assessment.name}}</li>
+      <li *ngIf="noDirAssessmentItems.length != 0">
+        <span class="bold">Assessments</span>
+        <ul>
+          <li *ngFor="let assessmentItem of noDirAssessmentItems">
+            <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+            <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> {{assessmentItem.assessment.name}}
+          </li>
+        </ul>
+      </li>
+      <li>
+        <span class="bold">Directories</span>
+        <ul>
+          <li *ngFor="let dirItem of exportData.directories">
+            <span class="fa fa-folder p-1"></span>{{dirItem.directory.name}}
+            <ul>
+              <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">
+                <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+                <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> {{assessmentItem.assessment.name}}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
   <div class="row">
@@ -20,19 +42,6 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="row justify-content-center" *ngIf="!isDataGathered && export">
-   	<div class="col-md-10">
-			<div class="main-content" style="text-align: center;">
-				<div class="spinner">
-				<div class="bounce1"></div>
-				<div class="bounce2"></div>
-				<div class="bounce3"></div>
-			</div>
-			<h1>Gathering Data</h1>
-    </div>
-	</div>
-</div>-->
 
 <div *ngIf="import">
   <div class="row">
