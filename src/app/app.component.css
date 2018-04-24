@@ -90,6 +90,11 @@ Buttons
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 );
   border-color: #717171;
 }
+
+.btn-secondary:hover{
+  color:#007bff;
+}
+
 .btn.disabled, .btn:disabled {
     opacity: 1;
 }
