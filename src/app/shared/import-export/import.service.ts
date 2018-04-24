@@ -14,28 +14,40 @@ export class ImportService {
 
   directoryItems: Array<ImportExportDirectory>;
   assessmentItems: Array<ImportExportAssessment>;
+  addedDirIds: Array<number>;
   constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService) { }
 
   importData(data: ImportExportData, workingDirectoryId: number) {
+    this.addedDirIds = new Array<number>();
     this.assessmentItems = data.assessments;
     this.directoryItems = data.directories;
     let tmpAssessmentArr: Array<ImportExportAssessment> = data.assessments;
+    //tmpDir to hold new data
     let tmpDirectory: ImportDirectory = {
+      //set tmpDir id as parentDirDirectoryId of first directory
       id: data.directories[0].directory.parentDirectoryId,
       directoryItem: undefined,
       assessments: new Array(),
       subDirectories: new Array()
     };
-    tmpDirectory = this.buildDir(tmpDirectory, true, workingDirectoryId);
+    tmpDirectory = this.buildDir(tmpDirectory, data.directories, true, workingDirectoryId);
     this.addDirectory(tmpDirectory);
   }
 
-  buildDir(directory: ImportDirectory, first?: boolean, workingDirectoryId?: number): ImportDirectory {
-    let tmpDirs: Array<ImportExportDirectory> = _.filter(this.directoryItems, (dir) => { return dir.directory.parentDirectoryId == directory.id });
-    if(first){
-      tmpDirs.forEach(dir => {
-        dir.directory.parentDirectoryId = workingDirectoryId;
+  buildDir(_directory: ImportDirectory, directoryItems: Array<ImportExportDirectory>, first?: boolean, workingDirectoryId?: number): ImportDirectory {
+    let hasBeenAdded = _.find(this.addedDirIds, (id) => {return id == _directory.id});
+    if(hasBeenAdded){
+      //this directory has been built already
+      return _directory;
+    }else{
+      this.addedDirIds.push(_directory.id);
+    }
+    //get siblingDirs
+    let tmpDirs: Array<ImportExportDirectory> = _.filter(directoryItems, (dir) => { return dir.directory.parentDirectoryId == _directory.id });
+    if (first) {
+      tmpDirs.forEach(tmpDir => {
+        tmpDir.directory.parentDirectoryId = workingDirectoryId;
       })
     }
     let subDirs: Array<ImportDirectory> = new Array<ImportDirectory>();
@@ -46,14 +58,13 @@ export class ImportService {
         subDirectories: new Array(),
         assessments: new Array()
       }
-      tmpSubDir = this.buildDir(tmpSubDir);
+      tmpSubDir = this.buildDir(tmpSubDir, directoryItems);
       subDirs.push(tmpSubDir);
-
     })
-    let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId == directory.id });
-    directory.subDirectories = subDirs;
-    directory.assessments = dirAssessments;
-    return directory
+    let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId == _directory.id });
+    _directory.subDirectories = subDirs;
+    _directory.assessments = dirAssessments;
+    return _directory
   }
 
   addDirectory(importDir: ImportDirectory) {
