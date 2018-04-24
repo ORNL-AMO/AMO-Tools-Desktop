@@ -18,5 +18,6 @@ export interface ImportExportDirectory {
 export interface ImportExportData {
     directories: Array<ImportExportDirectory>,
     assessments: Array<ImportExportAssessment>,
+    calculators?: Array<Calculator>,
     origin?: string
 }

@@ -50,7 +50,8 @@ export class ExportService {
     }
     this.exportData = {
       directories: this.exportDirectories,
-      assessments: this.exportAssessments
+      assessments: this.exportAssessments,
+      calculators: calculators
     }
     return this.exportData;
   }
