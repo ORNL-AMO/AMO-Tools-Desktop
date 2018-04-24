@@ -69,8 +69,8 @@ export class PhastBarChartComponent implements OnInit {
       this.chartContainerHeight = 280;
     }
     else {
-      this.chartContainerWidth = 1400;
-      this.chartContainerHeight = 400;
+      this.chartContainerWidth = 950;
+      this.chartContainerHeight = 370;
     }
 
     this.initChart();
@@ -182,11 +182,12 @@ export class PhastBarChartComponent implements OnInit {
       }
     });
     if (this.printView) {
+      d3.selectAll(".print-bar-chart .c3-legend-item text").style('font-size', '1.0rem');
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.1rem").style("fill", "none").style("stroke", "#000").style("line-height", "20px");
-      d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "1.0rem");
+      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+      d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.9rem");
     }
     else {
       d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");

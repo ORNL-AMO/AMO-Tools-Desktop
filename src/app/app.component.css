@@ -349,15 +349,21 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 @media print {
+  @page {
+    margin-top: 10mm;
+    margin-bottom: 10mm;
+    margin-left: 5mm;
+    margin-right: 5mm;
+  }
 
-.indicate-report-field-different{
-    background: none;
-    font-weight: bold !important;
-}
+  .indicate-report-field-different{
+      background: none;
+      font-weight: bold !important;
+  }
 
-.indicate-report-row-different{
-    border: none;
-}
+  .indicate-report-row-different{
+      border: none;
+  }
 }
 
 /*.input-warning{

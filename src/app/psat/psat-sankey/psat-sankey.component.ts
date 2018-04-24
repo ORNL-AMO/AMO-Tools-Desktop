@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -12,7 +12,7 @@ const width = 2650,
   height = 1400,
   labelFontSize = 28,
   labelPadding = 4,
-  reportFontSize = 30,
+  reportFontSize = 34,
   reportPadding = 4,
   topLabelPositionY = 150,
   bottomLabelPositionY = 1250,
@@ -35,7 +35,12 @@ export class PsatSankeyComponent implements OnInit {
   location: string;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
+  @Input()
+  modIndex: number;
 
+  @ViewChild("ngChart") ngChart: ElementRef;
 
   //debug, set false when finished
   debugFlag: boolean = true;
@@ -103,7 +108,7 @@ export class PsatSankeyComponent implements OnInit {
       this.selectedResults = this.psatService.emptyResults();
     }
   }
-  
+
 
   makeSankey() {
     let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
@@ -120,19 +125,35 @@ export class PsatSankeyComponent implements OnInit {
 
   sankey(results: PsatOutputs) {
 
-    this.closeSankey();
+    // this.closeSankey();
+
+    // real version
     // Remove  all Sankeys
-    d3.select('#' + this.location).selectAll('svg').remove();
+    // d3.select('#' + this.location).selectAll('svg').remove();
+
+    //debug
+    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
     this.width = width;
     this.height = height;
 
-    svg = d3.select('#' + this.location).append('svg')
+
+    //debug
+    svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", "100%")
       .attr("height", "80%")
       .attr("viewBox", "0 0 " + width + " " + height)
       .attr("preserveAspectRatio", "xMinYMin")
       .append("g");
+
+
+    //real version 
+    // svg = d3.select('#' + this.location).append('svg')
+    //   .attr("width", "100%")
+    //   .attr("height", "80%")
+    //   .attr("viewBox", "0 0 " + width + " " + height)
+    //   .attr("preserveAspectRatio", "xMinYMin")
+    //   .append("g");
 
     this.calcLosses(results);
 
@@ -279,7 +300,7 @@ export class PsatSankeyComponent implements OnInit {
       .data(links)
       .enter().append('svg:marker')
       .attr('id', function (d) {
-        return 'end-' + d.target;
+        return 'psat-end-' + d.target;
       })
       .attr('orient', 'auto')
       .attr('refX', .1)
@@ -302,7 +323,7 @@ export class PsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")";
+        return "url(" + window.location + "#psat-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -327,10 +348,10 @@ export class PsatSankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
         if (d.input) {
-          return d.x - 100;
+          return d.x - 150;
         }
         else if (d.output) {
-          return d.x + 130;
+          return d.x + 200;
         }
         else {
           return d.x;
@@ -338,14 +359,29 @@ export class PsatSankeyComponent implements OnInit {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize) + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize) + labelFontSize + labelPadding - 170;
+          }
+          else {
+            return d.y + (d.displaySize) + reportFontSize + reportPadding - 170;
+          }
         }
         else {
           if (d.top) {
-            return topLabelPositionY;
+            if (this.location === 'sankey-diagram') {
+              return topLabelPositionY;
+            }
+            else {
+              return topReportPositionY;
+            }
           }
           else {
-            return bottomLabelPositionY;
+            if (this.location === 'sankey-diagram') {
+              return bottomLabelPositionY;
+            }
+            else {
+              return bottomReportPositionY;
+            }
           }
         }
       })
@@ -354,7 +390,7 @@ export class PsatSankeyComponent implements OnInit {
           return d.name;
         }
       })
-      .style("font-size", labelFontSize + "px");
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
 
     var twoDecimalFormat = d3.format(".3");
 
@@ -365,10 +401,10 @@ export class PsatSankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
         if (d.input) {
-          return d.x - 100;
+          return d.x - 150;
         }
         else if (d.output) {
-          return d.x + 130;
+          return d.x + 200;
         }
         else {
           return d.x;
@@ -376,13 +412,28 @@ export class PsatSankeyComponent implements OnInit {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 170;
+          }
+          else {
+            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 170;
+          }
         }
         else if (d.top) {
-          return topLabelPositionY + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return topLabelPositionY + labelFontSize + labelPadding;
+          }
+          else {
+            return topReportPositionY + reportFontSize + reportPadding;
+          }
         }
         else {
-          return bottomLabelPositionY + labelFontSize + labelPadding;
+          if (this.location === 'sankey-diagram') {
+            return bottomLabelPositionY + labelFontSize + labelPadding;
+          }
+          else {
+            return bottomReportPositionY + reportFontSize + reportPadding;
+          }
         }
       })
       .text(function (d) {
@@ -390,7 +441,7 @@ export class PsatSankeyComponent implements OnInit {
           return twoDecimalFormat(d.value) + " kW";
         }
       })
-      .style("font-size", labelFontSize + "px");
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
   }
 
 
@@ -493,7 +544,7 @@ export class PsatSankeyComponent implements OnInit {
       var link_data = d;
       svg.append("linearGradient")
         .attr("id", function () {
-          return "linear-gradient-" + i;
+          return "psat-linear-gradient-" + i;
         })
         .attr("gradientUnits", "userSpaceOnUse")
         .attr("x1", nodes[link_data.source].x)
@@ -536,7 +587,7 @@ export class PsatSankeyComponent implements OnInit {
 
   getEndMarker(d, nodes) {
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#end-" + d.target + ")";
+      return "url(" + window.location + "#psat-end-" + d.target + ")";
     }
     else {
       return "";
@@ -551,7 +602,7 @@ export class PsatSankeyComponent implements OnInit {
     nodes.forEach(function (d, i) {
       var node_data = d;
       if (!d.inter || d.output) {
-        svg.select("#end-" + i)
+        svg.select("#psat-end-" + i)
           .attr("fill", function () {
             return color(node_data.value);
           })
@@ -560,7 +611,7 @@ export class PsatSankeyComponent implements OnInit {
 
     links.forEach(function (d, i) {
       var link_data = d;
-      svg.select("#linear-gradient-" + i)
+      svg.select("#psat-linear-gradient-" + i)
         .attr("x1", nodes[link_data.source].x)
         .attr("y1", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].output) {
@@ -680,7 +731,7 @@ export class PsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")"
+        return "url(" + window.location + "#psat-linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {

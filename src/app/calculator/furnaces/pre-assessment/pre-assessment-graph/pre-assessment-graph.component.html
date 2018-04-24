@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div #pieChartContainer [ngClass]="{'col-md-12 mx-auto' : !inRollup, 'col-12' : inRollup, 'pad-top' : !printView}">
-    <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
+    <app-pie-chart [sideBySide]="!inRollup && !printView" [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
       [printView]="printView" [exportName]="exportName"></app-pie-chart>
   </div>
 </div>

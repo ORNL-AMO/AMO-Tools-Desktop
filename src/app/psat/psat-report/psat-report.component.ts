@@ -45,6 +45,8 @@ export class PsatReportComponent implements OnInit {
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
+  printReportGraphs: boolean;
+  printReportSankey: boolean;
   printResults: boolean;
   printInputData: boolean;
 
@@ -139,6 +141,8 @@ export class PsatReportComponent implements OnInit {
 
   initPrintLogic() {
     if (this.inRollup) {
+      this.printReportGraphs = true;
+      this.printReportSankey = true;
       this.printResults = true;
       this.printInputData = true;
     }
@@ -157,6 +161,8 @@ export class PsatReportComponent implements OnInit {
 
   resetPrintSelection() {
     this.selectAll = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
     this.printResults = false;
     this.printInputData = false;
   }
@@ -166,13 +172,23 @@ export class PsatReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
           this.printResults = true;
-          this.printInputData = true;
         }
         else {
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
           this.printResults = false;
-          this.printInputData = false;
         }
+        break;
+      }
+      case "reportGraphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "reportSankey": {
+        this.printReportSankey = !this.printReportSankey;
         break;
       }
       case "results": {
@@ -202,17 +218,4 @@ export class PsatReportComponent implements OnInit {
       this.resetPrintSelection();
     }, 2000);
   }
-
-
-  // print() {
-  //   this.showPrint = true;
-  //   this.closeModal(false);
-  //   setTimeout(() => {
-  //     let win = this.windowRefService.nativeWindow;
-  //     let doc = this.windowRefService.getDoc();
-  //     win.print();
-
-  //     this.showPrint = false;
-  //   }, 1000);
-  // }
 }

@@ -1,6 +1,6 @@
 <div class="print-break-before show-print" *ngIf="settings">
 
-  <div class="row justify-content-center">
+  <div class="row row-bottom-divider justify-content-center">
     <div class="col-12">
       <h3>PHAST Rollup Report</h3>
     </div>
@@ -10,26 +10,28 @@
     <div *ngIf="calculator.preAssessments">
       <div class="col-12">
         <div class="row">
-          <div class="col-12">
-            <div class="header">
-              <h5>Pre Assessment Summary</h5>
-            </div>
+          <div class="col-12 header text-center">
+            <h5>Pre Assessment Summary</h5>
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-6">
+          <div class="col-12 text-center">
             Energy Use
           </div>
-          <div class="col-6">
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 print-rollup-pie-container">
+            <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"
+              [resultType]="'value'"></app-pre-assessment-graph>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 text-center">
             Energy Cost
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-6">
-            <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"
-              [resultType]="'value'"></app-pre-assessment-graph>
-          </div>
-          <div class="col-6">
+          <div class="col-12 print-rollup-pie-container">
             <app-pre-assessment-graph [printView]="true" [settings]="settings" [preAssessments]="calculator.preAssessments" [inRollup]="true"
               [resultType]="'energyCost'"></app-pre-assessment-graph>
           </div>
@@ -46,10 +48,8 @@
   <div class="row print-avoid-break">
     <div class="col-12">
       <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="header">
-            <h5>Summary of Energy Sources Used</h5>
-          </div>
+        <div class="col-12 header text-center">
+          <h5>Summary of Energy Sources Used</h5>
         </div>
       </div>
       <div class="row justify-content-center">
@@ -63,10 +63,8 @@
   <div class="row print-avoid-break">
     <div class="col-12">
       <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="header">
-            <h5>Energy Use</h5>
-          </div>
+        <div class="col-12 header text-center">
+          <h5>Energy Use</h5>
         </div>
       </div>
       <div class="row justify-content-center">
@@ -80,10 +78,8 @@
   <div class="row print-avoid-break">
     <div class="col-12">
       <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="header">
-            <h5>Modification Summary</h5>
-          </div>
+        <div class="col-12 header text-center">
+          <h5>Modification Summary</h5>
         </div>
       </div>
       <div class="row justify-content-center">

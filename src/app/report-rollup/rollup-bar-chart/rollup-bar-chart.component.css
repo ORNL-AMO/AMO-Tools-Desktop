@@ -27,4 +27,8 @@
     .print-legend {
         display: initial;
     }
+
+    .bar-chart-container {
+        padding-bottom: 40px;
+    }
 }

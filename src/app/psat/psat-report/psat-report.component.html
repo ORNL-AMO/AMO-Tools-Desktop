@@ -88,12 +88,26 @@
 
         <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
-                <a>Results</a>
-            </li><!--
-            --><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
-                <a>Input Data</a>
-            </li><!--
-            --><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Result Data</a>
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                <a>Report Graphs</a>
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+                <a>Sankey</a>
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                <a>Input Summary</a>
+            </li>
+            <!--
+            -->
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
                 <a>Facility Info</a>
             </li>
         </ul>
@@ -101,16 +115,22 @@
         <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' || showPrint">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-
-        <div class="results scroll-item" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
-            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
-            </app-output-summary>
-
-        </div>
         <div class="input-data results scroll-item" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)">
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
+        <div class="results scroll-item" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
+            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
+            </app-output-summary>
+        </div>
+        <div class="results scroll-item" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))">
+            <app-psat-report-graphs [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
+                [printGraphs]="printReportGraphs"></app-psat-report-graphs>
+        </div>
+        <div class="results scroll-item" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)">
+            <app-psat-report-sankey [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="printReportSankey"></app-psat-report-sankey>
+        </div>
+
     </div>
     <!-- End .report-data -->
 
@@ -157,12 +177,28 @@
                         Results
                     </div>
                 </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportGraphs"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Report Graphs
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Report Sankey
+                    </div>
+                </div>
                 <div class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
                     </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Input Data
+                    <div class="col-8">
+                        Input Summary
                     </div>
                 </div>
             </div>
