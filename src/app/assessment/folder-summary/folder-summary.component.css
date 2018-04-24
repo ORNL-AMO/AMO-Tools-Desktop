@@ -28,3 +28,11 @@ td, a{
   padding-top:4px;
   text-align: center;
 }
+
+.card{
+  border: none;
+}
+
+.table{
+  margin-bottom: 0px;
+}

@@ -8,7 +8,7 @@
       <br> PH Pre-Assessment / Screening</a>
   </div>
 </div> -->
-<div class="card" *ngIf="checkPreAssessment()">
+<div class="card card-item" *ngIf="checkPreAssessment()">
   <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="calculator.selected">
     <span class="fa fa-pie-chart"></span>
@@ -51,7 +51,7 @@
     </p>
   </div>
 </div>
-<div class="card" *ngIf="!checkPreAssessment()">
+<div class="card card-item" *ngIf="!checkPreAssessment()">
   <div class="card-header summary-card-header">
     <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
   </div>

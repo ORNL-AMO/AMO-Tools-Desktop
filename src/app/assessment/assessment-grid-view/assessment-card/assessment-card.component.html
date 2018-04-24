@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-item">
   <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
