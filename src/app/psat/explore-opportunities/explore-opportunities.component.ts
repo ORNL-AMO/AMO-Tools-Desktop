@@ -3,8 +3,8 @@ import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
-import { SettingsService } from '../../settings/settings.service';
 import { CompareService } from '../compare.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -43,10 +43,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
-  constructor(private psatService: PsatService, private settingsService: SettingsService, private compareService: CompareService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
-    let globalSettings = this.settingsService.globalSettings;
+    let globalSettings = this.settingsDbService.globalSettings;
     if(globalSettings){
       if(globalSettings.defaultPanelTab){
         this.tabSelect = globalSettings.defaultPanelTab;

@@ -8,6 +8,7 @@ import { SettingsService } from '../settings/settings.service';
 @Injectable()
 export class SettingsDbService {
   allSettings: Array<Settings>;
+  globalSettings: Settings;
   constructor(private indexedDbService: IndexedDbService, private settingService: SettingsService) { }
 
   setAll(): Promise<any> {
@@ -15,6 +16,8 @@ export class SettingsDbService {
       if (this.indexedDbService.db) {
         this.indexedDbService.getAllSettings().then(settings => {
           this.allSettings = settings;
+          this.globalSettings = this.getByDirectoryId(1);
+          this.globalSettings = this.checkSettings(this.globalSettings);
           resolve(true)
         })
       } else {
@@ -37,7 +40,7 @@ export class SettingsDbService {
   getByDirectoryId(id: number): Settings {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId == id });
     if (!selectedSettings) {
-      selectedSettings = _.find(this.allSettings, (settings) => { return settings.directoryId == 1 })
+      selectedSettings = this.globalSettings;
     }
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
@@ -49,7 +52,7 @@ export class SettingsDbService {
       selectedSettings = this.getByDirectoryId(assessment.directoryId)
     }
     if (!selectedSettings) {
-      selectedSettings = this.getByDirectoryId(1);
+      selectedSettings = this.globalSettings;
     }
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;

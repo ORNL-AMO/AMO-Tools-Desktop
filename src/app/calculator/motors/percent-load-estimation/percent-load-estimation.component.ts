@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { FormBuilder, Validators } from "@angular/forms";
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -27,7 +27,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   tabSelect: string = 'results';
   toggleCalculate = false;
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.percentLoadEstimationForm) {
@@ -42,10 +42,10 @@ export class PercentLoadEstimationComponent implements OnInit {
     }
 
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
