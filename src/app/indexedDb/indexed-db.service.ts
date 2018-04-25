@@ -559,7 +559,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllGasLoadChargeMaterial(): Promise<any> {
+  getAllGasLoadChargeMaterial(): Promise<Array<GasLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
@@ -604,7 +604,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllLiquidLoadChargeMaterial(): Promise<any> {
+  getAllLiquidLoadChargeMaterial(): Promise<Array<LiquidLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
@@ -839,7 +839,7 @@ export class IndexedDbService {
     })
   }
 
-  getSolidLiquidFlueGasMaterials(): Promise<any> {
+  getSolidLiquidFlueGasMaterials(): Promise<Array<SolidLiquidFlueGasMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);

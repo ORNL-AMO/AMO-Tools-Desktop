@@ -1,20 +1,20 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
+import { SolidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SuiteDbService } from '../../suite-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { GasLoadChargeMaterial } from '../../../shared/models/materials';
 
 @Component({
-  selector: 'app-custom-gas-load-charge-materials',
-  templateUrl: './custom-gas-load-charge-materials.component.html',
-  styleUrls: ['./custom-gas-load-charge-materials.component.css']
+  selector: 'app-custom-solid-load-charge-materials',
+  templateUrl: './custom-solid-load-charge-materials.component.html',
+  styleUrls: ['./custom-solid-load-charge-materials.component.css']
 })
-export class CustomGasLoadChargeMaterialsComponent implements OnInit {
+export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  gasChargeMaterials: Array<GasLoadChargeMaterial>;
+  solidChargeMaterials: Array<SolidLoadChargeMaterial>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -25,9 +25,9 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
 
   getCustomMaterials() {
-    this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();
-    this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
-      this.gasChargeMaterials = idbResults;
+    this.solidChargeMaterials = new Array<SolidLoadChargeMaterial>();
+    this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
+      this.solidChargeMaterials = idbResults;
     });
   }
 }

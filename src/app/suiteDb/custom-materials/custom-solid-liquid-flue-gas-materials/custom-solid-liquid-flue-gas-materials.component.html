@@ -1,11 +1,11 @@
 <div class="row">
 
   <!-- <div *ngIf="foundFlueGasMaterials"> -->
-  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let gasChargeMaterial of gasChargeMaterials; let i = index">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let solidLiquidFlueGasMaterial of solidLiquidFlueGasMaterials; let i = index">
     <div class="card card-item">
       <!-- <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}"> -->
       <div class="card-header summary-card-header phast">
-        {{gasChargeMaterial.substance}}
+        {{solidLiquidFlueGasMaterial.substance}}
         <i class="fa fa-edit pull-right"></i>
         <!-- <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"> -->
         <!-- <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> -->
@@ -15,18 +15,18 @@
       </div>
       <div class="card-body scroll-item summary-card-body">
 
-        <table class="table">
+        <!-- <table class="table">
           <tr>
             <td>
               Specific Heat Vapor:
             </td>
             <td>
-              {{gasChargeMaterial.specificHeatVapor | sigFigs:'6'}}
+              {{solidLiquidFlueGasMaterial.specificHeatVapor | sigFigs:'6'}}
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/(lb-&#8457;)</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/(kg-&#8451;)</span>
             </td>
           </tr>
-        </table>
+        </table> -->
 
       </div>
       <div class="card-footer summary-card-footer">
@@ -39,13 +39,13 @@
 
 <!--CREATE material MODAL-->
 <!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div>
-        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings"></app-flue-gas-material>
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div>
+          <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+            [settings]="settings"></app-flue-gas-material>
+        </div>
       </div>
     </div>
-  </div>
-</div> -->
+  </div> -->

@@ -20,6 +20,9 @@ import { SharedModule } from "../shared/shared.module";
 import { CustomMaterialsComponent } from './custom-materials/custom-materials.component';
 import { CustomFlueGasMaterialsComponent } from './custom-materials/custom-flue-gas-materials/custom-flue-gas-materials.component';
 import { CustomGasLoadChargeMaterialsComponent } from './custom-materials/custom-gas-load-charge-materials/custom-gas-load-charge-materials.component';
+import { CustomLiquidLoadChargeMaterialsComponent } from './custom-materials/custom-liquid-load-charge-materials/custom-liquid-load-charge-materials.component';
+import { CustomSolidLoadChargeMaterialsComponent } from './custom-materials/custom-solid-load-charge-materials/custom-solid-load-charge-materials.component';
+import { CustomSolidLiquidFlueGasMaterialsComponent } from './custom-materials/custom-solid-liquid-flue-gas-materials/custom-solid-liquid-flue-gas-materials.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -48,6 +51,9 @@ import { CustomGasLoadChargeMaterialsComponent } from './custom-materials/custom
         CustomMaterialsComponent,
         CustomFlueGasMaterialsComponent,
         CustomGasLoadChargeMaterialsComponent,
+        CustomLiquidLoadChargeMaterialsComponent,
+        CustomSolidLoadChargeMaterialsComponent,
+        CustomSolidLiquidFlueGasMaterialsComponent,
     ],
     exports: [
         GasLoadChargeMaterialComponent,

@@ -1,11 +1,11 @@
 <div class="row">
 
   <!-- <div *ngIf="foundFlueGasMaterials"> -->
-  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let gasChargeMaterial of gasChargeMaterials; let i = index">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let liquidChargeMaterial of liquidChargeMaterials; let i = index">
     <div class="card card-item">
       <!-- <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}"> -->
       <div class="card-header summary-card-header phast">
-        {{gasChargeMaterial.substance}}
+        {{liquidChargeMaterial.substance}}
         <i class="fa fa-edit pull-right"></i>
         <!-- <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"> -->
         <!-- <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> -->
@@ -18,10 +18,40 @@
         <table class="table">
           <tr>
             <td>
+              Specific Heat Liquid:
+            </td>
+            <td>
+              {{liquidChargeMaterial.specificHeatLiquid | sigFigs:'6'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/(lb-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/(kg-&#8451;)</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Vaporization Temperature:
+            </td>
+            <td>
+              {{liquidChargeMaterial.vaporizationTemperature | sigFigs: '6'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> &#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'"> &#8451;</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Latent Heat:
+            </td>
+            <td>
+              {{liquidChargeMaterial.latentHeat | sigFigs: '6'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/kg</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
               Specific Heat Vapor:
             </td>
             <td>
-              {{gasChargeMaterial.specificHeatVapor | sigFigs:'6'}}
+              {{liquidChargeMaterial.specificHeatVapor | sigFigs:'6'}}
               <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/(lb-&#8457;)</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/(kg-&#8451;)</span>
             </td>
