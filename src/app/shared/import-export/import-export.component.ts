@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { PSAT } from '../models/psat';
 import * as _ from 'lodash';
@@ -26,7 +26,6 @@ export class ImportExportComponent implements OnInit {
   @Output('importData')
   importData = new EventEmitter<any>();
 
-
   // exportData: Array<ImportDataObjects>;
   isDataGathered: boolean;
   gatheringData: any;
@@ -34,14 +33,29 @@ export class ImportExportComponent implements OnInit {
   validFile: boolean;
   gatheringSettings: any;
   noDirAssessmentItems: Array<ImportExportAssessment>;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
+  showCalcs: boolean = false;
+  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.noDirAssessmentItems = new Array();
+    if (this.export) {
+      this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
+      if (this.exportData.calculators) {
+        if (this.exportData.calculators.length != 0) {
+          if (this.exportData.calculators[0].preAssessments) {
+            this.showCalcs = true;
+          }
+        }
+      }
+    }
   }
 
-  getDirAssessments(id: number){
-    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => {return assessmentItem.assessment.directoryId == id});
+  getDirAssessments(id: number) {
+    if (this.noDirAssessmentItems) {
+      _.remove(this.noDirAssessmentItems, (assessment) => { return assessment.assessment.directoryId == id });
+      // this.cd.detectChanges();
+    }
+    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId == id });
     return assessments;
   }
 

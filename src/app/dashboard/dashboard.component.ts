@@ -429,10 +429,8 @@ export class DashboardComponent implements OnInit {
 
   exportSelected() {
     let test = this.exportService.getSelected(JSON.parse(JSON.stringify(this.workingDirectory)), this.workingDirectory.id);
-    if (test.assessments.length != 0 || test.directories.length != 0) {
+    if (test.assessments.length != 0 || test.directories.length != 0 || test.calculators.length != 0) {
       this.exportData = test;
-      console.log(this.exportData);
-      //this.getSelected(this.workingDirectory);
       this.showExportModal();
     } else {
       this.addToast('No items have been selected');
