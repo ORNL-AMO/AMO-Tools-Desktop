@@ -40,9 +40,13 @@ export class ExploreOpeningFormComponent implements OnInit {
   numOpeningsError2: Array<string>;
   viewFactorError1: Array<string>;
   viewFactorError2: Array<string>;
+  emissivityError1: Array<string>;
+  emissivityError2: Array<string>;
 
+  showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>
   showSize: Array<boolean>;
+  showAllEmissivity: boolean = false;
   showOpening: boolean = false;
   constructor(private convertUnitsService: ConvertUnitsService, private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
@@ -73,6 +77,10 @@ export class ExploreOpeningFormComponent implements OnInit {
     this.thicknessError2 = new Array<string>();
     this.numOpeningsError2 = new Array<string>();
     this.viewFactorError2 = new Array<string>();
+    this.emissivityError1 = new Array<string>();
+    this.emissivityError2 = new Array<string>();
+    this.showEmissivity = new Array<boolean>();
+
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
@@ -90,6 +98,8 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.thicknessError2.push(null);
       this.numOpeningsError2.push(null);
       this.totalArea2.push(0);
+      this.emissivityError1.push(null);
+      this.emissivityError2.push(null);
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index)
       this.getArea(1, loss, index)
 
@@ -97,6 +107,11 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.viewFactorError1.push(null);
       this.viewFactorError2.push(null);
       this.showViewFactor.push(!check);
+      check = (loss.emissivity != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
+      if (!this.showAllEmissivity && check) {
+        this.showAllEmissivity = check;
+      }
+      this.showEmissivity.push(check);
       index++;
     })
   }
@@ -287,6 +302,35 @@ export class ExploreOpeningFormComponent implements OnInit {
     } else if (num == 2) {
       this.viewFactorError2[index] = test;
     }
+  }
+
+
+  toggleAllEmissivity() {
+    if (this.showAllEmissivity == false) {
+      let index = 0;
+      this.phast.losses.openingLosses.forEach(loss => {
+        this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
+        this.showEmissivity[index] = false;
+        index++;
+        this.calculate();
+      })
+    }
+  }
+
+  toggleEmissivity(index: number, loss: OpeningLoss) {
+    if (this.showEmissivity[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
+      this.calculate();
+    }
+  }
+
+  checkSurfaceEmissivity(num: number, loss: OpeningLoss, index: number) {
+    if (num == 1) {
+      this.emissivityError1[index] = (loss.emissivity < 0 || loss.emissivity > 1) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    } else if (num == 2) {
+      this.emissivityError2[index] = (loss.emissivity < 0 || loss.emissivity > 1) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    }
+    this.calculate();
   }
 
   focusField(str: string) {

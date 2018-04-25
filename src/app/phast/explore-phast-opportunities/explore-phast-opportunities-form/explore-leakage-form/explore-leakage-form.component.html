@@ -8,9 +8,46 @@
   <ul *ngFor="let loss of phast.losses.leakageLosses; let index = index">
     <li>
       <div class="checkbox form-group">
+        <label for="{{'modifyPressure_'+index}}">
+          <input type="checkbox" id="{{'modifyPressure_'+index}}" (focus)="focusField('draftPressure')" (change)="togglePressure(index, loss.draftPressure)"
+            [(ngModel)]="showPressure[index]" /> Modify Furnace Draft Pressure
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showPressure[index]">
+        <div class="form-group">
+          <label class="small" for="draftPressure">Baseline Draft Pressure</label>
+          <div class="input-group">
+            <input name="{{'draftPressure_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.draftPressure"
+              id="draftPressure" onfocus="this.select();" (input)="checkPressure(1, loss.draftPressure, index)" (focus)="focusField('draftPressure')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
+              <sub>2</sub>O</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Pa</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="draftPressureError1[index] !== null">{{draftPressureError1[index]}}</span>
+        </div>
+        <div class="form-group">
+          <label class="small" for="draftPressure">Modification Draft Pressure</label>
+          <div class="input-group">
+            <input name="{{'draftPressure_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure"
+              id="draftPressure" onfocus="this.select();" (input)="checkPressure(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure, index)"
+              (focus)="focusField('draftPressure')" (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
+              <sub>2</sub>O</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Pa</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="draftPressureError2[index] !== null">{{draftPressureError2[index]}}</span>
+        </div>
+      </form>
+    </li>
+    <li>
+      <div class="checkbox form-group">
         <label for="{{'modifyLeakage_'+index}}">
           <input type="checkbox" id="{{'modifyLeakage_'+index}}" (focus)="focusField('openingArea')" (change)="toggleOpening(index, loss.openingArea)"
-            [(ngModel)]="showOpening[index]" /> Modify Opening Size
+            [(ngModel)]="showOpening[index]" /> Modify Opening Area
         </label>
         <label>
           {{loss.name}}
@@ -40,8 +77,8 @@
           <label class="small" for="openingArea">Modification Opening Area</label>
           <div class="input-group">
             <input name="{{'openingArea_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea"
-              id="openingArea" onfocus="this.select();" (input)="checkOpening(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea, index)" (focus)="focusField('openingArea')"
-              (blur)="focusOut()">
+              id="openingArea" onfocus="this.select();" (input)="checkOpening(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea, index)"
+              (focus)="focusField('openingArea')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
               <span>ft
                 <sup>2</sup>

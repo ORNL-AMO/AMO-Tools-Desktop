@@ -1,18 +1,18 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFlueGas">
-    <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasTemperature')" (change)="toggleFlueGas()" [(ngModel)]="showFlueGas"
-    /> Preheat Combustion Air; Maintain Air / Fuel Ratio
+    <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasTemperature')" (change)="toggleFlueGas()"
+      [(ngModel)]="showFlueGas" /> Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas
   </label>
 </div>
 <div *ngIf="showFlueGas">
   <ul>
     <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
-      <div class="checkbox form-group">
+      <!-- <div class="checkbox form-group">
         <label for="modifyO2">
           <input type="checkbox" id="modifyO2" (focus)="focusField('o2InFlueGas')" (change)="toggleO2()" [(ngModel)]="showO2" /> Modify Oxygen In Flue Gas
         </label>
-      </div>
-      <form *ngIf="showO2">
+      </div> -->
+      <form *ngIf="showFlueGas">
         <div class="form-group">
           <label for="baselineO2">Baseline Oxygen in Flue Gas</label>
           <div class="input-group">
@@ -33,13 +33,13 @@
     </li>
 
     <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Excess Air'">
-      <div class="checkbox form-group">
+      <!-- <div class="checkbox form-group">
         <label for="modifyExcessAir">
           <input type="checkbox" id="modifyExcessAir" (focus)="focusField('excessAirPercentage')" (change)="toggleExcessAir()" [(ngModel)]="showExcessAir"
           /> Modify Excess Air In Flue Gas
         </label>
-      </div>
-      <form *ngIf="showExcessAir">
+      </div> -->
+      <form *ngIf="showFlueGas">
         <div class="form-group">
           <label for="baselineExcessAir">Baseline Excess Air in Flue Gas</label>
           <div class="input-group">
@@ -60,8 +60,9 @@
         </div>
       </form>
     </li>
-
-    <li>
+  </ul>
+</div>
+<!-- <li>
       <div class="checkbox form-group">
         <label for="modifyFuelTemp">
           <input type="checkbox" id="modifyFuelTemp" (focus)="focusField('flueGasTemperature')" (change)="toggleFuelTemp()" [(ngModel)]="showFuelTemp"
@@ -90,16 +91,17 @@
           </div>
         </div>
       </form>
-    </li>
-
+    </li> -->
+<div class="checkbox">
+  <label class="group-label" for="exploreAirTemp">
+    <input type="checkbox" id="exploreAirTemp" value="true" (focus)="focusField('combustionAirTemperature')" (change)="toggleAirTemp()"
+      [(ngModel)]="showAirTemp" /> Preheat Combustion Air
+  </label>
+</div>
+<div *ngIf="showAirTemp">
+  <ul>
     <li>
-      <div class="checkbox form-group">
-        <label for="modifyAirTemp">
-          <input type="checkbox" id="modifyAirTemp" (focus)="focusField('combustionAirTemperature')" (change)="toggleAirTemp()" [(ngModel)]="showAirTemp"
-          /> Modify Combustion Air Temperature
-        </label>
-      </div>
-      <form *ngIf="showAirTemp">
+      <form>
         <div class="form-group">
           <label for="baselineAirTemp">Baseline Combustion Air Temperature</label>
           <div class="input-group">
