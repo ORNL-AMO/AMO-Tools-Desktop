@@ -40,9 +40,11 @@ export class ImportExportComponent implements OnInit {
     this.noDirAssessmentItems = new Array();
     if (this.export) {
       this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
-      if(this.exportData.calculators){
-        if(this.exportData.calculators[0].preAssessments){
-          this.showCalcs = true;
+      if (this.exportData.calculators) {
+        if (this.exportData.calculators.length != 0) {
+          if (this.exportData.calculators[0].preAssessments) {
+            this.showCalcs = true;
+          }
         }
       }
     }

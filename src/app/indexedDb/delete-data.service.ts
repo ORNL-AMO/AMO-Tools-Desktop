@@ -47,9 +47,11 @@ export class DeleteDataService {
     } else if (directory.calculators) {
       if (directory.calculators.length != 0) {
         directory.calculators.forEach(calculator => {
-          this.indexedDbService.deleteCalculator(calculator.id).then(() => {
-            this.calculatorDbService.setAll();
-          })
+          if (calculator.id) {
+            this.indexedDbService.deleteCalculator(calculator.id).then(() => {
+              this.calculatorDbService.setAll();
+            })
+          }
         })
 
       }

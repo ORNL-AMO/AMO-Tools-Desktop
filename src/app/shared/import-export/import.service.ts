@@ -43,11 +43,11 @@ export class ImportService {
       this.addAssessments(data.assessments, workingDirectoryId);
     }
 
-    if(data.calculators){
+    if (data.calculators) {
       data.calculators.forEach(calc => {
         delete calc.id;
         calc.directoryId = workingDirectoryId;
-        this.indexedDbService.addCalculator(calc).then(() => {this.calculatorDbService.setAll()});
+        this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll() });
       })
     }
   }
@@ -62,13 +62,12 @@ export class ImportService {
     }
     //get siblingDirs
     let tmpDirs: Array<ImportExportDirectory> = _.filter(directoryItems, (dir) => { return dir.directory.parentDirectoryId == _directory.id });
-    if (first) {
-      tmpDirs.forEach(tmpDir => {
-        tmpDir.directory.parentDirectoryId = workingDirectoryId;
-      })
-    }
+
     let subDirs: Array<ImportDirectory> = new Array<ImportDirectory>();
     tmpDirs.forEach(dir => {
+      if (first) {
+        dir.directory.parentDirectoryId = workingDirectoryId;
+      }
       let tmpSubDir: ImportDirectory = {
         id: dir.directory.id,
         directoryItem: dir,
@@ -79,7 +78,7 @@ export class ImportService {
       subDirs.push(tmpSubDir);
     })
     let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId == _directory.id });
-    this.assessmentsAdded.concat(dirAssessments);
+    this.assessmentsAdded = this.assessmentsAdded.concat(dirAssessments);
     _directory.subDirectories = subDirs;
     _directory.assessments = dirAssessments;
     return _directory
