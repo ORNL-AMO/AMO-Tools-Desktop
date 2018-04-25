@@ -57,7 +57,7 @@ export class ExportService {
   }
 
   getAssessmentObj(assessment: Assessment): ImportExportAssessment {
-    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     let model: ImportExportAssessment = {
       assessment: assessment,
