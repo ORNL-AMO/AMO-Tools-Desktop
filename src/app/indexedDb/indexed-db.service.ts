@@ -773,6 +773,12 @@ export class IndexedDbService {
     });
   }
 
+  // putFlueGasMaterial(_material: FlueGasMaterial): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+
+  //   })
+  // }
+
   getFlueGasMaterialById(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readonly');

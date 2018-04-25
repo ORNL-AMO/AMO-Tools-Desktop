@@ -245,6 +245,11 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'settings';
   }
 
+  showCustomMaterials() {
+    this.selectedCalculator = '';
+    this.dashboardView = 'custom-materials';
+  }
+
   showContact() {
     this.selectedCalculator = '';
     this.dashboardView = 'contact';

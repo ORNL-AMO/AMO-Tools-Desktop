@@ -69,6 +69,9 @@
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
       <span (click)="goToSettings()">Settings</span>
     </li>
+    <li [ngClass]="{'selected':dashboardView == 'materials'}">
+      <span (click)="goToMaterials()">Custom Materials</span>
+    </li>
     <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
       <span (click)="showTutorials()">Tutorials</span>
     </li>

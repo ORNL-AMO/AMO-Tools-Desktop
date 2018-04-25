@@ -24,24 +24,28 @@ export class FlueGasMaterialComponent implements OnInit {
   @Output('hideModal')
   hideModal = new EventEmitter();
 
-  newMaterial: FlueGasMaterial = {
-    substance: 'New Fuel',
-    C2H6: 0,
-    C3H8: 0,
-    C4H10_CnH2n: 0,
-    CH4: 0,
-    CO: 0,
-    CO2: 0,
-    H2: 0,
-    H2O: 0,
-    N2: 0,
-    O2: 0,
-    SO2: 0,
-    heatingValue: 0,
-    heatingValueVolume: 0,
-    specificGravity: 0,
+  @Input()
+  newMaterial: FlueGasMaterial;
+  @Input()
+  editMaterial: boolean;
+  // newMaterial: FlueGasMaterial = {
+  //   substance: 'New Fuel',
+  //   C2H6: 0,
+  //   C3H8: 0,
+  //   C4H10_CnH2n: 0,
+  //   CH4: 0,
+  //   CO: 0,
+  //   CO2: 0,
+  //   H2: 0,
+  //   H2O: 0,
+  //   N2: 0,
+  //   O2: 0,
+  //   SO2: 0,
+  //   heatingValue: 0,
+  //   heatingValueVolume: 0,
+  //   specificGravity: 0,
 
-  };
+  // };
   selectedMaterial: FlueGasMaterial;
   allMaterials: Array<FlueGasMaterial>;
   isValid: boolean;
@@ -55,12 +59,35 @@ export class FlueGasMaterialComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
+    this.checkInputMaterial()
     this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
     this.checkMaterialName();
     this.setHHV();
     this.canAdd = true;
     this.getTotalOfFlueGasses();
     // this.selectedMaterial = this.allMaterials[0];
+  }
+
+  checkInputMaterial() {
+    if (this.newMaterial === undefined || this.newMaterial === null) {
+      this.newMaterial = {
+        substance: 'New Fuel',
+        C2H6: 0,
+        C3H8: 0,
+        C4H10_CnH2n: 0,
+        CH4: 0,
+        CO: 0,
+        CO2: 0,
+        H2: 0,
+        H2O: 0,
+        N2: 0,
+        O2: 0,
+        SO2: 0,
+        heatingValue: 0,
+        heatingValueVolume: 0,
+        specificGravity: 0,
+      };
+    }
   }
 
   getTotalOfFlueGasses() {
@@ -70,6 +97,10 @@ export class FlueGasMaterialComponent implements OnInit {
     this.getDiff();
   }
   addMaterial() {
+    if (this.editMaterial) {
+      // this.updateMaterial();
+      console.log('newMaterial ID = ' + this.newMaterial.id);
+    }
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
@@ -84,6 +115,10 @@ export class FlueGasMaterialComponent implements OnInit {
       }
     }
   }
+
+  // updateMaterial() {
+
+  // }
 
   getDiff() {
     this.difference = 100 - this.totalOfFlueGasses;
