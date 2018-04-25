@@ -42,7 +42,12 @@ export class ExploreOpeningFormComponent implements OnInit {
   viewFactorError2: Array<string>;
   emissivityError1: Array<string>;
   emissivityError2: Array<string>;
+  timeOpenError1: Array<string>;
+  timeOpenError2: Array<string>;
 
+
+  showTimeOpen: Array<boolean>;
+  showAllTimeOpen: boolean = false;
   showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>
   showSize: Array<boolean>;
@@ -80,6 +85,9 @@ export class ExploreOpeningFormComponent implements OnInit {
     this.emissivityError1 = new Array<string>();
     this.emissivityError2 = new Array<string>();
     this.showEmissivity = new Array<boolean>();
+    this.showTimeOpen = new Array<boolean>();
+    this.timeOpenError1 = new Array<string>();
+    this.timeOpenError2 = new Array<string>();
 
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
@@ -100,6 +108,10 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.totalArea2.push(0);
       this.emissivityError1.push(null);
       this.emissivityError2.push(null);
+      this.timeOpenError1.push(null);
+      this.timeOpenError2.push(null);
+
+
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index)
       this.getArea(1, loss, index)
 
@@ -112,6 +124,11 @@ export class ExploreOpeningFormComponent implements OnInit {
         this.showAllEmissivity = check;
       }
       this.showEmissivity.push(check);
+      check = (loss.percentTimeOpen != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
+      this.showTimeOpen.push(check);
+      if (!this.showAllTimeOpen && check) {
+        this.showAllTimeOpen = check;
+      }
       index++;
     })
   }
@@ -332,6 +349,39 @@ export class ExploreOpeningFormComponent implements OnInit {
     }
     this.calculate();
   }
+
+  checkTimeOpen(num: number, loss: OpeningLoss, index: number) {
+    if (num == 1) {
+      this.timeOpenError2[index] = (loss.percentTimeOpen < 0 || loss.percentTimeOpen > 100) ?
+        'Percent Time Open must be between 0% and 100%' : null;
+    } else if (num == 2) {
+      this.timeOpenError2[index] = (loss.percentTimeOpen < 0 || loss.percentTimeOpen > 100) ?
+        'Percent Time Open must be between 0% and 100%' : null;
+    }
+    this.calculate();
+
+  }
+
+
+  toggleAllTimeOpen() {
+    if (this.showAllTimeOpen == false) {
+      let index = 0;
+      this.phast.losses.openingLosses.forEach(loss => {
+        this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
+        this.showTimeOpen[index] = false;
+        index++;
+        this.calculate();
+      })
+    }
+  }
+
+  toggleTimeOpen(index: number, loss: OpeningLoss) {
+    if (this.showTimeOpen[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
+      this.calculate();
+    }
+  }
+
 
   focusField(str: string) {
     this.changeField.emit(str);
