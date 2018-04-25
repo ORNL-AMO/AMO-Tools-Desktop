@@ -47,9 +47,11 @@ export class DeleteDataService {
     } else if (directory.calculators) {
       if (directory.calculators.length != 0) {
         directory.calculators.forEach(calculator => {
-          this.indexedDbService.deleteCalculator(calculator.id).then(() => {
-            this.calculatorDbService.setAll();
-          })
+          if (calculator.id) {
+            this.indexedDbService.deleteCalculator(calculator.id).then(() => {
+              this.calculatorDbService.setAll();
+            })
+          }
         })
 
       }
@@ -69,8 +71,8 @@ export class DeleteDataService {
   }
 
   deleteAssessment(assessment: Assessment) {
-    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
-    if (settings) {
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    if (settings && settings.assessmentId == assessment.id) {
       this.indexedDbService.deleteSettings(settings.id).then(() => {
         this.settingsDbService.setAll();
       });
