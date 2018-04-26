@@ -11,7 +11,7 @@
   <div class="setup-form-group">
     <div class="form-group">
       <label for="pumpType">Pump Type</label>
-      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="startSavePolling()" (focus)="focusField('pumpType')"
         [ngClass]="{'indicate-different': isPumpStyleDifferent()}">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
         <option *ngIf="!baseline" [ngValue]="'Specified Optimal Efficiency'">Specified Optimal Efficiency</option>
@@ -39,7 +39,7 @@
 
     <div class="form-group">
       <label for="drive">Drive</label>
-      <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="startSavePolling()" (focus)="focusField('drive')"
       [ngClass]="{'indicate-different': isDriveDifferent()}">
         <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
       </select>

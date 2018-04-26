@@ -773,6 +773,7 @@ export class PsatService {
   }
 
   getPsatInputsFromForm(form: FormGroup): PsatInputs {
+    
     let efficiency = this.getEfficiencyFromForm(form);
     let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
     let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
