@@ -143,6 +143,7 @@ export class WallLossesComponent implements OnInit {
     } else {
       loss.heatLoss = null;
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -161,7 +162,6 @@ export class WallLossesComponent implements OnInit {
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     })
-    this.total = this.getTotal();
     //set input data to equal new data for update
     this.losses.wallLosses = tmpWallLosses;
     //emit to losses.component that data is updated and should be saved
