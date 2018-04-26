@@ -35,9 +35,17 @@
         [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-opening-form>
     </li>
     <li>
-        <app-explore-slag-form *ngIf="showSlag" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
-          [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-slag-form>
-      </li>
+      <app-explore-slag-form *ngIf="showSlag" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-slag-form>
+    </li>
+    <li>
+      <app-explore-cooling-form *ngIf="showCooling" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-cooling-form>
+    </li>
+    <li>
+      <app-explore-atmosphere-form *ngIf="showAtmosphere" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-atmosphere-form>
+    </li>
     <li>
       <app-explore-system-efficiency-form *ngIf="resultsCategories.showSystemEff" [(phast)]="phast" (changeField)="focusField($event)"
         (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-system-efficiency-form>

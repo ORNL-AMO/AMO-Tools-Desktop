@@ -17,6 +17,8 @@ import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { ToastyModule } from 'ng2-toasty';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
+import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
+import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/exp
     ExploreOperationsFormComponent,
     ExploreFlueGasFormComponent,
     ExploreSystemEfficiencyFormComponent,
-    ExploreSlagFormComponent
+    ExploreSlagFormComponent,
+    ExploreCoolingFormComponent,
+    ExploreAtmosphereFormComponent
   ],
   exports: [
     ExplorePhastOpportunitiesComponent

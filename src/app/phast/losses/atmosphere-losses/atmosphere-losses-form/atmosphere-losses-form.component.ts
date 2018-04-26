@@ -77,9 +77,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   checkSpecificHeat() {
     if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-
-      console.log(this.atmosphereLossForm.controls.atmosphereGas.value);
-
       let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
       if (material) {
         let val = material.specificHeat;
