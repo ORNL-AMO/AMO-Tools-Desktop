@@ -30,6 +30,7 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   showLeakage: boolean = false;
   showWall: boolean = false;
   showOpening: boolean = false;
+  showSlag: boolean = false;
   constructor(private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
@@ -50,7 +51,9 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
     if(this.phast.losses.openingLosses){
       this.showOpening = true;
     }
-  
+    if(this.phast.losses.slagLosses){
+      this.showSlag = true;
+    }
   }
 
   calculate(){

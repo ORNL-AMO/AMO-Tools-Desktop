@@ -10,37 +10,41 @@
       </div>
     </li> -->
     <li>
-      <app-explore-charge-materials-form *ngIf="showCharge" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-charge-materials-form>
+      <app-explore-flue-gas-form *ngIf="resultsCategories.showFlueGas" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-flue-gas-form>
     </li>
     <li>
-      <app-explore-fixtures-form *ngIf="showFixture" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-fixtures-form>
+      <app-explore-charge-materials-form *ngIf="showCharge" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-charge-materials-form>
     </li>
     <li>
-      <app-explore-leakage-form *ngIf="showLeakage" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-leakage-form>
+      <app-explore-fixtures-form *ngIf="showFixture" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-fixtures-form>
+    </li>
+    <li>
+      <app-explore-leakage-form *ngIf="showLeakage" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-leakage-form>
 
     </li>
     <li>
-      <app-explore-wall-form *ngIf="showWall" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-wall-form>
+      <app-explore-wall-form *ngIf="showWall" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-wall-form>
     </li>
     <li>
-      <app-explore-opening-form *ngIf="showOpening" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-opening-form>
+      <app-explore-opening-form *ngIf="showOpening" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+        [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-opening-form>
+    </li>
+    <li>
+        <app-explore-slag-form *ngIf="showSLag" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()"
+          [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-slag-form>
+      </li>
+    <li>
+      <app-explore-system-efficiency-form *ngIf="resultsCategories.showSystemEff" [(phast)]="phast" (changeField)="focusField($event)"
+        (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-system-efficiency-form>
     </li>
     <li>
       <app-explore-operations-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
         [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-operations-form>
-    </li>
-    <li>
-      <app-explore-flue-gas-form *ngIf="resultsCategories.showFlueGas" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-flue-gas-form>
-    </li>
-    <li>
-      <app-explore-system-efficiency-form *ngIf="resultsCategories.showSystemEff" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-system-efficiency-form>
     </li>
   </ul>
 </div>

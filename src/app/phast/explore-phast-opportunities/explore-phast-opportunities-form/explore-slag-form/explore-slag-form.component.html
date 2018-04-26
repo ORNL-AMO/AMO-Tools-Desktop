@@ -1,0 +1,31 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreSlag">
+    <input type="checkbox" id="exploreSlag" (focus)="focusField('weight')" (change)="toggleSlag()" [(ngModel)]="showSlag" /> Reduce Slag
+  </label>
+</div>
+<div *ngIf="showSlag">
+  <ul>
+    <li>
+      <form>
+        <div class="form-group">
+          <label for="baselineWeight">Baseline Weight</label>
+          <div class="input-group">
+            <input name="baselineWeight" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.losses.slag[0].weight"
+              id="baselineWeight" onfocus="this.select();" (input)="calculate()" (focus)="focusField('weight')" (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Lb/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modifiedWeight">Modified Weight</label>
+          <div class="input-group">
+            <input name="modifiedWeight" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.slag[0].weight"
+              id="modifiedWeight" onfocus="this.select();" (input)="calculate()" (focus)="focusField('weight')" (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Lb/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+          </div>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>

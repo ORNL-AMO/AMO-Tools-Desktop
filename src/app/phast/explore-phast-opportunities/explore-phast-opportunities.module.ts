@@ -16,6 +16,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { ToastyModule } from 'ng2-toasty';
+import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { ToastyModule } from 'ng2-toasty';
     ExploreOpeningFormComponent,
     ExploreOperationsFormComponent,
     ExploreFlueGasFormComponent,
-    ExploreSystemEfficiencyFormComponent
+    ExploreSystemEfficiencyFormComponent,
+    ExploreSlagFormComponent
   ],
   exports: [
     ExplorePhastOpportunitiesComponent

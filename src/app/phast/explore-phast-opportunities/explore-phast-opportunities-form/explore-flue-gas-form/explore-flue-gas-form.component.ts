@@ -164,6 +164,10 @@ export class ExploreFlueGasFormComponent implements OnInit {
       this.modifiedFlueGas.o2InFlueGas = 0;
       this.modifiedFlueGas.excessAirPercentage = 0;
     }
+    this.excessAirWarning1 = null;
+    this.excessAirWarning2 = null;
+    this.o2warning1 = null;
+    this.o2warning2 = null;
     this.calculate();
   }
 
