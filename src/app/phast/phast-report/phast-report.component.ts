@@ -116,7 +116,7 @@ export class PhastReportComponent implements OnInit {
 
 
   getSettings(): void {
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
     if (tmpSettings) {
       if (!tmpSettings.energyResultUnit) {
         tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);

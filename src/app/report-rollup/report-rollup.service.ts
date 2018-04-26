@@ -74,7 +74,7 @@ export class ReportRollupService {
 
 
   pushAssessment(assessment: Assessment) {
-    let settings = this.settingsDbService.getByAssessmentId(assessment.id)
+    let settings = this.settingsDbService.getByAssessmentId(assessment)
     let tmpSettings = this.checkSettings(settings);
     this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
     if (assessment.psat) {

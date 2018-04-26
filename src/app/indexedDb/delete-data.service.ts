@@ -71,8 +71,8 @@ export class DeleteDataService {
   }
 
   deleteAssessment(assessment: Assessment) {
-    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
-    if (settings) {
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    if (settings && settings.assessmentId == assessment.id) {
       this.indexedDbService.deleteSettings(settings.id).then(() => {
         this.settingsDbService.setAll();
       });

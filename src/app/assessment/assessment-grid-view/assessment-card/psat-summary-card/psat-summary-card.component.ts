@@ -34,7 +34,7 @@ export class PsatSummaryCardComponent implements OnInit {
     ngOnInit() {
         this.setupDone = this.assessment.psat.setupDone;
         if (this.setupDone) {
-            this.settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+            this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
             this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings);
             if (this.assessment.psat.modifications) {
                 this.numMods = this.assessment.psat.modifications.length;

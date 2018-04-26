@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { Calculator } from '../../../shared/models/calculators';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -46,17 +46,17 @@ export class PreAssessmentComponent implements OnInit {
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
-  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsService: SettingsService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       this.initAssessments();
     } else {
       this.initAssessments();
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
 
   }

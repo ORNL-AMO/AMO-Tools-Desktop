@@ -7,8 +7,8 @@ import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveService } from './pump-curve.service';
 import { PumpCurveForm, PumpCurveDataRow, Calculator } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
-import { SettingsService } from '../../../settings/settings.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -45,15 +45,15 @@ export class PumpCurveComponent implements OnInit {
   calcExists: boolean = false;
   saving: boolean = false;
   pumpFormExists: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
+  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     //get systen settings if using stand alone calculator
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (this.inAssessment) {
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);

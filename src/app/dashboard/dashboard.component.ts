@@ -88,28 +88,16 @@ export class DashboardComponent implements OnInit {
     this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
     })
-    if (this.settingsService.globalSettings) {
-      if (!this.settingsService.globalSettings.disableTutorial) {
-        this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
-          if (this.settingsService.globalSettings) {
-            this.settingsService.globalSettings.disableTutorial = val;
-            this.indexedDbService.putSettings(this.settingsService.globalSettings).then(() => {
-              this.settingsDbService.setAll();
-            });
-          }
-        })
-      }
-    } else {
+    if (!this.settingsDbService.globalSettings.disableTutorial) {
       this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
-        if (this.settingsService.globalSettings) {
-          this.settingsService.globalSettings.disableTutorial = val;
-          this.indexedDbService.putSettings(this.settingsService.globalSettings).then(() => {
+        if (this.settingsDbService.globalSettings) {
+          this.settingsDbService.globalSettings.disableTutorial = val;
+          this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
             this.settingsDbService.setAll();
           });
         }
       })
     }
-
     this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
       if (val) {
         this.exportAll();
@@ -175,10 +163,9 @@ export class DashboardComponent implements OnInit {
     this.rootDirectoryRef = this.directoryDbService.getById(1);
     this.allDirectories = this.directoryDbService.getById(1);
     this.workingDirectory = this.allDirectories;
-    this.settingsService.globalSettings = this.settingsDbService.getByDirectoryId(1);
     if (!this.tutorialShown) {
-      if (this.settingsService.globalSettings) {
-        if (!this.settingsService.globalSettings.disableTutorial) {
+      if (this.settingsDbService.globalSettings) {
+        if (!this.settingsDbService.globalSettings.disableTutorial) {
           this.assessmentService.openingTutorial.next(true);
           this.tutorialShown = true;
         }

@@ -10,6 +10,7 @@ import { setTimeout } from 'timers';
 import { Calculator } from '../shared/models/calculators';
 import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -52,7 +53,7 @@ export class ReportRollupComponent implements OnInit {
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
-    private windowRefService: WindowRefService, private settingsService: SettingsService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
+    private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -68,7 +69,7 @@ export class ReportRollupComponent implements OnInit {
       this.setSidebarHeight();
     }, 2100);
 
-    this.settings = this.settingsService.globalSettings;
+    this.settings = this.settingsDbService.globalSettings;
     this.checkSettings();
 
     this.createdDate = new Date();

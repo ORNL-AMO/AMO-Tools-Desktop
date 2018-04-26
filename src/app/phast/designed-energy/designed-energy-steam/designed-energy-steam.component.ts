@@ -4,6 +4,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { DesignedEnergyService } from '../designed-energy.service';
 import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-designed-energy-steam',
@@ -24,7 +25,7 @@ export class DesignedEnergySteamComponent implements OnInit {
   results: DesignedEnergyResults;
   currentField: string = 'fuelType';
 
-  constructor(private designedEnergyService: DesignedEnergyService, private settingsService: SettingsService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (this.phast.designedEnergy.designedEnergySteam.length == 0) {
@@ -33,8 +34,8 @@ export class DesignedEnergySteamComponent implements OnInit {
       this.calculate();
     }
     
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
