@@ -27,7 +27,6 @@ export class CoreService {
   }
 
   createDirectorySettings(): Promise<any> {
-    console.log('create');
     return new Promise((resolve, reject) => {
       let tmpSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
       tmpSettings.directoryId = 1;
