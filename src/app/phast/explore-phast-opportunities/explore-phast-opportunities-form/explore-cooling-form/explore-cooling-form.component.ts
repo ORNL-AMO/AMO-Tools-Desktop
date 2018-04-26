@@ -24,6 +24,19 @@ export class ExploreCoolingFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    let index = 0;
+    this.phast.losses.coolingLosses.forEach(loss => {
+      if(loss.coolingLossType == 'Liquid'){
+        this.baselineLosses.push(loss.liquidCoolingLoss);
+      }else if(loss.coolingLossType == 'Gas'){
+        this.baselineLosses.push(loss.gasCoolingLoss);
+      }
+      if(this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].coolingLossType == 'Liquid'){
+        this.modifiedLosses.push(loss.liquidCoolingLoss)
+      }else if(this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].coolingLossType == 'Gas'){
+        this.modifiedLosses.push(loss.gasCoolingLoss);
+      }
+    })
   }
 
 }

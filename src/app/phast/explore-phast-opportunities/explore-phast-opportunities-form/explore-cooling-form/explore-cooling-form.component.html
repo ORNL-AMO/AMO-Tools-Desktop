@@ -5,7 +5,7 @@
   </label>
 </div>
 <div *ngIf="showCooling">
-  <ul *ngFor="let loss of phast.losses.coolingLosses; let index = index">
+  <ul *ngFor="let loss of baselineLosses; let index = index">
     <!--flow rate-->
     <li>
       <div class="checkbox form-group">
