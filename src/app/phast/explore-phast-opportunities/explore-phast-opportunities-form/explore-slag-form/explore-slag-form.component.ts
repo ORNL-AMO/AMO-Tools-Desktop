@@ -24,6 +24,7 @@ export class ExploreSlagFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.initData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -34,13 +35,15 @@ export class ExploreSlagFormComponent implements OnInit {
     }
   }
 
-  initData(){
-    let check = (this.phast.losses.slagLosses[0].weight != this.phast.modifications[this.exploreModIndex].phast.losses[0].weight);
+  initData() {
+    let check = (this.phast.losses.slagLosses[0].weight != this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight);
     this.showSlag = check;
   }
 
-  toggleSlag(){
-    this.phast.modifications[this.exploreModIndex].phast.losses[0].weight = this.phast.losses.slagLosses[0].weight;
+  toggleSlag() {
+    if (this.showSlag == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight = this.phast.losses.slagLosses[0].weight;
+    }
   }
 
   focusField(str: string) {
