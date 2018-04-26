@@ -1,12 +1,36 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFlueGas">
     <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasTemperature')" (change)="toggleFlueGas()"
-      [(ngModel)]="showFlueGas" /> Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas
+      [(ngModel)]="showFlueGas" /> Maintain Optimum Air/Fuel Ratio or Recommended O
+    <sub>2</sub> Level in Flue Gas
   </label>
 </div>
 <div *ngIf="showFlueGas">
   <ul>
-    <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
+    <li>
+      <!-- <div class="checkbox form-group">
+              <label for="modifyO2">
+                <input type="checkbox" id="modifyO2" (focus)="focusField('o2InFlueGas')" (change)="toggleO2()" [(ngModel)]="showO2" /> Modify Oxygen In Flue Gas
+              </label>
+            </div> -->
+      <form *ngIf="showFlueGas">
+        <div class="form-group">
+          <label for="oxygenCalculationMethod1">Baseline Oxygen Calculation Method</label>
+          <select [disabled]="true" name="oxygenCalculationMethod1" class="form-control" (change)="changeMethod(1)" [(ngModel)]="baselineFlueGas.oxygenCalculationMethod"
+            id="oxygenCalculationMethod1" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
+            <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="oxygenCalculationMethod2">Modified Oxygen Calculation Method</label>
+          <select name="oxygenCalculationMethod2" class="form-control" (change)="changeMethod(2)" [(ngModel)]="modifiedFlueGas.oxygenCalculationMethod"
+            id="oxygenCalculationMethod2" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
+            <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
+          </select>
+        </div>
+      </form>
+    </li>
+    <li>
       <!-- <div class="checkbox form-group">
         <label for="modifyO2">
           <input type="checkbox" id="modifyO2" (focus)="focusField('o2InFlueGas')" (change)="toggleO2()" [(ngModel)]="showO2" /> Modify Oxygen In Flue Gas
@@ -15,24 +39,34 @@
       <form *ngIf="showFlueGas">
         <div class="form-group">
           <label for="baselineO2">Baseline Oxygen in Flue Gas</label>
-          <div class="input-group">
+          <div class="input-group" *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
             <input name="baselineO2" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.o2InFlueGas"
-              id="baselineO2" onfocus="this.select();" (input)="calculate()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+              id="baselineO2" onfocus="this.select();" (input)="calculateExcessAir(baselineFlueGas,1)" (focus)="focusField('o2InFlueGas')"
+              (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="excessAirWarning1 !== null">{{excessAirWarning2}}</span>
+          <div class="text-center small" *ngIf="baselineFlueGas.oxygenCalculationMethod != 'Oxygen in Flue Gas'">
+            {{baselineFlueGas.o2InFlueGas | number:'2.2-2'}} %
           </div>
         </div>
         <div class="form-group">
           <label for="modified02">Modified Oxygen in Flue Gas</label>
-          <div class="input-group">
+          <div class="input-group" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
             <input name="modified02" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
-              id="modified02" onfocus="this.select();" (input)="calculate()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+              id="modified02" onfocus="this.select();" (input)="calculateExcessAir(modifiedFlueGas,2)" (focus)="focusField('o2InFlueGas')"
+              (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="excessAirWarning2 !== null">{{excessAirWarning2}}</span>
+          <div class="text-center small" *ngIf="modifiedFlueGas.oxygenCalculationMethod != 'Oxygen in Flue Gas'">
+            {{modifiedFlueGas.o2InFlueGas | number:'2.2-2'}} %
           </div>
         </div>
       </form>
     </li>
 
-    <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Excess Air'">
+    <li>
       <!-- <div class="checkbox form-group">
         <label for="modifyExcessAir">
           <input type="checkbox" id="modifyExcessAir" (focus)="focusField('excessAirPercentage')" (change)="toggleExcessAir()" [(ngModel)]="showExcessAir"
@@ -42,20 +76,28 @@
       <form *ngIf="showFlueGas">
         <div class="form-group">
           <label for="baselineExcessAir">Baseline Excess Air in Flue Gas</label>
-          <div class="input-group">
+          <div class="input-group" *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Excess Air'">
             <input name="baselineExcessAir" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.excessAirPercentage"
-              id="baselineExcessAir" onfocus="this.select();" (input)="calculate()" (focus)="focusField('excessAirPercentage')"
+              id="baselineExcessAir" onfocus="this.select();" (input)="calculateO2(baselineFlueGas, 1)" (focus)="focusField('excessAirPercentage')"
               (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="o2warning1 !== null">{{o2warning1}}</span>
+          <div class="text-center small" *ngIf="baselineFlueGas.oxygenCalculationMethod != 'Excess Air'">
+            {{baselineFlueGas.excessAirPercentage | number:'2.2-2'}} %
           </div>
         </div>
         <div class="form-group">
           <label for="modifiedExcessAir">Modified Oxygen in Flue Gas</label>
-          <div class="input-group">
+          <div class="input-group" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Excess Air'">
             <input name="modifiedExcessAir" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.excessAirPercentage"
-              id="modifiedExcessAir" onfocus="this.select();" (input)="calculate()" (focus)="focusField('excessAirPercentage')"
+              id="modifiedExcessAir" onfocus="this.select();" (input)="calculateO2(modifiedFlueGas,2)" (focus)="focusField('excessAirPercentage')"
               (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="o2warning2 !== null">{{o2warning2}}</span>
+          <div class="text-center small" *ngIf="modifiedFlueGas.oxygenCalculationMethod != 'Excess Air'">
+            {{modifiedFlueGas.excessAirPercentage | number:'2.2-2'}} %
           </div>
         </div>
       </form>
