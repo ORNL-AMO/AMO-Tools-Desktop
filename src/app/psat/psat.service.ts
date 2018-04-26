@@ -989,9 +989,11 @@ export class PsatService {
     } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
       rpmRange.min = 1080;
       rpmRange.max = 3600;
-    }else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
+    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
       rpmRange.min = 900;
       rpmRange.max = 3000;
+    } else if (effClass === 3) {
+      return {min: 1, max: 3600}; // specified case
     }
     return rpmRange;
   }
