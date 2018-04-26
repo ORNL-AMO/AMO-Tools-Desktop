@@ -257,7 +257,7 @@ export class PhastComponent implements OnInit {
 
   getSettings() {
     //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
       this.settings = tmpSettings;
       //sets which tabs will be used based on settings

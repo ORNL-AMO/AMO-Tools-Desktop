@@ -287,7 +287,7 @@ export class PsatComponent implements OnInit {
 
   getSettings(update?: boolean) {
     //get assessment settings
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
       this.settings = tmpSettings;
       this.isAssessmentSettings = true;

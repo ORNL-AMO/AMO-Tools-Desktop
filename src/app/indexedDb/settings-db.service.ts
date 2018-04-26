@@ -46,15 +46,15 @@ export class SettingsDbService {
     return selectedSettings;
   }
 
-  getByAssessmentId(assessment: Assessment): Settings {
+  getByAssessmentId(assessment: Assessment, neededFromAssessment?: boolean): Settings {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId == assessment.id });
-    if (!selectedSettings) {
-      selectedSettings = this.getByDirectoryId(assessment.directoryId)
+    if (!selectedSettings && !neededFromAssessment) {
+      selectedSettings = this.getByDirectoryId(assessment.directoryId);
+      selectedSettings = this.checkSettings(selectedSettings);
     }
-    if (!selectedSettings) {
+    if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.globalSettings;
     }
-    selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
   }
 
