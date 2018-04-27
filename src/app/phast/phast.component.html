@@ -103,9 +103,9 @@
       <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next)"
+      <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next && selectedLossTab.next)"
         (click)="nextStep()">Next</button>
-      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && (!stepTab.next || !selectedLossTab.next)" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
     </div>
   </div>

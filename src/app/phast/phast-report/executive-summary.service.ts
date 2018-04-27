@@ -13,9 +13,9 @@ export class ExecutiveSummaryService {
   getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
-    tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, baseline);
+    tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, phast);
     tmpResultsSummary.energyPerMass = this.calcEnergyPer(phast, settings);
-    tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, baseline);
+    tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, phast);
     if (isMod && baselineSummary) {
       tmpResultsSummary.annualCostSavings = baselineSummary.annualCost - tmpResultsSummary.annualCost;
       tmpResultsSummary.annualEnergySavings = baselineSummary.annualEnergyUsed - tmpResultsSummary.annualEnergyUsed;

@@ -142,7 +142,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     } else {
       loss.heatLoss = null;
     }
-
+    this.total = this.getTotal();
   }
 
   collapseLoss(loss: any) {
@@ -162,8 +162,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
       tmpSurfaceLoss.heatLoss = loss.heatLoss;
       tmpSurfaceLosses.push(tmpSurfaceLoss);
-    })
-    this.total = this.getTotal();
+    });
     this.losses.extendedSurfaces = tmpSurfaceLosses;
     this.savedLoss.emit(true);
   }

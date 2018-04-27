@@ -130,6 +130,7 @@ export class GasLeakageLossesComponent implements OnInit {
     else {
       loss.heatLoss = null;
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -146,7 +147,6 @@ export class GasLeakageLossesComponent implements OnInit {
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
     })
-    this.total = this.getTotal();
     this.losses.leakageLosses = tmpLeakageLosses;
     this.savedLoss.emit(true);
   }

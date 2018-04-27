@@ -42,6 +42,7 @@ export class LossesTabsComponent implements OnInit {
 
   ngOnInit() {
     this.lossTabs = this.lossesService.lossesTabs;
+    // console.log(this.lossTabs);
     this.lossesService.lossesTab.subscribe(val => {
       this.selectedTab = this.lossesService.getTab(val);
     })
