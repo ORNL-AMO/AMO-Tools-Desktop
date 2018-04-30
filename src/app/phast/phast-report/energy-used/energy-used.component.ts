@@ -43,8 +43,6 @@ export class EnergyUsedComponent implements OnInit {
     energyIntensity: 0,
     electricityUsed: 0
   }
-
-  baseLineResults: PhastResults;
   fuelHeatingValue: number = 0;
   steamHeatingValue: number = 0;
   fuelName: string;
@@ -64,7 +62,6 @@ export class EnergyUsedComponent implements OnInit {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
     this.calculatedResults = this.phastResultsService.calculatedByPhast(this.phast, this.settings);
     this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.energyResultUnit);
-    this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
     this.getUnits();
 
     if (this.settings.energySourceType == 'Steam') {
@@ -84,13 +81,24 @@ export class EnergyUsedComponent implements OnInit {
     }
     if (this.settings.unitsOfMeasure == 'Metric') {
       this.energyCostUnit = '/GJ';
-      this.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
       this.energyPerTimeUnit = this.settings.energyResultUnit + '/kWh';
     } else if (this.settings.unitsOfMeasure == 'Imperial') {
       this.energyCostUnit = '/MMBtu';
-      this.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
       this.energyPerTimeUnit = this.settings.energyResultUnit + '/kWh';
     }
+
+    if (this.settings.energyResultUnit == 'MMBtu') {
+      this.energyPerMassUnit = 'Btu/lb';
+    } else if (this.settings.energyResultUnit == 'GJ') {
+      this.energyPerMassUnit = 'kJ/kg';
+    } else {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.energyPerMassUnit = this.settings.energyResultUnit + '/kg'
+      } else {
+        this.energyPerMassUnit = this.settings.energyResultUnit + '/lb'
+      }
+    }
+
   }
 
   setElectrotechVals(tmpResults: PhastResults) {
@@ -99,11 +107,11 @@ export class EnergyUsedComponent implements OnInit {
       if (this.phast.meteredEnergy.meteredEnergyElectricity) {
         this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings, this.phast.meteredEnergy.meteredEnergyFuel);
       }
-    } 
-    
+    }
+
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy.designedEnergyElectricity) {
-        let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast,this.settings);
+        let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
         fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
         let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
         this.designedResults = this.designedEnergyService.sumFuelElectric(fuelResults, elecResults);
@@ -118,8 +126,8 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
         this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
       }
-    } 
-    
+    }
+
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy.designedEnergySteam) {
         this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
@@ -137,8 +145,8 @@ export class EnergyUsedComponent implements OnInit {
       if (this.phast.meteredEnergy.meteredEnergyFuel) {
         this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
       }
-    } 
-    
+    }
+
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy.designedEnergyFuel) {
         this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);

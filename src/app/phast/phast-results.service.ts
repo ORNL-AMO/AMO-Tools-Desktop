@@ -201,6 +201,11 @@ export class PhastResultsService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     //sum aux equipment results
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    if (settings.energyResultUnit == 'MMBtu') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('GJ').to('KJ');
+    }
     let phastCalcs: CalculatedByPhast = {
       fuelEnergyUsed: calculatedFuelEnergyUsed,
       energyIntensity: calculatedEnergyIntensity,
