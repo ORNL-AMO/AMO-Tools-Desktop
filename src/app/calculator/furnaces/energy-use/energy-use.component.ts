@@ -32,7 +32,7 @@ export class EnergyUseComponent implements OnInit {
     // 1 is sharp edge
     sectionType: 1,
     dischargeCoefficient: 0.6,
-    gasHeatingValue: 22031,
+    gasHeatingValue: 1032.44,
     gasTemperature: 85,
     gasPressure: 85,
     orificePressureDrop: 10,
@@ -106,7 +106,7 @@ export class EnergyUseComponent implements OnInit {
         // 1 is sharp edge
         sectionType: 1,
         dischargeCoefficient: 0.6,
-        gasHeatingValue: 22031,
+        gasHeatingValue: 1032.44,
         gasTemperature: 85,
         gasPressure: 85,
         orificePressureDrop: 10,
