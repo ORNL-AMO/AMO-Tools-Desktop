@@ -34,6 +34,20 @@ export class ExploreCoolingFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.initData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.showCooling = false;
+        this.initData();
+      }
+    }
+  }
+
+
+  initData() {
     this.baselineLosses = new Array();
     this.modifiedLosses = new Array();
     this.showFlowRate = new Array<boolean>();
@@ -79,7 +93,6 @@ export class ExploreCoolingFormComponent implements OnInit {
       this.showTemp.push(check);
     })
   }
-
 
   toggleCooling() {
     if (this.showCooling == false) {

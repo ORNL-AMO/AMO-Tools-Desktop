@@ -48,6 +48,8 @@ export class ExploreFixturesFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showFixtures = false;
+        this.showAllTemp = false;
         this.initData();
         this.initTempData();
       }

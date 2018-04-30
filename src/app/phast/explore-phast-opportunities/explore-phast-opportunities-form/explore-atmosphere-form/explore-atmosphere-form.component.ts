@@ -39,6 +39,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showAtmosphere = false;
         this.initData();
       }
     }

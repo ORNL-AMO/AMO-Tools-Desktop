@@ -54,6 +54,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showFlueGas = false;
         this.initData();
       }
     }

@@ -62,6 +62,9 @@ export class ExploreOpeningFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showAllEmissivity = false;
+        this.showAllTimeOpen = false;
+        this.showOpening = false;
         this.initData();
       }
     }

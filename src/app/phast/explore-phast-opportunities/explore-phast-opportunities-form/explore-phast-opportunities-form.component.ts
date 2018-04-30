@@ -22,6 +22,8 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
 
   resultsCategories: ShowResultsCategories;
 
@@ -74,5 +76,9 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
 
   emitLossTab(tab: LossTab){
     this.changeTab.emit(tab);
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 }

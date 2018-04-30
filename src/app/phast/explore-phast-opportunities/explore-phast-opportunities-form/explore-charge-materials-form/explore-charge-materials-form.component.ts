@@ -37,7 +37,8 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
-      if (!changes.exploreModIndex.isFirstChange()) {;
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.showMaterial = false;
         this.initData();
       }
     }

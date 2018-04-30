@@ -39,6 +39,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showLeakage = false;
         this.initData();
       }
     }
@@ -53,13 +54,16 @@ export class ExploreLeakageFormComponent implements OnInit {
     let index: number = 0;
     this.phast.losses.leakageLosses.forEach(loss => {
       let check: boolean = this.initOpening(loss.openingArea, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea);
-      if (!this.showOpening && check) {
+      if (!this.showLeakage && check) {
         this.showLeakage = check;
       }
       this.showOpening.push(check);
       this.openingAreaError1.push(null);
       this.openingAreaError2.push(null);
       check = this.initOpening(loss.draftPressure, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure);
+      if (!this.showLeakage && check) {
+        this.showLeakage = check;
+      }
       this.showPressure.push(check);
       this.draftPressureError1.push(null);
       this.draftPressureError2.push(null);
