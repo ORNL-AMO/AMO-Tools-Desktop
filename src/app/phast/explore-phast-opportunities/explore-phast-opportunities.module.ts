@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExplorePhastOpportunitiesFormComponent } from './explore-phast-opportunities-form/explore-phast-opportunities-form.component';
-import { ExplorePhastOpportunitiesHelpComponent } from './explore-phast-opportunities-help/explore-phast-opportunities-help.component';
 import { ExplorePhastOpportunitiesResultsComponent } from './explore-phast-opportunities-results/explore-phast-opportunities-results.component';
 import { ExplorePhastOpportunitiesComponent } from './explore-phast-opportunities.component';
 import { ExploreChargeMaterialsFormComponent } from './explore-phast-opportunities-form/explore-charge-materials-form/explore-charge-materials-form.component';
@@ -31,7 +30,6 @@ import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-fo
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,
-    ExplorePhastOpportunitiesHelpComponent,
     ExplorePhastOpportunitiesResultsComponent,
     ExplorePhastOpportunitiesComponent,
     ExploreChargeMaterialsFormComponent,

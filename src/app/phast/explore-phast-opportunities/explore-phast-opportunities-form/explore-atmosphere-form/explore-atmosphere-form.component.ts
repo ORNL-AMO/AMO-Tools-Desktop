@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { LossTab } from '../../../tabs';
 @Component({
   selector: 'app-explore-atmosphere-form',
   templateUrl: './explore-atmosphere-form.component.html',
@@ -18,6 +19,8 @@ export class ExploreAtmosphereFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   showAtmosphere: boolean = false;
   showFlowRate: Array<boolean>;
@@ -59,7 +62,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
       this.flowRateError1.push(null);
       this.flowRateError2.push(null);
 
-      check = (loss.inletTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature || 
+      check = (loss.inletTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature ||
         loss.outletTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature)
       if (!this.showAtmosphere && check) {
         this.showAtmosphere = check;
@@ -133,13 +136,10 @@ export class ExploreAtmosphereFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
-    //   this.changeTab.emit( {
-    //     tabName: 'Charge Material',
-    //     step: 1,
-    //     next: 2,
-    //     componentStr: 'charge-material',
-    //     showAdd: true  
-    // });
+    this.changeTab.emit({
+      tabName: 'Atmosphere',
+      componentStr: 'atmosphere-losses',
+    });
   }
 
   focusOut() {
