@@ -417,4 +417,38 @@ export class PhastComponent implements OnInit {
     this.exploreOppsToast = bool;
     this.cd.detectChanges();
   }
+
+  addNewMod() {
+    let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
+    let tmpModification: Modification = {
+      phast: {
+        losses: {},
+        name: modName,
+      },
+      notes: {
+        chargeNotes: '',
+        wallNotes: '',
+        atmosphereNotes: '',
+        fixtureNotes: '',
+        openingNotes: '',
+        coolingNotes: '',
+        flueGasNotes: '',
+        otherNotes: '',
+        leakageNotes: '',
+        extendedNotes: '',
+        slagNotes: '',
+        auxiliaryPowerNotes: '',
+        exhaustGasNotes: '',
+        energyInputExhaustGasNotes: '',
+        operationsNotes: ''
+      }
+    }
+    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
+    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
+    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this._phast.operatingHours)));
+    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this._phast.systemEfficiency)));
+    tmpModification.exploreOpportunities = true;
+    this.saveNewMod(tmpModification);
+  }
+
 }

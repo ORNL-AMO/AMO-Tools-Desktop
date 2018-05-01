@@ -1,7 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="exploreOpening">
-    <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('numberOfOpenings')" (change)="toggleOpening()" [(ngModel)]="showOpening"
-    /> Minimize Opening Size
+    <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('numberOfOpenings')" (change)="toggleOpening()"
+      [(ngModel)]="showOpening" /> Minimize Opening Size or install tunnel-like extensions
   </label>
 </div>
 <div *ngIf="showOpening">
@@ -155,17 +155,20 @@
       </div>
       <form *ngIf="showViewFactor[index]">
         <div class="form-group">
-          <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">Baseline View Factor<br>
+          <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">Baseline View Factor
+            <br>
             <span>
               <a id="{{'viewFactor1_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(loss)">Calculate View Factor</a>
             </span>
           </label>
-          <input name="{{'viewFactor1_'+lossIndex}}" disabled="true" type="number" step="0.1" min="0" max="1" class="form-control" [(ngModel)]="loss.viewFactor"
-            id="viewFactor1" onfocus="this.select();" (input)="checkViewFactor(1, loss.viewFactor)" (focus)="focusField('viewFactor')">
+          <input name="{{'viewFactor1_'+lossIndex}}" disabled="true" type="number" step="0.1" min="0" max="1" class="form-control"
+            [(ngModel)]="loss.viewFactor" id="viewFactor1" onfocus="this.select();" (input)="checkViewFactor(1, loss.viewFactor)"
+            (focus)="focusField('viewFactor')">
           <span class="alert-warning pull-right small" *ngIf="viewFactorError1[index] !== null">{{viewFactorError1[index]}}</span>
         </div>
         <div class="form-group">
-          <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">Modification View Factor<br>
+          <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">Modification View Factor
+            <br>
             <span>
               <a id="{{'viewFactor2_'+lossIndex}}" class="click-link small" (click)="calculateViewFactor(phast.modifications[exploreModIndex].phast.losses.openingLosses[index])">Calculate View Factor</a>
             </span>
@@ -180,50 +183,84 @@
     </li>
   </ul>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
-
-  <div class="form-group">
-    <label class="small" for="avgSurfaceTemp">Baseline</label>
-    <div class="input-group">
-      <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
-        id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp(1, loss.surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
-        (blur)="focusOut()">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
-    </div>
-    <span class="alert-warning pull-right small" *ngIf="surfaceTempError1[index] !== null">{{surfaceTempError1[index]}}</span>
-  </div>
-  <div class="form-group">
-    <label class="small" for="avgSurfaceTemp">Modification Surface Temperature</label>
-    <div class="input-group">
-      <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature"
-        id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp(2, phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature, index)"
-        (focus)="focusField('avgSurfaceTemp')" (blur)="focusOut()">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
-    </div>
-    <span class="alert-warning pull-right small" *ngIf="surfaceTempError2[index] !== null">{{surfaceTempError2[index]}}</span>
-  </div>
-  </form>
-  </li>
+<!--emissivity-->
+<div class="checkbox">
+  <label class="group-label" for="exploreEmissivity">
+    <input type="checkbox" id="exploreEmissivity" value="true" (focus)="focusField('emissivity')" (change)="toggleAllEmissivity()" [(ngModel)]="showAllEmissivity"
+    /> Install curtains or radiation shields to reduce opening losses
+  </label>
+</div>
+<div *ngIf="showAllEmissivity">
+  <ul *ngFor="let loss of phast.losses.openingLosses; let index = index">
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifyEmissivity_'+index}}">
+          <input type="checkbox" id="{{'modifyEmissivity_'+index}}" (focus)="focusField('emissivity')" (change)="toggleEmissivity(index, loss)"
+            [(ngModel)]="showEmissivity[index]" /> Modify Emissivity
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showEmissivity[index]">
+        <div class="form-group">
+          <label class="small" for="emissivity">Baseline Emissivity
+          </label>
+          <input name="{{'emissivity_'+lossIndex}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.emissivity"
+            id="emissivity" onfocus="this.select();" (input)="checkSurfaceEmissivity(1, loss, index)" (focus)="focusField('emissivity')"
+            (blur)="focusOut()">
+          <span class="alert-warning pull-right small" *ngIf="emissivityError1[index] !== null">{{emissivityError1[index]}}</span>
+        </div>
+        <div class="form-group">
+          <label class="small">Modification Emissivity
+          </label>
+          <input name="{{'emissivity2_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].emissivity"
+            id="emissivity2" onfocus="this.select();" (input)="checkSurfaceEmissivity(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
+            (focus)="focusField('emissivity')" (blur)="focusOut()">
+          <span class="alert-warning pull-right small" *ngIf="emissivityError2[index] !== null">{{emissivityError2[index]}}</span>
+        </div>
+      </form>
+    </li>
   </ul>
-</div> -->
+</div>
+
+<!--time open-->
+<div class="checkbox">
+    <label class="group-label" for="exploreTimeOpen">
+      <input type="checkbox" id="exploreTimeOpen" value="true" (focus)="focusField('percentTimeOpen')" (change)="toggleAllTimeOpen()" [(ngModel)]="showAllTimeOpen"
+      /> Minimize the Time Furnace Doors are Open
+    </label>
+  </div>
+  <div *ngIf="showAllTimeOpen">
+    <ul *ngFor="let loss of phast.losses.openingLosses; let index = index">
+      <li>
+        <div class="checkbox form-group">
+          <label for="{{'modifyTimeOpen_'+index}}">
+            <input type="checkbox" id="{{'modifyTimeOpen_'+index}}" (focus)="focusField('percentTimeOpen')" (change)="toggleTimeOpen(index, loss)"
+              [(ngModel)]="showTimeOpen[index]" /> Modify % of Time Open
+          </label>
+          <label>
+            {{loss.name}}
+          </label>
+        </div>
+        <form *ngIf="showTimeOpen[index]">
+          <div class="form-group">
+            <label class="small" for="timeOpen">Baseline Time Open
+            </label>
+            <input name="{{'timeOpen_'+lossIndex}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.percentTimeOpen"
+              id="timeOpen" onfocus="this.select();" (input)="checkTimeOpen(1, loss, index)" (focus)="focusField('percentTimeOpen')"
+              (blur)="focusOut()">
+            <span class="alert-warning pull-right small" *ngIf="timeOpenError1[index] !== null">{{timeOpenError1[index]}}</span>
+          </div>
+          <div class="form-group">
+            <label class="small">Modification Time Open
+            </label>
+            <input name="{{'timeOpen2_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen"
+              id="timeOpen2" onfocus="this.select();" (input)="checkTimeOpen(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
+              (focus)="focusField('percentTimeOpen')" (blur)="focusOut()">
+            <span class="alert-warning pull-right small" *ngIf="timeOpenError2[index] !== null">{{timeOpenError2[index]}}</span>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
