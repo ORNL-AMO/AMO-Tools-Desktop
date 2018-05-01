@@ -6,28 +6,27 @@
         <h2>Steam Calculators</h2>
         <div class="row calc-item-row">
           <div class="col-1">
-            <!--<img src="assets/images/head-tool.png" class="ico-size">-->
+            <img src="assets/images/steam-properties.png" class="ico-size">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('steam-properties')">Steam Properties</a>
             <p>
-              Steam Properties placeholder
+              Calculates the properties of steam under various conditions.
             </p>
           </div>
         </div>
 
         <div class="row calc-item-row">
           <div class="col-1">
-            <!--<img src="assets/images/head-tool.png" class="ico-size">-->
+            <img src="assets/images/saturated-properties.png" class="ico-size">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('saturated-properties')">Saturated Properties</a>
             <p>
-              Saturated Properties placeholder
+              Calculates the properties of saturated steam under various conditions.
             </p>
           </div>
         </div>
-
 
       </div>
     </div>
@@ -42,19 +41,3 @@
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'saturated-properties'">
   <app-saturated-properties></app-saturated-properties>
 </div>
-
-<!--<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">-->
-  <!--<app-system-curve></app-system-curve>-->
-<!--</div>-->
-
-<!--<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'specific-speed'">-->
-  <!--<app-specific-speed></app-specific-speed>-->
-<!--</div>-->
-
-<!--<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'achievable-efficiency'">-->
-  <!--<app-achievable-efficiency></app-achievable-efficiency>-->
-<!--</div>-->
-
-<!--<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">-->
-  <!--<app-pump-curve></app-pump-curve>-->
-<!--</div>-->
