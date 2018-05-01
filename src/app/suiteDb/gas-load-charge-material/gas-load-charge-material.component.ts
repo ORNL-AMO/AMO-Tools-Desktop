@@ -35,6 +35,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
+  idbEditMaterialId: number;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -43,20 +44,22 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
 
     if (this.editExistingMaterial) {
-      console.log("we are editing");
+      //  console.log("we are editing");
       this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
       this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
+        //id used by IDb
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
         this.editMaterial();
         this.setExisting();
-        console.log('allMaterials.length = ' + this.allMaterials.length);
-        console.log('allCustomMaterials.length = ' + this.allCustomMaterials.length);
-        for (let i = 0; i < this.allCustomMaterials.length; i++) {
-          console.log('allCustomMaterials[' + i + '].name,id = ' + this.allCustomMaterials[i].substance + ', ' + this.allCustomMaterials[i].id);
-        }
-        for (let i = 0; i < this.allMaterials.length; i++) {
-          console.log('allMaterials[' + i + '].name,id = ' + this.allMaterials[i].substance + ', ' + this.allMaterials[i].id);
-        }
+        // console.log('allMaterials.length = ' + this.allMaterials.length);
+        // console.log('allCustomMaterials.length = ' + this.allCustomMaterials.length);
+        // for (let i = 0; i < this.allCustomMaterials.length; i++) {
+        //   console.log('allCustomMaterials[' + i + '].name,id = ' + this.allCustomMaterials[i].substance + ', ' + this.allCustomMaterials[i].id);
+        // }
+        // for (let i = 0; i < this.allMaterials.length; i++) {
+        //   console.log('allMaterials[' + i + '].name,id = ' + this.allMaterials[i].substance + ', ' + this.allMaterials[i].id);
+        // }
       });
     }
     else {
@@ -91,23 +94,17 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   updateMaterial() {
-    console.log('updateMaterial()');
-    // this.closeModal.emit(this.newMaterial);
-    console.log('new name = ' + this.newMaterial.substance);
-    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
-    this.newMaterial.id = this.allMaterials[tmp].id;
-
     if (this.settings.unitsOfMeasure == 'Metric') {
-      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+      this.existingMaterial.specificHeatVapor = this.convertUnitsService.value(this.existingMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
-    let suiteDbResult = this.suiteDbService.updateGasLoadChargeMaterial(this.newMaterial);
-    console.log('made it through suiteDbResult');
+    let suiteDbResult = this.suiteDbService.updateGasLoadChargeMaterial(this.existingMaterial);
     if (suiteDbResult == true) {
-      console.log('suiteDbResult == true');
-      // this.indexedDbService.updateGasLoadChargeMaterial(this.newMaterial).then(idbResults => {
-      //   console.log('made it through indexedDbService call');
-      this.closeModal.emit(this.newMaterial);
-      // })
+      //need to set id for idb to put updates
+      this.existingMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putGasLoadChargeMaterial(this.newMaterial).then(val => {
+        console.log('updated');
+        this.closeModal.emit(this.newMaterial);
+      })
     }
     else {
       console.log('suiteDbResult == false');
@@ -149,12 +146,10 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   checkEditMaterialName() {
-    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.allMaterials[tmp].id) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
-      }
     });
+
 
     if (test.length > 0) {
       this.nameError = 'This name is in use by another material';

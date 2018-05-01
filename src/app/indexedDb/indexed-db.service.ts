@@ -544,22 +544,57 @@ export class IndexedDbService {
     });
   }
 
-  updateGasLoadChargeMaterial(_material: GasLoadChargeMaterial): Promise<any> {
+  putGasLoadChargeMaterial(material: GasLoadChargeMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
-      let updateRequest = store.update(_material);
-      myDb.setDefaultErrorHandler(updateRequest, myDb);
-      updateRequest.onsuccess = (e) => {
-        console.log('updateRequest SUCCESS');
-        resolve(e.target.result);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: GasLoadChargeMaterial =  event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
       }
-      updateRequest.onerror = (e) => {
-        console.log('updateRequest REJECTED');
-        reject(e.target.result);
+      getRequest.onerror = (event) => {
+        reject(event);
       }
     })
   }
+
+  deleteGasLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+  // updateGasLoadChargeMaterial(_material: GasLoadChargeMaterial): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+  //     let updateRequest = store.update(_material);
+  //     myDb.setDefaultErrorHandler(updateRequest, myDb);
+  //     updateRequest.onsuccess = (e) => {
+  //       console.log('updateRequest SUCCESS');
+  //       resolve(e.target.result);
+  //     }
+  //     updateRequest.onerror = (e) => {
+  //       console.log('updateRequest REJECTED');
+  //       reject(e.target.result);
+  //     }
+  //   })
+  // }
 
   getGasLoadChargeMaterial(id: number): Promise<GasLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
