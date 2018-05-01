@@ -11,3 +11,7 @@
     cursor: pointer;
     color: darkslategray;
 }
+
+.sidebar-item:hover{
+    background-color: #eee;
+}

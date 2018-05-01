@@ -171,6 +171,13 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.phast .explore-ops-form .group-label{
+    border-bottom: #BF3D00 groove 1px;
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 1px;
+}
+
 .compressed-air .group-label{
     border-bottom: #17A589 groove 2px;
 }

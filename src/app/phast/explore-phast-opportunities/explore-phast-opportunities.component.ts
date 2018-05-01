@@ -29,7 +29,8 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   exploreOppsToast = new EventEmitter<boolean>();
   @Output('save')
   save = new EventEmitter<boolean>();
-
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
   tabSelect: string = 'results';
   currentField: string = 'default';
   toggleCalculate: boolean = false;
@@ -119,7 +120,10 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
   addModification() {
-    console.log('click');
     this.lossesService.openNewModal.next(true);
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExplorePhastOpportunitiesFormComponent } from './explore-phast-opportunities-form/explore-phast-opportunities-form.component';
-import { ExplorePhastOpportunitiesHelpComponent } from './explore-phast-opportunities-help/explore-phast-opportunities-help.component';
 import { ExplorePhastOpportunitiesResultsComponent } from './explore-phast-opportunities-results/explore-phast-opportunities-results.component';
 import { ExplorePhastOpportunitiesComponent } from './explore-phast-opportunities.component';
 import { ExploreChargeMaterialsFormComponent } from './explore-phast-opportunities-form/explore-charge-materials-form/explore-charge-materials-form.component';
@@ -16,6 +15,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { ToastyModule } from 'ng2-toasty';
+import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
+import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
+import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,6 @@ import { ToastyModule } from 'ng2-toasty';
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,
-    ExplorePhastOpportunitiesHelpComponent,
     ExplorePhastOpportunitiesResultsComponent,
     ExplorePhastOpportunitiesComponent,
     ExploreChargeMaterialsFormComponent,
@@ -38,7 +39,10 @@ import { ToastyModule } from 'ng2-toasty';
     ExploreOpeningFormComponent,
     ExploreOperationsFormComponent,
     ExploreFlueGasFormComponent,
-    ExploreSystemEfficiencyFormComponent
+    ExploreSystemEfficiencyFormComponent,
+    ExploreSlagFormComponent,
+    ExploreCoolingFormComponent,
+    ExploreAtmosphereFormComponent
   ],
   exports: [
     ExplorePhastOpportunitiesComponent
