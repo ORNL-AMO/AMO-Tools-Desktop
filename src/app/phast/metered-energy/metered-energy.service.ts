@@ -24,7 +24,7 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
 
     meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
-    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
+    meteredEnergyIntensity = this.convertIntensity(meteredEnergyIntensity, settings);
     //Calculated by PHAST
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -52,6 +52,16 @@ export class MeteredEnergyService {
     return tmpResults;
   }
 
+  convertIntensity(num: number, settings: Settings): number {
+    if (settings.energyResultUnit == 'MMBtu') {
+      num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      num = this.convertUnitsService.value(num).from('GJ').to('kJ');
+    }
+    return num;
+  }
+
+
   calcElectricityUsed(input: MeteredEnergyElectricity): number {
     return (input.electricityUsed / input.electricityCollectionTime) || 0;
   }
@@ -70,7 +80,7 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
 
     meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
-    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
+    meteredEnergyIntensity = this.convertIntensity(meteredEnergyIntensity, settings);
 
     //Calculated By PHAST
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
