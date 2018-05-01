@@ -23,10 +23,6 @@
       <div class="w-50 bold">
         Gross Heat
       </div>
-      <div class="text-center w-50 bold">
-        {{grossHeat | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
-      </div>
       <div *ngIf="grossHeat" class="text-center w-50 bold">
         {{grossHeat | sigFigs:'6'}}
         <span>{{resultsUnit}}</span>

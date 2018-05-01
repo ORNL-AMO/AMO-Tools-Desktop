@@ -9,7 +9,7 @@
         system.
       </p>
       <app-explore-phast-opportunities-form *ngIf="modExists" [phast]="phast" (emitCalculate)="getResults()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
+        [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)" (changeTab)="changeTab($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities-form>
     </div>
     <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
       <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"

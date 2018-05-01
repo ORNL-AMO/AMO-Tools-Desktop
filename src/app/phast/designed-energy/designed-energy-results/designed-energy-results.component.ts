@@ -47,12 +47,16 @@ export class DesignedEnergyResultsComponent implements OnInit {
 
   setEnergyIntensity() {
     if (this.settings.energyResultUnit == 'MMBtu') {
-      this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
-      this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('MMBtu').to('Btu');
+     // this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+      //this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('MMBtu').to('Btu');
+      this.designedEnergyIntensity = this.results.designedEnergyIntensity;
       this.resultUnits.energyPerMassUnit = 'Btu/lb';
     } else if (this.settings.energyResultUnit == 'GJ') {
-      this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
-      this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('GJ').to('kJ');
+      //this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+      //this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('GJ').to('kJ');
+      this.designedEnergyIntensity = this.results.designedEnergyIntensity;
       this.resultUnits.energyPerMassUnit = 'kJ/kg';
     }else{
       this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;

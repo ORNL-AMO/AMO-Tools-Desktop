@@ -1,9 +1,10 @@
 
-
-
-<span
-	[ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
-	<img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram.png">
-	<img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram.png">
-	{{assessment.name}}
-</span>
+<div class="d-flex" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
+	<span class="p-0 d-flex align-items-center">
+		<img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram.png">
+		<img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram.png">
+	</span>
+	<span class="p-1">
+		<a class="click-link">{{assessment.name}}</a>
+	</span>
+</div>

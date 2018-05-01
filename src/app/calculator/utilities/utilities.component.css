@@ -12,3 +12,7 @@ a:not([href]):not([tabindex]):hover {
 a:not([href]):not([tabindex]){
   color: blue;
 }
+
+.content-container{
+  padding: 1rem;
+}

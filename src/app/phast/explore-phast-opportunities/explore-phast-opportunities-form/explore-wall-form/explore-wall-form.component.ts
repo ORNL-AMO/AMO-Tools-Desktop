@@ -31,9 +31,10 @@ export class ExploreWallFormComponent implements OnInit {
   ngOnInit() {
     this.initData();
   }
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.exploreModIndex){
-      if(!changes.exploreModIndex.isFirstChange()){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.showWall = false;
         this.initData();
       }
     }
@@ -79,7 +80,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleSurfaceTemp(index: number, baselineArea: number) {
-    if(this.showSurfaceTemp[index] == false){
+    if (this.showSurfaceTemp[index] == false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineArea;
       this.calculate();
     }
@@ -97,14 +98,14 @@ export class ExploreWallFormComponent implements OnInit {
   checkSurfaceTemp(num: number, surfaceTemp: number, index: number) {
     if (num === 1) {
       if (surfaceTemp < this.phast.losses.wallLosses[index].ambientTemperature) {
-        this.surfaceTempError1[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.losses.wallLosses[index].ambientTemperature +')';
+        this.surfaceTempError1[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.losses.wallLosses[index].ambientTemperature + ')';
       } else {
         this.surfaceTempError1[index] = null;
         this.calculate();
       }
     } else if (num === 2) {
       if (surfaceTemp < this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature) {
-        this.surfaceTempError2[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature +')';
+        this.surfaceTempError2[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature + ')';
       } else {
         this.surfaceTempError2[index] = null;
         this.calculate();
@@ -116,7 +117,7 @@ export class ExploreWallFormComponent implements OnInit {
 
   }
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(true)
   }
 

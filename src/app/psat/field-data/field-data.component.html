@@ -76,40 +76,25 @@
           (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
+    </div>
 
-      <div class="form-group" *ngIf="baseline">
-        <label for="measuredVoltage">Measured Voltage</label>
-        <div class="input-group">
-          <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
-            (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
-          <span class="units">V</span>
-        </div>
-        <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+    <div class="form-group" *ngIf="baseline">
+      <label for="measuredVoltage">Measured Voltage</label>
+      <div class="input-group">
+        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
+          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
+        <span class="units">V</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
     </div>
   </div>
   <div class="setup-form-group" *ngIf="!baseline">
-    <!-- <div *ngIf="!baseline" class="form-group">
-      <label class="form-check-label" style="width: 100%; padding-top: 5px;">
-        <input name="optimizeCalculation" id="optimizeCalculation" class="form-control form-check-input" type="checkbox" formControlName="optimizeCalculation"
-          value="true" (change)="focusField('optimizeCalculation')">Optimize Pump and Motor combination, automatically</label>
-    </div> -->
     <div class="form-group opt-group">
       <label>
         <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
         <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination automatically</label>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="viscosity">Kinematic Viscosity</label>-->
-    <!--<div name="viscosity" class="incrementor form-control input-group">-->
-    <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractViscosity()"><i class="fa fa-minus"></i></button>-->
-    <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addViscosity()"><i class="fa fa-plus"></i></button>-->
-    <!--<input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.controls.viscosity}}"-->
-    <!--(input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">-->
-    <!--<span class="input-group-addon units">cST</span>-->
-    <!--</div>-->
-    <!--</div>-->
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">

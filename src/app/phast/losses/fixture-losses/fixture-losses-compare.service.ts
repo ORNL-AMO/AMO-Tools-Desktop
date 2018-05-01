@@ -83,7 +83,8 @@ export class FixtureLossesCompareService {
       this.compare(baseline.feedRate, modification.feedRate) ||
       this.compare(baseline.initialTemperature, modification.initialTemperature) ||
       this.compare(baseline.finalTemperature, modification.finalTemperature) ||
-      this.compare(baseline.materialName, modification.correctionFactor)
+      this.compare(baseline.correctionFactor, modification.correctionFactor) || 
+      this.compare(baseline.materialName, modification.materialName) 
     )
   }
 
