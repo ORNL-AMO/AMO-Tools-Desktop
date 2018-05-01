@@ -31,7 +31,7 @@ export class AssessmentGridViewComponent implements OnInit {
     }
   }
 
-  viewPreAssessment() {
-    this.emitPreAssessment.emit(true);
+  viewPreAssessment(exists: boolean) {
+    this.emitPreAssessment.emit(exists);
   }
 }

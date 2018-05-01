@@ -143,6 +143,7 @@ export class AssessmentMenuComponent implements OnInit {
 
 
   showPreAssessment() {
-    this.emitPreAssessment.emit(true);
+    this.emitPreAssessment.emit();
   }
+
 }
