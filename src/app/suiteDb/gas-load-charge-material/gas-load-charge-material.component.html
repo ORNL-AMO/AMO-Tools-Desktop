@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body custom-card-body card-container col">
     <div class="row">
-      <div class="col-sm-6 col-md-6 card-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
@@ -29,14 +29,16 @@
             <div class="form-group" *ngIf="!editExistingMaterial">
               <label class="small" for="materialName">Material Name</label>
               <div class="input-group">
-                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"/>
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                />
               </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group" *ngIf="editExistingMaterial">
               <label class="small" for="materialName">Material Name</label>
               <div class="input-group">
-                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"/>
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
+                />
               </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
@@ -54,8 +56,22 @@
           </div>
         </form>
       </div>
+      <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+        <div class="row phast align-items-top">
+          <div class="col-12">
+            <div class="header card-header">
+              <h3>Confirm Delete</h3>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          Are you sure you want to
+          <strong>permenantly delete</strong> this material?
+          <br>This cannot be undone.
+        </div>
+      </div>
 
-      <div class="col-sm-6 col-md-6 card-help-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
           <app-gas-load-charge-material-help [currentField]="currentField"></app-gas-load-charge-material-help>
         </div>
@@ -64,8 +80,9 @@
 
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button *ngIf="!editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
-      <button *ngIf="editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidMaterialName">Submit Edit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidMaterialName">Submit Edit</button>
+      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
 
   </div>

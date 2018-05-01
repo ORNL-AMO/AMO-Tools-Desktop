@@ -52,22 +52,9 @@ export class SuiteDbService {
     return db.selectGasLoadChargeMaterialById(id)
   }
 
-
-  //testing update function
-  updateGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
-    console.log('updateGasLoadChargeMaterial()');
-    console.log('material.substance = ' + material.substance);
-    console.log('material.id = ' + material.id);
-    return db.updateGasLoadChargeMaterial(material);
-  }
-
-
-
   selectLiquidLoadChargeMaterials() {
     return db.selectLiquidLoadChargeMaterials()
   }
-
-
 
   selectLiquidLoadChargeMaterialById(id: number) {
     return db.selectLiquidLoadChargeMaterialById(id)
@@ -88,6 +75,7 @@ export class SuiteDbService {
   selectAtmosphereSpecificHeat() {
     return db.selectAtmosphereSpecificHeat();
   }
+
   selectAtmosphereSpecificHeatById(id: number) {
     return db.selectAtmosphereSpecificHeatById(id);
   }
@@ -119,6 +107,66 @@ export class SuiteDbService {
   insertWallLossesSurface(material: WallLossesSurface) {
     return db.insertWallLossesSurface(material);
   }
+
+
+  //update functions
+  updateGasFlueGasMaterial(material: FlueGasMaterial) {
+    return db.updateGasFlueGasMaterial(material);
+  }
+
+  updateSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
+    return db.updateSolidLiquidFlueGasMaterial(material);
+  }
+
+  updateGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
+    return db.updateGasLoadChargeMaterial(material);
+  }
+
+  updateLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) {
+    return db.updateLiquidLoadChargeMaterial(material);
+  }
+
+  updateSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) {
+    return db.updateSolidLoadChargeMaterial(material);
+  }
+
+  updateAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) {
+    return db.updateAtmosphereSpecificHeat(material);
+  }
+
+  updateWallLossesSurface(material: WallLossesSurface) {
+    return db.updateWallLossesSurface(material);
+  }
+
+  //delete functions
+  deleteGasFlueGasMaterial(id: number) {
+    return db.deleteGasFlueGasMaterial(id);
+  }
+
+  deleteSolidLiquidFlueGasMaterial(id: number) {
+    return db.deleteSolidLiquidFlueGasMaterial(id);
+  }
+
+  deleteGasLoadChargeMaterial(id: number) {
+    return db.deleteGasLoadChargeMaterial(id);
+  }
+
+  deleteLiquidLoadChargeMaterial(id: number) {
+    return db.deleteLiquidLoadChargeMaterial(id);
+  }
+
+  deleteSolidLoadChargeMaterial(id: number) {
+    return db.deleteSolidLoadChargeMaterial(id);
+  }
+
+  deleteAtmosphereSpecificHeat(id: number) {
+    return db.deleteAtmosphereSpecificHeat(id);
+  }
+
+  deleteWallLossesSurface(id: number) {
+    return db.deleteWallLossesSurface(id);
+  }
+
 
   selectWallLossesSurface() {
     return db.selectWallLossesSurface();

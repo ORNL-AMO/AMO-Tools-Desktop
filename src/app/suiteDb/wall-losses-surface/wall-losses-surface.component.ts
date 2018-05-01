@@ -35,6 +35,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   currentField: string = 'selectedMaterial';
+  idbEditMaterialId: number;
+  sdbEditMaterialId: number;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -46,6 +48,8 @@ export class WallLossesSurfaceComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectWallLossesSurface();
       this.indexedDbService.getWallLossesSurface().then(idbResults => {
         this.allCustomMaterials = idbResults;
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface == material.surface }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface == material.surface }).id;
         this.setExisting();
       });
     }
@@ -69,8 +73,15 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   updateMaterial() {
-    console.log('updateMaterial()');
-    this.closeModal.emit(this.newMaterial);
+    this.newMaterial.id = this.sdbEditMaterialId;
+    let suiteDbResult = this.suiteDbService.updateWallLossesSurface(this.newMaterial);
+    if (suiteDbResult == true) {
+      //need to set id for idb to put updates
+      this.newMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putWallLossesSurface(this.newMaterial).then(val => {
+        this.closeModal.emit(this.newMaterial);
+      });
+    }
   }
 
   setExisting() {
@@ -91,9 +102,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   checkEditMaterialName() {
-    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.allMaterials[tmp].id) {
+      if (material.id != this.sdbEditMaterialId) {
         return material.surface.toLowerCase().trim() == this.newMaterial.surface.toLowerCase().trim();
       }
     });

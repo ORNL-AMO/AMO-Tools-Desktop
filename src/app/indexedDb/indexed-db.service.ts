@@ -550,7 +550,7 @@ export class IndexedDbService {
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
       let getRequest = store.get(material.id);
       getRequest.onsuccess = (event) => {
-        let tmpMaterial: GasLoadChargeMaterial =  event.target.result;
+        let tmpMaterial: GasLoadChargeMaterial = event.target.result;
         tmpMaterial = material;
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
@@ -563,7 +563,7 @@ export class IndexedDbService {
       getRequest.onerror = (event) => {
         reject(event);
       }
-    })
+    });
   }
 
   deleteGasLoadChargeMaterial(id: number): Promise<any> {
@@ -579,22 +579,7 @@ export class IndexedDbService {
       }
     })
   }
-  // updateGasLoadChargeMaterial(_material: GasLoadChargeMaterial): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
-  //     let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
-  //     let updateRequest = store.update(_material);
-  //     myDb.setDefaultErrorHandler(updateRequest, myDb);
-  //     updateRequest.onsuccess = (e) => {
-  //       console.log('updateRequest SUCCESS');
-  //       resolve(e.target.result);
-  //     }
-  //     updateRequest.onerror = (e) => {
-  //       console.log('updateRequest REJECTED');
-  //       reject(e.target.result);
-  //     }
-  //   })
-  // }
+
 
   getGasLoadChargeMaterial(id: number): Promise<GasLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
@@ -641,6 +626,42 @@ export class IndexedDbService {
     });
   }
 
+  putLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: LiquidLoadChargeMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  deleteLiquidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
   getLiquidLoadChargeMaterial(id: number): Promise<LiquidLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
@@ -683,6 +704,28 @@ export class IndexedDbService {
       }
       addRequest.onerror = (e) => {
         reject(e.target.result)
+      }
+    });
+  }
+
+  putSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: SolidLoadChargeMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
       }
     });
   }
@@ -733,6 +776,28 @@ export class IndexedDbService {
     });
   }
 
+  putAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: AtmosphereSpecificHeat = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
   getAtmosphereSpecificHeatById(id: number): Promise<AtmosphereSpecificHeat> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
@@ -775,6 +840,28 @@ export class IndexedDbService {
       }
       addRequest.onerror = (e) => {
         reject(e.target.result)
+      }
+    });
+  }
+
+  putWallLossesSurface(material: WallLossesSurface): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: WallLossesSurface = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
       }
     });
   }
@@ -824,7 +911,32 @@ export class IndexedDbService {
       }
     });
   }
+  
+  putFlueGasMaterial(material: FlueGasMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: FlueGasMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
 
+  // deleteFlueGasMaterial(id: number) :Promise<any> {
+
+  // }
 
   getFlueGasMaterialById(id: number): Promise<FlueGasMaterial> {
     return new Promise((resolve, reject) => {
@@ -867,6 +979,28 @@ export class IndexedDbService {
       }
       addRequest.onerror = (e) => {
         reject(e.target.result)
+      }
+    });
+  }
+
+  putSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: SolidLiquidFlueGasMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
       }
     });
   }

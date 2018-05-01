@@ -18,6 +18,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
 
   editExistingMaterial: boolean = false;
   existingMaterial: GasLoadChargeMaterial;
+  deletingMaterial: boolean = false;
   gasChargeMaterials: Array<GasLoadChargeMaterial>;
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -51,6 +52,15 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     });
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getGasLoadChargeMaterial(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
   showMaterialModal() {
     this.showModal = true;
     this.materialModal.show();
@@ -60,6 +70,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = true;
     this.getCustomMaterials();
   }
 }

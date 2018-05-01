@@ -40,15 +40,21 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
+  idbEditMaterialId: number;
+  sdbEditMaterialId: number;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.getByDirectoryId(1);
+    }
+
     if (this.editExistingMaterial) {
       this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
       this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
-        this.editMaterial();
-        this.setExisting();
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id; this.setExisting();
       });
     }
     else {
@@ -56,25 +62,12 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
       this.checkMaterialName();
     }
-    //this.selectedMaterial = this.allMaterials[0];
-    if (!this.settings) {
-      this.settings = this.settingsDbService.getByDirectoryId(1);
-    }
-  }
-
-  editMaterial() {
-    if (this.existingMaterial !== null && this.existingMaterial !== undefined) {
-      console.log('editMaterial() in modal');
-      console.log('existingMaterial.id = ' + this.existingMaterial.id);
-      console.log('existingMaterial.substance = ' + this.existingMaterial.substance);
-    }
   }
 
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
-
         this.newMaterial.vaporizationTemperature = this.convertUnitsService.value(this.newMaterial.vaporizationTemperature).from('C').to('F');
         this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
@@ -90,8 +83,21 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   }
 
   updateMaterial() {
-    console.log('updateMaterial()');
-    this.closeModal.emit(this.newMaterial);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.vaporizationTemperature = this.convertUnitsService.value(this.newMaterial.vaporizationTemperature).from('C').to('F');
+      this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkgC').to('btulbF');
+      this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
+      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+    }
+    this.newMaterial.id = this.sdbEditMaterialId;
+    let suiteDbResult = this.suiteDbService.updateLiquidLoadChargeMaterial(this.newMaterial);
+    if (suiteDbResult == true) {
+      //need to set id for idb to put updates
+      this.newMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putLiquidLoadChargeMaterial(this.newMaterial).then(val => {
+        this.closeModal.emit(this.newMaterial);
+      });
+    }
   }
 
   setExisting() {
@@ -116,7 +122,6 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
           vaporizationTemperature: this.existingMaterial.vaporizationTemperature
         }
       }
-      this.checkEditMaterialName();
     }
     else if (this.selectedMaterial) {
       if (this.settings.unitsOfMeasure == 'Metric') {
@@ -142,9 +147,8 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   }
 
   checkEditMaterialName() {
-    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.allMaterials[tmp].id) {
+      if (material.id != this.sdbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });

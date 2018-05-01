@@ -34,6 +34,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   currentField: string = "selectedMaterial";
+  idbEditMaterialId: number;
+  sdbEditMaterialId: number;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -45,7 +47,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
       this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
         this.allCustomMaterials = idbResults;
-        this.editMaterial();
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
         this.setExisting();
       });
     }
@@ -53,14 +56,6 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.canAdd = true;
       this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
       this.checkMaterialName();
-    }
-  }
-
-  editMaterial() {
-    if (this.existingMaterial !== null && this.existingMaterial !== undefined) {
-      console.log('editMaterial() in modal');
-      console.log('existingMaterial.id = ' + this.existingMaterial.id);
-      console.log('existingMaterial.substance = ' + this.existingMaterial.substance);
     }
   }
 
@@ -80,8 +75,18 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   }
 
   updateMaterial() {
-    console.log('updateMaterial()');
-    this.closeModal.emit(this.newMaterial);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
+    }
+    this.newMaterial.id = this.sdbEditMaterialId;
+    let suiteDbResult = this.suiteDbService.updateAtmosphereSpecificHeat(this.newMaterial);
+    if (suiteDbResult == true) {
+      //need to set id for idb to put updates
+      this.newMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putAtmosphereSpecificHeat(this.newMaterial).then(val => {
+        this.closeModal.emit(this.newMaterial);
+      });
+    }
   }
 
   setExisting() {
@@ -121,9 +126,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
 
   checkEditMaterialName() {
-    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.allMaterials[tmp].id) {
+      if (material.id != this.sdbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });
