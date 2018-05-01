@@ -56,6 +56,7 @@ export class PhastReportComponent implements OnInit {
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    console.log('init');
     this.initPrintLogic();
     this.createdDate = new Date();
     if (this.settings) {
@@ -116,7 +117,7 @@ export class PhastReportComponent implements OnInit {
 
 
   getSettings(): void {
-    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
     if (tmpSettings) {
       if (!tmpSettings.energyResultUnit) {
         tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);

@@ -122,6 +122,7 @@ export class FixtureLossesComponent implements OnInit {
     } else {
       loss.heatLoss = null;
     }
+    this.total = this.getTotal();
   }
 
   collapseLoss(loss: FixtureLossObj) {
@@ -142,7 +143,6 @@ export class FixtureLossesComponent implements OnInit {
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
     });
-    this.total = this.getTotal();
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.savedLoss.emit(true);
   }

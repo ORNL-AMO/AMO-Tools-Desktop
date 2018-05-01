@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
 import { LossTab } from '../../tabs';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-losses-result-panel',
@@ -35,11 +35,11 @@ export class LossesResultPanelComponent implements OnInit {
 
   tabSelect: string = 'results';
   helpHeight: number;
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

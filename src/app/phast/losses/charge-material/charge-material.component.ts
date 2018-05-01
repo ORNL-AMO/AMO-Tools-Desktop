@@ -198,6 +198,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.heatRequired = null;
       }
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -238,7 +239,6 @@ export class ChargeMaterialComponent implements OnInit {
       }
       tmpChargeMaterials.push(tmpMaterial);
     });
-    this.total = this.getTotal();
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.savedLoss.emit(true);
   }

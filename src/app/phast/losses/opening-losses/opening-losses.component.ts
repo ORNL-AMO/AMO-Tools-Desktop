@@ -137,6 +137,7 @@ export class OpeningLossesComponent implements OnInit {
     } else {
       loss.totalOpeningLosses = null;
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -153,7 +154,6 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
     })
-    this.total = this.getTotal();
     this.losses.openingLosses = tmpOpeningLosses;
     this.savedLoss.emit(true);
   }

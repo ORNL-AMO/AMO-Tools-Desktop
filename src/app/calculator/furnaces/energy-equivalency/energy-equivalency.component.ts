@@ -3,7 +3,7 @@ import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElec
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -39,11 +39,11 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   currentField: string = 'default';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       this.initDefaultValues(this.settings);
       this.calculateElectric();
       this.calculateFuel();
@@ -52,8 +52,8 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.calculateElectric();
       this.calculateFuel();
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

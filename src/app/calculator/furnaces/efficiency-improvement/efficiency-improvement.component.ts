@@ -3,7 +3,7 @@ import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../..
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -35,12 +35,12 @@ export class EfficiencyImprovementComponent implements OnInit {
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
 
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
 
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       this.initDefaultValues(this.settings);
       this.calculate();
     } else {

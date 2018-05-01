@@ -83,7 +83,7 @@ export class FolderSummaryComponent implements OnInit {
           }
         } else if (assessment.type == 'PHAST') {
           if (assessment.phast.setupDone) {
-            let settings: Settings = this.settingsDbService.getByAssessmentId(assessment.id);
+            let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
             let result = this.executiveSummaryService.getSummary(assessment.phast, false, settings, assessment.phast);
             this.phastEnergyUsed = this.phastEnergyUsed + this.convertUnitsService.value(result.annualEnergyUsed).from(settings.energyResultUnit).to(this.directorySettings.energyResultUnit);
             this.phastEnergyCost = this.phastEnergyCost + result.annualCost;

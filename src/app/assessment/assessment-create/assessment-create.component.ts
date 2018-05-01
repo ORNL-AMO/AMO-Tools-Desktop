@@ -8,8 +8,8 @@ import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../settings/settings.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -40,12 +40,12 @@ export class AssessmentCreateComponent implements OnInit {
     private modelService: ModelService,
     private router: Router,
     private indexedDbService: IndexedDbService,
-    private settingsService: SettingsService,
+    private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
     }
 
 

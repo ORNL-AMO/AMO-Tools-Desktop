@@ -108,7 +108,7 @@ export class PsatReportComponent implements OnInit {
 
   getSettings() {
     //check for assessment settings
-    this.settings = this.settingsDbService.getByAssessmentId(this.assessment.id);
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
     if (this.settings) {
       if (!this.settings.temperatureMeasurement) {
         this.settings = this.settingsService.setTemperatureUnit(this.settings);

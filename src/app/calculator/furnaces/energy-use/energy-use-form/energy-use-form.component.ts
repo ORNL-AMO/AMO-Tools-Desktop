@@ -94,7 +94,7 @@ export class EnergyUseFormComponent implements OnInit {
 
   setHHVandSG() {
     if (this.flowCalculations.gasType == 0) {
-      this.flowCalculations.gasHeatingValue = 22031;
+      this.flowCalculations.gasHeatingValue = 1032.44;
       this.flowCalculations.specificGravity = 0.657;
     } else if (this.flowCalculations.gasType == 1) {
       this.flowCalculations.gasHeatingValue = 0;
