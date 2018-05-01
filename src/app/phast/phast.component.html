@@ -1,0 +1,152 @@
+<div #content *ngIf="assessment && settings" class="phast-container phast">
+  <!--header content, sticks to top on scroll-->
+  <div #header class="hide-print sticky-top">
+    <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
+    <!-- phast-tabs = step tabs -->
+    <app-phast-tabs [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
+    <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
+    <!-- <nav *ngIf="mainTab == 'assessment'">
+      <ul class="tabs subtabs phast">
+        <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+          <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+            <br>
+            <span class="help-text psat-view">Novice View</span>
+          </a>
+        </li><li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+          <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+            <br>
+            <span class="help-text psat-view">Expert View</span>
+          </a>
+        </li>
+      </ul>
+    </nav> -->
+    <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
+    <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
+      <app-losses-tabs [phast]="_phast" [settings]="settings"></app-losses-tabs>
+    </nav>
+    <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>
+  </div>
+
+  <!--Furnace Setup -->
+  <div *ngIf="mainTab == 'system-setup'" class="system-setup tab-content">
+    <div *ngIf="stepTab.step == 1" class="row panel-container">
+      <div class="col-6 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'modal-open': isModalOpen}">
+        <!--Step: 1 System Basics (Settings)-->
+        <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"
+          (updateSettings)="getSettings()" (save)="saveDb()"></app-system-basics>
+        <!--Step: 2 Operating Hours-->
+        <app-operating-hours *ngIf="specTab.step == 2" [phast]="_phast" (save)="saveDb()"></app-operating-hours>
+        <!--Step: 3 Operating Costs-->
+        <app-energy-costs *ngIf="specTab.step == 3" [phast]="_phast" (save)="saveDb()" [settings]="settings"></app-energy-costs>
+      </div>
+      <div class="col-6">
+        <app-help-panel [settingsTab]="specTab"></app-help-panel>
+      </div>
+    </div>
+    <!--Step: 4 Heat Balance-->
+    <app-losses *ngIf="stepTab.step  == 2" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true" [containerHeight]="containerHeight"></app-losses>
+    <!--Step: 5 Aux Equipment-->
+    <app-aux-equipment *ngIf="stepTab.step  == 3" [(phast)]="_phast" (save)="saveDb()" [containerHeight]="containerHeight"></app-aux-equipment>
+    <!--Step: 6 Designed Energy-->
+    <app-designed-energy *ngIf="stepTab.step  == 4" [(phast)]="_phast" [settings]="settings" (save)="saveDb()" [containerHeight]="containerHeight"></app-designed-energy>
+    <!--Step: 7 Metered Energy -->
+    <app-metered-energy *ngIf="stepTab.step  == 5" [(phast)]="_phast" [settings]="settings" (save)="saveDb()" [containerHeight]="containerHeight"></app-metered-energy>
+  </div>
+
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <div *ngIf="assessmentTab == 'explore-opportunities'">
+      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
+        (save)="saveDb()" [exploreModIndex]="modificationIndex" (exploreOppsToast)="setExploreOppsToast($event)"></app-explore-phast-opportunities>
+    </div>
+    <div *ngIf="assessmentTab == 'modify-conditions'">
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"
+        [modificationIndex]="modificationIndex"></app-losses>
+    </div>
+  </div>
+  <!--Report-->
+  <div *ngIf="mainTab == 'report'" class="row justify-content-center">
+    <div class="col-11">
+      <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-phast-report>
+    </div>
+  </div>
+  <!--Sankey-->
+  <div *ngIf="mainTab == 'sankey'" class="row">
+    <div class="col-10 mx-auto">
+      <div class="form-group">
+        <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
+          <option [ngValue]="_phast">Baseline</option>
+          <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="sankeyPhast" class="col-12">
+      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+    </div>
+  </div>
+
+  <!--Diagram-->
+  <div *ngIf="mainTab =='diagram'" class="tab-content">
+    <app-phast-diagram></app-phast-diagram>
+  </div>
+
+  <!--Calculators-->
+  <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'" [settings]="settings"></app-efficiency-improvement>
+    <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [settings]="settings"></app-energy-equivalency>
+    <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
+    <app-o2-enrichment *ngIf="calcTab == 'o2-enrichment'" [settings]="settings"></app-o2-enrichment>
+    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight"></app-pre-assessment>
+  </div>
+  <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+    <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
+      <button class="btn btn-secondary" (click)="lastStep()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next && selectedLossTab.next)"
+        (click)="nextStep()">Next</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && (!stepTab.next || !selectedLossTab.next)" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
+    </div>
+  </div>
+</div>
+<!--disclaimer toast-->
+<ng2-toasty class="disclaimer" [ngClass]="{'explore-opps':exploreOppsToast}"></ng2-toasty>
+
+
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">
+  <div class="modal-dialog modal-lg list-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Scenario</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [phast]="_phast" (save)="saveDb()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" *ngIf="_phast">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Scenario</h3>
+        <button class="close" (click)="closeAddNewModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-modification [phast]="_phast" [modifications]="_phast.modifications" (save)="saveNewMod($event)"></app-add-modification>
+      </div>
+    </div>
+  </div>
+</div>
