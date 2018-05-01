@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
 
-        <div class="col-2 sidebar-bg" [ngClass]="{'modal-open': isModalOpen}">
+        <div class="col-2 sidebar-bg p-0" [ngClass]="{'modal-open': isModalOpen}">
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
                 (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
