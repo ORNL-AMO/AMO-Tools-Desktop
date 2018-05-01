@@ -902,6 +902,7 @@ Sidebar
   margin: 0;
 }
 .sidebar-group li {
+  padding-left: .25rem;
   list-style: none;
   margin: 0;
   line-height: 1;
@@ -914,10 +915,10 @@ Sidebar
   padding-bottom: 1.5px;
 }
 
-.sidebar-group li span:hover{
+/* .sidebar-group li span:hover{
   background-color: #eee;
   cursor: pointer;
-}
+} */
 .sidebar-group li span.disabled {
   font-size: 15px;
   color: #a0a0a0;
@@ -941,25 +942,18 @@ Sidebar
   font-weight: bold;
 }
 
-.sidebar-group li.sub-directory .sub-directory {
+/* .sidebar-group li.sub-directory .sub-directory {
   margin-left: 20px;
-}
+} */
 .sidebar-group li.sub-directory > span {
   padding: 0;
 }
-  .sidebar-group .assessments .psat,
-  .sidebar-group .assessments .phast {
-    /* background-repeat: no-repeat;
-    background-size: 16px;
-    background-position: left 4px;
-    margin-left: 18px; */
-  }
-  .sidebar-group .assessments .psat .sidebar-icon  {
+  /* .sidebar-group .assessments .psat .sidebar-icon  {
     background-image: url('../assets/images/ico-psat-diagram-small.png');
   }
   .sidebar-group .assessments .phast .sidebar-icon {
     background-image: url('../assets/images/ico-phast-diagram-small.png');
-  }
+  } */
 
 
 
@@ -973,9 +967,10 @@ Content Container
   border-radius: 4px;
   margin-top: 40px;
   margin-bottom: 40px;
-  -webkit-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
+  /* -webkit-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
   -moz-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
-  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07); */
+  box-shadow: 0px 0px 10px 5px gray;
 }
 
   .content-container h2 {

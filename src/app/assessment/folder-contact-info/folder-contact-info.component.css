@@ -104,3 +104,9 @@ td, a{
 .no-border-top{
   border-top: none;
 }
+
+
+
+.modal-dialog{
+  top: 1rem;
+}
