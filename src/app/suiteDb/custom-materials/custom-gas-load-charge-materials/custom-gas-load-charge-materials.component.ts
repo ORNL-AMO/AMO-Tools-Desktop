@@ -28,6 +28,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
 
   getCustomMaterials() {
+    console.log('getCustomMaterials');
     this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();
     this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
       this.gasChargeMaterials = idbResults;

@@ -52,9 +52,22 @@ export class SuiteDbService {
     return db.selectGasLoadChargeMaterialById(id)
   }
 
+
+  //testing update function
+  updateGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
+    console.log('updateGasLoadChargeMaterial()');
+    console.log('material.substance = ' + material.substance);
+    console.log('material.id = ' + material.id);
+    return db.updateGasLoadChargeMaterial(material);
+  }
+
+
+
   selectLiquidLoadChargeMaterials() {
     return db.selectLiquidLoadChargeMaterials()
   }
+
+
 
   selectLiquidLoadChargeMaterialById(id: number) {
     return db.selectLiquidLoadChargeMaterialById(id)

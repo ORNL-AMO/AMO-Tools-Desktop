@@ -92,7 +92,26 @@ export class GasLoadChargeMaterialComponent implements OnInit {
 
   updateMaterial() {
     console.log('updateMaterial()');
-    this.closeModal.emit(this.newMaterial);
+    // this.closeModal.emit(this.newMaterial);
+    console.log('new name = ' + this.newMaterial.substance);
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    this.newMaterial.id = this.allMaterials[tmp].id;
+
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+    }
+    let suiteDbResult = this.suiteDbService.updateGasLoadChargeMaterial(this.newMaterial);
+    console.log('made it through suiteDbResult');
+    if (suiteDbResult == true) {
+      console.log('suiteDbResult == true');
+      // this.indexedDbService.updateGasLoadChargeMaterial(this.newMaterial).then(idbResults => {
+      //   console.log('made it through indexedDbService call');
+      this.closeModal.emit(this.newMaterial);
+      // })
+    }
+    else {
+      console.log('suiteDbResult == false');
+    }
   }
 
   setExisting() {
