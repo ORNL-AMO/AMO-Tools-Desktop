@@ -18,6 +18,10 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   closeModal = new EventEmitter<LiquidLoadChargeMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: LiquidLoadChargeMaterial;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -32,18 +36,37 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   currentField: string = 'selectedMaterial';
   selectedMaterial: LiquidLoadChargeMaterial;
   allMaterials: Array<LiquidLoadChargeMaterial>;
+  allCustomMaterials: Array<LiquidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
-    this.checkMaterialName();
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.editMaterial();
+        this.setExisting();
+      });
+    }
+    else {
+      this.canAdd = true;
+      this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.checkMaterialName();
+    }
     //this.selectedMaterial = this.allMaterials[0];
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
+    }
+  }
+
+  editMaterial() {
+    if (this.existingMaterial !== null && this.existingMaterial !== undefined) {
+      console.log('editMaterial() in modal');
+      console.log('existingMaterial.id = ' + this.existingMaterial.id);
+      console.log('existingMaterial.substance = ' + this.existingMaterial.substance);
     }
   }
 
@@ -66,10 +89,36 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
-
+  updateMaterial() {
+    console.log('updateMaterial()');
+    this.closeModal.emit(this.newMaterial);
+  }
 
   setExisting() {
-    if (this.selectedMaterial) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          latentHeat: this.convertUnitsService.value(this.existingMaterial.latentHeat).from('btulbF').to('kJkgC'),
+          specificHeatLiquid: this.convertUnitsService.value(this.existingMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
+          specificHeatVapor: this.convertUnitsService.value(this.existingMaterial.specificHeatVapor).from('btulbF').to('kJkgC'),
+          vaporizationTemperature: this.convertUnitsService.value(this.existingMaterial.vaporizationTemperature).from('F').to('C')
+        }
+      }
+      else {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          latentHeat: this.existingMaterial.latentHeat,
+          specificHeatLiquid: this.existingMaterial.specificHeatLiquid,
+          specificHeatVapor: this.existingMaterial.specificHeatVapor,
+          vaporizationTemperature: this.existingMaterial.vaporizationTemperature
+        }
+      }
+      this.checkEditMaterialName();
+    }
+    else if (this.selectedMaterial) {
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
@@ -92,13 +141,39 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  checkEditMaterialName() {
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.allMaterials[tmp].id) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isValidMaterialName = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
+      this.isValidMaterialName = true;
+      this.nameError = null;
+    }
+  }
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;
-    } else {
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
       this.isValidMaterialName = true;
       this.nameError = null;
     }

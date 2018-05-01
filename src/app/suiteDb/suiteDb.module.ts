@@ -23,12 +23,16 @@ import { CustomGasLoadChargeMaterialsComponent } from './custom-materials/custom
 import { CustomLiquidLoadChargeMaterialsComponent } from './custom-materials/custom-liquid-load-charge-materials/custom-liquid-load-charge-materials.component';
 import { CustomSolidLoadChargeMaterialsComponent } from './custom-materials/custom-solid-load-charge-materials/custom-solid-load-charge-materials.component';
 import { CustomSolidLiquidFlueGasMaterialsComponent } from './custom-materials/custom-solid-liquid-flue-gas-materials/custom-solid-liquid-flue-gas-materials.component';
+import { CustomAtmosphereSpecificHeatMaterialsComponent } from './custom-materials/custom-atmosphere-specific-heat-materials/custom-atmosphere-specific-heat-materials.component';
+import { CustomWallLossesSurfacesComponent } from './custom-materials/custom-wall-losses-sufaces/custom-wall-losses-surfaces.component';
+import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
     imports: [
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        SharedModule
+        SharedModule,
+        ModalModule
     ],
     providers: [
         SuiteDbService
@@ -54,6 +58,8 @@ import { CustomSolidLiquidFlueGasMaterialsComponent } from './custom-materials/c
         CustomLiquidLoadChargeMaterialsComponent,
         CustomSolidLoadChargeMaterialsComponent,
         CustomSolidLiquidFlueGasMaterialsComponent,
+        CustomAtmosphereSpecificHeatMaterialsComponent,
+        CustomWallLossesSurfacesComponent,
     ],
     exports: [
         GasLoadChargeMaterialComponent,

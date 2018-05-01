@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SuiteDbService } from '../../suite-db.service';
@@ -13,9 +13,12 @@ import { GasLoadChargeMaterial } from '../../../shared/models/materials';
 export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  showModal: boolean;
 
+  editExistingMaterial: boolean = false;
+  existingMaterial: GasLoadChargeMaterial;
   gasChargeMaterials: Array<GasLoadChargeMaterial>;
-
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
@@ -29,5 +32,33 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
       this.gasChargeMaterials = idbResults;
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.showModal.firstChange) {
+      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+        this.showMaterialModal();
+      }
+    }
+  }
+
+  editMaterial(id: number) {
+    this.indexedDbService.getGasLoadChargeMaterial(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    this.materialModal.hide();
+    this.showModal = false;
+    this.editExistingMaterial = false;
+    this.getCustomMaterials();
   }
 }

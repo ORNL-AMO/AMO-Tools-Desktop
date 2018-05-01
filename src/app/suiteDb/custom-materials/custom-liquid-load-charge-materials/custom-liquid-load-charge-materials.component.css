@@ -98,3 +98,16 @@ a:not([href]):not([tabindex]):hover {
       color: #999;
     }
   
+
+
+
+    
+  .btn-delete-material {
+    font-size: 13px;
+    color: #dc3545;
+  }
+
+  .btn-delete-material:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }

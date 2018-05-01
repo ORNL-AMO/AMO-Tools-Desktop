@@ -1,81 +1,34 @@
-<!-- <div class="row">
-  <div class="col-10  mx-auto">
+<div class="row">
+  <div class="col-10 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        
-        <div class="form-section">
-          <label class="group-label general">Custom Materials</label>
-          <p class="help-text">Access, create, and customize materials for use throughout the suite.</p>
-        
-          <app-custom-gas-load-charge-materials [settings]="settings"></app-custom-gas-load-charge-materials>
-          
-        </div>
-
-        <div class="form-section">
-          <app-custom-flue-gas-materials [settings]="settings"></app-custom-flue-gas-materials>
-        </div>
-
-      </div>
-      <div class="form-section">
-        <label class="group-label general">Custom Materials</label>
-        <p class="help-text">Access, create, and customize materials for use throughout the suite.</p>
-      
-        <app-custom-gas-load-charge-materials [settings]="settings"></app-custom-gas-load-charge-materials>
-        
-      </div>
-
-      <div class="form-section">
-        <app-custom-flue-gas-materials [settings]="settings"></app-custom-flue-gas-materials>
+        <label class="group-label general">Custom Flue Gas Materials</label>
+        <a class="click-link pull-right small" (click)="toggleModal('flue')">Add Flue Gas Material</a>
+        <p class="help-text">View, create, edit your custom flue gas materials.</p>
       </div>
     </div>
-
-
-    <div class="form-section">
-      <label class="group-label general">Custom Materials</label>
-      <p class="help-text">Access, create, and customize materials for use throughout the suite.</p>
-    
-      <app-custom-gas-load-charge-materials [settings]="settings"></app-custom-gas-load-charge-materials>
-      
-    </div>
-
-    <div class="form-section">
-      <app-custom-flue-gas-materials [settings]="settings"></app-custom-flue-gas-materials>
-    </div>
-
-
+    <app-custom-flue-gas-materials [settings]="settings" [showModal]="showFlueModal"></app-custom-flue-gas-materials>
   </div>
-</div> -->
-
-
-<!-- <div class="row">
-  <div class="col-10  mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <div class="form-section">
-          <label class="group-label general">Custom Materials</label>
-          <p class="help-text">Access, create, and customize materials for use throughout the suite.</p>
-        </div>
-      </div>
-    </div>
+</div>
+<div class="row">
+  <div class="col-10 mx-auto">
+    <div class="section-divider"></div>
   </div>
-</div> -->
+</div>
+
 
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <!-- <div class="form-section"> -->
-        <label class="group-label general">Custom Flue Gas Materials</label>
-        <a class="click-link pull-right small">Add Flue Gas Material</a>
-        <p class="help-text">View, create, edit your custom flue gas materials.</p>
-        <!-- </div> -->
-
+        <label class="group-label general">Custom Solid/Liquid Flue Gas Materials</label>
+        <a class="click-link pull-right small" (click)="toggleModal('solid-liquid-flue')">Add Solid/Liquid Flue Gas Material</a>
+        <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p>
       </div>
     </div>
-    <app-custom-flue-gas-materials [settings]="settings"></app-custom-flue-gas-materials>
+    <app-custom-solid-liquid-flue-gas-materials [settings]="settings" [showModal]="showSolidLiquidFlueModal"></app-custom-solid-liquid-flue-gas-materials>
   </div>
 </div>
-
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="section-divider"></div>
@@ -88,14 +41,13 @@
     <div class="tab-content content-container">
       <div class="card-form">
         <label class="group-label general">Custom Gas Load Charge Materials</label>
-        <a class="click-link pull-right small">Add Gas Load Charge Material</a>
+        <a class="click-link pull-right small" (click)="toggleModal('gas-load')">Add Gas Load Charge Material</a>
         <p class="help-text">View, create, edit your custom gas load charge materials.</p>
       </div>
     </div>
-    <app-custom-gas-load-charge-materials [settings]="settings"></app-custom-gas-load-charge-materials>
+    <app-custom-gas-load-charge-materials [settings]="settings" [showModal]="showGasLoadChargeModal"></app-custom-gas-load-charge-materials>
   </div>
 </div>
-
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="section-divider"></div>
@@ -103,20 +55,18 @@
 </div>
 
 
-
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
         <label class="group-label general">Custom Liquid Load Charge Materials</label>
-        <a class="click-link pull-right small">Add Liquid Load Charge Material</a>
+        <a class="click-link pull-right small" (click)="toggleModal('liquid-load')">Add Liquid Load Charge Material</a>
         <p class="help-text">View, create, edit your custom liquid load charge materials.</p>
       </div>
     </div>
-    <app-custom-liquid-load-charge-materials [settings]="settings"></app-custom-liquid-load-charge-materials>
+    <app-custom-liquid-load-charge-materials [settings]="settings" [showModal]="showLiquidLoadChargeModal"></app-custom-liquid-load-charge-materials>
   </div>
 </div>
-
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="section-divider"></div>
@@ -129,14 +79,51 @@
     <div class="tab-content content-container">
       <div class="card-form">
         <label class="group-label general">Custom Solid Load Charge Materials</label>
-        <a class="click-link pull-right small">Add Solid Load Charge Material</a>
+        <a class="click-link pull-right small" (click)="toggleModal('solid-load')">Add Solid Load Charge Material</a>
         <p class="help-text">View, create, edit your custom solid load charge materials.</p>
       </div>
     </div>
-    <app-custom-solid-load-charge-materials [settings]="settings"></app-custom-solid-load-charge-materials>
+    <app-custom-solid-load-charge-materials [settings]="settings" [showModal]="showSolidLoadChargeModal"></app-custom-solid-load-charge-materials>
+  </div>
+</div>
+<div class="row">
+  <div class="col-10 mx-auto">
+    <div class="section-divider"></div>
   </div>
 </div>
 
+
+<div class="row">
+  <div class="col-10 mx-auto">
+    <div class="tab-content content-container">
+      <div class="card-form">
+        <label class="group-label general">Custom Atmosphere Specific Heat Materials</label>
+        <a class="click-link pull-right small" (click)="toggleModal('atmosphere-material')">Add Atmosphere Specific Heat Material</a>
+        <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p>
+      </div>
+    </div>
+    <app-custom-atmosphere-specific-heat-materials [settings]="settings" [showModal]="showAtmosphereModal"></app-custom-atmosphere-specific-heat-materials>
+  </div>
+</div>
+<div class="row">
+  <div class="col-10 mx-auto">
+    <div class="section-divider"></div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-10 mx-auto">
+    <div class="tab-content content-container">
+      <div class="card-form">
+        <label class="group-label general">Custom Wall Losses Surfaces</label>
+        <a class="click-link pull-right small" (click)="toggleModal('wall-surface')">Add Wall Losses Surfaces</a>
+        <p class="help-text">View, create, edit your custom wall losses surfaces.</p>
+      </div>
+    </div>
+    <app-custom-wall-losses-surfaces [settings]="settings" [showModal]="showWallSurfaceModal"></app-custom-wall-losses-surfaces>
+  </div>
+</div>
 <div class="row">
   <div class="col-10 mx-auto">
     <div class="section-divider"></div>

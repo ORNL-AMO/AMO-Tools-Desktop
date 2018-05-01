@@ -1,22 +1,13 @@
 
 
 <div class="row">
-
-  <!-- <div *ngIf="foundFlueGasMaterials"> -->
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let flueGasMaterial of flueGasMaterials; let i = index">
     <div class="card card-item">
-      <!-- <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}"> -->
       <div class="card-header summary-card-header phast">
         {{flueGasMaterial.substance}}
-        <i class="fa fa-edit pull-right"></i>
-        <!-- <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"> -->
-        <!-- <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> -->
-        <!-- <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png"> -->
-        <!-- <a (click)="goToAssessment(assessment)">{{assessment.name}}</a> -->
-        <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+        <i (click)="editMaterial(flueGasMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">
-
 
         <table class="table">
           <tr>
@@ -26,7 +17,7 @@
               <sub>6</sub>:
             </td>
             <td>
-              {{flueGasMaterial.C2H6}}
+              {{flueGasMaterial.C2H6 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -36,7 +27,7 @@
               <sub>8</sub>:
             </td>
             <td>
-              {{flueGasMaterial.C3H8}}
+              {{flueGasMaterial.C3H8 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -47,7 +38,7 @@
               <sub>2</sub>n:
             </td>
             <td>
-              {{flueGasMaterial.C4H10_CnH2n}}
+              {{flueGasMaterial.C4H10_CnH2n | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -56,7 +47,7 @@
               <sub>4</sub>:
             </td>
             <td>
-              {{flueGasMaterial.CH4}}
+              {{flueGasMaterial.CH4 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -64,7 +55,7 @@
               CO:
             </td>
             <td>
-              {{flueGasMaterial.CO}}
+              {{flueGasMaterial.CO | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -73,7 +64,7 @@
               <sub>2</sub>:
             </td>
             <td>
-              {{flueGasMaterial.CO2}}
+              {{flueGasMaterial.CO2 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -82,7 +73,7 @@
               <sub>2</sub>:
             </td>
             <td>
-              {{flueGasMaterial.H2}}
+              {{flueGasMaterial.H2 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -91,7 +82,7 @@
               <sub>2</sub>O:
             </td>
             <td>
-              {{flueGasMaterial.H2O}}
+              {{flueGasMaterial.H2O | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -100,7 +91,7 @@
               <sub>2</sub>:
             </td>
             <td>
-              {{flueGasMaterial.N2}}
+              {{flueGasMaterial.N2 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -109,7 +100,7 @@
               <sub>2</sub>:
             </td>
             <td>
-              {{flueGasMaterial.O2}}
+              {{flueGasMaterial.O2 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -118,7 +109,7 @@
               <sub>2</sub>:
             </td>
             <td>
-              {{flueGasMaterial.SO2}}
+              {{flueGasMaterial.SO2 | sigFigs: '3'}} %
             </td>
           </tr>
           <tr>
@@ -153,25 +144,22 @@
 
       </div>
       <div class="card-footer summary-card-footer">
-        <div class="last-updated pull-right">Last updated</div>
+        <div class="last-updated pull-right btn-delete-material">Delete Material</div>
       </div>
     </div>
   </div>
-
-
-
 </div>
 
 
 <!--CREATE material MODAL-->
-<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
         <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings"></app-flue-gas-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-flue-gas-material>
       </div>
     </div>
   </div>
-</div> -->
+</div>

@@ -5,12 +5,13 @@
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3>Create Fuel</h3>
+              <h3 *ngIf="!editExistingMaterial">Create Fuel</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Fuel</h3>
             </div>
           </div>
         </div>
         <form>
-          <div class="form-section">
+          <div class="form-section" *ngIf="!editExistingMaterial">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
@@ -19,11 +20,18 @@
               </select>
             </div>
           </div>
+
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="substance">Substance Name</label>
-              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-                (focus)="focusField('substance')" />
+              <div class="input-group" *ngIf="!editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
+              <div class="input-group" *ngIf="editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group">
@@ -111,7 +119,8 @@
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="!editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
     </div>
   </div>
 </div>

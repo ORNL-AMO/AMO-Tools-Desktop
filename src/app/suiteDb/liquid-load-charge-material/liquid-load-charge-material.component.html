@@ -5,17 +5,18 @@
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3>Create Liquid Material</h3>
+              <h3 *ngIf="!editExistingMaterial">Create Liquid Material</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Liquid Material</h3>
             </div>
           </div>
         </div>
 
         <form>
-          <div class="form-section">
+          <div class="form-section" *ngIf="!editExistingMaterial">
             <div class="form-group">
               <label>Start with existing material</label>
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
-                      (focus)="focusField('selectedMaterial')">
+                (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
                 <option value="null"></option>
               </select>
@@ -23,19 +24,24 @@
           </div>
           <div class="form-section">
             <label>
-              <h6>New Material:</h6>
+              <h6 *ngIf="!editExistingMaterial">New Material:</h6>
+              <h6 *ngIf="editExistingMaterial">Edit Material:</h6>
             </label>
             <div class="form-group">
               <label for="materialName">Material Name</label>
-              <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-              />
+              <div class="input-group" *ngIf="!editExistingMaterial">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"/>
+              </div>
+              <div class="input-group" *ngIf="editExistingMaterial">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"/>
+              </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group">
               <label for="specificHeatLiquid">Specific Heat Liquid</label>
               <div class="input-group">
                 <input type="number" id="specificHeatLiquid" name="specificHeatLiquid" class="form-control" [(ngModel)]="newMaterial.specificHeatLiquid"
-                       (focus)="focusField('specificHeatLiquid')"/>
+                  (focus)="focusField('specificHeatLiquid')" />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
               </div>
@@ -44,7 +50,7 @@
               <label for="vaporizationTemperature">Vaporizing Temperature</label>
               <div class="input-group">
                 <input type="number" id="vaporizationTemperature" name="vaporizationTemperature" class="form-control" [(ngModel)]="newMaterial.vaporizationTemperature"
-                (focus)="focusField('vaporizationTemperature')"/>
+                  (focus)="focusField('vaporizationTemperature')" />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
               </div>
@@ -53,8 +59,8 @@
               <label for="latentHeat">Latent Heat of Vaporization</label>
               <div class="input-group">
 
-                <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat"
-                (focus)="focusField('latentHeat')"/>
+                <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat" (focus)="focusField('latentHeat')"
+                />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
 
@@ -64,7 +70,7 @@
               <label for="specificHeatVapor">Specific Heat Vapor</label>
               <div class="input-group">
                 <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="form-control" [(ngModel)]="newMaterial.specificHeatVapor"
-                (focus)="focusField('specificHeatVapor')"/>
+                  (focus)="focusField('specificHeatVapor')" />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
               </div>
@@ -81,7 +87,8 @@
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="!editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidMaterialName">Submit</button>
     </div>
   </div>
 </div>

@@ -18,6 +18,10 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   closeModal = new EventEmitter<SolidLoadChargeMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: SolidLoadChargeMaterial;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -31,6 +35,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   changeField: string = 'selectedMaterial';
   selectedMaterial: SolidLoadChargeMaterial;
   allMaterials: Array<SolidLoadChargeMaterial>;
+  allCustomMaterials: Array<SolidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
@@ -38,12 +43,20 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
-    this.checkMaterialName();
-    // this.selectedMaterial = this.allMaterials[0];
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
+    }
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.setExisting();
+      });
+    }
+    else {
+      this.canAdd = true;
+      this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      this.checkMaterialName();
     }
   }
 
@@ -65,9 +78,36 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  updateMaterial() {
+    console.log('updateMaterial()');
+    this.closeModal.emit(this.newMaterial);
+  }
+
 
   setExisting() {
-    if (this.selectedMaterial) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      if (this.settings.unitsOfMeasure == "Metric") {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          latentHeat: this.convertUnitsService.value(this.existingMaterial.latentHeat).from('btuLb').to('kJkg'),
+          meltingPoint: this.convertUnitsService.value(this.existingMaterial.meltingPoint).from('F').to('C'),
+          specificHeatLiquid: this.convertUnitsService.value(this.existingMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
+          specificHeatSolid: this.convertUnitsService.value(this.existingMaterial.specificHeatSolid).from('btulbF').to('kJkgC'),
+        }
+      }
+      else {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          latentHeat: this.existingMaterial.latentHeat,
+          meltingPoint: this.existingMaterial.meltingPoint,
+          specificHeatLiquid: this.existingMaterial.specificHeatLiquid,
+          specificHeatSolid: this.existingMaterial.specificHeatSolid,
+        }
+      }
+    }
+    else if (this.selectedMaterial) {
       if (this.settings.unitsOfMeasure == "Metric") {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
@@ -92,6 +132,27 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  checkEditMaterialName() {
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.allMaterials[tmp].id) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isValidMaterialName = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
+      this.isValidMaterialName = true;
+      this.nameError = null;
+    }
+  }
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })

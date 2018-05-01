@@ -1,17 +1,9 @@
 <div class="row">
-
-  <!-- <div *ngIf="foundFlueGasMaterials"> -->
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let gasChargeMaterial of gasChargeMaterials; let i = index">
     <div class="card card-item">
-      <!-- <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}"> -->
       <div class="card-header summary-card-header phast">
         {{gasChargeMaterial.substance}}
-        <i class="fa fa-edit pull-right"></i>
-        <!-- <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"> -->
-        <!-- <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> -->
-        <!-- <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png"> -->
-        <!-- <a (click)="goToAssessment(assessment)">{{assessment.name}}</a> -->
-        <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+        <i (click)="editMaterial(gasChargeMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">
 
@@ -30,7 +22,7 @@
 
       </div>
       <div class="card-footer summary-card-footer">
-        <div class="last-updated pull-right">Last updated</div>
+        <div class="pull-right btn-delete-material">Delete Material</div>
       </div>
     </div>
   </div>
@@ -38,14 +30,14 @@
 
 
 <!--CREATE material MODAL-->
-<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings"></app-flue-gas-material>
+        <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-gas-load-charge-material>
       </div>
     </div>
   </div>
-</div> -->
+</div>

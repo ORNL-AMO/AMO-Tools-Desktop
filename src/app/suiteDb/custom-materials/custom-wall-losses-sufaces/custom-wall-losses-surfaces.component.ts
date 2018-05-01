@@ -1,27 +1,26 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { SuiteDbService } from '../../suite-db.service';
-import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
+import { WallLossesSurface } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SuiteDbService } from '../../suite-db.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
-  selector: 'app-custom-liquid-load-charge-materials',
-  templateUrl: './custom-liquid-load-charge-materials.component.html',
-  styleUrls: ['./custom-liquid-load-charge-materials.component.css']
+  selector: 'app-custom-wall-losses-surfaces',
+  templateUrl: './custom-wall-losses-surfaces.component.html',
+  styleUrls: ['./custom-wall-losses-surfaces.component.css']
 })
-export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
+export class CustomWallLossesSurfacesComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   showModal: boolean;
 
-  liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
-  existingMaterial: LiquidLoadChargeMaterial;
   editExistingMaterial: boolean = false;
+  existingMaterial: WallLossesSurface;
+  wallLossesSurfaces: Array<WallLossesSurface>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-
 
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
 
@@ -30,12 +29,11 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   getCustomMaterials() {
-    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
-      this.liquidChargeMaterials = idbResults;
+    this.wallLossesSurfaces = new Array<WallLossesSurface>();
+    this.indexedDbService.getWallLossesSurface().then(idbResults => {
+      this.wallLossesSurfaces = idbResults;
     });
   }
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.showModal.firstChange) {
@@ -46,14 +44,12 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   editMaterial(id: number) {
-    this.indexedDbService.getLiquidLoadChargeMaterial(id).then(idbResults => {
+    this.indexedDbService.getWallLossesSurfaceById(id).then(idbResults => {
       this.existingMaterial = idbResults;
       this.editExistingMaterial = true;
       this.showMaterialModal();
     });
-
   }
-
 
   showMaterialModal() {
     this.showModal = true;

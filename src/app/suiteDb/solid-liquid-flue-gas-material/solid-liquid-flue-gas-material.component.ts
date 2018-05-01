@@ -16,6 +16,10 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: SolidLiquidFlueGasMaterial;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -32,6 +36,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
+  allCustomMaterials: Array<SolidLiquidFlueGasMaterial>;
   isValid: boolean;
   nameError: string = null;
   canAdd: boolean;
@@ -43,16 +48,21 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    this.checkMaterialName();
-    this.setHHV();
-    // this.selectedMaterial = this.allMaterials[0];
-    // if (!this.settings) {
-    //   this.indexedDbService.getSettings(1).then(results => {
-    //     this.settings = results;
-    //   })
-    // }
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.setExisting();
+        this.setHHV();
+      });
+
+    }
+    else {
+      this.canAdd = true;
+      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.checkMaterialName();
+      this.setHHV();
+    }
   }
 
   addMaterial() {
@@ -67,10 +77,33 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+  updateMaterial() {
+    this.closeModal.emit(this.newMaterial);
+  }
+
+  editExisting() {
+
+  }
 
 
   setExisting() {
-    if (this.selectedMaterial) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      this.newMaterial = {
+        id: this.existingMaterial.id,
+        substance: this.existingMaterial.substance,
+        carbon: this.existingMaterial.carbon,
+        hydrogen: this.existingMaterial.hydrogen,
+        inertAsh: this.existingMaterial.inertAsh,
+        moisture: this.existingMaterial.moisture,
+        nitrogen: this.existingMaterial.nitrogen,
+        o2: this.existingMaterial.o2,
+        sulphur: this.existingMaterial.sulphur,
+        heatingValue: 0
+      }
+      this.setHHV();
+      this.checkEditMaterialName();
+    }
+    else if (this.selectedMaterial) {
       this.newMaterial = {
         substance: this.selectedMaterial.substance + ' (mod)',
         carbon: this.selectedMaterial.carbon,
@@ -111,8 +144,30 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+  checkEditMaterialName() {
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.allMaterials[tmp].id) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isNameValid = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isNameValid = false;
+    }
+    else {
+      this.isNameValid = true;
+      this.nameError = null;
+    }
+  }
+
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;

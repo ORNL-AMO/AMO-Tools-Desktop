@@ -1,27 +1,26 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
+import { ModalDirective } from 'ngx-bootstrap';
+import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SuiteDbService } from '../../suite-db.service';
-import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
-import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
-  selector: 'app-custom-liquid-load-charge-materials',
-  templateUrl: './custom-liquid-load-charge-materials.component.html',
-  styleUrls: ['./custom-liquid-load-charge-materials.component.css']
+  selector: 'app-custom-atmosphere-specific-heat-materials',
+  templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
+  styleUrls: ['./custom-atmosphere-specific-heat-materials.component.css']
 })
-export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
+export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   showModal: boolean;
 
-  liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
-  existingMaterial: LiquidLoadChargeMaterial;
   editExistingMaterial: boolean = false;
+  existingMaterial: AtmosphereSpecificHeat;
+  atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-
 
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
 
@@ -30,12 +29,11 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   getCustomMaterials() {
-    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
-      this.liquidChargeMaterials = idbResults;
+    this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
+    this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
+      this.atmosphereSpecificHeatMaterials = idbResults;
     });
   }
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.showModal.firstChange) {
@@ -46,12 +44,11 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   editMaterial(id: number) {
-    this.indexedDbService.getLiquidLoadChargeMaterial(id).then(idbResults => {
+    this.indexedDbService.getAtmosphereSpecificHeatById(id).then(idbResults => {
       this.existingMaterial = idbResults;
       this.editExistingMaterial = true;
       this.showMaterialModal();
     });
-
   }
 
 

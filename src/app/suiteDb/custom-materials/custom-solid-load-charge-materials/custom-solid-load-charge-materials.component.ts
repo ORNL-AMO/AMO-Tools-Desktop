@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -13,9 +13,12 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  showModal: boolean;
 
   solidChargeMaterials: Array<SolidLoadChargeMaterial>;
-
+  editExistingMaterial: boolean = false;
+  existingMaterial: SolidLoadChargeMaterial;
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
@@ -29,5 +32,33 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
     this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
       this.solidChargeMaterials = idbResults;
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.showModal.firstChange) {
+      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+        this.showMaterialModal();
+      }
+    }
+  }
+
+  editMaterial(id: number) {
+    this.indexedDbService.getSolidLoadChargeMaterial(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    this.materialModal.hide();
+    this.showModal = false;
+    this.editExistingMaterial = false;
+    this.getCustomMaterials();
   }
 }

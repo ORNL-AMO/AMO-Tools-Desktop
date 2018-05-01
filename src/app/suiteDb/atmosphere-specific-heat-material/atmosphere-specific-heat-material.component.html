@@ -5,16 +5,17 @@
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3>Create Gas Material</h3>
+              <h3 *ngIf="!editExistingMaterial">Create Gas Material</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Gas Material</h3>
             </div>
           </div>
         </div>
         <form>
-          <div class="form-section">
+          <div class="form-section" *ngIf="!editExistingMaterial">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing gas</label>
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
-              (focus)="focusField('selectedMaterial')">
+                (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
                 <option [ngValue]="null"></option>
               </select>
@@ -22,19 +23,30 @@
           </div>
           <div class="form-section">
             <label>
-              <h6>New Material:</h6>
+              <h6 *ngIf="!editExistingMaterial">New Material:</h6>
+              <h6 *ngIf="editExistingMaterial">Edit Material:</h6>
             </label>
-            <div class="form-group">
+            <div class="form-group" *ngIf="!editExistingMaterial">
               <label class="small" for="materialName">Material Name</label>
-              <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-              />
+              <div class="input-group">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"/>
+              </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
+            <div class="form-group" *ngIf="editExistingMaterial">
+              <label class="small" for="materialName">Material Name</label>
+              <div class="input-group">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"/>
+              </div>
+              <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
+            </div>
+
+
             <div class="form-group">
               <label class="small" for="specificHeat">Specific Heat</label>
               <div class="input-group">
-                <input type="number" id="specificHeat" name="specificHeat" class="form-control" [(ngModel)]="newMaterial.specificHeat"
-                (focus)="focusField('specificHeat')"/>
+                <input type="number" id="specificHeat" name="specificHeat" class="form-control" [(ngModel)]="newMaterial.specificHeat" (focus)="focusField('specificHeat')"
+                />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
               </div>
@@ -51,7 +63,8 @@
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="!editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidMaterialName">Submit</button>
     </div>
   </div>
 </div>

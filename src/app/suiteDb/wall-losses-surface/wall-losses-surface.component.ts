@@ -17,6 +17,10 @@ export class WallLossesSurfaceComponent implements OnInit {
   closeModal = new EventEmitter<WallLossesSurface>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: WallLossesSurface;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -26,6 +30,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   };
   selectedMaterial: WallLossesSurface;
   allMaterials: Array<WallLossesSurface>;
+  allCustomMaterials: Array<WallLossesSurface>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
@@ -33,12 +38,21 @@ export class WallLossesSurfaceComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectWallLossesSurface();
-    this.checkMaterialName();
-    // this.selectedMaterial = this.allMaterials[0];
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
+    }
+
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectWallLossesSurface();
+      this.indexedDbService.getWallLossesSurface().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.setExisting();
+      });
+    }
+    else {
+      this.canAdd = true;
+      this.allMaterials = this.suiteDbService.selectWallLossesSurface();
+      this.checkMaterialName();
     }
   }
 
@@ -54,13 +68,47 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
   }
 
+  updateMaterial() {
+    console.log('updateMaterial()');
+    this.closeModal.emit(this.newMaterial);
+  }
+
   setExisting() {
-    if (this.selectedMaterial) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      this.newMaterial = {
+        id: this.existingMaterial.id,
+        surface: this.existingMaterial.surface,
+        conditionFactor: this.existingMaterial.conditionFactor
+      }
+    }
+    else if (this.selectedMaterial) {
       this.newMaterial = {
         surface: this.selectedMaterial.surface + ' (mod)',
         conditionFactor: this.selectedMaterial.conditionFactor
       }
       this.checkMaterialName();
+    }
+  }
+
+  checkEditMaterialName() {
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.allMaterials[tmp].id) {
+        return material.surface.toLowerCase().trim() == this.newMaterial.surface.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isValidMaterialName = false;
+    }
+    else if (this.newMaterial.surface.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
+      this.isValidMaterialName = true;
+      this.nameError = null;
     }
   }
 

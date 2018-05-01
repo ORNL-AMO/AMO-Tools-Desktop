@@ -21,33 +21,35 @@ export class FlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<FlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: FlueGasMaterial;
   @Output('hideModal')
   hideModal = new EventEmitter();
+  // @Input()
+  // newMaterial: FlueGasMaterial;
+  newMaterial: FlueGasMaterial = {
+    substance: 'New Fuel',
+    C2H6: 0,
+    C3H8: 0,
+    C4H10_CnH2n: 0,
+    CH4: 0,
+    CO: 0,
+    CO2: 0,
+    H2: 0,
+    H2O: 0,
+    N2: 0,
+    O2: 0,
+    SO2: 0,
+    heatingValue: 0,
+    heatingValueVolume: 0,
+    specificGravity: 0,
 
-  @Input()
-  newMaterial: FlueGasMaterial;
-  @Input()
-  editMaterial: boolean;
-  // newMaterial: FlueGasMaterial = {
-  //   substance: 'New Fuel',
-  //   C2H6: 0,
-  //   C3H8: 0,
-  //   C4H10_CnH2n: 0,
-  //   CH4: 0,
-  //   CO: 0,
-  //   CO2: 0,
-  //   H2: 0,
-  //   H2O: 0,
-  //   N2: 0,
-  //   O2: 0,
-  //   SO2: 0,
-  //   heatingValue: 0,
-  //   heatingValueVolume: 0,
-  //   specificGravity: 0,
-
-  // };
+  };
   selectedMaterial: FlueGasMaterial;
   allMaterials: Array<FlueGasMaterial>;
+  allCustomMaterials: Array<FlueGasMaterial>;
   isValid: boolean;
   nameError: string = null;
   canAdd: boolean;
@@ -59,17 +61,41 @@ export class FlueGasMaterialComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
-    this.checkInputMaterial()
-    this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
-    this.checkMaterialName();
-    this.setHHV();
-    this.canAdd = true;
-    this.getTotalOfFlueGasses();
+
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
+      this.indexedDbService.getFlueGasMaterials().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.setExisting();
+      });
+    }
+    else {
+      this.canAdd = true;
+      this.checkInputMaterial()
+      this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
+      this.setHHV();
+      this.checkMaterialName();
+      this.getTotalOfFlueGasses();
+    }
+
     // this.selectedMaterial = this.allMaterials[0];
   }
 
+  editMaterial() {
+    if (this.existingMaterial !== null && this.existingMaterial !== undefined) {
+      console.log('editMaterial() in modal');
+      console.log('existingMaterial.id = ' + this.existingMaterial.id);
+      console.log('existingMaterial.substance = ' + this.existingMaterial.substance);
+    }
+  }
+
   checkInputMaterial() {
-    if (this.newMaterial === undefined || this.newMaterial === null) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      console.log('checkInputMaterial(), we are editing existing material');
+      this.newMaterial = this.existingMaterial;
+    }
+    else if (this.newMaterial === undefined || this.newMaterial === null) {
+      console.log('checkInputMaterial(), we are creating a new material');
       this.newMaterial = {
         substance: 'New Fuel',
         C2H6: 0,
@@ -96,11 +122,9 @@ export class FlueGasMaterialComponent implements OnInit {
       + this.newMaterial.N2 + this.newMaterial.O2 + this.newMaterial.SO2;
     this.getDiff();
   }
+
+
   addMaterial() {
-    if (this.editMaterial) {
-      // this.updateMaterial();
-      console.log('newMaterial ID = ' + this.newMaterial.id);
-    }
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
@@ -116,15 +140,16 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
-  // updateMaterial() {
+  updateMaterial() {
+    this.closeModal.emit(this.newMaterial);
+  }
 
-  // }
 
   getDiff() {
     this.difference = 100 - this.totalOfFlueGasses;
     if (this.difference > .4 || this.difference < -.4) {
-      this.differenceError = true;      
-    }else{
+      this.differenceError = true;
+    } else {
       this.differenceError = false;
     }
   }
@@ -133,10 +158,52 @@ export class FlueGasMaterialComponent implements OnInit {
     this.hideModal.emit();
   }
 
-  //debug
   setExisting() {
-    if (this.selectedMaterial) {
-
+    if (this.editExistingMaterial && this.existingMaterial) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          C2H6: this.existingMaterial.C2H6,
+          C3H8: this.existingMaterial.C3H8,
+          C4H10_CnH2n: this.existingMaterial.C4H10_CnH2n,
+          CH4: this.existingMaterial.CH4,
+          CO: this.existingMaterial.CO,
+          CO2: this.existingMaterial.CO2,
+          H2: this.existingMaterial.H2,
+          H2O: this.existingMaterial.H2O,
+          N2: this.existingMaterial.N2,
+          O2: this.existingMaterial.O2,
+          SO2: this.existingMaterial.SO2,
+          heatingValue: this.convertUnitsService.value(this.existingMaterial.heatingValue).from('btuLb').to('kJkg'),
+          heatingValueVolume: this.convertUnitsService.value(this.existingMaterial.heatingValueVolume).from('btuSCF').to('kJNm3'),
+          specificGravity: this.existingMaterial.specificGravity
+        }
+      }
+      else {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          C2H6: this.existingMaterial.C2H6,
+          C3H8: this.existingMaterial.C3H8,
+          C4H10_CnH2n: this.existingMaterial.C4H10_CnH2n,
+          CH4: this.existingMaterial.CH4,
+          CO: this.existingMaterial.CO,
+          CO2: this.existingMaterial.CO2,
+          H2: this.existingMaterial.H2,
+          H2O: this.existingMaterial.H2O,
+          N2: this.existingMaterial.N2,
+          O2: this.existingMaterial.O2,
+          SO2: this.existingMaterial.SO2,
+          heatingValue: this.existingMaterial.heatingValue,
+          heatingValueVolume: this.existingMaterial.heatingValueVolume,
+          specificGravity: this.existingMaterial.specificGravity
+        }
+      }
+      this.getTotalOfFlueGasses();
+      this.setHHV();
+    }
+    else if (this.selectedMaterial) {
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
@@ -181,30 +248,6 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
-  //real version
-  // setExisting() {
-  //   if (this.selectedMaterial) {
-  //     this.newMaterial = {
-  //       substance: this.selectedMaterial.substance + ' (mod)',
-  //       C2H6: this.selectedMaterial.C2H6,
-  //       C3H8: this.selectedMaterial.C3H8,
-  //       C4H10_CnH2n: this.selectedMaterial.C4H10_CnH2n,
-  //       CH4: this.selectedMaterial.CH4,
-  //       CO: this.selectedMaterial.CO,
-  //       CO2: this.selectedMaterial.CO2,
-  //       H2: this.selectedMaterial.H2,
-  //       H2O: this.selectedMaterial.H2O,
-  //       N2: this.selectedMaterial.N2,
-  //       O2: this.selectedMaterial.O2,
-  //       SO2: this.selectedMaterial.SO2,
-  //       heatingValue: this.selectedMaterial.heatingValue,
-  //       heatingValueVolume: this.selectedMaterial.heatingValueVolume,
-  //       specificGravity: this.selectedMaterial.specificGravity
-  //     }
-  //     this.checkMaterialName();
-  //     this.setHHV();
-  //   }
-  // }
 
   setHHV() {
     this.getTotalOfFlueGasses();
@@ -224,9 +267,32 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = 0;
       this.newMaterial.heatingValueVolume = 0;
       this.newMaterial.specificGravity = 0;
-
     }
   }
+
+
+  checkEditMaterialName() {
+    let tmp = ((this.allMaterials.length - this.allCustomMaterials.length) - 1) + this.existingMaterial.id;
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.allMaterials[tmp].id) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isNameValid = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isNameValid = false;
+    }
+    else {
+      this.isNameValid = true;
+      this.nameError = null;
+    }
+  }
+
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })

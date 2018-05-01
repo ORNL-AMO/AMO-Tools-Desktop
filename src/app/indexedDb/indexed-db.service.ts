@@ -544,7 +544,7 @@ export class IndexedDbService {
     });
   }
 
-  getGasLoadChargeMaterial(id: number): Promise<any> {
+  getGasLoadChargeMaterial(id: number): Promise<GasLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
@@ -589,7 +589,7 @@ export class IndexedDbService {
     });
   }
 
-  getLiquidLoadChargeMaterial(id: number): Promise<any> {
+  getLiquidLoadChargeMaterial(id: number): Promise<LiquidLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
@@ -635,7 +635,7 @@ export class IndexedDbService {
     });
   }
 
-  getSolidLoadChargeMaterial(id: number): Promise<any> {
+  getSolidLoadChargeMaterial(id: number): Promise<SolidLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
@@ -650,7 +650,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllSolidLoadChargeMaterial(): Promise<any> {
+  getAllSolidLoadChargeMaterial(): Promise<Array<SolidLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
@@ -681,7 +681,7 @@ export class IndexedDbService {
     });
   }
 
-  getAtmosphereSpecificHeatById(id: number): Promise<any> {
+  getAtmosphereSpecificHeatById(id: number): Promise<AtmosphereSpecificHeat> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
@@ -696,7 +696,7 @@ export class IndexedDbService {
     })
   }
 
-  getAtmosphereSpecificHeat(): Promise<any> {
+  getAtmosphereSpecificHeat(): Promise<Array<AtmosphereSpecificHeat>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
@@ -727,7 +727,7 @@ export class IndexedDbService {
     });
   }
 
-  getWallLossesSurfaceById(id: number): Promise<any> {
+  getWallLossesSurfaceById(id: number): Promise<WallLossesSurface> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
@@ -742,7 +742,7 @@ export class IndexedDbService {
     })
   }
 
-  getWallLossesSurface(): Promise<any> {
+  getWallLossesSurface(): Promise<Array<WallLossesSurface>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
@@ -773,13 +773,8 @@ export class IndexedDbService {
     });
   }
 
-  // putFlueGasMaterial(_material: FlueGasMaterial): Promise<any> {
-  //   return new Promise((resolve, reject) => {
 
-  //   })
-  // }
-
-  getFlueGasMaterialById(id: number): Promise<any> {
+  getFlueGasMaterialById(id: number): Promise<FlueGasMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
@@ -794,7 +789,7 @@ export class IndexedDbService {
     })
   }
 
-  getFlueGasMaterials(): Promise<any> {
+  getFlueGasMaterials(): Promise<Array<FlueGasMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
