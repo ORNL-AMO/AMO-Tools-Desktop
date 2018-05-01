@@ -75,6 +75,11 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.general .panel-tab-item.active{
+    border: none;
+    border-bottom: #212F3D groove 2px;
+}
+
 .header h3{
     margin-left: 5px;
 }
@@ -88,12 +93,16 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.general .header{
+    border-bottom: #212F3D groove 2px;
+}
+
 .psat .disabled .header{
     border-bottom-color: gray;
 }
 
 .compressed-air .header{
-    border-bottom: #17A589 groove 2px;
+    border-bottom: #A569BD groove 2px;
 }
 
 .panel-add a{
@@ -172,7 +181,11 @@
 }
 
 .compressed-air .group-label{
-    border-bottom: #17A589 groove 2px;
+    border-bottom: #A569BD groove 2px;
+}
+
+.general .group-label{
+    border-bottom: #212F3D groove 2px;
 }
 
 .loss-label{

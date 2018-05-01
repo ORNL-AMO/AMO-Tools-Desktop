@@ -47,11 +47,8 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   chartContainerWidth: number;
   chartContainerHeight: number;
 
-  doc: any;
-  window: any;
 
-
-  constructor(private cd: ChangeDetectorRef, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
+  constructor(private cd: ChangeDetectorRef, private svgToPngService: SvgToPngService, private preAssessmentService: PreAssessmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.values = new Array<number>();
@@ -75,9 +72,6 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-
     if (this.inRollup) {
       this.chartContainerHeight = 220;
       this.cd.detectChanges();
@@ -128,11 +122,12 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
       else {
         tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, this.resultType);
       }
-      for (let i = 0; i < tmpArray.length; i++) {
-        this.values.unshift(tmpArray[i].percent);
-        this.labels.unshift(tmpArray[i].name + ": " + tmpArray[i].percent.toFixed(2) + "%");
-
-      }
+      tmpArray.forEach(val => {
+        if (isNaN(val.percent) == false && val.percent != 0) {
+          this.values.unshift(val.percent);
+          this.labels.unshift(val.name + ": " + val.percent.toFixed(2) + "%");
+        }
+      })
       if (this.values.length > 0) {
         this.destroy = true;
       }

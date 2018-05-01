@@ -1,12 +1,12 @@
-<div #container class="modify-conditions panel-container row phast" *ngIf="settings" [ngClass]="{'in-modal': inModal}">
+<div #container class="modify-conditions panel-container row general" *ngIf="settings" [ngClass]="{'in-modal': inModal}">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
-      <div class="panel-column col-6 align-top" [ngStyle]="{'height.px': height}">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/assessment.png" class="ico-size2">
+      <div class="panel-column col-6 align-top pr-0" [ngStyle]="{'height.px': height}">
+        <div #leftPanelHeader class="d-flex header">
+          <div class="p-1">
+            <img src="assets/images/assessment.png" class="ico-size3">
           </div>
-          <div class="col">
+          <div class="p-1">
             <h3 class="pre-assessment-header">Pre-assessment / Screening Calculator</h3>
           </div>
         </div>
@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="col-6">
-              <a class="pull-right small align-bottom click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Furnace</a>
+              <a class="pull-right small align-bottom click-link" (click)="addPreAssessment()" *ngIf="showAdd">+Add Unit</a>
             </div>
           </div>
           <div class="row" *ngFor="let assessment of preAssessments; let index = index;">
@@ -36,7 +36,7 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
+                <a class="d-flex justify-content-center align-items-baseline" [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')"><span>Results</span></a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
@@ -45,8 +45,12 @@
           </div>
           <div class="row justify-content-center scroll-item" [ngStyle]="{'height.px': contentHeight}" *ngIf="tabSelect == 'results'">
             <!-- <h5>Process Heating Equipment - Energy Distribution</h5> -->
-            <app-pre-assessment-graph [settings]="settings" [preAssessments]="preAssessments" [graphColors]="assessmentGraphColors" [printView]="false" [inRollup]="false" [toggleCalculate]="toggleCalculate" [resultType]="'value'"></app-pre-assessment-graph>
-            <app-pre-assessment-cost-form [settings]="settings" [inModal]="inModal" (emitCalculate)="calculate()"></app-pre-assessment-cost-form>
+            <div class="col-12">
+              <app-pre-assessment-graph [settings]="settings" [preAssessments]="preAssessments" [graphColors]="assessmentGraphColors" [printView]="false" [inRollup]="false" [toggleCalculate]="toggleCalculate" [resultType]="'value'"></app-pre-assessment-graph>
+            </div>
+            <div class="col-10 mx-auto">
+              <app-pre-assessment-cost-form [settings]="settings" [inModal]="inModal" (emitCalculate)="calculate()"></app-pre-assessment-cost-form>
+            </div>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">

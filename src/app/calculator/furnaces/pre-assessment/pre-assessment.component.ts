@@ -39,7 +39,7 @@ export class PreAssessmentComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   results: Array<any>;
-  currentEnergySourceType: string = 'Fuel';
+  currentEnergySourceType: string = 'Electricity';
   currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
@@ -141,7 +141,7 @@ export class PreAssessmentComponent implements OnInit {
     let tmpSettings: Settings = JSON.parse(JSON.stringify(this.settings));
     this.preAssessments.unshift({
       type: 'Metered',
-      name: 'Furnace ' + this.nameIndex,
+      name: 'Unit ' + this.nameIndex,
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
