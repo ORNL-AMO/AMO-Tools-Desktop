@@ -387,6 +387,7 @@ export class DashboardComponent implements OnInit {
     if (this.workingDirectory.calculators) {
       tmpArray3 = this.workingDirectory.calculators.filter(
         calc => {
+          console.log(calc.selected);
           if (calc.selected) {
             return calc;
           }

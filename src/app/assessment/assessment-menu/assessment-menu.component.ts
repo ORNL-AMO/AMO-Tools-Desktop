@@ -104,6 +104,24 @@ export class AssessmentMenuComponent implements OnInit {
 
   checkSelected() {
     let tmpArray = new Array();
+    // let calcTest;
+    if(this.directory.calculators){
+      tmpArray = this.directory.calculators.filter(calc => {
+        return calc.selected == true;
+      })
+      // if(this.directory.calculators[0].selected){
+      //   calcTest = true;
+      // }
+    }
+    if (this.checkReport() || tmpArray.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkReport() {
+    let tmpArray = new Array();
     let tmpArray2 = new Array();
     if (this.directory.assessments) {
       tmpArray = this.directory.assessments.filter(
@@ -123,22 +141,11 @@ export class AssessmentMenuComponent implements OnInit {
         }
       )
     }
-    let calcTest;
-    if(this.directory.calculators){
-      if(this.directory.calculators[0].selected){
-        calcTest = true;
-      }
-    }
-    if (tmpArray.length != 0 || tmpArray2.length != 0 || calcTest) {
+    if (tmpArray.length != 0 || tmpArray2.length != 0) {
       return true;
     } else {
       return false;
     }
-  }
-
-  checkDeleteExport() {
-    let test = this.checkSelected();
-    return test;
   }
 
 

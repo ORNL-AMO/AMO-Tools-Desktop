@@ -33,9 +33,9 @@
         <button class="btn btn-secondary action-btn" (click)="showCreateAssessment()" type="button">Add Assessment</button>
         <button class="btn btn-secondary action-btn" (click)="showPreAssessment()" type="button">Add Pre-Assessment</button>
         <app-create-folder [(directory)]="directory" [directorySettings]="directorySettings" (newDirectory)="emitNewDir()"></app-create-folder>
-        <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="emitGenReport()">Generate Report</button>
-        <button class="btn btn-secondary action-btn" [disabled]="!checkDeleteExport()" type="button" (click)="signalDeleteItems()">Delete</button>
-        <button class="btn btn-secondary action-btn" [disabled]="!checkDeleteExport()" type="button" (click)="emitExport()">Export</button>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button" (click)="emitGenReport()">Generate Report</button>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()">Delete</button>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="emitExport()">Export</button>
         <button class="btn btn-secondary action-btn" type="button" (click)="emitImport()">Import</button>
       </div>
       <label class="ml-auto select-all">

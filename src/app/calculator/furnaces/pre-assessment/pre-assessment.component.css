@@ -38,7 +38,7 @@ td{
 }
 
 .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #212F3D;
+    background-color: #145A32;
 }
 
 .no-data{

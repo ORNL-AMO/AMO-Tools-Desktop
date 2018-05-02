@@ -84,7 +84,7 @@ export class PreAssessmentComponent implements OnInit {
       this.preAssessments = new Array<PreAssessment>();
       this.addPreAssessment();
     } else {
-      if(!this.calculate.name){
+      if(!this.calculator.name){
         this.showName = true;
       }
       if (this.calculator.preAssessments) {
