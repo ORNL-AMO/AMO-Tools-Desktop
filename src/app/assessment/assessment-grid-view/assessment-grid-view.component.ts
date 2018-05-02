@@ -15,7 +15,7 @@ export class AssessmentGridViewComponent implements OnInit {
   @Input()
   isChecked: boolean;
   @Output('emitPreAssessment')
-  emitPreAssessment = new EventEmitter<boolean>();
+  emitPreAssessment = new EventEmitter<number>();
   @Input()
   directorySettings: Settings;
   constructor() { }
@@ -31,7 +31,7 @@ export class AssessmentGridViewComponent implements OnInit {
     }
   }
 
-  viewPreAssessment(exists: boolean) {
-    this.emitPreAssessment.emit(exists);
+  viewPreAssessment(index: number) {
+    this.emitPreAssessment.emit(index);
   }
 }
