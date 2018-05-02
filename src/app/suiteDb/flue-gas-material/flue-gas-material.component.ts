@@ -25,6 +25,8 @@ export class FlueGasMaterialComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: FlueGasMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
   // @Input()
@@ -144,6 +146,17 @@ export class FlueGasMaterialComponent implements OnInit {
       this.indexedDbService.putFlueGasMaterial(this.newMaterial).then(val => {
         this.closeModal.emit(this.newMaterial);
       });
+    }
+  }
+
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteGasFlueGasMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteFlueGasMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
     }
   }
 
@@ -302,7 +315,7 @@ export class FlueGasMaterialComponent implements OnInit {
       this.nameError = null;
     }
   }
-  
+
   focusField(str: string) {
     this.currentField = str;
   }

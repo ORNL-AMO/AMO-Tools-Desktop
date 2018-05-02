@@ -22,6 +22,8 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: LiquidLoadChargeMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -97,6 +99,17 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.indexedDbService.putLiquidLoadChargeMaterial(this.newMaterial).then(val => {
         this.closeModal.emit(this.newMaterial);
       });
+    }
+  }
+
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteLiquidLoadChargeMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteLiquidLoadChargeMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
     }
   }
 

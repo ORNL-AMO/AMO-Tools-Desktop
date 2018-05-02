@@ -70,7 +70,7 @@
 
       </div>
       <div class="card-footer summary-card-footer">
-        <div class="btn-delete-material pull-right">Delete Material</div>
+        <div class="btn-delete-material pull-right" (click)="deleteMaterial(solidLiquidFlueGasMaterial.id)">Delete Material</div>
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@
     <div class="modal-content">
       <div>
         <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-solid-liquid-flue-gas-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-solid-liquid-flue-gas-material>
       </div>
     </div>
   </div>

@@ -18,6 +18,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
 
   editExistingMaterial: boolean = false;
   existingMaterial: AtmosphereSpecificHeat;
+  deletingMaterial: boolean = false;
   atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
@@ -51,6 +52,14 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
     });
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getAtmosphereSpecificHeatById(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
 
   showMaterialModal() {
     this.showModal = true;
@@ -61,6 +70,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = false;
     this.getCustomMaterials();
   }
 }

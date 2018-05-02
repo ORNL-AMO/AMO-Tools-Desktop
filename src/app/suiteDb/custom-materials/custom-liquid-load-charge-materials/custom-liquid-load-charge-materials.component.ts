@@ -19,6 +19,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
   existingMaterial: LiquidLoadChargeMaterial;
   editExistingMaterial: boolean = false;
+  deletingMaterial: boolean = false;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -51,9 +52,16 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
       this.editExistingMaterial = true;
       this.showMaterialModal();
     });
-
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getLiquidLoadChargeMaterial(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
 
   showMaterialModal() {
     this.showModal = true;
@@ -64,6 +72,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = false;
     this.getCustomMaterials();
   }
 }

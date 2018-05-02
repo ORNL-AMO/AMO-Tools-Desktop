@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body custom-card-body card-container col">
     <div class="row">
-      <div class="col-sm-6 col-md-6 card-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
@@ -111,16 +111,46 @@
         </form>
       </div>
 
-      <div class="col-sm-6 col-md-6 card-help-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
           <app-solid-liquid-flue-gas-material-help [currentField]="currentField"></app-solid-liquid-flue-gas-material-help>
         </div>
       </div>
+
+      <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+        <div class="text-center">
+          <div class="row phast align-items-top">
+            <div class="col-12">
+              <div class="header card-header">
+                <h3>Confirm Delete</h3>
+              </div>
+            </div>
+          </div>
+          <div class="delete-warning-container">
+            <div class="row">
+              <div class="col-12">
+                Material Name: {{newMaterial.substance}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                Are you sure you want to
+                <strong>
+                  <u>permentantly delete</u>
+                </strong> this material?
+                <br>This cannot be undone.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button *ngIf="!editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
-      <button *ngIf="editExistingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
   </div>
 </div>

@@ -52,7 +52,7 @@
 
       </div>
       <div class="card-footer summary-card-footer">
-        <div class="btn-delete-material pull-right">Delete Material</div>
+        <div class="btn-delete-material pull-right" (click)="deleteMaterial(liquidChargeMaterial.id)">Delete Material</div>
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
     <div class="modal-content">
       <div>
         <app-liquid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-liquid-load-charge-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-liquid-load-charge-material>
       </div>
     </div>
   </div>

@@ -22,6 +22,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: SolidLoadChargeMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -100,6 +102,16 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteSolidLoadChargeMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
+    }
+  }
 
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {

@@ -18,6 +18,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
 
   solidLiquidFlueGasMaterials: Array<SolidLiquidFlueGasMaterial>;
   editExistingMaterial: boolean = false;
+  deletingMaterial: boolean = false;
   existingMaterial: SolidLiquidFlueGasMaterial;
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -50,6 +51,15 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
     });
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getSolidLiquidFlueGasMaterialById(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
   showMaterialModal() {
     this.showModal = true;
     this.materialModal.show();
@@ -59,6 +69,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = false;
     this.getCustomMaterials();
   }
 }

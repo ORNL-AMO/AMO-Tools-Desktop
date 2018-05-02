@@ -20,6 +20,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: AtmosphereSpecificHeat;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -86,6 +88,17 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.indexedDbService.putAtmosphereSpecificHeat(this.newMaterial).then(val => {
         this.closeModal.emit(this.newMaterial);
       });
+    }
+  }
+
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteAtmosphereSpecificHeat(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
     }
   }
 

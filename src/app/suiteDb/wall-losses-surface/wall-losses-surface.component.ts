@@ -21,6 +21,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: WallLossesSurface;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -81,6 +83,17 @@ export class WallLossesSurfaceComponent implements OnInit {
       this.indexedDbService.putWallLossesSurface(this.newMaterial).then(val => {
         this.closeModal.emit(this.newMaterial);
       });
+    }
+  }
+
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteWallLossesSurface(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteWallLossesSurface(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
     }
   }
 

@@ -144,7 +144,7 @@
 
       </div>
       <div class="card-footer summary-card-footer">
-        <div class="last-updated pull-right btn-delete-material">Delete Material</div>
+        <div class="last-updated pull-right btn-delete-material" (click)="deleteMaterial(flueGasMaterial.id)">Delete Material</div>
       </div>
     </div>
   </div>
@@ -158,7 +158,7 @@
     <div class="modal-content">
       <div>
         <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-flue-gas-material>
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-flue-gas-material>
       </div>
     </div>
   </div>

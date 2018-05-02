@@ -20,6 +20,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   editExistingMaterial: boolean;
   @Input()
   existingMaterial: SolidLiquidFlueGasMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -98,6 +100,16 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteSolidLiquidFlueGasMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
+    }
+  }
 
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {

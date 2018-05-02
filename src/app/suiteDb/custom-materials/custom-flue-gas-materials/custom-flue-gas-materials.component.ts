@@ -22,6 +22,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   flueGasMaterials: Array<FlueGasMaterial>;
   editExistingMaterial: boolean = false;
   existingMaterial: FlueGasMaterial;
+  deletingMaterial: boolean = false;
   options: any;
 
 
@@ -54,6 +55,15 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
     });
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getFlueGasMaterialById(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
   showMaterialModal() {
     this.showModal = true;
     this.materialModal.show();
@@ -63,6 +73,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = false;
     this.getCustomMaterials();
   }
 }

@@ -18,6 +18,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
 
   editExistingMaterial: boolean = false;
   existingMaterial: WallLossesSurface;
+  deletingMaterial: boolean = false;
   wallLossesSurfaces: Array<WallLossesSurface>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
@@ -51,6 +52,15 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
     });
   }
 
+  deleteMaterial(id: number) {
+    this.indexedDbService.getWallLossesSurfaceById(id).then(idbResults => {
+      this.existingMaterial = idbResults;
+      this.editExistingMaterial = true;
+      this.deletingMaterial = true;
+      this.showMaterialModal();
+    });
+  }
+
   showMaterialModal() {
     this.showModal = true;
     this.materialModal.show();
@@ -60,6 +70,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
+    this.deletingMaterial = false;
     this.getCustomMaterials();
   }
 }

@@ -610,6 +610,7 @@ export class IndexedDbService {
       }
     })
   }
+  
   //liquidLoadChargeMaterial
   addLiquidLoadChargeMaterial(_material: LiquidLoadChargeMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -708,6 +709,20 @@ export class IndexedDbService {
     });
   }
 
+  deleteSolidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
   putSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
@@ -776,6 +791,20 @@ export class IndexedDbService {
     });
   }
 
+  deleteAtmosphereSpecificHeat(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
   putAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
@@ -842,6 +871,20 @@ export class IndexedDbService {
         reject(e.target.result)
       }
     });
+  }
+
+  deleteWallLossesSurface(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
   }
 
   putWallLossesSurface(material: WallLossesSurface): Promise<any> {
@@ -934,9 +977,19 @@ export class IndexedDbService {
     });
   }
 
-  // deleteFlueGasMaterial(id: number) :Promise<any> {
-
-  // }
+  deleteFlueGasMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
 
   getFlueGasMaterialById(id: number): Promise<FlueGasMaterial> {
     return new Promise((resolve, reject) => {
@@ -981,6 +1034,20 @@ export class IndexedDbService {
         reject(e.target.result)
       }
     });
+  }
+
+  deleteSolidLiquidFlueGasMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
   }
 
   putSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial): Promise<any> {

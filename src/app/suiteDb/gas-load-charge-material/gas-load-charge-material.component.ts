@@ -45,9 +45,14 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
     }
+    this.getMaterials();
+
+  }
+
+  getMaterials() {
+    this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
 
     if (this.editExistingMaterial) {
-      this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
       this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
         //id used by IDb
@@ -58,7 +63,6 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
     else {
       this.canAdd = true;
-      this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
       this.checkMaterialName();
     }
   }
@@ -95,29 +99,13 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   deleteMaterial() {
-    console.log('deleteMaterial()');
-    if (this.deleteMaterial && this.existingMaterial) {
-      console.log('deleteMaterial and existingMaterial is true');
+    if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
-        console.log('suiteDbResult is true');
-        let tmpMaterial: GasLoadChargeMaterial; 
-        this.indexedDbService.getGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
-          tmpMaterial = val;
-          console.log('tmpMaterial.id = ' + tmpMaterial.id);
-          console.log('tmpMaterial.substance = ' + tmpMaterial.substance);
-        });
         this.indexedDbService.deleteGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
-          console.log('made it through indexedDbService call');
           this.closeModal.emit(this.newMaterial);
         });
       }
-      else {
-        console.log('suiteDbResult is false');
-      }
-    }
-    else {
-      console.log('deleteMaterial and existingMaterial is not true');
     }
   }
 
