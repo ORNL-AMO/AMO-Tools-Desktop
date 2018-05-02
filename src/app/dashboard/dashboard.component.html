@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()"
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal($event)"
                 [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
@@ -198,10 +198,10 @@
                 </button>
             </div> -->
             <div class="modal-body" *ngIf="showPreAssessment">
-                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[0]" [settings]="workingDirectorySettings"></app-pre-assessment>
+                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[selectedCalcIndex]" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
             <div class="modal-footer justify-content-center">
-                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[0])">Save to Folder</button>
+                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[selectedCalcIndex])">Save to Folder</button>
                 <button class="btn btn-secondary save-btn" (click)="hidePreAssessmentModal()">Cancel</button>
             </div>
         </div>

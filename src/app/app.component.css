@@ -651,9 +651,8 @@ Assessments: List View
 .list-row {
   padding: 14px;
   background: #fbfbfb;
-  border-color: #d6d6d6;
-  border-style: solid;
-  border-width: 0 1px 1px;
+  border-radius: .25rem;
+
 }
   .list-row:after {
     display: table;
@@ -1095,7 +1094,7 @@ Calculators
 
 .ico-size3 {
   height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(187, 187, 187, 0.65));
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);

@@ -316,7 +316,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#145A32")
       .style('pointer-events', 'none');
 
     this.averageLine = this.svg.append("path")
@@ -677,7 +677,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) + ' %')
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
-      .style("fill", "#2ECC71");
+      .style("fill", "#145A32");
 
     this.svg.append("text")
       .attr("x", 20)

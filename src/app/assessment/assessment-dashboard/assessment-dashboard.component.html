@@ -13,11 +13,11 @@
 			</div>
 		</div>
 		<app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
-		 (emitPreAssessment)="preAssessmentEmit()" [directorySettings]="directorySettings">
+		 (emitPreAssessment)="preAssessmentEmit($event)" [directorySettings]="directorySettings">
 		</app-assessment-grid-view>
 
 		<app-assessment-list-view *ngIf="view == 'list'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"
-		 (emitPreAssessment)="preAssessmentEmit()">
+		 (emitPreAssessment)="preAssessmentEmit($event)">
 		</app-assessment-list-view>
 
 		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()" (emitUpdateDirectory)="newDir()">

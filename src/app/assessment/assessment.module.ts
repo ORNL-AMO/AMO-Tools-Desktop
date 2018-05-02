@@ -28,6 +28,7 @@ import { FolderSummaryComponent } from './folder-summary/folder-summary.componen
 import { FolderContactInfoComponent } from './folder-contact-info/folder-contact-info.component';
 import { PreAssessmentCardComponent } from './assessment-grid-view/pre-assessment-card/pre-assessment-card.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
+import { PreAssessmentListItemComponent } from './assessment-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-
     FolderSummaryComponent,
     FolderContactInfoComponent,
     PreAssessmentCardComponent,
-    AssessmentDashboardComponent
+    AssessmentDashboardComponent,
+    PreAssessmentListItemComponent
   ],
   exports: [
     AssessmentCreateComponent,
