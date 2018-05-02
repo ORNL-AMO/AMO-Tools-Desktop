@@ -3,7 +3,7 @@
   <div #header class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
-    <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
+    <app-phast-tabs [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
     <!-- <nav *ngIf="mainTab == 'assessment'">
       <ul class="tabs subtabs phast">
@@ -57,7 +57,7 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
-        (save)="saveDb()" [exploreModIndex]="modificationIndex" (exploreOppsToast)="setExploreOppsToast($event)"></app-explore-phast-opportunities>
+        (save)="saveDb()" [exploreModIndex]="modificationIndex" (exploreOppsToast)="setExploreOppsToast($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="false"
@@ -103,9 +103,9 @@
       <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next)"
+      <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next && selectedLossTab.next)"
         (click)="nextStep()">Next</button>
-      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && (!stepTab.next || !selectedLossTab.next)" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
     </div>
   </div>

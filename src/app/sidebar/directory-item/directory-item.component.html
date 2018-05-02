@@ -1,23 +1,23 @@
 <ul>
   <li *ngIf="validDirectory && directory.id != 1" [ngClass]="{'selected':selectedDirectoryId == directory.id  && dashboardView == 'assessment-dashboard'}">
-    <span (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
+    <span class="sidebar-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
       <i class="fa fa-folder" [ngClass]="{'selected':selectedDirectoryId == directory.id}" aria-hidden="true"></i>
         {{directory.name}}
     </span>
   </li>
-  <li class="sub-directory" *ngIf="directory.subDirectory && directory.collapsed == false">
-    <span *ngFor="let directory of directory.subDirectory">
-      <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-      (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView"></app-directory-item>
-    </span>
+  <li class="sub-directory" *ngIf="directory.subDirectory && directory.collapsed == false" [ngClass]="{'show-border': directory.collapsed == false}">
     <ul>
-      <li class="assessments" *ngIf="directory.assessments && directory.collapsed == false">
+      <li class="assessments pl-0" *ngIf="directory.assessments && directory.collapsed == false">
         <ul>
           <li *ngFor="let assessment of directory.assessments">
             <app-assessment-item [assessment]="assessment"></app-assessment-item>
           </li>
         </ul>
       </li>
+      <span *ngFor="let directory of directory.subDirectory">
+          <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
+          (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView"></app-directory-item>
+        </span>
     </ul>
   </li>
 </ul>

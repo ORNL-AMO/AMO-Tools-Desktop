@@ -3,9 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
@@ -32,7 +32,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
     if (!this.psat) {
       this.efficiencyForm = this.psatService.initForm();
@@ -48,7 +48,7 @@ export class AchievableEfficiencyComponent implements OnInit {
 
     //if stand alone calculator use system settings
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       if (this.settings.flowMeasurement != 'gpm') {
         let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
         this.efficiencyForm.patchValue({
@@ -56,8 +56,8 @@ export class AchievableEfficiencyComponent implements OnInit {
         })
       }
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

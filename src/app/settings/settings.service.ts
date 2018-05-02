@@ -7,7 +7,6 @@ declare const packageJson;
 @Injectable()
 export class SettingsService {
 
-  globalSettings: Settings;
   setDontShow: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder) {
     this.setDontShow = new BehaviorSubject<boolean>(false);

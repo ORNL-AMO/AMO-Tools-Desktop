@@ -48,7 +48,11 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
 
     this.timeUnit = this.settings.energyResultUnit + '/yr';
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if(this.settings.energyResultUnit == 'MMBtu'){
+      this.energyUnit = 'Btu/lb';
+    }else if(this.settings.energyResultUnit == 'GJ'){
+      this.energyUnit = 'kJ/kg';
+    }else if (this.settings.unitsOfMeasure == 'Metric') {
       this.energyUnit = this.settings.energyResultUnit + '/kg';
     } else if (this.settings.unitsOfMeasure == 'Imperial') {
       this.energyUnit = this.settings.energyResultUnit + '/lb';

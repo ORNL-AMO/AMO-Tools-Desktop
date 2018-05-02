@@ -26,7 +26,7 @@ import { PhastResultsService } from './phast-results.service';
 import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 import { ConvertPhastService } from './convert-phast.service';
 import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
-import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
 import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.module';
 import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
@@ -37,6 +37,7 @@ import { PhastCompareService } from './phast-compare.service';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
+import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent
+    AddModificationComponent,
+    PhastTabsTooltipComponent,
   ],
   exports: [
   ],

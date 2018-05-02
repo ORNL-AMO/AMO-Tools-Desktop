@@ -39,25 +39,29 @@ export class MeteredEnergyResultsComponent implements OnInit {
   }
 
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.results){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.results) {
       this.setEnergyIntensity();
     }
   }
 
-  setEnergyIntensity(){
-    if(this.settings.energyResultUnit == 'MMBtu'){
-      this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
-      this.meteredEnergyIntensity = this.convertUnitsService.value(this.results.meteredEnergyIntensity).from('MMBtu').to('Btu');
+  setEnergyIntensity() {
+    if (this.settings.energyResultUnit == 'MMBtu') {
+      //   this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+     // this.meteredEnergyIntensity = this.convertUnitsService.value(this.results.meteredEnergyIntensity).from('MMBtu').to('Btu');
+      this.meteredEnergyIntensity = this.results.meteredEnergyIntensity;
       this.resultUnits.energyPerMassUnit = 'Btu/lb';
-    }else if(this.settings.energyResultUnit == 'GJ'){
-      this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
-      this.meteredEnergyIntensity = this.convertUnitsService.value(this.results.meteredEnergyIntensity).from('GJ').to('kJ');
+    } else if (this.settings.energyResultUnit == 'GJ') {
+      //  this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+     // this.meteredEnergyIntensity = this.convertUnitsService.value(this.results.meteredEnergyIntensity).from('GJ').to('kJ');
+      this.meteredEnergyIntensity = this.results.meteredEnergyIntensity;
       this.resultUnits.energyPerMassUnit = 'kJ/kg';
-    }else{
+    } else {
       this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
       this.meteredEnergyIntensity = this.results.meteredEnergyIntensity;
     }
   }
-  
+
 }

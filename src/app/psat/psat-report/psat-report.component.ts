@@ -9,6 +9,8 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PsatReportService } from './psat-report.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -43,6 +45,8 @@ export class PsatReportComponent implements OnInit {
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
+  printReportGraphs: boolean;
+  printReportSankey: boolean;
   printResults: boolean;
   printInputData: boolean;
 
@@ -53,7 +57,7 @@ export class PsatReportComponent implements OnInit {
   currentTab: string = 'results';
   createdDate: Date;
 
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
 
   ngOnInit() {
     this.initPrintLogic();
@@ -104,16 +108,12 @@ export class PsatReportComponent implements OnInit {
 
   getSettings() {
     //check for assessment settings
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          if (!this.settings.temperatureMeasurement) {
-            this.settings = this.settingsService.setTemperatureUnit(this.settings);
-          }
-        }
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    if (this.settings) {
+      if (!this.settings.temperatureMeasurement) {
+        this.settings = this.settingsService.setTemperatureUnit(this.settings);
       }
-    )
+    }
   }
 
   closeAssessment() {
@@ -122,14 +122,11 @@ export class PsatReportComponent implements OnInit {
 
   getDirectoryList(id: number) {
     if (id && id != 1) {
-      this.indexedDbService.getDirectory(id).then(
-        results => {
-          this.assessmentDirectories.push(results);
-          if (results.parentDirectoryId != 1) {
-            this.getDirectoryList(results.parentDirectoryId);
-          }
-        }
-      )
+      let results = this.directoryDbService.getById(id);
+      this.assessmentDirectories.push(results);
+      if (results.parentDirectoryId != 1) {
+        this.getDirectoryList(results.parentDirectoryId);
+      }
     }
   }
 
@@ -143,14 +140,14 @@ export class PsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    console.log('initPrintLogic()');
-    console.log('this.inRollup ' + this.inRollup);
     if (this.inRollup) {
+      this.printReportGraphs = true;
+      this.printReportSankey = true;
       this.printResults = true;
       this.printInputData = true;
     }
   }
-  
+
   showModal(): void {
     this.printMenuModal.show();
   }
@@ -164,6 +161,8 @@ export class PsatReportComponent implements OnInit {
 
   resetPrintSelection() {
     this.selectAll = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
     this.printResults = false;
     this.printInputData = false;
   }
@@ -173,13 +172,23 @@ export class PsatReportComponent implements OnInit {
       case "select-all": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
           this.printResults = true;
-          this.printInputData = true;
         }
         else {
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
           this.printResults = false;
-          this.printInputData = false;
         }
+        break;
+      }
+      case "reportGraphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "reportSankey": {
+        this.printReportSankey = !this.printReportSankey;
         break;
       }
       case "results": {
@@ -209,17 +218,4 @@ export class PsatReportComponent implements OnInit {
       this.resetPrintSelection();
     }, 2000);
   }
-
-
-  // print() {
-  //   this.showPrint = true;
-  //   this.closeModal(false);
-  //   setTimeout(() => {
-  //     let win = this.windowRefService.nativeWindow;
-  //     let doc = this.windowRefService.getDoc();
-  //     win.print();
-
-  //     this.showPrint = false;
-  //   }, 1000);
-  // }
 }

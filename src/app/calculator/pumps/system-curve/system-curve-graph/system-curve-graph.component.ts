@@ -653,7 +653,7 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#145A32")
       .style('pointer-events', 'none');
 
     d3.select("path.domain").attr("d", "");

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-directory-item',
@@ -24,7 +26,7 @@ export class DirectoryItemComponent implements OnInit {
   isFirstChange: boolean = true;
   childDirectories: Directory;
   validDirectory: boolean = false;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
@@ -60,17 +62,15 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   populateDirectories(directoryRef: DirectoryDbRef, collapse?: boolean) {
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
-      results => {
-        this.directory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
-      results => {
-        this.directory.subDirectory = results;
-        this.directory.collapsed = collapse;
-      }
-    )
+    this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
+    this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
+    this.directory.collapsed = collapse;
+    //   this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
+    //     results => {
+    //       this.directory.subDirectory = results;
+    //       this.directory.collapsed = collapse;
+    //     }
+    //   )
+    // }
   }
 }

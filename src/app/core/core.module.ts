@@ -20,7 +20,6 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
@@ -36,10 +35,17 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 import { VersionModalComponent } from '../version-modal/version-modal.component';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
-import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { MeasurComponent } from '../landing-screen/measur/measur.component';
-import { DashboardService } from '../dashboard/dashboard.service';
 import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-tutorial.component';
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from './core.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +73,6 @@ import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-
     CalculatorModule,
     ModalModule,
     NgxElectronModule,
-    IndexedDbModule,
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
@@ -80,7 +85,14 @@ import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-
   ],
   providers: [
     AssessmentService,
-    DashboardService
+    CoreService,
+    WindowRefService,
+    IndexedDbService,
+    AssessmentDbService,
+    DirectoryDbService,
+    SettingsDbService,
+    CalculatorDbService,
+    DeleteDataService
   ]
 })
 

@@ -17,7 +17,7 @@
       <div class="checkbox">
         <label class="group-label" for="modifyCalculationMethod">
           <input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')"
-            [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation" /> Optimize Pump and Motor combination, automatically
+            [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation" /> Optimize Pump and Motor Combination for a Fixed Specific Speed
         </label>
       </div>
       <ul *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
@@ -41,23 +41,23 @@
           </form>
         </li>
         <li>
-          <div class="checkbox">
-            <label for="showSpeed">
-              Fixed specific speed?
-            </label>
-          </div>
-          <form>
-            <div class="form-group">
-            </div>
-            <div name="fixedSpeed" class="form-check">
-              <label class="form-check-label">
-                <input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='1'
-                  (change)="calculate('fixedSpecificSpeed')">Yes
-                <input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='0'
-                  (change)="calculate('fixedSpecificSpeed')">No
-              </label>
-            </div>
-          </form>
+          <!--<div class="checkbox">-->
+            <!--<label for="showSpeed">-->
+              <!--Fixed specific speed?-->
+            <!--</label>-->
+          <!--</div>-->
+          <!--<form>-->
+            <!--<div class="form-group">-->
+            <!--</div>-->
+            <!--<div name="fixedSpeed" class="form-check">-->
+              <!--<label class="form-check-label">-->
+                <!--<input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='1'-->
+                  <!--(change)="calculate('fixedSpecificSpeed')">Yes-->
+                <!--<input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='0'-->
+                  <!--(change)="calculate('fixedSpecificSpeed')">No-->
+              <!--</label>-->
+            <!--</div>-->
+          <!--</form>-->
         </li>
       </ul>
     </li>

@@ -3,7 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   currentField: string;
   nemaForm: FormGroup;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.psat) {
@@ -46,15 +46,15 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       if (this.settings.powerMeasurement != 'hp') {
         this.nemaForm.patchValue({
           horsePower: 150
         })
       }
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

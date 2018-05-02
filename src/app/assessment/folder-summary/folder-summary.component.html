@@ -5,12 +5,12 @@
   </div>
 </div>
 
-
+<hr class="my-1">
 <div class="row">
   <div class="col-12">
     <div class="card panel-container">
-      <div class="card-body summary-rollup d-flex flex-row justify-content-around">
-        <div class="p-2">
+      <div class="card-body summary-rollup d-flex flex-wrap flex-row justify-content-between">
+        <div class="p-0">
           <label class="group-label">{{directory.name}} Summary</label>
           <table class="table">
             <tr>
@@ -39,7 +39,7 @@
             </tr>
           </table>
         </div>
-        <div class="p-2">
+        <div class="p-0">
           <label class="group-label">{{directory.name}} Settings</label>
           <table class="table">
             <tr>
@@ -67,7 +67,7 @@
               </td>
             </tr>
           </table>
-          <a class="pull-right click-link" (click)="showSettingsModal()">Edit Settings</a>
+          <a class="pull-right click-link p-2" (click)="showSettingsModal()">Edit Settings</a>
         </div>
       </div>
     </div>

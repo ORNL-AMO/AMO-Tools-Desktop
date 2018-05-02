@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { PSAT } from '../models/psat';
 import * as _ from 'lodash';
@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../models/settings';
 import { ImportExportService } from './import-export.service';
 import { ImportDataObjects } from '../../dashboard/dashboard.component';
+import { ImportExportData, ImportExportAssessment } from './importExportModel';
 
 @Component({
   selector: 'app-import-export',
@@ -15,7 +16,7 @@ import { ImportDataObjects } from '../../dashboard/dashboard.component';
 })
 export class ImportExportComponent implements OnInit {
   @Input()
-  selectedItems: Array<any>;
+  exportData: ImportExportData;
   @Output('closeExportModal')
   closeExportModal = new EventEmitter<boolean>();
   @Input()
@@ -25,97 +26,38 @@ export class ImportExportComponent implements OnInit {
   @Output('importData')
   importData = new EventEmitter<any>();
 
-
-  exportData: Array<ImportDataObjects>;
+  // exportData: Array<ImportDataObjects>;
   isDataGathered: boolean;
   gatheringData: any;
   fileReference: any;
   validFile: boolean;
   gatheringSettings: any;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
+  noDirAssessmentItems: Array<ImportExportAssessment>;
+  showCalcs: boolean = false;
+  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.noDirAssessmentItems = new Array();
     if (this.export) {
-      this.exportData = new Array();
-    }
-  }
-
-  ngOnChanges() {
-    if (this.export) {
-      if (this.gatheringData) {
-        clearTimeout(this.gatheringData);
-      }
-      this.gatheringData = setTimeout(() => {
-        if (this.gatheringSettings) {
-          clearTimeout(this.gatheringSettings);
+      this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
+      if (this.exportData.calculators) {
+        if (this.exportData.calculators.length != 0) {
+          if (this.exportData.calculators[0].preAssessments) {
+            this.showCalcs = true;
+          }
         }
-        //used to make sure all assessments proccessed (gotten outputs)
-        this.selectedItems.forEach(item => {
-          this.getAssessmentSettings(item);
-        });
-        this.gatheringSettings = setTimeout(() => {
-          this.isDataGathered = true;
-        }, 500)
-      }, 500)
+      }
     }
   }
 
-
-
-  getAssessmentSettings(item: any) {
-    if (item.directory) {
-      //check for assessment settings
-      this.indexedDbService.getDirectorySettings(item.directory.id).then(dirSettings => {
-        this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-          results => {
-            this.indexedDbService.getDirectoryCalculator(item.directory.id).then((calc) => {
-              let dirCalculator;
-              if (calc.length != 0) {
-                dirCalculator = calc[0];
-              }
-              if (results.length != 0) {
-                this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
-              } else {
-                //no assessment settings, find dir settings being usd
-                this.exportData.push({ assessment: item.assessment, settings: dirSettings[0], directory: item.directory, directorySettings: dirSettings[0], calculator: dirCalculator });
-              }
-            })
-          })
-      })
-    } else {
-      this.indexedDbService.getAssessmentSettings(item.assessment.id).then(
-        results => {
-          this.indexedDbService.getAssessmentCalculator(item.assessment.id).then((calc) => {
-            let assessmentCalc;
-            if (calc.length != 0) {
-              assessmentCalc = calc[0];
-            }
-            if (results.length != 0) {
-              this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory, directorySettings: undefined, calculator: assessmentCalc });
-            }
-          });
-        });
+  getDirAssessments(id: number) {
+    if (this.noDirAssessmentItems) {
+      _.remove(this.noDirAssessmentItems, (assessment) => { return assessment.assessment.directoryId == id });
+      // this.cd.detectChanges();
     }
+    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId == id });
+    return assessments;
   }
-
-  // getParentDirSettingsThenResults(parentDirectoryId: number, item: any) {
-  //   //get parent directory
-  //   this.indexedDbService.getDirectory(parentDirectoryId).then(
-  //     results => {
-  //       let parentDirectory = results;
-  //       //get parent directory settings
-  //       this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
-  //         results => {
-  //           if (results.length != 0) {
-  //             this.exportData.push({ assessment: item.assessment, settings: results[0], directory: item.directory });
-  //           } else {
-  //             //no settings try again with parents parent directory
-  //             this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, item)
-  //           }
-  //         })
-  //     }
-  //   )
-  // }
 
   buildExportJSON() {
     this.importExportService.downloadData(this.exportData);

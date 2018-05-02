@@ -22,7 +22,7 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyIntensity = this.convertIntensity(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -60,7 +60,7 @@ export class DesignedEnergyService {
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //convert to resultsUnit
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyIntensity = this.convertIntensity(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -73,6 +73,15 @@ export class DesignedEnergyService {
       calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
+  }
+
+  convertIntensity(num: number, settings: Settings): number {
+    if (settings.energyResultUnit == 'MMBtu') {
+      num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      num = this.convertUnitsService.value(num).from('GJ').to('kJ');
+    }
+    return num;
   }
 
   sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number {

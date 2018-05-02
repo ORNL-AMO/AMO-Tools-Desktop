@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -34,7 +34,7 @@ export class SpecificSpeedComponent implements OnInit {
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.psat) {
@@ -51,7 +51,7 @@ export class SpecificSpeedComponent implements OnInit {
 
     //get settings if standalone
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       //convert defaults if standalone without default system settings
       if (this.settings.flowMeasurement != 'gpm') {
         let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
@@ -67,8 +67,8 @@ export class SpecificSpeedComponent implements OnInit {
         })
       }
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

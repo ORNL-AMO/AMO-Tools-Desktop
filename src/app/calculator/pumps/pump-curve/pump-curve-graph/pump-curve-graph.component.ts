@@ -384,7 +384,7 @@ export class PumpCurveGraphComponent implements OnInit {
     this.focus.append("circle")
       .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#145A32")
       .style("stroke-width", "3px");
 
     this.focus.append("text")
@@ -716,7 +716,7 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#145A32")
       .style('pointer-events', 'none');
 
     line.data([data]).attr("d", guideLine);

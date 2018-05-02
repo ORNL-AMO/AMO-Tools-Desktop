@@ -15,6 +15,10 @@ import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { Directory } from '../shared/models/directory';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-psat',
@@ -48,7 +52,20 @@ export class PsatComponent implements OnInit {
     'pump-fluid',
     'motor',
     'field-data'
-  ]
+  ];
+
+  tab1Status: string;
+  tab2Status: string;
+  tab3Status: string;
+  tab4Status: string;
+  badge1Hover: boolean;
+  badge2Hover: boolean;
+  badge3Hover: boolean;
+  badge4Hover: boolean;
+  display1: boolean;
+  display2: boolean;
+  display3: boolean;
+  display4: boolean;
 
   psat: PSAT;
   modification: PSAT;
@@ -93,7 +110,10 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -101,6 +121,19 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.tab1Status = '';
+    this.tab2Status = '';
+    this.tab3Status = '';
+    this.tab4Status = '';
+    this.badge1Hover = false;
+    this.badge2Hover = false;
+    this.badge3Hover = false;
+    this.badge4Hover = false;
+    this.display1 = false;
+    this.display2 = false;
+    this.display3 = false;
+    this.display4 = false;
+
     //this.psatService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
@@ -178,12 +211,12 @@ export class PsatComponent implements OnInit {
     this.psatService.mainTab.next('system-setup');
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
-    if(this.addNewSub)this.addNewSub.unsubscribe();
-    if(this.openModSub)this.openModSub.unsubscribe();
-    if(this.selectedModSubscription)this.selectedModSubscription.unsubscribe();
-    if(this.calcTabSub)this.calcTabSub.unsubscribe();
-    if(this.secondaryTabSub)this.secondaryTabSub.unsubscribe();
-    if(this.mainTabSub)this.mainTabSub.unsubscribe();
+    if (this.addNewSub) this.addNewSub.unsubscribe();
+    if (this.openModSub) this.openModSub.unsubscribe();
+    if (this.selectedModSubscription) this.selectedModSubscription.unsubscribe();
+    if (this.calcTabSub) this.calcTabSub.unsubscribe();
+    if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
+    if (this.mainTabSub) this.mainTabSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -227,47 +260,66 @@ export class PsatComponent implements OnInit {
     }
   }
 
+  validateSettings() {
+    if (this.settings === undefined) {
+      return 'input-error';
+    }
+    if (this.settings.flowMeasurement === undefined || this.settings.flowMeasurement == '') {
+      return 'missing-data';
+    }
+    if (this.settings.language === undefined || this.settings.language == '') {
+      return 'missing-data';
+    }
+    if (this.settings.powerMeasurement === undefined || this.settings.powerMeasurement == '') {
+      return 'missing-data';
+    }
+    if (this.settings.pressureMeasurement === undefined || this.settings.pressureMeasurement == '') {
+      return 'missing-data';
+    }
+    if (this.settings.temperatureMeasurement === undefined || this.settings.pressureMeasurement == '') {
+      return 'missing-data';
+    }
+    if (this.settings.distanceMeasurement === undefined || this.settings.distanceMeasurement == '') {
+      return 'missing-data';
+    }
+    return 'success';
+  }
+
   getSettings(update?: boolean) {
     //get assessment settings
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          this.isAssessmentSettings = true;
-        } else {
-          //if no settings found for assessment, check directory settings
-          this.getParentDirectorySettings(this.assessment.directoryId);
-        }
-      }
-    )
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (tmpSettings) {
+      this.settings = tmpSettings;
+      this.isAssessmentSettings = true;
+    } else {
+      //if no settings found for assessment, check directory settings
+      this.getParentDirectorySettings(this.assessment.directoryId);
+    }
+    this.tab1Status = this.validateSettings();
   }
 
   getParentDirectorySettings(parentId: number) {
-    this.indexedDbService.getDirectorySettings(parentId).then(
-      results => {
-        if (results.length != 0) {
-          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
-          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-          tmpSettings.createdDate = new Date();
-          tmpSettings.modifiedDate = new Date();
-          tmpSettings.assessmentId = this.assessment.id;
-          //create settings for assessment
-          this.indexedDbService.addSettings(tmpSettings).then(
-            results => {
-              this.addToast('Settings Saved');
-              this.getSettings();
-            })
-        }
-        else {
-          //if no settings for directory check parent directory
-          this.indexedDbService.getDirectory(parentId).then(
-            results => {
-              this.getParentDirectorySettings(results.parentDirectoryId);
-            }
-          )
-        }
-      })
-
+    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
+    if (dirSettings) {
+      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
+      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
+      tmpSettings.assessmentId = this.assessment.id;
+      //create settings for assessment
+      this.indexedDbService.addSettings(tmpSettings).then(
+        results => {
+          this.settingsDbService.setAll().then(() => {
+            this.addToast('Settings Saved');
+            this.getSettings();
+          })
+        })
+    }
+    else {
+      //if no settings for directory check parent directory
+      let tmpDir: Directory = this.directoryDbService.getById(parentId);
+      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    }
   }
 
   checkPumpFluid() {
@@ -362,6 +414,29 @@ export class PsatComponent implements OnInit {
 
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+
+    if (!this.psatService.isPumpFluidFormValid(tmpForm)) {
+      this.tab2Status = 'missing-data';
+      this.tab3Status = 'input-error';
+      this.tab4Status = 'input-error';
+    }
+    else {
+      this.tab2Status = 'success';
+      if (!this.psatService.isMotorFormValid(tmpForm)) {
+        this.tab3Status = 'missing-data';
+        this.tab4Status = 'input-error';
+      }
+      else {
+        this.tab3Status = 'success';
+        if (!this.psatService.isFieldDataFormValid(tmpForm)) {
+          this.tab4Status = 'missing-data';
+        }
+        else {
+          this.tab4Status = 'success';
+        }
+      }
+    }
+
     if (
       this.psatService.isPumpFluidFormValid(tmpForm) &&
       this.psatService.isMotorFormValid(tmpForm) &&
@@ -376,9 +451,9 @@ export class PsatComponent implements OnInit {
       this._psat.setupDone = false;
     }
     if (this._psat.modifications) {
-      if(this._psat.modifications.length == 0){
+      if (this._psat.modifications.length == 0) {
         this.modificationExists = false;
-      }else{
+      } else {
         this.modificationExists = true;
       }
       this._psat.modifications.forEach(mod => {
@@ -387,16 +462,16 @@ export class PsatComponent implements OnInit {
         mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
         mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
       })
-    }else{
+    } else {
       this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._psat, this.modificationIndex)
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.indexedDbService.putAssessment(this.assessment).then(
-      results => {
+    this.indexedDbService.putAssessment(this.assessment).then(results => {
+      this.assessmentDbService.setAll().then(() => {
         this.psatService.getResults.next(true);
-      }
-    )
+      })
+    })
   }
 
   exportData() {
@@ -450,4 +525,79 @@ export class PsatComponent implements OnInit {
     this.save();
     this.closeAddNewModal();
   }
+
+
+  showTooltip(num: number) {
+    if (num == 1) {
+      this.badge1Hover = true;
+    }
+    else if (num == 2) {
+      this.badge2Hover = true;
+    }
+    else if (num == 3) {
+      this.badge3Hover = true;
+    }
+    else if (num == 4) {
+      this.badge4Hover = true;
+    }
+
+    setTimeout(() => {
+      this.checkHover(num);
+    }, 1000);
+  }
+
+  hideTooltip(num: number) {
+    if (num == 1) {
+      this.badge1Hover = false;
+      this.display1 = false;
+    }
+    else if (num == 2) {
+      this.badge2Hover = false;
+      this.display2 = false;
+    }
+    else if (num == 3) {
+      this.badge3Hover = false;
+      this.display3 = false;
+    }
+    else if (num == 4) {
+      this.badge4Hover = false;
+      this.display4 = false;
+    }
+  }
+
+  checkHover(num: number) {
+    if (num == 1) {
+      if (this.badge1Hover) {
+        this.display1 = true;
+      }
+      else {
+        this.display1 = false;
+      }
+    }
+    else if (num == 2) {
+      if (this.badge2Hover) {
+        this.display2 = true;
+      }
+      else {
+        this.display2 = false;
+      }
+    }
+    else if (num == 3) {
+      if (this.badge3Hover) {
+        this.display3 = true;
+      }
+      else {
+        this.display3 = false;
+      }
+    }
+    else if (num == 4) {
+      if (this.badge4Hover) {
+        this.display4 = true;
+      }
+      else {
+        this.display4 = false;
+      }
+    }
+  }
+
 }

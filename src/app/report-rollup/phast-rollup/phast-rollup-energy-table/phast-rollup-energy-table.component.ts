@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
 import { MeteredEnergyService } from '../../../phast/metered-energy/metered-energy.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-phast-rollup-energy-table',
   templateUrl: './phast-rollup-energy-table.component.html',
@@ -34,12 +35,13 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   energyCostUnit: string;
   energyPerMassUnit: string;
   energyPerTimeUnit: string;
+  resultsSub: Subscription;
   constructor(private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService, private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService, private suiteDbService: SuiteDbService,
     private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.checkSettings(this.settings);
-    this.reportRollupService.phastResults.subscribe(val => {
+    this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
       if (val.length) {
         this.tmpArr = new Array();
         this.getUnits();
@@ -61,6 +63,11 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       }
     })
   }
+
+  ngOnDestroy(){
+    this.resultsSub.unsubscribe();
+  }
+
 
   getData(dataArr: Array<any>) {
     dataArr.forEach(data => {

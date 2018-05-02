@@ -8,7 +8,8 @@ import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../settings/settings.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -39,11 +40,12 @@ export class AssessmentCreateComponent implements OnInit {
     private modelService: ModelService,
     private router: Router,
     private indexedDbService: IndexedDbService,
-    private settingsService: SettingsService) { }
+    private settingsDbService: SettingsDbService,
+    private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
     }
 
 
@@ -105,9 +107,11 @@ export class AssessmentCreateComponent implements OnInit {
           }
           tmpAssessment.directoryId = this.directory.id;
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            tmpAssessment.id = assessmentId;
-            this.assessmentService.createAssessment.next(false);
-            this.router.navigateByUrl('/psat/' + tmpAssessment.id)
+            this.assessmentDbService.setAll().then(() => {
+              tmpAssessment.id = assessmentId;
+              this.assessmentService.createAssessment.next(false);
+              this.router.navigateByUrl('/psat/' + tmpAssessment.id)
+            })
           })
         }
         else if (this.newAssessment.controls.assessmentType.value == 'Furnace') {
@@ -123,9 +127,11 @@ export class AssessmentCreateComponent implements OnInit {
             fuelCost: this.settings.fuelCost || 3.99
           }
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-            tmpAssessment.id = assessmentId;
-            this.assessmentService.createAssessment.next(false);
-            this.router.navigateByUrl('/phast/' + tmpAssessment.id)
+            this.assessmentDbService.setAll().then(() => {
+              tmpAssessment.id = assessmentId;
+              this.assessmentService.createAssessment.next(false);
+              this.router.navigateByUrl('/phast/' + tmpAssessment.id);
+            });
           });
         }
       })

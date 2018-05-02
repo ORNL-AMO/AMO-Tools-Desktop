@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsService } from "../../../settings/settings.service";
 import { ConvertUnitsService } from "../../../shared/convert-units/convert-units.service";
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-steam-properties',
@@ -16,7 +17,7 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesForm: FormGroup;
   tabSelect = 'results';
 
-  constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.steamPropertiesForm = this.formBuilder.group({
@@ -26,10 +27,10 @@ export class SteamPropertiesComponent implements OnInit {
     });
 
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
     }
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

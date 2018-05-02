@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card card-item">
   <div class="card-header summary-card-header">
-    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
+    <input type="checkbox" [(ngModel)]="directory.selected">
     <span class="fa fa-folder"></span>
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
     <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>

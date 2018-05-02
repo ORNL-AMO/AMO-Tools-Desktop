@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { FacilityInfo } from '../models/settings';
+import { PhonePipe } from '../pipes/phone.pipe';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-facility-info-summary',
@@ -14,18 +17,14 @@ export class FacilityInfoSummaryComponent implements OnInit {
 
 
   facilityInfo: FacilityInfo;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.indexedDbService.getDirectorySettings(this.assessment.directoryId).then(val => {
-      if(val){
-        let settings = val[0];
-        if (settings) {
-          if(settings.facilityInfo){
-            this.facilityInfo = settings.facilityInfo;
-          }
-        }
+    let settings = this.settingsDbService.getByDirectoryId(this.assessment.directoryId);
+    if (settings) {
+      if (settings.facilityInfo) {
+        this.facilityInfo = settings.facilityInfo;
       }
-    })
+    }
   }
 }

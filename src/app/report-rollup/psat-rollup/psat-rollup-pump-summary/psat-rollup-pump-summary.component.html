@@ -28,7 +28,7 @@
 
 <!-- print view -->
 <div *ngIf="printView">
-  <div *ngFor="let printChart of printChartData; let i = index" class="print-rollup-bar-chart-container">
+  <div *ngFor="let printChart of printChartData; let i = index" class="print-rollup-bar-chart-container print-section">
     <div class="row justify-content-center">
       {{titles[i]}}
     </div>
@@ -41,7 +41,7 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-center table-row">
+  <div class="row justify-content-center table-row print-section">
     <div class="col-12 output-summary">
       <app-psat-rollup-pump-summary-table [settings]="settings" [resultData]="resultData"></app-psat-rollup-pump-summary-table>
     </div>

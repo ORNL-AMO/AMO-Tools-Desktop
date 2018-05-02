@@ -339,7 +339,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#145A32")
       .style("display", "none")
       .style('pointer-events', 'none');
 
@@ -565,7 +565,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .text("Current: " + currentD.y + " % FLC")
           .style("font-size", "13px")
           .style("font-weight", "bold")
-          .style("fill", "#2ECC71");
+          .style("fill", "#145A32");
 
         //power factor
         if (powerFactorData.length != 0) {

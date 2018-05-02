@@ -3,7 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-motor-performance',
@@ -32,7 +32,7 @@ export class MotorPerformanceComponent implements OnInit {
 
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsService: SettingsService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.psat) {
@@ -53,7 +53,7 @@ export class MotorPerformanceComponent implements OnInit {
 
     //use system settings for standalone calculator
     if (!this.settings) {
-      this.settings = this.settingsService.globalSettings;
+      this.settings = this.settingsDbService.globalSettings;
       if (this.settings.powerMeasurement != 'hp') {
         this.performanceForm.patchValue({
           horsePower: '150'
@@ -61,8 +61,8 @@ export class MotorPerformanceComponent implements OnInit {
       }
     }
 
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

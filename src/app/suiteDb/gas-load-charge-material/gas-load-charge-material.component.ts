@@ -5,6 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-gas-load-charge-material',
   templateUrl: './gas-load-charge-material.component.html',
@@ -29,7 +30,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.canAdd = true;
@@ -37,9 +38,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
     if (!this.settings) {
-      this.indexedDbService.getSettings(1).then(results => {
-        this.settings = results;
-      })
+      this.settings = this.settingsDbService.getByDirectoryId(1);
     }
   }
 

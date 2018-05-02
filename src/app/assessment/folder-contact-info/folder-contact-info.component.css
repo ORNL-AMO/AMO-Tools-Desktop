@@ -7,11 +7,6 @@ td, a{
     padding-bottom: 0px;
   }
 
-  
-.summary-rollup{
-    padding: 6px;
-  }
-
   .group-label{
     border-bottom: #566573 groove 2px;
   }
@@ -35,18 +30,20 @@ td, a{
 }
 
 
-.expanded-row {
+.expanded-row, .expanded-row tr, .expanded-row td, .expanded-row tbody {
   height: initial;
   overflow: initial;
   color: rgba(0,0,0,1);
   transition: all ease 0.5s;
 }
 
-.collapsed-row {
+.collapsed-row, .collapsed-row tr, .collapsed-row td, .collapsed-row tbody {
   height: 0;
   overflow: hidden;
   color: rgba(0,0,0,0);
   transition: all ease 0.5s;
+  font-size: 0px;
+  border-top: none;
 }
 
 
@@ -96,6 +93,20 @@ td, a{
   padding-left: 13%;
 }
 
-.label-row {
-  padding-top: 10px;
+.card{
+  border: none;
+}
+
+.table{
+  margin-bottom: 0px;
+}
+
+.no-border-top{
+  border-top: none;
+}
+
+
+
+.modal-dialog{
+  top: 1rem;
 }

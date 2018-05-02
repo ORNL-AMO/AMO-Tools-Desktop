@@ -11,7 +11,8 @@ ul{
 }
 
 .summary-card-header{
-  border-bottom: #566573 groove 2px;
+  border-bottom: #B3B6B7 groove 2px;
+  border-image: linear-gradient(to right,#F0F3F4, #B3B6B7) 50 / 2;
 }
 .summary-card-body .fa-folder{
   font-size: large;

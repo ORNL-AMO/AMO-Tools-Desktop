@@ -1,17 +1,18 @@
 <div class="row">
   <div class="col-10">
-
-    <ol class="breadcrumb">
-      <li *ngFor="let crumb of breadCrumbs; let first = first;">
-        <a class="breadcrumb-item" *ngIf="first" (click)="goToDirectory(crumb)">
-          All Assessments /
-        </a>
-        <a class="breadcrumb-item" *ngIf="!first" (click)="goToDirectory(crumb)">
-          {{crumb.name}} /
-        </a>
-      </li>
-      <li class="breadcrumb-item">{{directory.name}}</li>
-    </ol>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item disabled"><span class="fa fa-folder"></span></li>
+        <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+          <a *ngIf="first" (click)="goToDirectory(crumb)"> All Assessments
+          </a>
+          <a *ngIf="!first" (click)="goToDirectory(crumb)">
+            {{crumb.name}}
+          </a>
+        </li>
+        <li class="breadcrumb-item active">{{directory.name}}</li>
+      </ol>
+    </nav>
   </div>
   <div class="col-2">
     <div class="btn-group pull-right" role="group">
@@ -24,32 +25,24 @@
     </div>
   </div>
 </div>
-
+<hr class="my-1">
 <div class="row">
   <div class="col-12">
-
-    <div class="table-header">
-
-      <div class="actions">
-        <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Assessment</button>
-        <!-- <button (click)="showPreAssessment()" type="button" class="btn btn-secondary">Add PH Pre-Assessment</button> -->
-        <app-create-folder [(directory)]="directory" [directorySettings]="directorySettings" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-        <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
-        <button [disabled]="!checkDeleteExport()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-        <button [disabled]="!checkDeleteExport()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
-
-        <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
+    <div class="actions d-flex align-items-center">
+      <div class="d-flex flex-wrap">
+        <button class="btn btn-secondary action-btn" (click)="showCreateAssessment()" type="button">Add Assessment</button>
+        <button class="btn btn-secondary action-btn" (click)="showPreAssessment()" type="button">Add Pre-Assessment</button>
+        <app-create-folder [(directory)]="directory" [directorySettings]="directorySettings" (newDirectory)="emitNewDir()"></app-create-folder>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkReport()" type="button" (click)="emitGenReport()">Generate Report</button>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()">Delete</button>
+        <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="emitExport()">Export</button>
+        <button class="btn btn-secondary action-btn" type="button" (click)="emitImport()">Import</button>
       </div>
-      <!-- End .table-actions -->
-
-      <div class="header" *ngIf="view != 'settings'">
-        <label>
-          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/>Select all</label>
-      </div>
-
+      <label class="ml-auto select-all">
+        <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />
+        <a>Select all folder content</a>
+      </label>
+      <!-- <a (click)="emitImport()">Import...</a> -->
     </div>
-
   </div>
 </div>
-
-<!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->

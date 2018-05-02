@@ -3,6 +3,7 @@ import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
 import { AuxEquipmentService } from './aux-equipment.service';
 import { SettingsService } from '../../settings/settings.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-aux-equipment',
   templateUrl: 'aux-equipment.component.html',
@@ -21,7 +22,7 @@ export class AuxEquipmentComponent implements OnInit {
 
   results: Array<{name: string, totalPower: number, motorPower: string}>;
   resultsSum: number = 0;
-  constructor(private auxEquipmentService: AuxEquipmentService, private settingsService: SettingsService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.phast.auxEquipment) {
@@ -31,8 +32,8 @@ export class AuxEquipmentComponent implements OnInit {
       this.calculate();
     }
     
-    if (this.settingsService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsService.globalSettings.defaultPanelTab;
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
