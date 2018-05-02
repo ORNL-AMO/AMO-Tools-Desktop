@@ -8,6 +8,8 @@ import {Component, Input, OnInit} from '@angular/core';
 export class SteamComponent implements OnInit {
   @Input()
   selectedTool: string;
+  @Input()
+  goCalcHome: boolean;
 
   constructor() { }
 
