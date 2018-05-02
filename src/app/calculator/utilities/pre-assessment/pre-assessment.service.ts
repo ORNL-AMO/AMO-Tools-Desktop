@@ -53,7 +53,7 @@ export class PreAssessmentService {
       let energyCost = tmpResults * settings.steamCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
-    else if (assessment.settings.energySourceType == 'Electricity') {
+    else if (assessment.settings.energySourceType == 'Electricity' || assessment.settings.energySourceType == 'Hybrid') {
       let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
       //may need conversion
       let energyCost = tmpResults * settings.electricityCost;
@@ -77,7 +77,7 @@ export class PreAssessmentService {
       let energyCost = tmpResults * settings.steamCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
-    else if (assessment.settings.energySourceType == 'Electricity') {
+    else if (assessment.settings.energySourceType == 'Electricity' || assessment.settings.energySourceType == 'Hybrid') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
       let energyCost = tmpResults * settings.electricityCost;
       tmpResults = this.convertElectrotechResults(tmpResults, settings);

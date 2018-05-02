@@ -28,3 +28,9 @@ a:not([href]):not([tabindex]){
   padding-top: 4px;
   font-size: larger;
 }
+
+
+.list-row.folder{
+  border-bottom: #B3B6B7 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #B3B6B7) 80 / 2;
+}

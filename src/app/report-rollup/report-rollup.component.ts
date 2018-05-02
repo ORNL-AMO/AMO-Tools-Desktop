@@ -31,7 +31,8 @@ export class ReportRollupComponent implements OnInit {
   _psatAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
-  selectedCalcs: Array<Calculator>;
+  selectedPhastCalcs: Array<Calculator>;
+  selectedPsatCalcs: Array<Calculator>;
   directoryIds: Array<number>;
   bannerHeight: number;
   assessmentsGathered: boolean = false;
@@ -58,7 +59,8 @@ export class ReportRollupComponent implements OnInit {
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
-    this.selectedCalcs = new Array<Calculator>();
+    this.selectedPhastCalcs = new Array<Calculator>();
+    this.selectedPsatCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
 
     setTimeout(() => {
@@ -113,10 +115,13 @@ export class ReportRollupComponent implements OnInit {
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
         if (items.length != 0) {
-          this.selectedCalcs = items;
-          for (let i = 0; i < this.selectedCalcs.length; i++) {
-            this.directoryIds.push(this.selectedCalcs[i].directoryId);
-          }
+          items.forEach(item => {
+            if(item.type == 'furnace'){
+              this.selectedPhastCalcs.push(item);
+            }else if(item.type == 'pump'){
+              this.selectedPsatCalcs.push(item);
+            }
+          })
         }
       }
     });

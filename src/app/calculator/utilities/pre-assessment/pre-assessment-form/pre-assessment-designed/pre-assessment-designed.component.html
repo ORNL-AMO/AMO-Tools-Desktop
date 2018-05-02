@@ -4,6 +4,21 @@
     </div>
 </div>
 <form>
+    <div *ngIf="assessment.settings.energySourceType == 'Hybrid'">
+        <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity; let index = index">
+            <div class="row">
+                <div class="col">
+                    <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
+                </div>
+                <div class="col">
+                    <a class="pull-right small click-link fa fa-times" (click)="removeElectricityZone(index)"></a>
+                </div>
+            </div>
+            <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
+            <app-designed-energy-fuel-form [inputs]="assessment.designedEnergy.designedEnergyFuel[index]" [settings]="settings"
+                (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form>
+        </div>
+    </div>
     <div *ngIf="assessment.settings.energySourceType == 'Electricity'">
         <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity; let index = index">
             <div class="row">
@@ -15,8 +30,8 @@
                 </div>
             </div>
             <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
-            <app-designed-energy-fuel-form [inputs]="assessment.designedEnergy.designedEnergyFuel[index]" [settings]="settings" (emitCalculate)="calculate()"
-                (changeField)="changeField($event)"></app-designed-energy-fuel-form>
+            <!-- <app-designed-energy-fuel-form *ngIf="showFuel" [inputs]="assessment.designedEnergy.designedEnergyFuel[index]" [settings]="settings"
+                (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form> -->
         </div>
     </div>
     <div *ngIf="assessment.settings.energySourceType == 'Fuel'">

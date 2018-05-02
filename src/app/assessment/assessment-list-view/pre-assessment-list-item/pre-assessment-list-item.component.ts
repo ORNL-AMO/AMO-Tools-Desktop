@@ -8,13 +8,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-
 @Component({
-  selector: 'app-pre-assessment-card',
-  templateUrl: './pre-assessment-card.component.html',
-  styleUrls: ['./pre-assessment-card.component.css', '../assessment-grid-view.component.css']
+  selector: 'app-pre-assessment-list-item',
+  templateUrl: './pre-assessment-list-item.component.html',
+  styleUrls: ['./pre-assessment-list-item.component.css']
 })
-export class PreAssessmentCardComponent implements OnInit {
+export class PreAssessmentListItemComponent implements OnInit {
   @Input()
   calculator: Calculator;
   @Input()
@@ -32,17 +31,13 @@ export class PreAssessmentCardComponent implements OnInit {
 
   @ViewChild('editModal') public editModal: ModalDirective;
   directories: Array<Directory>;
-  editForm: FormGroup;
-  numFurnaces: number = 0;
-  energyUsed: number = 0;
-  energyCost: number = 0;
   isFirstChange: boolean = true;
   preAssessmentExists: boolean;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService) { }
+  editForm: FormGroup;
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
-    //  this.populateDirArray();
-    this.getData();
+    this.checkPreAssessment();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,20 +48,6 @@ export class PreAssessmentCardComponent implements OnInit {
     }
     if (changes.calculator) {
       this.checkPreAssessment();
-      this.getData();
-    }
-  }
-
-  getData() {
-    if (this.preAssessmentExists) {
-      this.numFurnaces = this.calculator.preAssessments.length;
-      let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
-      this.energyUsed = _.sumBy(tmpResults, 'value');
-      this.energyCost = _.sumBy(tmpResults, 'energyCost');
-    } else {
-      this.energyCost = 0;
-      this.energyUsed = 0;
-      this.numFurnaces = 0;
     }
   }
 
@@ -83,13 +64,6 @@ export class PreAssessmentCardComponent implements OnInit {
       }
     }
   }
-
-  // populateDirArray() {
-  //   this.indexedDbService.getAllDirectories().then(dirs => {
-  //     this.directories = dirs;
-  //   })
-  // }
-
   showPreAssessment() {
     if (this.preAssessmentExists) {
       this.viewPreAssessment.emit(this.index);
@@ -97,7 +71,6 @@ export class PreAssessmentCardComponent implements OnInit {
       this.viewPreAssessment.emit(undefined);
     }
   }
-
   showEditModal() {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;

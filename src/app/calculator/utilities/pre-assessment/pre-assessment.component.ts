@@ -24,6 +24,9 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
+
+  showName: boolean = false;
+
   @ViewChild('container') container: ElementRef;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -39,13 +42,14 @@ export class PreAssessmentComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   results: Array<any>;
-  currentEnergySourceType: string = 'Fuel';
+  currentEnergySourceType: string = 'Electricity';
   currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
+  type: string = 'furnace';
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -58,7 +62,6 @@ export class PreAssessmentComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
   }
 
   ngAfterViewInit() {
@@ -82,6 +85,13 @@ export class PreAssessmentComponent implements OnInit {
       this.preAssessments = new Array<PreAssessment>();
       this.addPreAssessment();
     } else {
+      if(!this.calculator.name){
+        this.showName = true;
+      }
+      if(!this.calculator.type){
+        this.calculator.type = 'furnace';
+      }
+      this.type = this.calculator.type;
       if (this.calculator.preAssessments) {
         if (this.calculator.preAssessments.length != 0) {
           this.nameIndex = this.calculator.preAssessments.length;
@@ -100,21 +110,27 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
+  setType(str: string){
+    this.calculator.type = str;
+    this.type = str;
+  }
+
   setCurrentField(str: string) {
     this.currentField = str;
+    //console.log(this.currentField);
   }
 
   setEnergySourceType(str: string) {
     if (str != this.currentEnergySourceType) {
       this.currentEnergySourceType = str;
-      this.currentField = '';
+     // this.currentField = '';
     }
   }
 
   setAssessmentType(str: string) {
     if (str != this.currentAssessmentType) {
       this.currentAssessmentType = str;
-      this.currentField = ''
+     // this.currentField = ''
     }
   }
 
@@ -141,7 +157,7 @@ export class PreAssessmentComponent implements OnInit {
     let tmpSettings: Settings = JSON.parse(JSON.stringify(this.settings));
     this.preAssessments.unshift({
       type: 'Metered',
-      name: 'Furnace ' + this.nameIndex,
+      name: 'Unit ' + this.nameIndex,
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
@@ -203,5 +219,10 @@ export class PreAssessmentComponent implements OnInit {
         }
       }
     });
+  }
+
+
+  setName(){
+    this.showName = false;
   }
 }

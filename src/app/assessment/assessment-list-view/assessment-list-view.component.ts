@@ -17,7 +17,7 @@ export class AssessmentListViewComponent implements OnInit {
   @Input()
   directoryCalculator: Calculator;
   @Output('emitPreAssessment')
-  emitPreAssessment = new EventEmitter<boolean>();
+  emitPreAssessment = new EventEmitter<number>();
   constructor() { }
 
   ngOnInit() {
@@ -31,8 +31,8 @@ export class AssessmentListViewComponent implements OnInit {
     }
   }
 
-  viewPreAssessment() {
-    this.emitPreAssessment.emit(true);
+  viewPreAssessment(index: number) {
+    this.emitPreAssessment.emit(index);
   }
 
 }
