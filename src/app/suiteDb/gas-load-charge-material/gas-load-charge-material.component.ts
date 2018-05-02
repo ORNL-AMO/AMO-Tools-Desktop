@@ -95,13 +95,29 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   deleteMaterial() {
+    console.log('deleteMaterial()');
     if (this.deleteMaterial && this.existingMaterial) {
+      console.log('deleteMaterial and existingMaterial is true');
       let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult == true) {
+        console.log('suiteDbResult is true');
+        let tmpMaterial: GasLoadChargeMaterial; 
+        this.indexedDbService.getGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
+          tmpMaterial = val;
+          console.log('tmpMaterial.id = ' + tmpMaterial.id);
+          console.log('tmpMaterial.substance = ' + tmpMaterial.substance);
+        });
         this.indexedDbService.deleteGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
+          console.log('made it through indexedDbService call');
           this.closeModal.emit(this.newMaterial);
         });
       }
+      else {
+        console.log('suiteDbResult is false');
+      }
+    }
+    else {
+      console.log('deleteMaterial and existingMaterial is not true');
     }
   }
 
