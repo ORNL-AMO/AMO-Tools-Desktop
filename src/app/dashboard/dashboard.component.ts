@@ -194,8 +194,7 @@ export class DashboardComponent implements OnInit {
       this.selectedCalcIndex = calcIndex;
     }else{
       let calcualtorData: Calculator = {
-        directoryId: this.workingDirectory.id,
-        name: this.workingDirectory.name + ' Pre-Assessment'
+        directoryId: this.workingDirectory.id
       }
       this.workingDirectory.calculators.push(calcualtorData);
       this.selectedCalcIndex = this.workingDirectory.calculators.length-1;

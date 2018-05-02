@@ -33,7 +33,9 @@ td{
     margin: 10px;
 }
 
-
+.assessment-name{
+    font-size: larger;
+}
 
 .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #212F3D;

@@ -24,6 +24,9 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
+
+  showName: boolean = false;
+
   @ViewChild('container') container: ElementRef;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -81,6 +84,9 @@ export class PreAssessmentComponent implements OnInit {
       this.preAssessments = new Array<PreAssessment>();
       this.addPreAssessment();
     } else {
+      if(!this.calculate.name){
+        this.showName = true;
+      }
       if (this.calculator.preAssessments) {
         if (this.calculator.preAssessments.length != 0) {
           this.nameIndex = this.calculator.preAssessments.length;
@@ -202,5 +208,10 @@ export class PreAssessmentComponent implements OnInit {
         }
       }
     });
+  }
+
+
+  setName(){
+    this.showName = false;
   }
 }
