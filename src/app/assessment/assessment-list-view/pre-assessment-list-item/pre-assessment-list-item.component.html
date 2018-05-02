@@ -1,9 +1,4 @@
-<div class="list-row pre-assessment" *ngIf="preAssessmentExists">
-  <!-- <div class="drag-handle">
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-  </div> -->
+<div class="list-row pre-assessment" *ngIf="preAssessmentExists" [ngClass]="{'pump': calculator.type =='pump', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="assessment-name">
     <input type="checkbox" [(ngModel)]="calculator.selected" />
     <i class="fa fa-pie-chart" aria-hidden="true"></i>
@@ -12,9 +7,11 @@
   <div>
     <span class="fa fa-edit pull-right" (click)="showEditModal()"></span>
   </div>
+  <br>
+  <div class="last-updated">Pre-assessment / Screening</div>
 </div>
 
-<div class="list-row pre-assessment text-center"  *ngIf="!preAssessmentExists">
+<div class="list-row pre-assessment text-center general"  *ngIf="!preAssessmentExists">
   <a class="click-link" (click)="showPreAssessment()">Add PH Pre-Assessment / Screening</a>
 </div>
 

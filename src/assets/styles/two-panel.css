@@ -77,7 +77,7 @@
 
 .general .panel-tab-item.active{
     border: none;
-    border-bottom: #145A32 groove 2px;
+    border-bottom: #145A32 solid 2px;
 }
 
 .header h3{
@@ -94,7 +94,7 @@
 }
 
 .general .header{
-    border-bottom: #145A32 groove 2px;
+    border-bottom: #145A32 solid 2px;
 }
 
 .psat .disabled .header{
@@ -104,6 +104,23 @@
 .compressed-air .header{
     border-bottom: #A569BD groove 2px;
 }
+
+.general .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #145A32;
+    transition: all .5s ease-in-out;
+}
+
+.phast .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
+    transition: all .5s ease-in-out;
+}
+
+.psat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #2980b9;
+    transition: all .5s ease-in-out;
+}
+
+
 
 .panel-add a{
     padding-top: 5px;
@@ -192,7 +209,7 @@
 }
 
 .general .group-label{
-    border-bottom: #145A32 groove 2px;
+    border-bottom: #145A32 solid 2px;
 }
 
 .loss-label{

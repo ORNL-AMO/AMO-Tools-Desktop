@@ -36,10 +36,6 @@
     margin-bottom: 0px;
 }
 
-.btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #145A32;
-}
-
 .pad-top {
     padding-top: 20px;
 }

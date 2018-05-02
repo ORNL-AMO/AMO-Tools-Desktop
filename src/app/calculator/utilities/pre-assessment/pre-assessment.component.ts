@@ -49,6 +49,7 @@ export class PreAssessmentComponent implements OnInit {
   showAdd: boolean = true;
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
+  type: string = 'furnace';
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -87,6 +88,10 @@ export class PreAssessmentComponent implements OnInit {
       if(!this.calculator.name){
         this.showName = true;
       }
+      if(!this.calculator.type){
+        this.calculator.type = 'furnace';
+      }
+      this.type = this.calculator.type;
       if (this.calculator.preAssessments) {
         if (this.calculator.preAssessments.length != 0) {
           this.nameIndex = this.calculator.preAssessments.length;
@@ -103,6 +108,11 @@ export class PreAssessmentComponent implements OnInit {
       }
       this.calculate();
     }
+  }
+
+  setType(str: string){
+    this.calculator.type = str;
+    this.type = str;
   }
 
   setCurrentField(str: string) {

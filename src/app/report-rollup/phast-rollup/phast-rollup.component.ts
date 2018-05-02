@@ -15,21 +15,15 @@ export class PhastRollupComponent implements OnInit {
   phastResults: Array<PhastResultsData>;
   @Input()
   calculators: Array<Calculator>;
-
-  selectedCalcs: Array<Calculator>;
-  preAssessments: Array<PreAssessment>;
   showPreAssessment: boolean = true;
-
   constructor() { }
 
   ngOnInit() {
-    if (this.calculators[0] === undefined) {
+    if (!this.calculators || this.calculators.length == 0) {
       this.showPreAssessment = false;
     }
     else {
-      if (this.calculators[0].preAssessments) {
-        this.showPreAssessment = true;
-      }
+      this.showPreAssessment = true;
     }
   }
 }

@@ -37,8 +37,32 @@ td{
     font-size: larger;
 }
 
-.btn-secondary:not([disabled]):not(.disabled).active{
+.general .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #145A32;
+    transition: all .5s ease-in-out;
+}
+
+.phast .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
+    transition: all .5s ease-in-out;
+}
+
+.psat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #2980b9;
+    transition: all .5s ease-in-out;
+}
+
+.general .ico-size3{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
+    transition: all .5s ease-in-out;
+}
+.phast .ico-size3{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
+    transition: all .5s ease-in-out;
+}
+.psat .ico-size3{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #2980b9);
+    transition: all .5s ease-in-out;
 }
 
 .no-data{

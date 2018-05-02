@@ -162,7 +162,7 @@
                 </button>
             </div>
             <div class="modal-body panel-container psat">
-                <app-psat-rollup [settings]="settings"></app-psat-rollup>
+                <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup>
             </div>
         </div>
     </div>
@@ -180,7 +180,7 @@
                 </button>
             </div>
             <div class="modal-body panel-container phast">
-                <app-phast-rollup [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup>
+                <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
             </div>
         </div>
     </div>

@@ -69,10 +69,20 @@ h5{
     font-size: 12px;
 }
 
-.btn-secondary:not([disabled]):not(.disabled).active{
+.general .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #145A32;
+    transition: all .5s ease-in-out;
 }
 
+.phast .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
+    transition: all .5s ease-in-out;
+}
+
+.psat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #2980b9;
+    transition: all .5s ease-in-out;
+}
 .btn-col{
     text-align: center;
     padding-top: 3px;
