@@ -30,7 +30,7 @@ import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-
 import { PsatRollupPrintComponent } from './psat-rollup/psat-rollup-print/psat-rollup-print.component';
 import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-pump-summary-table/psat-rollup-pump-summary-table.component';
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
-import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PhastRollupPreAssessmentTableComponent } from './phast-rollup/phast-rollup-pre-assessment-table/phast-rollup-pre-assessment-table.component';
 
 @NgModule({

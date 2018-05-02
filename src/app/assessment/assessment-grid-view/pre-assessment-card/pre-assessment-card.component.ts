@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PreAssessmentService } from '../../../calculator/furnaces/pre-assessment/pre-assessment.service';
+import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 

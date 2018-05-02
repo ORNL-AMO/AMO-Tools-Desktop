@@ -1,4 +1,4 @@
-import { PreAssessment } from "../../calculator/furnaces/pre-assessment/pre-assessment";
+import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
 import { FormGroup } from "@angular/forms";
 
 export interface Calculator {

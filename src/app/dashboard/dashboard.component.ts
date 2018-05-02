@@ -26,7 +26,7 @@ import { CoreService } from '../core/core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
-import { PreAssessment } from '../calculator/furnaces/pre-assessment/pre-assessment';
+import { PreAssessment } from '../calculator/utilities/pre-assessment/pre-assessment';
 declare const packageJson;
 
 @Component({

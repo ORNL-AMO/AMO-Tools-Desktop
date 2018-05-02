@@ -107,19 +107,20 @@ export class PreAssessmentComponent implements OnInit {
 
   setCurrentField(str: string) {
     this.currentField = str;
+    //console.log(this.currentField);
   }
 
   setEnergySourceType(str: string) {
     if (str != this.currentEnergySourceType) {
       this.currentEnergySourceType = str;
-      this.currentField = '';
+     // this.currentField = '';
     }
   }
 
   setAssessmentType(str: string) {
     if (str != this.currentAssessmentType) {
       this.currentAssessmentType = str;
-      this.currentField = ''
+     // this.currentField = ''
     }
   }
 
