@@ -43,7 +43,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   input: SaturatedPropertiesInput;
   output: SaturatedPropertiesOutput;
 
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.input = {
@@ -85,11 +85,13 @@ export class SaturatedPropertiesFormComponent implements OnInit {
       }
       this.input.saturatedTemperature = temperature;
     }
-    // pressure min 0.001 max 22.064 MPa
-    // temp min 273.2 max 657 K
     this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
 
     return 0;
+  }
+
+  getDisplayUnit(unit: string) {
+    return this.steamService.getDisplayUnit(unit);
   }
 
 }
