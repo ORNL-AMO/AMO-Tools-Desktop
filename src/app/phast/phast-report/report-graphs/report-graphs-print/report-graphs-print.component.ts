@@ -14,25 +14,35 @@ import { PhastReportService } from '../../phast-report.service';
 })
 export class ReportGraphsPrintComponent implements OnInit {
     @Input()
-    modExists: boolean;
+    resultsArray: Array<{ name: string, data: PhastResults }>;
     @Input()
-    resultCats: ShowResultsCategories;
+    showResultsCats: ShowResultsCategories;
     @Input()
-    baselinePhast: any;
+    graphColors: Array<string>;
     @Input()
-    modPhast: any;
+    pieChartWidth: number;
     @Input()
-    resultsArray: Array<any>;
-    @Input()
-    settings: Settings;
+    pieChartHeight: number;
     @Input()
     printView: boolean;
-    @Input()
-    chartContainerWidth: number;
     @Input()
     phast: PHAST;
     @Input()
     assessment: Assessment;
+    @Input()
+    settings: Settings;
+    @Input()
+    modExists: boolean;
+    @Input()
+    allPieLabels: Array<Array<string>>;
+    @Input()
+    allPieValues: Array<Array<number>>;
+    @Input()
+    baselinePhast: any;
+    @Input()
+    printSankey: boolean;
+    @Input()
+    printGraphs: boolean;
 
     sankeyBaseline: PHAST;
     modification: PHAST;

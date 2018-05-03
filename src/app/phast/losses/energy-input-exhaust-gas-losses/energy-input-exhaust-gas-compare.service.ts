@@ -1,108 +1,80 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class EnergyInputExhaustGasCompareService {
-
-
   baselineEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
   modifiedEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
 
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineEnergyInputExhaustGasLosses && this.modifiedEnergyInputExhaustGasLosses) {
-      if (this.baselineEnergyInputExhaustGasLosses.length == this.modifiedEnergyInputExhaustGasLosses.length) {
-        let numLosses = this.baselineEnergyInputExhaustGasLosses.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
+  inputError: BehaviorSubject<boolean>;
+  constructor() {
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
+  compareAllLosses(): boolean {
+    let index = 0;
+    let numLoss = this.baselineEnergyInputExhaustGasLosses.length;
+    let isDiff: boolean = false;
+    if (this.modifiedEnergyInputExhaustGasLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
         }
-        this.checkExhaustGasLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
+    return isDiff;
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareLoss(index: number): boolean {
+    return (
+      this.compareExcessAir(index) ||
+      this.compareCombustionAirTemp(index) ||
+      this.compareExhaustGasTemp(index) ||
+      this.compareTotalHeatInput(index) ||
+      this.compareElectricalPowerInput(index)
+    )
+  }
+  compareExcessAir(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].excessAir, this.modifiedEnergyInputExhaustGasLosses[index].excessAir);
+  }
+  compareCombustionAirTemp(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].combustionAirTemp, this.modifiedEnergyInputExhaustGasLosses[index].combustionAirTemp);
+  }
+  compareExhaustGasTemp(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].exhaustGasTemp, this.modifiedEnergyInputExhaustGasLosses[index].exhaustGasTemp);
+  }
+  compareTotalHeatInput(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].totalHeatInput, this.modifiedEnergyInputExhaustGasLosses[index].totalHeatInput);
+  }
+  compareElectricalPowerInput(index: number): boolean {
+    return this.compare(this.baselineEnergyInputExhaustGasLosses[index].electricalPowerInput, this.modifiedEnergyInputExhaustGasLosses[index].electricalPowerInput);
   }
 
-  // addOther() {
-  //   this.differentArray.forEach(diff => {
-  //     diff.different.otherLossObjects.push(new BehaviorSubject<boolean>(null));
-  //   })
-  // }
-
-  initDifferentObject(): EnergyInputExhaustGasDifferent {
-    // let tmpBehaviorArray = new Array<BehaviorSubject<boolean>>();
-    // for (let i = 0; i < numOther; i++) {
-    //   tmpBehaviorArray.push(new BehaviorSubject<boolean>(null));
-    // }
-
-    let tmpDifferent: EnergyInputExhaustGasDifferent = {
-      excessAir: new BehaviorSubject<boolean>(null),
-      combustionAirTemp: new BehaviorSubject<boolean>(null),
-      exhaustGasTemp: new BehaviorSubject<boolean>(null),
-      totalHeatInput: new BehaviorSubject<boolean>(null),
-      electricalPowerInput: new BehaviorSubject<boolean>(null),
-      //otherLossObjects: tmpBehaviorArray
-    }
-    return tmpDifferent;
-  }
-
-  checkExhaustGasLosses() {
-    if (this.baselineEnergyInputExhaustGasLosses && this.modifiedEnergyInputExhaustGasLosses) {
-      if (this.baselineEnergyInputExhaustGasLosses.length != 0 && this.modifiedEnergyInputExhaustGasLosses.length != 0 && this.baselineEnergyInputExhaustGasLosses.length == this.modifiedEnergyInputExhaustGasLosses.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //excessAir
-          this.differentArray[lossIndex].different.excessAir.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].excessAir, this.modifiedEnergyInputExhaustGasLosses[lossIndex].excessAir));
-          //combustionAirTemp
-          this.differentArray[lossIndex].different.combustionAirTemp.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].combustionAirTemp, this.modifiedEnergyInputExhaustGasLosses[lossIndex].combustionAirTemp));
-          //exhaustGasTemp
-          this.differentArray[lossIndex].different.exhaustGasTemp.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].exhaustGasTemp, this.modifiedEnergyInputExhaustGasLosses[lossIndex].exhaustGasTemp));
-          //totalHeatInput
-          this.differentArray[lossIndex].different.totalHeatInput.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].totalHeatInput, this.modifiedEnergyInputExhaustGasLosses[lossIndex].totalHeatInput));
-          //electricalPowerInput
-          this.differentArray[lossIndex].different.electricalPowerInput.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].electricalPowerInput, this.modifiedEnergyInputExhaustGasLosses[lossIndex].electricalPowerInput));
-          //otherLossObjects
-          // let i = 0;
-          // this.differentArray[lossIndex].different.otherLossObjects.forEach(obj => {
-          //   obj.next(this.compare(this.baselineEnergyInputExhaustGasLosses[lossIndex].otherLossObjects[i], this.modifiedEnergyInputExhaustGasLosses[lossIndex].otherLossObjects[i]));
-          //   i++;
-          // });
-        }
-      } else {
-        this.disableAll()
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.energyInputExhaustGasLoss) {
+        let index = 0;
+        baseline.losses.energyInputExhaustGasLoss.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.energyInputExhaustGasLoss[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
       }
-    } else {
-      this.disableAll()
     }
+    return isDiff;
   }
 
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.excessAir.next(false);
-      this.differentArray[lossIndex].different.combustionAirTemp.next(false);
-      this.differentArray[lossIndex].different.exhaustGasTemp.next(false);
-      this.differentArray[lossIndex].different.totalHeatInput.next(false);
-      this.differentArray[lossIndex].different.electricalPowerInput.next(false);
-      // let i = 0;
-      // this.differentArray[lossIndex].different.otherLossObjects.forEach(obj => {
-      //   obj.next(false);
-      //   i++;
-      // });
-    }
+  compareBaseModLoss(baseline: EnergyInputExhaustGasLoss, modification: EnergyInputExhaustGasLoss): boolean {
+    return (
+      this.compare(baseline.excessAir, modification.excessAir) ||
+      this.compare(baseline.combustionAirTemp, modification.combustionAirTemp) ||
+      this.compare(baseline.exhaustGasTemp, modification.exhaustGasTemp) ||
+      this.compare(baseline.totalHeatInput, modification.totalHeatInput) ||
+      this.compare(baseline.electricalPowerInput, modification.electricalPowerInput)
+    )
   }
 
   compare(a: any, b: any) {
@@ -119,13 +91,4 @@ export class EnergyInputExhaustGasCompareService {
       return false;
     }
   }
-}
-
-export interface EnergyInputExhaustGasDifferent {
-  excessAir: BehaviorSubject<boolean>,
-  combustionAirTemp: BehaviorSubject<boolean>,
-  exhaustGasTemp: BehaviorSubject<boolean>,
-  totalHeatInput: BehaviorSubject<boolean>,
-  electricalPowerInput: BehaviorSubject<boolean>,
-  //otherLossObjects: Array<BehaviorSubject<boolean>>
 }

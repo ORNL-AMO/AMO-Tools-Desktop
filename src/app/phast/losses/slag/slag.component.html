@@ -19,12 +19,6 @@
           </span>
         </div>
       </form>
-      <!-- <label class="group-label loss-label">
-        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
-        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
-        {{loss.name}}
-        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
-      </label> -->
     </div>
   </div>
   <div class="row" *ngIf="!loss.collapse">
@@ -33,18 +27,31 @@
         (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-slag-form>
     </div>
   </div>
-  <div class="row loss-results">
+  <div class="row loss-results loss-total">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Loss</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        <label class="font-weight-bold">Slag Loss</label>
+        <div *ngIf="loss.heatLoss" class="text-center font-weight-bold">
           {{loss.heatLoss | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.heatLoss" class="text-center font-weight-bold">
           &mdash; &mdash;
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- <div class="row">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold small">
+        Wall Loss Total
+      </div>
+      <div class="text-center w-50 bold small">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+    </div>
+  </div>
+</div> -->

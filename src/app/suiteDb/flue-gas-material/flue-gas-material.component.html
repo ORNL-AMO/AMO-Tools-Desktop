@@ -1,16 +1,17 @@
 <div class="card">
   <div class="card-body custom-card-body card-container col">
     <div class="row">
-      <div class="col-sm-6 col-md-6 card-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3>Create Fuel</h3>
+              <h3 *ngIf="!editExistingMaterial">Create Fuel</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Fuel</h3>
             </div>
           </div>
         </div>
         <form>
-          <div class="form-section">
+          <div class="form-section" *ngIf="!editExistingMaterial">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
@@ -19,11 +20,18 @@
               </select>
             </div>
           </div>
+
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="substance">Substance Name</label>
-              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-                (focus)="focusField('substance')" />
+              <div class="input-group" *ngIf="!editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
+              <div class="input-group" *ngIf="editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group">
@@ -50,8 +58,8 @@
             </div>
             <div class="form-group">
               <label class="small" for="C4H10_CnH2n">C
-                <sub>4</sub> H
-                <sub>10</sub> CnH
+                <sub>4</sub>H
+                <sub>10</sub>CnH
                 <sub>2</sub>n</label>
               <div class="input-group">
                 <input type="number" step="any" min="0" max="100" id="C4H10_CnH2n" name="C4H10_CnH2n" class="form-control" [(ngModel)]="newMaterial.C4H10_CnH2n"
@@ -143,7 +151,13 @@
                 <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
               </label>
               <div class="text-center small">
-                <span>{{totalOfFlueGasses.toFixed(2) }} %</span>
+                <span>{{totalOfFlueGasses | number:'1.2-2' }} %</span>
+              </div>
+            </div>
+            <div class="form-group" [ngClass]="{'difference-error': differenceError}">
+              <label class="small" for="difference">Difference</label>
+              <div class="text-center small">
+                {{difference | number:'1.0-3'}} %
               </div>
             </div>
             <div class="form-group">
@@ -176,43 +190,47 @@
         </form>
       </div>
 
-      <div class="col-sm-6 col-md-6 card-help-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
           <app-flue-gas-material-help [currentField]="currentField"></app-flue-gas-material-help>
-          <!--<div class="help-header">-->
-
-          <!--<h3>Flue Gases Help</h3>-->
-          <!--<p>Enter gases</p>-->
-          <!--<p class="text-muted">-->
-          <!--<span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.-->
-          <!--</p>-->
-
-          <!--</div>-->
-          <!--<div class="help-content">-->
-
-          <!--<div class="card" *ngIf="currentField == 'C2H6'">-->
-          <!--<div class="card-header">-->
-          <!--Atmosphere Gas-->
-          <!--</div>-->
-          <!--<div class="card-block">-->
-          <!--<label><u><strong>Description</strong></u></label>-->
-          <!--<p>-->
-          <!--Ethane composition of gas/liquid fuel by volume-->
-          <!--</p>-->
-          <!--<label><u><strong>Input</strong></u></label>-->
-          <!--<p>-->
-          <!--Minimum Value Allowed: <strong>0</strong>-->
-          <!--</p>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-
         </div>
       </div>
+
+
+      <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+        <div class="text-center">
+          <div class="row phast align-items-top">
+            <div class="col-12">
+              <div class="header card-header">
+                <h3>Confirm Delete</h3>
+              </div>
+            </div>
+          </div>
+          <div class="delete-warning-container">
+            <div class="row">
+              <div class="col-12">
+                Material Name: {{newMaterial.substance}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                Are you sure you want to
+                <strong>
+                  <u>permentantly delete</u>
+                </strong> this material?
+                <br>This cannot be undone.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
   </div>
 </div>

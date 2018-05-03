@@ -35,4 +35,8 @@ th{
     tr > th {
         font-size: 18px !important;
     }
+
+    .print-section {
+        page-break-inside: avoid;
+    }
 }

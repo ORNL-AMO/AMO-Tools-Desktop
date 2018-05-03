@@ -67,13 +67,14 @@
   <div class="form-section">
     <div class="form-group">
       <label for="hoursPerYear">Hours / Year</label>
-      <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" [(ngModel)]="yearFormat">
+      <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" [(ngModel)]="phast.operatingHours.hoursPerYear">
     </div>
+    <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
   </div>
 
-  <label class="group-label">
+  <!-- <label class="group-label">
     Operating Conditions at time of Assessment</label>
   <div class="operating-text-box">
     <textarea class="op-text-area" rows="4" id="operatingConditions" [(ngModel)]="phast.operatingHours.operatingConditions" placeholder="Add note for operating conditions"></textarea>
-  </div>
+  </div> -->
 </div>

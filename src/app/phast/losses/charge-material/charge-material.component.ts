@@ -5,7 +5,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
-import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -17,8 +16,6 @@ import { FormGroup } from '@angular/forms/src/model';
 export class ChargeMaterialComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
@@ -37,6 +34,8 @@ export class ChargeMaterialComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _chargeMaterial: Array<ChargeMaterialObj>;
   firstChange: boolean = true;
@@ -45,15 +44,24 @@ export class ChargeMaterialComponent implements OnInit {
   lossesLocked: boolean = false;
 
   showError: boolean = false;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
+  total: {
+    heatRequired: number,
+    netHeatLoss: number,
+    endoExoHeat: number
+  } = {
+      heatRequired: 0,
+      netHeatLoss: 0,
+      endoExoHeat: 0
+    };
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addMaterial();
+      } else if (changes.modificationIndex) {
+        this._chargeMaterial = new Array();
+        this.initChargeMaterial();
       }
     }
     else {
@@ -71,69 +79,14 @@ export class ChargeMaterialComponent implements OnInit {
       this._chargeMaterial = new Array();
     }
     if (this.losses.chargeMaterials) {
-      this.setCompareVals();
-      this.chargeMaterialCompareService.initCompareObjects();
       this.initChargeMaterial();
     }
-
-    this.chargeMaterialService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.chargeMaterials) {
-          this._chargeMaterial.splice(lossIndex, 1);
-          if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
-            this.chargeMaterialCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.chargeMaterialService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._chargeMaterial.push({
-    //         chargeMaterialType: 'Solid',
-    //         solidForm: this.chargeMaterialService.initSolidForm(),
-    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
-    //         gasForm: this.chargeMaterialService.initGasForm(),
-    //         name: 'Material #' + (this._chargeMaterial.length + 1),
-    //         heatRequired: 0.0,
-    //         modifiedHeatRequired: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // } else {
-    //   this.chargeMaterialService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._chargeMaterial.push({
-    //         chargeMaterialType: 'Solid',
-    //         solidForm: this.chargeMaterialService.initSolidForm(),
-    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
-    //         gasForm: this.chargeMaterialService.initGasForm(),
-    //         name: 'Material #' + (this._chargeMaterial.length + 1),
-    //         heatRequired: 0.0,
-    //         modifiedHeatRequired: 0.0,
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // }
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
   }
 
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.chargeMaterialCompareService.baselineMaterials = null;
-      //  this.chargeMaterialService.addLossBaselineMonitor.next(false);
-    } else {
-      this.chargeMaterialCompareService.modifiedMaterials = null;
-      // this.chargeMaterialService.addLossModificationMonitor.next(false);
-    }
-    this.chargeMaterialService.deleteLossIndex.next(null);
-  }
   disableForms() {
     this._chargeMaterial.forEach(loss => {
       loss.solidForm.disable();
@@ -186,16 +139,11 @@ export class ChargeMaterialComponent implements OnInit {
       }
       this.calculate(tmpLoss);
       this._chargeMaterial.push(tmpLoss);
+      this.total = this.getTotal();
     })
   }
 
   addMaterial() {
-    // if (this.isLossesSetup) {
-    //   this.chargeMaterialService.addLoss(this.isBaseline);
-    // }
-    if (this.chargeMaterialCompareService.differentArray) {
-      this.chargeMaterialCompareService.addObject(this.chargeMaterialCompareService.differentArray.length - 1);
-    }
     this._chargeMaterial.push({
       chargeMaterialType: 'Solid',
       solidForm: this.chargeMaterialService.initSolidForm(this._chargeMaterial.length + 1),
@@ -210,7 +158,8 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   removeMaterial(lossIndex: number) {
-    this.chargeMaterialService.setDelete(lossIndex);
+    this._chargeMaterial.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   collapseLoss(loss: ChargeMaterialObj) {
@@ -249,6 +198,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.heatRequired = null;
       }
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -290,8 +240,16 @@ export class ChargeMaterialComponent implements OnInit {
       tmpChargeMaterials.push(tmpMaterial);
     });
     this.losses.chargeMaterials = tmpChargeMaterials;
-    this.setCompareVals();
     this.savedLoss.emit(true);
+  }
+
+  getTotal() {
+    let total = {
+      heatRequired: _.sumBy(this._chargeMaterial, 'heatRequired'),
+      netHeatLoss: _.sumBy(this._chargeMaterial, 'netHeatLoss'),
+      endoExoHeat: _.sumBy(this._chargeMaterial, 'endoExoHeat')
+    }
+    return total;
   }
 
   setName(material: any) {
@@ -317,8 +275,8 @@ export class ChargeMaterialComponent implements OnInit {
         name: material.gasForm.controls.name.value
       })
     }
+    this.saveLosses();
   }
-
 
   changeField(str: string) {
     this.fieldChange.emit(str);
@@ -326,20 +284,7 @@ export class ChargeMaterialComponent implements OnInit {
   focusOut() {
     this.fieldChange.emit('default');
   }
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.chargeMaterialCompareService.baselineMaterials = this.losses.chargeMaterials;
-    } else {
-      this.chargeMaterialCompareService.modifiedMaterials = this.losses.chargeMaterials;
-    }
-    if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
-      if (this.chargeMaterialCompareService.differentArray.length != 0) {
-        this.chargeMaterialCompareService.checkChargeMaterials();
-      }
-    }
-  }
-
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 }

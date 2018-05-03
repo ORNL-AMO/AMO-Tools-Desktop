@@ -1,4 +1,4 @@
-import { PreAssessment } from "../../calculator/furnaces/pre-assessment/pre-assessment";
+import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
 import { FormGroup } from "@angular/forms";
 
 export interface Calculator {
@@ -12,7 +12,8 @@ export interface Calculator {
     headToolSuction?: HeadToolSuction,
     headToolType?: string,
     systemCurve?: SystemCurve,
-    pumpCurveForm?: PumpCurveForm
+    pumpCurveForm?: PumpCurveForm,
+    selected?: boolean
 }
 
 export interface HeadToolSuction {

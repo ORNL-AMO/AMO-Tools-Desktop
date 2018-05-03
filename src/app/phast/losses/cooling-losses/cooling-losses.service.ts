@@ -1,29 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { LiquidCoolingLoss, GasCoolingLoss, CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
-import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class CoolingLossesService {
-  deleteLossIndex: BehaviorSubject<number>;
-  //  addLossBaselineMonitor: BehaviorSubject<any>;
-  //  addLossModificationMonitor: BehaviorSubject<any>;
-  constructor(private formBuilder: FormBuilder) {
-    this.deleteLossIndex = new BehaviorSubject<number>(null);
-    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
-  }
 
-  setDelete(num: number) {
-    this.deleteLossIndex.next(num);
+  constructor(private formBuilder: FormBuilder) {
   }
-  // addLoss(bool: boolean) {
-  //   if (bool) {
-  //     this.addLossModificationMonitor.next(true);
-  //   } else {
-  //     this.addLossBaselineMonitor.next(true);
-  //   }
-  // }
 
   initLiquidCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = 8.338;

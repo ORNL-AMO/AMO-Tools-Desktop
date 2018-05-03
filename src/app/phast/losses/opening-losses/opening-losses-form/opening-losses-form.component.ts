@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 import { OpeningLossesService } from '../opening-losses.service';
 import { PhastService } from '../../../phast.service';
@@ -32,7 +31,6 @@ export class OpeningLossesFormComponent implements OnInit {
 
   totalArea: number = 0.0;
 
-  counter: any;
   firstChange: boolean = true;
   temperatureError: string = null;
   emissivityError: string = null;
@@ -43,7 +41,7 @@ export class OpeningLossesFormComponent implements OnInit {
   heightError: string = null;
   viewFactorError: string = null;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService,
+  constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
     private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
@@ -66,27 +64,21 @@ export class OpeningLossesFormComponent implements OnInit {
     this.checkTemperature(true);
     this.checkTimeOpen(true);
     this.checkThickness(true);
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
-
   focusOut() {
     this.changeField.emit('default');
   }
-
   disableForm() {
-    this.openingLossesForm.disable();
+    this.openingLossesForm.controls.openingType.disable();
+    // this.openingLossesForm.disable();
   }
-
   enableForm() {
-    this.openingLossesForm.enable();
+    this.openingLossesForm.controls.openingType.enable();
+    // this.openingLossesForm.enable();
   }
-
   calculateViewFactor() {
     let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
     let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
@@ -95,11 +87,9 @@ export class OpeningLossesFormComponent implements OnInit {
     });
     this.startSavePolling();
   }
-
   roundVal(val: number, digits: number): number {
     return Number(val.toFixed(digits));
   }
-
   checkOpeningDimensions(bool?: boolean) {
     if (this.openingLossesForm.controls.openingType.value === 'Round') {
       this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Diameter must be greater than 0" : null;
@@ -111,28 +101,24 @@ export class OpeningLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
   }
-
   checkThickness(bool?: boolean) {
     this.thicknessError = (this.openingLossesForm.controls.wallThickness.value < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
     if (!bool) {
       this.startSavePolling();
     }
   }
-
   checkNumOpenings(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
     this.numOpeningsError = (this.openingLossesForm.controls.numberOfOpenings.value < 0) ? "Number of Openings must be greater than 0" : null;
   }
-
   checkViewFactor(bool?: boolean) {
     this.viewFactorError = (this.openingLossesForm.controls.viewFactor.value < 0) ? "View Factor must be greater than 0" : null;
     if (!bool) {
       this.startSavePolling();
     }
   }
-
   checkTemperature(bool?: boolean) {
     this.temperatureError = (this.openingLossesForm.controls.ambientTemp.value > this.openingLossesForm.controls.insideTemp.value) ?
       'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
@@ -140,14 +126,12 @@ export class OpeningLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
   }
-
   checkSurfaceEmissivity(bool?: boolean) {
     this.emissivityError = (this.openingLossesForm.controls.emissivity.value > 1 || this.openingLossesForm.controls.emissivity.value < 0) ? 'Surface emissivity must be between 0 and 1' : null;
     if (!bool) {
       this.startSavePolling();
     }
   }
-
   checkTimeOpen(bool?: boolean) {
     this.timeOpenError = (this.openingLossesForm.controls.percentTimeOpen.value < 0 || this.openingLossesForm.controls.percentTimeOpen.value > 100) ?
       'Percent Time Open must be between 0% and 100%' : null;
@@ -155,7 +139,6 @@ export class OpeningLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
   }
-
   getArea() {
     let smallUnit = 'in';
     let largeUnit = 'ft';
@@ -163,14 +146,12 @@ export class OpeningLossesFormComponent implements OnInit {
       smallUnit = 'mm';
       largeUnit = 'm';
     }
-
     this.checkNumOpenings();
     this.checkOpeningDimensions();
     if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
       this.totalArea = 0;
       return;
     }
-
     if (this.openingLossesForm.controls.openingType.value == 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
@@ -181,7 +162,7 @@ export class OpeningLossesFormComponent implements OnInit {
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
         this.startSavePolling();
       }
-    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (Square)') {
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
         let lengthInches = this.openingLossesForm.controls.lengthOfOpening.value;
         let heightInches = this.openingLossesForm.controls.heightOfOpening.value;
@@ -200,107 +181,102 @@ export class OpeningLossesFormComponent implements OnInit {
       this.totalArea = 0.0;
     }
   }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   checkInputError() {
     if (this.temperatureError || this.emissivityError || this.timeOpenError || this.numOpeningsError || this.thicknessError || this.lengthError ||
       this.heightError || this.viewFactorError) {
       this.inputError.emit(true);
+      this.openingLossesCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.openingLossesCompareService.inputError.next(false);
     }
-
   }
-
   startSavePolling() {
     this.checkInputError();
     this.calculate.emit(true);
-    this.emitSave();
+    this.saveEmit.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses && this.openingLossesCompareService.differentArray.length != 0) {
-      if (this.openingLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //openingType
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.openingType.subscribe((val) => {
-          let openingTypeElements = doc.getElementsByName('openingType_' + this.lossIndex);
-          openingTypeElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //wallThickness
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.thickness.subscribe((val) => {
-          let wallThicknessElements = doc.getElementsByName('wallThickness_' + this.lossIndex);
-          wallThicknessElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heightOfOpening
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.heightOfOpening.subscribe((val) => {
-          let heightOfOpeningElements = doc.getElementsByName('heightOfOpening_' + this.lossIndex);
-          heightOfOpeningElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //lengthOfOpening
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.lengthOfOpening.subscribe((val) => {
-          let lengthOfOpeningElements = doc.getElementsByName('lengthOfOpening_' + this.lossIndex);
-          lengthOfOpeningElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //viewFactor
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.viewFactor.subscribe((val) => {
-          let viewFactorElements = doc.getElementsByName('viewFactor_' + this.lossIndex);
-          viewFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //insideTemp
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.insideTemperature.subscribe((val) => {
-          let insideTempElements = doc.getElementsByName('insideTemp_' + this.lossIndex);
-          insideTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //ambientTemp
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
-          let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
-          ambientTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //emissivity
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.emissivity.subscribe((val) => {
-          let emissivityElements = doc.getElementsByName('emissivity_' + this.lossIndex);
-          emissivityElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //percentTimeOpen
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.percentTimeOpen.subscribe((val) => {
-          let percentTimeOpenElements = doc.getElementsByName('percentTimeOpen_' + this.lossIndex);
-          percentTimeOpenElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //numOpening
-        this.openingLossesCompareService.differentArray[this.lossIndex].different.numberOfOpenings.subscribe((val) => {
-          let numberOfOpeningsElements = doc.getElementsByName('numberOfOpenings_' + this.lossIndex);
-          numberOfOpeningsElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses) {
+      return true;
+    } else {
+      return false;
     }
   }
+  compareNumberOfOpenings(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareNumberOfOpenings(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareEmissivity(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareEmissivity(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareThickness(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareThickness(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareAmbientTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareAmbientTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareInsideTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareInsideTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  comparePercentTimeOpen(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.comparePercentTimeOpen(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareViewFactor(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareViewFactor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareOpeningType(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareOpeningType(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLengthOfOpening(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareLengthOfOpening(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareHeightOfOpening(): boolean {
+    if (this.canCompare()) {
+      return this.openingLossesCompareService.compareHeightOfOpening(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+
+
 }

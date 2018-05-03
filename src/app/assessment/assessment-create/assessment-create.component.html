@@ -4,7 +4,7 @@
 
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
-     [config]="{backdrop: 'static'}">
+  [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md create-assessment-modal">
     <div class="modal-content">
 
@@ -14,9 +14,10 @@
         <button class="close" (click)="hideCreateModal(false)">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div><!-- End .modal-header -->
+      </div>
+      <!-- End .modal-header -->
 
-      <form [formGroup]="newAssessment" (keyup.enter)="createAssessment()">
+      <form [formGroup]="newAssessment" (ngSubmit)="createAssessment()">
 
         <div class="modal-body">
 
@@ -38,7 +39,7 @@
                 <option [ngValue]="'Fan'">Fan</option>
               </select>
 
-              <!-- <div class="form-check">
+            <!-- <div class="form-check">
                 <label class="form-check-label">
                   <input class="form-check-input" type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> This is a new asset
                 </label>
@@ -49,30 +50,35 @@
                 </label>
               </div> -->
 
-              <div class="equipment-select" *ngIf="selectedEquip == 'existing'">
-                <div class="dropdown">
-                  <button class="btn dropdown-toggle assessment-dropdown" type="button" (click)="toggleDropdown(showDropdown)">{{selectedAssessment}}
-                    <span class="caret pull-right"></span></button>
-                  <ul class="dropdown-menu pointer-item assessment-dropdown" [ngClass]="{'not-hidden': showDropdown}">
-                    <li class="assessment-dropdown-item">
-                      <input class="form-control item-search" type="text" placeholder="Search Assessments" #search (keyup)="onKey(search.value)">
-                    </li>
-                    <li class="dropdown-divider"></li>
-                    <li class="item-hover assessment-dropdown-item" *ngFor="let assessment of filteredAssessments" (click)="setAssessment(assessment.name)">{{assessment.name}}</li>
-                  </ul>
-                </div>
+            <div class="equipment-select" *ngIf="selectedEquip == 'existing'">
+              <div class="dropdown">
+                <button class="btn dropdown-toggle assessment-dropdown" type="button" (click)="toggleDropdown(showDropdown)">{{selectedAssessment}}
+                  <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu pointer-item assessment-dropdown" [ngClass]="{'not-hidden': showDropdown}">
+                  <li class="assessment-dropdown-item">
+                    <input class="form-control item-search" type="text" placeholder="Search Assessments" #search (keyup)="onKey(search.value)">
+                  </li>
+                  <li class="dropdown-divider"></li>
+                  <li class="item-hover assessment-dropdown-item" *ngFor="let assessment of filteredAssessments" (click)="setAssessment(assessment.name)">{{assessment.name}}</li>
+                </ul>
               </div>
+            </div>
 
-            </div><!-- End .form-group -->
+          </div>
+          <!-- End .form-group -->
 
-        </div><!-- End .modal-body -->
+        </div>
+        <!-- End .modal-body -->
 
-        <div class="modal-footer">
-
-          <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
-          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Assessment</button>
-
-        </div><!-- End .modal-footer -->
+        <div class="d-flex justify-content-between">
+          <div class="p-2">
+            <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
+          </div>
+          <div class="p-2">
+            <button class="btn btn-primary" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Assessment</button>
+          </div>
+        </div>
 
       </form>
     </div>

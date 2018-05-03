@@ -1,9 +1,9 @@
 .phast-container{
-    height: 100%;
+    height: 100vh;
 }
 
 .system-setup{
-    height: 100%;
+    margin-bottom:25px;
 }
 
 
@@ -11,11 +11,21 @@
     z-index: initial !important;
 }
 
-
-#phastSelect {
-    margin-top: 25px;
-}
-
 .btn-primary{
     background-color: #BF3D00;
+}
+
+
+.list-modal{
+    top: .5rem;
+    max-width: 95%;
+    height: 90%;
+}
+
+.list-modal .modal-content{
+    height: 100%;
+}
+
+.list-modal .modal-body{
+    max-height: 80vh;
 }

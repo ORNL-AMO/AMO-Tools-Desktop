@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -10,6 +10,9 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
 import { PhastReportService } from './phast-report.service';
 import { setTimeout } from 'timers';
+import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -31,16 +34,32 @@ export class PhastReportComponent implements OnInit {
   @Input()
   quickReport: boolean;
 
+  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
+
+  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
+
+  selectAll: boolean = false;
+  // printFacilityInfo: boolean = false;
+  printEnergyUsed: boolean = false;
+  printExecutiveSummary: boolean = false;
+  printResultsData: boolean = false;
+  printReportGraphs: boolean = false;
+  printReportSankey: boolean = false;
+  printInputSummary: boolean = false;
+
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    console.log('init');
+    this.initPrintLogic();
     this.createdDate = new Date();
-    if(this.settings){
+    if (this.settings) {
       if (!this.settings.energyResultUnit) {
         this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
       }
@@ -63,89 +82,163 @@ export class PhastReportComponent implements OnInit {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
 
+    //subscribe to print event
     this.phastReportService.showPrint.subscribe(printVal => {
+      //shows loading print view
       this.showPrintDiv = printVal;
-      if(printVal == true){
+      if (printVal == true) {
+        //use delay to show loading before print payload starts
         setTimeout(() => {
           this.showPrint = printVal;
-        },20)
-      }else{
-         this.showPrint = printVal;
+        }, 20)
+      } else {
+        this.showPrint = printVal;
       }
     });
   }
 
-  setTab(str: string) {
+  ngAfterViewInit() {
+  }
+
+  initPrintLogic() {
+    if (this.inRollup) {
+      this.printEnergyUsed = true;
+      this.printExecutiveSummary = true;
+      this.printResultsData = true;
+      this.printReportGraphs = true;
+      this.printReportSankey = true;
+      this.printInputSummary = false;
+    }
+  }
+
+  setTab(str: string): void {
     this.currentTab = str;
   }
 
 
-  getSettings() {
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(results => {
-      if (results.length != 0) {
-        if (!results[0].energyResultUnit) {
-          results[0] = this.settingsService.setEnergyResultUnitSetting(results[0]);
-        }
-        this.settings = results[0];
-      } else {
-        this.getParentDirectorySettings(this.assessment.directoryId);
+  getSettings(): void {
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    if (tmpSettings) {
+      if (!tmpSettings.energyResultUnit) {
+        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
       }
-    })
-  }
-
-
-  getParentDirectorySettings(dirId: number) {
-    this.indexedDbService.getDirectorySettings(dirId).then(
-      resultSettings => {
-        if (resultSettings.length != 0) {
-          if (resultSettings[0].energyResultUnit) {
-            resultSettings[0] = this.settingsService.setEnergyResultUnitSetting(resultSettings[0]);
-          }
-          this.settings = resultSettings[0];
-        } else {
-          this.indexedDbService.getDirectory(dirId).then(
-            results => {
-              let parentDirectory = results;
-              //get parent directory settings
-              this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
-            })
-        }
-      })
-  }
-
-  getDirectoryList(id: number) {
-    if (id && id != 1) {
-      this.indexedDbService.getDirectory(id).then(
-        results => {
-          this.assessmentDirectories.push(results);
-          if (results.parentDirectoryId != 1) {
-            this.getDirectoryList(results.parentDirectoryId);
-          }
-        }
-      )
+      this.settings = tmpSettings;
+    } else {
+      this.getParentDirectorySettings(this.assessment.directoryId);
     }
   }
 
 
-  print() {
-    console.log('clicked');
+  getParentDirectorySettings(dirId: number): void {
+    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(dirId);
+    if (tmpSettings) {
+      if (!tmpSettings.energyResultUnit) {
+        tmpSettings = this.settingsService.setEnergyResultUnitSetting(tmpSettings);
+      }
+      this.settings = tmpSettings;
+    } else {
+      let parentDirectory = this.directoryDbService.getById(dirId);
+      //get parent directory settings
+      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
+    }
+  }
+
+  getDirectoryList(id: number): void {
+    if (id && id != 1) {
+      let tmpDir: Directory = this.directoryDbService.getById(id);
+      if (tmpDir) {
+        this.assessmentDirectories.push(tmpDir);
+        if (tmpDir.parentDirectoryId != 1) {
+          this.getDirectoryList(tmpDir.parentDirectoryId);
+        }
+      }
+    }
+  }
+  
+  showModal(): void {
+    this.printMenuModal.show();
+  }
+
+
+  closeModal(reset: boolean): void {
+    if (reset) {
+      this.resetPrintSelection();
+    }
+    this.printMenuModal.hide();
+  }
+
+  resetPrintSelection() {
+    this.selectAll = false;
+    this.printEnergyUsed = false;
+    this.printExecutiveSummary = false;
+    this.printResultsData = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printInputSummary = false;
+  }
+
+  togglePrint(section: string): void {
+    switch (section) {
+      case "select-all": {
+        this.selectAll = !this.selectAll;
+        if (this.selectAll) {
+          this.printEnergyUsed = true;
+          this.printExecutiveSummary = true;
+          this.printResultsData = true;
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
+        }
+        else {
+          this.printEnergyUsed = false;
+          this.printExecutiveSummary = false;
+          this.printResultsData = false;
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
+        }
+        break;
+      }
+      case "energy-used": {
+        this.printEnergyUsed = !this.printEnergyUsed;
+        break;
+      }
+      case "executive-summary": {
+        this.printExecutiveSummary = !this.printExecutiveSummary;
+        break;
+      }
+      case "results-data": {
+        this.printResultsData = !this.printResultsData;
+        break;
+      }
+      case "report-graphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "report-sankey": {
+        this.printReportSankey = !this.printReportSankey;
+        break;
+      }
+      case "input-summary": {
+        this.printInputSummary = !this.printInputSummary;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+
+  print(): void {
+    this.closeModal(false);
     //when print clicked set show print value to true
     this.phastReportService.showPrint.next(true);
-    
-
-    //eventually add logic for modal or something to say "building print view"
-
-    //set timeout for delay to print call. May want to do this differently later but for now should work
-    //10000000 is excessive, put it at whatever you want
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
       let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.phastReportService.showPrint.next(false);
-    }, 2000)
-    // let win = this.windowRefService.nativeWindow;
-    // let doc = this.windowRefService.getDoc();
-    // win.print();
+      this.resetPrintSelection();
+    }, 2000);
   }
 }

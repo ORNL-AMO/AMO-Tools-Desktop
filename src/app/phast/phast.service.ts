@@ -45,6 +45,7 @@ export class PhastService {
   stepTab: BehaviorSubject<StepTab>;
   specTab: BehaviorSubject<StepTab>;
   calcTab: BehaviorSubject<string>;
+  assessmentTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
@@ -66,6 +67,7 @@ export class PhastService {
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
     this.calcTab = new BehaviorSubject<string>('o2-enrichment');
+    this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
   }
 
   goToStep(newStepNum: number) {
@@ -290,7 +292,7 @@ export class PhastService {
     const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.chargeReacted / 100 : -input.chargeReacted / 100;
-    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat * (1 - inputs.waterContentCharged / 100)).from('Btu').to(settings.energyResultUnit);
 
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
@@ -599,10 +601,11 @@ export class PhastService {
     if (losses.wallLosses) {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
     }
-    if (losses.energyInputExhaustGasLoss) {
-      let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
-      grossHeatRequired += tmpResults.exhaustGasLosses;
-    }
+    //remove per issue 1379
+    // if (losses.energyInputExhaustGasLoss) {
+    //   let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
+    //   grossHeatRequired += tmpResults.exhaustGasLosses;
+    // }
     if (losses.exhaustGasEAF) {
       grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF, settings);
     }
@@ -712,7 +715,7 @@ export class PhastService {
         windVelocity: 5,
         surfaceEmissivity: loss.surfaceEmissivity,
         conditionFactor: 1,
-        correctionFactor: 1,
+        correctionFactor: 1
       }
       let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status == 'VALID') {
@@ -767,7 +770,7 @@ export class PhastService {
         if (loss.openingType == 'Round') {
           let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
-        } else if (loss.openingType == 'Rectangular (Square)') {
+        } else if (loss.openingType == 'Rectangular (or Square)') {
           let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
           sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }

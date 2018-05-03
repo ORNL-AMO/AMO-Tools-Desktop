@@ -3,8 +3,8 @@
     <div class="header">
       <h3>{{assessment.name}} Settings</h3>
       <br>
-      <a class="no-data-link" *ngIf="showUpdateData" (click)="updateData()">Your units have changed! Click here to update your data to reflect these changes!</a>
-      <span class="data-updated" *ngIf="dataUpdated">Data Updated!</span>
+      <a *ngIf="showUpdateData" class="no-data-link" (click)="updateData()">Your units have changed! Click here to update your data to reflect these changes!</a>
+      <span *ngIf="dataUpdated" class="data-updated">Data Updated!</span>
     </div>
   </div>
 </div>
@@ -25,36 +25,22 @@
     <div class="col-12">
       <form>
         <div class="form-group">
-          <label for="equipmentNotes">Equipment Notes</label>
-          <div class="input-group">
-            <textarea name="equipmentNotes" rows="4" id="equipmentNotes" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
-          </div>
+          <label class="group-label w-100">Equipment Notes</label>
+          <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges()" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
         </div>
       </form>
     </div>
   </div>
-</div>
-
-
-
-
-<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        Settings Changed
-        <button class="close" aria-label="Close" (click)="hideSettingsModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Your settings have changed. Would you like to convert assessment data to match new settings?
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary pull-right" (click)="updateData(true)">Yes</button>
-        <button class="btn btn-danger pull-left" (click)="updateData(false)">No keep data</button>
-      </div>
+  <div class="row">
+    <div class="col-12">
+      <form>
+        <div class="form-group">
+          <label class="group-label w-100">
+            Operating Conditions at time of Assessment</label>
+          <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges()" [(ngModel)]="phast.operatingHours.operatingConditions"
+            placeholder="Add note for operating conditions"></textarea>
+        </div>
+      </form>
     </div>
   </div>
 </div>

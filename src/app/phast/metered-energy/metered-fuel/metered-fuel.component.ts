@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MeteredEnergyFuel, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
-import { PhastService } from '../../phast.service';
 import { MeteredEnergyService } from '../metered-energy.service';
 import { Settings } from '../../../shared/models/settings';
+import { SettingsService } from '../../../settings/settings.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-metered-fuel',
@@ -17,7 +18,8 @@ export class MeteredFuelComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  containerHeight: number;
   tabSelect: string = 'results';
   results: MeteredEnergyResults = {
     meteredEnergyUsed: 0,
@@ -30,7 +32,7 @@ export class MeteredFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.phast.meteredEnergy.meteredEnergyFuel) {
@@ -49,6 +51,10 @@ export class MeteredFuelComponent implements OnInit {
       }
     }
     this.calculate();
+    
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
   }
 
   setTab(str: string) {

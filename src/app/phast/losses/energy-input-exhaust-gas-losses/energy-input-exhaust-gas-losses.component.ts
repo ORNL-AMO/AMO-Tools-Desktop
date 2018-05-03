@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
-import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -16,8 +15,6 @@ import { FormGroup } from '@angular/forms';
 export class EnergyInputExhaustGasLossesComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
@@ -36,6 +33,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _exhaustGasLosses: Array<EnInputExGasObj>;
   firstChange: boolean = true;
@@ -43,15 +42,15 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   showError: boolean = false;
-  constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService) { }
+  constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._exhaustGasLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -69,9 +68,15 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (!this._exhaustGasLosses) {
       this._exhaustGasLosses = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.energyInputExhaustGasLoss) {
-      this.setCompareVals();
-      this.energyInputExhaustGasCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
         let tmpLoss = {
@@ -90,56 +95,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         this._exhaustGasLosses.push(tmpLoss);
       })
     }
-
-    this.energyInputExhaustGasService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.energyInputExhaustGasLoss) {
-          this._exhaustGasLosses.splice(lossIndex, 1);
-          if (this.energyInputExhaustGasCompareService.differentArray && !this.isBaseline) {
-            this.energyInputExhaustGasCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.energyInputExhaustGasService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.energyInputExhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.energyInputExhaustGasService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.energyInputExhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0,
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = null;
-      //  this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
-    } else {
-      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = null;
-      // this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
-    }
-    this.energyInputExhaustGasService.deleteLossIndex.next(null);
   }
 
   disableForms() {
@@ -149,12 +104,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.energyInputExhaustGasService.addLoss(this.isBaseline);
-    // }
-    if (this.energyInputExhaustGasCompareService.differentArray) {
-      this.energyInputExhaustGasCompareService.addObject(this.energyInputExhaustGasCompareService.differentArray.length - 1);
-    }
     this._exhaustGasLosses.push({
       form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
@@ -165,7 +114,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.energyInputExhaustGasService.setDelete(lossIndex);
+    this._exhaustGasLosses.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   calculate(loss: EnInputExGasObj) {
@@ -199,7 +149,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       tmpExhaustGases.push(tmpExhaustGas);
     })
     this.losses.energyInputExhaustGasLoss = tmpExhaustGases;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -207,20 +156,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = this.losses.energyInputExhaustGasLoss;
-    } else {
-      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = this.losses.energyInputExhaustGasLoss;
-    }
-    if (this.energyInputExhaustGasCompareService.differentArray && !this.isBaseline) {
-      if (this.energyInputExhaustGasCompareService.differentArray.length != 0) {
-        this.energyInputExhaustGasCompareService.checkExhaustGasLosses();
-      }
-    }
-  }
 
-  setError(bool: boolean){
+  setError(bool: boolean) {
     this.showError = bool;
   }
 }

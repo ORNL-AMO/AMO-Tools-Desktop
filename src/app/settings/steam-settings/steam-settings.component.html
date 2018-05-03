@@ -1,0 +1,60 @@
+<form [formGroup]="settingsForm">
+  <div class="form-group">
+    <label for="pressureMeasurement">Pressure Measurement</label>
+    <select class="form-control" formControlName="steamPressureMeasurement" id="pressureMeasurement" (change)="save()">
+      <!--<option value='mPa'>MPa</option>-->
+      <option value='kPa'>Kilopascals ( kPa )</option>
+      <option value='psi'>Pounds per Square Inch ( psi )</option>
+      <option value='bar'>Bar ( bar )</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="temperatureMeasurement">Temperature Measurement</label>
+    <select class="form-control" formControlName="steamTemperatureMeasurement" id="temperatureMeasurement" (change)="save()">
+      <option value='F'>Degrees Fahrenheit ( F )</option>
+      <option value='C'>Degrees Celsius ( C )</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="steamSpecificEnthalpyMeasurement">Specific Enthalpy</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamSpecificEnthalpyMeasurement" class="form-control" formControlName="steamSpecificEnthalpyMeasurement" id="steamSpecificEnthalpyMeasurement" (change)="save()" autofocus>
+        <option value='btuLb'>British thermal units per Pound ( Btu/lb )</option>
+        <option value='kJkg'>Kilojoules per Kilogram ( kJ/kg )</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steamSpecificEntropyMeasurement">Specific Entropy</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamSpecificEntropyMeasurement" class="form-control" formControlName="steamSpecificEntropyMeasurement" id="steamSpecificEntropyMeasurement" (change)="save()" autofocus>
+        <option value='btulbF'>British thermal units per Pound Fahrenheit ( Btu/lb-F )</option>
+        <option value='kJkgK'>Kilojoules per Kilogram Kelvin ( kJ/kg/K )</option>
+      </select>
+    </div>
+  </div>
+
+<div class="form-group">
+  <label for="steamSpecificVolumeMeasurement">Specific Volume</label>
+  <div class="input-group calc-addon-group">
+    <select name="steamSpecificVolumeMeasurement" class="form-control" formControlName="steamSpecificVolumeMeasurement" id="steamSpecificVolumeMeasurement" (change)="save()" autofocus>
+      <option value='ft3lb'>Standard Cubic Foot per Pound ( f3/lb )</option>
+      <option value='m3kg'>Normal Cubic Meter per Kilogram ( m3/kg )</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="steamMassFlowMeasurement">Mass Flow</label>
+  <div class="input-group calc-addon-group">
+    <select name="steamMassFlowMeasurement" class="form-control" formControlName="steamMassFlowMeasurement" id="steamMassFlowMeasurement" (change)="save()" autofocus>
+      <option value='lbhr'>Pound per Hour (lb/hr)</option>
+      <option value='kghr'>Kilogram per Hour ( kg/hr )</option>
+    </select>
+  </div>
+</div>
+
+</form>

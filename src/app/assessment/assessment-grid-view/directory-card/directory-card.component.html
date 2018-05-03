@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card card-item">
   <div class="card-header summary-card-header">
-    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
+    <input type="checkbox" [(ngModel)]="directory.selected">
     <span class="fa fa-folder"></span>
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
     <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
@@ -40,11 +40,11 @@
         <form [formGroup]="editForm">
           <div class="form-group">
             <label>Edit Folder Name</label>
-            <input type="text" class="form-control" formControlName="name">
+            <input type="text" class="form-control w-100" formControlName="name">
           </div>
           <div class="form-group" *ngIf="directories">
             <label>Change Folder Location</label>
-            <select class="form-control" formControlName="directoryId">
+            <select class="form-control w-100" formControlName="directoryId">
               <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
             </select>
           </div>

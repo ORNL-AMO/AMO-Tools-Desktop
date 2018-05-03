@@ -10,12 +10,12 @@ export class UpdateDataService {
     constructor(private settingsService: SettingsService) { }
 
     checkAssessment(assessment: Assessment): Assessment {
-        if(this.checkAssessmentVersionDifferent(assessment) == false){
+        if (this.checkAssessmentVersionDifferent(assessment) == false) {
             return assessment;
-        }else{
-            if(assessment.type == 'PSAT'){
+        } else {
+            if (assessment.type == 'PSAT') {
                 return this.updatePsat(assessment);
-            }else if(assessment.type == 'PHAST'){
+            } else if (assessment.type == 'PHAST') {
                 return this.updatePhast(assessment);
             }
         }
@@ -38,6 +38,22 @@ export class UpdateDataService {
 
     updatePhast(assessment: Assessment): Assessment {
         //logic for updating phast data
+        if (!assessment.phast.operatingHours) {
+            assessment.phast.operatingHours = {
+                weeksPerYear: 52,
+                daysPerWeek: 7,
+                shiftsPerDay: 3,
+                hoursPerShift: 8,
+                hoursPerYear: 8736
+            }
+        }
+        if (!assessment.phast.operatingCosts) {
+            assessment.phast.operatingCosts = {
+                fuelCost: 3.99,
+                steamCost: 4.69,
+                electricityCost: .066
+            }
+        }
         assessment.appVersion = packageJson.version;
         return assessment;
     }
@@ -50,10 +66,10 @@ export class UpdateDataService {
         }
     }
 
-    checkSettings(settings: Settings): Settings{
-        if(this.checkSettingsVersionDifferent(settings) == false){
+    checkSettings(settings: Settings): Settings {
+        if (this.checkSettingsVersionDifferent(settings) == false) {
             return settings
-        }else {
+        } else {
             return this.updateSettings(settings);
         }
     }
@@ -61,6 +77,15 @@ export class UpdateDataService {
     updateSettings(settings: Settings): Settings {
         settings = this.settingsService.setEnergyResultUnitSetting(settings);
         settings = this.settingsService.setTemperatureUnit(settings);
+        if(!settings.fuelCost){
+            settings.fuelCost = 3.99;
+        }
+        if(!settings.steamCost){
+            settings.steamCost = 4.69;
+        }
+        if(!settings.electricityCost){
+            settings.electricityCost = .066;
+        }
         settings.appVersion = packageJson.version;
         return settings;
     }

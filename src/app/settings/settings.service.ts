@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
 declare const packageJson;
 
 @Injectable()
 export class SettingsService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  setDontShow: BehaviorSubject<boolean>;
+  constructor(private formBuilder: FormBuilder) {
+    this.setDontShow = new BehaviorSubject<boolean>(false);
+   }
 
   getSettingsForm(): FormGroup {
     return this.formBuilder.group({
@@ -17,6 +21,12 @@ export class SettingsService {
       'flowMeasurement': [''],
       'powerMeasurement': [''],
       'pressureMeasurement': [''],
+      'steamPressureMeasurement': [''],
+      'steamTemperatureMeasurement': [''],
+      'steamSpecificEnthalpyMeasurement': [''],
+      'steamSpecificEntropyMeasurement': [''],
+      'steamSpecificVolumeMeasurement': [''],
+      'steamMassFlowMeasurement': [''],
       'currentMeasurement': [''],
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
@@ -25,7 +35,11 @@ export class SettingsService {
       'energyResultUnit': [''],
       'customFurnaceName': [''],
       'temperatureMeasurement': [''],
-      'phastRollupUnit': ['']
+      'phastRollupUnit': [''],
+      'defaultPanelTab': [''],
+      'fuelCost': [3.99],
+      'steamCost': [4.69],
+      'electricityCost': [.066]
     });
   }
 
@@ -38,6 +52,12 @@ export class SettingsService {
       'flowMeasurement': [settings.flowMeasurement],
       'powerMeasurement': [settings.powerMeasurement],
       'pressureMeasurement': [settings.pressureMeasurement],
+      'steamPressureMeasurement': [settings.steamPressureMeasurement],
+      'steamTemperatureMeasurement': [settings.steamTemperatureMeasurement],
+      'steamSpecificEnthalpyMeasurement': [settings.steamSpecificEnthalpyMeasurement],
+      'steamSpecificEntropyMeasurement': [settings.steamSpecificEntropyMeasurement],
+      'steamSpecificVolumeMeasurement': [settings.steamSpecificVolumeMeasurement],
+      'steamMassFlowMeasurement': [settings.steamMassFlowMeasurement],
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
@@ -48,7 +68,14 @@ export class SettingsService {
       'temperatureMeasurement': [settings.temperatureMeasurement],
       'phastRollupUnit': [settings.phastRollupUnit],
       'fanCurveType': [settings.fanCurveType],
-      'fanConvertedConditions': [settings.fanConvertedConditions]
+      'fanConvertedConditions': [settings.fanConvertedConditions],
+      'phastRollupFuelUnit': [settings.phastRollupFuelUnit],
+      'phastRollupElectricityUnit': [settings.phastRollupElectricityUnit],
+      'phastRollupSteamUnit': [settings.phastRollupSteamUnit],
+      'defaultPanelTab': [settings.defaultPanelTab],
+      'fuelCost': [settings.fuelCost || 3.99],
+      'steamCost': [settings.steamCost || 4.69],
+      'electricityCost': [settings.electricityCost || .066]
     });
   }
 
@@ -61,6 +88,12 @@ export class SettingsService {
       flowMeasurement: form.controls.flowMeasurement.value,
       powerMeasurement: form.controls.powerMeasurement.value,
       pressureMeasurement: form.controls.pressureMeasurement.value,
+      steamPressureMeasurement: form.controls.steamPressureMeasurement.value,
+      steamTemperatureMeasurement: form.controls.steamTemperatureMeasurement.value,
+      steamSpecificEnthalpyMeasurement: form.controls.steamSpecificEnthalpyMeasurement.value,
+      steamSpecificEntropyMeasurement: form.controls.steamSpecificEntropyMeasurement.value,
+      steamSpecificVolumeMeasurement: form.controls.steamSpecificVolumeMeasurement.value,
+      steamMassFlowMeasurement: form.controls.steamMassFlowMeasurement.value,
       currentMeasurement: form.controls.currentMeasurement.value,
       viscosityMeasurement: form.controls.viscosityMeasurement.value,
       voltageMeasurement: form.controls.voltageMeasurement.value,
@@ -70,14 +103,21 @@ export class SettingsService {
       customFurnaceName: form.controls.customFurnaceName.value,
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
       appVersion: packageJson.version,
-      phastRollupUnit: form.controls.phastRollupUnit.value, 
       fanCurveType: form.controls.fanCurveType.value,
-      fanConvertedConditions: form.controls.fanConvertedConditions.value    
+      fanConvertedConditions: form.controls.fanConvertedConditions.value,
+      phastRollupUnit: form.controls.phastRollupUnit.value,
+      phastRollupFuelUnit: form.controls.phastRollupFuelUnit.value,
+      phastRollupElectricityUnit: form.controls.phastRollupElectricityUnit.value,
+      phastRollupSteamUnit: form.controls.phastRollupSteamUnit.value,
+      defaultPanelTab: form.controls.defaultPanelTab.value,
+      fuelCost: form.controls.fuelCost.value,
+      steamCost: form.controls.steamCost.value,
+      electricityCost: form.controls.electricityCost.value
     };
     return tmpSettings;
   }
 
-  getNewSettingFromSetting(settings: Settings): Settings{
+  getNewSettingFromSetting(settings: Settings): Settings {
     let newSettings: Settings = {
       language: settings.language,
       currency: settings.currency,
@@ -86,6 +126,12 @@ export class SettingsService {
       flowMeasurement: settings.flowMeasurement,
       powerMeasurement: settings.powerMeasurement,
       pressureMeasurement: settings.pressureMeasurement,
+      steamPressureMeasurement: settings.steamPressureMeasurement,
+      steamTemperatureMeasurement: settings.steamTemperatureMeasurement,
+      steamSpecificEnthalpyMeasurement: settings.steamSpecificEnthalpyMeasurement,
+      steamSpecificEntropyMeasurement: settings.steamSpecificEntropyMeasurement,
+      steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
+      steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -95,7 +141,14 @@ export class SettingsService {
       temperatureMeasurement: settings.temperatureMeasurement,
       phastRollupUnit: settings.phastRollupUnit,
       fanCurveType: settings.fanCurveType,
-      fanConvertedConditions: settings.fanConvertedConditions
+      fanConvertedConditions: settings.fanConvertedConditions,
+      phastRollupFuelUnit: settings.phastRollupFuelUnit,
+      phastRollupElectricityUnit: settings.phastRollupElectricityUnit,
+      phastRollupSteamUnit: settings.phastRollupSteamUnit,
+      defaultPanelTab: settings.defaultPanelTab,
+      fuelCost: settings.fuelCost,
+      steamCost: settings.steamCost,
+      electricityCost: settings.electricityCost
     }
     return newSettings;
   }
@@ -107,7 +160,18 @@ export class SettingsService {
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi',
-        temperatureMeasurement: 'F'
+        temperatureMeasurement: 'F',
+        steamTemperatureMeasurement: 'F',
+        steamPressureMeasurement: 'psi',
+        steamSpecificEnthalpyMeasurement: 'Btu/lb',
+        steamSpecificEntropyMeasurement: 'Btu/lb-F',
+        steamSpecificVolumeMeasurement: 'ft3/lb',
+        steamMassFlowMeasurement: 'lb/hr',
+        energyResultUnit: 'MMBtu',
+        phastRollupUnit: 'MMBtu',
+        phastRollupFuelUnit: 'MMBtu',
+        phastRollupElectricityUnit: 'MMBtu',
+        phastRollupSteamUnit: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -119,7 +183,18 @@ export class SettingsService {
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
-        temperatureMeasurement: 'C'
+        temperatureMeasurement: 'C',
+        steamPressureMeasurement: 'kPa',
+        steamTemperatureMeasurement: 'C',
+        steamSpecificEnthalpyMeasurement: 'kJ/kg',
+        steamSpecificEntropyMeasurement: 'kJ/kg/K',
+        steamSpecificVolumeMeasurement: 'm3/kg',
+        steamMassFlowMeasurement: 'kg/hr',
+        energyResultUnit: 'GJ',
+        phastRollupUnit: 'GJ',
+        phastRollupFuelUnit: 'GJ',
+        phastRollupElectricityUnit: 'GJ',
+        phastRollupSteamUnit: 'GJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -129,7 +204,7 @@ export class SettingsService {
     return settingsForm;
   }
 
-  setEnergyResultUnit(settingsForm: FormGroup): FormGroup  {
+  setEnergyResultUnit(settingsForm: FormGroup): FormGroup {
     if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
@@ -177,17 +252,60 @@ export class SettingsService {
     return settings;
   }
 
-
-
-
   setTemperatureUnit(settings: Settings): Settings{
     if(settings.unitsOfMeasure == 'Imperial'){
       settings.temperatureMeasurement = 'F';
-    }else if(settings.unitsOfMeasure == 'Metric'){
+    } else if (settings.unitsOfMeasure == 'Metric') {
       settings.temperatureMeasurement = 'C';
-    }else{
+      settings.steamTemperatureMeasurement = 'C';
+    } else {
       settings.temperatureMeasurement = 'F';
+      settings.steamTemperatureMeasurement = 'F';
     }
     return settings;
   }
+
+  setSteamUnits(settings: Settings): Settings {
+    if (settings.unitsOfMeasure === 'Imperial') {
+      if (!settings.steamTemperatureMeasurement) {
+        settings.steamTemperatureMeasurement = 'F';
+      }
+      if (!settings.steamPressureMeasurement) {
+        settings.steamPressureMeasurement = 'psi';
+      }
+      if (!settings.steamSpecificEnthalpyMeasurement) {
+        settings.steamSpecificEnthalpyMeasurement = 'Btu/lb';
+      }
+      if (!settings.steamSpecificEntropyMeasurement) {
+        settings.steamSpecificEntropyMeasurement = 'Btu/lb-F';
+      }
+      if (!settings.steamSpecificVolumeMeasurement) {
+        settings.steamSpecificVolumeMeasurement = 'ft3/lb';
+      }
+      if (!settings.steamMassFlowMeasurement) {
+        settings.steamMassFlowMeasurement = 'lb/hr';
+      }
+    } else {
+      if (!settings.steamTemperatureMeasurement) {
+        settings.steamTemperatureMeasurement = 'C';
+      }
+      if (!settings.steamPressureMeasurement) {
+        settings.steamPressureMeasurement = 'kPa';
+      }
+      if (!settings.steamSpecificEnthalpyMeasurement) {
+        settings.steamSpecificEnthalpyMeasurement = 'kJ/kg';
+      }
+      if (!settings.steamSpecificEntropyMeasurement) {
+        settings.steamSpecificEntropyMeasurement = 'kJ/kg/K';
+      }
+      if (!settings.steamSpecificVolumeMeasurement) {
+        settings.steamSpecificVolumeMeasurement = 'm3/kg';
+      }
+      if (!settings.steamMassFlowMeasurement) {
+        settings.steamMassFlowMeasurement = 'kg/hr';
+      }
+    }
+    return settings;
+  }
+
 }

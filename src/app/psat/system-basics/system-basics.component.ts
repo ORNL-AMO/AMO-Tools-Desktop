@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -50,15 +51,7 @@ export class SystemBasicsComponent implements OnInit {
   dataUpdated: boolean = false;
   @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.saveClicked && !this.isFirstChange) {
-  //     this.saveChanges();
-  //   } else {
-  //     this.isFirstChange = false;
-  //   }
-  // }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -84,14 +77,16 @@ export class SystemBasicsComponent implements OnInit {
         this.showUpdateData = true;
       }
     }
-    if(this.showUpdateData == false){
+    if (this.showUpdateData == false) {
       this.dataUpdated = true;
     }
     //save
     this.indexedDbService.putSettings(this.settings).then(
       results => {
-        //get updated settings
-        this.updateSettings.emit(true);
+        this.settingsDbService.setAll().then(() => {
+          //get updated settings
+          this.updateSettings.emit(true);
+        })
       }
     )
   }
@@ -107,13 +102,6 @@ export class SystemBasicsComponent implements OnInit {
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.showUpdateData = false;
     this.dataUpdated = true;
-    //update settings
-    // this.indexedDbService.putSettings(this.settings).then(
-    //   results => {
-    //     //get updated settings
-    //     this.updateSettings.emit(true);
-    //   }
-    // )
   }
 
   convertPsatData(psat: PSAT) {
@@ -164,14 +152,6 @@ export class SystemBasicsComponent implements OnInit {
     return closest;
 
   }
-
-  // editName() {
-  //   this.isEditingName = true;
-  // }
-
-  // doneEditingName() {
-  //   this.isEditingName = false;
-  // }
 
   startSavePolling(bool?: boolean) {
     this.saveChanges()

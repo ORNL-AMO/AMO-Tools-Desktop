@@ -1,11 +1,29 @@
-<button class="btn pull-right" (click)="hideSetupDialog()">
+<!-- <button class="btn pull-right" (click)="hideSetupDialog()">
   <span aria-hidden="true">&times;</span>
 </button>
 <h4>Setup Your Process Heating System Heat Balance</h4>
 <p>In this section you will input your process heating losses.</p>
-<p>Once you have added the data for your current system (your baseline) you can add modifications to explore potential savings
-  within your system.
+<p>Once you have added the data for your current system (your baseline) you can add scenarios to explore potential savings within
+  your system.
 </p>
-<p>Please setup your baseline data completely before navigating to the "Assessment" tab and adding modifications. Once a modifcation
-  is added you will not be able to alter your baseline.</p>
-<button class="btn btn-primary" (click)="hideSetupDialog()">Got It!</button>
+<p>Please setup your baseline data completely before navigating to the "Assessment" tab and adding operating scenarios. Once
+  a scenario is added you will not be able to alter your baseline.</p>
+<button class="btn btn-primary" (click)="hideSetupDialog()">Got It!</button> -->
+
+<div class="jumbotron jumbotron-fluid mb-0">
+  <div class="container">
+    <h4>Setup Your Process Heating System Heat Balance
+      <button class="btn btn-close btn-primary pull-right" (click)="hideSetupDialog()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </h4>
+    <p class="lead">In this section you will input your process heating losses.</p>
+    <hr>
+    <p>Once you have added the data for your current system (your baseline) you can add scenarios to explore potential savings within
+      your system.
+    </p>
+    <p>Please setup your baseline data completely before navigating to the "Assessment" tab and adding operating scenarios. Once
+      a scenario is added you will not be able to alter your baseline.</p>
+      <button class="btn btn-primary" (click)="hideSetupDialog()">Get Started!</button>
+  </div>
+</div>

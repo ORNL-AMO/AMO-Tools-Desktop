@@ -11,11 +11,13 @@ import * as _ from 'lodash';
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
 
-  baseline: BehaviorSubject<PHAST>;
-  modification: BehaviorSubject<Modification>;
+  //baseline: BehaviorSubject<PHAST>;
+  // modification: BehaviorSubject<Modification>;
 
   lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
+  openModificationModal: BehaviorSubject<boolean>;
+  openNewModal: BehaviorSubject<boolean>;
 
 
   chargeDone: boolean;
@@ -25,28 +27,24 @@ export class LossesService {
   efficiencyDone: boolean;
 
   lossesTabs: Array<LossTab>;
-  tabsSet: boolean;
   updateTabs: BehaviorSubject<boolean>;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
-    this.baseline = new BehaviorSubject<PHAST>(null);
-    this.modification = new BehaviorSubject<Modification>(null);
+    // this.baseline = new BehaviorSubject<PHAST>(null);
+    //this.modification = new BehaviorSubject<Modification>(null);
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateTabs = new BehaviorSubject<boolean>(false);
-    // this.chargeDone = new BehaviorSubject<boolean>(false);
-    // this.enInput1Done = new BehaviorSubject<boolean>(false);
-    // this.enInput2Done = new BehaviorSubject<boolean>(false);
-    // this.flueGasDone = new BehaviorSubject<boolean>(false);
-    // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
+    this.openModificationModal = new BehaviorSubject<boolean>(false);
+    this.openNewModal = new BehaviorSubject<boolean>(false);
   }
 
-  getTab(num: number){
-    let newTab = _.find(this.lossesTabs, (t) => {return num == t.step});
+  getTab(num: number) {
+    let newTab = _.find(this.lossesTabs, (t) => { return num == t.step });
     return newTab;
   }
 
-  setTabs(settings: Settings){
+  setTabs(settings: Settings) {
     this.lossesTabs = new Array();
     defaultTabs.forEach(tab => {
       this.lossesTabs.push(tab);
@@ -55,80 +53,74 @@ export class LossesService {
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
         this.lossesTabs.push({
           tabName: 'Slag',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'slag' 
+          componentStr: 'slag'
         })
         this.lossesTabs.push({
           tabName: 'Exhaust Gas',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'exhaust-gas' 
+          componentStr: 'exhaust-gas'
         })
-        this.lossesTabs.push({
+        this.lossesTabs.unshift({
           tabName: 'Energy Input',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'energy-input' 
+          componentStr: 'energy-input'
         })
-      } 
-      
+      }
+
       else if (settings.furnaceType != 'Custom Electrotechnology') {
         this.lossesTabs.push({
           tabName: 'Auxiliary Power',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'auxiliary-power' 
+          componentStr: 'auxiliary-power'
         })
-        this.lossesTabs.push({
+        this.lossesTabs.unshift({
           tabName: 'Energy Input',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'energy-input-exhaust-gas' 
-        })
-      } 
-      
-      else if (settings.furnaceType == 'Custom Electrotechnology') {
-        this.lossesTabs.push({
-          tabName: 'Heat System Efficiency',
-          step: this.lossesTabs.length+1,
-          back: this.lossesTabs.length,
-          next: this.lossesTabs.length+2,
-          componentStr: 'heat-system-efficiency' 
+          componentStr: 'energy-input-exhaust-gas'
         })
       }
-    } 
-    
+
+      else if (settings.furnaceType == 'Custom Electrotechnology') {
+        this.lossesTabs.unshift({
+          tabName: 'Heat System Efficiency',
+          componentStr: 'heat-system-efficiency'
+        })
+      }
+    }
+
     else if (settings.energySourceType == 'Steam') {
-      this.lossesTabs.push({
+      this.lossesTabs.unshift({
         tabName: 'Heat System Efficiency',
-        step: this.lossesTabs.length+1,
-        back: this.lossesTabs.length,
-        next: this.lossesTabs.length+2,
-        componentStr: 'heat-system-efficiency' 
-      })
-    } 
-    
-    else if (settings.energySourceType == 'Fuel') {
-      this.lossesTabs.push({
-        tabName: 'Flue Gas',
-        step: this.lossesTabs.length+1,
-        back: this.lossesTabs.length,
-        next: this.lossesTabs.length+2,
-        componentStr: 'flue-gas-losses' 
+        componentStr: 'heat-system-efficiency'
       })
     }
-    this.lossesTabs.push({
-      tabName: 'Operations',
-      step: this.lossesTabs.length+1,
-      back: this.lossesTabs.length,
-      componentStr: 'operations' 
+
+    else if (settings.energySourceType == 'Fuel') {
+      this.lossesTabs.unshift({
+        tabName: 'Flue Gas',
+        componentStr: 'flue-gas-losses'
+      })
+    }
+    this.lossesTabs.unshift({
+      tabName: 'Charge Material',
+      componentStr: 'charge-material',
+      showAdd: true
     })
+    this.lossesTabs.unshift({
+      tabName: 'Operations',
+      componentStr: 'operations'
+    })
+    let i = 0;
+    let numTabs = this.lossesTabs.length;
+    for (i; i < numTabs; i++) {
+      if (i == 1) {
+        this.lossesTabs[i].step = i + 1;
+        this.lossesTabs[i].next = i + 2;
+      } else if (i == numTabs - 1) {
+        this.lossesTabs[i].step = i + 1;
+        this.lossesTabs[i].back = i;
+      } else {
+        this.lossesTabs[i].step = i + 1;
+        this.lossesTabs[i].next = i + 2;
+        this.lossesTabs[i].back = i;
+      }
+    }
     this.lossesTab.next(1);
   }
 
@@ -140,19 +132,25 @@ export class LossesService {
     this.efficiencyDone = false;
   }
 
-  setBaseline(phast: PHAST) {
-    this.baseline.next(phast);
-  }
+  // setBaseline(phast: PHAST) {
+  //   this.baseline.next(phast);
+  // }
 
-  setModification(modification: Modification) {
-    this.modification.next(modification);
-  }
+  // setModification(modification: Modification) {
+  //   this.modification.next(modification);
+  // }
 
   setLossIndex(num: number) {
     this.lossIndex.next(num);
   }
 
   checkSetupDone(phast: PHAST, settings: Settings) {
+    let modExists = false;
+    if(phast.modifications){
+      if(phast.modifications.length != 0){
+        modExists = true;
+      }
+    }
     //used to check if setup is done for an assessment
     let isDone, grossHeat = false;
     if (phast.losses) {
@@ -190,8 +188,9 @@ export class LossesService {
       this.chargeDone = false;
       return false;
     }
+
     grossHeat = (this.efficiencyDone || this.enInput1Done || this.enInput2Done || this.flueGasDone);
-    isDone = (grossHeat && this.chargeDone);
+    isDone = (grossHeat && this.chargeDone) || modExists;
     return isDone;
   }
 

@@ -7,6 +7,8 @@ import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveService } from './pump-curve.service';
 import { PumpCurveForm, PumpCurveDataRow, Calculator } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -43,36 +45,32 @@ export class PumpCurveComponent implements OnInit {
   calcExists: boolean = false;
   saving: boolean = false;
   pumpFormExists: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
+  constructor(private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     //get systen settings if using stand alone calculator
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          this.settings = results[0];
-        }
-      )
+      this.settings = this.settingsDbService.globalSettings;
     }
-
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
     if (this.inAssessment) {
-      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then(results => {
-        if (results.length != 0) {
-          this.calculator = results[0];
-          this.calcExists = true;
-          if (this.calculator.pumpCurveForm) {
-            this.pumpFormExists = true;
-            this.pumpCurveForm = this.calculator.pumpCurveForm;
-            this.subscribe();
-          } else {
-            this.initForm();
-            this.subscribe();
-          }
+      this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+      if (this.calculator) {
+        this.calcExists = true;
+        if (this.calculator.pumpCurveForm) {
+          this.pumpFormExists = true;
+          this.pumpCurveForm = this.calculator.pumpCurveForm;
+          this.subscribe();
         } else {
           this.initForm();
           this.subscribe();
         }
-      })
+      } else {
+        this.initForm();
+        this.subscribe();
+      }
     } else {
       this.initForm();
       this.subscribe();
@@ -198,7 +196,9 @@ export class PumpCurveComponent implements OnInit {
     if (!this.saving || this.calcExists) {
       if (this.calcExists) {
         this.calculator.pumpCurveForm = this.pumpCurveForm;
-        this.indexedDbService.putCalculator(this.calculator);
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
       } else {
         this.saving = true;
         this.calculator = {
@@ -206,9 +206,11 @@ export class PumpCurveComponent implements OnInit {
           pumpCurveForm: this.pumpCurveForm
         }
         this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculator.id = result
-          this.calcExists = true;
-          this.saving = false;
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result
+            this.calcExists = true;
+            this.saving = false;
+          })
         })
       }
     }

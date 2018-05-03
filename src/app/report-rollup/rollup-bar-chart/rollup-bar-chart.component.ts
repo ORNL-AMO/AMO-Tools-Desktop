@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, SimpleChange } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -43,6 +43,9 @@ export class RollupBarChartComponent implements OnInit {
   @Input()
   assessmentType: string;
 
+  chartContainerHeight: number;
+  rotateLabels: boolean;
+
   // 2 Dimensional array. 
   // Each sub array will correspond to a single bar color across every category
   @Input()
@@ -58,15 +61,54 @@ export class RollupBarChartComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+
+    if (this.chartLabels !== undefined) {
+      if (this.chartLabels.length > 9) {
+        this.chartContainerHeight = 600;
+        this.rotateLabels = true;
+      }
+      else {
+        this.chartContainerHeight = 320;
+        this.rotateLabels = false;
+      }
+    }
+    else {
+      this.chartContainerHeight = 320;
+    }
+
+    if (this.graphColors === undefined) {
+      this.graphColors = graphColors;
+    }
   }
 
   ngAfterViewInit() {
-    this.initChart();
+
+    if (this.printView) {
+      this.chartContainerWidth = 1035;
+      if (this.chartLabels !== undefined) {
+        if (this.chartLabels.length > 9) {
+          this.chartContainerHeight = 600;
+          this.rotateLabels = true;
+        }
+        else {
+          this.chartContainerHeight = 370;
+          this.rotateLabels = false;
+        }
+      }
+      else {
+        this.chartContainerHeight = 370;
+      }
+      this.initChart();
+    }
   }
 
   ngOnChanges() {
-    if (this.isUpdate && !this.printView) {
-      this.initChart();
+    if (!this.printView) {
+      if (this.chartContainerWidth > 0) {
+        this.chartContainerHeight = 320;
+        this.rotateLabels = false;
+        this.initChart();
+      }
     }
   }
 
@@ -82,10 +124,21 @@ export class RollupBarChartComponent implements OnInit {
       }
     }
 
+    let rotateAmount: number;
+    let paddingRight: number;
+    if (this.rotateLabels) {
+      rotateAmount = 60;
+      paddingRight = 20;
+    }
+    else {
+      rotateAmount = 0;
+      paddingRight = 0;
+    }
+
     let unit = this.unit;
 
     if (this.allDataColumns) {
-        this.barChart = c3.generate({
+      this.barChart = c3.generate({
         bindto: this.ngChart.nativeElement,
         data: {
           columns: this.allDataColumns,
@@ -94,7 +147,12 @@ export class RollupBarChartComponent implements OnInit {
         axis: {
           x: {
             type: 'category',
-            categories: this.chartLabels
+            tick: {
+              rotate: rotateAmount,
+              multiline: !this.rotateLabels,
+            },
+            categories: this.chartLabels,
+            height: 2.75 * rotateAmount + 40
           },
           y: {
             label: {
@@ -113,17 +171,18 @@ export class RollupBarChartComponent implements OnInit {
         },
         size: {
           width: this.chartContainerWidth,
-          height: 320
+          height: this.chartContainerHeight
         },
         padding: {
-          bottom: 20
+          bottom: 20,
+          right: paddingRight
         },
         color: {
           pattern: this.graphColors
         },
         legend: {
-          show: this.showLegend,
-          position: 'right'
+          show: !this.printView,
+          position: 'bottom'
         },
         tooltip: {
           contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
@@ -155,12 +214,21 @@ export class RollupBarChartComponent implements OnInit {
           }
         }
       });
+
       //formatting chart
-      d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-      d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-      d3.selectAll(".c3-texts").style("font-size", "10px");
-      d3.selectAll(".c3-legend-item text").style("font-size", "15px");
-      d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      if (this.printView) {
+        d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+        d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+        d3.selectAll(".c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+        d3.selectAll(".c3-axis-y g.tick text tspan").style("font-size", "0.65rem");
+      }
+      else {
+        d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+        d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+        d3.selectAll(".c3-texts").style("font-size", "10px");
+        d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      }
     }
   }
 

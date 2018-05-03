@@ -1,11 +1,11 @@
 a:not([href]):not([tabindex]).click-link{
-    color: blue;
+    color: #007bff;
 }
 
 a:not([href]):not([tabindex]).click-link:hover{
     text-decoration: underline;
     cursor: pointer;
-    color: blue;
+    color: #0056b3;
 }
 
 a:not([href]):not([tabindex]).disabled-link{
@@ -65,3 +65,70 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .loss-results{
     margin-bottom: 20px;
 }
+
+.loss-total{
+    border-top: 2px groove #bf3d00;
+    padding-top: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+
+
+
+/*grid view*/
+.summary-card-header{
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 14px;
+}
+
+/*tab badge*/
+.gray-badge.input-error{
+    background-color: orange;
+}
+
+
+.gray-badge.missing-data{
+    background-color: red;
+}
+
+.gray-badge.success{
+    background-color: green;
+}
+
+.gray-badge.loss-different{
+    background-color: #007bff;
+    /* background-color: blue; */
+}
+
+
+.indicate-different {
+	border: #007bff solid 2px;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.indicate-different.form-control {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.indicate-different.incrementor {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.invalid, .indicate-different.invalid, input.indicate-different.invalid{
+	border: red solid 2px !important;
+    box-shadow: 0px 0px 5px red !important;
+}
+
+.error, .indicate-different.error, input.indicate-different.error {
+    border: orange solid 2px;
+    box-shadow: 0px 0px 5px orange;
+}
+
+
+.card-item{
+    box-shadow: 3px 0px 5px 2px gray;
+  } 

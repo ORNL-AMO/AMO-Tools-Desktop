@@ -6,12 +6,6 @@
 <div class="card-form" *ngFor="let loss of _flueGasLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <!-- <label class="group-label loss-label">
-        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
-        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
-        {{loss.name}}
-        <span aria-hidden="true" *ngIf="isBaseline && inSetup && !modExists" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
-      </label> -->
       <form class="name-input-form" [formGroup]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'">
         <div class="input-group">
           <span class="input-group-addon units left" (click)="collapseLoss(loss)">
@@ -43,7 +37,7 @@
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
         <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked"
-          (focus)="changeField('measurementType')" (blur)="focusOut()">
+          (focus)="changeField('measurementType')" (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>
         </select>
@@ -56,68 +50,38 @@
         [settings]="settings" (inputError)="setError($event)"></app-flue-gas-losses-form-volume>
     </div>
   </div>
-  <div class="row loss-results" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
+  <div class="row loss-total" [ngClass]="{'input-error': (showError == true || availableHeatError)}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">Available Heat</label>
-        <div *ngIf="loss.availableHeat" class="text-center small font-weight-bold">
+        <label class="bold">Available Heat</label>
+        <div *ngIf="loss.availableHeat" class="text-center bold">
           {{loss.availableHeat | number:'2.1-1'}} %
         </div>
-        <div *ngIf="!loss.availableHeat" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.availableHeat" class="text-center bold">
           &mdash; &mdash;
         </div>
         <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
       </div>
       <div class="form-group">
-        <label class="small font-weight-bold">Gross Heat</label>
-        <div *ngIf="loss.grossHeat" class="text-center small font-weight-bold">
+        <label class="bold">Gross Heat</label>
+        <div *ngIf="loss.grossHeat" class="text-center bold">
           {{loss.grossHeat | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.grossHeat" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.grossHeat" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
       <div class="form-group">
-        <label class="small font-weight-bold">Flue Gas Losses</label>
-        <div *ngIf="loss.systemLosses" class="text-center small font-weight-bold">
+        <label class="bold">Flue Gas Losses</label>
+        <div *ngIf="loss.systemLosses" class="text-center bold">
           {{loss.systemLosses | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.systemLosses" class="text-center small font-weight-bold">
+        <div *ngIf="!loss.systemLosses" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
     </div>
   </div>
 </div>
-<!--
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <h4>
-    This portion of the application is still in active development.
-  </h4>
-  <h5>
-    Below is a description of what you will find here in the future.
-  </h5>
-  <blockquote class="blockquote">
-    <p>
-      Flue gas losses encompass energy lost through the flue or “chimney” of the furnace. The gasses constitute normally the largest
-      losses in a fired process heating system.
-    </p>
-  </blockquote>
-  <blockquote class="blockquote">
-    <p>
-      The flue gas calculator calculates flue gas loss by summing up heat content of components of flue gas. For industrial heating
-      systems, it is difficult and impractical to measure the quantity of each component to calculate the total heat content
-      of the flue gases.
-    </p>
-  </blockquote>
-  <blockquote class="blockquote">
-    <p>
-      Hence, an indirect method known as available heat method is used to calculate heat losses from a heating system. Available
-      heat is expressed as the percentage of the fuel heat input into the system.
-    </p>
-  </blockquote>
-</div>
-</div>-->

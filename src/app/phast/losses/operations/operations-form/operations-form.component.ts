@@ -26,21 +26,14 @@ export class OperationsFormComponent implements OnInit {
   daysPerWeekError: string = null;
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
-
-  counter: any;
+  hoursPerYearError: string = null;
   firstChange: boolean = true;
-  constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
+  constructor(private operationsCompareService: OperationsCompareService) { }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
-    } else {
-      this.enableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,11 +50,11 @@ export class OperationsFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.operationsForm.disable();
+    // this.operationsForm.disable();
   }
 
   enableForm() {
-    this.operationsForm.enable();
+    // this.operationsForm.enable();
   }
 
   focusField(str: string) {
@@ -98,7 +91,6 @@ export class OperationsFormComponent implements OnInit {
     } else {
       this.hoursPerShiftError = null;
     }
-    this.startSavePolling();
     // this.phast.operatingHours.isCalculated = true;
     // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
     let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
@@ -106,11 +98,32 @@ export class OperationsFormComponent implements OnInit {
       hoursPerYear: tmpHoursPerYear.toFixed(0)
     })
     this.isCalculated = true;
+    if (this.operationsForm.controls.hoursPerYear.value > 8760) {
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
+    } else {
+      this.hoursPerYearError = null;
+    }
+    this.startSavePolling();
+    this.checkErrors();
   }
 
   setNotCalculated() {
+    if (this.operationsForm.controls.hoursPerYear.value > 8760) {
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
+    } else {
+      this.hoursPerYearError = null;
+    }
+    this.checkErrors();
     this.startSavePolling();
     this.isCalculated = false;
+  }
+
+  checkErrors() {
+    if (this.timeError || this.weeksPerYearError || this.daysPerWeekError || this.shiftsPerDayError || this.hoursPerShiftError || this.hoursPerYearError) {
+      this.operationsCompareService.inputError.next(true);
+    } else {
+      this.operationsCompareService.inputError.next(false);
+    }
   }
 
   addShift() {
@@ -186,59 +199,67 @@ export class OperationsFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
-  initDifferenceMonitor() {
+  canCompare() {
     if (this.operationsCompareService.baseline && this.operationsCompareService.modification) {
-      if (this.operationsCompareService.differentObject) {
-        let doc = this.windowRefService.getDoc();
-        this.operationsCompareService.differentObject.daysPerWeek.subscribe(val => {
-          let daysPerWeekElements = doc.getElementsByName('daysPerWeek');
-          daysPerWeekElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.weeksPerYear.subscribe(val => {
-          let weeksPerYearElements = doc.getElementsByName('weeksPerYear');
-          weeksPerYearElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.shiftsPerDay.subscribe(val => {
-          let shiftsPerDayElements = doc.getElementsByName('shiftsPerDay');
-          shiftsPerDayElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.hoursPerShift.subscribe(val => {
-          let hoursPerShiftElements = doc.getElementsByName('hoursPerShift');
-          hoursPerShiftElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.hoursPerYear.subscribe(val => {
-          let hoursPerYearElements = doc.getElementsByName('hoursPerYear');
-          hoursPerYearElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.fuelCost.subscribe(val => {
-          let fuelCostElements = doc.getElementsByName('fuelCost');
-          fuelCostElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.steamCost.subscribe(val => {
-          let steamCostElements = doc.getElementsByName('steamCost');
-          steamCostElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        this.operationsCompareService.differentObject.electricityCost.subscribe(val => {
-          let electricityCostElements = doc.getElementsByName('electricityCost');
-          electricityCostElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+  compareWeeksPerYear(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareWeeksPerYear();
+    } else {
+      return false;
+    }
+  }
+  compareDaysPerWeek(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareDaysPerWeek();
+    } else {
+      return false;
+    }
+  }
+  compareShiftsPerDay(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareShiftsPerDay();
+    } else {
+      return false;
+    }
+  }
+  compareHoursPerShift(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareHoursPerShift();
+    } else {
+      return false;
+    }
+  }
+  compareHoursPerYear(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareHoursPerYear();
+    } else {
+      return false;
+    }
+  }
+  compareFuelCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareFuelCost();
+    } else {
+      return false;
+    }
+  }
+  compareSteamCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareSteamCost();
+    } else {
+      return false;
+    }
+  }
+  compareElectricityCost(): boolean {
+    if (this.canCompare()) {
+      return this.operationsCompareService.compareElectricityCost();
+    } else {
+      return false;
     }
   }
 }

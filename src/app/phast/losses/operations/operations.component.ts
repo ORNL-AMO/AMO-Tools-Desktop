@@ -5,7 +5,6 @@ import { PHAST, OperatingCosts, OperatingHours } from '../../../shared/models/ph
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
-import { OperationsCompareService } from './operations-compare.service';
 import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-operations',
@@ -15,8 +14,6 @@ import { FormGroup } from '@angular/forms';
 export class OperationsComponent implements OnInit {
   @Input()
   phast: PHAST;
-  @Input()
-  saveClicked: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
   @Input()
@@ -27,76 +24,55 @@ export class OperationsComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  modificationIndex: number;
 
   operationsForm: FormGroup;
-  firstChange: boolean = true;
   isCalculated: boolean;
-  constructor(private operationsService: OperationsService, private operationsCompareService: OperationsCompareService) { }
-
-  ngOnInit() {
-    this.operationsForm = this.operationsService.initForm(this.phast);
-    this.isCalculated = this.phast.operatingHours.isCalculated;
-    this.setCompareVals();
-    this.operationsCompareService.initCompareObjects();
-  }
+  isFirstChange: boolean = true;
+  constructor(private operationsService: OperationsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
+    if (!this.isFirstChange) {
+      if (changes.modificationIndex) {
+        this.initForm();
+      }
+      else {
+        this.isFirstChange = false;
       }
     }
-    else {
-      this.firstChange = false;
-    }
+  }
+  ngOnInit() {
+    this.initForm();
+  }
+  initForm() {
+    this.operationsForm = this.operationsService.initForm(this.phast);
+    this.isCalculated = this.phast.operatingHours.isCalculated;
   }
 
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      this.operationsCompareService.baseline = null;
-    } else {
-      this.operationsCompareService.modification = null;
-    }
-  }
-debugger
   saveLosses() {
-    if (this.operationsForm.status == 'VALID') {
-      let tmpOpHours: OperatingHours = {
-        hoursPerShift: this.operationsForm.controls.hoursPerShift.value,
-        hoursPerYear: this.operationsForm.controls.hoursPerYear.value,
-        shiftsPerDay: this.operationsForm.controls.shiftsPerDay.value,
-        daysPerWeek: this.operationsForm.controls.daysPerWeek.value,
-        weeksPerYear: this.operationsForm.controls.weeksPerYear.value,
-        isCalculated: this.isCalculated
-      }
-      let tmpOpCosts: OperatingCosts = {
-        electricityCost: this.operationsForm.controls.electricityCost.value,
-        steamCost: this.operationsForm.controls.steamCost.value,
-        fuelCost: this.operationsForm.controls.fuelCost.value
-      }
-      let implementationCost = this.operationsForm.controls.implementationCost.value;
-      this.phast.operatingCosts = tmpOpCosts;
-      this.phast.operatingHours = tmpOpHours;
-      this.phast.implementationCost = implementationCost;
-      this.savedLoss.emit(true);
+    let tmpOpHours: OperatingHours = {
+      hoursPerShift: this.operationsForm.controls.hoursPerShift.value,
+      hoursPerYear: this.operationsForm.controls.hoursPerYear.value,
+      shiftsPerDay: this.operationsForm.controls.shiftsPerDay.value,
+      daysPerWeek: this.operationsForm.controls.daysPerWeek.value,
+      weeksPerYear: this.operationsForm.controls.weeksPerYear.value,
+      isCalculated: this.isCalculated
     }
-    this.setCompareVals();
+    let tmpOpCosts: OperatingCosts = {
+      electricityCost: this.operationsForm.controls.electricityCost.value,
+      steamCost: this.operationsForm.controls.steamCost.value,
+      fuelCost: this.operationsForm.controls.fuelCost.value
+    }
+    let implementationCost = this.operationsForm.controls.implementationCost.value;
+    this.phast.operatingCosts = tmpOpCosts;
+    this.phast.operatingHours = tmpOpHours;
+    this.phast.implementationCost = implementationCost;
+    this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
-  }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.operationsCompareService.baseline = this.phast;
-    } else {
-      this.operationsCompareService.modification = this.phast;
-    }
-    if (this.operationsCompareService.differentObject && !this.isBaseline) {
-      this.operationsCompareService.checkDifferent();
-    }
-
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
@@ -40,14 +40,34 @@ export class ExploreOpeningFormComponent implements OnInit {
   numOpeningsError2: Array<string>;
   viewFactorError1: Array<string>;
   viewFactorError2: Array<string>;
+  emissivityError1: Array<string>;
+  emissivityError2: Array<string>;
+  timeOpenError1: Array<string>;
+  timeOpenError2: Array<string>;
 
+
+  showTimeOpen: Array<boolean>;
+  showAllTimeOpen: boolean = false;
+  showEmissivity: Array<boolean>;
   showViewFactor: Array<boolean>
   showSize: Array<boolean>;
+  showAllEmissivity: boolean = false;
   showOpening: boolean = false;
   constructor(private convertUnitsService: ConvertUnitsService, private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.showAllEmissivity = false;
+        this.showAllTimeOpen = false;
+        this.showOpening = false;
+        this.initData();
+      }
+    }
   }
 
   initData() {
@@ -65,6 +85,13 @@ export class ExploreOpeningFormComponent implements OnInit {
     this.thicknessError2 = new Array<string>();
     this.numOpeningsError2 = new Array<string>();
     this.viewFactorError2 = new Array<string>();
+    this.emissivityError1 = new Array<string>();
+    this.emissivityError2 = new Array<string>();
+    this.showEmissivity = new Array<boolean>();
+    this.showTimeOpen = new Array<boolean>();
+    this.timeOpenError1 = new Array<string>();
+    this.timeOpenError2 = new Array<string>();
+
     let index: number = 0;
     this.phast.losses.openingLosses.forEach(loss => {
       let check: boolean = this.initSize(loss, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
@@ -82,6 +109,12 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.thicknessError2.push(null);
       this.numOpeningsError2.push(null);
       this.totalArea2.push(0);
+      this.emissivityError1.push(null);
+      this.emissivityError2.push(null);
+      this.timeOpenError1.push(null);
+      this.timeOpenError2.push(null);
+
+
       this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index)
       this.getArea(1, loss, index)
 
@@ -89,6 +122,16 @@ export class ExploreOpeningFormComponent implements OnInit {
       this.viewFactorError1.push(null);
       this.viewFactorError2.push(null);
       this.showViewFactor.push(!check);
+      check = (loss.emissivity != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
+      if (!this.showAllEmissivity && check) {
+        this.showAllEmissivity = check;
+      }
+      this.showEmissivity.push(check);
+      check = (loss.percentTimeOpen != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
+      this.showTimeOpen.push(check);
+      if (!this.showAllTimeOpen && check) {
+        this.showAllTimeOpen = check;
+      }
       index++;
     })
   }
@@ -174,7 +217,7 @@ export class ExploreOpeningFormComponent implements OnInit {
           this.totalArea2[index] = 0;
         }
       }
-    } else if (loss.openingType == 'Rectangular (Square)') {
+    } else if (loss.openingType == 'Rectangular (or Square)') {
       if (loss.lengthOfOpening && loss.heightOfOpening) {
         let lengthInches = loss.lengthOfOpening;
         let heightInches = loss.heightOfOpening;
@@ -225,7 +268,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   checkHeight(num: number, loss: OpeningLoss, index: number) {
-    if (loss.openingType == 'Rectangular (Square)') {
+    if (loss.openingType == 'Rectangular (or Square)') {
       if (num = 1) {
         this.heightError1[index] = (loss.heightOfOpening <= 0) ? "Opening Height must be greater than 0" : null;
       } else if (num = 2) {
@@ -247,7 +290,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       } else if (num = 2) {
         this.lengthError2[index] = (loss.lengthOfOpening < 0) ? "Opening Diameter must be greater than 0" : null;
       }
-    } else if (loss.openingType == 'Rectangular (Square)') {
+    } else if (loss.openingType == 'Rectangular (or Square)') {
       if (num = 1) {
         this.lengthError1[index] = (loss.lengthOfOpening < 0) ? "Opening Length must be greater than 0" : null;
       } else if (num = 2) {
@@ -281,6 +324,68 @@ export class ExploreOpeningFormComponent implements OnInit {
     }
   }
 
+
+  toggleAllEmissivity() {
+    if (this.showAllEmissivity == false) {
+      let index = 0;
+      this.phast.losses.openingLosses.forEach(loss => {
+        this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
+        this.showEmissivity[index] = false;
+        index++;
+        this.calculate();
+      })
+    }
+  }
+
+  toggleEmissivity(index: number, loss: OpeningLoss) {
+    if (this.showEmissivity[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
+      this.calculate();
+    }
+  }
+
+  checkSurfaceEmissivity(num: number, loss: OpeningLoss, index: number) {
+    if (num == 1) {
+      this.emissivityError1[index] = (loss.emissivity < 0 || loss.emissivity > 1) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    } else if (num == 2) {
+      this.emissivityError2[index] = (loss.emissivity < 0 || loss.emissivity > 1) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    }
+    this.calculate();
+  }
+
+  checkTimeOpen(num: number, loss: OpeningLoss, index: number) {
+    if (num == 1) {
+      this.timeOpenError2[index] = (loss.percentTimeOpen < 0 || loss.percentTimeOpen > 100) ?
+        'Percent Time Open must be between 0% and 100%' : null;
+    } else if (num == 2) {
+      this.timeOpenError2[index] = (loss.percentTimeOpen < 0 || loss.percentTimeOpen > 100) ?
+        'Percent Time Open must be between 0% and 100%' : null;
+    }
+    this.calculate();
+
+  }
+
+
+  toggleAllTimeOpen() {
+    if (this.showAllTimeOpen == false) {
+      let index = 0;
+      this.phast.losses.openingLosses.forEach(loss => {
+        this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
+        this.showTimeOpen[index] = false;
+        index++;
+        this.calculate();
+      })
+    }
+  }
+
+  toggleTimeOpen(index: number, loss: OpeningLoss) {
+    if (this.showTimeOpen[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
+      this.calculate();
+    }
+  }
+
+
   focusField(str: string) {
     this.changeField.emit(str);
     this.changeTab.emit({
@@ -289,7 +394,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       next: 7,
       back: 5,
       componentStr: 'opening-losses',
-      showAdd: true 
+      showAdd: true
     })
   }
 

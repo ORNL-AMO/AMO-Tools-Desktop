@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -7,6 +7,7 @@ import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { Calculator } from '../../../shared/models/calculators';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -21,6 +22,8 @@ export class PhastRollupGraphsComponent implements OnInit {
   calculator: Calculator;
   // @Input()
   // preAssessmentData: 
+
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;
@@ -42,18 +45,19 @@ export class PhastRollupGraphsComponent implements OnInit {
   backgroundColors: Array<string>;
   graphColors: Array<string>;
   resultData: Array<PhastResultsData>;
-  dataOption: string = 'cost';
+  dataOption: string = 'energy';
   totalSteamEnergyUsed: number = 0;
   totalElectricalEnergyUsed: number = 0;
   totalFuelEnergyUsed: number = 0;
   totalFuelCost: number = 0;
   totalSteamCost: number = 0;
   totalElectricalCost: number = 0;
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.reportRollupService.phastResults.subscribe(val => {
+    this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
       if (val.length != 0) {
         this.initTotals();
         this.calcPhastSums(val);
@@ -66,9 +70,10 @@ export class PhastRollupGraphsComponent implements OnInit {
     if (this.printView) {
       this.initPrintChartData();
     }
-    else {
-      this.chartContainerWidth = (window.innerWidth - 30) * .28;
-    }
+  }
+
+  ngOnDestory(){
+    this.resultsSub.unsubscribe();
   }
 
   initTotals() {
@@ -117,7 +122,6 @@ export class PhastRollupGraphsComponent implements OnInit {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
-    this.updateChart();
   }
 
   initPrintChartData() {
@@ -153,7 +157,7 @@ export class PhastRollupGraphsComponent implements OnInit {
         i++;
       });
     }
-    
+
   }
 
   getConvertedValue(val: number, settings: Settings) {
@@ -193,7 +197,13 @@ export class PhastRollupGraphsComponent implements OnInit {
     ]
   }
 
-  updateChart() {
-    this.isUpdate = true;
+  getPieWidth(): number {
+    if (this.pieChartContainer) {
+      let containerPadding = 30;
+      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
+    }
   }
 }

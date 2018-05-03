@@ -42,6 +42,7 @@ export class SankeyComponent implements OnInit {
   @Input()
   modIndex: number;
 
+  //real version
   @ViewChild("ngChart") ngChart: ElementRef;
   @ViewChild("btnDownload") btnDownload: ElementRef;
 
@@ -133,8 +134,13 @@ export class SankeyComponent implements OnInit {
         .call(() => {
           this.calcSankey(results.nodes);
         })
-        .attr("width", "2400px")
-        .attr("height", "800px")
+        //debug
+        .attr("width", "100%")
+        .attr("height", "80%")
+
+        //real version
+        // .attr("width", "2400px")
+        // .attr("height", "800px")
         .attr("viewBox", "0 0 " + width + " " + height)
         .attr("preserveAspectRatio", "xMinYMin")
         .append("g");
@@ -210,14 +216,14 @@ export class SankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
         if (d.usefulOutput) {
-          return d.x + 70;
+          return d.x + 40;
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.x - 70;
+            return d.x - 140;
           }
           else if (this.location !== 'sankey-diagram') {
-            return d.x + 70;
+            return d.x - 135;
           }
           return d.x
         }
@@ -228,9 +234,9 @@ export class SankeyComponent implements OnInit {
       .attr("dy", (d) => {
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + labelFontSize + labelPadding;
+            return d.y + (d.displaySize) + labelFontSize + labelPadding - 182;
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize) + reportFontSize + reportPadding;
+            return d.y + (d.displaySize) + reportFontSize + reportPadding - 182;
           }
         }
 
@@ -273,14 +279,14 @@ export class SankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
         if (d.usefulOutput) {
-          return d.x + 70;
+          return d.x + 40;
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.x - 70;
+            return d.x - 140;
           }
           else if (this.location !== 'sankey-diagram') {
-            return d.x + 70;
+            return d.x - 135;
           }
           return d.x + 70;
         }
@@ -291,9 +297,9 @@ export class SankeyComponent implements OnInit {
       .attr("dy", (d) => {
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
+            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 182;
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2);
+            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 182;
           }
         }
         if (d.usefulOutput) {
@@ -705,15 +711,20 @@ export class SankeyComponent implements OnInit {
     () => this.changePlaceHolders(nodes);
   }
 
+
   drawFurnace() {
     var furnace = svg.append("g")
       .append("polygon")
       .attr("points", function () {
-        return (580 - 100) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 500);
+        let xVentAnchor = 520;
+        let xLeftSideShift = 60;
+        let xRightSideShift = 120
+        return (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");
   }
+
 
   downloadChart() {
     if (!this.exportName) {

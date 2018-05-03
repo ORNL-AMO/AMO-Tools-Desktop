@@ -53,7 +53,7 @@ Tabs
     background: #ececec;
     -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
-    z-index: 3;
+    /* z-index: 3; */
     position: relative;
   }
   .tabs.subtabs li {
@@ -115,6 +115,26 @@ Tabs
       border-radius: 23%;
       margin-right: 5px;
     }
+
+    .tabs.subtabs.phast .active.missing-data .step-number,
+    .tabs.subtabs.phast .missing-data .step-number,
+    .tabs.subtabs.psat .active.missing-data .step-number,
+    .tabs.subtabs.psat .missing-data .step-number {
+      background: red;
+    }
+    .tabs.subtabs.phast .active.input-error .step-number,
+    .tabs.subtabs.phast .input-error .step-number,
+    .tabs.subtabs.psat .active.input-error .step-number,
+    .tabs.subtabs.psat .input-error .step-number {
+      background: orange;
+    }
+    .tabs.subtabs.phast .active.success .step-number,
+    .tabs.subtabs.phast .success .step-number,
+    .tabs.subtabs.psat .active.success .step-number,
+    .tabs.subtabs.psat .success .step-number {
+      background: green;
+    }
+
       .tabs.subtabs.phast .active .step-number {
         background: #BF3D00;
       }

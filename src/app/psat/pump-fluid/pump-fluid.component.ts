@@ -16,8 +16,6 @@ import { FormGroup } from '@angular/forms';
 export class PumpFluidComponent implements OnInit {
   @Input()
   psat: PSAT;
-  @Input()
-  saveClicked: boolean;
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Output('isValid')
@@ -32,6 +30,8 @@ export class PumpFluidComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modificationIndex: number;
 
   counter: any;
 
@@ -101,15 +101,14 @@ export class PumpFluidComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.savePsat(this.psatForm);
-      }
       if (!this.selected) {
         this.disableForm();
       } else {
         this.enableForm();
       }
-      this.setCompareVals();
+      if (changes.modificationIndex) {
+        this.init();
+      }
     }
     else {
       this.isFirstChange = false;
@@ -117,24 +116,24 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.checkPumpRpm(true);
+    this.init();
     if (this.settings.temperatureMeasurement == 'C') {
       this.tempUnit = '&#8451';
     } else if (this.settings.temperatureMeasurement == 'F') {
       this.tempUnit = '&#8457';
-    } else if (this.settings.temperatureMeasurement == 'K') {
-      this.tempUnit = '&#8490';
     }
-  }
-
-  ngAfterViewInit() {
+    // } else if (this.settings.temperatureMeasurement == 'K') {
+    //   this.tempUnit = '&#8490';
+    // }
     if (!this.selected) {
       this.disableForm();
     }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
+  }
+
+  init() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    this.checkPumpRpm(true);
   }
 
   disableForm() {
@@ -152,6 +151,7 @@ export class PumpFluidComponent implements OnInit {
       })
     }
     this.checkForm(this.psatForm);
+    this.startSavePolling();
   }
 
   subtractNum(str: string) {
@@ -163,6 +163,7 @@ export class PumpFluidComponent implements OnInit {
       }
     }
     this.checkForm(this.psatForm);
+    this.startSavePolling();
   }
 
   focusField(str: string) {
@@ -184,17 +185,7 @@ export class PumpFluidComponent implements OnInit {
 
   savePsat(form: FormGroup) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.setCompareVals();
     this.saved.emit(this.selected);
-  }
-
-  setCompareVals() {
-    if (this.baseline) {
-      this.compareService.baselinePSAT = this.psat;
-    } else {
-      this.compareService.modifiedPSAT = this.psat;
-    }
-    this.compareService.checkPumpDifferent();
   }
 
   checkPumpRpm(bool?: boolean) {
@@ -270,69 +261,76 @@ export class PumpFluidComponent implements OnInit {
     this.savePsat(this.psatForm)
   }
 
-  //used to add classes to inputs with different baseline vs modification values
-  initDifferenceMonitor() {
-    if (!this.inSetup) {
-      let doc = this.windowRefService.getDoc();
-      //pump style
-      this.compareService.pump_style_different.subscribe((val) => {
-        let pumpStyleElements = doc.getElementsByName('pumpType');
-        pumpStyleElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //pump specified
-      this.compareService.pump_specified_different.subscribe((val) => {
-        let specifiedPumpTypeElements = doc.getElementsByName('specifiedPumpType');
-        specifiedPumpTypeElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //pump rated speed
-      this.compareService.pump_rated_speed_different.subscribe((val) => {
-        let pumpRpmElements = doc.getElementsByName('pumpRPM');
-        pumpRpmElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-
-      //drive
-      this.compareService.drive_different.subscribe((val) => {
-        let driveElements = doc.getElementsByName('drive');
-        driveElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      // kinematic viscosity
-      this.compareService.kinematic_viscosity_different.subscribe((val) => {
-        let viscosityElements = doc.getElementsByName('viscosity');
-        viscosityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //specific gravity
-      this.compareService.specific_gravity_different.subscribe((val) => {
-        let gravityElements = doc.getElementsByName('gravity');
-        gravityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //stages
-      this.compareService.stages_different.subscribe((val) => {
-        let stagesElements = doc.getElementsByName('stages');
-        stagesElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      });
-      //fixed speed
-      // this.compareService.fixed_speed_different.subscribe((val) => {
-      //   let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
-      //   fixedSpeedElements.forEach(element => {
-      //     element.classList.toggle('indicate-different', val);
-      //   });
-      // });
+  canCompare() {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT) {
+      return true;
+    } else {
+      return false;
     }
   }
 
+  isPumpSpecifiedDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isPumpSpecifiedDifferent();
+    } else {
+      return false;
+    }
+  }
+  isPumpStyleDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isPumpStyleDifferent();
+    } else {
+      return false;
+    }
+  }
+  isPumpRpmDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isPumpRpmDifferent();
+    } else {
+      return false;
+    }
+  }
+  isDriveDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDriveDifferent();
+    } else {
+      return false;
+    }
+  }
+  isKinematicViscosityDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isKinematicViscosityDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecificGravityDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificGravityDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFluidTempDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFluidTempDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFluidTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFluidTypeDifferent();
+    } else {
+      return false;
+    }
+  }
 
+  isStagesDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isStagesDifferent();
+    } else {
+      return false;
+    }
+  }
 }

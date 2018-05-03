@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 @Component({
   selector: 'app-directory-card',
   templateUrl: './directory-card.component.html',
@@ -26,16 +28,14 @@ export class DirectoryCardComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal') public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.populateDirectories(this.directory);
     // this.directory.assessments = tmpDirectory.assessments;
     // this.directory.subDirectory = tmpDirectory.subDirectory;
     // this.directory.collapsed = tmpDirectory.collapsed;
-    if (this.isChecked) {
-      this.directory.selected = this.isChecked;
-    }
+    this.directory.selected = false;
   }
 
 
@@ -53,45 +53,29 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   populateDirectories(directory: Directory) {
-    // let tmpDirectory: Directory = {
-    //   name: directoryRef.name,
-    //   createdDate: directoryRef.createdDate,
-    //   modifiedDate: directoryRef.modifiedDate,
-    //   id: directoryRef.id,
-    //   collapsed: false,
-    //   parentDirectoryId: directoryRef.id
-    // }
-    this.indexedDbService.getDirectoryAssessments(directory.id).then(
-      results => {
-        directory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directory.id).then(
-      results => {
-        directory.subDirectory = results;
-      }
-    );
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
-    })
+    directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
+    directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
   }
 
-  setDelete() {
-    this.directory.selected = this.isChecked;
-  }
+  // setDelete() {
+  //   this.directory.selected = this.isChecked;
+  // }
 
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
   }
 
   showEditModal() {
-    this.editForm = this.formBuilder.group({
-      'name': [this.directory.name],
-      'directoryId': [this.directory.parentDirectoryId]
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
+      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+      this.editForm = this.formBuilder.group({
+        'name': [this.directory.name],
+        'directoryId': [this.directory.parentDirectoryId]
+      })
+      this.editModal.show();
     })
-    this.editModal.show();
   }
 
   hideEditModal() {
@@ -116,8 +100,10 @@ export class DirectoryCardComponent implements OnInit {
     this.directory.name = this.editForm.controls.name.value;
     this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putDirectory(this.directory).then(val => {
-      this.updateDirectory.emit(true);
-      this.hideEditModal();
+      this.directoryDbService.setAll().then(() => {
+        this.updateDirectory.emit(true);
+        this.hideEditModal();
+      })
     })
   }
 }

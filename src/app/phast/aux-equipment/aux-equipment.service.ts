@@ -9,7 +9,7 @@ export class AuxEquipmentService {
 
 
   calculate(phast: PHAST) {
-    let results = new Array<any>();
+    let results = new Array<{name: string, totalPower: number, motorPower: string}>();
     if (phast.auxEquipment) {
       phast.auxEquipment.forEach(equipment => {
         results.push({
@@ -23,7 +23,7 @@ export class AuxEquipmentService {
   }
 
 
-  getResultsSum(results: any) {
+  getResultsSum(results: Array<{name: string, totalPower: number, motorPower: string}>) {
     let sum = 0;
     results.forEach(result => {
       if (result.motorPower == 'Calculated') {

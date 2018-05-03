@@ -10,6 +10,12 @@ export interface Settings {
     powerMeasurement?: string,
     distanceMeasurement?: string,
     pressureMeasurement?: string,
+    steamPressureMeasurement?: string,
+    steamTemperatureMeasurement?: string,
+    steamSpecificEnthalpyMeasurement?: string,
+    steamSpecificEntropyMeasurement?: string,
+    steamSpecificVolumeMeasurement?: string,
+    steamMassFlowMeasurement?: string,
     currentMeasurement?: string,
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
@@ -24,6 +30,14 @@ export interface Settings {
     facilityInfo?: FacilityInfo,
     fanCurveType?: string,
     fanConvertedConditions?: string
+    phastRollupFuelUnit?: string,
+    phastRollupSteamUnit?: string,
+    phastRollupElectricityUnit?: string,
+    defaultPanelTab?: string,
+    electricityCost?: number,
+    fuelCost?: number,
+    steamCost?: number,
+    disableTutorial?: boolean
 }
 
 

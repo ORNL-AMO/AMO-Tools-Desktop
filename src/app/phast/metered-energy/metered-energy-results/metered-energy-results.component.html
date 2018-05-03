@@ -1,8 +1,8 @@
 <div class="output-summary">
-  <table class="table table-hover">
+  <table class="table table-hover table-striped">
     <thead>
       <tr>
-        <th></th>
+        <th>{{label}}</th>
         <th>Metered Energy Use</th>
         <th>Calculated By Phast</th>
       </tr>
@@ -15,8 +15,8 @@
       </tr>
       <tr>
         <td>Energy Intensity for Charge Materials</td>
-        <td>{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td>{{meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td>{{calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
       </tr>
       <tr>
         <td>Electricity Used (Auxiliary)</td>

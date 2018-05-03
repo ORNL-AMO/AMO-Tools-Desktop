@@ -1,0 +1,108 @@
+<!-- <div class="card calc-card" (click)="showPreAssessment()">
+  <div class="card-body" *ngIf="calculator.preAssessments">
+    <a>View or Edit
+      <br> PH Pre-Assessment / Screening</a>
+  </div>
+  <div class="card-body" *ngIf="!calculator.preAssessments">
+    <a>Add
+      <br> PH Pre-Assessment / Screening</a>
+  </div>
+</div> -->
+<div class="card card-item" *ngIf="preAssessmentExists" [ngClass]="{'psat': calculator.type =='pump', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
+  <div class="card-header summary-card-header">
+    <input type="checkbox" [(ngModel)]="calculator.selected">
+    <span class="fa fa-pie-chart"></span>
+    <a (click)="showPreAssessment()">{{calculator.name}}</a>
+    <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
+  </div>
+  <div class="card-body summary-card-body scroll-item">
+    <!-- <a (click)="showPreAssessment()">View or Edit
+      <br> PH Pre-Assessment / Screening</a> -->
+    <table class="table">
+      <tr>
+        <td>
+          <span *ngIf="calculator.type == 'furnace'">Number of Furnaces</span>
+          <span *ngIf="calculator.type == 'pump'">Number of Pumps</span>
+          <span *ngIf="calculator.type == 'general'">Number of Units</span>
+        </td>
+        <td>
+          {{numUnits}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Annual Energy Used
+        </td>
+        <td>
+          {{energyUsed | number:'1.0-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Annual Energy Cost
+        </td>
+        <td>
+          {{energyCost | currency}}
+        </td>
+      </tr>
+    </table>
+    <p class="text-center">
+      <a class="click-link small" (click)="showPreAssessment()">Show / Edit</a>
+    </p>
+  </div>
+  <div class="card-footer summary-card-footer">
+      <div class="last-updated text-center">Pre-Assessment / Screening</div>
+    </div>
+</div>
+<div class="card card-item" *ngIf="!preAssessmentExists">
+  <div class="card-header summary-card-header">
+    <a (click)="showPreAssessment()">{{directory.name}} Pre-Assessment</a>
+  </div>
+  <div class="card-body summary-card-body scroll-item text-center">
+    <div class="no-assessment-data" (click)="showPreAssessment()">
+      Add PH Pre-Assessment / Screening
+      <br>
+      <span class="fa fa-plus-circle"></span>
+      <br>
+      <p class="small">No Pre-Assessment found for this facility.</p>
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit Pre Assessment Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Pre Assessment Name</label>
+            <input type="text" class="form-control w-100" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Change Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

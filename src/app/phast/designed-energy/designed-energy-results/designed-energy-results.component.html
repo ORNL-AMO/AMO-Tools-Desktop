@@ -1,8 +1,8 @@
-<div class="output-summary">
-  <table class="table table-hover">
+<div class="output-summary" *ngIf="results">
+  <table class="table table-hover table-striped">
     <thead>
       <tr>
-        <th></th>
+        <th>{{title}}</th>
         <th>Design Energy Use</th>
         <th>Calculated By Phast</th>
       </tr>
@@ -15,8 +15,8 @@
       </tr>
       <tr>
         <td>Energy Intensity for Charge Materials</td>
-        <td>{{results.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td>{{designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td>{{calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
       </tr>
       <tr>
         <td>Electricity Used (Auxiliary)</td>

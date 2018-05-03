@@ -5,7 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
-import {ConvertUnitsService} from "../../shared/convert-units/convert-units.service";
+import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -16,6 +16,12 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: SolidLiquidFlueGasMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -32,29 +38,44 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
+  allCustomMaterials: Array<SolidLiquidFlueGasMaterial>;
   isValid: boolean;
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
   currentField: string = 'selectedMaterial';
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService,  private convertUnitsService: ConvertUnitsService) { }
+  difference: number = 0;
+  differenceError: boolean = false;
+  idbEditMaterialId: number;
+  sdbEditMaterialId: number;
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    this.checkMaterialName();
-    this.setHHV();
-    // this.selectedMaterial = this.allMaterials[0];
-    // if (!this.settings) {
-    //   this.indexedDbService.getSettings(1).then(results => {
-    //     this.settings = results;
-    //   })
-    // }
+    if (this.editExistingMaterial) {
+      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.setExisting();
+        this.setHHV();
+      });
+
+    }
+    else {
+      this.canAdd = true;
+      this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+      this.checkMaterialName();
+      this.setHHV();
+    }
   }
 
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
+      }
       let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
       if (suiteDbResult == true) {
         this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
@@ -64,10 +85,50 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+  updateMaterial() {
+    if (this.settings.unitsOfMeasure === 'Metric') {
+      this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
+    }
+    this.newMaterial.id = this.sdbEditMaterialId;
+    let suiteDbResult = this.suiteDbService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
+    if (suiteDbResult == true) {
+      //need to set id for idb to put updates
+      this.newMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putSolidLiquidFlueGasMaterial(this.newMaterial).then(val => {
+        this.closeModal.emit(this.newMaterial);
+      });
+    }
+  }
 
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteSolidLiquidFlueGasMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
+    }
+  }
 
   setExisting() {
-    if (this.selectedMaterial) {
+    if (this.editExistingMaterial && this.existingMaterial) {
+      this.newMaterial = {
+        id: this.existingMaterial.id,
+        substance: this.existingMaterial.substance,
+        carbon: this.existingMaterial.carbon,
+        hydrogen: this.existingMaterial.hydrogen,
+        inertAsh: this.existingMaterial.inertAsh,
+        moisture: this.existingMaterial.moisture,
+        nitrogen: this.existingMaterial.nitrogen,
+        o2: this.existingMaterial.o2,
+        sulphur: this.existingMaterial.sulphur,
+        heatingValue: 0
+      }
+      this.setHHV();
+      this.checkEditMaterialName();
+    }
+    else if (this.selectedMaterial) {
       this.newMaterial = {
         substance: this.selectedMaterial.substance + ' (mod)',
         carbon: this.selectedMaterial.carbon,
@@ -86,6 +147,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   setHHV() {
     const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+    this.getDiff();
     if (isNaN(tmpHeatingVals) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = tmpHeatingVals;
@@ -98,10 +160,38 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+  getDiff() {
+    this.difference = 100 - this.newMaterial.carbon - this.newMaterial.hydrogen - this.newMaterial.inertAsh - this.newMaterial.moisture - this.newMaterial.nitrogen - this.newMaterial.o2 - this.newMaterial.sulphur;
+    if (this.difference > .4 || this.difference < -.4) {
+      this.differenceError = true;
+    } else {
+      this.differenceError = false;
+    }
+  }
 
+  checkEditMaterialName() {
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.sdbEditMaterialId) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isNameValid = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isNameValid = false;
+    }
+    else {
+      this.isNameValid = true;
+      this.nameError = null;
+    }
+  }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;
@@ -111,7 +201,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 

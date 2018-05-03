@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-psat-rollup-pump-summary',
   templateUrl: './psat-rollup-pump-summary.component.html',
@@ -14,6 +15,8 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   settings: Settings
   @Input()
   printView: boolean;
+
+  @ViewChild('barChartContainer') barChartContainer: ElementRef;
 
   firstLoad: boolean = true;
   isUpdate: boolean = false;
@@ -49,11 +52,12 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   ];
   numPsats: number;
   graphOption: string = 'Energy Use';
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.resultData = new Array();
-    this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
+    this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
         this.numPsats = psats.length;
         this.resultData = psats;
@@ -78,6 +82,10 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       this.buildChartData(this.graphOption, true);
       this.initChartData();
     }
+  }
+
+  ngOnDestory(){
+    this.resultsSub.unsubscribe();
   }
 
   buildChartData(graphOption: string, update: boolean) {
@@ -163,6 +171,16 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       this.printChartData.push(tmpDataColumns);
       this.titles.push(this.graphOptions[i]);
       this.units.push(this.unit);
+    }
+  }
+
+  getWidth() {
+    if (this.barChartContainer) {
+      let containerPadding = 30;
+      return this.barChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
     }
   }
 }

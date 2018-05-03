@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
-import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
 import { Calculator } from '../../shared/models/calculators';
+import { Settings } from '../../shared/models/settings';
+
 
 @Component({
   selector: 'app-assessment-dashboard',
@@ -29,9 +30,10 @@ export class AssessmentDashboardComponent implements OnInit {
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
   @Output('emitPreAssessment')
-  emitPreAssessment = new EventEmitter<boolean>();
+  emitPreAssessment = new EventEmitter<number>();
   @Input()
-  directoryCalculator: Calculator;
+  directorySettings: Settings;
+
 
   isChecked: boolean = false;
   view: string;
@@ -101,7 +103,7 @@ export class AssessmentDashboardComponent implements OnInit {
     this.importEmit.emit(true);
   }
 
-  preAssessmentEmit(){
-    this.emitPreAssessment.emit(true);
+  preAssessmentEmit(selectedIndex?: number) {
+    this.emitPreAssessment.emit(selectedIndex);
   }
 }

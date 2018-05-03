@@ -1,22 +1,16 @@
 <form [formGroup]="auxLossesForm">
 
   <div class="form-section">
-    <!--<div class="form-group">-->
-    <!--<label class="small" for="motorPhase">Motor Current Phase(s)</label>-->
-    <!--<input name="{{'motorPhase_'+lossIndex}}" type="number" step="1" min="1" max="3" class="form-control" formControlName="motorPhase" id="motorPhase" onfocus="this.select();" (input)="startSavePolling()"-->
-    <!--(focus)="focusField('motorPhase')" (blur)="focusOut()">-->
-    <!--</div>-->
-
     <div class="form-group">
       <label class="small" for="motorPhase">Motor Current Phase(s)</label>
-      <select name="{{'motorPhase_'+lossIndex}}" class="form-control" id="motorPhase" (change)="startSavePolling()" formControlName="motorPhase" (focus)="focusField('motorPhase')"
-        (blur)="focusOut()">
+      <select name="{{'motorPhase_'+lossIndex}}" class="form-control" id="motorPhase" (change)="startSavePolling()" formControlName="motorPhase"
+        (focus)="focusField('motorPhase')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMotorPhase(), 'invalid': auxLossesForm.controls.motorPhase.status == 'INVALID'}">
         <option *ngFor="let phase of motorPhases" [ngValue]="phase">{{phase}}</option>
       </select>
     </div>
     <div class="form-group">
       <label class="small" for="supplyVoltage">Supply Voltage</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSupplyVoltage(), 'error': voltageError !== null, 'invalid': auxLossesForm.controls.supplyVoltage.status == 'INVALID'}">
         <input name="{{'supplyVoltage_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="supplyVoltage"
           id="supplyVoltage" onfocus="this.select();" (input)="checkVoltageError()" (focus)="focusField('supplyVoltage')" (blur)="focusOut()">
         <span class="input-group-addon units">V</span>
@@ -26,8 +20,8 @@
 
     <div class="form-group">
       <label class="small" for="avgCurrent">Average Current</label>
-      <div class="input-group">
-        <input name="{{'avgCurrent_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="avgCurrent"
+      <div class="input-group" [ngClass]="{'indicate-different': compareAvgCurrent(), 'invalid': auxLossesForm.controls.avgCurrent.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'avgCurrent_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="avgCurrent"
           id="avgCurrent" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgCurrent')" (blur)="focusOut()">
         <span class="input-group-addon units">A</span>
       </div>
@@ -35,14 +29,15 @@
 
     <div class="form-group">
       <label class="small" for="powerFactor">Power Factor</label>
-      <input name="{{'powerFactor_'+lossIndex}}" type="number" step="any" min="0" max="1" class="form-control" formControlName="powerFactor"
-        id="powerFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('powerFactor')" (blur)="focusOut()">
+      <input [readonly]="!baselineSelected" name="{{'powerFactor_'+lossIndex}}" type="number" step="any" min="0" max="1" class="form-control" formControlName="powerFactor"
+        id="powerFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('powerFactor')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': comparePowerFactor(), 'invalid': auxLossesForm.controls.powerFactor.status == 'INVALID'}">
     </div>
 
     <div class="form-group">
       <label class="small" for="operatingTime">Operating Time</label>
-      <div class="input-group">
-        <input name="{{'operatingTime_'+lossIndex}}" type="number" min="0" max="100" step="any" class="form-control" formControlName="operatingTime"
+      <div class="input-group" [ngClass]="{'indicate-different': compareOperatingTime(), 'invalid': auxLossesForm.controls.operatingTime.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'operatingTime_'+lossIndex}}" type="number" min="0" max="100" step="any" class="form-control" formControlName="operatingTime"
           id="operatingTime" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('operatingTime')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>

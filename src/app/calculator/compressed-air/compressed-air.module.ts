@@ -1,42 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompressedAirComponent } from './compressed-air.component';
-import { BagMethodComponent } from './bag-method/bag-method.component';
-import { SharedModule } from '../../shared/shared.module';
-import { BagMethodFormComponent } from './bag-method/bag-method-form/bag-method-form.component';
-import { FlowFactorComponent } from './flow-factor/flow-factor.component';
-import { FlowFactorFormComponent } from './flow-factor/flow-factor-form/flow-factor-form.component';
-import { PneumaticAirComponent } from './pneumatic-air/pneumatic-air.component';
-import { PneumaticAirFormComponent } from './pneumatic-air/pneumatic-air-form/pneumatic-air-form.component';
-import { PipeSizingComponent } from './pipe-sizing/pipe-sizing.component';
-import { PipeSizingFormComponent } from './pipe-sizing/pipe-sizing-form/pipe-sizing-form.component';
-import { AirVelocityComponent } from './air-velocity/air-velocity.component';
-import { AirVelocityFormComponent } from './air-velocity/air-velocity-form/air-velocity-form.component';
-import { OperatingCostComponent } from './operating-cost/operating-cost.component';
-import { OperatingCostFormComponent } from './operating-cost/operating-cost-form/operating-cost-form.component';
+import { AirVelocityModule } from './air-velocity/air-velocity.module';
+import { BagMethodModule } from './bag-method/bag-method.module';
+import { FlowFactorModule } from './flow-factor/flow-factor.module';
+import { OperatingCostModule } from './operating-cost/operating-cost.module';
+import { PipeSizingModule } from './pipe-sizing/pipe-sizing.module';
+import { PneumaticAirModule } from './pneumatic-air/pneumatic-air.module';
+import { ReceiverTankModule } from './receiver-tank/receiver-tank.module';
+import { SystemCapacityModule } from './system-capacity/system-capacity.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule
+    AirVelocityModule,
+    BagMethodModule,
+    FlowFactorModule,
+    OperatingCostModule,
+    PipeSizingModule,
+    PneumaticAirModule,
+    ReceiverTankModule,
+    SystemCapacityModule
   ],
   declarations: [
-    CompressedAirComponent,
-    BagMethodComponent,
-    BagMethodFormComponent,
-    FlowFactorComponent,
-    FlowFactorFormComponent,
-    PneumaticAirComponent,
-    PneumaticAirFormComponent,
-    PipeSizingComponent,
-    PipeSizingFormComponent,
-    AirVelocityComponent,
-    AirVelocityFormComponent,
-    OperatingCostComponent,
-    OperatingCostFormComponent
+    CompressedAirComponent
   ],
   exports: [
     CompressedAirComponent

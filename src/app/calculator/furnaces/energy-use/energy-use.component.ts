@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-energy-use',
@@ -32,7 +32,7 @@ export class EnergyUseComponent implements OnInit {
     // 1 is sharp edge
     sectionType: 1,
     dischargeCoefficient: 0.6,
-    gasHeatingValue: 22031,
+    gasHeatingValue: 1032.44,
     gasTemperature: 85,
     gasPressure: 85,
     orificePressureDrop: 10,
@@ -50,20 +50,20 @@ export class EnergyUseComponent implements OnInit {
   currentField: string = 'orificeDiameter';
   tabSelect: string = 'results';
 
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(results => {
-        if (results) {
-          this.settings = results[0];
-          this.initDefaultValues(this.settings);
-          this.calculate();
-        }
-      })
+      this.settings = this.settingsDbService.globalSettings;
+      this.initDefaultValues(this.settings);
+      this.calculate();
     } else {
       this.initDefaultValues(this.settings);
       this.calculate();
+    }
+
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
@@ -106,7 +106,7 @@ export class EnergyUseComponent implements OnInit {
         // 1 is sharp edge
         sectionType: 1,
         dischargeCoefficient: 0.6,
-        gasHeatingValue: 22031,
+        gasHeatingValue: 1032.44,
         gasTemperature: 85,
         gasPressure: 85,
         orificePressureDrop: 10,

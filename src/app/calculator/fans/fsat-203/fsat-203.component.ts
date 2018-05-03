@@ -5,6 +5,7 @@ import { Fsat203Service } from './fsat-203.service';
 import { FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-fsat-203',
@@ -30,13 +31,11 @@ export class Fsat203Component implements OnInit {
   results: Fan203Results;
   planeResults: PlaneResults;
   settings: Settings;
-  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private indexedDbService: IndexedDbService) { }
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.indexedDbService.getDirectorySettings(1).then(val => {
-      this.settings = val;
-    })
-   // this.fsatService.test();
+    this.settings = this.settingsDbService.globalSettings;
+    // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
     this.checkBasics();
     this.checkGasDensity();

@@ -14,6 +14,7 @@ import { MeteredSteamHelpComponent } from './metered-steam/metered-steam-help/me
 import { MeteredElectricityFormComponent } from './metered-electricity/metered-electricity-form/metered-electricity-form.component';
 import { MeteredElectricityHelpComponent } from './metered-electricity/metered-electricity-help/metered-electricity-help.component';
 import { MeteredEnergyResultsComponent } from './metered-energy-results/metered-energy-results.component';
+import { MeteredElectricityResultsComponent } from './metered-electricity/metered-electricity-results/metered-electricity-results.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,8 +32,10 @@ import { MeteredEnergyResultsComponent } from './metered-energy-results/metered-
     MeteredSteamHelpComponent,
     MeteredElectricityFormComponent,
     MeteredElectricityHelpComponent,
-    MeteredEnergyResultsComponent
+    MeteredEnergyResultsComponent,
+    MeteredElectricityResultsComponent
   ],
+  //components exported for use in preAssessments calculator
   exports: [
     MeteredEnergyComponent,
     MeteredElectricityFormComponent,

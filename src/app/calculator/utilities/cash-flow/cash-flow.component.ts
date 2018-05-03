@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CashFlowForm, CashFlowResults } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-cash-flow',
@@ -30,7 +31,7 @@ export class CashFlowComponent implements OnInit {
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
 
-  constructor(private cashFlowService: CashFlowService) {
+  constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService) {
 
   }
 
@@ -43,6 +44,9 @@ export class CashFlowComponent implements OnInit {
       operationCost: 500,
       fuelCost: 500,
       junkCost: 500
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

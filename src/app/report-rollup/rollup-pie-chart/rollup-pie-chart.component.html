@@ -1,32 +1,19 @@
 <div *ngIf="!printView && assessmentType == 'phast'">
-  <div class="pie-chart-container chart-container">
-    <div #ngChart class="phast-rollup-pie-chart">
-
-    </div>
-  </div>
+  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
+    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
 </div>
 
 <div *ngIf="printView && assessmentType == 'phast'">
-  <div class="pie-chart-container chart-container">
-    <div #ngChart class="print-phast-rollup-pie-chart">
-
-    </div>
-  </div>
+  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
+    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
 </div>
 
 <div *ngIf="!printView && assessmentType == 'psat'">
-  <div class="pie-chart-container chart-container">
-    <div #ngChart class="psat-rollup-pie-chart">
-
-    </div>
-  </div>
+  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
+    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
 </div>
 
 <div *ngIf="printView && assessmentType == 'psat'">
-  <div class="pie-chart-container chart-container">
-    <div #ngChart class="print-psat-rollup-pie-chart">
-
-    </div>
-  </div>
+  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
+    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
 </div>
-<span #btnDownload class="pie-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

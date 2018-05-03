@@ -3,11 +3,12 @@
     <div class="row align-items-top calculator-panel">
       <div class="panel-column col-6 align-top">
         <div class="header">
-          <h3>Compressed Air - Flow Factor</h3>
+          <h3>Pneumatic Valve Flow Factor</h3>
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-flow-factor-form [inputs]="inputs" (setUser)="setUserFlowRate($event)" [(userFlowRate)]="userFlowRate" [valveFlowFactor]="valveFlowFactor" (calculate)="getValveFlowFactor($event)"></app-flow-factor-form>
+            <app-flow-factor-form [inputs]="inputs" (setUser)="setUserFlowRate($event)" (calculate)="getValveFlowFactor()" [(userFlowRate)]="userFlowRate"
+              [valveFlowFactor]="valveFlowFactor"></app-flow-factor-form>
           </div>
         </div>
       </div>
@@ -17,7 +18,31 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Flow Factor Help</p>
+            <p>There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient C<sub>v</sub>=1. The second one is used for calculating C<sub>v</sub> when the flow rate is known.</p>
+            <div class="card">
+              <div class="card-header">
+                Inlet Pressure
+              </div>
+              <div class="card-block">
+                <p>Pressure entering the pneumatic valve.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                Outlet Pressure
+              </div>
+              <div class="card-block">
+                <p>Pressure leaving the pneumatic valve.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                Flow Rate
+              </div>
+              <div class="card-block">
+                <p>Flow rate in the valve.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

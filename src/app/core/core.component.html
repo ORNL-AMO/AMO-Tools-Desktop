@@ -1,5 +1,6 @@
 <!-- <div #coreContainer> -->
-    <div #screenshotBar class="feedback hide-print" *ngIf="showFeedback">
+<div *ngIf="idbStarted">
+    <div #screenshotBar class="feedback hide-print" *ngIf="showFeedback && !showTutorial">
 
         <div class="feedback-header">
             <h2>Provide Feedback: Tell us how we can improve this app!</h2>
@@ -12,39 +13,31 @@
         <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()">
             <i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
     </div>
+    <div *ngIf="!hideTutorial" class="opening-tutorial">
+        <app-opening-tutorial (closeTutorial)="closeTutorial()"></app-opening-tutorial>
+    </div>
 
     <router-outlet></router-outlet>
     <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>
+</div>
 <!-- </div> -->
-<!--<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
-    [config]="{backdrop: 'static'}">
+<!-- <div bsModal #tutorialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tutorialModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
         <div class="modal-content card">
             <div class="modal-header card-title">
-                <div *ngIf="!updateSelected">
-                    AMO-Tools-Desktop Update Available
-                </div>
-                <div *ngIf="updateSelected">
-                    Downloading...
-                </div>
+                Welcome to MEASUR
                 <button class="close pull-right" (click)="cancel()">
-                  <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body card-body">
-                <div *ngIf="!updateSelected">
-                    <p class="card-text">When the download is complete, the program will automatically exit and install the updates</p>
-                    <button class="btn-sm btn-primary" (click)="updateClick()">Download Now</button>
-                    <button class="btn-sm btn-secondary pull-right" (click)="cancel()">Cancel</button>
-                </div>
-                <div *ngIf="updateSelected">
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </div>
+                <p>View tutorial to get started?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" (click)="cancel()">Skip</button>
+                <button class="btn btn-primary" (click)="tutorial()">View Tutorial</button>
             </div>
         </div>
     </div>
-</div>-->
+</div> -->

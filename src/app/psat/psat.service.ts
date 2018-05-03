@@ -20,11 +20,13 @@ export class PsatService {
   calcTab: BehaviorSubject<string>;
   baseline: PSAT;
   getResults: BehaviorSubject<boolean>;
+  modifyConditionsTab: BehaviorSubject<string>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.calcTab = new BehaviorSubject<string>('system-curve');
     this.getResults = new BehaviorSubject<boolean>(true);
+    this.modifyConditionsTab = new BehaviorSubject<string>('field-data');
   }
 
   test() {
@@ -722,8 +724,7 @@ export class PsatService {
       'measuredVoltage': ['', Validators.required],
       'optimizeCalculation': [''],
       'implementationCosts': ['']
-    })
-  }
+    })}
 
   getFormFromPsat(psatInputs: PsatInputs): FormGroup {
     if (!psatInputs.fixed_speed) {
@@ -749,7 +750,7 @@ export class PsatService {
       'fixedSpeed': [fixedSpeed, Validators.required],
       'frequency': [lineFreq, Validators.required],
       'horsePower': [psatInputs.motor_rated_power, Validators.required],
-      'motorRPM': [psatInputs.motor_rated_speed, Validators.required],
+      'motorRPM': [psatInputs.motor_rated_speed, (Validators.required, Validators.min(1))],
       'efficiencyClass': [effClass, Validators.required],
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
@@ -771,6 +772,7 @@ export class PsatService {
   }
 
   getPsatInputsFromForm(form: FormGroup): PsatInputs {
+
     let efficiency = this.getEfficiencyFromForm(form);
     let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
     let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
@@ -975,8 +977,8 @@ export class PsatService {
 
   getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {
     let rpmRange = {
-      min: 0,
-      max: 0
+      min: 1,
+      max: 3600
     }
     if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1 )) { // if 60Hz and Standard or Energy Efficiency
       rpmRange.min = 540;
@@ -987,7 +989,7 @@ export class PsatService {
     } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
       rpmRange.min = 1080;
       rpmRange.max = 3600;
-    }else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
+    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
       rpmRange.min = 900;
       rpmRange.max = 3000;
     }

@@ -121,13 +121,18 @@ export class SankeyService {
     }
 
     let tmpNode;
-    tmpNode = this.createNode("Gross Heat", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
+    tmpNode = this.createNode("Gross Heat", results.totalInput, this.baseSize, 300, 285, 0, true, false, false, false, unit, false)
     results.nodes.push(tmpNode);
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
     let interIndex = 2;
 
-    ventOffsetX = (250 * interIndex);
+
+    //debug
+    ventOffsetX = (275 * interIndex);
+
+    //real version
+    // ventOffsetX = (250 * interIndex);
     spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
 
     var scale = d3.scaleLinear()
@@ -137,22 +142,12 @@ export class SankeyService {
     let top: boolean = false;
 
 
-    // //debug
-    // if (results.availableHeatPercent) {
-    //   tmpNode = this.createNode("Available Heat", results.availableHeatPercent, 0, 0, 400, 735, false, false, false, false, "%", false, true)
-    //   results.nodes.push(tmpNode);
-    //   tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
-    //   results.nodes.push(tmpNode);
-    //   interIndex++;
-    // }
-
-
     // FLUE GAS ARROW
     // one of three
     // Flue Gas
     if (results.totalFlueGas) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
+      tmpNode = this.createNode("Flue Gas Loss", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
@@ -161,7 +156,7 @@ export class SankeyService {
     // Exhaust Gas EAF
     if (results.totalExhaustGas) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Exhaust Gas Losses", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
+      tmpNode = this.createNode("Exhaust Gas Loss", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
@@ -170,7 +165,7 @@ export class SankeyService {
 
     if (results.totalSystemLosses) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, spacing, 0, false, false, false, true, unit, false)
+      tmpNode = this.createNode("System Loss", results.totalSystemLosses, 0, 0, spacing, 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
@@ -182,7 +177,7 @@ export class SankeyService {
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, spacing, 0, false, false, false, top, unit, false);
+      tmpNode = this.createNode("Atmosphere Loss", results.totalAtmosphereLoss, 0, 0, spacing, 0, false, false, false, top, unit, false);
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -192,7 +187,7 @@ export class SankeyService {
     // Other
     if (results.totalOtherLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Other Loss", results.totalOtherLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -202,7 +197,7 @@ export class SankeyService {
     // Cooling
     if (results.totalCoolingLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Water Cooling Loss", results.totalCoolingLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -212,7 +207,7 @@ export class SankeyService {
     // Wall
     if (results.totalWallLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Wall Loss", results.totalWallLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -222,7 +217,7 @@ export class SankeyService {
     // Opening
     if (results.totalOpeningLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Opening Loss", results.totalOpeningLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -232,7 +227,7 @@ export class SankeyService {
     // Fixture
     if (results.totalFixtureLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Fixture/Trays Losses", results.totalFixtureLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Fixture/Trays Loss", results.totalFixtureLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -242,7 +237,7 @@ export class SankeyService {
     // Leakage
     if (results.totalLeakageLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Hot Gas Leakage Losses", results.totalLeakageLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Hot Gas Leakage Loss", results.totalLeakageLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -252,7 +247,7 @@ export class SankeyService {
     // External Surface
     if (results.totalExtSurfaceLoss) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, spacing, 0, false, false, false, top, unit, true)
+      tmpNode = this.createNode("External Surface \n  Loss", results.totalExtSurfaceLoss, 0, 0, spacing, 0, false, false, false, top, unit, true)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -262,7 +257,7 @@ export class SankeyService {
     // auxiliary power losses
     if (results.totalAuxPower) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Auxiliary Power Loss", results.totalAuxPower, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -272,7 +267,7 @@ export class SankeyService {
     // slag
     if (results.totalSlag) {
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, spacing, 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Slag Loss", results.totalSlag, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
@@ -280,7 +275,7 @@ export class SankeyService {
       top = !top;
     }
     spacing = scale(interIndex);
-    tmpNode = this.createNode("Charge Materials", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
+    tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
   }

@@ -11,15 +11,15 @@
     </div>
   </div>
   <div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10 col-sm-12">
+    <div #barChartContainer class="col-lg-12 col-md-12 col-sm-12">
       <!-- c3 graph container -->
-      <app-rollup-bar-chart [settings]="settings" [chartContainerWidth]="chartContainerWidth" [chartLabels]="chartLabels" [axisLabel]="axisLabel"
+      <app-rollup-bar-chart [settings]="settings" [chartContainerWidth]="getWidth()" [chartLabels]="chartLabels" [axisLabel]="axisLabel"
         [unit]="unit" [graphColors]="graphColors" [showTitle]="showTitle" [printView]="printView" [title]="title" [showLegend]="showLegend"
         [isUpdate]="isUpdate" [allDataColumns]="allDataColumns" [assessmentType]="'phast'"></app-rollup-bar-chart>
     </div>
   </div>
-  <div class="row justify-content-center table-row">
-    <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
+  <div class="row justify-content-center table-row pad-top">
+    <div class="col-lg-12 col-md-12 col-sm-12 output-summary">
       <app-phast-rollup-furnace-summary-table [settings]="settings" [resultData]="resultData"></app-phast-rollup-furnace-summary-table>
     </div>
   </div>
@@ -27,7 +27,6 @@
 
 <!-- print view -->
 <div *ngIf="printView">
-
   <div *ngFor="let printChart of printChartData; let i = index" class="print-rollup-bar-chart-container">
     <div class="row justify-content-center">
       {{titles[i]}}
@@ -41,8 +40,8 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-center table-row">
-    <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
+  <div class="row justify-content-center table-row pad-top">
+    <div class="col-lg-12 col-md-12 col-sm-12 output-summary">
       <app-phast-rollup-furnace-summary-table [settings]="settings" [resultData]="resultData"></app-phast-rollup-furnace-summary-table>
     </div>
   </div>

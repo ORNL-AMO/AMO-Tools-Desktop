@@ -1,7 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="exploreFixtures">
     <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('feedRate')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
-    /> Adjust Fixture Data
+    /> Improve Materials Handling
   </label>
 </div>
 <div *ngIf="showFixtures">
@@ -20,8 +20,9 @@
         <div class="form-group">
           <label for="baselineCost">Baseline Feed Rate</label>
           <div class="input-group">
-            <input name="{{'feedRate_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.feedRate" id="{{feedRate_+index}}"
-              onfocus="this.select();" (input)="checkFeedRate(1, loss.feedRate, index)" (focus)="focusField('feedRate')" (blur)="focusOut()">
+            <input name="{{'feedRate_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.feedRate"
+              id="{{feedRate_+index}}" onfocus="this.select();" (input)="checkFeedRate(1, loss.feedRate, index)" (focus)="focusField('feedRate')"
+              (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
@@ -37,6 +38,78 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
           <span class="alert-warning pull-right small" *ngIf="feedRateError2[index] !== null">{{feedRateError2[index]}}</span>
+        </div>
+      </form>
+    </li>
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifyMaterial_'+index}}">
+          <input type="checkbox" id="{{'modifyMaterial_'+index}}" (focus)="focusField('materialName')" (change)="toggleMaterial(index, loss.materialName)"
+            [(ngModel)]="showMaterial[index]" /> Modify Material Type
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showMaterial[index]">
+        <div class="form-group">
+          <label for="baselineMaterial">Baseline Material</label>
+          <select name="{{'materialName_'+lossIndex}}" class="form-control" [(ngModel)]="loss.materialName" id="materialName1" (change)="setSpecificHeat(loss)"
+            (focus)="focusField('materialName')" (blur)="focusOut()" [disabled]="true">
+            <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="materialName2">Modification Material</label>
+          <select name="{{'materialName2_'+lossIndex}}" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].materialName"
+            id="materialName" (change)="setSpecificHeat(phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index])"
+            (focus)="focusField('materialName')" (blur)="focusOut()">
+            <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
+          </select>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+
+
+<div class="checkbox">
+  <label class="group-label" for="expoloreTemp">
+    <input type="checkbox" id="expoloreTemp" value="true" (focus)="focusField('initialTemp')" (change)="toggleAllTemp()" [(ngModel)]="showAllTemp"
+    /> Avoid Fixture Cooling
+  </label>
+</div>
+<div *ngIf="showAllTemp">
+  <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'initialTemp_'+index}}">
+          <input type="checkbox" id="{{'initialTemp_'+index}}" (focus)="focusField('initialTemp')" (change)="toggleInletTemp(index, loss.initialTemp)"
+            [(ngModel)]="showInitialTemp[index]" /> Modify Initial Temperature
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showInitialTemp[index]">
+        <div class="form-group">
+          <label for="baselineTemp">Baseline Initial Temperature</label>
+          <div class="input-group">
+            <input name="{{'initialTemp1_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.initialTemperature"
+              id="{{initialTemp1_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemp')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modificationTemp">Modification Initial Temperature</label>
+          <div class="input-group">
+            <input name="{{'initialTemp2_'+index}}" type="number" step="any" min="0" class="form-control" id="{{initialTemp2_+index}}"
+              onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemp')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
         </div>
       </form>
     </li>

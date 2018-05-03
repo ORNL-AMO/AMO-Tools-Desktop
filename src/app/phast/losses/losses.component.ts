@@ -8,6 +8,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
 import { LossTab } from '../tabs';
+import { PhastCompareService } from '../phast-compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-losses',
@@ -25,74 +27,46 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
   lossAdded: boolean;
   @Input()
   containerHeight: number;
+  @Input()
+  modificationIndex: number;
 
-  _modifications: Modification[];
-  isDropdownOpen: boolean = false;
+  // _modifications: Modification[];
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
-  modificationIndex: number = 0;
   selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
-  isFirstChange: boolean = true;
   showNotes: boolean = false;
-  editModification: Modification;
-  showEditModification: boolean = false;
-
   isLossesSetup: boolean;
-  showModal: boolean = false;
-
-  isModalOpen: boolean = false;
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;
+  lossTabSubscription: Subscription;
+  modalOpenSubscription: Subscription;
+  isModalOpen: boolean = false;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, ) {
+    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
   }
 
   ngOnInit() {
     this.lossesTabs = this.lossesService.lossesTabs;
-    this._modifications = new Array<Modification>();
+    // this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
     } else {
       this.phast.disableSetupDialog = true;
     }
-    if (this.phast.modifications) {
-      this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-      if (this._modifications.length != 0) {
-        this.modificationExists = true;
-      }
-    }
 
-    this.lossesService.lossesTab.subscribe(val => {
+    this.lossTabSubscription = this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      
-      this.selectedTab = _.find(this.lossesTabs, (t) => {return val == t.step });
-      // if (this.lossesTab == 'heat-system-efficiency'
-      //   || this.lossesTab == 'atmosphere-losses'
-      //   || this.lossesTab == 'exhaust-gas'
-      //   || this.lossesTab == 'heat-system-efficiency'
-      //   || this.lossesTab == 'flue-gas-losses'
-      //   || this.lossesTab == 'energy-input'
-      //   || this.lossesTab == 'energy-input-exhaust-gas'
-      // ) {
-      //   this.showAddBtn = false;
-      // } else {
-
-      //   this.showAddBtn = true;
-      // }
-    })
-    this.lossesService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
     })
 
     if (!this.inSetup) {
@@ -109,100 +83,44 @@ export class LossesComponent implements OnInit {
       }
       this.toastyService.warning(toastOptions);
     }
+    this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
+    this.lossesService.updateTabs.next(true);
   }
 
+
   ngOnDestroy() {
-    // this.lossesService.lossesTab.next('charge-material');
     this.toastyService.clearAll();
+    if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex) {
+      this.toggleCalculate = !this.toggleCalculate;
+    }
   }
 
   changeField($event) {
     this.currentField = $event;
   }
-  
+
   saveModifications() {
-    if (this._modifications) {
-      this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      this.saved.emit(true);
-      this.showEditModification = false;
-      this.editModification = null;
-      this.toggleCalculate = !this.toggleCalculate;
-      if (this._modifications.length != 0) {
-        this.modificationExists = true;
-      } else {
-        this.modificationExists = false;
+    if (this.phast.modifications[this.modificationIndex]) {
+      if (this.phast.modifications[this.modificationIndex].exploreOpportunities) {
+        this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }
+    }
+
+    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    this.saved.emit(true);
+    this.toggleCalculate = !this.toggleCalculate;
+    if (this.phast.modifications.length != 0) {
+      this.modificationExists = true;
     } else {
       this.modificationExists = false;
     }
-  }
-
-  addModification() {
-    let tmpModification: Modification = {
-      phast: {
-        losses: {},
-        name: ''
-      },
-      notes: {
-        chargeNotes: '',
-        wallNotes: '',
-        atmosphereNotes: '',
-        fixtureNotes: '',
-        openingNotes: '',
-        coolingNotes: '',
-        flueGasNotes: '',
-        otherNotes: '',
-        leakageNotes: '',
-        extendedNotes: '',
-        slagNotes: '',
-        auxiliaryPowerNotes: '',
-        exhaustGasNotes: '',
-        energyInputExhaustGasNotes: '',
-        operationsNotes: ''
-      }
-    }
-    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
-    tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
-    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
-    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
-    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
-    this._modifications.unshift(tmpModification);
-    this.modificationIndex = this._modifications.length - 1;
-    this.modificationSelected = true;
-    this.baselineSelected = false;
-    this.saveModifications();
-    this.materialModal.hide();
-  }
-
-  deleteModification() {
-    this.modificationIndex = 0;
-    _.remove(this._modifications, (mod) => {
-      return mod.phast.name == this.editModification.phast.name;
-    });
-    this.showEditModification = false;
-    this.editModification = null;
-    this.saveModifications();
-  }
-
-  toggleDropdown() {
-    if (this.modificationSelected) {
-      this.showEditModification = false;
-      this.isDropdownOpen = !this.isDropdownOpen;
-      this.showNotes = false;
-    }
-  }
-
-  selectModification(modification: Modification) {
-    let tmpIndex = 0;
-    this._modifications.forEach(mod => {
-      if (mod == modification) {
-        this.modificationIndex = tmpIndex;
-        return;
-      } else {
-        tmpIndex++;
-      }
-    });
-    this.isDropdownOpen = false;
   }
 
   addLoss() {
@@ -215,7 +133,6 @@ export class LossesComponent implements OnInit {
 
   toggleNotes() {
     this.showNotes = !this.showNotes;
-    this.isDropdownOpen = false;
   }
 
   togglePanel(bool: boolean) {
@@ -229,11 +146,6 @@ export class LossesComponent implements OnInit {
     }
   }
 
-  dispEditModification(modification: Modification) {
-    this.editModification = modification;
-    this.showEditModification = true;
-  }
-
   hideSetupDialog() {
     this.saved.emit(true);
     this.phast.disableSetupDialog = true;
@@ -244,17 +156,7 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  openModal() {
-    this.isModalOpen = true;
-    this.materialModal.show();
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-    this.materialModal.hide();
-  }
-
-  cancelEdit(){
-    this.showEditModification = false;
+  newModification() {
+    this.lossesService.openNewModal.next(true);
   }
 }

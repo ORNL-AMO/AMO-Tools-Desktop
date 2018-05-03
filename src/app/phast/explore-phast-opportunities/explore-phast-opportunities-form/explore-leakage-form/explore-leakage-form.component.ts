@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
@@ -24,28 +24,49 @@ export class ExploreLeakageFormComponent implements OnInit {
 
 
   showOpening: Array<boolean>;
+  showPressure: Array<boolean>;
   showLeakage: boolean = false;
   openingAreaError1: Array<string>;
   openingAreaError2: Array<string>;
+  draftPressureError2: Array<string>;
+  draftPressureError1: Array<string>;
   constructor() { }
 
   ngOnInit() {
     this.initData();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.showLeakage = false;
+        this.initData();
+      }
+    }
+  }
   initData() {
     this.showOpening = new Array();
     this.openingAreaError1 = new Array<string>();
     this.openingAreaError2 = new Array<string>();
+    this.showPressure = new Array();
+    this.draftPressureError1 = new Array<string>();
+    this.draftPressureError2 = new Array<string>();
     let index: number = 0;
     this.phast.losses.leakageLosses.forEach(loss => {
       let check: boolean = this.initOpening(loss.openingArea, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea);
-      if (!this.showOpening && check) {
+      if (!this.showLeakage && check) {
         this.showLeakage = check;
       }
       this.showOpening.push(check);
       this.openingAreaError1.push(null);
       this.openingAreaError2.push(null);
+      check = this.initOpening(loss.draftPressure, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure);
+      if (!this.showLeakage && check) {
+        this.showLeakage = check;
+      }
+      this.showPressure.push(check);
+      this.draftPressureError1.push(null);
+      this.draftPressureError2.push(null);
       index++;
     })
   }
@@ -64,7 +85,9 @@ export class ExploreLeakageFormComponent implements OnInit {
       let index: number = 0;
       this.phast.losses.leakageLosses.forEach(loss => {
         let baselineArea: number = loss.openingArea;
+        let baselinePressure: number = loss.draftPressure;
         this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;
+        this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure = baselinePressure;
         index++;
       });
       this.initData();
@@ -75,6 +98,13 @@ export class ExploreLeakageFormComponent implements OnInit {
   toggleOpening(index: number, baselineArea: number) {
     if (this.showOpening[index] == false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;
+      this.calculate();
+    }
+  }
+
+  togglePressure(index: number, baselinePressure: number) {
+    if (this.showPressure[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure = baselinePressure;
       this.calculate();
     }
   }
@@ -104,6 +134,24 @@ export class ExploreLeakageFormComponent implements OnInit {
       } else if (num == 2) {
         this.openingAreaError2[index] = null;
       }
+      this.calculate();
+    }
+  }
+
+  checkPressure(num: number, draftPressure: number, index: number) {
+    if (draftPressure < 0) {
+      if (num == 1) {
+        this.draftPressureError1[index] = 'Draft Pressure must be equal or greater than 0';
+      } else if (num == 2) {
+        this.draftPressureError2[index] = 'Draft Pressure must be equal or greater than 0';
+      }
+    } else {
+      if (num == 1) {
+        this.draftPressureError1[index] = null;
+      } else if (num == 2) {
+        this.draftPressureError2[index] = null;
+      }
+      this.calculate();
     }
   }
 

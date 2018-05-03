@@ -5,10 +5,12 @@
 
   .summary-card-header.phast{
     border-bottom: #BF3D00 groove 2px;
+    border-image: linear-gradient(to right,#F0F3F4, #BF3D00) 50 / 2;
   }
 
   .summary-card-header.psat{
     border-bottom: #2980b9 groove 2px;
+    border-image: linear-gradient(to right,#F0F3F4, #2980b9) 50 / 2;
   }
 
   .summary-card-header.fsat{

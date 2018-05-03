@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class AuxEquipmentResultsComponent implements OnInit {
   @Input()
-  results: any[];
+  results: Array<{name: string, totalPower: number, motorPower: string}>;
   @Input()
   resultsSum: number;
   constructor() { }

@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
-import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -31,9 +30,8 @@ export class GasLeakageLossesFormComponent implements OnInit {
   specificGravityError: string = null;
   draftPressureError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
-  constructor(private gasLeakageCompareService: GasLeakageCompareService, private windowRefService: WindowRefService) { }
+  constructor(private gasLeakageCompareService: GasLeakageCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,39 +47,20 @@ export class GasLeakageLossesFormComponent implements OnInit {
 
   ngOnInit() {
     this.checkInputError(true);
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
   focusOut() {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.lossesForm.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    // this.lossesForm.enable();
   }
-
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
-  // checkTemperature(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
-  //     this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
-  //   } else {
-  //     this.temperatureError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -109,64 +88,63 @@ export class GasLeakageLossesFormComponent implements OnInit {
     }
     if(this.openingAreaError || this.specificGravityError || this.draftPressureError || this.temperatureError){
       this.inputError.emit(true);
+      this.gasLeakageCompareService.inputError.next(true);
     }else{
       this.inputError.emit(false);
+      this.gasLeakageCompareService.inputError.next(false);
     }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
-
-  initDifferenceMonitor() {
-    if (this.gasLeakageCompareService.baselineLeakageLoss && this.gasLeakageCompareService.modifiedLeakageLoss && this.gasLeakageCompareService.differentArray.length != 0) {
-      if (this.gasLeakageCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-        //draftPressure
-        this.gasLeakageCompareService.differentArray[this.lossIndex].different.draftPressure.subscribe((val) => {
-          let draftPressureElements = doc.getElementsByName('draftPressure_' + this.lossIndex);
-          draftPressureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //openingArea
-        this.gasLeakageCompareService.differentArray[this.lossIndex].different.openingArea.subscribe((val) => {
-          let openingAreaElements = doc.getElementsByName('openingArea_' + this.lossIndex);
-          openingAreaElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //leakageGasTemperature
-        this.gasLeakageCompareService.differentArray[this.lossIndex].different.leakageGasTemperature.subscribe((val) => {
-          let leakageGasTemperatureElements = doc.getElementsByName('leakageGasTemperature_' + this.lossIndex);
-          leakageGasTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //specificGravity
-        this.gasLeakageCompareService.differentArray[this.lossIndex].different.specificGravity.subscribe((val) => {
-          let specificGravityElements = doc.getElementsByName('specificGravity_' + this.lossIndex);
-          specificGravityElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //ambientTemperature
-        this.gasLeakageCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
-          let ambientTemperatureElements = doc.getElementsByName('ambientTemperature_' + this.lossIndex);
-          ambientTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.gasLeakageCompareService.baselineLeakageLoss && this.gasLeakageCompareService.modifiedLeakageLoss) {
+      return true;
+    } else {
+      return false;
     }
   }
+  compareDraftPressure(): boolean {
+    if (this.canCompare()) {
+      return this.gasLeakageCompareService.compareDraftPressure(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareOpeningArea(): boolean {
+    if (this.canCompare()) {
+      return this.gasLeakageCompareService.compareOpeningArea(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLeakageGasTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.gasLeakageCompareService.compareLeakageGasTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareAmbientTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.gasLeakageCompareService.compareAmbientTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSpecificGravity(): boolean {
+    if (this.canCompare()) {
+      return this.gasLeakageCompareService.compareSpecificGravity(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import * as _ from 'lodash';
 import { AuxEquipmentService } from './aux-equipment.service';
+import { SettingsService } from '../../settings/settings.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-aux-equipment',
   templateUrl: 'aux-equipment.component.html',
@@ -20,9 +20,9 @@ export class AuxEquipmentComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string = 'fuelType';
 
-  results: any;
+  results: Array<{name: string, totalPower: number, motorPower: string}>;
   resultsSum: number = 0;
-  constructor(private convertUnitsService: ConvertUnitsService, private auxEquipmentService: AuxEquipmentService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.phast.auxEquipment) {
@@ -30,6 +30,10 @@ export class AuxEquipmentComponent implements OnInit {
       this.addEquipment();
     }else {
       this.calculate();
+    }
+    
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 

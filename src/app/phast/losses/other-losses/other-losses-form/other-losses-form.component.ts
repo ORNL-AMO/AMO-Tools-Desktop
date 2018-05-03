@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -25,8 +25,6 @@ export class OtherLossesFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  counter: any;
-
   firstChange: boolean = true;
   resultsUnit: string;
   constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
@@ -49,60 +47,44 @@ export class OtherLossesFormComponent implements OnInit {
     } else {
       this.resultsUnit = 'kW';
     }
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
-
   disableForm() {
     this.lossesForm.disable();
   }
-
   enableForm() {
     this.lossesForm.enable();
   }
-
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss && this.otherLossesCompareService.differentArray.length != 0) {
-      if (this.otherLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //description
-        this.otherLossesCompareService.differentArray[this.lossIndex].different.description.subscribe((val) => {
-          let descriptionElements = doc.getElementsByName('description_' + this.lossIndex);
-          descriptionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heatLoss
-        this.otherLossesCompareService.differentArray[this.lossIndex].different.heatLoss.subscribe((val) => {
-          let heatLossElements = doc.getElementsByName('heatLoss_' + this.lossIndex);
-          heatLossElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss) {
+      return true;
+    } else {
+      return false;
     }
   }
+  compareDescription(): boolean {
+    if (this.canCompare()) {
+      return this.otherLossesCompareService.compareDescription(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+  compareHeatLoss(): boolean {
+    if (this.canCompare()) {
+      return this.otherLossesCompareService.compareHeatLoss(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 }

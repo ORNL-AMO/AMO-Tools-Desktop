@@ -3,6 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ReportRollupService, ReportItem } from '../report-rollup.service';
 import { Assessment } from '../../shared/models/assessment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-report-rollup-units',
@@ -27,11 +28,12 @@ export class ReportRollupUnitsComponent implements OnInit {
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
   tmpSettings: Settings;
+  assessmentsSub: Subscription;
   constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.tmpSettings = JSON.parse(JSON.stringify(this.settings));
-    this.reportRollupService.phastAssessments.subscribe(val => {
+    this.assessmentsSub = this.reportRollupService.phastAssessments.subscribe(val => {
       this.phastAssessments = val;
     })
 
@@ -46,11 +48,17 @@ export class ReportRollupUnitsComponent implements OnInit {
       this.energyResultOptions.push(tmpPossibility);
     })
   }
+
+  ngOnDestory(){
+    this.assessmentsSub.unsubscribe();
+  }
+
   getUnitName(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
+  
   getUnitDisplay(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
@@ -59,6 +67,9 @@ export class ReportRollupUnitsComponent implements OnInit {
 
   saveUnits(){
     this.settings.phastRollupUnit = this.tmpSettings.phastRollupUnit;
+    this.settings.phastRollupElectricityUnit = this.tmpSettings.phastRollupElectricityUnit;
+    this.settings.phastRollupFuelUnit = this.tmpSettings.phastRollupFuelUnit;
+    this.settings.phastRollupSteamUnit = this.tmpSettings.phastRollupSteamUnit;
     this.newUnit();
     this.closeUnitModal.emit(true);
   }

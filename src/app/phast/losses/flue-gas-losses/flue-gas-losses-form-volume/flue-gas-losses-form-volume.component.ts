@@ -42,8 +42,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   calculationWarning: string = null;
-
-  counter: any;
   showModal: boolean = false;
   calcMethodExcessAir: boolean;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private phastService: PhastService) { }
@@ -58,14 +56,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       }
     }
     this.setCalcMethod();
-  }
-
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,7 +78,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   disableForm() {
-    this.flueGasLossForm.disable();
+    this.flueGasLossForm.controls.gasTypeId.disable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.disable();
+    // this.flueGasLossForm.disable();
   }
 
   checkForm() {
@@ -98,7 +93,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   enableForm() {
-    this.flueGasLossForm.enable();
+    this.flueGasLossForm.controls.gasTypeId.enable();
+    this.flueGasLossForm.controls.oxygenCalculationMethod.enable();
+    // this.flueGasLossForm.enable();
   }
 
   changeMethod() {
@@ -107,6 +104,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAirPercentage: 0
     })
     this.setCalcMethod();
+    this.checkForm();
   }
 
   setCalcMethod() {
@@ -157,10 +155,12 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         o2InFlueGas: this.calculationFlueGasO2
       });
     }
-    if(this.calculationWarning){
+    if (this.calculationWarning) {
       this.inputError.emit(true);
-    }else{
+      this.flueGasCompareService.inputError.next(true);
+    } else {
       this.inputError.emit(false);
+      this.flueGasCompareService.inputError.next(false);
     }
   }
 
@@ -179,70 +179,16 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       SO2: this.roundVal(tmpFlueGas.SO2, 4),
       O2: this.roundVal(tmpFlueGas.O2, 4)
     });
-    this.checkForm();
+    this.startSavePolling();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
   startSavePolling() {
     this.checkForm();
-    this.emitSave();
-  }
-
-  initDifferenceMonitor() {
-    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && this.flueGasCompareService.differentArray.length != 0) {
-      if (this.flueGasCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        // gasTypeId
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.gasTypeId.subscribe((val) => {
-          let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
-          gasTypeIdElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-        // flueGasTemperature
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.subscribe((val) => {
-          let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
-          flueGasTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-        // excessAirPercentage
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.subscribe((val) => {
-          let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
-          excessAirPercentageElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-        // combustionAirTemperature
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.subscribe((val) => {
-          let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
-          combustionAirTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-        // fuelTemperature
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.fuelTemperature.subscribe((val) => {
-          let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
-          fuelTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-        // Oxygen Calculation Method
-        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.oxygenCalculationMethod.subscribe((val) => {
-          let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
-          fuelTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        });
-      }
-    }
+    this.saveEmit.emit(true);
   }
 
   showMaterialModal() {
@@ -266,5 +212,60 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
     this.checkForm();
+  }
+
+
+  canCompare() {
+    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss) {
+      if (this.flueGasCompareService.compareLossType(this.lossIndex) == false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  compareVolumeGasTypeId() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeGasTypeId(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVolumeFlueGasTemperature() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeFlueGasTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVolumeExcessAirPercentage() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeExcessAirPercentage(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVolumeCombustionAirTemperature() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeCombustionAirTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVolumeFuelTemperature() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeFuelTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareVolumeOxygenCalculationMethod() {
+    if (this.canCompare()) {
+      return this.flueGasCompareService.compareVolumeOxygenCalculationMethod(this.lossIndex);
+    } else {
+      return false;
+    }
   }
 }

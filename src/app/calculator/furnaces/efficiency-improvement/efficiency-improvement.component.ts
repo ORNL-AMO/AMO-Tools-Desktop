@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -35,22 +35,19 @@ export class EfficiencyImprovementComponent implements OnInit {
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
 
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
 
 
   ngOnInit() {
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(results => {
-        if (results) {
-          this.settings = results[0];
-          this.initDefaultValues(this.settings);
-          this.calculate();
-        }
-      });
+      this.settings = this.settingsDbService.globalSettings;
+      this.initDefaultValues(this.settings);
+      this.calculate();
     } else {
       this.initDefaultValues(this.settings);
       this.calculate();
     }
+
   }
 
   ngAfterViewInit() {

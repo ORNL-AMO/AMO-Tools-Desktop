@@ -1,8 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ImportExportService } from '../../shared/import-export/import-export.service';
 import { AssessmentService } from '../assessment.service';
+import { Calculator } from '../../shared/models/calculators';
+import { Settings } from 'electron';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-assessment-menu',
@@ -34,35 +36,25 @@ export class AssessmentMenuComponent implements OnInit {
   emitMove = new EventEmitter<boolean>();
   @Output('emitPreAssessment')
   emitPreAssessment = new EventEmitter<boolean>();
+  @Input()
+  directorySettings: Settings;
 
   breadCrumbs: Array<Directory>;
-
-  firstChange: boolean = true;
-
   isAllSelected: boolean;
   createAssessment: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private assessmentService: AssessmentService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.firstChange = true;
     this.breadCrumbs = new Array();
     this.getBreadcrumbs(this.directory.id);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes.directory) && !this.firstChange) {
-      if (changes.directory.currentValue.id != changes.directory.previousValue.id || changes.directory.currentValue.name != changes.directory.previousValue.name) {
-        this.breadCrumbs = new Array();
-        this.getBreadcrumbs(changes.directory.currentValue.id);
-      }
-    } else {
-      this.firstChange = false;
+    if (changes.directory) {
+      this.breadCrumbs = new Array();
+      this.getBreadcrumbs(changes.directory.currentValue.id);
     }
   }
-
-  // hideModal() {
-  //   this.createAssessment = false;
-  // }
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);
@@ -85,16 +77,13 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   getBreadcrumbs(dirId: number) {
-    this.indexedDbService.getDirectory(dirId).then(
-      resultDir => {
-        if (resultDir.id != this.directory.id) {
-          this.breadCrumbs.unshift(resultDir);
-        }
-        if (resultDir.parentDirectoryId) {
-          this.getBreadcrumbs(resultDir.parentDirectoryId);
-        }
-      }
-    )
+    let resultDir = this.directoryDbService.getById(dirId);
+    if (resultDir.id != this.directory.id) {
+      this.breadCrumbs.unshift(resultDir);
+    }
+    if (resultDir.parentDirectoryId) {
+      this.getBreadcrumbs(resultDir.parentDirectoryId);
+    }
   }
 
   signalDeleteItems() {
@@ -114,6 +103,24 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   checkSelected() {
+    let tmpArray = new Array();
+    // let calcTest;
+    if(this.directory.calculators){
+      tmpArray = this.directory.calculators.filter(calc => {
+        return calc.selected == true;
+      })
+      // if(this.directory.calculators[0].selected){
+      //   calcTest = true;
+      // }
+    }
+    if (this.checkReport() || tmpArray.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkReport() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();
     if (this.directory.assessments) {
@@ -141,7 +148,9 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
 
-  showPreAssessment(){
-    this.emitPreAssessment.emit(true);
+
+  showPreAssessment() {
+    this.emitPreAssessment.emit();
   }
+
 }

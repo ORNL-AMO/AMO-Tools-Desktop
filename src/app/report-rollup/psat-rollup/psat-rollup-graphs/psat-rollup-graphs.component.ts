@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { PsatService } from '../../../psat/psat.service';
@@ -7,6 +7,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',
@@ -17,6 +18,8 @@ export class PsatRollupGraphsComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
+
+  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
 
   chartContainerWidth: number;
   isUpdate: boolean = false;
@@ -36,12 +39,12 @@ export class PsatRollupGraphsComponent implements OnInit {
 
   // contains results for every option to build print view charts
   allResults: Array<any>;
-
+  resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
+    this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
         this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy });
         this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost });
@@ -54,17 +57,16 @@ export class PsatRollupGraphsComponent implements OnInit {
     if (this.printView) {
       this.initPrintChartData();
     }
-    else {
-      this.chartContainerWidth = (window.innerWidth - 30) * .28;
-    }
   }
 
+  ngOnDestory() {
+    this.resultsSub.unsubscribe();
+  }
 
   setDataOption(str: string) {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
-    this.updateChart();
   }
 
   getResults(resultsData: Array<PsatResultsData>) {
@@ -134,7 +136,13 @@ export class PsatRollupGraphsComponent implements OnInit {
     this.allResults.push(this.results);
   }
 
-  updateChart() {
-    this.isUpdate = true;
+  getPieWidth(): number {
+    if (this.pieChartContainer) {
+      let containerPadding = 30;
+      return this.pieChartContainer.nativeElement.clientWidth - containerPadding;
+    }
+    else {
+      return 0;
+    }
   }
 }

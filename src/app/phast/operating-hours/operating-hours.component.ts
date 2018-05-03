@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
 
 @Component({
@@ -11,16 +11,13 @@ export class OperatingHoursComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-  @Input()
-  saveClicked: boolean;
+
   timeError: string = null;
   weeksPerYearError: string = null;
   daysPerWeekError: string = null;
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
-  yearFormat: any;
-  isFirstChange: boolean = true;
-  counter: any;
+  hoursPerYearError: string = null;
   constructor() { }
 
   ngOnInit() {
@@ -36,13 +33,6 @@ export class OperatingHoursComponent implements OnInit {
       this.calculatHrsPerYear();
     } else if (!this.phast.operatingHours.hoursPerYear) {
       this.calculatHrsPerYear();
-    }
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveClicked && !this.isFirstChange) {
-      this.save.emit(true);
-    } else {
-      this.isFirstChange = false;
     }
   }
 
@@ -69,14 +59,21 @@ export class OperatingHoursComponent implements OnInit {
       this.shiftsPerDayError = null;
     }
     if (this.phast.operatingHours.hoursPerShift > 24 || this.phast.operatingHours.hoursPerShift <= 0) {
-      this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
+      this.hoursPerShiftError = "Number of hours/shift must be greater then 0 and equal or less than 24 ";
     } else {
       this.hoursPerShiftError = null;
     }
+
     this.startSavePolling();
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
-    this.yearFormat = this.phast.operatingHours.hoursPerYear.toFixed(0);
+    if(this.phast.operatingHours.hoursPerYear > 8760){
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
+    }else{
+      this.hoursPerYearError = null;
+    }
+
+    // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerYear.toFixed(0);
   }
 
   setNotCalculated() {

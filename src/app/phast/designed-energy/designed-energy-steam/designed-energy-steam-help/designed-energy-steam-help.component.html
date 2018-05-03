@@ -1,4 +1,4 @@
-<div class="help-header">
+<div class="help-header" *ngIf="!inPreAssessment">
 
   <h3>Designed Energy Help</h3>
   <p>Enter data about the design of processing heating equipment. This allows the user to compare PHAST calculations to the
@@ -29,7 +29,7 @@
 
   <div class="card" *ngIf="currentField == 'steamFlow'">
     <div class="card-header">
-      Steam Flow
+      Steam Flow Rate
     </div>
     <div class="card-header">
       <strong><u>Description:</u></strong>

@@ -13,9 +13,9 @@ export class ExecutiveSummaryService {
   getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
-    tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, baseline);
+    tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, phast);
     tmpResultsSummary.energyPerMass = this.calcEnergyPer(phast, settings);
-    tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, baseline);
+    tmpResultsSummary.annualCost = this.calcAnnualCost(tmpResultsSummary.annualEnergyUsed, settings, phast);
     if (isMod && baselineSummary) {
       tmpResultsSummary.annualCostSavings = baselineSummary.annualCost - tmpResultsSummary.annualCost;
       tmpResultsSummary.annualEnergySavings = baselineSummary.annualEnergyUsed - tmpResultsSummary.annualEnergyUsed;
@@ -23,7 +23,7 @@ export class ExecutiveSummaryService {
       tmpResultsSummary.implementationCosts = phast.implementationCost;
       if (tmpResultsSummary.annualCostSavings > 0 && phast.implementationCost) {
         tmpResultsSummary.paybackPeriod = (phast.implementationCost / tmpResultsSummary.annualCostSavings) * 12;
-      }else{
+      } else {
         tmpResultsSummary.paybackPeriod = 0;
       }
     }
@@ -45,6 +45,11 @@ export class ExecutiveSummaryService {
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let calculatedEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
     let calculatedEnergyIntensity = (calculatedEnergyUsed / sumFeedRate) || 0;
+    if (settings.energyResultUnit == 'MMBtu') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('GJ').to('kJ');
+    }
     return calculatedEnergyIntensity;
   }
 
@@ -53,16 +58,16 @@ export class ExecutiveSummaryService {
     let tmpAnnualCost = 0;
     //use copy of annualEnergy value to prevent altering input
     let tmpAnnualEnergy = JSON.parse(JSON.stringify(annualEnergyUsed));
-    
+
     //convert our annual energy to cost unit
-    if(settings.energySourceType == 'Electricity'){
+    if (settings.energySourceType == 'Electricity') {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('kWh');
-    }else if (settings.unitsOfMeasure == 'Metric') {
+    } else if (settings.unitsOfMeasure == 'Metric') {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('GJ');
     } else {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('MMBtu');
     }
-    
+
     //annual cost = annual energy in cost unit * cost
     if (settings.energySourceType == 'Fuel') {
       tmpAnnualCost = tmpAnnualEnergy * phast.operatingCosts.fuelCost;

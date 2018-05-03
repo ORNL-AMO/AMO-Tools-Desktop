@@ -3,6 +3,8 @@ import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { Modification, PsatInputs } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-help-panel',
   templateUrl: './help-panel.component.html',
@@ -33,20 +35,32 @@ export class HelpPanelComponent implements OnInit {
   modificationResults: PsatOutputs;
   annualSavings: number;
   percentSavings: number;
-  constructor(private psatService: PsatService) { }
+  getResultsSub: Subscription;
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.psatService.getResults.subscribe(val => {
-      if(val){
+    this.getResultsSub = this.psatService.getResults.subscribe(val => {
+      if (val) {
         this.getResults();
       }
     })
+
+    let globalSettings = this.settingsDbService.globalSettings;
+    if (globalSettings) {
+      if (globalSettings.defaultPanelTab) {
+        this.tabSelect = globalSettings.defaultPanelTab;
+      }
+    }
+
+    this.psatService.modifyConditionsTab.subscribe(val => {
+      this.currentTab = val;
+      console.log(this.currentTab);
+    })
   }
 
-  // ngOnChanges(changes: SimpleChanges){
-  //   console.log(changes.saveClicked)
-  //   this.getResults();
-  // }
+  ngOnDestroy(){
+    this.getResultsSub.unsubscribe();
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -86,7 +100,7 @@ export class HelpPanelComponent implements OnInit {
   }
 
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

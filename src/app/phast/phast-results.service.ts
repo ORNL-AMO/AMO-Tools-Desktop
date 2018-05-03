@@ -119,7 +119,7 @@ export class PhastResultsService {
         let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
         results.energyInputHeatDelivered = tmpResults.heatDelivered;
         results.totalExhaustGas = tmpResults.exhaustGasLosses;
-        results.grossHeatInput = results.totalInput - results.exothermicHeat;
+        results.grossHeatInput = results.totalInput - results.exothermicHeat + tmpResults.exhaustGasLosses;
         results.availableHeatPercent = tmpResults.availableHeat;
       }
     }
@@ -201,6 +201,11 @@ export class PhastResultsService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     //sum aux equipment results
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    if (settings.energyResultUnit == 'MMBtu') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('GJ').to('KJ');
+    }
     let phastCalcs: CalculatedByPhast = {
       fuelEnergyUsed: calculatedFuelEnergyUsed,
       energyIntensity: calculatedEnergyIntensity,

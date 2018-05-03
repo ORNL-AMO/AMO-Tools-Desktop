@@ -1,11 +1,11 @@
 <!-- <a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addFolder.png"></a> -->
-<button (click)="showCreateModal()" type="button" class="btn btn-secondary create-btn">Add Folder</button>
+<button (click)="showCreateModal()" type="button" class="btn btn-secondary">Add Folder</button>
 
 
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
      [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Create a Folder in {{directory.name}}</h3>
@@ -14,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-group" [formGroup]="newFolder">
+        <form class="form-group" [formGroup]="newFolder" (ngSubmit)="createFolder()">
           <div class="row">
             <div class="col-12">
                 <label class="form-control-label" for="newFolderName">Folder Name</label>
@@ -27,11 +27,11 @@
                </div>
             </div>
           </div>
-          <div class="row justify-content-between">
-            <div class="col-2">
-              <button class="btn" (click)="hideCreateModal()">Close</button>
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <button type="button" class="btn" (click)="hideCreateModal()">Close</button>
             </div>
-            <div class="col-2">
+            <div class="p-2">
               <button class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
             </div>
           </div>

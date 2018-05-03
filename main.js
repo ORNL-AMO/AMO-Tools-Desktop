@@ -20,6 +20,7 @@ require('dotenv').config();
 let win = null;
 let available = null;
 
+
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
@@ -34,7 +35,7 @@ app.on('ready', function () {
   }));
 
   if (isDev()) {
-   win.toggleDevTools();
+    win.toggleDevTools();
   };
   // Remove window once app is closed
   win.on('closed', function () {
@@ -44,16 +45,16 @@ app.on('ready', function () {
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
     if (!isDev()) {
-    autoUpdater.checkForUpdates();
-    log.info('checking for update..');
-    autoUpdater.on('update-available', (event, info) => {
-      coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
-  });
-    autoUpdater.on('update-not-available', (event, info) => {
-      log.info('no update available..');
-  });
-  }
-})
+      autoUpdater.checkForUpdates();
+      log.info('checking for update..');
+      autoUpdater.on('update-available', (event, info) => {
+        coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
+      });
+      autoUpdater.on('update-not-available', (event, info) => {
+        log.info('no update available..');
+      });
+    }
+  })
 
   autoUpdater.on('error', (event, error) => {
   });

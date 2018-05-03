@@ -7,9 +7,9 @@ import { FurnacesModule } from './furnaces/furnaces.module';
 import { CalculatorComponent } from './calculator.component';
 
 
-import { SteamComponent } from './steam/steam.component';
 import { MotorsModule } from './motors/motors.module';
 
+import { SteamModule } from './steam/steam.module';
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
 import { StandaloneService } from './standalone.service';
@@ -18,8 +18,7 @@ import { FansModule } from './fans/fans.module';
 
 @NgModule({
   declarations: [
-    CalculatorComponent,
-    SteamComponent
+    CalculatorComponent
   ],
   exports: [
     CalculatorComponent
@@ -31,6 +30,7 @@ import { FansModule } from './fans/fans.module';
     ReactiveFormsModule,
     CommonModule,
     PumpsModule,
+    SteamModule,
     UtilitiesModule,
     FurnacesModule,
     MotorsModule,

@@ -22,7 +22,7 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyIntensity = this.convertIntensity(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -60,7 +60,7 @@ export class DesignedEnergyService {
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //convert to resultsUnit
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyIntensity = this.convertIntensity(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -75,11 +75,20 @@ export class DesignedEnergyService {
     return tmpResults;
   }
 
+  convertIntensity(num: number, settings: Settings): number {
+    if (settings.energyResultUnit == 'MMBtu') {
+      num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      num = this.convertUnitsService.value(num).from('GJ').to('kJ');
+    }
+    return num;
+  }
+
   sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number {
     let designedEnergyUsed = 0;
     let constant = Math.pow(10, 6);
     inputs.forEach(input => {
-      designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
+      designedEnergyUsed += ((input.totalBurnerCapacity) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100));
     })
     return designedEnergyUsed || 0;
   }
@@ -95,8 +104,8 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
 
-    designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
-    designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
+    designedEnergyUsed = this.convertSteamEnergyUsed(designedEnergyUsed, settings);
+    designedEnergyIntensity = this.convertSteamEnergyUsed(designedEnergyIntensity, settings);
     //Calculated by phast
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
@@ -122,6 +131,38 @@ export class DesignedEnergyService {
     if (settings.energySourceType == 'Electricity') {
       val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
     } else if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
+    }
+    return val;
+  }
+
+  sumFuelElectric(fuelResults: DesignedEnergyResults, electricResults: DesignedEnergyResults): DesignedEnergyResults {
+    let results: DesignedEnergyResults = {
+      designedEnergyUsed: fuelResults.designedEnergyUsed + electricResults.designedEnergyUsed,
+      designedEnergyIntensity: fuelResults.designedEnergyIntensity + electricResults.designedEnergyIntensity,
+      designedElectricityUsed: fuelResults.designedElectricityUsed + electricResults.designedElectricityUsed,
+      calculatedFuelEnergyUsed: electricResults.calculatedFuelEnergyUsed,
+      calculatedEnergyIntensity: electricResults.calculatedEnergyIntensity,
+      calculatedElectricityUsed: electricResults.calculatedElectricityUsed
+    }
+    return results;
+  }
+
+  convertFuelToElectric(fuelResults: DesignedEnergyResults, settings: Settings): DesignedEnergyResults {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('MMBtu').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('MMBtu').to('kWh');
+    } else {
+      fuelResults.designedEnergyIntensity = this.convertUnitsService.value(fuelResults.designedEnergyIntensity).from('GJ').to('kWh');
+      fuelResults.designedEnergyUsed = this.convertUnitsService.value(fuelResults.designedEnergyUsed).from('GJ').to('kWh');
+    }
+    return fuelResults;
+  }
+
+  convertSteamEnergyUsed(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);

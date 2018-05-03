@@ -1,4 +1,4 @@
-.label-width{
+/* .label-width{
   margin-left: 22px;
   white-space: nowrap;
 }
@@ -7,7 +7,7 @@
  }
 label {
   white-space: nowrap;
-}
+} */
 input[type=radio]:checked + label {
   display: inline-block;
   color: #BF3D00;
@@ -19,3 +19,10 @@ input[type=radio]:checked + label {
  }
 
 
+label, .form-check{
+  font-size: small;
+}
+
+.form-check{
+  width: 50%;
+}

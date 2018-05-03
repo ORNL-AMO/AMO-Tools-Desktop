@@ -1,8 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { LossTab } from '../tabs';
+import { PhastCompareService } from '../phast-compare.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { LossesService } from '../losses/losses.service';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-explore-phast-opportunities',
@@ -18,14 +23,15 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-
+  @Input()
+  exploreModIndex: number;
+  @Output('exploreOppsToast')
+  exploreOppsToast = new EventEmitter<boolean>();
   @Output('save')
   save = new EventEmitter<boolean>();
-  @Input()
-  saveClicked: boolean;
-
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
   tabSelect: string = 'results';
-  exploreModIndex: number;
   currentField: string = 'default';
   toggleCalculate: boolean = false;
   lossTab: LossTab = {
@@ -33,76 +39,68 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     tabName: '',
     componentStr: ''
   };
-  counter: any;
-  isFirstChange: boolean = true;
-  constructor() { }
+
+  modExists: boolean = false;
+  selectModificationSubscription: Subscription;
+  toastId: any;
+  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig,
+  ) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   ngOnInit() {
-    if (!this.phast.modifications) {
-      this.phast.modifications = new Array();
-      this.addMod();
-      this.exploreModIndex = 0;
-      this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
-    } else {
-      let i = 0;
-      let exists = false;
-      //find explore opportunites modificiation
-      this.phast.modifications.forEach(mod => {
-        if (mod.exploreOpportunities) {
-          this.exploreModIndex = i;
-          exists = true;
-        } else {
-          i++;
-        }
-      })
-      //none found add one
-      if (!exists) {
-        this.addMod();
-        this.exploreModIndex = this.phast.modifications.length - 1;
-        this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification'
-      }
-    }
+    this.checkExists();
+    this.checkExploreOpps();
+  }
+
+  ngOnDestroy() {
+    this.toastyService.clearAll();
+    this.exploreOppsToast.emit(false);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.save.emit(true);
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.firstChange) {
+        if (changes.exploreModIndex) {
+          this.toastyService.clearAll();
+          this.checkExists();
+          this.checkExploreOpps();
+        }
       }
-    } else {
-      this.isFirstChange = false;
     }
   }
 
-  addMod() {
-    this.phast.modifications.push({
-      notes: {
-        chargeNotes: '',
-        wallNotes: '',
-        atmosphereNotes: '',
-        fixtureNotes: '',
-        openingNotes: '',
-        coolingNotes: '',
-        flueGasNotes: '',
-        otherNotes: '',
-        leakageNotes: '',
-        extendedNotes: '',
-        slagNotes: '',
-        auxiliaryPowerNotes: '',
-        exhaustGasNotes: '',
-        energyInputExhaustGasNotes: '',
-        heatSystemEfficiencyNotes: '',
-        operationsNotes: ''
-      },
-      phast: JSON.parse(JSON.stringify(this.assessment.phast)),
-      exploreOpportunities: true
-    });
+  checkExists() {
+    if (this.exploreModIndex || this.exploreModIndex == 0) {
+      this.modExists = true;
+    } else {
+      this.modExists = false;
+    }
+  }
+
+  checkExploreOpps() {
+    if (this.modExists) {
+      if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
+        this.exploreOppsToast.emit(true);
+        let toastOptions: ToastOptions = {
+          title: 'Explore Opportunites',
+          msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
+          showClose: true,
+          timeout: 10000000,
+          theme: 'default'
+        }
+        this.toastyService.warning(toastOptions);
+      } else {
+        this.exploreOppsToast.emit(false);
+      }
+    }
   }
 
   setTab(str: string) {
     this.tabSelect = str;
   }
-
 
   getResults() {
     this.startSavePolling();
@@ -113,12 +111,19 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.currentField = str;
   }
 
-
   changeTab(tab: LossTab) {
     this.lossTab = tab;
   }
 
   startSavePolling() {
     this.save.emit(true);
+  }
+
+  addModification() {
+    this.lossesService.openNewModal.next(true);
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 }

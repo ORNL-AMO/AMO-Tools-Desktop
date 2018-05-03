@@ -10,22 +10,20 @@ export class AuxEquipmentFormComponent implements OnInit {
   equipment: AuxEquipment;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  // @Input()
-  // settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  counter: any;
   voltageError: string = null;
   constructor() { }
 
   ngOnInit() {
+    this.checkVoltageError(true);
   }
 
   checkVoltageError(bool?: boolean) {
     if (!bool) {
-      this.startSavePolling();
+      this.save();
       this.emitCalculate.emit(true);
     }
     if (this.equipment.supplyVoltage < 0 || this.equipment.supplyVoltage > 480) {
@@ -40,11 +38,11 @@ export class AuxEquipmentFormComponent implements OnInit {
   }
 
   calculate() {
-    this.startSavePolling();
+    this.save();
     this.emitCalculate.emit(true);
   }
 
-  startSavePolling() {
+  save() {
     this.emitSave.emit(true);
   }
 }

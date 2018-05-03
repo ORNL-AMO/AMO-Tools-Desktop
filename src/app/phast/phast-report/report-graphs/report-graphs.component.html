@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <select name="selectedPhast1" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast1">
+            <select name="selectedPhast1" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast1" (ngModelChange)="selectNewPhast(1)">
               <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
             </select>
           </div>
@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <select name="selectedPhast2" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast2">
+            <select name="selectedPhast2" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast2" (ngModelChange)="selectNewPhast(2)">
               <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
             </select>
           </div>
@@ -33,9 +33,9 @@
         </div>
       </div>
       <div class="row print-solo">
-        <div class="col-12">
-          <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data"
-            [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+        <div #pieChartContainer class="col-12">
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
+            [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
         </div>
       </div>
     </div>
@@ -46,13 +46,13 @@
     <div class="row justify-content-center align-items-center hide-print">
       <div class="col-12">
         <div class="row">
-          <div class="col-6">
-            <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data"
-              [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+          <div #pieChartContainer class="col-6">
+              <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
+              [labels]="selectedPhast1PieLabels" [values]="selectedPhast1PieValues" [exportName]="selectedPhast1ExportName"></app-pie-chart>
           </div>
           <div class="col-6">
-            <app-phast-pie-chart [chartIndex]="1" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast2.data"
-              [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+            <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [chartContainerHeight]="pieChartContainerHeight"
+              [labels]="selectedPhast2PieLabels" [values]="selectedPhast2PieValues" [exportName]="selectedPhast2ExportName"></app-pie-chart>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
 
   <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center hide-print medium-padding-top" *ngIf="modExists">
-    <div class="col-7 mx-auto">
+    <div #barChartContainer class="col-10 mx-auto">
       <app-phast-bar-chart [printView]="false" [chartContainerWidth]="chartContainerWidth" [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name"
         [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
     </div>
@@ -69,12 +69,12 @@
 
 
   <!-- if show print then content will init -->
-  <!-- <div *ngIf="showPrint && modExists" class="row show-print print-component"> -->
   <div *ngIf="showPrint" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-      <app-report-graphs-print [assessment]="assessment" [printView]="true" [settings]="settings" [modExists]="modExists" [resultCats]="showResultsCats"
-        [baselinePhast]="baselinePhast" [resultsArray]="resultsArray" [phast]="phast"></app-report-graphs-print>
+      <app-report-graphs-print [resultsArray]="resultsArray" [showResultsCats]="showResultsCats" [graphColors]="graphColors" [pieChartWidth]="pieChartContainerWidth"
+        [pieChartHeight]="pieChartContainerHeight" [printGraphs]="printGraphs" [printSankey]="printSankey" [phast]="phast" [assessment]="assessment" [settings]="settings"
+        [modExists]="modExists" [allPieLabels]="allPieLabels" [allPieValues]="allPieValues" [baselinePhast]="baselinePhast"></app-report-graphs-print>
     </div>
   </div>
 </div>

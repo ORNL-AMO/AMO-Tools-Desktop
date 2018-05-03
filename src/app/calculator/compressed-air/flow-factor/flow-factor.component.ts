@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {PneumaticValve} from "../../../shared/models/standalone";
+import { StandaloneService } from "../../standalone.service";
+import { PneumaticValve } from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-flow-factor',
   templateUrl: './flow-factor.component.html',
   styleUrls: ['./flow-factor.component.css']
 })
-export class FlowFactorComponent implements OnInit  {
+export class FlowFactorComponent implements OnInit {
 
   inputs: PneumaticValve;
-  valveFlowFactor: number;
+  valveFlowFactor: number = 0;
   userFlowRate: boolean = false;
+  currentField: string = 'default';
   constructor() { }
 
   ngOnInit() {
@@ -22,9 +23,9 @@ export class FlowFactorComponent implements OnInit  {
     };
   }
 
-setUserFlowRate(bool: boolean) {
-  this.userFlowRate = bool;
-}
+  setUserFlowRate(bool: boolean) {
+    this.userFlowRate = bool;
+  }
   getFlowRate() {
     this.inputs.flowRate = StandaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
   }
@@ -32,9 +33,11 @@ setUserFlowRate(bool: boolean) {
   getValveFlowFactor() {
     if (!this.userFlowRate) {
       this.getFlowRate();
-      console.log('get');
     }
     this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
-    console.log('calc');
+  }
+
+  setField(str: string) {
+    this.currentField = str;
   }
 }

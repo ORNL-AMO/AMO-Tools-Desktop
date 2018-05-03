@@ -1,26 +1,10 @@
-/* tr > td,
-tr > th{
-    text-align: center;
+@media print {
+    .print-rollup-pie-container {
+        padding-bottom: 35px;
+        padding-left: 34px;
+    }
 }
 
-tr > td {
-    vertical-align: middle;
+.pad-top {
+    padding-top: 20px;
 }
-
-
-.name{
-    border-left: solid 10px;
-    padding-left: 4px;
-}
-
-th{
-    width:9%;
-}
-
-.btn-toggle{
-    padding-bottom: 10px;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.12);
-} */

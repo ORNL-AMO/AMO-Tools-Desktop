@@ -28,10 +28,9 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   surfaceAreaError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
   emissivityError: string = null;
-  constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private windowRefService: WindowRefService) { }
+  constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -47,36 +46,18 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   ngOnInit() {
     this.checkInputError(true);
-  }
-
-  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   disableForm() {
-    this.lossesForm.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    // this.lossesForm.enable();
   }
-  checkForm() {
-    this.calculate.emit(true);
-  }
-
-  // checkEmissivity(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
-  //     this.emissivityError = 'Surface emissivity must be between 0 and 1';
-  //   } else {
-  //     this.emissivityError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -99,59 +80,58 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
     if(this.temperatureError || this.surfaceAreaError || this.emissivityError){
       this.inputError.emit(true);
+      this.extendedSurfaceCompareService.inputError.next(true);
     }else{
       this.inputError.emit(false);
+      this.extendedSurfaceCompareService.inputError.next(false);
     }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
+
   focusOut() {
     this.changeField.emit('default');
   }
   startSavePolling() {
-    this.checkForm();
-    this.emitSave();
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface && this.extendedSurfaceCompareService.differentArray.length != 0) {
-      if (this.extendedSurfaceCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //surfaceArea
-        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
-          let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
-          surfaceAreaElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //avgSurfaceTemp
-        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
-          let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
-          avgSurfaceTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //ambientTemp
-        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
-          let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
-          ambientTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //surfaceEmissivity
-        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
-          let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
-          surfaceEmissivityElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface) {
+      return true;
+    } else {
+      return false;
     }
   }
+  compareSurfaceArea(): boolean {
+    if (this.canCompare()) {
+      return this.extendedSurfaceCompareService.compareSurfaceArea(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareAmbientTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.extendedSurfaceCompareService.compareAmbientTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSurfaceTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.extendedSurfaceCompareService.compareSurfaceTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSurfaceEmissivity(): boolean {
+    if (this.canCompare()) {
+      return this.extendedSurfaceCompareService.compareSurfaceEmissivity(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 }

@@ -3,6 +3,8 @@ import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
+import { CompareService } from '../compare.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -13,8 +15,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
-  saveClicked: boolean;
-  @Input()
   settings: Settings;
   @Output('saved')
   saved = new EventEmitter<boolean>();
@@ -22,9 +22,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   psat: PSAT;
   @Input()
   containerHeight: number;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
 
-  annualSavings: number;
-  percentSavings: number;
+  annualSavings: number = 0;
+  percentSavings: number = 0;
   title: string;
   unit: string;
   titlePlacement: string;
@@ -36,81 +40,68 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
   isFirstChange: boolean = true;
-  exploreModIndex: number = 0;
 
   tabSelect: string = 'results';
   currentField: string;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
-    if (!this.psat.modifications) {
-      this.psat.modifications = new Array();
-      this.psat.modifications.push({
-        notes: {
-          systemBasicsNotes: '',
-          pumpFluidNotes: '',
-          motorNotes: '',
-          fieldDataNotes: ''
-        },
-        psat: {
-          inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-        },
-        exploreOpportunities: true
-      });
-      this.exploreModIndex = 0;
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
-    } else {
-      let i = 0;
-      let exists = false;
-      //find explore opportunites modificiation
-      this.psat.modifications.forEach(mod => {
-        if (mod.exploreOpportunities) {
-          this.exploreModIndex = i;
-          exists = true;
-        } else {
-          i++;
-        }
-      })
-      //none found add one
-      if (!exists) {
-        this.psat.modifications.push({
-          notes: {
-            systemBasicsNotes: '',
-            pumpFluidNotes: '',
-            motorNotes: '',
-            fieldDataNotes: ''
-          },
-          psat: {
-            inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-          },
-          exploreOpportunities: true
-        });
-        this.exploreModIndex = this.psat.modifications.length - 1;
-        this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification'
+    let globalSettings = this.settingsDbService.globalSettings;
+    if(globalSettings){
+      if(globalSettings.defaultPanelTab){
+        this.tabSelect = globalSettings.defaultPanelTab;
       }
     }
-
     this.title = 'Potential Adjustment';
     this.unit = '%';
     this.titlePlacement = 'top';
     this.getResults();
-    this.save();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.saveClicked) {
-        this.save();
-      }
-    } else {
-      this.isFirstChange = false;
-    }
-  }
+  // checkForExploreMod() {
+  //   let i = 0;
+  //   this.psat.modifications.forEach(mod => {
+  //     if (mod.exploreOpportunities) {
+  //       this.exploreModIndex = i;
+  //       this.exploreModExists = true;
+  //     } else {
+  //       i++;
+  //     }
+  //   })
+  //   if(!this.exploreModExists){
+  //     this.tabSelect = 'help';
+  //   }
+  // }
 
+  // addExploreOpp() {
+  //   if (!this.psat.modifications) {
+  //     this.psat.modifications = new Array();
+  //   }
+  //   let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
+  //   psatCpy.name = 'Opportunities Modification';
+  //   this.psat.modifications.push({
+  //     notes: {
+  //       systemBasicsNotes: '',
+  //       pumpFluidNotes: '',
+  //       motorNotes: '',
+  //       fieldDataNotes: ''
+  //     },
+  //     psat: {
+  //       inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
+  //     },
+  //     exploreOpportunities: true
+  //   });
+  //   this.save();
+  //   this.checkForExploreMod();
+  //   this.getResults();
+  // }
+
+  addExploreOpp(){
+    this.compareService.openNewModal.next(true);
+  }
   getResults() {
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
     let tmpForm = this.psatService.getFormFromPsat(psatInputs);
     if (tmpForm.status == 'VALID') {
       if (psatInputs.optimize_calculation) {
@@ -121,24 +112,27 @@ export class ExploreOpportunitiesComponent implements OnInit {
     } else {
       this.baselineResults = this.psatService.emptyResults();
     }
-    tmpForm = this.psatService.getFormFromPsat(modInputs);
-    if (tmpForm.status == 'VALID') {
-      if (modInputs.optimize_calculation) {
-        this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+    if (this.modificationExists) {
+      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.modificationIndex].psat.inputs));
+      tmpForm = this.psatService.getFormFromPsat(modInputs);
+      if (tmpForm.status == 'VALID') {
+        if (modInputs.optimize_calculation) {
+          this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+        } else {
+          this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+        }
       } else {
-        this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+        this.modificationResults = this.psatService.emptyResults();
       }
-    } else {
-      this.modificationResults = this.psatService.emptyResults();
+      this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
+      this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
     }
-    this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
-    this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
   }
 
   save() {
     //this.assessment.psat = this.psat;
-    if(!this.psat.modifications[this.exploreModIndex].psat.name){
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+    if (!this.psat.modifications[this.modificationIndex].psat.name) {
+      this.psat.modifications[this.modificationIndex].psat.name = 'Opportunities Modification';
     }
     this.saved.emit(true);
   }

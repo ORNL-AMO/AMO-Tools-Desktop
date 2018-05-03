@@ -1,7 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="exploreWall">
     <input type="checkbox" id="exploreWall" value="true" (focus)="focusField('avgSurfaceTemp')" (change)="toggleWall()" [(ngModel)]="showWall"
-    /> Adjust Wall Loss Data
+    /> Add / Improve Wall Insulation
   </label>
 </div>
 <div *ngIf="showWall">
@@ -20,7 +20,7 @@
         <div class="form-group">
           <label class="small" for="avgSurfaceTemp">Baseline Surface Temperature</label>
           <div class="input-group">
-            <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
+            <input name="{{'avgSurfaceTemp_'+lossIndex}}" disabled="true" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
               id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp(1, loss.surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>

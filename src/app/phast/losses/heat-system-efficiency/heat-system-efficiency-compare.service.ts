@@ -1,39 +1,27 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, Modification } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class HeatSystemEfficiencyCompareService {
   baseline: PHAST;
   modification: PHAST;
 
-  differentObject: EfficiencyDifferentObject
   constructor() { }
-
-  initCompareObjects() {
-    if (this.baseline && this.modification) {
-      this.differentObject = this.initDifferentObject();
-      this.checkDifferent();
+  compareEfficiency(){
+    if(this.baseline && this.modification){
+      return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency)
+    }else{
+      return false;
     }
   }
 
-  checkDifferent() {
-    if (this.baseline && this.modification) {
-      this.differentObject.efficiency.next(this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency))
-    } else {
-      this.disableAll();
+  combaseBaseModEfficiency(baseline: PHAST, modification: PHAST){
+    if(baseline && modification){
+      return this.compare(baseline.systemEfficiency, modification.systemEfficiency)
+    }else{
+      return false;
     }
-  }
-
-  disableAll() {
-    this.differentObject.efficiency.next(false);
-  }
-
-  initDifferentObject(): EfficiencyDifferentObject {
-    let object: EfficiencyDifferentObject = {
-      efficiency: new BehaviorSubject<boolean>(null)
-    }
-    return object;
   }
 
   compare(a: any, b: any) {
@@ -58,7 +46,4 @@ export class HeatSystemEfficiencyCompareService {
     }
   }
 
-}
-export interface EfficiencyDifferentObject {
-  efficiency: BehaviorSubject<boolean>;
 }

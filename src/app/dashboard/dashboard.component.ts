@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
-import { MockDirectory } from '../shared/mocks/mock-directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
@@ -12,11 +11,22 @@ import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
+import { Subscription } from 'rxjs';
+
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from '../core/core.service';
+import { ExportService } from '../shared/import-export/export.service';
+import { ImportExportData } from '../shared/import-export/importExportModel';
+import { ImportService } from '../shared/import-export/import.service';
+import { PreAssessment } from '../calculator/utilities/pre-assessment/pre-assessment';
 declare const packageJson;
 
 @Component({
@@ -56,150 +66,121 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean = false;
   showPreAssessment: boolean = false;
   workingDirectorySettings: Settings;
-  workingDirectoryCalculator: Calculator;
   calcDataExists: boolean = false;
+  dontShowSub: Subscription;
+  tutorialShown: boolean = false;
+  createAssessmentSub: Subscription;
+  exportData: ImportExportData;
+  exportAllSub: Subscription;
+  selectedCalcIndex: number;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
+    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
+    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
-    // this.importExportService.test();
     //start toolts suite database if it has not started
-    if (this.suiteDbService.hasStarted == false) {
-      this.suiteDbService.startup();
-    }
-    this.selectedItems = new Array();
-    this.showLandingScreen = this.assessmentService.getLandingScreen();
-    //open DB and get directories
-    if (this.indexedDbService.db == undefined) {
-      this.indexedDbService.db = this.indexedDbService.initDb().then(
-        results => {
-          this.getData();
-          if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
-            this.initCustomDbMaterials();
-          }
-        }
-      )
-    } else {
-      this.getData();
-    }
+    this.initData();
 
-    this.assessmentService.createAssessment.subscribe(val => {
+    this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
+    })
+    if (!this.settingsDbService.globalSettings.disableTutorial) {
+      this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+        if (this.settingsDbService.globalSettings) {
+          this.settingsDbService.globalSettings.disableTutorial = val;
+          this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+            this.settingsDbService.setAll();
+          });
+        }
+      })
+    }
+    this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
+      if (val) {
+        this.exportAll();
+      }
     })
   }
 
   ngOnDestroy() {
     this.assessmentService.createAssessment.next(false);
+    this.createAssessmentSub.unsubscribe();
+    if (this.dontShowSub) this.dontShowSub.unsubscribe();
+    this.exportAllSub.unsubscribe();
   }
 
   ngAfterViewInit() {
   }
 
-  initCustomDbMaterials() {
-    //this.suiteDbService.test();
-    this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
-      let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
-      customGasLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.suiteDbService.insertGasLoadChargeMaterial(material);
-      })
-    })
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.suiteDbService.insertLiquidLoadChargeMaterial(material);
-      })
-    })
-    this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
-      let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
-      customLiquidLoadChargeMaterials.forEach(material => {
-        let suiteResult = this.suiteDbService.insertSolidLoadChargeMaterial(material);
-      })
-    })
-    this.indexedDbService.getAtmosphereSpecificHeat().then(results => {
-      let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
-      customAtmosphereSpecificHeatMaterials.forEach(material => {
-        let suiteResult = this.suiteDbService.insertAtmosphereSpecificHeat(material);
-      })
-    })
-    this.indexedDbService.getWallLossesSurface().then(results => {
-      let customWallLossesSurfaces: WallLossesSurface[] = results;
-      customWallLossesSurfaces.forEach(material => {
-        let suiteResult = this.suiteDbService.insertWallLossesSurface(material);
-      })
-    })
-    this.indexedDbService.getFlueGasMaterials().then(results => {
-      let customFluesGasses: FlueGasMaterial[] = results;
-      customFluesGasses.forEach(material => {
-        let suiteResult = this.suiteDbService.insertGasFlueGasMaterial(material);
-      })
-    })
-    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
-      let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
-      customSolidLiquidFlueGasses.forEach(material => {
-        let suiteResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(material);
-      })
-    })
+  initData() {
+    this.selectedItems = new Array();
+    this.showLandingScreen = this.assessmentService.getLandingScreen();
+    this.getData();
+    if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
+      this.suiteDbService.initCustomDbMaterials();
+    }
+  }
+  getWorkingDirectoryData() {
+    // this.updateDbData();
+    this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
+    let tmpCalcs = this.calculatorDbService.getByDirectoryId(this.workingDirectory.id);
+    if (tmpCalcs.length != 0) {
+      this.workingDirectory.calculators = tmpCalcs;
+      this.calcDataExists = true;
+    } else {
+      this.workingDirectory.calculators = new Array<Calculator>();
+      let tmpCalc: Calculator = {
+        directoryId: this.workingDirectory.id
+      }
+      this.workingDirectory.calculators.push(tmpCalc);
+      this.calcDataExists = false;
+    }
   }
 
-  getWorkingDirectoryData(){
-    this.indexedDbService.getDirectorySettings(this.workingDirectory.id).then(results => {
-      if(results.length != 0){
-        this.workingDirectorySettings = results[0];
-      }
-    })
-
-    this.indexedDbService.getDirectoryCalculator(this.workingDirectory.id).then(results => {
-      if(results.length != 0){
-        this.workingDirectoryCalculator = results[0];
-        this.calcDataExists = true;
-      }else{
-        this.workingDirectoryCalculator = {
-          directoryId: this.workingDirectory.id
-        }
-        this.calcDataExists = false;
-      }
-    })
-  }
-
-  addCalculatorData(calcualtorData: Calculator){
-    if(this.calcDataExists){
+  addCalculatorData(calcualtorData: Calculator) {
+    if (this.calcDataExists) {
       this.indexedDbService.putCalculator(calcualtorData).then(() => {
-        this.hidePreAssessmentModal();
+        this.calculatorDbService.setAll().then(() => {
+          this.hidePreAssessmentModal();
+          this.getWorkingDirectoryData();
+        })
       });
-    }else{
-      calcualtorData.directoryId = this.workingDirectory.id;
+    } else {
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
-        this.hidePreAssessmentModal();
-      });;
+        this.calculatorDbService.setAll().then(() => {
+          this.hidePreAssessmentModal();
+          this.getWorkingDirectoryData();
+        });
+      });
     }
   }
 
   getData() {
-    this.indexedDbService.getDirectory(1).then(
-      results => {
-        if (results) {
-          this.rootDirectoryRef = results;
-          this.allDirectories = this.populateDirectories(results);
-          this.workingDirectory = this.allDirectories
-          this.getWorkingDirectoryData();
-        } else {
-          this.createExampleAssessments();
-          this.createDirectory();
-        }
-      })
-    this.indexedDbService.getDirectorySettings(1).then(
-      results => {
-        if (results.length == 0) {
-          this.createDirectorySettings();
+    this.rootDirectoryRef = this.directoryDbService.getById(1);
+    this.allDirectories = this.directoryDbService.getById(1);
+    this.workingDirectory = this.allDirectories;
+    if (!this.tutorialShown) {
+      if (this.settingsDbService.globalSettings) {
+        if (!this.settingsDbService.globalSettings.disableTutorial) {
+          this.assessmentService.openingTutorial.next(true);
+          this.tutorialShown = true;
         }
       }
-    );
+    }
+    this.getWorkingDirectoryData();
   }
+
+  updateDbData() {
+    this.directoryDbService.getAll();
+    this.assessmentDbService.getAll();
+    this.settingsDbService.getAll();
+    this.calculatorDbService.getAll();
+  }
+
   openModal($event) {
     this.isModalOpen = $event;
   }
@@ -208,7 +189,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
-  showPreAssessmentModal() {
+  showPreAssessmentModal(calcIndex: number) {
+    if(calcIndex != undefined){
+      this.selectedCalcIndex = calcIndex;
+    }else{
+      let calcualtorData: Calculator = {
+        directoryId: this.workingDirectory.id
+      }
+      this.workingDirectory.calculators.push(calcualtorData);
+      this.selectedCalcIndex = this.workingDirectory.calculators.length-1;
+      this.calcDataExists = false;
+    }
     this.showPreAssessment = true;
     this.preAssessmentModal.show();
   }
@@ -251,43 +242,34 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'settings';
   }
 
+  showCustomMaterials() {
+    this.selectedCalculator = '';
+    this.dashboardView = 'custom-materials';
+  }
+
   showContact() {
     this.selectedCalculator = '';
     this.dashboardView = 'contact';
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef): Directory {
+  populateDirectories(directory: Directory): Directory {
     let tmpDirectory: Directory = {
-      name: directoryRef.name,
-      createdDate: directoryRef.createdDate,
-      modifiedDate: directoryRef.modifiedDate,
-      id: directoryRef.id,
+      name: directory.name,
+      createdDate: directory.createdDate,
+      modifiedDate: directory.modifiedDate,
+      id: directory.id,
       collapsed: false,
-      parentDirectoryId: directoryRef.parentDirectoryId
+      parentDirectoryId: directory.parentDirectoryId
     }
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
-      results => {
-        tmpDirectory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
-      results => {
-        tmpDirectory.subDirectory = results;
-      }
-    )
+    tmpDirectory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
+    tmpDirectory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
     return tmpDirectory;
   }
 
   changeWorkingDirectory(directory: Directory) {
     this.dashboardView = 'assessment-dashboard';
-    this.indexedDbService.getDirectory(directory.id).then(
-      results => {
-        if (results) {
-          this.workingDirectory = this.populateDirectories(results);
-          this.getWorkingDirectoryData();
-        }
-      })
+    this.workingDirectory = this.populateDirectories(directory);
+    this.getWorkingDirectoryData();
   }
 
   viewCalculator(str: string) {
@@ -296,69 +278,10 @@ export class DashboardComponent implements OnInit {
     this.selectedCalculator = str;
   }
 
-  createExampleAssessments() {
-    let tmpAssessment = MockDirectory.assessments[0];
-    tmpAssessment.directoryId = 1;
-    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-
-    })
-
-    tmpAssessment = MockDirectory.assessments[1];
-    tmpAssessment.directoryId = 1;
-    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-
-    })
-  }
-
-  createDirectorySettings() {
-    let tmpSettings: Settings = {
-      language: 'English',
-      currency: '$ - US Dollar',
-      unitsOfMeasure: 'Imperial',
-      directoryId: 1,
-      createdDate: new Date(),
-      modifiedDate: new Date(),
-      distanceMeasurement: 'ft',
-      flowMeasurement: 'gpm',
-      powerMeasurement: 'hp',
-      pressureMeasurement: 'psi',
-      energySourceType: 'Fuel',
-      appVersion: packageJson.version,
-      energyResultUnit: 'MMBtu',
-      temperatureMeasurement: 'F'
-    }
-    this.indexedDbService.addSettings(tmpSettings).then(
-      results => {
-      }
-    )
-
-    tmpSettings.assessmentId = 1;
-    this.indexedDbService.addSettings(tmpSettings).then(results => { });
-    tmpSettings.assessmentId = 2;
-    this.indexedDbService.addSettings(tmpSettings).then(results => { });
-  }
-
-  createDirectory() {
-    let tmpDirectory: DirectoryDbRef = {
-      name: 'All Assessments',
-      createdDate: new Date(),
-      modifiedDate: new Date(),
-      parentDirectoryId: null,
-    }
-    this.indexedDbService.addDirectory(tmpDirectory).then(
-      results => {
-        this.indexedDbService.getDirectory(results).then(result => {
-          this.rootDirectoryRef = results;
-          this.allDirectories = this.populateDirectories(result);
-          this.workingDirectory = this.allDirectories;
-        })
-      }
-    )
-  }
-
   newDir() {
-    this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
+    this.allDirectories = this.populateDirectories(this.allDirectories);
     this.workingDirectory = this.populateDirectories(this.workingDirectory);
+    this.getWorkingDirectoryData();
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 
@@ -419,15 +342,35 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.deleteDb().then(
       results => {
         this.suiteDbService.startup();
-        this.ngOnInit();
-        this.hideDeleteModal()
-      }
-    )
+        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
+          this.coreService.createDirectory().then(() => {
+            this.coreService.createDirectorySettings().then(() => {
+              this.coreService.createExamples().then(() => {
+                this.setAllDbData();
+              });
+            });
+          });
+        });
+      });
   }
-
+  setAllDbData() {
+    this.directoryDbService.setAll().then(() => {
+      this.assessmentDbService.setAll().then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentService.tutorialShown = false;
+            this.tutorialShown = false;
+            this.initData();
+            this.hideDeleteModal();
+          })
+        })
+      })
+    })
+  }
   checkSelected() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();
+    let tmpArray3 = new Array();
     if (this.workingDirectory.assessments) {
       tmpArray = this.workingDirectory.assessments.filter(
         assessment => {
@@ -446,7 +389,17 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+    if (this.workingDirectory.calculators) {
+      tmpArray3 = this.workingDirectory.calculators.filter(
+        calc => {
+          console.log(calc.selected);
+          if (calc.selected) {
+            return calc;
+          }
+        }
+      )
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0 || tmpArray3) {
       return true;
     } else {
       return false;
@@ -455,76 +408,31 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteSelected(dir: Directory) {
-    this.hideDeleteItemsModal();
-    if (dir.subDirectory) {
-      dir.subDirectory.forEach(subDir => {
-        if (subDir.selected || subDir.parentDirectoryId != 1) {
-          this.indexedDbService.getChildrenDirectories(subDir.id).then(results => {
-            if (results) {
-              subDir.subDirectory = results;
-              this.deleteSelected(subDir);
-            }
-          })
-        }
-      });
+    this.deleting = true;
+    let isWorkingDir;
+    if (dir.id == this.workingDirectory.id) {
+      isWorkingDir = true;
+    } else {
+      isWorkingDir = false;
     }
-    if (dir != this.workingDirectory) {
-      if (dir.parentDirectoryId != this.workingDirectory.id || dir.selected) {
-        this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
-          let childDirAssessments = results;
-          childDirAssessments.forEach(assessment => {
-            this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-              this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
-              this.workingDirectory = this.populateDirectories(this.workingDirectory);
-            });
-            this.indexedDbService.getAssessmentSettings(assessment.id).then(
-              results => {
-                if (results.length != 0) {
-                  this.indexedDbService.deleteSettings(results[0].id).then(
-                    results => { console.log('assessment setting deleted'); }
-                  )
-                }
-              }
-            )
-          })
-        })
-        this.indexedDbService.deleteDirectory(dir.id).then(results => {
-          this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
-          this.workingDirectory = this.populateDirectories(this.workingDirectory);
-        })
-
-        this.indexedDbService.getDirectorySettings(dir.id).then(results => {
-          if (results.length != 0) {
-            this.indexedDbService.deleteSettings(results[0].id).then(
-              results => { console.log('dir setting deleted'); }
-            )
-          }
-        })
-      }
-    }
-    if (dir == this.workingDirectory) {
-      let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'selected': true });
-      checkedAssessments.forEach(assessment => {
-        this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-          this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
-          this.workingDirectory = this.populateDirectories(this.workingDirectory);
-        });
-        this.indexedDbService.getAssessmentSettings(assessment.id).then(
-          results => {
-            if (results.length != 0) {
-              this.indexedDbService.deleteSettings(results[0].id).then(
-                results => { console.log('assessment setting deleted'); }
-              )
-            }
-          }
-        )
-      })
-    }
+    this.deleteDataService.deleteDirectory(dir, isWorkingDir);
+    setTimeout(() => {
+      this.newDir();
+      this.hideDeleteItemsModal();
+      this.deleting = false;
+    }, 1500)
   }
 
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
+      this.workingDirectory.calculators.forEach(calc => {
+        if (calc.selected) {
+          this.reportRollupService.calcsArray.push(calc);
+          this.reportRollupService.selectedCalcs.next(this.reportRollupService.calcsArray);
+        }
+
+      })
       this.reportRollupService.getReportData(this.workingDirectory);
       //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
@@ -534,13 +442,18 @@ export class DashboardComponent implements OnInit {
   }
 
   exportSelected() {
-    if (this.checkSelected()) {
-      this.selectedItems = new Array();
-      this.getSelected(this.workingDirectory);
+    let test = this.exportService.getSelected(JSON.parse(JSON.stringify(this.workingDirectory)), this.workingDirectory.id);
+    if (test.assessments.length != 0 || test.directories.length != 0 || test.calculators.length != 0) {
+      this.exportData = test;
       this.showExportModal();
     } else {
       this.addToast('No items have been selected');
     }
+  }
+
+  exportAll() {
+    this.exportData = this.exportService.getSelected(JSON.parse(JSON.stringify(this.allDirectories)), 1);
+    this.showExportModal();
   }
 
   returnSelected() {
@@ -549,135 +462,34 @@ export class DashboardComponent implements OnInit {
 
   closeReport() {
     this.selectedItems = new Array();
+    this.workingDirectory.calculators.forEach(calc => calc.selected = false);
     this.workingDirectory.assessments.forEach(
       assessment => {
         assessment.selected = false;
       }
     )
+    //prevents unneccessary pre assessments in report rollup
+    this.workingDirectory.subDirectory.forEach(dir => {
+      dir.selected = false;
+    });
     this.dashboardView = 'assessment-dashboard';
   }
 
-
-  getSelected(dir: Directory) {
-    //add selected and children dir assessments
-    if (dir.assessments) {
-      dir.assessments.forEach(
-        assessment => {
-          let assessmentDir;
-          if (dir.id != this.workingDirectory.id) {
-            assessmentDir = dir;
-          }
-          if (assessment.selected) {
-            this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
-          } else if (dir.id != this.workingDirectory.id) {
-            this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
-          }
-        }
-      )
-    } else {
-      //get assessments of directory if non passed in
-      this.indexedDbService.getDirectoryAssessments(dir.id).then(
-        resultAssessments => {
-          if (resultAssessments.length != 0) {
-            resultAssessments.forEach(assessment => { this.selectedItems.push({ assessment: assessment, directory: dir }) })
-          }
-        }
-      )
-    }
-
-    //process selected sub directories of working directory
-    if (dir.id == this.workingDirectory.id) {
-      if (dir.subDirectory) {
-        dir.subDirectory.forEach(
-          subDir => {
-            if (subDir.selected) {
-              this.getSelected(subDir);
-            }
-          }
-        )
-      }
-    }
-    //get subdirectories of selected non working directories
-    else {
-      this.indexedDbService.getChildrenDirectories(dir.id).then(
-        resultDir => {
-          if (resultDir.length != 0) {
-            resultDir.forEach(dir => this.getSelected(dir));
-          }
-        }
-      )
-    }
-  }
-
-  checkImportData(data: any) {
-    if (data[data.length - 1].origin == "AMO-TOOLS-DESKTOP") {
-      data.pop();
+  checkImportData(data: ImportExportData) {
+    if (data.origin == "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
-      this.runImport(data);
-
+      this.importService.importData(data, this.workingDirectory.id);
+      setTimeout(() => {
+        this.hideImportModal();
+        this.importInProgress = false;
+        this.allDirectories = this.populateDirectories(this.allDirectories);
+        this.workingDirectory = this.populateDirectories(this.workingDirectory);
+        this.getWorkingDirectoryData();
+      }, 1500)
     }
     else {
       this.addToast('INVALID FILE');
     }
-  }
-
-  runImport(data: ImportDataObjects[]) {
-    if (this.importing) {
-      clearTimeout(this.importing)
-    }
-    this.importing = setTimeout(() => {
-      this.hideImportModal();
-      this.importInProgress = false;
-      this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
-      this.workingDirectory = this.populateDirectories(this.workingDirectory);
-    }, 2500)
-
-    let uniqDirs = _.uniqBy(data, 'directory.id');
-    let dirIdPairs = new Array();
-    uniqDirs.forEach(dir => {
-      if (dir.directory) {
-        let tmpDirDbRef: DirectoryDbRef = {
-          name: dir.directory.name,
-          parentDirectoryId: this.workingDirectory.id
-        }
-        let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
-        if (checkParentArr.length != 0) {
-          tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
-        }
-        this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          dir.directorySettings.directoryId = results;
-          delete dir.directorySettings.id;
-          this.indexedDbService.addSettings(dir.directorySettings);
-          dirIdPairs.push({ oldId: dir.directory.id, newId: results });
-        });
-      }
-    })
-    setTimeout(() => {
-      data.forEach(dataObj => {
-        let tmpDirectoryIdArr = dirIdPairs.filter(pair => { return pair.oldId == dataObj.assessment.directoryId });
-        let tmpDirectoryId = this.workingDirectory.id;
-        if (tmpDirectoryIdArr.length != 0) {
-          tmpDirectoryId = tmpDirectoryIdArr[0].newId;
-        }
-        let tmpAssessment: Assessment = {
-          type: dataObj.assessment.type,
-          name: dataObj.assessment.name,
-          psat: dataObj.assessment.psat,
-          phast: dataObj.assessment.phast,
-          directoryId: tmpDirectoryId
-        }
-        this.indexedDbService.addAssessment(tmpAssessment).then(
-          results => {
-            //check for psat until phast has settings
-            let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
-            tmpSettings.assessmentId = results;
-            this.indexedDbService.addSettings(tmpSettings).then(
-              results => { }
-            )
-          }
-        )
-      })
-    }, 1000);
   }
 
   addToast(msg: string) {
@@ -695,5 +507,6 @@ export interface ImportDataObjects {
   settings: Settings,
   directory: Directory,
   assessment: Assessment,
-  directorySettings: Settings
+  directorySettings: Settings,
+  calculator?: Calculator
 }

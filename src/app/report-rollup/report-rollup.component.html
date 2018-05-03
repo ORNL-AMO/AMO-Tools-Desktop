@@ -14,14 +14,14 @@
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" (showModal)="showModal()" (showPsatModal)="showPsatModal();"
-                (hideSummary)="setSidebarHeight()"></app-report-summary>
+            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
+                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
         </div>
     </div>
 </div>
 <!-- End .report-header -->
 
-<div #reportTemplate *ngIf="assessmentsGathered && settings">
+<div *ngIf="assessmentsGathered && settings">
 
     <div class="report-cover" *ngIf="!printView">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
@@ -38,44 +38,39 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" (showModal)="showModal()" (showPsatModal)="showPsatModal();"
-                    (hideSummary)="setSidebarHeight()"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
+                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
             </div>
         </div>
     </div>
     <!-- End .report-header -->
 
-    <div class="row">
+    <div class="d-flex">
 
-        <div class="col-lg-1 col-md-2 col-sm-2 hide-print">
-            <div class="report-container">
-                <div class="sidebar hide-print" id="sidebar" [ngStyle]="{'height.px': sidebarHeight}">
-                    <ul>
-                        <li *ngFor="let item of _psatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
-                            <a class="sb-item">
-                                <img *ngIf="item.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
-                                <span>
-                                    {{item.assessment.name}}
-                                </span>
-                            </a>
-                        </li>
-                        <li *ngFor="let item of _phastAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
-                            <a class="sb-item">
-                                <img class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-                                <span>
-                                    {{item.assessment.name}}
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="p-1 sidebar hide-print scroll-item" id="sidebar" [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}">
+            <ul>
+                <li *ngFor="let item of _psatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
+                    <a class="sb-item">
+                        <img *ngIf="item.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+                        <span>
+                            {{item.assessment.name}}
+                        </span>
+                    </a>
+                </li>
+                <li *ngFor="let item of _phastAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
+                    <a class="sb-item">
+                        <img class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+                        <span>
+                            {{item.assessment.name}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
         </div>
         <!-- End .sidebar -->
 
 
-        <div [ngClass]="{'col-lg-11 col-md-10 col-sm-10 assessment-reports': !printView, 'col-12 assessment-reports': printView}">
-
+        <div class="assessment-padding d-flex flex-column scroll-item">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
                 <div class="row print-break-before">
@@ -85,7 +80,7 @@
                 </div>
                 <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
                     <div class="col-12">
-                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true" (selectModification)="updateSummary($event)"
+                        <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true" [printView]="printView" (selectModification)="updateSummary($event)"
                             [settings]="item.settings">
                         </app-psat-report>
                     </div>
@@ -167,7 +162,7 @@
                 </button>
             </div>
             <div class="modal-body panel-container psat">
-                <app-psat-rollup [settings]="settings"></app-psat-rollup>
+                <app-psat-rollup [settings]="settings" [calculators]="selectedPsatCalcs"></app-psat-rollup>
             </div>
         </div>
     </div>
@@ -185,7 +180,7 @@
                 </button>
             </div>
             <div class="modal-body panel-container phast">
-                <app-phast-rollup [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup>
+                <app-phast-rollup [settings]="settings" [calculators]="selectedPhastCalcs"></app-phast-rollup>
             </div>
         </div>
     </div>

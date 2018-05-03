@@ -33,6 +33,10 @@
         page-break-inside: avoid;
     }
 
+    .print-only-sankey {
+        page-break-inside: avoid;
+    }
+
     .print-page-title {
         font-size: 40px !important;
         font-weight: bold;
@@ -48,7 +52,7 @@
     }
 
     .print-mod-notes {
-        font-size: 22px;
+        font-size: 15px;
     }
 
     .print-graphs-container {
@@ -107,13 +111,5 @@
         position: relative;
         top: 150px;
         left: -200px;
-    }
-
-    .print-pie-chart-left {
-        left: -215px;
-    }
-
-    .print-pie-chart-right {
-        left: -150px;
     }
 }

@@ -42,3 +42,13 @@ a:not([href]):not([tabindex]){
 .report-modal .modal-body{
   padding: 0px;
 }
+
+.list-row.psat{
+  border-bottom: #2980b9 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #2980b9) 80 / 2;
+}
+
+.list-row.phast{
+  border-bottom: #BF3D00 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #BF3D00) 80 / 2;
+}

@@ -1,0 +1,28 @@
+.tooltip-box {
+    top: 47px;
+    position: absolute;
+    background-color: rgba(85,85,85,0);
+    color: #fff;
+    padding: 10px;
+    opacity: 0;
+    transition: all ease 0.3s;
+    font-size: 16px;
+    z-index: 5;
+}
+
+.revealed-tooltip-box {
+    display: initial;
+    top: 37px;
+    opacity: 1;
+    background-color: rgba(85,85,85,0.9);
+    transition: all ease 0.3s;
+}
+
+.badge-td {
+    padding-top: 13px;
+    padding-right: 5px;
+}
+
+.tooltip-td {
+    vertical-align: middle;
+}

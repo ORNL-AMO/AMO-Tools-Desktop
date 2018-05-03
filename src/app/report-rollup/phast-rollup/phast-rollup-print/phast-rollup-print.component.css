@@ -7,4 +7,16 @@
     .print-avoid-break {
         page-break-inside: avoid;
     }
+
+    .row-bottom-divider {
+        border-bottom: solid 1px #999;
+    }
+
+    .header {
+        padding-top: 24px;
+    }
+
+    .print-rollup-pie-container {
+        padding-bottom: 35px;
+    }
 }

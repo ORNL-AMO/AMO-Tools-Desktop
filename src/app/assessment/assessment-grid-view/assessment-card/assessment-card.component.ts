@@ -6,6 +6,7 @@ import { Directory } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-assessment-card',
@@ -27,16 +28,13 @@ export class AssessmentCardComponent implements OnInit {
   directories: Array<Directory>;
 
   editForm: FormGroup;
-  constructor(private assessmentService: AssessmentService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder) { }
+  constructor(private assessmentService: AssessmentService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService) { }
 
 
   ngOnInit() {
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;
     }
-    this.indexedDbService.getAllDirectories().then(dirs => {
-      this.directories = dirs;
-    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,11 +55,14 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   showEditModal() {
-    this.editForm = this.formBuilder.group({
-      'name': [this.assessment.name],
-      'directoryId': [this.assessment.directoryId]
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.editForm = this.formBuilder.group({
+        'name': [this.assessment.name],
+        'directoryId': [this.assessment.directoryId]
+      })
+      this.editModal.show();
     })
-    this.editModal.show();
   }
 
   hideEditModal() {
@@ -82,8 +83,10 @@ export class AssessmentCardComponent implements OnInit {
     this.assessment.name = this.editForm.controls.name.value;
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putAssessment(this.assessment).then(val => {
-      this.changeDirectory.emit(true);
-      this.hideEditModal();
+      this.assessmentDbService.setAll().then(() => {
+        this.changeDirectory.emit(true);
+        this.hideEditModal();
+      })
     })
   }
 }

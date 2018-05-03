@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
 import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-designed-energy-results',
@@ -12,13 +13,16 @@ export class DesignedEnergyResultsComponent implements OnInit {
   results: DesignedEnergyResults;
   @Input()
   settings: Settings;
-
-  resultUnits: any = {
+  @Input()
+  title: string;
+  resultUnits: { energyPerMassUnit: string, energyPerTimeUnit: string, electricityUsedUnit: string } = {
     energyPerMassUnit: '',
     energyPerTimeUnit: '',
     electricityUsedUnit: ''
   };
-  constructor() { }
+  designedEnergyIntensity: number;
+  calculatedEnergyIntensity: number;
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.settings.energyResultUnit == 'kWh') {
@@ -32,5 +36,31 @@ export class DesignedEnergyResultsComponent implements OnInit {
       this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
     }
     this.resultUnits.electricityUsedUnit = 'kW';
+    this.setEnergyIntensity();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.results) {
+      this.setEnergyIntensity();
+    }
+  }
+
+  setEnergyIntensity() {
+    if (this.settings.energyResultUnit == 'MMBtu') {
+     // this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('MMBtu').to('Btu');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+      //this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('MMBtu').to('Btu');
+      this.designedEnergyIntensity = this.results.designedEnergyIntensity;
+      this.resultUnits.energyPerMassUnit = 'Btu/lb';
+    } else if (this.settings.energyResultUnit == 'GJ') {
+      //this.calculatedEnergyIntensity = this.convertUnitsService.value(this.results.calculatedEnergyIntensity).from('GJ').to('kJ');
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+      //this.designedEnergyIntensity = this.convertUnitsService.value(this.results.designedEnergyIntensity).from('GJ').to('kJ');
+      this.designedEnergyIntensity = this.results.designedEnergyIntensity;
+      this.resultUnits.energyPerMassUnit = 'kJ/kg';
+    }else{
+      this.calculatedEnergyIntensity = this.results.calculatedEnergyIntensity;
+      this.designedEnergyIntensity = this.results.designedEnergyIntensity;
+    }
   }
 }

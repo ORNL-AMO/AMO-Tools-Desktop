@@ -13,6 +13,7 @@ import { DesignedEnergyFuelHelpComponent } from './designed-energy-fuel/designed
 import { DesignedEnergyElectricityFormComponent } from './designed-energy-electricity/designed-energy-electricity-form/designed-energy-electricity-form.component';
 import { DesignedEnergyElectricityHelpComponent } from './designed-energy-electricity/designed-energy-electricity-help/designed-energy-electricity-help.component';
 import { DesignedEnergyService } from './designed-energy.service';
+import { DesignedEnergyElectricityResultsComponent } from './designed-energy-electricity/designed-energy-electricity-results/designed-energy-electricity-results.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +31,8 @@ import { DesignedEnergyService } from './designed-energy.service';
     DesignedEnergyFuelFormComponent,
     DesignedEnergyFuelHelpComponent,
     DesignedEnergyElectricityFormComponent,
-    DesignedEnergyElectricityHelpComponent
+    DesignedEnergyElectricityHelpComponent,
+    DesignedEnergyElectricityResultsComponent
   ],
   exports: [
     DesignedEnergyComponent,

@@ -3,11 +3,11 @@
     <div class="row align-items-top calculator-panel">
       <div class="panel-column col-6 align-top">
         <div class="header">
-          <h3>Compressed Air - Pneumatic Air</h3>
+          <h3>Pneumatic Air</h3>
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-pneumatic-air-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)"></app-pneumatic-air-form>
+            <app-pneumatic-air-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)" (emitChangeField)="setField($event)"></app-pneumatic-air-form>
           </div>
         </div>
       </div>
@@ -17,7 +17,58 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Pneumatic Air Help</p>
+            <p>Compute the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
+              The design specs of the compressor are entered in the calculator and the quantity of air needed is generated.</p>
+            <div class="help-content">
+              <div class="card" *ngIf="currentField == 'cylinderDiameter'">
+                <div class="card-header">
+                  Cylinder Diameter
+                </div>
+                <div class="card-block">
+                  <p>Inner diameter of cylinder.</p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'airPressure'">
+                <div class="card-header">
+                  Air Pressure
+                </div>
+                <div class="card-block">
+                  <p>Pressure of the air coming out of the cylinder </p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'cylinderStroke'">
+                <div class="card-header">
+                  Cylinder Stroke
+                </div>
+                <div class="card-block">
+                  <p>Distance that the piston can travel inside a cylinder.</p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'pistonRodDiameter'">
+                <div class="card-header">
+                  Piston Rod Diameter
+                </div>
+                <div class="card-block">
+                  <p>Diameter of the piston rod (required only in case of a double acting cylinder).</p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'cyclesPerMinute'">
+                <div class="card-header">
+                  Cycles Per Minute
+                </div>
+                <div class="card-block">
+                  <p>Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute.</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  Compression Ratio
+                </div>
+                <div class="card-block">
+                  <p>This is the ratio of air pressure with atmospheric pressure.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

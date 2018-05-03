@@ -8,6 +8,8 @@ import { PsatService } from '../../../psat/psat.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import * as _ from 'lodash';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -18,8 +20,6 @@ export class SystemCurveComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-  @Input()
-  inPsat: boolean;
   @Input()
   assessment: Assessment;
   @Input()
@@ -45,34 +45,23 @@ export class SystemCurveComponent implements OnInit {
   calcExists: boolean = false;
   showForm: boolean = false;
   saving: boolean = false;
-  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     //in assesssment
     if (this.inAssessment) {
       this.psat.name = 'Baseline';
-      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
-        if (results.length != 0) {
-          this.calculator = results[0];
-          this.calcExists = true;
-          if (this.calculator.systemCurve) {
-            this.initDefault();
-            this.setPointValuesFromCalc(true);
-            this.curveConstants.form.patchValue({
-              specificGravity: this.calculator.systemCurve.specificGravity,
-              systemLossExponent: this.calculator.systemCurve.systemLossExponent
-            })
-            this.showForm = true;
-          } else {
-            this.initializeCalculator();
-            this.initDefault();
-            this.setPointValuesFromCalc(true);
-            this.curveConstants.form.patchValue({
-              specificGravity: this.calculator.systemCurve.specificGravity,
-              systemLossExponent: this.calculator.systemCurve.systemLossExponent
-            })
-            this.showForm = true;
-          }
+      this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+      if (this.calculator) {
+        this.calcExists = true;
+        if (this.calculator.systemCurve) {
+          this.initDefault();
+          this.setPointValuesFromCalc(true);
+          this.curveConstants.form.patchValue({
+            specificGravity: this.calculator.systemCurve.specificGravity,
+            systemLossExponent: this.calculator.systemCurve.systemLossExponent
+          })
+          this.showForm = true;
         } else {
           this.initializeCalculator();
           this.initDefault();
@@ -83,23 +72,31 @@ export class SystemCurveComponent implements OnInit {
           })
           this.showForm = true;
         }
-      })
+      } else {
+        this.initializeCalculator();
+        this.initDefault();
+        this.setPointValuesFromCalc(true);
+        this.curveConstants.form.patchValue({
+          specificGravity: this.calculator.systemCurve.specificGravity,
+          systemLossExponent: this.calculator.systemCurve.systemLossExponent
+        })
+        this.showForm = true;
+      }
     }
     //stand alone
     else {
       this.initDefault();
       //get system settings if using stand alone calculator
       if (!this.settings) {
-        this.indexedDbService.getDirectorySettings(1).then(
-          results => {
-            this.settings = results[0];
-            this.convertDefaults(this.settings);
-            this.showForm = true;
-          }
-        )
+        this.settings = this.settingsDbService.globalSettings;
+        this.convertDefaults(this.settings);
+        this.showForm = true;
       } else {
         this.showForm = true;
       }
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
@@ -110,9 +107,9 @@ export class SystemCurveComponent implements OnInit {
   }
 
   resizeTabs() {
-      if (this.leftPanelHeader.nativeElement.clientHeight) {
-        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-      }
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setPointValuesFromCalc(init?: boolean) {
@@ -250,14 +247,16 @@ export class SystemCurveComponent implements OnInit {
       head: this.psat.inputs.head
     }
     dataPoints.push(baselinePoint)
-    this.psat.modifications.forEach(mod => {
-      let modPoint: CurveData = {
-        modName: mod.psat.name,
-        flowRate: mod.psat.inputs.flow_rate,
-        head: mod.psat.inputs.head
-      }
-      dataPoints.push(modPoint);
-    })
+    if (this.psat.modifications) {
+      this.psat.modifications.forEach(mod => {
+        let modPoint: CurveData = {
+          modName: mod.psat.name,
+          flowRate: mod.psat.inputs.flow_rate,
+          head: mod.psat.inputs.head
+        }
+        dataPoints.push(modPoint);
+      })
+    }
     let systemCurve: SystemCurve = {
       specificGravity: this.psat.inputs.specific_gravity,
       systemLossExponent: 1.9,
@@ -290,14 +289,18 @@ export class SystemCurveComponent implements OnInit {
     _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).head = this.pointTwo.form.controls.head.value;
     if (!this.saving || this.calcExists) {
       if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator);
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
       } else {
         this.saving = true;
         this.calculator.assessmentId = this.assessment.id;
         this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculator.id = result;
-          this.calcExists = true;
-          this.saving = false;
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          })
         });
       }
     }

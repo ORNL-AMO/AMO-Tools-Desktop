@@ -1,0 +1,14 @@
+<div class="tooltip-box hidden-tooltip-box" [ngStyle]="{'display': (display ? 'initial' : 'none')}" [ngClass]="{'revealed-tooltip-box': reveal}">
+  <!-- <div class="tooltip-box revealed-tooltip-box" [ngClass]="{'revealed-tooltip-box': reveal}"> -->
+    <table class="tooltip-table">
+      <tr>
+        <td class="tooltip-td badge-td">
+          <span class="badge gray-badge" [ngClass]="badgeClass">
+          </span>
+        </td>
+        <td class="tooltip-td">
+          {{message}}
+        </td>
+      </tr>
+    </table>
+  </div>

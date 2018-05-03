@@ -2,11 +2,11 @@
   <!-- toggleCollapse toggles collapse variable -->
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Atmosphere Losses ({{numLosses}})
-      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
   <!-- if not collapsed show table-->
-  <div *ngIf="!collapse">
+  <div *ngIf="!collapse || printView">
     <!-- integrate loss data -->
     <div class="card-body" *ngFor="let data of lossData; let index = index;">
       <div class="output-summary">

@@ -1,12 +1,4 @@
 <div class="card-form">
-  <!--<div class="row">
-    <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">Heat System Efficiency</h6>
-        <h6 *ngIf="!isBaseline">Heat System Efficiency Modification</h6>
-      </div>
-    </div>
-  </div>-->
   <div class="row">
     <div class="col-12">
       <form [formGroup]="efficiencyForm">
@@ -14,32 +6,42 @@
           <div class="form-group">
             <label *ngIf="isBaseline" class="small" for="efficiency">Heat System Efficiency</label>
             <label *ngIf="!isBaseline" class="small" for="efficiency">Heat System Efficiency Modification</label>
-            <div class="input-group">
-              <input name="efficiency" type="number" step="any" min="0" max="100" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
+            <div class="input-group"  [ngClass]="{'indicate-different': compareEfficiency(), 'invalid': efficiencyForm.controls.efficiency.status == 'INVALID'}">
+              <input [readonly]="!baselineSelected" name="efficiency" type="number" step="any" min="0" max="100" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
                 (input)="calculate()" (focus)="focusField('efficiency')">
               <span class="input-group-addon units">%</span>
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="small" for="grossHeat">Gross Heat</label>
-          <div *ngIf="grossHeat"  class="text-center small">
-            {{grossHeat | sigFigs:'6'}} <span>{{resultsUnit}}</span>
-          </div>
-          <div *ngIf="!grossHeat" class="text-center small">
-            &mdash; &mdash;
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="small" for="systemLosses">System Losses</label>
-          <div *ngIf="systemLosses"  class="text-center small">
-            {{systemLosses | sigFigs:'6'}} <span>{{resultsUnit}}</span>
-          </div>
-          <div *ngIf="!systemLosses" class="text-center small">
-            &mdash; &mdash;
-          </div>
-        </div>
       </form>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Gross Heat
+      </div>
+      <div *ngIf="grossHeat" class="text-center w-50 bold">
+        {{grossHeat | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+      <div *ngIf="!grossHeat" class="text-center w-50 bold">
+        &mdash; &mdash;
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="w-50 bold">
+        System Losses
+      </div>
+      <div *ngIf="systemLosses" class="text-center w-50 bold">
+        {{systemLosses | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+      <div *ngIf="!systemLosses" class="text-center w-50 bold">
+        &mdash; &mdash;
+      </div>
     </div>
   </div>
 </div>

@@ -28,4 +28,9 @@ a:not([href]):not([tabindex]).no-data-link{
 
   textarea{
     width: 100%;
+    font-size: small;
+  }
+
+  form{
+    padding-top: 0px;
   }

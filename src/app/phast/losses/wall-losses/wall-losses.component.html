@@ -10,6 +10,7 @@
     <div class="col-12">
       <form class="name-input-form" [formGroup]="loss.form">
         <div class="input-group">
+          <!--indicator for toggling collapse-->
           <span class="input-group-addon units left" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
@@ -20,12 +21,6 @@
           </span>
         </div>
       </form>
-      <!-- <label class="group-label loss-label">
-        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
-        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
-        {{loss.name}}
-        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
-      </label> -->
     </div>
   </div>
   <div class="row" *ngIf="!loss.collapse">
@@ -47,6 +42,19 @@
         <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
           &mdash; &mdash;
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Wall Loss Total
+      </div>
+      <div class="text-center w-50 bold">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
       </div>
     </div>
   </div>

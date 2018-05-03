@@ -31,9 +31,8 @@ export class GasCoolingLossesFormComponent implements OnInit {
   gasFlowError: string = null;
   gasDensityError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
-  constructor(private windowRefService: WindowRefService, private coolingLossesCompareService: CoolingLossesCompareService) { }
+  constructor(private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -47,34 +46,20 @@ export class GasCoolingLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { this.checkInputError(true); }
-
-  ngAfterViewInit() {
+  ngOnInit() {
+    this.checkInputError(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
-
   disableForm() {
-    this.lossesForm.disable();
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.lossesForm.enable();
+    // this.lossesForm.enable();
   }
-
-  // checkTemperature(bool?: boolean) {
-  //   if (!bool) {
-  //     this.startSavePolling();
-  //   }
-  //   if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-  //     this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-  //   } else {
-  //     this.temperatureError = null;
-  //   }
-  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -103,80 +88,84 @@ export class GasCoolingLossesFormComponent implements OnInit {
 
     if (this.specificHeatError || this.gasFlowError || this.gasDensityError || this.temperatureError) {
       this.inputError.emit(true);
+      this.coolingLossesCompareService.inputError.next(true);
     } else {
       this.inputError.emit(false);
+      this.coolingLossesCompareService.inputError.next(false);
     }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
   focusOut() {
     this.changeField.emit('default');
   }
   startSavePolling() {
+    this.saveEmit.emit(true);
     this.calculate.emit(true)
-    this.emitSave();
   }
-
-  initDifferenceMonitor() {
-    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && this.coolingLossesCompareService.differentArray.length != 0) {
-      if (this.coolingLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //avgSpecificHeat
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.specificHeat.subscribe((val) => {
-          let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
-          avgSpecificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //gasFlow
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.flowRate.subscribe((val) => {
-          let gasFlowElements = doc.getElementsByName('gasFlow_' + this.lossIndex);
-          gasFlowElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //inletTemp
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.initialTemperature.subscribe((val) => {
-          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-          inletTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //outletTemp
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.finalTemperature.subscribe((val) => {
-          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-          outletTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //correctionFactor
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.correctionFactor.subscribe((val) => {
-          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-          correctionFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //gasDensity
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.gasDensity.subscribe((val) => {
-          let gasDensityElements = doc.getElementsByName('gasDensity_' + this.lossIndex);
-          gasDensityElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //coolingMedium
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.coolingMedium.subscribe((val) => {
-          let coolingMediumElements = doc.getElementsByName('coolingMedium_' + this.lossIndex);
-          coolingMediumElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+  canCompare() {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
+        return true
+      } else {
+        return false;
       }
+    } else {
+      return false;
     }
   }
+
+  compareCoolingMedium(): boolean {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+      return this.coolingLossesCompareService.compareCoolingMedium(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+  compareGasFlowRate(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasFlowRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasInitialTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasFinalTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasFinalTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasSpecificHeat(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasSpecificHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasCorrectionFactor(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasCorrectionFactor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareGasDensity(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareGasDensity(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 }

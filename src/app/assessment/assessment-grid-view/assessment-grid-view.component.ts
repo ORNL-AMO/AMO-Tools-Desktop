@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { Calculator } from '../../shared/models/calculators';
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-assessment-grid-view',
   templateUrl: './assessment-grid-view.component.html',
@@ -13,11 +14,10 @@ export class AssessmentGridViewComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Input()
   isChecked: boolean;
-  @Input()
-  directoryCalculator: Calculator;
   @Output('emitPreAssessment')
-  emitPreAssessment = new EventEmitter<boolean>();
-
+  emitPreAssessment = new EventEmitter<number>();
+  @Input()
+  directorySettings: Settings;
   constructor() { }
 
   ngOnInit() {
@@ -31,8 +31,7 @@ export class AssessmentGridViewComponent implements OnInit {
     }
   }
 
-  viewPreAssessment() {
-    this.emitPreAssessment.emit(true);
+  viewPreAssessment(index: number) {
+    this.emitPreAssessment.emit(index);
   }
-
 }

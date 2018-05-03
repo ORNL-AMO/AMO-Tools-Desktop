@@ -4,7 +4,6 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
-import { EnergyInputCompareService } from './energy-input-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -16,8 +15,6 @@ import { FormGroup } from '@angular/forms';
 export class EnergyInputComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
@@ -36,20 +33,22 @@ export class EnergyInputComponent implements OnInit {
   inSetup: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
   _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
+  constructor(private energyInputService: EnergyInputService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._energyInputs = new Array();
+        this.initForms();
       }
     }
     else {
@@ -67,9 +66,15 @@ export class EnergyInputComponent implements OnInit {
     if (!this._energyInputs) {
       this._energyInputs = new Array();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
+
+  initForms() {
     if (this.losses.energyInputEAF) {
-      this.setCompareVals();
-      this.energyInputCompareService.initCompareObjects();
       let lossIndex = 1;
       this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
@@ -90,63 +95,6 @@ export class EnergyInputComponent implements OnInit {
         this._energyInputs.push(tmpLoss);
       })
     }
-    this.energyInputService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.energyInputEAF) {
-          this._energyInputs.splice(lossIndex, 1);
-          if (this.energyInputCompareService.differentArray && !this.isBaseline) {
-            this.energyInputCompareService.differentArray.splice(lossIndex, 1);
-          }
-          this.saveLosses();
-        }
-      }
-    })
-    // if (this.isBaseline) {
-    //   this.energyInputService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._energyInputs.push({
-    //         form: this.energyInputService.initForm(),
-    //         name: 'Loss #' + (this._energyInputs.length + 1),
-    //         results: {
-    //           heatDelivered: 0,
-    //           kwhCycle: 0,
-    //           totalKwhCycle: 0
-    //         },
-    //         collapse: false
-    //       });
-    //     }
-    //   })
-    // } else {
-    //   this.energyInputService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._energyInputs.push({
-    //         form: this.energyInputService.initForm(),
-    //         name: 'Loss #' + (this._energyInputs.length + 1),
-    //         results: {
-    //           heatDelivered: 0,
-    //           kwhCycle: 0,
-    //           totalKwhCycle: 0
-    //         },
-    //         collapse: false
-    //       })
-    //     }
-    //   })
-    // }
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isBaseline) {
-      //  this.energyInputService.addLossBaselineMonitor.next(false);
-      this.energyInputCompareService.baselineEnergyInput = null;
-    } else {
-      this.energyInputCompareService.modifiedEnergyInput = null;
-      //  this.energyInputService.addLossModificationMonitor.next(false);
-    }
-    this.energyInputService.deleteLossIndex.next(null);
   }
 
   disableForms() {
@@ -155,12 +103,6 @@ export class EnergyInputComponent implements OnInit {
     })
   }
   addLoss() {
-    // if (this.isLossesSetup) {
-    //   this.energyInputService.addLoss(this.isBaseline);
-    // }
-    if (this.energyInputCompareService.differentArray) {
-      this.energyInputCompareService.addObject(this.energyInputCompareService.differentArray.length - 1);
-    }
     this._energyInputs.push({
       form: this.energyInputService.initForm(this._energyInputs.length + 1),
       results: {
@@ -173,7 +115,8 @@ export class EnergyInputComponent implements OnInit {
   }
 
   removeLoss(lossIndex: number) {
-    this.energyInputService.setDelete(lossIndex);
+    this._energyInputs.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
   collapseLoss(loss: EnInputObj) {
@@ -209,7 +152,6 @@ export class EnergyInputComponent implements OnInit {
       tmpEnergyInputs.push(tmpEnergyInput);
     })
     this.losses.energyInputEAF = tmpEnergyInputs;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -217,18 +159,6 @@ export class EnergyInputComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.energyInputCompareService.baselineEnergyInput = this.losses.energyInputEAF;
-    } else {
-      this.energyInputCompareService.modifiedEnergyInput = this.losses.energyInputEAF;
-    }
-    if (this.energyInputCompareService.differentArray && !this.isBaseline) {
-      if (this.energyInputCompareService.differentArray.length != 0) {
-        this.energyInputCompareService.checkEnergyInputs();
-      }
-    }
-  }
 }
 
 export interface EnInputObj {

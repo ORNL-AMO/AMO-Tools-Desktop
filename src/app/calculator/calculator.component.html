@@ -2,7 +2,7 @@
 <app-furnaces [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
 <app-motors [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'motors'"></app-motors>
 <app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
-<app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>
+<app-steam *ngIf="selectedCalculator == 'steam'" [goCalcHome]="goCalcHome" [selectedTool]="selectedTool"></app-steam>
 <app-compressed-air [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
 <app-utilities [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
@@ -11,9 +11,9 @@
 <div class="row" *ngIf="selectedCalculator == 'all'">
   <div class="col-10  mx-auto">
 
-    <div class="content-container calculator-list">
+    <div class="content-container calculator-list card-item">
 
-      <h2>All Calculators</h2>
+      <h2 class="mb-1">All Calculators</h2>
 
       <h3>Pumps</h3>
       <div class="row calc-item-row">
@@ -187,6 +187,130 @@
           </p>
         </div>
       </div>
+      <h3>Compressed Air</h3>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/leakage-loss-estimator.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'bag-method')">Leak Loss Estimator - Bag Method</a>
+          <p>
+            Estimate compressed air consumption using the bag method.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/pneumatic-valve-flow-factor.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'flow-factor')">Pneumatic Valve Flow Factor</a>
+          <p>
+            There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient
+            C
+            <sub>v</sub>=1. The second one is used for calculating C
+            <sub>v</sub> when the flow rate is known.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/pneumatic-air-requirement.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'pneumatic-air')">Pneumatic Air Requirement</a>
+          <p>
+            Compute the quantity of air required by a specific single acting or a double acting piston cylinder compressor. The design
+            specs of the compressor are entered in the calculator and the quantity of air needed is generated.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/receiver-tank-calculation.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'receiver-tank')">Receiver Tank Calculations</a>
+          <p>
+            The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line pulsations or
+            frequent loading and unloading of the compressor. The different methods to calculate the size of the receiver tank and the quantity
+            of compressed air available for use are included in this calculator.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/pipe-sizing.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'pipe-sizing')">Pipe Sizing</a>
+          <p>
+            Find the pipe diameter when the volumetric flow, pressure and design velocity are known.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/velocity-in-piping.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'air-velocity')">Velocity in the Piping</a>
+          <p>
+            Find the velocity of compressed air through all the different piping involved in the system.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/air-system-capacity.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'system-capacity')">System - Capacity</a>
+          <p>
+            Find the total air quantity that the compressed air system can contain at any instant of time, including the air in the pipes
+            and receivers. The total capacity of the compressed air system can be obtained by adding the volumes of pipes
+            and receivers.
+          </p>
+        </div>
+      </div>
+      <div class="row calc-item-row">
+        <div class="col-1">
+           <img src="assets/images/operation-cost.png" class="ico-size5">
+        </div>
+        <div class="col-11">
+          <a class="click-item" (click)="showTool('compressed-air', 'operation-cost')">Operation Cost Calculations</a>
+          <p>
+            Find the cost of operation of the compressor in both fully and partially load instances.
+          </p>
+        </div>
+      </div>
+
+      <h3>Steam</h3>
+      <div class="row calc-item-row">
+        <div class="col-1">
+          <img src="assets/images/steam-properties.png" class="ico-size3">
+        </div>
+        <div class="col-11">
+          <a (click)="showTool('steam','steam-properties')">Steam Properties</a>
+          <p>
+            Calculates the properties of steam under various conditions.
+          </p>
+        </div>
+      </div>
+
+      <div class="row calc-item-row">
+        <div class="col-1">
+          <img src="assets/images/saturated-properties.png" class="ico-size3">
+        </div>
+        <div class="col-11">
+          <a (click)="showTool('steam','saturated-properties')">Saturated Properties</a>
+          <p>
+            Calculates the properties of saturated steam under various conditions.
+          </p>
+        </div>
+      </div>
+
+
       <h3>General</h3>
       <div class="row calc-item-row">
         <div class="col-1">

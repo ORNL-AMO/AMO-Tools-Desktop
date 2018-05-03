@@ -24,10 +24,12 @@ export class MeteredFuelFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
+  @Input()
+  inElectricity: boolean;
 
   fuelTypes: FlueGasMaterial[];
   fuelFlowInput: boolean;
-  counter: any;
+
   constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -69,25 +71,19 @@ export class MeteredFuelFormComponent implements OnInit {
       }
       this.inputs.heatingValue = heatingVal;
     }
-    this.calculate();
     this.setFlowRate();
   }
 
   setFlowRate() {
     //added if so that HHV input also calls setFlowRate() before calculate()
     if (this.fuelFlowInput) {
-      this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue;
+      this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue * this.inputs.collectionTime/1000000;
     }
     this.calculate();
   }
 
   calculate() {
-    this.startSavePolling();
+    this.emitSave.emit(true);
     this.emitCalculate.emit(true);
   }
-
-  startSavePolling() {
-    this.emitSave.emit(true);
-  }
-
 }

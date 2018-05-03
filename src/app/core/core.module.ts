@@ -20,7 +20,6 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
@@ -37,7 +36,17 @@ import { VersionModalComponent } from '../version-modal/version-modal.component'
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { FsatModule } from '../fsat/fsat.module';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
-import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
+import { MeasurComponent } from '../landing-screen/measur/measur.component';
+import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-tutorial.component';
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from './core.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +61,9 @@ import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-a
     ContactPageComponent,
     AcknowledgmentsPageComponent,
     UpdateModalComponent,
-    VersionModalComponent
+    VersionModalComponent,
+    MeasurComponent,
+    OpeningTutorialComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +74,6 @@ import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-a
     CalculatorModule,
     ModalModule,
     NgxElectronModule,
-    IndexedDbModule,
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
@@ -76,7 +86,15 @@ import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-a
     PreAssessmentModule
   ],
   providers: [
-    AssessmentService
+    AssessmentService,
+    CoreService,
+    WindowRefService,
+    IndexedDbService,
+    AssessmentDbService,
+    DirectoryDbService,
+    SettingsDbService,
+    CalculatorDbService,
+    DeleteDataService
   ]
 })
 

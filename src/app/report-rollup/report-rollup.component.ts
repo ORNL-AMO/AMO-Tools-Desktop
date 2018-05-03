@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
-import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
 import { setTimeout } from 'timers';
 import { Calculator } from '../shared/models/calculators';
+import { SettingsService } from '../settings/settings.service';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -24,17 +26,15 @@ export class ReportRollupComponent implements OnInit {
     this.checkActiveAssessment();
   }
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
-
   _reportAssessments: Array<ReportItem>;
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
-
   //debug
-  selectedCalcs: Array<Calculator>;
-
-
-
+  selectedPhastCalcs: Array<Calculator>;
+  selectedPsatCalcs: Array<Calculator>;
+  directoryIds: Array<number>;
+  bannerHeight: number;
   assessmentsGathered: boolean = false;
   isSummaryVisible: boolean = true;
   createdDate: Date;
@@ -44,97 +44,124 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
 
   numPhasts: number = 0;
-
+  numPsats: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
+  reportAssessmentsSub: Subscription;
+  phastAssessmentsSub: Subscription;
+  allPhastSub: Subscription;
+  selectedPhastSub: Subscription;
+  psatAssessmentSub: Subscription;
+  selectedCalcsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
-    private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
+    private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
-    this.selectedCalcs = new Array<Calculator>();
-
+    this.selectedPhastCalcs = new Array<Calculator>();
+    this.selectedPsatCalcs = new Array<Calculator>();
+    this.directoryIds = new Array<number>();
 
     setTimeout(() => {
       this.assessmentsGathered = true;
-      this.numPhasts = this._phastAssessments.length;
+      this.cd.detectChanges();
     }, 2000);
-
     setTimeout(() => {
       this.setSidebarHeight();
-    }, 2500);
+    }, 2100);
 
-    this.indexedDbService.getDirectorySettings(1).then(results => {
-      this.settings = this.reportRollupService.checkSettings(results[0]);;
-    });
+    this.settings = this.settingsDbService.globalSettings;
+    this.checkSettings();
+
     this.createdDate = new Date();
-    this.reportRollupService.reportAssessments.subscribe(items => {
+    this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
         if (items.length != 0) {
           this._reportAssessments = items;
-          this.focusedAssessment = this._reportAssessments[0].assessment;
+          this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
         }
       }
     });
     this.assessmentService.showFeedback.next(false);
-    let count = 1;
-    this.reportRollupService.phastAssessments.subscribe(val => {
-      if (val.length != 0) {
-        this.reportRollupService.initPhastResultsArr(val);
-        count++;
-      }
-    });
-    this.reportRollupService.allPhastResults.subscribe(val => {
+    this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
       if (val.length != 0) {
         this.reportRollupService.initPhastCompare(val);
       }
     });
-    this.reportRollupService.selectedPhasts.subscribe(val => {
+    this.selectedPhastSub = this.reportRollupService.selectedPhasts.subscribe(val => {
       if (val.length != 0) {
         this.reportRollupService.getPhastResultsFromSelected(val);
       }
     });
-
-
-    this.reportRollupService.psatAssessments.subscribe(items => {
+    this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
       if (items) {
         if (items.length != 0) {
           this._psatAssessments = items;
+          this.numPsats = this._psatAssessments.length;
         }
       }
     });
-
-    this.reportRollupService.phastAssessments.subscribe(items => {
+    this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
       if (items) {
         if (items.length != 0) {
+          this.reportRollupService.initPhastResultsArr(items);
           this._phastAssessments = items;
+          this.numPhasts = this._phastAssessments.length;
         }
       }
     });
-
-
     //gets calculators for pre assessment rollup
-    this.reportRollupService.selectedCalcs.subscribe(items => {
+    this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
         if (items.length != 0) {
-          this.selectedCalcs = items;
-          console.log("selectedCalcs was assigned, selectedCalcs.length = " + this.selectedCalcs.length);
+          items.forEach(item => {
+            if(item.type == 'furnace'){
+              this.selectedPhastCalcs.push(item);
+            }else if(item.type == 'pump'){
+              this.selectedPsatCalcs.push(item);
+            }
+          })
         }
       }
     });
   }
 
-
-
-  // ngAfterViewInit() {
-  //   this.setSidebarHeight();
-  // }
-
+  ngAfterViewInit() {
+    // setTimeout(() => {
+    //   this.setSidebarHeight();
+    // }, 500)
+  }
 
   ngOnDestroy() {
     this.assessmentService.showFeedback.next(true);
     this.reportRollupService.initSummary();
+    if (this.reportAssessmentsSub) this.reportAssessmentsSub.unsubscribe();
+    if (this.phastAssessmentsSub) this.phastAssessmentsSub.unsubscribe();
+    if (this.allPhastSub) this.allPhastSub.unsubscribe();
+    if (this.selectedPhastSub) this.selectedPhastSub.unsubscribe();
+    if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
+    if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
+  }
+
+  checkSettings() {
+    if (!this.settings.phastRollupElectricityUnit) {
+      this.settings.phastRollupElectricityUnit = 'kWh';
+    }
+    if (!this.settings.phastRollupFuelUnit) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.settings.phastRollupFuelUnit = 'GJ';
+      } else {
+        this.settings.phastRollupFuelUnit = 'MMBtu';
+      }
+    }
+    if (!this.settings.phastRollupSteamUnit) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.settings.phastRollupSteamUnit = 'GJ';
+      } else {
+        this.settings.phastRollupSteamUnit = 'MMBtu';
+      }
+    }
   }
 
   exportToCsv() {
@@ -191,8 +218,8 @@ export class ReportRollupComponent implements OnInit {
     let window = this.windowRefService.nativeWindow;
     let wndHeight = window.innerHeight;
     let header = doc.getElementById('reportHeader');
-    let headerHeight = header.clientHeight;
-    this.sidebarHeight = wndHeight - headerHeight;
+    this.bannerHeight = header.clientHeight;
+    this.sidebarHeight = wndHeight - this.bannerHeight;
   }
 
   checkActiveAssessment() {

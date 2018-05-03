@@ -1,9 +1,9 @@
-<div class="help-header">
+<div class="help-header" *ngIf="!inPreAssessment">
 
   <h3>Metered Energy Help</h3>
   <p>
-    Enter data about the energy of processing heating equipment based on metered fuel use. This allows the user to compare
-    PHAST calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
+    Enter data about the energy of processing heating equipment based on metered fuel use. This allows the user to compare PHAST
+    calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
     metered fuel energy used by the measurement period (hours/days/weeks).
   </p>
   <!--<p class="text-muted">
@@ -19,7 +19,9 @@
       Fuel Type
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
         Fuel used in heat zone
       </p>
@@ -31,7 +33,9 @@
       Flow Rate
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
         Metered flow rate of fuel, as measured during the collection period. If flow rate is unknown, it can be calculated using
         the button below using data about
@@ -44,9 +48,11 @@
       Heating Value - HHV
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
-         Higher heating value of the fuel (calculated based on fuel composition)
+        Higher heating value of the fuel (calculated based on fuel composition)
       </p>
     </div>
   </div>
@@ -56,7 +62,9 @@
       Fuel Collection Time
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
         Time period over which fuel meter data was collected
       </p>
@@ -68,7 +76,9 @@
       Electicity Used
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
         Metered electricity used by auxiliary equipment during collection period
       </p>
@@ -80,9 +90,53 @@
       Electicity Collection Time
     </div>
     <div class="card-header">
-      <strong><u>Description:</u></strong>
+      <strong>
+        <u>Description:</u>
+      </strong>
       <p>
         Time period over which auxiliary electricity meter data was collected
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fuelDescription'">
+    <div class="card-header">
+      Type of Fuel
+    </div>
+    <div class="card-header">
+      <strong>
+        <u>Description:</u>
+      </strong>
+      <p>
+        Gas or Solid/Liquid Fuels
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fuelEnergy'">
+    <div class="card-header">
+      Metered Fuel Energy
+    </div>
+    <div class="card-header">
+      <strong>
+        <u>Description:</u>
+      </strong>
+      <p>
+        The amount of fuel energy measured by the fuel meter during the data collection time
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Calculate using Flow Rate
+    </div>
+    <div class="card-header">
+      <strong>
+        <u>Description:</u>
+      </strong>
+      <p>
+        The volume of fuel measured by the meter during the data collection time
       </p>
     </div>
   </div>

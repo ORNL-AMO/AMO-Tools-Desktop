@@ -1,0 +1,81 @@
+<p>Find the cost of operation of the compressor in both fully and partially load instances.</p>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'motorBhp'">
+    <div class="card-header">
+      Compressor Motor Brake Horse Power
+    </div>
+    <div class="card-block">
+      <p>Input power required at the compressor input shaft for a specific speed, capacity and pressure condition. It is generally shown on the compressor panel.       </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'bhpUnloaded'">
+    <div class="card-header">
+      Compressor Motor Brake Horse Power Unloaded
+    </div>
+    <div class="card-block">
+      <p>Brake horse power in the unloaded condition.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'annualOperatingHours'">
+    <div class="card-header">
+      Annual Operating Hours
+    </div>
+    <div class="card-block">
+      <p>Time for which the compressor operates in a year.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'runTimeUnloaded'">
+    <div class="card-header">
+      Runtime Unloaded %
+    </div>
+    <div class="card-block">
+      <p>Percentage of time the compressor runs in un-loaded condition.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'runTimeLoaded'">
+    <div class="card-header">
+      Runtime Loaded %
+    </div>
+    <div class="card-block">
+      <p>Percentage of time the compressor runs in loaded condition.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'efficiencyLoaded'">
+    <div class="card-header">
+      Efficiency Loaded
+    </div>
+    <div class="card-block">
+      <p>
+        Percentage of efficiency in loaded condition.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'efficiencyUnloaded'">
+    <div class="card-header">
+      Efficiency Unloaded
+    </div>
+    <div class="card-block">
+      <p>Percentage of efficiency in un-loaded condition.</p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'costOfElectricity'">
+    <div class="card-header">
+      Cost of Electricity
+    </div>
+    <div class="card-block">
+      <p>Cost of electricity per kWh.</p>
+    </div>
+  </div>
+  <!-- <div class="card" *ngIf="currentField == 'motorBhp'">
+    <div class="card-header">
+      Air Flow
+    </div>
+    <div class="card-block">
+      <p>
+        Volumetric flow rate of the air in the compresser system, referenced to the compresseor inlet conditions.
+      </p>
+    </div>
+  </div> -->
+
+</div>

@@ -1,15 +1,25 @@
+<!--step tabs-->
 <nav>
   <ul class="tabs subtabs progress-tabs phast">
-    <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
-      <a (click)="changeTab(tab.step)"><span class="step-number">{{tab.step}}</span> {{tab.tabName}}</a>
+    <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step
+    , 'input-error': (tab.step == 1 && tab1Status == 'input-error') || (tab.step == 2 && tab2Status == 'input-error')
+    , 'missing-data': (tab.step == 1 && tab1Status == 'missing-data') || (tab.step == 2 && tab2Status == 'missing-data')
+    , 'success': (tab.step == 1 && tab1Status == 'success') || (tab.step == 2 && tab2Status == 'success')}">
+      <a (click)="changeTab(tab.step)">
+        <span *ngIf="tab.step == 1 || tab.step == 2" (mouseenter)="showTooltip(tab.step)" (mouseleave)="hideTooltip(tab.step)" class="step-number">{{tab.step}}</span>
+        <span *ngIf="tab.step > 2" class="step-number">{{tab.step}}</span>
+        {{tab.tabName}}</a>
+      <app-phast-tabs-tooltip *ngIf="tab.step == 1" [badgeClass]="tab1Status" [reveal]="display1" [display]="badge1Hover"></app-phast-tabs-tooltip>
+      <app-phast-tabs-tooltip *ngIf="tab.step == 2" [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-phast-tabs-tooltip>
     </li>
   </ul>
 </nav>
 
-<nav *ngIf="currentTab.step == 1">
+<!--specTabs for system basics, op hours and op conditions-->
+<!-- <nav *ngIf="currentTab.step == 1">
   <ul class="tabs subtabs phast">
     <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab.step == tab.step}">
       <a (click)="changeSpecTab(tab)">{{tab.tabName}}</a>
     </li>
   </ul>
-</nav> 
+</nav>  -->

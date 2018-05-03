@@ -71,49 +71,49 @@ export class FsatComponent implements OnInit {
 
   getSettings(update?: boolean) {
     //get assessment settings
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          // if (update) {
-          //   this.addToast('Settings Saved');
-          //   if (this.saveContinue) {
-          //     this.continue(this.saveContinue)
-          //   }
-          // }
-        } else {
-          //if no settings found for assessment, check directory settings
-          this.getParentDirectorySettings(this.assessment.directoryId);
-        }
-      }
-    )
+    // this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
+    //   results => {
+    //     if (results.length != 0) {
+    //       this.settings = results[0];
+    //       // if (update) {
+    //       //   this.addToast('Settings Saved');
+    //       //   if (this.saveContinue) {
+    //       //     this.continue(this.saveContinue)
+    //       //   }
+    //       // }
+    //     } else {
+    //       //if no settings found for assessment, check directory settings
+    //       this.getParentDirectorySettings(this.assessment.directoryId);
+    //     }
+    //   }
+    // )
   }
 
   getParentDirectorySettings(parentId: number) {
-    this.indexedDbService.getDirectorySettings(parentId).then(
-      results => {
-        if (results.length != 0) {
-          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
-          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-          tmpSettings.createdDate = new Date();
-          tmpSettings.modifiedDate = new Date();
-          tmpSettings.assessmentId = this.assessment.id;
-          //create settings for assessment
-          this.indexedDbService.addSettings(tmpSettings).then(
-            results => {
-              //this.addToast('Settings Saved');
-              this.getSettings();
-            })
-        }
-        else {
-          //if no settings for directory check parent directory
-          this.indexedDbService.getDirectory(parentId).then(
-            results => {
-              this.getParentDirectorySettings(results.parentDirectoryId);
-            }
-          )
-        }
-      })
+    // this.indexedDbService.getDirectorySettings(parentId).then(
+    //   results => {
+    //     if (results.length != 0) {
+    //       let settingsForm = this.settingsService.getFormFromSettings(results[0]);
+    //       let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+    //       tmpSettings.createdDate = new Date();
+    //       tmpSettings.modifiedDate = new Date();
+    //       tmpSettings.assessmentId = this.assessment.id;
+    //       //create settings for assessment
+    //       this.indexedDbService.addSettings(tmpSettings).then(
+    //         results => {
+    //           //this.addToast('Settings Saved');
+    //           this.getSettings();
+    //         })
+    //     }
+    //     else {
+    //       //if no settings for directory check parent directory
+    //       this.indexedDbService.getDirectory(parentId).then(
+    //         results => {
+    //           this.getParentDirectorySettings(results.parentDirectoryId);
+    //         }
+    //       )
+    //     }
+    //   })
   }
   
   show203Modal() {

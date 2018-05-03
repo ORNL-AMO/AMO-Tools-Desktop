@@ -11,7 +11,8 @@
   <div class="setup-form-group">
     <div class="form-group">
       <label for="pumpType">Pump Type</label>
-      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')">
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="startSavePolling()" (focus)="focusField('pumpType')"
+        [ngClass]="{'indicate-different': isPumpStyleDifferent()}">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
         <option *ngIf="!baseline" [ngValue]="'Specified Optimal Efficiency'">Specified Optimal Efficiency</option>
       </select>
@@ -28,7 +29,7 @@
 
     <div class="form-group">
       <label for="pumpRPM">Pump Speed</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isPumpRpmDifferent()}">
         <input type="number" name="pumpRPM" min="0" step="10" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
           id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
@@ -38,7 +39,8 @@
 
     <div class="form-group">
       <label for="drive">Drive</label>
-      <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')">
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="startSavePolling()" (focus)="focusField('drive')"
+      [ngClass]="{'indicate-different': isDriveDifferent()}">
         <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
       </select>
     </div>
@@ -46,14 +48,14 @@
     <div class="form-group">
       <label for="fluidType">Fluid Type</label>
       <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()"
-        (focus)="focusField('fluidType')">
+        (focus)="focusField('fluidType')" [ngClass]="{'indicate-different': isFluidTypeDifferent()}">
         <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="fluidTemperature">Fluid Temperature</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isFluidTempDifferent()}">
         <input type="number" name="fluidTemperature" step="any" class="form-control {{different.fluidTemperature}}" formControlName="fluidTemperature"
           id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="tempUnit"></span>
@@ -64,12 +66,12 @@
     <div class="form-group">
       <label for="gravity">Specific Gravity</label>
       <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
-        (focus)="focusField('specificGravity')" onfocus="this.select();">
+        (focus)="focusField('specificGravity')" onfocus="this.select();" [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
     </div>
 
     <div class="form-group">
       <label for="viscosity">Kinematic Viscosity</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isKinematicViscosityDifferent()}">
         <input type="number" min="0" name="viscosity" step="any" class="form-control" formControlName="viscosity" id="viscosity"
           (input)="startSavePolling()" (focus)="focusField('viscosity')" onfocus="this.select();">
         <span class="input-group-addon units">cSt</span>
@@ -78,7 +80,7 @@
 
     <div class="form-group">
       <label for="stages">Stages</label>
-      <div name="stages" class="incrementor form-control input-group">
+      <div name="stages" class="incrementor form-control input-group" [ngClass]="{'indicate-different': isStagesDifferent()}">
         <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
           <i class="fa fa-minus"></i>
         </button>

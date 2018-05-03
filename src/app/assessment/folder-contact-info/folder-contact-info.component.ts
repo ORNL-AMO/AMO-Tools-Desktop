@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, Pipe } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsService } from '../../settings/settings.service';
+import { PhonePipe } from '../../shared/pipes/phone.pipe';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-folder-contact-info',
@@ -19,12 +21,17 @@ export class FolderContactInfoComponent implements OnInit {
   showModal: boolean = false;
   isParentSettings: boolean = false;
 
+  isExpanded: boolean = false;
+  // btnExpandText: string = "More Info";
+
+  settingsReady: boolean = false;
+
   showAddress: boolean = false;
   showFacilityContact: boolean = false;
   showAssessmentContact: boolean = false;
   showNoData: boolean = true;
   collapse: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
+  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.getSettings(this.directory.id, this.directory);
@@ -52,15 +59,19 @@ export class FolderContactInfoComponent implements OnInit {
   save() {
     if (this.isParentSettings) {
       this.indexedDbService.addSettings(this.settings).then(val => {
-        this.isParentSettings = false;
-        this.checkShow();
-        this.hideFacilityModal();
+        this.settingsDbService.setAll().then(() => {
+          this.isParentSettings = false;
+          this.checkShow();
+          this.hideFacilityModal();
+        });
       })
     } else {
       this.indexedDbService.putSettings(this.settings).then(returnVal => {
-        this.checkShow();
-        this.hideFacilityModal();
-      })
+        this.settingsDbService.setAll().then(() => {
+          this.checkShow();
+          this.hideFacilityModal();
+        })
+      });
     }
   }
 
@@ -109,25 +120,47 @@ export class FolderContactInfoComponent implements OnInit {
   }
 
   getSettings(id: number, directory?: Directory) {
-    this.indexedDbService.getDirectorySettings(id).then(settings => {
-      if (settings && settings.length != 0) {
-        if (this.isParentSettings) {
-          let settingsForm = this.settingsService.getFormFromSettings(settings[0]);
-          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-          tmpSettings.createdDate = new Date();
-          tmpSettings.modifiedDate = new Date();
-          tmpSettings.directoryId = this.directory.id;
-          tmpSettings.facilityInfo = settings[0].facilityInfo;
-          this.settings = tmpSettings;
-          this.checkShow();
-        } else {
-          this.settings = settings[0];
-          this.checkShow();
-        }
-      } else if (directory.parentDirectoryId) {
-        this.isParentSettings = true;
-        this.getSettings(directory.parentDirectoryId);
+    let settings: Settings = this.settingsDbService.getByDirectoryId(id);
+    if (settings) {
+      if (this.isParentSettings) {
+        let settingsForm = this.settingsService.getFormFromSettings(settings);
+        let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+        tmpSettings.createdDate = new Date();
+        tmpSettings.modifiedDate = new Date();
+        tmpSettings.directoryId = this.directory.id;
+        tmpSettings.facilityInfo = settings.facilityInfo;
+        this.settings = tmpSettings;
+        this.settingsReady = true;
+        this.checkShow();
+      } else {
+        this.settings = settings;
+        this.settingsReady = true;
+        this.checkShow();
       }
-    })
+    } else {
+      this.settingsReady = false;
+      // if (directory.parentDirectoryId) {
+      //   this.isParentSettings = true;
+      //   this.getSettings(directory.parentDirectoryId);
+      // }
+    }
   }
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
+    // if (this.isExpanded) {
+    //   this.revealFacilityInfo();
+    // }
+    // else {
+    //   this.hideFacilityInfo();
+    // }
+  }
+
+  // revealFacilityInfo() {
+  //   this.btnExpandText = "Less Info";
+  // }
+
+  // hideFacilityInfo() {
+  //   this.btnExpandText = "More Info";
+  // }
 }

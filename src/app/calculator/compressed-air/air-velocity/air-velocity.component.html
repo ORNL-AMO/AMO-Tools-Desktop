@@ -3,11 +3,11 @@
     <div class="row align-items-top calculator-panel">
       <div class="panel-column col-6 align-top">
         <div class="header">
-          <h3>Compressed Air - Air Velocity</h3>
+          <h3>Air Velocity</h3>
         </div>
         <div class="row">
           <div class="col-12 tab-content">
-            <app-air-velocity-form [inputs]="inputs" [outputs]="outputs" (calculate)="getAirVelocity($event)"></app-air-velocity-form>
+            <app-air-velocity-form [inputs]="inputs" [outputs]="outputs" (calculate)="getAirVelocity($event)" (emitChangeField)="setField($event)"></app-air-velocity-form>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Air Velocity Help</p>
+            <app-air-velocity-help [currentField]="currentField"></app-air-velocity-help>
           </div>
         </div>
       </div>
