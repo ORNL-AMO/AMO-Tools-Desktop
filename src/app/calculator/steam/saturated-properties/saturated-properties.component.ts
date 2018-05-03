@@ -33,4 +33,6 @@ export class SaturatedPropertiesComponent implements OnInit {
     }
   }
 
+  setTab(str: string) { }
+
 }

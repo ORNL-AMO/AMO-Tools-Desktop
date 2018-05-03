@@ -34,4 +34,6 @@ export class SteamPropertiesComponent implements OnInit {
     }
   }
 
+  setTab(str: string) { }
+
 }

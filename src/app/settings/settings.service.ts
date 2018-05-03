@@ -258,4 +258,48 @@ export class SettingsService {
     }
     return settings;
   }
+
+  setSteamUnits(settings: Settings): Settings {
+    if (settings.unitsOfMeasure === 'Imperial') {
+      if (!settings.steamTemperatureMeasurement) {
+        settings.steamTemperatureMeasurement = 'F';
+      }
+      if (!settings.steamPressureMeasurement) {
+        settings.steamPressureMeasurement = 'psi';
+      }
+      if (!settings.steamSpecificEnthalpyMeasurement) {
+        settings.steamSpecificEnthalpyMeasurement = 'Btu/lb';
+      }
+      if (!settings.steamSpecificEntropyMeasurement) {
+        settings.steamSpecificEntropyMeasurement = 'Btu/lb-F';
+      }
+      if (!settings.steamSpecificVolumeMeasurement) {
+        settings.steamSpecificVolumeMeasurement = 'ft3/lb';
+      }
+      if (!settings.steamMassFlowMeasurement) {
+        settings.steamMassFlowMeasurement = 'lb/hr';
+      }
+    } else {
+      if (!settings.steamTemperatureMeasurement) {
+        settings.steamTemperatureMeasurement = 'C';
+      }
+      if (!settings.steamPressureMeasurement) {
+        settings.steamPressureMeasurement = 'kPa';
+      }
+      if (!settings.steamSpecificEnthalpyMeasurement) {
+        settings.steamSpecificEnthalpyMeasurement = 'kJ/kg';
+      }
+      if (!settings.steamSpecificEntropyMeasurement) {
+        settings.steamSpecificEntropyMeasurement = 'kJ/kg/K';
+      }
+      if (!settings.steamSpecificVolumeMeasurement) {
+        settings.steamSpecificVolumeMeasurement = 'm3/kg';
+      }
+      if (!settings.steamMassFlowMeasurement) {
+        settings.steamMassFlowMeasurement = 'kg/hr';
+      }
+    }
+    return settings;
+  }
+
 }

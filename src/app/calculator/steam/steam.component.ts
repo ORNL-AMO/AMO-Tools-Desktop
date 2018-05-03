@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'app-steam',
@@ -11,9 +11,22 @@ export class SteamComponent implements OnInit {
   @Input()
   goCalcHome: boolean;
 
+  firstChange: boolean = true;
+
   constructor() { }
 
   ngOnInit() {
+    if (!this.selectedTool) {
+      this.selectedTool = 'none';
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      this.selectedTool = 'none';
+    } else {
+      this.firstChange = false;
+    }
   }
 
   showTool(str: string) {

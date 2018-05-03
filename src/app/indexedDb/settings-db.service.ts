@@ -67,6 +67,9 @@ export class SettingsDbService {
     if (!settings.temperatureMeasurement) {
       settings = this.settingService.setTemperatureUnit(settings);
     }
+
+    settings = this.settingService.setSteamUnits(settings);
+
     if (!settings.fuelCost) {
       settings.fuelCost = 3.99;
     }
