@@ -21,10 +21,12 @@
     <table class="table">
       <tr>
         <td>
-          Number of Furnaces
+          <span *ngIf="calculator.type == 'furnace'">Number of Furnaces</span>
+          <span *ngIf="calculator.type == 'pump'">Number of Pumps</span>
+          <span *ngIf="calculator.type == 'general'">Number of Units</span>
         </td>
         <td>
-          {{numFurnaces}}
+          {{numUnits}}
         </td>
       </tr>
       <tr>

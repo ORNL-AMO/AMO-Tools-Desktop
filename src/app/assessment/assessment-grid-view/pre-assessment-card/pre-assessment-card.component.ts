@@ -33,7 +33,7 @@ export class PreAssessmentCardComponent implements OnInit {
   @ViewChild('editModal') public editModal: ModalDirective;
   directories: Array<Directory>;
   editForm: FormGroup;
-  numFurnaces: number = 0;
+  numUnits: number = 0;
   energyUsed: number = 0;
   energyCost: number = 0;
   isFirstChange: boolean = true;
@@ -59,14 +59,14 @@ export class PreAssessmentCardComponent implements OnInit {
 
   getData() {
     if (this.preAssessmentExists) {
-      this.numFurnaces = this.calculator.preAssessments.length;
+      this.numUnits = this.calculator.preAssessments.length;
       let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
       this.energyUsed = _.sumBy(tmpResults, 'value');
       this.energyCost = _.sumBy(tmpResults, 'energyCost');
     } else {
       this.energyCost = 0;
       this.energyUsed = 0;
-      this.numFurnaces = 0;
+      this.numUnits = 0;
     }
   }
 

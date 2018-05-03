@@ -8,9 +8,17 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DesignedEnergySteamHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  inPreAssessment: boolean;
+
   constructor() { }
 
   ngOnInit() {
+    console.log('init');
+  }
+
+  ngOnChanges(){
+    console.log(this.currentField);
   }
 
 }
