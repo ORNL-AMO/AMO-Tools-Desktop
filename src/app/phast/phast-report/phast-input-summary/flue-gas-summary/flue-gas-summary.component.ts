@@ -3,6 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
+import { FlueGasMaterial } from '../../../../shared/models/materials';
 @Component({
   selector: 'app-flue-gas-summary',
   templateUrl: './flue-gas-summary.component.html',
@@ -45,6 +46,19 @@ export class FlueGasSummaryComponent implements OnInit {
   moistureInAirDiff: Array<boolean>;
   dischargeTempDiff: Array<boolean>;
   unburnedCarbonDiff: Array<boolean>;
+
+  c2h6Diff: Array<boolean>;
+  c3h8Diff: Array<boolean>;
+  c4h10cnh2nDiff: Array<boolean>;
+  ch4Diff: Array<boolean>;
+  coDiff: Array<boolean>;
+  co2Diff: Array<boolean>;
+  h2Diff: Array<boolean>;
+  h2oDiff: Array<boolean>;
+  n2Diff: Array<boolean>;
+  o2Diff: Array<boolean>;
+  so2Diff: Array<boolean>;
+
   numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
@@ -60,7 +74,18 @@ export class FlueGasSummaryComponent implements OnInit {
     this.moistureInAirDiff = new Array();
     this.dischargeTempDiff = new Array();
     this.unburnedCarbonDiff = new Array();
-
+    this.c2h6Diff = new Array();
+    this.c3h8Diff = new Array();
+    this.c4h10cnh2nDiff = new Array();
+    this.ch4Diff = new Array();
+    this.coDiff = new Array();
+    this.co2Diff = new Array();
+    this.h2Diff = new Array();
+    this.h2oDiff = new Array();
+    this.n2Diff = new Array();
+    this.o2Diff = new Array();
+    this.so2Diff = new Array();
+  
     this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
@@ -95,6 +120,17 @@ export class FlueGasSummaryComponent implements OnInit {
           this.moistureInAirDiff.push(false);
           this.dischargeTempDiff.push(false);
           this.unburnedCarbonDiff.push(false);
+          this.c2h6Diff.push(false);
+          this.c3h8Diff.push(false);
+          this.c4h10cnh2nDiff.push(false);
+          this.ch4Diff.push(false);
+          this.coDiff.push(false);
+          this.co2Diff.push(false);
+          this.h2Diff.push(false);
+          this.h2oDiff.push(false);
+          this.n2Diff.push(false);
+          this.o2Diff.push(false);
+          this.so2Diff.push(false);
           //index +1 for next loss
           index++;
         })
@@ -129,9 +165,10 @@ export class FlueGasSummaryComponent implements OnInit {
   getData(loss: FlueGas): FlueGasSummaryData {
     let tmpName, tmpGasTemp, tmpMethod, tmpOxygen, tmpExcessAir, tmpCombustionTemp, tmpFuelTemp,
       tmpMoisture, tmpDischargeTemp, tmpUnburnedCarbon;
+    let tmpGas: FlueGasMaterial;
 
     if (loss.flueGasType == 'By Volume') {
-      let tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId == val.id })
+      tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId == val.id })
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByVolume.flueGasTemperature;
       tmpMethod = loss.flueGasByVolume.oxygenCalculationMethod;
@@ -140,7 +177,7 @@ export class FlueGasSummaryComponent implements OnInit {
       tmpCombustionTemp = loss.flueGasByVolume.combustionAirTemperature;
       tmpFuelTemp = loss.flueGasByVolume.fuelTemperature;
     } else if (loss.flueGasType == 'By Mass') {
-      let tmpGas = this.massOptions.find(val => { return loss.flueGasByMass.gasTypeId == val.id })
+      tmpGas = this.massOptions.find(val => { return loss.flueGasByMass.gasTypeId == val.id })
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByMass.flueGasTemperature;
       tmpMethod = loss.flueGasByMass.oxygenCalculationMethod;
@@ -164,11 +201,11 @@ export class FlueGasSummaryComponent implements OnInit {
       fuelTemperature: tmpFuelTemp,
       moistureInAir: tmpMoisture,
       dischargeTemp: tmpDischargeTemp,
-      unburnedCarbon: tmpUnburnedCarbon
+      unburnedCarbon: tmpUnburnedCarbon,
+      material: tmpGas
     }
     return tmpSummaryData;
   }
-
 }
 
 
@@ -184,5 +221,6 @@ export interface FlueGasSummaryData {
   fuelTemperature: number,
   moistureInAir: number,
   dischargeTemp: number,
-  unburnedCarbon: number
+  unburnedCarbon: number,
+  material: FlueGasMaterial
 }

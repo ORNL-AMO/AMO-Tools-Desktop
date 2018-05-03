@@ -151,6 +151,154 @@
                 {{mod.unburnedCarbon}}
               </td>
             </tr>
+
+            <!-- fuel composition -->
+            <tr>
+              <td class="bold">
+                Fuel Composition
+              </td>
+              <td>
+              </td>
+              <td *ngFor="let mod of data.modifications">
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':c2h6Diff[index] == true}">
+                C
+                <sub>2</sub>H
+                <sub>6</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':c2h6Diff[index] == true}">
+                {{data.baseline.material.C2H6}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.C2H6, mod.material.C2H6, 'c2h6Diff', index)}">
+                {{mod.material.C2H6}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':c3h8Diff[index] == true}">
+                C
+                <sub>3</sub>H
+                <sub>8</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':c3h8Diff[index] == true}">
+                {{data.baseline.material.C3H8}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.C3H8, mod.material.C3H8, 'c3h8Diff', index)}">
+                {{mod.material.C3H8}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':c4h10cnh2nDiff[index] == true}">
+                C
+                <sub>4</sub>H
+                <sub>10</sub>CnH
+                <sub>2</sub>N
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':c4h10cnh2nDiff[index] == true}">
+                {{data.baseline.material.C4H10_CnH2n}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.C4H10_CnH2n, mod.material.C4H10_CnH2n, 'c4h10cnh2nDiff', index)}">
+                {{mod.material.C4H10_CnH2n}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':ch4Diff[index] == true}">
+                CH
+                <sub>4</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':ch4Diff[index] == true}">
+                {{data.baseline.material.CH4}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.CH4, mod.material.CH4, 'ch4Diff', index)}">
+                {{mod.material.CH4}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':coDiff[index] == true}">
+                CO
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':coDiff[index] == true}">
+                {{data.baseline.material.CO}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.CO, mod.material.CO, 'coDiff', index)}">
+                {{mod.material.CO}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':co2Diff[index] == true}">
+                CO
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':co2Diff[index] == true}">
+                {{data.baseline.material.CO2}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.CO2, mod.material.CO2, 'co2Diff', index)}">
+                {{mod.material.CO2}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':h2Diff[index] == true}">
+                H
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':h2Diff[index] == true}">
+                {{data.baseline.material.H2}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.H2, mod.material.H2, 'h2Diff', index)}">
+                {{mod.material.H2}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':h2oDiff[index] == true}">
+                H
+                <sub>2</sub>O
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':h2oDiff[index] == true}">
+                {{data.baseline.material.H2O}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.H2O, mod.material.H2O, 'h2oDiff', index)}">
+                {{mod.material.H2O}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':n2Diff[index] == true}">
+                N
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':n2Diff[index] == true}">
+                {{data.baseline.material.N2}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.N2, mod.material.N2, 'n2Diff', index)}">
+                {{mod.material.N2}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':o2Diff[index] == true}">
+                O
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':o2Diff[index] == true}">
+                {{data.baseline.material.O2}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.O2, mod.material.O2, 'o2Diff', index)}">
+                {{mod.material.O2}}%
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':so2Diff[index] == true}">
+                SO
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':so2Diff[index] == true}">
+                {{data.baseline.material.SO2}}%
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.material.SO2, mod.material.SO2, 'so2Diff', index)}">
+                {{mod.material.SO2}}%
+              </td>
+            </tr>
+
           </tbody>
         </table>
       </div>
