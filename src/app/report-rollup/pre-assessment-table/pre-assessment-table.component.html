@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-12">
+      <div class="output-summary">
+        <div class="summary-table">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Unit Name</th>
+                <th>Category</th>
+                <th>Energy Use ({{unit}}/hr)</th>
+                <th>% of Energy Use</th>
+                <th>Energy Cost ($/hr)</th>
+                <th>% of Energy Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of data; let i = index">
+                <td class="name" [ngStyle]="{'border-left-color': d.color}">
+                  {{d.name}}
+                </td>
+                <td>
+                  {{d.type}}
+                </td>
+                <td>
+                  {{d.energyUse | number:0}}
+                </td>
+                <td>
+                  {{d.percentEnergy | percent: '.2'}}
+                </td>
+                <td>
+                  {{d.energyCost | currency: 'CAD': 'symbol-narrow': '.2-2'}}
+                </td>
+                <td>
+                  {{d.percentEnergy | percent: '.2'}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -71,6 +71,9 @@
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
       <span class="sidebar-item" (click)="goToSettings()">Settings</span>
     </li>
+    <li [ngClass]="{'selected':dashboardView == 'materials'}">
+      <span class="sidebar-item" (click)="goToMaterials()">Custom Materials</span>
+    </li>
     <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
       <span class="sidebar-item" (click)="showTutorials()">Tutorials</span>
     </li>

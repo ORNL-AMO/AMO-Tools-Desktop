@@ -1,21 +1,22 @@
 <div class="card">
   <div class="card-body custom-card-body card-container col">
     <div class="row">
-      <div class="col-sm-6 col-md-6 card-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3>Create Solid Material</h3>
+              <h3 *ngIf="!editExistingMaterial">Create Solid Material</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Solid Material</h3>
             </div>
           </div>
         </div>
 
         <form>
-          <div class="form-section">
+          <div class="form-section" *ngIf="!editExistingMaterial">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
-              (focus)="focusField('selectedMaterial')">
+                (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
                 <option [ngValue]="null"></option>
               </select>
@@ -23,19 +24,25 @@
           </div>
           <div class="form-section">
             <label>
-              <h6>New Material:</h6>
+              <h6 *ngIf="!editExistingMaterial">New Material:</h6>
+              <h6 *ngIf="editExistingMaterial">Edit Material:</h6>
             </label>
             <div class="form-group">
               <label class="small" for="materialName">Material Name</label>
-              <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-              />
+              <div class="input-group" *ngIf="!editExistingMaterial">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                />
+              </div>
+              <div class="input-group" *ngIf="editExistingMaterial">
+                <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
+                />
+              </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group">
               <label class="small" for="latentHeat">Latent Heat of Fusion</label>
               <div class="input-group">
-                <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat"
-                (focus)="focusField('latentHeat')">
+                <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat" (focus)="focusField('latentHeat')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
               </div>
@@ -43,8 +50,7 @@
             <div class="form-group">
               <label class="small" for="meltingPoint">Melting Point</label>
               <div class="input-group">
-                <input type="number" id="meltingPoint" name="meltingPoint" class="form-control" [(ngModel)]="newMaterial.meltingPoint"
-                (focus)="focusField('meltingPoint')">
+                <input type="number" id="meltingPoint" name="meltingPoint" class="form-control" [(ngModel)]="newMaterial.meltingPoint" (focus)="focusField('meltingPoint')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
               </div>
@@ -53,7 +59,7 @@
               <label class="small" for="specificHeatLiquid">Specific heat of liquid from molten material</label>
               <div class="input-group">
                 <input type="number" id="specificHeatLiquid" name="specificHeatLiquid" class="form-control" [(ngModel)]="newMaterial.specificHeatLiquid"
-                (focus)="focusField('specificHeatLiquid')">
+                  (focus)="focusField('specificHeatLiquid')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
               </div>
@@ -62,7 +68,7 @@
               <label class="small" for="specificHeatSolid">Average specific heat of the solid material</label>
               <div class="input-group">
                 <input type="number" id="specificHeatSolid" name="specificHeatSolid" class="form-control" [(ngModel)]="newMaterial.specificHeatSolid"
-                (focus)="focusField('specificHeatSolid')">
+                  (focus)="focusField('specificHeatSolid')">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
               </div>
@@ -70,16 +76,52 @@
           </div>
         </form>
       </div>
-
-      <div class="col-sm-6 col-md-6 card-help-column">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
           <app-solid-load-charge-material-help [currentField]="currentField"></app-solid-load-charge-material-help>
         </div>
       </div>
+
+      <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+        <div class="text-center">
+          <div class="row phast align-items-top">
+            <div class="col-12">
+              <div class="header card-header">
+                <h3>Confirm Delete</h3>
+              </div>
+            </div>
+          </div>
+          <div class="delete-warning-container">
+            <div class="row">
+              <div class="col-12">
+                Material Name: {{newMaterial.substance}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                Are you sure you want to
+                <strong>
+                  <u>permentantly delete</u>
+                </strong> this material?
+                <br>This cannot be undone.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
+
+
+
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()"
+        [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()"
+        [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
   </div>
 </div>

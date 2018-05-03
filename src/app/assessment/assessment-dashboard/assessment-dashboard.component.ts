@@ -30,7 +30,7 @@ export class AssessmentDashboardComponent implements OnInit {
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
   @Output('emitPreAssessment')
-  emitPreAssessment = new EventEmitter<boolean>();
+  emitPreAssessment = new EventEmitter<number>();
   @Input()
   directorySettings: Settings;
 
@@ -103,7 +103,7 @@ export class AssessmentDashboardComponent implements OnInit {
     this.importEmit.emit(true);
   }
 
-  preAssessmentEmit(){
-    this.emitPreAssessment.emit(true);
+  preAssessmentEmit(selectedIndex: number){
+    this.emitPreAssessment.emit(selectedIndex);
   }
 }

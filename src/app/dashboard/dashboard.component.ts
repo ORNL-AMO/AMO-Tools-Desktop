@@ -26,6 +26,7 @@ import { CoreService } from '../core/core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
+import { PreAssessment } from '../calculator/utilities/pre-assessment/pre-assessment';
 declare const packageJson;
 
 @Component({
@@ -65,13 +66,13 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean = false;
   showPreAssessment: boolean = false;
   workingDirectorySettings: Settings;
-  workingDirectoryCalculator: Calculator;
   calcDataExists: boolean = false;
   dontShowSub: Subscription;
   tutorialShown: boolean = false;
   createAssessmentSub: Subscription;
   exportData: ImportExportData;
   exportAllSub: Subscription;
+  selectedCalcIndex: number;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
@@ -128,15 +129,16 @@ export class DashboardComponent implements OnInit {
     this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
     let tmpCalcs = this.calculatorDbService.getByDirectoryId(this.workingDirectory.id);
     if (tmpCalcs.length != 0) {
-      this.workingDirectoryCalculator = tmpCalcs[0];
+      this.workingDirectory.calculators = tmpCalcs;
       this.calcDataExists = true;
     } else {
-      this.workingDirectoryCalculator = {
+      this.workingDirectory.calculators = new Array<Calculator>();
+      let tmpCalc: Calculator = {
         directoryId: this.workingDirectory.id
       }
+      this.workingDirectory.calculators.push(tmpCalc);
       this.calcDataExists = false;
     }
-    this.workingDirectory.calculators = [this.workingDirectoryCalculator];
   }
 
   addCalculatorData(calcualtorData: Calculator) {
@@ -148,8 +150,6 @@ export class DashboardComponent implements OnInit {
         })
       });
     } else {
-      calcualtorData.directoryId = this.workingDirectory.id;
-      calcualtorData.name = this.workingDirectory.name + ' Pre-Assessment';
       this.indexedDbService.addCalculator(calcualtorData).then(() => {
         this.calculatorDbService.setAll().then(() => {
           this.hidePreAssessmentModal();
@@ -189,7 +189,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
-  showPreAssessmentModal() {
+  showPreAssessmentModal(calcIndex: number) {
+    if(calcIndex != undefined){
+      this.selectedCalcIndex = calcIndex;
+    }else{
+      let calcualtorData: Calculator = {
+        directoryId: this.workingDirectory.id
+      }
+      this.workingDirectory.calculators.push(calcualtorData);
+      this.selectedCalcIndex = this.workingDirectory.calculators.length-1;
+      this.calcDataExists = false;
+    }
     this.showPreAssessment = true;
     this.preAssessmentModal.show();
   }
@@ -230,6 +240,11 @@ export class DashboardComponent implements OnInit {
   showSettings() {
     this.selectedCalculator = '';
     this.dashboardView = 'settings';
+  }
+
+  showCustomMaterials() {
+    this.selectedCalculator = '';
+    this.dashboardView = 'custom-materials';
   }
 
   showContact() {
@@ -355,6 +370,7 @@ export class DashboardComponent implements OnInit {
   checkSelected() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();
+    let tmpArray3 = new Array();
     if (this.workingDirectory.assessments) {
       tmpArray = this.workingDirectory.assessments.filter(
         assessment => {
@@ -373,7 +389,17 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0 || this.workingDirectoryCalculator.selected) {
+    if (this.workingDirectory.calculators) {
+      tmpArray3 = this.workingDirectory.calculators.filter(
+        calc => {
+          console.log(calc.selected);
+          if (calc.selected) {
+            return calc;
+          }
+        }
+      )
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0 || tmpArray3) {
       return true;
     } else {
       return false;
@@ -400,12 +426,13 @@ export class DashboardComponent implements OnInit {
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
-      if (this.workingDirectoryCalculator) {
-        if (this.workingDirectoryCalculator.selected) {
-          this.reportRollupService.calcsArray.push(this.workingDirectoryCalculator);
+      this.workingDirectory.calculators.forEach(calc => {
+        if (calc.selected) {
+          this.reportRollupService.calcsArray.push(calc);
           this.reportRollupService.selectedCalcs.next(this.reportRollupService.calcsArray);
         }
-      }
+
+      })
       this.reportRollupService.getReportData(this.workingDirectory);
       //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
@@ -435,7 +462,7 @@ export class DashboardComponent implements OnInit {
 
   closeReport() {
     this.selectedItems = new Array();
-    this.workingDirectoryCalculator.selected = false;
+    this.workingDirectory.calculators.forEach(calc => calc.selected = false);
     this.workingDirectory.assessments.forEach(
       assessment => {
         assessment.selected = false;

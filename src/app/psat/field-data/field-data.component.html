@@ -93,7 +93,7 @@
       <label>
         <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
         <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
-        Optimize Pump and Motor combination automatically</label>
+        Optimize Pump and Motor combination for a Fixed Specific Speed</label>
     </div>
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
@@ -104,17 +104,17 @@
       </div>
       <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
     </div>
-    <div class="form-group">
-      <label>Fixed specific speed?</label>
-      <div name="fixedSpeed" class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" formControlName="fixedSpeed" value="Yes" (change)="focusField('fixedSpecificSpeed')">Yes
-        </label>
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" formControlName="fixedSpeed" value="No" (change)="focusField('fixedSpecificSpeed')">No
-        </label>
-      </div>
-    </div>
+    <!--<div class="form-group">-->
+      <!--<label>Fixed specific speed?</label>-->
+      <!--<div name="fixedSpeed" class="form-check">-->
+        <!--<label class="form-check-label">-->
+          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="Yes" (change)="focusField('fixedSpecificSpeed')">Yes-->
+        <!--</label>-->
+        <!--<label class="form-check-label">-->
+          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="No" (change)="focusField('fixedSpecificSpeed')">No-->
+        <!--</label>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="form-group">
       <label for="implementationCosts">Implementation Costs</label>
       <div class="input-group">

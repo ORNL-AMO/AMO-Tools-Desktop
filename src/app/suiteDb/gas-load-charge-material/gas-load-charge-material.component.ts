@@ -16,6 +16,12 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   closeModal = new EventEmitter<GasLoadChargeMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  editExistingMaterial: boolean;
+  @Input()
+  existingMaterial: GasLoadChargeMaterial;
+  @Input()
+  deletingMaterial: boolean;
   @Output('hideModal')
   hideModal = new EventEmitter();
 
@@ -27,20 +33,40 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   currentField: string = 'selectedMaterial';
   selectedMaterial: GasLoadChargeMaterial;
   allMaterials: Array<GasLoadChargeMaterial>;
+  allCustomMaterials: Array<GasLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
+  idbEditMaterialId: number;
+  sdbEditMaterialId: number;
   constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.canAdd = true;
-    this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
-    this.checkMaterialName();
-    // this.selectedMaterial = this.allMaterials[0];
     if (!this.settings) {
       this.settings = this.settingsDbService.getByDirectoryId(1);
     }
+    this.getMaterials();
+
   }
+
+  getMaterials() {
+    this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
+
+    if (this.editExistingMaterial) {
+      this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
+        this.allCustomMaterials = idbResults;
+        //id used by IDb
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.setExisting();
+      });
+    }
+    else {
+      this.canAdd = true;
+      this.checkMaterialName();
+    }
+  }
+
 
   addMaterial() {
     if (this.canAdd) {
@@ -57,10 +83,50 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  updateMaterial() {
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+    }
+    this.newMaterial.id = this.sdbEditMaterialId;
+    let suiteDbResult = this.suiteDbService.updateGasLoadChargeMaterial(this.newMaterial);
+    if (suiteDbResult == true) {
+      //need to set id for idb to put updates
+      this.newMaterial.id = this.idbEditMaterialId;
+      this.indexedDbService.putGasLoadChargeMaterial(this.newMaterial).then(val => {
+        this.closeModal.emit(this.newMaterial);
+      });
+    }
+  }
+
+  deleteMaterial() {
+    if (this.deletingMaterial && this.existingMaterial) {
+      let suiteDbResult = this.suiteDbService.deleteGasLoadChargeMaterial(this.sdbEditMaterialId);
+      if (suiteDbResult == true) {
+        this.indexedDbService.deleteGasLoadChargeMaterial(this.idbEditMaterialId).then(val => {
+          this.closeModal.emit(this.newMaterial);
+        });
+      }
+    }
+  }
 
   setExisting() {
-    if (this.selectedMaterial) {
-
+    if (this.editExistingMaterial && this.existingMaterial) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          specificHeatVapor: this.convertUnitsService.value(this.existingMaterial.specificHeatVapor).from('btulbF').to('kJkgC')
+        }
+      }
+      else {
+        this.newMaterial = {
+          id: this.existingMaterial.id,
+          substance: this.existingMaterial.substance,
+          specificHeatVapor: this.existingMaterial.specificHeatVapor
+        }
+      }
+    }
+    else if (this.selectedMaterial) {
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
@@ -77,17 +143,44 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+  checkEditMaterialName() {
+    let test = _.filter(this.allMaterials, (material) => {
+      if (material.id != this.sdbEditMaterialId) {
+        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      }
+    });
+
+    if (test.length > 0) {
+      this.nameError = 'This name is in use by another material';
+      this.isValidMaterialName = false;
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
+      this.isValidMaterialName = true;
+      this.nameError = null;
+    }
+  }
+
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;
-    } else {
+    }
+    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+      this.nameError = 'The material must have a name';
+      this.isValidMaterialName = false;
+    }
+    else {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
   }
+
   focusField(str: string) {
     this.currentField = str;
   }

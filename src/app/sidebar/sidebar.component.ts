@@ -35,6 +35,8 @@ export class SidebarComponent implements OnInit {
   dashboardView: string;
   @Output('emitGoToSettings')
   emitGoToSettings = new EventEmitter<boolean>();
+  @Output('emitGoToMaterials')
+  emitGoToMaterials = new EventEmitter<boolean>();
   @Output('emitGoToContact')
   emitGoToContact = new EventEmitter<boolean>();
   @Output('openModal')
@@ -108,6 +110,10 @@ export class SidebarComponent implements OnInit {
 
   goToSettings() {
     this.emitGoToSettings.emit(true);
+  }
+
+  goToMaterials() {
+    this.emitGoToMaterials.emit(true);
   }
 
   goHome() {

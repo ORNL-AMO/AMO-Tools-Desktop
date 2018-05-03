@@ -5,7 +5,7 @@
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
                 (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
-                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
+                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToMaterials)="showCustomMaterials()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
             </app-sidebar>
         </div>
 
@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()"
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal($event)"
                 [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
@@ -39,6 +39,9 @@
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'settings'">
             <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
+        </div>
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'custom-materials'">
+            <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
         </div>
     </div>
 </div>
@@ -195,10 +198,10 @@
                 </button>
             </div> -->
             <div class="modal-body" *ngIf="showPreAssessment">
-                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[0]" [settings]="workingDirectorySettings"></app-pre-assessment>
+                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[selectedCalcIndex]" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
             <div class="modal-footer justify-content-center">
-                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[0])">Save to Folder</button>
+                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[selectedCalcIndex])">Save to Folder</button>
                 <button class="btn btn-secondary save-btn" (click)="hidePreAssessmentModal()">Cancel</button>
             </div>
         </div>

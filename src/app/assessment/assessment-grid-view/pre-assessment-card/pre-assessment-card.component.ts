@@ -5,7 +5,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PreAssessmentService } from '../../../calculator/furnaces/pre-assessment/pre-assessment.service';
+import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 
@@ -20,13 +20,15 @@ export class PreAssessmentCardComponent implements OnInit {
   @Input()
   directory: Directory;
   @Output('viewPreAssessment')
-  viewPreAssessment = new EventEmitter<boolean>();
+  viewPreAssessment = new EventEmitter<number>();
   @Output('updateDirectory')
   updateDirectory = new EventEmitter();
   @Input()
   settings: Settings;
   @Input()
   isChecked: boolean;
+  @Input()
+  index: number;
 
   @ViewChild('editModal') public editModal: ModalDirective;
   directories: Array<Directory>;
@@ -35,26 +37,28 @@ export class PreAssessmentCardComponent implements OnInit {
   energyUsed: number = 0;
   energyCost: number = 0;
   isFirstChange: boolean = true;
+  preAssessmentExists: boolean;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
-  //  this.populateDirArray();
+    //  this.populateDirArray();
     this.getData();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isChecked && !this.isFirstChange) {
       this.calculator.selected = this.isChecked;
-    } else if (changes.calculator && !this.isFirstChange) {
-      this.getData();
-    }
-    else {
+    } else {
       this.isFirstChange = false;
+    }
+    if (changes.calculator) {
+      this.checkPreAssessment();
+      this.getData();
     }
   }
 
   getData() {
-    if (this.calculator.preAssessments) {
+    if (this.preAssessmentExists) {
       this.numFurnaces = this.calculator.preAssessments.length;
       let tmpResults = this.preAssessmentService.getResults(this.calculator.preAssessments, this.settings, 'MMBtu');
       this.energyUsed = _.sumBy(tmpResults, 'value');
@@ -67,14 +71,16 @@ export class PreAssessmentCardComponent implements OnInit {
   }
 
   checkPreAssessment() {
-    if (this.calculator.preAssessments) {
-      if (this.calculator.preAssessments.length > 0) {
-        return true;
+    if (this.calculator) {
+      if (this.calculator.preAssessments) {
+        if (this.calculator.preAssessments.length > 0) {
+          this.preAssessmentExists = true;
+        } else {
+          this.preAssessmentExists = false;
+        }
       } else {
-        return false;
+        this.preAssessmentExists = false;
       }
-    } else {
-      return false;
     }
   }
 
@@ -85,7 +91,11 @@ export class PreAssessmentCardComponent implements OnInit {
   // }
 
   showPreAssessment() {
-    this.viewPreAssessment.emit(true);
+    if (this.preAssessmentExists) {
+      this.viewPreAssessment.emit(this.index);
+    } else {
+      this.viewPreAssessment.emit(undefined);
+    }
   }
 
   showEditModal() {
@@ -121,7 +131,7 @@ export class PreAssessmentCardComponent implements OnInit {
     this.calculator.name = this.editForm.controls.name.value;
     this.calculator.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putCalculator(this.calculator).then(val => {
-      this.calculatorDbService.setAll().then(()=> {
+      this.calculatorDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideEditModal();
       })

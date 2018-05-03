@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let wallLossesSurface of wallLossesSurfaces; let i = index">
+    <div class="card card-item">
+      <div class="card-header summary-card-header phast">
+        {{wallLossesSurface.surface}}
+        <i class="fa fa-edit pull-right" (click)="editMaterial(wallLossesSurface.id)"></i>
+      </div>
+      <div class="card-body scroll-item summary-card-body">
+
+        <table class="table">
+          <tr>
+            <td>
+              Condition Factor:
+            </td>
+            <td>
+              {{wallLossesSurface.conditionFactor | sigFigs:'6'}}
+            </td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="card-footer summary-card-footer">
+        <div class="btn-delete-material last-updated pull-right" (click)="deleteMaterial(wallLossesSurface.id)">Delete Surface</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-wall-losses-surface>
+      </div>
+    </div>
+  </div>
+</div>
