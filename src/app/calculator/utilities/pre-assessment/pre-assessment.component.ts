@@ -113,6 +113,10 @@ export class PreAssessmentComponent implements OnInit {
   setType(str: string){
     this.calculator.type = str;
     this.type = str;
+    if(this.type == 'pump'){
+      this.calculator.preAssessments.length == 1;
+      this.calculator.preAssessments[0].settings.energySourceType = 'Electricity';
+    }
   }
 
   setCurrentField(str: string) {
