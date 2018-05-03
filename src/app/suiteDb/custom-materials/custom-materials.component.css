@@ -1,0 +1,36 @@
+.settings-container{
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+.group-label{
+    width: 100%;
+    font-size: large;
+}
+
+.group-label.general{
+    border-bottom: groove 2px #808B96;
+}
+
+.btn-danger{
+    padding: 6px;
+}
+
+.red{
+    color: red;
+}
+
+.section-divider {
+    width: 100%;
+    border-bottom: 2px dashed #808B96;
+    padding-top: 36px;
+}
+
+.btn-expand {
+    width: 100%;
+    height: 20px;
+}
+
+.btn-expand:hover {
+    cursor: pointer;
+}

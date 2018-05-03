@@ -1,0 +1,165 @@
+
+
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let flueGasMaterial of flueGasMaterials; let i = index">
+    <div class="card card-item">
+      <div class="card-header summary-card-header phast">
+        {{flueGasMaterial.substance}}
+        <i (click)="editMaterial(flueGasMaterial.id)" class="fa fa-edit pull-right"></i>
+      </div>
+      <div class="card-body scroll-item summary-card-body">
+
+        <table class="table">
+          <tr>
+            <td>
+              C
+              <sub>2</sub>H
+              <sub>6</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.C2H6 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              C
+              <sub>3</sub>H
+              <sub>8</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.C3H8 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              C
+              <sub>4</sub>H
+              <sub>10</sub>CnH
+              <sub>2</sub>n:
+            </td>
+            <td>
+              {{flueGasMaterial.C4H10_CnH2n | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              CH
+              <sub>4</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.CH4 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              CO:
+            </td>
+            <td>
+              {{flueGasMaterial.CO | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              CO
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.CO2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              H
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.H2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              H
+              <sub>2</sub>O:
+            </td>
+            <td>
+              {{flueGasMaterial.H2O | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              N
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.N2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              O
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.O2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              SO
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{flueGasMaterial.SO2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Heating Value:
+            </td>
+            <td>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{flueGasMaterial.heatingValue | sigFigs:'6'}} Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{flueGasMaterial.heatingValue | sigFigs:'6'}} kJ/kg</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Heating Value Volume:
+            </td>
+            <td>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{flueGasMaterial.heatingValueVolume | sigFigs:'6'}} Btu/SCF</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{flueGasMaterial.heatingValueVolume | sigFigs:'6'}} kJ/Nm
+                <sup>3</sup>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Specific Gravity:
+            </td>
+            <td>
+              {{flueGasMaterial.specificGravity | number:'2.0-3'}}
+            </td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="card-footer summary-card-footer">
+        <div class="last-updated pull-right btn-delete-material" (click)="deleteMaterial(flueGasMaterial.id)">Delete Material</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-flue-gas-material>
+      </div>
+    </div>
+  </div>
+</div>
