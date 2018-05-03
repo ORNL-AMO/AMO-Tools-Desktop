@@ -49,13 +49,9 @@
     <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}">
       <span class="sidebar-item" (click)="chooseCalculator('furnaces')">Process Heating</span>
     </li>
-    <!--
     <li [ngClass]="{'selected': selectedCalculator == 'steam'}">
-      <span (click)="chooseCalculator('steam')">Steam</span>
+      <span class="sidebar-item" (click)="chooseCalculator('steam')">Steam</span>
     </li>
-    <li [ngClass]="{'selected': selectedCalculator == 'motors'}">
-      <span (click)="chooseCalculator('motors')">Motors</span>
-    </li>-->
     <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}">
       <span class="sidebar-item" (click)="chooseCalculator('compressed-air')">Compressed Air</span>
     </li>
