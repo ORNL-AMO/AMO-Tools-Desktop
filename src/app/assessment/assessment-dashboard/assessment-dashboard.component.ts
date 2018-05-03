@@ -103,7 +103,7 @@ export class AssessmentDashboardComponent implements OnInit {
     this.importEmit.emit(true);
   }
 
-  preAssessmentEmit(selectedIndex: number){
+  preAssessmentEmit(selectedIndex?: number) {
     this.emitPreAssessment.emit(selectedIndex);
   }
 }

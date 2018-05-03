@@ -65,7 +65,8 @@ export class SteamPropertiesFormComponent implements OnInit {
     }
   };
 
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private steamService: SteamService) {
+  }
 
   ngOnInit() {
     this.steamPropertiesOutput = {
@@ -73,6 +74,10 @@ export class SteamPropertiesFormComponent implements OnInit {
     };
     this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
     this.calculate();
+  }
+
+  getDisplayUnit(unit: string) {
+    return this.steamService.getDisplayUnit(unit);
   }
 
   calculate() {
