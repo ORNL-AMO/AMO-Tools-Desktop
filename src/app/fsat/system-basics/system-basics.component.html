@@ -9,10 +9,13 @@
 <div class="setup-form-group">
   <div class="row" *ngIf="settingsForm">
     <div class="col-12">
-      <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()"></app-application-settings>
+      <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()" [inPsat]="true"></app-application-settings>
     </div>
+    <!-- <div class="col-12">
+        <app-psat-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-psat-settings>
+      </div> -->
     <div class="col-12">
-        <app-fsat-settings [(settingsForm)]="settingsForm" (save)="save()"></app-fsat-settings>
-      </div>
+      <app-fsat-settings [(settingsForm)]="settingsForm" (save)="save()"></app-fsat-settings>
+    </div>
   </div>
 </div>

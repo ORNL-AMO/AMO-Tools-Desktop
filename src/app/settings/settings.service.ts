@@ -39,7 +39,8 @@ export class SettingsService {
       'defaultPanelTab': [''],
       'fuelCost': [3.99],
       'steamCost': [4.69],
-      'electricityCost': [.066]
+      'electricityCost': [.066],
+      'densityMeasurement': ['']
     });
   }
 
@@ -75,7 +76,8 @@ export class SettingsService {
       'defaultPanelTab': [settings.defaultPanelTab],
       'fuelCost': [settings.fuelCost || 3.99],
       'steamCost': [settings.steamCost || 4.69],
-      'electricityCost': [settings.electricityCost || .066]
+      'electricityCost': [settings.electricityCost || .066],
+      'densityMeasurement': [settings.densityMeasurement]
     });
   }
 
@@ -112,7 +114,8 @@ export class SettingsService {
       defaultPanelTab: form.controls.defaultPanelTab.value,
       fuelCost: form.controls.fuelCost.value,
       steamCost: form.controls.steamCost.value,
-      electricityCost: form.controls.electricityCost.value
+      electricityCost: form.controls.electricityCost.value,
+      densityMeasurement: form.controls.densityMeasurement.value
     };
     return tmpSettings;
   }
@@ -148,7 +151,8 @@ export class SettingsService {
       defaultPanelTab: settings.defaultPanelTab,
       fuelCost: settings.fuelCost,
       steamCost: settings.steamCost,
-      electricityCost: settings.electricityCost
+      electricityCost: settings.electricityCost,
+      densityMeasurement: settings.densityMeasurement
     }
     return newSettings;
   }

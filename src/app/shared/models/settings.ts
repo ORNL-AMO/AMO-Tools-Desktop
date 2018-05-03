@@ -9,6 +9,7 @@ export interface Settings {
     flowMeasurement?: string,
     powerMeasurement?: string,
     distanceMeasurement?: string,
+    densityMeasurement?: string,
     pressureMeasurement?: string,
     steamPressureMeasurement?: string,
     steamTemperatureMeasurement?: string,

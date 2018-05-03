@@ -6,6 +6,10 @@ import { FsatService } from './fsat.service';
 import { Settings } from '../shared/models/settings';
 import { SettingsService } from '../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { Directory } from '../shared/models/directory';
 
 @Component({
   selector: 'app-fsat',
@@ -27,8 +31,14 @@ export class FsatComponent implements OnInit {
   mainTab: string;
   stepTab: string;
   settings: Settings;
-
-  constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService, private fsatService: FsatService, private settingsService: SettingsService) { }
+  isAssessmentSettings: boolean;
+  constructor(private activatedRoute: ActivatedRoute, 
+    private indexedDbService: IndexedDbService, 
+    private fsatService: FsatService, 
+    private settingsService: SettingsService,    
+    private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService) {}
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -54,13 +64,15 @@ export class FsatComponent implements OnInit {
 
   getContainerHeight() {
     if (this.content) {
-      let contentHeight = this.content.nativeElement.clientHeight;
-      let headerHeight = this.header.nativeElement.clientHeight;
-      let footerHeight = 0;
-      if (this.footer) {
-        footerHeight = this.footer.nativeElement.clientHeight;
-      }
-      this.containerHeight = contentHeight - headerHeight - footerHeight;
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      }, 100);
     }
   }
 
@@ -70,50 +82,38 @@ export class FsatComponent implements OnInit {
 
 
   getSettings(update?: boolean) {
-    //get assessment settings
-    // this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-    //   results => {
-    //     if (results.length != 0) {
-    //       this.settings = results[0];
-    //       // if (update) {
-    //       //   this.addToast('Settings Saved');
-    //       //   if (this.saveContinue) {
-    //       //     this.continue(this.saveContinue)
-    //       //   }
-    //       // }
-    //     } else {
-    //       //if no settings found for assessment, check directory settings
-    //       this.getParentDirectorySettings(this.assessment.directoryId);
-    //     }
-    //   }
-    // )
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (tmpSettings) {
+      this.settings = tmpSettings;
+      this.isAssessmentSettings = true;
+    } else {
+      //if no settings found for assessment, check directory settings
+      this.getParentDirectorySettings(this.assessment.directoryId);
+    }
   }
 
   getParentDirectorySettings(parentId: number) {
-    // this.indexedDbService.getDirectorySettings(parentId).then(
-    //   results => {
-    //     if (results.length != 0) {
-    //       let settingsForm = this.settingsService.getFormFromSettings(results[0]);
-    //       let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
-    //       tmpSettings.createdDate = new Date();
-    //       tmpSettings.modifiedDate = new Date();
-    //       tmpSettings.assessmentId = this.assessment.id;
-    //       //create settings for assessment
-    //       this.indexedDbService.addSettings(tmpSettings).then(
-    //         results => {
-    //           //this.addToast('Settings Saved');
-    //           this.getSettings();
-    //         })
-    //     }
-    //     else {
-    //       //if no settings for directory check parent directory
-    //       this.indexedDbService.getDirectory(parentId).then(
-    //         results => {
-    //           this.getParentDirectorySettings(results.parentDirectoryId);
-    //         }
-    //       )
-    //     }
-    //   })
+    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
+    if (dirSettings) {
+      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
+      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
+      tmpSettings.assessmentId = this.assessment.id;
+      //create settings for assessment
+      this.indexedDbService.addSettings(tmpSettings).then(
+        results => {
+          this.settingsDbService.setAll().then(() => {
+           // this.addToast('Settings Saved');
+            this.getSettings();
+          })
+        })
+    }
+    else {
+      //if no settings for directory check parent directory
+      let tmpDir: Directory = this.directoryDbService.getById(parentId);
+      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    }
   }
   
   show203Modal() {

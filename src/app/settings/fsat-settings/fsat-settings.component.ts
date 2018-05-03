@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-fsat-settings',
   templateUrl: './fsat-settings.component.html',
@@ -12,20 +13,104 @@ export class FsatSettingsComponent implements OnInit {
   @Output('save')
   save = new EventEmitter<boolean>();
 
-  fanCurveTypes: Array<string> = [
-    'Fan Total Pressure',
-    'Fan Static Pressure',
-    'Static Pressure Rise'
-  ]
+  pressureMeasurements: Array<any> = [];
+  flowMeasurements: Array<any> = [];
+  powerMeasurements: Array<any> = [];
+  densityMeasurements: Array<any> = [];
+  temperatureMeasurements: Array<any> = [];
 
-  conditions: Array<string> = [
-    'Base Case Fan',
-    'Optimized Fan',
-    'User Defined'
+  flowOptions: Array<string> = [
+    'gpm',
+    'MGD',
+    'm3/h',
+    'L/s',
+    'm3/min',
+    'impgpm'
+  ];
+
+  pressureOptions: Array<string> = [
+    'psi',
+    'Pa',
+    'torr',
+    'mmHG',
+    'inH2o'
+    //TODO: mm W.C (milimeter water column)
+  ];
+  powerOptions: Array<string> = [
+    'kW',
+    'hp'
+  ];
+  tempOptions: Array<string> = [
+    'C',
+    'F'
+    // 'K'
+  ];
+
+  densityOptions: Array<string> = [
+    'kgNm3',
+    'kgL',
+    'lbscf',
+    'lbgal'
   ]
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.flowOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.flowMeasurements.push(tmpPossibility);
+    })
+    this.pressureOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.pressureMeasurements.push(tmpPossibility);
+    })
+    this.powerOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.pressureMeasurements.push(tmpPossibility);
+    })
+    this.tempOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.temperatureMeasurements.push(tmpPossibility);
+    })
+    this.densityOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.densityMeasurements.push(tmpPossibility);
+    })
+    this.powerOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.powerMeasurements.push(tmpPossibility);
+    })
+
+  }
+
+  getUnitName(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.plural;
+    }
+  }
+
+  setCustom() {
+    this.settingsForm.patchValue({
+      unitsOfMeasure: 'Custom'
+    })
+    this.emitSave();
   }
 
   emitSave() {
