@@ -6,21 +6,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SteamComponent implements OnInit {
 
-  selectedToo: string;
+  selectedTool: string;
   firstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
     if (!this.selectedTool) {
       this.selectedTool = 'none';
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      this.selectedTool = 'none';
-    }else{
-      this.firstChange = false;
     }
   }
 
