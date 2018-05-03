@@ -231,7 +231,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, Math.floor((this.maxFuelSavings + 10.0) / 10) * 10 ]);
+      .domain([-10, Math.floor((this.maxFuelSavings + 10.0) / 10) * 10 ]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -320,7 +320,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       this.o2EnrichmentPoint.o2CombAirEnriched = i;
       const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
 
-      if (fuelSavings > 0 && fuelSavings < 100) {
+      if (fuelSavings > -10 && fuelSavings < 100) {
         if (fuelSavings > line.fuelSavings) {
           line.fuelSavings = fuelSavings;
         }
