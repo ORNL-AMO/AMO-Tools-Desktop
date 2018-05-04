@@ -31,6 +31,8 @@ import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorComponent } from './fan-motor/fan-motor.component';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { PsatService } from '../psat/psat.service';
+import { FanFieldDataComponent } from './fan-field-data/fan-field-data.component';
+import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -61,9 +63,9 @@ import { PsatService } from '../psat/psat.service';
     OperatingPointsHelpComponent, 
     FsatFluidComponent, 
     FanSetupComponent, 
-    FanMotorComponent
+    FanMotorComponent, FanFieldDataComponent
   ],
-  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService, FanMotorService, PsatService],
+  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService, FanMotorService, PsatService, FanFieldDataService],
   exports: [FsatComponent]
 })
 export class FsatModule { }

@@ -1,0 +1,237 @@
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Settings } from '../../shared/models/settings';
+import { FanFieldDataService, FanFieldData } from './fan-field-data.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { ModalDirective } from 'ngx-bootstrap';
+
+@Component({
+  selector: 'app-fan-field-data',
+  templateUrl: './fan-field-data.component.html',
+  styleUrls: ['./fan-field-data.component.css']
+})
+export class FanFieldDataComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  @Input()
+  selected: boolean;
+
+  @ViewChild('amcaModal') public amcaModal: ModalDirective;
+
+  loadEstimateMethods: Array<string> = [
+    'Power',
+    'Current'
+  ];
+
+  flowError: string = null;
+  voltageError: string = null;
+  costError: string = null;
+  opFractionError: string = null;
+  ratedPowerError: string = null;
+  marginError: string = null;
+
+  fieldDataForm: FormGroup;
+  constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService) { }
+
+  ngOnInit() {
+
+    this.init();
+  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.isFirstChange) {
+  //     if (changes.selected) {
+  //       if (!this.selected) {
+  //         this.disableForm();
+  //       } else {
+  //         this.enableForm();
+  //       }
+  //       if (!this.baseline) {
+  //         this.optimizeCalc(this.fieldDataForm.controls.optimizeCalculation.value);
+  //       }
+  //     }
+
+  //     if (changes.modificationIndex) {
+  //       this.init();
+  //     }
+  //   }
+  //   else {
+  //     this.isFirstChange = false;
+  //   }
+  // }
+
+  init() {
+    let mockData: FanFieldData = {
+      operatingFraction: 0,
+      flowRate: 1800,
+      pressure: 10,
+      loadEstimatedMethod: 'Power',
+      motorPower: 12,
+      cost: 1
+    }
+    this.fieldDataForm = this.fanFieldDataService.getFormFromObj(mockData);
+    this.checkForm(this.fieldDataForm);
+    // this.helpPanelService.currentField.next('operatingFraction');
+    //init warning messages;
+    this.checkCost(true);
+    this.checkFlowRate(true);
+    this.checkOpFraction(true);
+    this.checkRatedPower(true);
+    //this.cd.detectChanges();
+  }
+
+  disableForm() {
+    this.fieldDataForm.disable();
+  }
+
+  enableForm() {
+    this.fieldDataForm.enable();
+  }
+
+  focusField(str: string) {
+    // this.helpPanelService.currentField.next(str);
+  }
+
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
+
+  checkForm(form: any) {
+    // this.formValid = this.psatService.isFieldDataFormValid(form);
+    // if (this.formValid) {
+    //   this.isValid.emit(true)
+    // } else {
+    //   this.isInvalid.emit(true)
+    // }
+  }
+
+
+  showAmcaModal() {
+    if (this.selected) {
+      // this.openHeadTool.emit(true);
+      this.amcaModal.show();
+    }
+  }
+
+  hideAmcaModal() {
+    // this.closeHeadTool.emit(true);
+    // if (this.fieldDataForm.controls.head.value != this.psat.inputs.head) {
+    //   this.fieldDataForm.patchValue({
+    //     head: this.psat.inputs.head
+    //   })
+    // }
+    // this.amcaModal.hide();
+  }
+
+  save(){
+
+  }
+
+  checkFlowRate(bool?: boolean) {
+    if (!bool) {
+      this.save();
+    }
+    // if (this.fieldDataForm.controls.flowRate.pristine == false && this.fieldDataForm.controls.flowRate.value != '') {
+    //   let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.fieldDataForm.controls.flowRate.value, this.settings);
+    //   if (tmp.message) {
+    //     this.flowError = tmp.message;
+    //   } else {
+    //     this.flowError = null;
+    //   }
+    //   return tmp.valid;
+    // }
+    // else {
+    //   return null;
+    // }
+    return null;
+  }
+
+
+  checkCost(bool?: boolean) {
+    if (!bool) {
+      this.save();
+    }
+    if (this.fieldDataForm.controls.cost.value < 0) {
+      this.costError = 'Cannot have negative cost';
+      return false;
+    } else if (this.fieldDataForm.controls.cost.value > 1) {
+      this.costError = "Shouldn't be greater then 1";
+      return false;
+    } else if (this.fieldDataForm.controls.cost.value >= 0 && this.fieldDataForm.controls.cost.value <= 1) {
+      this.costError = null;
+      return true;
+    } else {
+      this.costError = null;
+      return null;
+    }
+  }
+
+  checkOpFraction(bool?: boolean) {
+    if (!bool) {
+      this.save();
+    }
+    if (this.fieldDataForm.controls.operatingFraction.value > 1) {
+      this.opFractionError = 'Operating fraction needs to be between 0 - 1';
+      return false;
+    }
+    else if (this.fieldDataForm.controls.operatingFraction.value < 0) {
+      this.opFractionError = "Cannot have negative operating fraction";
+      return false;
+    }
+    else {
+      this.opFractionError = null;
+      return true;
+    }
+  }
+  checkRatedPower(bool?: boolean) {
+    if (!bool) {
+      this.save();
+    }
+    // let tmpVal;
+    // if (this.fieldDataForm.controls.loadEstimatedMethod.value == 'Power') {
+    //   tmpVal = this.fieldDataForm.controls.motorKW.value;
+    // } else {
+    //   tmpVal = this.fieldDataForm.controls.motorAmps.value;
+    // }
+
+    // if (this.fieldDataForm.controls.horsePower.value && tmpVal) {
+    //   let val, compare;
+    //   if (this.settings.powerMeasurement == 'hp') {
+    //     val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
+    //     compare = this.convertUnitsService.value(this.fieldDataForm.controls.horsePower.value).from(this.settings.powerMeasurement).to('kW');
+    //   } else {
+    //     val = tmpVal;
+    //     compare = this.fieldDataForm.controls.horsePower.value;
+    //   }
+    //   compare = compare * 1.5;
+    //   if (val > compare) {
+    //     this.ratedPowerError = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+    //     return false
+    //   } else {
+    //     this.ratedPowerError = null;
+    //     return true
+    //   }
+    // } else {
+    //   return true;
+    // }
+    return true;
+  }
+
+  // optimizeCalc(bool: boolean) {
+  //   if (!bool || !this.selected) {
+  //     this.fieldDataForm.controls.sizeMargin.disable();
+  //     this.fieldDataForm.controls.fixedSpeed.disable();
+  //   } else {
+  //     this.fieldDataForm.controls.sizeMargin.enable();
+  //     this.fieldDataForm.controls.fixedSpeed.enable();
+  //   }
+  //   this.fieldDataForm.patchValue({
+  //     optimizeCalculation: bool
+  //   });
+  //   this.save();
+  // }
+}

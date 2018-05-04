@@ -12,6 +12,7 @@
       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'"></app-fsat-fluid>
       <app-fan-setup *ngIf="stepTab == 'fan-setup'"></app-fan-setup>
       <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings"></app-fan-motor>
+      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings"></app-fan-field-data>
       <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
       <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points>
