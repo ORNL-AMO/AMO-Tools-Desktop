@@ -5,7 +5,6 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { debug } from 'util';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 @Component({
@@ -97,7 +96,7 @@ export class PumpFluidComponent implements OnInit {
   };
 
   tempUnit: string;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {

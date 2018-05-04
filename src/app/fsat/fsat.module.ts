@@ -26,6 +26,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { SharedModule } from '../shared/shared.module';
+import { FanSetupComponent } from './fan-setup/fan-setup.component';
+import { FanSetupService } from './fan-setup/fan-setup.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -54,9 +56,9 @@ import { SharedModule } from '../shared/shared.module';
     RatedOperatingPointsFormComponent, 
     FanCurveDataHelpComponent, 
     OperatingPointsHelpComponent, 
-    FsatFluidComponent
+    FsatFluidComponent, FanSetupComponent
   ],
-  providers: [FsatService, HelpPanelService, FsatFluidService],
+  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService],
   exports: [FsatComponent]
 })
 export class FsatModule { }
