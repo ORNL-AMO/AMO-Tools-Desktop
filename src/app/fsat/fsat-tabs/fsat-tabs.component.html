@@ -15,9 +15,9 @@
             <a (click)="changeStepTab('fan-setup')">
               <span class="step-number">3</span>Fan</a>
           </li>
-          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'operating-points'}">
-            <a (click)="changeStepTab('operating-points')">
-              <span class="step-number">4</span>Tested Operating Points</a>
+          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-motor'}">
+            <a (click)="changeStepTab('fan-motor')">
+              <span class="step-number">4</span>Motor</a>
           </li>
           <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'rated-operating-points'}">
             <a (click)="changeStepTab('rated-operating-points')">

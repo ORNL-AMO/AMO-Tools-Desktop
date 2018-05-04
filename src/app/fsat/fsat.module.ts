@@ -28,6 +28,9 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { SharedModule } from '../shared/shared.module';
 import { FanSetupComponent } from './fan-setup/fan-setup.component';
 import { FanSetupService } from './fan-setup/fan-setup.service';
+import { FanMotorComponent } from './fan-motor/fan-motor.component';
+import { FanMotorService } from './fan-motor/fan-motor.service';
+import { PsatService } from '../psat/psat.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -56,9 +59,11 @@ import { FanSetupService } from './fan-setup/fan-setup.service';
     RatedOperatingPointsFormComponent, 
     FanCurveDataHelpComponent, 
     OperatingPointsHelpComponent, 
-    FsatFluidComponent, FanSetupComponent
+    FsatFluidComponent, 
+    FanSetupComponent, 
+    FanMotorComponent
   ],
-  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService],
+  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService, FanMotorService, PsatService],
   exports: [FsatComponent]
 })
 export class FsatModule { }
