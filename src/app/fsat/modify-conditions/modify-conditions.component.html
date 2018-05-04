@@ -1,0 +1,60 @@
+<nav class="hide-print">
+  <app-modify-conditions-tabs></app-modify-conditions-tabs>
+</nav>
+
+<div class="modify-conditions row psat" *ngIf="settings">
+
+  <!-- Baseline -->
+  <div class="modification baseline col-4 panel-column" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+    <div class="header">
+      <h3>Baseline</h3>
+    </div>
+    <div class="losses-container psat-losses-container">
+      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'"></app-fsat-info>
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"></app-fan-field-data>
+    </div>
+  </div>
+
+
+  <!-- Modifications Start -->
+  <div class="modification col-4 panel-column" (click)="togglePanel(modifiedSelected)" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+
+    <!-- Modification Header -->
+    <div class="header d-flex flex-row justify-content-between">
+      <h3>Modification</h3>
+    </div>
+
+    <!-- Forms -->
+    <div class="losses-container psat-losses-container">
+      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'"></app-fsat-info>
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"></app-fan-field-data>
+    </div>
+  </div>
+
+  <!-- No content message -->
+  <!-- <div class="col-4 no-data" *ngIf="!modificationExists" (click)="addModification()">
+    <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
+      opportunities.
+    </h3>
+    <button type="button" class="btn btn-primary">Add Modified Condition</button>
+    <p>Data will be copied from your current baseline condition.</p>
+  </div> -->
+
+  <!-- Help Panel -->
+  <div class="col-4 help-panel">
+    <app-help-panel></app-help-panel>
+    <!-- <div *ngIf="!modificationExists">
+      <div class="header">
+        <h3>Help</h3>
+      </div>
+      <p>Add Modification to view results</p>
+    </div> -->
+  </div>
+
+</div>

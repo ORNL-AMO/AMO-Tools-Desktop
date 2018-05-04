@@ -49,6 +49,7 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 .fsat .btn-primary{
     background-color: #FFE400;
+    border-color: #FFE400;
     color: black;
 }
 

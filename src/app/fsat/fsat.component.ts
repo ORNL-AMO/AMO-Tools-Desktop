@@ -10,6 +10,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fsat',
@@ -32,6 +33,10 @@ export class FsatComponent implements OnInit {
   stepTab: string;
   settings: Settings;
   isAssessmentSettings: boolean;
+  assessmentTab: string;
+  mainTabSub: Subscription;
+  stepTabSub: Subscription;
+  assessmentTabSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, 
     private indexedDbService: IndexedDbService, 
     private fsatService: FsatService, 
@@ -49,13 +54,21 @@ export class FsatComponent implements OnInit {
         this.getSettings();
       })
     })
-    this.fsatService.mainTab.subscribe(val => {
+    this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
     })
-    this.fsatService.stepTab.subscribe(val => {
+    this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      console.log(this.stepTab);
     })
+    this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.mainTabSub.unsubscribe();
+    this.assessmentTabSub.unsubscribe();
+    this.stepTabSub.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {

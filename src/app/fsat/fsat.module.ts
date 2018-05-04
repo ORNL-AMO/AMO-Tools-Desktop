@@ -33,6 +33,10 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { PsatService } from '../psat/psat.service';
 import { FanFieldDataComponent } from './fan-field-data/fan-field-data.component';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
+import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
+import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
+import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
+import { ModifyConditionsService } from './modify-conditions/modify-conditions.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -43,29 +47,42 @@ import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
     SettingsModule,
     Fsat203Module,
     ModalModule,
-    SharedModule
+    SharedModule,
+    ExploreOpportunitiesModule
   ],
   declarations: [
-    FsatComponent, 
-    FsatBannerComponent, 
-    FsatTabsComponent, 
-    SystemBasicsComponent, 
-    HelpPanelComponent, 
-    SystemBasicsHelpComponent, 
-    FsatBasicsHelpComponent, 
-    FsatInfoComponent, 
-    FanCurveDataComponent, 
-    OperatingPointsComponent, 
-    OperatingPointsFormComponent, 
-    RatedOperatingPointsComponent, 
-    RatedOperatingPointsFormComponent, 
-    FanCurveDataHelpComponent, 
-    OperatingPointsHelpComponent, 
-    FsatFluidComponent, 
-    FanSetupComponent, 
-    FanMotorComponent, FanFieldDataComponent
+    FsatComponent,
+    FsatBannerComponent,
+    FsatTabsComponent,
+    SystemBasicsComponent,
+    HelpPanelComponent,
+    SystemBasicsHelpComponent,
+    FsatBasicsHelpComponent,
+    FsatInfoComponent,
+    FanCurveDataComponent,
+    OperatingPointsComponent,
+    OperatingPointsFormComponent,
+    RatedOperatingPointsComponent,
+    RatedOperatingPointsFormComponent,
+    FanCurveDataHelpComponent,
+    OperatingPointsHelpComponent,
+    FsatFluidComponent,
+    FanSetupComponent,
+    FanMotorComponent, 
+    FanFieldDataComponent, 
+    ModifyConditionsComponent, 
+    ModifyConditionsTabsComponent
   ],
-  providers: [FsatService, HelpPanelService, FsatFluidService, FanSetupService, FanMotorService, PsatService, FanFieldDataService],
+  providers: [
+    FsatService, 
+    HelpPanelService, 
+    FsatFluidService, 
+    FanSetupService, 
+    FanMotorService, 
+    PsatService, 
+    FanFieldDataService, 
+    ModifyConditionsService
+  ],
   exports: [FsatComponent]
 })
 export class FsatModule { }

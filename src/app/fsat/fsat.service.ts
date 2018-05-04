@@ -9,11 +9,13 @@ declare var fanAddon: any;
 export class FsatService {
 
 
-  mainTab: BehaviorSubject<string>
+  mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
+  assessmentTab: BehaviorSubject<string>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
+    this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
   }
 
   test() {
