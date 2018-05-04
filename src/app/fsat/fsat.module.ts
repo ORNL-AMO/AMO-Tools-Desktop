@@ -23,6 +23,9 @@ import { FanCurveDataHelpComponent } from './help-panel/fan-curve-data-help/fan-
 import { OperatingPointsHelpComponent } from './help-panel/operating-points-help/operating-points-help.component';
 import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
+import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,10 +35,28 @@ import { ModalModule } from 'ngx-bootstrap';
     SettingsModule,
     SettingsModule,
     Fsat203Module,
-    ModalModule
+    ModalModule,
+    SharedModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent, FsatBasicsHelpComponent, FsatInfoComponent, FanCurveDataComponent, OperatingPointsComponent, OperatingPointsFormComponent, RatedOperatingPointsComponent, RatedOperatingPointsFormComponent, FanCurveDataHelpComponent, OperatingPointsHelpComponent],
-  providers: [FsatService, HelpPanelService],
+  declarations: [
+    FsatComponent, 
+    FsatBannerComponent, 
+    FsatTabsComponent, 
+    SystemBasicsComponent, 
+    HelpPanelComponent, 
+    SystemBasicsHelpComponent, 
+    FsatBasicsHelpComponent, 
+    FsatInfoComponent, 
+    FanCurveDataComponent, 
+    OperatingPointsComponent, 
+    OperatingPointsFormComponent, 
+    RatedOperatingPointsComponent, 
+    RatedOperatingPointsFormComponent, 
+    FanCurveDataHelpComponent, 
+    OperatingPointsHelpComponent, 
+    FsatFluidComponent
+  ],
+  providers: [FsatService, HelpPanelService, FsatFluidService],
   exports: [FsatComponent]
 })
 export class FsatModule { }

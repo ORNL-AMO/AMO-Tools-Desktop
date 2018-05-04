@@ -9,6 +9,7 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment" (emitSave)="saveSettings()"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <app-fsat-info *ngIf="stepTab == 'fsat-info'"></app-fsat-info>
+      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'"></app-fsat-fluid>
       <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
       <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points>

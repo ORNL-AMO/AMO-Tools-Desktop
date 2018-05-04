@@ -54,6 +54,7 @@ export class FsatComponent implements OnInit {
     })
     this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
+      console.log(this.stepTab);
     })
   }
   ngAfterViewInit() {
