@@ -37,6 +37,8 @@ export class FsatComponent implements OnInit {
   mainTabSub: Subscription;
   stepTabSub: Subscription;
   assessmentTabSub: Subscription;
+  //TODO: Add Modification logic
+  modificationExists: boolean = true;
   constructor(private activatedRoute: ActivatedRoute, 
     private indexedDbService: IndexedDbService, 
     private fsatService: FsatService, 

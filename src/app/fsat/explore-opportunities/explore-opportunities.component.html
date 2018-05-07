@@ -1,3 +1,56 @@
-<p>
-  explore-opportunities works!
-</p>
+<div class="container-fluid fsat">
+	<div class="row modify-conditions panel-container">
+		<div *ngIf="modificationExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+			<div class="header">
+				<h3>Select Potential Adjustment Projects</h3>
+			</div>
+			<p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
+			<app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()"
+			 (changeField)="focusField($event)" (emitOptimize)="optimize()">
+			</app-explore-opportunities-form>
+
+		</div>
+		<div *ngIf="!modificationExists" class="no-data col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+			<h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
+				opportunities.</h3>
+			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
+			<p>Data will be copied from your current baseline condition.</p>
+		  </div>
+		<div class="col-md-6 help-panel">
+			<div class="row">
+				<ul class="tabs primary tab-row">
+					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+						<a class="border-left-0" (click)="setTab('results')">Results</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+						<a (click)="setTab('sankey')">Sankey</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
+						<a (click)="setTab('help')">Help</a>
+					</li>
+				</ul>
+			</div>
+			<div class="explore-help-panel" *ngIf="tabSelect == 'help'">
+				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings">
+				</app-explore-opportunities-help>
+			</div>
+			
+
+			<!-- <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
+			 *ngIf="tabSelect == 'sankey' && modificationExists">
+			</app-explore-opportunities-sankey> -->
+
+			<div class="panel-results" *ngIf="modificationExists">
+				<!-- <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
+				</app-explore-opportunities-results> -->
+			</div>
+			<div  *ngIf="!modificationExists && tabSelect != 'help'">
+				<!--Placeholder for help text -->
+				<p>Explore Opportunities to view results</p>
+			</div>
+
+			<!-- End .help-panel -->
+		</div>
+	</div>
+</div>

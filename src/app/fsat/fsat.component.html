@@ -23,7 +23,8 @@
   </div>
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'"></app-explore-opportunities>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
+      (saved)="save()" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings"></app-modify-conditions>
   </div>
 
