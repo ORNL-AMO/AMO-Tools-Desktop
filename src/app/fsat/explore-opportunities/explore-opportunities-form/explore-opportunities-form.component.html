@@ -8,7 +8,7 @@
     </li>
     <li>
       <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
+        [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-rated-motor-form>
     </li>
     <li>
       <app-fan-data-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"

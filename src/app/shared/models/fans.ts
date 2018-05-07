@@ -34,7 +34,8 @@ export interface FanMotor {
   efficiencyClass: string,
   efficiency?: number,
   motorVoltage: number,
-  fullLoadAmps: number
+  fullLoadAmps: number,
+  optimize?: boolean
 }
 
 export interface FanSetup {
