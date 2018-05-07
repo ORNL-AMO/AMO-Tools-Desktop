@@ -49,3 +49,7 @@ ul{
 .navbar{
     padding: 0px;
 }
+
+.pills-nav .disabled span {
+    color: #ABB2B9;
+}

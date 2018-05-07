@@ -1,8 +1,8 @@
 <div class="help-panel">
-    <div class="row" *ngIf="!inSetup" style="margin: 0px;">
+    <div class="row m-0" *ngIf="!inSetup">
         <ul class="tabs primary tab-row">
             <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Results</a>
+                <a class="border-left-0" (click)="setTab('results')">Results</a>
             </li><!--
             --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>

@@ -3,7 +3,7 @@
     <div class="col-12 tab-col">
     <ul class="tabs primary tab-row">
       <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
-        <a (click)="setTab('results')">Results</a>
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
       </li><!--
       --><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help', 'tab-3': !inSetup, 'tab-2': inSetup}">
         <a (click)="setTab('help')">Help</a>

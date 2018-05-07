@@ -8,11 +8,11 @@
     <div class="col-6 panel-column modification">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment" (emitSave)="saveSettings()"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
-      <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true"></app-fsat-info>
-      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true"></app-fsat-fluid>
-      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [inSetup]="true"></app-fan-setup>
-      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true"></app-fan-motor>
-      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true"></app-fan-field-data>
+      <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info>
+      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true"></app-fsat-fluid>
+      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true"></app-fan-setup>
+      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true"></app-fan-motor>
+      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true"></app-fan-field-data>
       <!-- <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
       <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points> -->
@@ -28,7 +28,7 @@
   </div>
 
 
-  <div #footer id="fsatFooter" class="footer hide-print row">
+  <div #footer id="fsatFooter" class="footer hide-print row m-0">
     <div class="col-12">
       <div class="pull-right">
         <button class="btn btn-secondary">Save</button>

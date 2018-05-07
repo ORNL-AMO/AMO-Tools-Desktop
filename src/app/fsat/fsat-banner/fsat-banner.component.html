@@ -31,16 +31,16 @@
         <li [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')">
           <span>Assessment</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">
           <span>Diagram</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
           <span>Report</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">
           <span>Sankey</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
           <span>Calculators</span>
         </li>
       </ul>
