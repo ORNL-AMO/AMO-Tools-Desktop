@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FsatService } from '../fsat.service';
 import { Subscription } from 'rxjs';
+import { CompareService } from '../compare.service';
+import { FSAT } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -15,7 +17,9 @@ export class FsatTabsComponent implements OnInit {
   mainTabSub: Subscription;
   stepTabSub: Subscription;
   assessmentTabSub: Subscription;
-  constructor(private fsatService: FsatService) { }
+  modSubscription: Subscription;
+  selectedModification: FSAT;
+  constructor(private fsatService: FsatService, private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -28,12 +32,19 @@ export class FsatTabsComponent implements OnInit {
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     })
+
+    this.modSubscription = this.compareService.selectedModification.subscribe(val => {
+      this.selectedModification = val;
+      console.log(this.selectedModification);
+      this.cd.detectChanges();
+    })
   }
 
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.stepTabSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
+    this.modSubscription.unsubscribe();
   }
 
   changeStepTab(str: string) {
@@ -42,5 +53,9 @@ export class FsatTabsComponent implements OnInit {
 
   changeAssessmentTab(str: string){
     this.fsatService.assessmentTab.next(str);
+  }
+
+  selectModification() {
+    this.compareService.openModificationModal.next(true);
   }
 }

@@ -21,6 +21,7 @@ import { CompareService } from './compare.service';
   styleUrls: ['./fsat.component.css']
 })
 export class FsatComponent implements OnInit {
+  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
 
   @ViewChild('fsat203Modal') public fsat203Modal: ModalDirective;
   @ViewChild('header') header: ElementRef;
@@ -48,6 +49,7 @@ export class FsatComponent implements OnInit {
   addNewSub: Subscription;
   showAdd: boolean;
   isModalOpen: boolean;
+  openModSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -68,6 +70,7 @@ export class FsatComponent implements OnInit {
           if (this._fsat.modifications.length != 0) {
             this.modificationExists = true;
             this.modificationIndex = 0;
+            this.compareService.setCompareVals(this._fsat, 0);
           }
         } else {
           this._fsat.modifications = new Array<Modification>();
@@ -92,7 +95,11 @@ export class FsatComponent implements OnInit {
         this.showAddNewModal();
       }
     })
-
+    this.openModSub = this.compareService.openModificationModal.subscribe(val => {
+      if (val) {
+        this.selectModificationModal()
+      }
+    })
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._fsat) {
         this.modificationIndex = _.findIndex(this._fsat.modifications, (val) => {
@@ -105,9 +112,14 @@ export class FsatComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.compareService.baselineFSAT = undefined;
+    this.compareService.modifiedFSAT = undefined;
+    this.compareService.selectedModification.next(undefined);
     this.mainTabSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
     this.stepTabSub.unsubscribe();
+    this.openModSub.unsubscribe();
+    this.selectedModSubscription.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -178,11 +190,11 @@ export class FsatComponent implements OnInit {
   }
 
   showAddNewModal() {
-    this.isModalOpen = true;
+    //this.isModalOpen = true;
     this.addNewModal.show();
   }
   closeAddNewModal() {
-    this.isModalOpen = false;
+    //this.isModalOpen = false;
     this.fsatService.openNewModal.next(false);
     this.addNewModal.hide();
   }
@@ -190,11 +202,20 @@ export class FsatComponent implements OnInit {
   saveNewMod(mod: Modification) {
     this._fsat.modifications.push(mod);
     this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
-    this.save();
     this.closeAddNewModal();
+    this.save();
   }
 
   save() {
+    if (this._fsat.modifications) {
+      if (this._fsat.modifications.length == 0) {
+        this.modificationExists = false;
+      } else {
+        this.modificationExists = true;
+      }
+    } else {
+      this.modificationExists = false;
+    }
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
@@ -202,5 +223,15 @@ export class FsatComponent implements OnInit {
         // this.psatService.getResults.next(true);
       })
     })
+  }
+
+  selectModificationModal() {
+    this.isModalOpen = true;
+    this.changeModificationModal.show();
+  }
+  closeSelectModification() {
+    this.isModalOpen = false;
+    this.compareService.openModificationModal.next(false);
+    this.changeModificationModal.hide();
   }
 }

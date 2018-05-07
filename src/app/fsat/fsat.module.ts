@@ -39,6 +39,7 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { ModifyConditionsService } from './modify-conditions/modify-conditions.service';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { CompareService } from './compare.service';
+import { ModificationListComponent } from './modification-list/modification-list.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -73,7 +74,7 @@ import { CompareService } from './compare.service';
     FanMotorComponent, 
     FanFieldDataComponent, 
     ModifyConditionsComponent, 
-    ModifyConditionsTabsComponent, AddModificationComponent
+    ModifyConditionsTabsComponent, AddModificationComponent, ModificationListComponent
   ],
   providers: [
     FsatService, 
