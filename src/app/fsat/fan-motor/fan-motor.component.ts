@@ -15,7 +15,9 @@ export class FanMotorComponent implements OnInit {
   settings: Settings;
   @Input()
   selected: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
@@ -64,30 +66,35 @@ export class FanMotorComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
-    // if (this.psat.inputs.optimize_calculation) {
-    //   this.disableOptimized();
-    // }
-    // if (!this.selected) {
-    //   this.disableForm();
-    // }
+    if(!this.selected){
+      this.disableForm();
+    }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      // if (!this.selected) {
-      //   this.disableForm();
-      // } else {
-      //   this.enableForm();
-      // }
-      if (changes.modificationIndex) {
-        this.init();
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.selected && !changes.selected.firstChange){
+      if(this.selected){
+        this.enableForm();
+      }else{
+        this.disableForm();
       }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex) {
+      this.init();
     }
   }
 
+  disableForm() {
+    this.fanMotorForm.controls.frequency.disable();
+    this.fanMotorForm.controls.horsePower.disable();
+    this.fanMotorForm.controls.efficiencyClass.disable();
+  }
+
+  enableForm() {
+    this.fanMotorForm.controls.frequency.enable();
+    this.fanMotorForm.controls.horsePower.enable();
+    this.fanMotorForm.controls.efficiencyClass.enable();
+  }
   init() {
     this.checkForm(this.fanMotorForm);
    // this.helpPanelService.currentField.next('lineFrequency');

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService, FanFieldData } from './fan-field-data.service';
@@ -15,7 +15,9 @@ export class FanFieldDataComponent implements OnInit {
   settings: Settings;
   @Input()
   selected: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
 
   loadEstimateMethods: Array<string> = [
@@ -34,30 +36,32 @@ export class FanFieldDataComponent implements OnInit {
   constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-
     this.init();
+    if(!this.selected){
+      this.disableForm();
+    }
   }
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.isFirstChange) {
-  //     if (changes.selected) {
-  //       if (!this.selected) {
-  //         this.disableForm();
-  //       } else {
-  //         this.enableForm();
-  //       }
-  //       if (!this.baseline) {
-  //         this.optimizeCalc(this.fieldDataForm.controls.optimizeCalculation.value);
-  //       }
-  //     }
 
-  //     if (changes.modificationIndex) {
-  //       this.init();
-  //     }
-  //   }
-  //   else {
-  //     this.isFirstChange = false;
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.selected && !changes.selected.firstChange){
+      if(this.selected){
+        this.enableForm();
+      }else{
+        this.disableForm();
+      }
+    }
+    if (changes.modificationIndex) {
+      this.init();
+    }
+  }
+
+  disableForm() {
+    this.fieldDataForm.controls.loadEstimatedMethod.disable();
+  }
+
+  enableForm() {
+    this.fieldDataForm.controls.loadEstimatedMethod.enable();
+  }
 
   init() {
     let mockData: FanFieldData = {
@@ -77,14 +81,6 @@ export class FanFieldDataComponent implements OnInit {
     this.checkOpFraction(true);
     this.checkRatedPower(true);
     //this.cd.detectChanges();
-  }
-
-  disableForm() {
-    this.fieldDataForm.disable();
-  }
-
-  enableForm() {
-    this.fieldDataForm.enable();
   }
 
   focusField(str: string) {

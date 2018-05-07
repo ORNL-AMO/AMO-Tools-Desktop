@@ -1,5 +1,5 @@
 <form [formGroup]="fieldDataForm">
-  <div class="row">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
       <div class="header">
         <h3>Field Data</h3>
@@ -10,15 +10,15 @@
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();">
+        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();" [readonly]="!selected">
       <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
     </div>
 
     <div class="form-group">
       <label for="cost">Cost</label>
       <div class="input-group">
-        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="cost"
-          (input)="checkCost()" (focus)="focusField('cost')" onfocus="this.select();">
+        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="cost" (input)="checkCost()"
+          (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
@@ -28,7 +28,7 @@
       <label for="flowRate">Flow Rate</label>
       <div class="input-group">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
-          (focus)="focusField('flowRate')" onfocus="this.select();">
+          (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
         <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
 
@@ -44,7 +44,7 @@
       </label>
       <div class="input-group">
         <input name="pressure" type="number" min="0.1" step="any" class="form-control" formControlName="pressure" id="pressure" (input)="save()"
-          (focus)="focusField('pressure')" onfocus="this.select();">
+          (focus)="focusField('pressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
@@ -61,8 +61,8 @@
     <div class="form-group">
       <label for="motorPower">Motor Power</label>
       <div class="input-group">
-        <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower" (input)="checkRatedPower()"
-          (focus)="focusField('motorPower')" onfocus="this.select();">
+        <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower"
+          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group units">hp</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
@@ -71,7 +71,7 @@
       <label for="motorAmps">Motor Current</label>
       <div class="input-group">
         <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
-          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();">
+          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();"  [readonly]="!selected">
         <span class="input-group-addon units">A</span>
       </div>
     </div> -->

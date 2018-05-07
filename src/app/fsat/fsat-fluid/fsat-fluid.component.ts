@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Fsat203Service } from '../../calculator/fans/fsat-203/fsat-203.service';
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
@@ -32,6 +32,10 @@ export class FsatFluidComponent implements OnInit {
   gasDone: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<BaseGasDensity>();
+  @Input()
+  inSetup: boolean;
+  @Input()
+  selected: boolean;
 
   gasDensityForm: FormGroup;
 
@@ -50,7 +54,33 @@ export class FsatFluidComponent implements OnInit {
 
   ngOnInit() {
     this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.fanGasDensity);
+    if(!this.selected){
+      this.disableForm();
+    }
   }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.selected && !changes.selected.firstChange){
+      if(this.selected){
+        this.enableForm();
+      }else{
+        this.disableForm();
+      }
+    }
+  }
+
+  disableForm() {
+    this.gasDensityForm.controls.gasType.disable();
+    this.gasDensityForm.controls.inputType.disable();
+    // this.chargeMaterialForm.disable();
+  }
+
+  enableForm() {
+    this.gasDensityForm.controls.gasType.enable();
+    this.gasDensityForm.controls.inputType.enable();
+    // this.chargeMaterialForm.enable();
+  }
+
   save() {
     this.fanGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
     this.emitSave.emit(this.fanGasDensity);

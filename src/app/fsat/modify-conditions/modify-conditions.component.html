@@ -2,19 +2,19 @@
   <app-modify-conditions-tabs></app-modify-conditions-tabs>
 </nav>
 
-<div class="modify-conditions row psat" *ngIf="settings">
+<div class="modify-conditions row fsat" *ngIf="settings">
 
   <!-- Baseline -->
   <div class="modification baseline col-4 panel-column" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
     </div>
-    <div class="losses-container psat-losses-container">
-      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'"></app-fsat-info>
-      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'"></app-fsat-fluid>
-      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'"></app-fan-setup>
-      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings"></app-fan-motor>
-      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"></app-fan-field-data>
+    <div class="losses-container fsat-losses-container">
+      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected"></app-fsat-info>
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="baselineSelected"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="baselineSelected"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected"></app-fan-field-data>
     </div>
   </div>
 
@@ -28,12 +28,12 @@
     </div>
 
     <!-- Forms -->
-    <div class="losses-container psat-losses-container">
-      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'"></app-fsat-info>
-      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'"></app-fsat-fluid>
-      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'"></app-fan-setup>
-      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings"></app-fan-motor>
-      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings"></app-fan-field-data>
+    <div class="losses-container fsat-losses-container">
+      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected"></app-fsat-info>
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="modifiedSelected"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="modifiedSelected"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"></app-fan-field-data>
     </div>
   </div>
 

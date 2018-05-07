@@ -1,5 +1,5 @@
 <form [formGroup]="fanInfoForm" *ngIf="fanInfoForm">
-  <div class="row">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
       <div class="header">
         <h3>Fan Information</h3>

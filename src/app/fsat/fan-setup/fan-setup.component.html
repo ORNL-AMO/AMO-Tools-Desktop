@@ -1,5 +1,5 @@
 <form [formGroup]="fanForm">
-  <div class="row">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
       <div class="header">
         <h3>Fan</h3>
@@ -29,7 +29,7 @@
       <label for="fanSpeed">Fan Speed</label>
       <div class="input-group">
         <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed"
-          id="fanSpeed" (input)="save()" (focus)="focusField('fanSpeed')" onfocus="this.select();">
+          id="fanSpeed" (input)="save()" (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span> -->
@@ -52,7 +52,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" (input)="save()"
-          (focus)="focusField('stages')" onfocus="this.select();">
+          (focus)="focusField('stages')" onfocus="this.select();" [readonly]="!selected">
       </div>
     </div>
   </div>

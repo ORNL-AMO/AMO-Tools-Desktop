@@ -16,7 +16,6 @@ export class ModifyConditionsTabsComponent implements OnInit {
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
-      console.log(this.modifyConditionsTab);
     })
   }
 

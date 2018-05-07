@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FanRatedInfo } from '../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -9,7 +9,11 @@ import { HelpPanelService } from '../help-panel/help-panel.service';
   styleUrls: ['./fsat-info.component.css']
 })
 export class FsatInfoComponent implements OnInit {
-
+  @Input()
+  inSetup: boolean;
+  @Input()
+  selected: boolean;
+  
   fanInfoForm: FormGroup;
 
   options: Array<string> = [
