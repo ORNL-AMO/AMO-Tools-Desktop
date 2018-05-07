@@ -7,10 +7,13 @@ import { ExploreOpportunitiesFormComponent } from './explore-opportunities-form/
 import { SystemDataFormComponent } from './explore-opportunities-form/system-data-form/system-data-form.component';
 import { RatedMotorFormComponent } from './explore-opportunities-form/rated-motor-form/rated-motor-form.component';
 import { FanDataFormComponent } from './explore-opportunities-form/fan-data-form/fan-data-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesHelpComponent, ExploreOpportunitiesFormComponent, SystemDataFormComponent, RatedMotorFormComponent, FanDataFormComponent],
   providers: [ExploreOpportunitiesService],

@@ -13,13 +13,13 @@ export class FsatService {
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   openNewModal: BehaviorSubject<boolean>;
-  selectedModification: BehaviorSubject<FSAT>;
+  openModificationModal: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.openNewModal = new BehaviorSubject<boolean>(false);
-    this.selectedModification = new BehaviorSubject<FSAT>(undefined);
+    this.openModificationModal = new BehaviorSubject<boolean>(false);
   }
 
   test() {

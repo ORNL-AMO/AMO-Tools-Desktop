@@ -4,7 +4,7 @@
 
     <li>
       <app-system-data-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-system-data-form>
+        [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-system-data-form>
     </li>
     <li>
       <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"

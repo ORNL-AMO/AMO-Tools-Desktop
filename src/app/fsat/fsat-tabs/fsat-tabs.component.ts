@@ -56,6 +56,6 @@ export class FsatTabsComponent implements OnInit {
   }
 
   selectModification() {
-    this.compareService.openModificationModal.next(true);
+    this.fsatService.openModificationModal.next(true);
   }
 }

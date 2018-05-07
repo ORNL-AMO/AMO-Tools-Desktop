@@ -7,12 +7,8 @@ export class CompareService {
   baselineFSAT: FSAT;
   modifiedFSAT: FSAT;
   selectedModification: BehaviorSubject<FSAT>;
-  openModificationModal: BehaviorSubject<boolean>;
-  openNewModal: BehaviorSubject<boolean>;
   constructor() {
     this.selectedModification = new BehaviorSubject<FSAT>(undefined);
-    this.openModificationModal = new BehaviorSubject<boolean>(undefined);
-    this.openNewModal = new BehaviorSubject<boolean>(undefined);
   }
 
 

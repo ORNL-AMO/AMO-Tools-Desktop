@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
+import { CompareService } from '../compare.service';
+import { FsatService } from '../fsat.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -23,7 +25,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
-  constructor() { }
+  constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
   }
@@ -33,5 +35,18 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   focusField($event) {
     this.currentField = $event;
+  }
+
+  addExploreOpp(){
+    this.fsatService.openNewModal.next(true);
+  }
+
+  getResults(){
+
+  }
+
+
+  save(){
+    
   }
 }

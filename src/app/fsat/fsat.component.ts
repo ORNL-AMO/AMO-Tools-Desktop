@@ -43,7 +43,7 @@ export class FsatComponent implements OnInit {
   stepTabSub: Subscription;
   assessmentTabSub: Subscription;
   //TODO: Add Modification logic
-  modificationExists: boolean = true;
+  modificationExists: boolean;
   modificationIndex: number;
   selectedModSubscription: Subscription;
   addNewSub: Subscription;
@@ -71,6 +71,8 @@ export class FsatComponent implements OnInit {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._fsat, 0);
+          }else{
+            this.modificationExists = false;
           }
         } else {
           this._fsat.modifications = new Array<Modification>();
@@ -95,7 +97,7 @@ export class FsatComponent implements OnInit {
         this.showAddNewModal();
       }
     })
-    this.openModSub = this.compareService.openModificationModal.subscribe(val => {
+    this.openModSub = this.fsatService.openModificationModal.subscribe(val => {
       if (val) {
         this.selectModificationModal()
       }
@@ -231,7 +233,7 @@ export class FsatComponent implements OnInit {
   }
   closeSelectModification() {
     this.isModalOpen = false;
-    this.compareService.openModificationModal.next(false);
+    this.fsatService.openModificationModal.next(false);
     this.changeModificationModal.hide();
   }
 }
