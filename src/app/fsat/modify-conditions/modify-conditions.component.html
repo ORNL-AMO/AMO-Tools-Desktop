@@ -10,41 +10,49 @@
       <h3>Baseline</h3>
     </div>
     <div class="losses-container fsat-losses-container">
-      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected"></app-fsat-info>
-      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="baselineSelected"></app-fsat-fluid>
-      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="baselineSelected"></app-fan-setup>
-      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected"></app-fan-motor>
-      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected"></app-fan-field-data>
+      <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
+        [modificationIndex]="modificationIndex"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="baselineSelected" [fanSetup]="assessment.fsat.fanSetup"
+        [modificationIndex]="modificationIndex"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected" [fanMotor]="assessment.fsat.fanMotor"
+        [modificationIndex]="modificationIndex"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData"
+        [modificationIndex]="modificationIndex"></app-fan-field-data>
     </div>
   </div>
 
 
   <!-- Modifications Start -->
-  <div class="modification col-4 panel-column" (click)="togglePanel(modifiedSelected)" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+  <div *ngIf="modificationExists" class="modification col-4 panel-column" (click)="togglePanel(modifiedSelected)" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <div class="header d-flex flex-row justify-content-between">
-      <h3>Modification</h3>
+      <h3>{{assessment.fsat.modifications[modificationIndex].fsat.name}}</h3>
     </div>
 
     <!-- Forms -->
     <div class="losses-container fsat-losses-container">
-      <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected"></app-fsat-info>
-      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="modifiedSelected"></app-fsat-fluid>
-      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="modifiedSelected"></app-fan-setup>
-      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected"></app-fan-motor>
-      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"></app-fan-field-data>
+      <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->
+      <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
+        [modificationIndex]="modificationIndex"></app-fsat-fluid>
+      <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="modifiedSelected" [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
+        [modificationIndex]="modificationIndex"></app-fan-setup>
+      <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected" [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
+        [modificationIndex]="modificationIndex"></app-fan-motor>
+      <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
+        [modificationIndex]="modificationIndex"></app-fan-field-data>
     </div>
   </div>
 
   <!-- No content message -->
-  <!-- <div class="col-4 no-data" *ngIf="!modificationExists" (click)="addModification()">
+  <div class="col-4 no-data" *ngIf="!modificationExists" (click)="addModification()">
     <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
       opportunities.
     </h3>
     <button type="button" class="btn btn-primary">Add Modified Condition</button>
     <p>Data will be copied from your current baseline condition.</p>
-  </div> -->
+  </div>
 
   <!-- Help Panel -->
   <div class="col-4 help-panel pl-0">

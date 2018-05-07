@@ -4,6 +4,7 @@ import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { FSAT } from '../shared/models/fans';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -31,13 +32,13 @@ export class AssessmentService {
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-    if(str){
+    if (str) {
       this.tab = str;
-    }else{
+    } else {
       this.tab = 'system-setup';
     }
 
-    if(str2){
+    if (str2) {
       this.subTab = str2;
     }
     if (assessment.type == 'PSAT') {
@@ -50,8 +51,8 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
-    }else if(assessment.type == 'FSAT'){
-      this.router.navigateByUrl('/fsat/'+assessment.id);
+    } else if (assessment.type == 'FSAT') {
+      this.router.navigateByUrl('/fsat/' + assessment.id);
     }
   }
 
@@ -241,5 +242,50 @@ export class AssessmentService {
       fluidTemperature: _fluidTemperature
     };
     return newPsatInputs;
+  }
+
+  getNewFsat(): FSAT {
+    let newFsat: FSAT = {
+      fieldData: {
+        operatingFraction: 0,
+        flowRate: 1800,
+        pressure: 10,
+        loadEstimatedMethod: 'Power',
+        motorPower: 12,
+        cost: 1
+      },
+      fanMotor: {
+        frequency: '50 Hz',
+        horsePower: 5,
+        motorRPM: 3000,
+        efficiencyClass: 'Standard Efficiency',
+        efficiency: 0,
+        motorVoltage: 0,
+        fullLoadAmps: 0
+      },
+      fanSetup: {
+        fanType: 'Airfoil (SISW)',
+        fanSpeed: 0,
+        drive: 'Direct Drive',
+        stages: 0
+      },
+      baseGasDensity: {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        //Mark Additions
+        inputType: 'relativeHumidity',
+        conditionLocation: 4,
+        //Method 2 variables
+        specificGravity: 1,
+        wetBulbTemp: 119,
+        relativeHumidity: 0,
+        dewPoint: 0,
+        specificHeatGas: .24
+      }
+    }
+    return newFsat;
   }
 }

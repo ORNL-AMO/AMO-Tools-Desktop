@@ -37,6 +37,8 @@ import { ExploreOpportunitiesModule } from './explore-opportunities/explore-oppo
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { ModifyConditionsService } from './modify-conditions/modify-conditions.service';
+import { AddModificationComponent } from './add-modification/add-modification.component';
+import { CompareService } from './compare.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -71,7 +73,7 @@ import { ModifyConditionsService } from './modify-conditions/modify-conditions.s
     FanMotorComponent, 
     FanFieldDataComponent, 
     ModifyConditionsComponent, 
-    ModifyConditionsTabsComponent
+    ModifyConditionsTabsComponent, AddModificationComponent
   ],
   providers: [
     FsatService, 
@@ -81,7 +83,8 @@ import { ModifyConditionsService } from './modify-conditions/modify-conditions.s
     FanMotorService, 
     PsatService, 
     FanFieldDataService, 
-    ModifyConditionsService
+    ModifyConditionsService,
+    CompareService
   ],
   exports: [FsatComponent]
 })

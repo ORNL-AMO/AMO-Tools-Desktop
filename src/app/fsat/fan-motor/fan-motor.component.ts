@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FanMotorService, FanMotor } from './fan-motor.service';
+import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FanMotor } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-motor',
@@ -17,7 +18,11 @@ export class FanMotorComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  fanMotor: FanMotor;
+  @Input()
+  modificationIndex: number;
+
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
@@ -50,36 +55,26 @@ export class FanMotorComponent implements OnInit {
   constructor(private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    let tmpData: FanMotor = {
-      frequency: '50 Hz',
-      horsePower: 5,
-      motorRPM: 3000,
-      efficiencyClass: 'Standard Efficiency',
-      efficiency: 0,
-      motorVoltage: 0,
-      fullLoadAmps: 0
-    }
-    this.fanMotorForm = this.fanMotorService.getFormFromObj(tmpData)
     this.init();
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
     } else {
       this.options = this.kWatts;
     }
-    if(!this.selected){
+    if (!this.selected) {
       this.disableForm();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.selected && !changes.selected.firstChange){
-      if(this.selected){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected) {
         this.enableForm();
-      }else{
+      } else {
         this.disableForm();
       }
     }
-    if (changes.modificationIndex) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
     }
   }
@@ -96,8 +91,9 @@ export class FanMotorComponent implements OnInit {
     this.fanMotorForm.controls.efficiencyClass.enable();
   }
   init() {
+    this.fanMotorForm = this.fanMotorService.getFormFromObj(this.fanMotor)
     this.checkForm(this.fanMotorForm);
-   // this.helpPanelService.currentField.next('lineFrequency');
+    // this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
     this.modifyPowerArrays();
     this.checkEfficiency(true);
@@ -339,7 +335,7 @@ export class FanMotorComponent implements OnInit {
     this.save();
   }
 
-  save(){
+  save() {
 
   }
 }

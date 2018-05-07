@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FieldData } from '../../shared/models/fans';
 
 @Injectable()
 export class FanFieldDataService {
@@ -7,7 +8,7 @@ export class FanFieldDataService {
   constructor(private formBuilder: FormBuilder) { }
 
 
-  getFormFromObj(obj: FanFieldData): FormGroup {
+  getFormFromObj(obj: FieldData): FormGroup {
     let form = this.formBuilder.group({
       operatingFraction: [obj.operatingFraction, Validators.required],
       flowRate: [obj.flowRate, Validators.required],
@@ -18,14 +19,4 @@ export class FanFieldDataService {
     })
     return form;
   }
-}
-
-
-export interface FanFieldData {
-  operatingFraction: number,
-  cost: number,
-  flowRate: number,
-  pressure: number,
-  loadEstimatedMethod: string,
-  motorPower: number
 }

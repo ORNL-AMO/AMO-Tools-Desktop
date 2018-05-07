@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
-import { FanFieldDataService, FanFieldData } from './fan-field-data.service';
+import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { FieldData } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -17,7 +18,10 @@ export class FanFieldDataComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  fieldData: FieldData;
+  @Input()
+  modificationIndex: number;
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
 
   loadEstimateMethods: Array<string> = [
@@ -37,20 +41,20 @@ export class FanFieldDataComponent implements OnInit {
 
   ngOnInit() {
     this.init();
-    if(!this.selected){
+    if (!this.selected) {
       this.disableForm();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.selected && !changes.selected.firstChange){
-      if(this.selected){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected) {
         this.enableForm();
-      }else{
+      } else {
         this.disableForm();
       }
     }
-    if (changes.modificationIndex) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
     }
   }
@@ -64,23 +68,17 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   init() {
-    let mockData: FanFieldData = {
-      operatingFraction: 0,
-      flowRate: 1800,
-      pressure: 10,
-      loadEstimatedMethod: 'Power',
-      motorPower: 12,
-      cost: 1
+    if (this.fieldData) {
+      this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);
+      this.checkForm(this.fieldDataForm);
+      // this.helpPanelService.currentField.next('operatingFraction');
+      //init warning messages;
+      this.checkCost(true);
+      this.checkFlowRate(true);
+      this.checkOpFraction(true);
+      this.checkRatedPower(true);
+      //this.cd.detectChanges();
     }
-    this.fieldDataForm = this.fanFieldDataService.getFormFromObj(mockData);
-    this.checkForm(this.fieldDataForm);
-    // this.helpPanelService.currentField.next('operatingFraction');
-    //init warning messages;
-    this.checkCost(true);
-    this.checkFlowRate(true);
-    this.checkOpFraction(true);
-    this.checkRatedPower(true);
-    //this.cd.detectChanges();
   }
 
   focusField(str: string) {
@@ -123,7 +121,7 @@ export class FanFieldDataComponent implements OnInit {
     // this.amcaModal.hide();
   }
 
-  save(){
+  save() {
 
   }
 

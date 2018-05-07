@@ -137,6 +137,7 @@ export class AssessmentCreateComponent implements OnInit {
           let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
           tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
           tmpAssessment.directoryId = this.directory.id;
+          tmpAssessment.fsat = this.assessmentService.getNewFsat();
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.indexedDbService.getAssessment(assessmentId).then(assessment => {
               tmpAssessment = assessment;

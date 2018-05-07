@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FanSetup } from '../../shared/models/fans';
 
 @Injectable()
 export class FanSetupService {
@@ -16,11 +17,4 @@ export class FanSetupService {
     })
     return form;
   }
-}
-
-export interface FanSetup {
-  fanType: string,
-  fanSpeed: number,
-  drive: string,
-  stages: number
 }

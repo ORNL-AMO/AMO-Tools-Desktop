@@ -11,6 +11,9 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
+import { FSAT, Modification } from '../shared/models/fans';
+import * as _ from 'lodash';
+import { CompareService } from './compare.service';
 
 @Component({
   selector: 'app-fsat',
@@ -20,14 +23,15 @@ import { Subscription } from 'rxjs';
 export class FsatComponent implements OnInit {
 
   @ViewChild('fsat203Modal') public fsat203Modal: ModalDirective;
-
-
-
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
+
+  @ViewChild('addNewModal') public addNewModal: ModalDirective;
   containerHeight: number;
 
+
+  _fsat: FSAT;
   assessment: Assessment;
   mainTab: string;
   stepTab: string;
@@ -39,13 +43,19 @@ export class FsatComponent implements OnInit {
   assessmentTabSub: Subscription;
   //TODO: Add Modification logic
   modificationExists: boolean = true;
-  constructor(private activatedRoute: ActivatedRoute, 
-    private indexedDbService: IndexedDbService, 
-    private fsatService: FsatService, 
-    private settingsService: SettingsService,    
+  modificationIndex: number;
+  selectedModSubscription: Subscription;
+  addNewSub: Subscription;
+  showAdd: boolean;
+  isModalOpen: boolean;
+  constructor(private activatedRoute: ActivatedRoute,
+    private indexedDbService: IndexedDbService,
+    private fsatService: FsatService,
+    private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
-    private assessmentDbService: AssessmentDbService) {}
+    private assessmentDbService: AssessmentDbService,
+    private compareService: CompareService) { }
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -53,6 +63,16 @@ export class FsatComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
+        if (this._fsat.modifications) {
+          if (this._fsat.modifications.length != 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+          }
+        } else {
+          this._fsat.modifications = new Array<Modification>();
+          this.modificationExists = false;
+        }
         this.getSettings();
       })
     })
@@ -65,9 +85,26 @@ export class FsatComponent implements OnInit {
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
     })
+
+    this.addNewSub = this.fsatService.openNewModal.subscribe(val => {
+      this.showAdd = val;
+      if (val) {
+        this.showAddNewModal();
+      }
+    })
+
+    this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
+      if (mod && this._fsat) {
+        this.modificationIndex = _.findIndex(this._fsat.modifications, (val) => {
+          return val.fsat.name == mod.name
+        })
+      } else {
+        this.modificationIndex = undefined;
+      }
+    })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
     this.stepTabSub.unsubscribe();
@@ -120,7 +157,7 @@ export class FsatComponent implements OnInit {
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
           this.settingsDbService.setAll().then(() => {
-           // this.addToast('Settings Saved');
+            // this.addToast('Settings Saved');
             this.getSettings();
           })
         })
@@ -131,7 +168,7 @@ export class FsatComponent implements OnInit {
       this.getParentDirectorySettings(tmpDir.parentDirectoryId);
     }
   }
-  
+
   show203Modal() {
     this.fsat203Modal.show();
   }
@@ -140,4 +177,30 @@ export class FsatComponent implements OnInit {
     this.fsat203Modal.hide();
   }
 
+  showAddNewModal() {
+    this.isModalOpen = true;
+    this.addNewModal.show();
+  }
+  closeAddNewModal() {
+    this.isModalOpen = false;
+    this.fsatService.openNewModal.next(false);
+    this.addNewModal.hide();
+  }
+
+  saveNewMod(mod: Modification) {
+    this._fsat.modifications.push(mod);
+    this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
+    this.save();
+    this.closeAddNewModal();
+  }
+
+  save() {
+    this.compareService.setCompareVals(this._fsat, this.modificationIndex);
+    this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
+    this.indexedDbService.putAssessment(this.assessment).then(results => {
+      this.assessmentDbService.setAll().then(() => {
+        // this.psatService.getResults.next(true);
+      })
+    })
+  }
 }

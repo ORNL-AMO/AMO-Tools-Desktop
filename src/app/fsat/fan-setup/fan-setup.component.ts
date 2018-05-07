@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { FanSetupService, FanSetup } from './fan-setup.service';
+import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
+import { FanSetup } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-setup',
@@ -12,7 +13,10 @@ export class FanSetupComponent implements OnInit {
   inSetup: boolean;
   @Input()
   selected: boolean;
-
+  @Input()
+  fanSetup: FanSetup;
+  @Input()
+  modificationIndex: number;
 
   fanTypes: Array<string> = [
     'Airfoil (SISW)',
@@ -34,17 +38,11 @@ export class FanSetupComponent implements OnInit {
     'Synchronous Belt Drive'
   ];
 
-  tmpFormData: FanSetup = {
-    fanType: 'Airfoil (SISW)',
-    fanSpeed: 0,
-    drive: 'Direct Drive',
-    stages: 0
-  }
   fanForm: FormGroup;
   constructor(private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
-    this.fanForm =  this.fanSetupService.getFormFromObj(this.tmpFormData);
+    this.init();
     if(!this.selected){
       this.disableForm();
     }
@@ -57,8 +55,14 @@ export class FanSetupComponent implements OnInit {
         this.disableForm();
       }
     }
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+      this.init();
+    }
   }
 
+  init(){
+    this.fanForm =  this.fanSetupService.getFormFromObj(this.fanSetup);
+  }
   disableForm() {
     this.fanForm.controls.fanType.disable();
     this.fanForm.controls.drive.disable();

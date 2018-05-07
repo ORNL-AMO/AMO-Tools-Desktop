@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, PlaneData, Plane } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 declare var fanAddon: any;
@@ -12,10 +12,14 @@ export class FsatService {
   mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
+  openNewModal: BehaviorSubject<boolean>;
+  selectedModification: BehaviorSubject<FSAT>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+    this.openNewModal = new BehaviorSubject<boolean>(false);
+    this.selectedModification = new BehaviorSubject<FSAT>(undefined);
   }
 
   test() {

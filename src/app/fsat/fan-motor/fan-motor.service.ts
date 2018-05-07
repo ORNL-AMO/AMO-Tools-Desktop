@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FanMotor } from '../../shared/models/fans';
 
 @Injectable()
 export class FanMotorService {
@@ -18,15 +19,4 @@ export class FanMotorService {
     })
     return form;
   }
-}
-
-
-export interface FanMotor {
-  frequency: string,
-  horsePower: number,
-  motorRPM: number,
-  efficiencyClass: string,
-  efficiency?: number,
-  motorVoltage: number,
-  fullLoadAmps: number
 }

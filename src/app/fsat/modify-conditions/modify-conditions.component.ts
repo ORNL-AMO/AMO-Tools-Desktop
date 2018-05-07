@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModifyConditionsService } from './modify-conditions.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
+import { Assessment } from '../../shared/models/assessment';
+import { FsatService } from '../fsat.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -11,18 +13,29 @@ import { Settings } from '../../shared/models/settings';
 export class ModifyConditionsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  modificationExists: boolean;
 
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
 
-  constructor(private modifyConditionsService: ModifyConditionsService) { }
+  constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService) { }
 
   ngOnInit() {
+    console.log(this.assessment.fsat);
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
     })
+  }
+
+  ngOnChanges(){
+    console.log(this.modificationIndex);
   }
 
   ngOnDestroy(){
@@ -38,5 +51,9 @@ export class ModifyConditionsComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
+  }
+
+  addModification() {
+    this.fsatService.openNewModal.next(true);
   }
 }

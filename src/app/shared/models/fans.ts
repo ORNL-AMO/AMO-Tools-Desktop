@@ -1,7 +1,48 @@
 export interface FSAT {
   name?: string
+  modifications?: Modification[],
+  selected?: boolean,
+  fieldData?: FieldData,
+  fanMotor?: FanMotor,
+  fanSetup?: FanSetup,
+  baseGasDensity?: BaseGasDensity
 }
 
+export interface Modification {
+  notes?: Notes,
+  fsat?: FSAT,
+  exploreOpportunities?: boolean
+}
+
+export interface Notes {
+
+}
+
+export interface FieldData {
+  operatingFraction: number,
+  cost: number,
+  flowRate: number,
+  pressure: number,
+  loadEstimatedMethod: string,
+  motorPower: number
+}
+
+export interface FanMotor {
+  frequency: string,
+  horsePower: number,
+  motorRPM: number,
+  efficiencyClass: string,
+  efficiency?: number,
+  motorVoltage: number,
+  fullLoadAmps: number
+}
+
+export interface FanSetup {
+  fanType: string,
+  fanSpeed: number,
+  drive: string,
+  stages: number
+}
 
 export interface FanRatedInfo {
   fanSpeed: number;

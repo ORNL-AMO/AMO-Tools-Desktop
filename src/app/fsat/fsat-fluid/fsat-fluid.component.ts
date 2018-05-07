@@ -12,22 +12,7 @@ import { FsatFluidService } from './fsat-fluid.service';
 })
 export class FsatFluidComponent implements OnInit {
   @Input()
-  fanGasDensity: BaseGasDensity = {
-    dryBulbTemp: 123,
-    staticPressure: -17.6,
-    barometricPressure: 26.57,
-    gasDensity: 0.0547,
-    gasType: 'AIR',
-    //Mark Additions
-    inputType: 'relativeHumidity',
-    conditionLocation: 4,
-    //Method 2 variables
-    specificGravity: 1,
-    wetBulbTemp: 119,
-    relativeHumidity: 0,
-    dewPoint: 0,
-    specificHeatGas: .24
-  };;
+  baseGasDensity: BaseGasDensity;
   @Input()
   gasDone: boolean;
   @Output('emitSave')
@@ -36,6 +21,8 @@ export class FsatFluidComponent implements OnInit {
   inSetup: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  modificationIndex: number;
 
   gasDensityForm: FormGroup;
 
@@ -53,20 +40,27 @@ export class FsatFluidComponent implements OnInit {
   constructor(private fsatService: FsatService, private fsatFluidService: FsatFluidService) { }
 
   ngOnInit() {
-    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.fanGasDensity);
-    if(!this.selected){
+    this.init();
+    if (!this.selected) {
       this.disableForm();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.selected && !changes.selected.firstChange){
-      if(this.selected){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected) {
         this.enableForm();
-      }else{
+      } else {
         this.disableForm();
       }
     }
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+      this.init();
+    }
+  }
+
+  init() {
+    this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity);
   }
 
   disableForm() {
@@ -82,22 +76,22 @@ export class FsatFluidComponent implements OnInit {
   }
 
   save() {
-    this.fanGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.emitSave.emit(this.fanGasDensity);
+    this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.emitSave.emit(this.baseGasDensity);
   }
 
   focusField() {
 
   }
 
-  getDensity(){
-    if(this.gasDensityForm.controls.inputType.value == 'relativeHumidity'){
+  getDensity() {
+    if (this.gasDensityForm.controls.inputType.value == 'relativeHumidity') {
       this.calcDensityRelativeHumidity();
-    }else if(this.gasDensityForm.controls.inputType.value == 'wetBulb'){
+    } else if (this.gasDensityForm.controls.inputType.value == 'wetBulb') {
       this.calcDensityWetBulb();
-    }else if(this.gasDensityForm.controls.inputType.value == 'dewPoint'){
+    } else if (this.gasDensityForm.controls.inputType.value == 'dewPoint') {
       this.calcDensityDewPoint();
-    }else{
+    } else {
       this.save();
     }
   }
