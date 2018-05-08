@@ -55,7 +55,8 @@
                 <label for="modificationFlowRate">Modification Flow Rate</label>
                 <div class="input-group">
                     <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control" (focus)="focusField('flowRate')"
-                        [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.flowRate" (input)="checkFlowRate(2)" />
+                        [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.flowRate" (input)="checkFlowRate(2)"
+                    />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
                     <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
                 </div>
@@ -72,20 +73,37 @@
         </div>
         <form *ngIf="showPressure">
             <div class="form-group">
-                <label for="baselinePressure">Baseline pressure</label>
+                <label for="baselinePressure">Baseline Inlet Pressure</label>
                 <div class="input-group">
-                    <input name="baselinePressure" [disabled]="true" type="number" step="any" id="baselinePressure" class="form-control" (focus)="focusField('pressure')" (input)="calculate()"
-                        [(ngModel)]="fsat.fieldData.pressure" />
-                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.distanceMeasurement)"></span>
+                    <input name="baselinePressure" [disabled]="true" type="number" step="any" id="baselinePressure" class="form-control" (focus)="focusField('pressure')"
+                        (input)="calculate()" [(ngModel)]="fsat.fieldData.inletPressure" />
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
 
                 </div>
             </div>
             <div class="form-group">
-                <label for="modificationHead">Modification pressure</label>
+                <label for="baselineOutletPressure">Baseline Outlet Pressure</label>
                 <div class="input-group">
-                    <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('pressure')"
-                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.pressure" />
-                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.distanceMeasurement)"></span>
+                    <input name="baselineOutletPressure" [disabled]="true" type="number" step="any" id="baselineOutletPressure" class="form-control"
+                        (focus)="focusField('pressure')" (input)="calculate()" [(ngModel)]="fsat.fieldData.outletPressure" />
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="modificationInletPressure">Modification Inlet Pressure</label>
+                <div class="input-group">
+                    <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control" (focus)="focusField('pressure')"
+                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.inletPressure" />
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="modificationOutletPressure">Modification Outlet Pressure</label>
+                <div class="input-group">
+                    <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control" (focus)="focusField('pressure')"
+                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.outletPressure" />
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
                 </div>
             </div>
         </form>
@@ -100,8 +118,9 @@
         <form *ngIf="showOperatingFraction">
             <div class="form-group">
                 <label for="baselineOperatingFraction">Baseline operating fractiong</label>
-                <input name="baselineOperatingFraction" [disabled]="true" type="number" step="any" id="baselineOperatingFraction" class="form-control" (focus)="focusField('operatingFraction')"
-                    (input)="checkOpFraction(1)" [(ngModel)]="fsat.fieldData.operatingFraction" />
+                <input name="baselineOperatingFraction" [disabled]="true" type="number" step="any" id="baselineOperatingFraction" class="form-control"
+                    (focus)="focusField('operatingFraction')" (input)="checkOpFraction(1)" [(ngModel)]="fsat.fieldData.operatingFraction"
+                />
                 <span class="alert-danger pull-right small" *ngIf="opFractionError1 !== null">{{opFractionError1}}</span>
             </div>
             <div class="form-group">

@@ -249,7 +249,8 @@ export class AssessmentService {
       fieldData: {
         operatingFraction: 0,
         flowRate: 1800,
-        pressure: 10,
+        inletPressure: 10,
+        outletPressure: 10,
         loadEstimatedMethod: 'Power',
         motorPower: 12,
         cost: 1,

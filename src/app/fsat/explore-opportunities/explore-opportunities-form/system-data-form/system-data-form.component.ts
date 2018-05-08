@@ -84,7 +84,8 @@ export class SystemDataFormComponent implements OnInit {
   }
 
   initPressure() {
-      if (this.fsat.fieldData.pressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.pressure) {
+      if (this.fsat.fieldData.inletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure || 
+        this.fsat.fieldData.outletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure) {
           this.showPressure = true;
       }else{
           this.showPressure = false;
@@ -129,7 +130,8 @@ export class SystemDataFormComponent implements OnInit {
 
   togglePressure() {
       if (this.showPressure == false) {
-          this.fsat.modifications[this.exploreModIndex].fsat.fieldData.pressure = this.fsat.fieldData.pressure;
+        this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure = this.fsat.fieldData.inletPressure;
+        this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure = this.fsat.fieldData.outletPressure;
           this.calculate();
       }
   }

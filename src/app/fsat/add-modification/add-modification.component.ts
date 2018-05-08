@@ -42,6 +42,12 @@ export class AddModificationComponent implements OnInit {
     let tmpModification: Modification = {
       fsat: {
         name: this.newModificationName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
       }
     }
     let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this.fsat)));

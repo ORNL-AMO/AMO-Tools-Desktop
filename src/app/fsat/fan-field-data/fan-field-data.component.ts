@@ -22,6 +22,11 @@ export class FanFieldDataComponent implements OnInit {
   fieldData: FieldData;
   @Input()
   modificationIndex: number;
+  @Input()
+  loadEstimationMethod: string;
+  @Input()
+  baseline: boolean;
+
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
 
   loadEstimateMethods: Array<string> = [

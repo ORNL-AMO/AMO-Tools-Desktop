@@ -37,20 +37,35 @@
     </div>
 
     <div class="form-group">
-
-      <label for="pressure">
-        Pressure
-        <a class="form-text small click-link" (click)="showAmcaModal()">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a>
+      <label for="inletPressure">
+        Inlet Pressure
+        <!-- <a class="form-text small click-link" (click)="showAmcaModal()">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a> -->
       </label>
       <div class="input-group">
-        <input name="pressure" type="number" min="0.1" step="any" class="form-control" formControlName="pressure" id="pressure" (input)="save()"
-          (focus)="focusField('pressure')" onfocus="this.select();" [readonly]="!selected">
+        <input name="inletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
+          (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
+      </div>
+      <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
+    </div>
+    <div class="form-group">
+      <label for="outletPressure">
+        Outlet Pressure
+        <!-- <a class="form-text small click-link" (click)="showAmcaModal()">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a> -->
+      </label>
+      <div class="input-group">
+        <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
+          (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
     </div>
 
-    <div class="form-group">
+    <div>
+      <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
       <label for="loadEstimatedMethod">Load Estimation Method</label>
       <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="save()"
         (focus)="focusField('loadEstimatedMethod')">
@@ -58,40 +73,29 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="motorPower">Motor Power</label>
+    <div class="form-group" *ngIf="baseline">
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Power'">Motor Power</label>
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Current'">Motor Current</label>
       <div class="input-group">
         <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower"
           (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group units">hp</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Power'">hp</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Current'">A</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
     </div>
-    <!-- <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Current' && baseline">
-      <label for="motorAmps">Motor Current</label>
-      <div class="input-group">
-        <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
-          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();"  [readonly]="!selected">
-        <span class="input-group-addon units">A</span>
-      </div>
-    </div> -->
 
     <div class="form-group">
       <label for="specificHeatRatio">Specific Heat Ratio (&gamma;)</label>
-      <div class="input-group">
-        <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
-          id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
-      </div>
-      <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
+        id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
     </div>
 
     <div class="form-group">
       <label for="compressibilityFactor">Compressibility Factor</label>
-      <div class="input-group">
-        <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
-          id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();" [readonly]="!selected">
-      </div>
-      <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
+      <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
+        id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
+        [readonly]="!selected">
     </div>
   </div>
 </form>

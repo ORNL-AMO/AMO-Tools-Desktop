@@ -18,7 +18,7 @@
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected" [fanMotor]="assessment.fsat.fanMotor"
         [modificationIndex]="modificationIndex"></app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData"
-        [modificationIndex]="modificationIndex"></app-fan-field-data>
+        [modificationIndex]="modificationIndex" [baseline]="true"></app-fan-field-data>
     </div>
   </div>
 

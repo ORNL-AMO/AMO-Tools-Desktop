@@ -138,9 +138,13 @@ export class ModificationListComponent implements OnInit {
     let tmpModification: Modification = {
       fsat: {
         name: this.newModificationName,
-      },
-      notes: {
-      },
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      }
     }
     // if (this.asssessmentTab == 'explore-opportunities') {
     //   tmpModification.exploreOpportunities = true;
