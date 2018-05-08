@@ -42,8 +42,8 @@
         [modificationIndex]="modificationIndex"></app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
         [modificationIndex]="modificationIndex"></app-fan-field-data>
-      <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"
-      [modificationIndex]="modificationIndex"></app-modify-field-data-form>
+      <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"
+        [fsat]="assessment.fsat.modifications[modificationIndex].fsat" [modificationIndex]="modificationIndex"></app-modify-field-data-form>
     </div>
   </div>
 
@@ -58,13 +58,13 @@
 
   <!-- Help Panel -->
   <div class="col-4 help-panel pl-0">
-    <app-help-panel></app-help-panel>
-    <!-- <div *ngIf="!modificationExists">
+    <app-help-panel *ngIf="modificationExists" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-help-panel>
+    <div *ngIf="!modificationExists">
       <div class="header">
         <h3>Help</h3>
       </div>
-      <p>Add Modification to view results</p>
-    </div> -->
+      <p>Add Modification to view results and get additional help.</p>
+    </div>
   </div>
 
 </div>

@@ -71,7 +71,7 @@ export class FsatComponent implements OnInit {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._fsat, 0);
-          }else{
+          } else {
             this.modificationExists = false;
           }
         } else {
@@ -122,6 +122,7 @@ export class FsatComponent implements OnInit {
     this.stepTabSub.unsubscribe();
     this.openModSub.unsubscribe();
     this.selectedModSubscription.unsubscribe();
+    this.addNewSub.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -205,7 +206,9 @@ export class FsatComponent implements OnInit {
     this._fsat.modifications.push(mod);
     this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
     this.closeAddNewModal();
-    this.save();
+    this.addNewModal.onHidden.subscribe(() => {
+      this.save();
+    })
   }
 
   save() {

@@ -41,6 +41,11 @@ import { AddModificationComponent } from './add-modification/add-modification.co
 import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { ModifyFieldDataFormComponent } from './modify-conditions/modify-field-data-form/modify-field-data-form.component';
+import { FanFieldDataHelpComponent } from './help-panel/fan-field-data-help/fan-field-data-help.component';
+import { FanMotorHelpComponent } from './help-panel/fan-motor-help/fan-motor-help.component';
+import { FanSetupHelpComponent } from './help-panel/fan-setup-help/fan-setup-help.component';
+import { FsatFluidHelpComponent } from './help-panel/fsat-fluid-help/fsat-fluid-help.component';
+import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-notes/modify-conditions-notes.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -75,7 +80,7 @@ import { ModifyFieldDataFormComponent } from './modify-conditions/modify-field-d
     FanMotorComponent, 
     FanFieldDataComponent, 
     ModifyConditionsComponent, 
-    ModifyConditionsTabsComponent, AddModificationComponent, ModificationListComponent, ModifyFieldDataFormComponent
+    ModifyConditionsTabsComponent, AddModificationComponent, ModificationListComponent, ModifyFieldDataFormComponent, FanFieldDataHelpComponent, FanMotorHelpComponent, FanSetupHelpComponent, FsatFluidHelpComponent, ModifyConditionsNotesComponent
   ],
   providers: [
     FsatService, 
