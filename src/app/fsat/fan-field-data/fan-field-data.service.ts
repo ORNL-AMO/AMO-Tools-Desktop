@@ -19,7 +19,6 @@ export class FanFieldDataService {
       cost: [obj.cost, Validators.required],
       specificHeatRatio: [obj.specificHeatRatio, Validators.required],
       compressibilityFactor: [obj.compressibilityFactor, Validators.required]
-
     })
     return form;
   }

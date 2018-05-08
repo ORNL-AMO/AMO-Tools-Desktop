@@ -42,6 +42,8 @@
         [modificationIndex]="modificationIndex"></app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
         [modificationIndex]="modificationIndex"></app-fan-field-data>
+      <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"
+      [modificationIndex]="modificationIndex"></app-modify-field-data-form>
     </div>
   </div>
 

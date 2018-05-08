@@ -28,14 +28,12 @@ export class ModifyConditionsComponent implements OnInit {
   constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService) { }
 
   ngOnInit() {
-    console.log(this.assessment.fsat);
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
     })
   }
 
   ngOnChanges(){
-    console.log(this.modificationIndex);
   }
 
   ngOnDestroy(){

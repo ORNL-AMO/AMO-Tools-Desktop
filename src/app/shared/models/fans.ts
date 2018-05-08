@@ -6,7 +6,8 @@ export interface FSAT {
   fanMotor?: FanMotor,
   fanSetup?: FanSetup,
   baseGasDensity?: BaseGasDensity,
-  notes: Notes
+  notes: Notes,
+  implementationCosts?: number
 }
 
 export interface Modification {

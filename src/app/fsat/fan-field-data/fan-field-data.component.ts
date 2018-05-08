@@ -220,17 +220,17 @@ export class FanFieldDataComponent implements OnInit {
     return true;
   }
 
-  // optimizeCalc(bool: boolean) {
-  //   if (!bool || !this.selected) {
-  //     this.fieldDataForm.controls.sizeMargin.disable();
-  //     this.fieldDataForm.controls.fixedSpeed.disable();
-  //   } else {
-  //     this.fieldDataForm.controls.sizeMargin.enable();
-  //     this.fieldDataForm.controls.fixedSpeed.enable();
-  //   }
-  //   this.fieldDataForm.patchValue({
-  //     optimizeCalculation: bool
-  //   });
-  //   this.save();
-  // }
+  optimizeCalc(bool: boolean) {
+    if (!bool || !this.selected) {
+      this.fieldDataForm.controls.sizeMargin.disable();
+     // this.fieldDataForm.controls.fixedSpeed.disable();
+    } else {
+      this.fieldDataForm.controls.sizeMargin.enable();
+     // this.fieldDataForm.controls.fixedSpeed.enable();
+    }
+    this.fieldDataForm.patchValue({
+      optimizeCalculation: bool
+    });
+    this.save();
+  }
 }
