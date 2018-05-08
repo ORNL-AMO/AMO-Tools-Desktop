@@ -18,6 +18,7 @@ export interface Notes {
 
 }
 
+//fsat Data
 export interface FieldData {
   operatingFraction: number,
   cost: number,
@@ -42,8 +43,10 @@ export interface FanSetup {
   fanType: string,
   fanSpeed: number,
   drive: string,
-  stages: number
+  stages: number,
+  fanSpecified?: number
 }
+//
 
 export interface FanRatedInfo {
   fanSpeed: number;
