@@ -123,6 +123,7 @@ export class FsatComponent implements OnInit {
     this.openModSub.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.addNewSub.unsubscribe();
+    this.fsatService.initData();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -234,6 +235,11 @@ export class FsatComponent implements OnInit {
 
   saveFieldData(newFieldData: FieldData) {
     this._fsat.fieldData = newFieldData;
+    this.save();
+  }
+
+  saveFsat(newFsat: FSAT) {
+    this._fsat = newFsat;
     this.save();
   }
 

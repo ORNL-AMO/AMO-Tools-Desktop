@@ -9,10 +9,13 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
-      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)"></app-fsat-fluid>
+      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
+        (emitSave)="saveGasDensity($event)"></app-fsat-fluid>
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" (emitSave)="saveFanSetup($event)"></app-fan-setup>
-      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor" (emitSave)="saveFanMotor($event)"></app-fan-motor>
-      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)"></app-fan-field-data>
+      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor"
+        (emitSave)="saveFanMotor($event)"></app-fan-motor>
+      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"
+        [baseline]="true" (emitSave)="saveFieldData($event)"></app-fan-field-data>
       <!-- <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
       <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points> -->
@@ -24,9 +27,9 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
-      (saved)="save()" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"></app-explore-opportunities>
+      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
-      [modificationExists]="modificationExists"></app-modify-conditions>
+      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)"></app-modify-conditions>
   </div>
 
 

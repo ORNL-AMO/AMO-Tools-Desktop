@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ModifyConditionsService } from './modify-conditions.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
+import { BaseGasDensity, FanSetup, FanMotor, FieldData, FSAT } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -19,6 +20,8 @@ export class ModifyConditionsComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
+  @Output('emitSaveAssessment')
+  emitSaveAssessment = new EventEmitter<FSAT>();
 
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
@@ -33,13 +36,13 @@ export class ModifyConditionsComponent implements OnInit {
     })
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.modifyConditionsTabSub.unsubscribe();
   }
-  
+
   togglePanel(bool: boolean) {
     if (bool == this.baselineSelected) {
       this.baselineSelected = true;
@@ -53,5 +56,54 @@ export class ModifyConditionsComponent implements OnInit {
 
   addModification() {
     this.fsatService.openNewModal.next(true);
+  }
+
+  saveAssessment() {
+    this.emitSaveAssessment.emit(this.assessment.fsat);
+  }
+
+  saveBaselineGasDensity(newGasDensity: BaseGasDensity) {
+    this.assessment.fsat.baseGasDensity = newGasDensity;
+    this.saveAssessment();
+  }
+
+  saveBaselineFanSetup(newSetup: FanSetup) {
+    this.assessment.fsat.fanSetup = newSetup;
+    this.saveAssessment();
+  }
+
+  saveBaselineFanMotor(newFanMotor: FanMotor) {
+    this.assessment.fsat.fanMotor = newFanMotor;
+    this.saveAssessment();
+  }
+
+  saveBaselineFieldData(newFieldData: FieldData) {
+    this.assessment.fsat.fieldData = newFieldData;
+    this.saveAssessment();
+  }
+
+  saveModGasDensity(newGasDensity: BaseGasDensity) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.baseGasDensity = newGasDensity;
+    this.saveAssessment();
+  }
+
+  saveModFanSetup(newSetup: FanSetup) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.fanSetup = newSetup;
+    this.saveAssessment();
+  }
+
+  saveModFanMotor(newFanMotor: FanMotor) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.fanMotor = newFanMotor;
+    this.saveAssessment();
+  }
+
+  saveModFieldData(newFieldData: FieldData) {
+    this.assessment.fsat.modifications[this.modificationIndex].fsat.fieldData = newFieldData;
+    this.saveAssessment();
+  }
+
+  saveModExtra(newFsat: FSAT){
+    this.assessment.fsat.modifications[this.modificationIndex].fsat = newFsat;
+    this.saveAssessment();   
   }
 }

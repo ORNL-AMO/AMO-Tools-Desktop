@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -23,7 +23,9 @@ export class ModifyFieldDataFormComponent implements OnInit {
   loadEstimationMethod: string;
   @Input()
   baseline: boolean;
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<FSAT>();
+  
   modifyFieldDataForm: FormGroup;
   marginError: string = null;
   constructor(private formBuilder: FormBuilder) { }
@@ -67,7 +69,10 @@ export class ModifyFieldDataFormComponent implements OnInit {
   }
 
   save(){
-
+    this.fsat.implementationCosts = this.modifyFieldDataForm.controls.implementationCosts.value;
+    this.fsat.fanMotor.sizeMargin = this.modifyFieldDataForm.controls.sizeMargin.value;
+    this.fsat.fanMotor.optimize = this.modifyFieldDataForm.controls.optimizeCalculation.value;
+    this.emitSave.emit(this.fsat);
   }
   checkMargin(bool?: boolean) {
     if (!bool) {

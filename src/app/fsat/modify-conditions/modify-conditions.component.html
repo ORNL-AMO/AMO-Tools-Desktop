@@ -12,13 +12,13 @@
     <div class="losses-container fsat-losses-container">
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
-        [modificationIndex]="modificationIndex"></app-fsat-fluid>
+        [modificationIndex]="modificationIndex" (emitSave)="saveBaselineGasDensity($event)"></app-fsat-fluid>
       <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="baselineSelected" [fanSetup]="assessment.fsat.fanSetup"
-        [modificationIndex]="modificationIndex"></app-fan-setup>
+        [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanSetup($event)"></app-fan-setup>
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected" [fanMotor]="assessment.fsat.fanMotor"
-        [modificationIndex]="modificationIndex"></app-fan-motor>
+        [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanMotor($event)"></app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData"
-        [modificationIndex]="modificationIndex" [baseline]="true"></app-fan-field-data>
+        [modificationIndex]="modificationIndex" [baseline]="true" (emitSave)="saveBaselineFieldData($event)"></app-fan-field-data>
     </div>
   </div>
 
@@ -35,15 +35,15 @@
     <div class="losses-container fsat-losses-container">
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
-        [modificationIndex]="modificationIndex"></app-fsat-fluid>
+        [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)"></app-fsat-fluid>
       <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [selected]="modifiedSelected" [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
-        [modificationIndex]="modificationIndex"></app-fan-setup>
+        [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)"></app-fan-setup>
       <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected" [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
-        [modificationIndex]="modificationIndex"></app-fan-motor>
+        [modificationIndex]="modificationIndex" (emitSave)="saveModFanMotor($event)"></app-fan-motor>
       <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
-        [modificationIndex]="modificationIndex"></app-fan-field-data>
+        [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)"></app-fan-field-data>
       <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"
-        [fsat]="assessment.fsat.modifications[modificationIndex].fsat" [modificationIndex]="modificationIndex"></app-modify-field-data-form>
+        [fsat]="assessment.fsat.modifications[modificationIndex].fsat" [modificationIndex]="modificationIndex" (emitSave)="saveModExtra($event)"></app-modify-field-data-form>
     </div>
   </div>
 

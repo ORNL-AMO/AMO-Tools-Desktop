@@ -3,6 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
 import { FsatService } from '../fsat.service';
+import { FSAT } from '../../shared/models/fans';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -20,8 +21,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
-  @Output('saved')
-  saved = new EventEmitter<boolean>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<FSAT>();
 
   tabSelect: string = 'results';
   currentField: string;
@@ -47,6 +48,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
 
   save(){
-    
+    this.emitSave.emit(this.assessment.fsat);
   }
 }

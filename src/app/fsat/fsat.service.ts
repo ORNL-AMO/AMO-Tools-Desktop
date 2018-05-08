@@ -15,6 +15,11 @@ export class FsatService {
   openNewModal: BehaviorSubject<boolean>;
   openModificationModal: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService) {
+    this.initData();
+  }
+
+
+  initData() {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
