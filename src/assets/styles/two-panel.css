@@ -80,6 +80,11 @@
     border-bottom: #145A32 solid 2px;
 }
 
+.fsat .panel-tab-item.active{
+    border: none;
+    border-bottom: #FFE400 groove 2px;
+}
+
 .header h3{
     margin-left: 5px;
 }

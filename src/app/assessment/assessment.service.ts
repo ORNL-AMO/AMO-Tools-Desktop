@@ -252,7 +252,9 @@ export class AssessmentService {
         pressure: 10,
         loadEstimatedMethod: 'Power',
         motorPower: 12,
-        cost: 1
+        cost: 1,
+        compressibilityFactor: 1,
+        specificHeatRatio: 1.4
       },
       fanMotor: {
         frequency: '50 Hz',
@@ -261,7 +263,8 @@ export class AssessmentService {
         efficiencyClass: 'Standard Efficiency',
         efficiency: 0,
         motorVoltage: 0,
-        fullLoadAmps: 0
+        fullLoadAmps: 0,
+        sizeMargin: 0
       },
       fanSetup: {
         fanType: 'Airfoil (SISW)',
@@ -284,6 +287,12 @@ export class AssessmentService {
         relativeHumidity: 0,
         dewPoint: 0,
         specificHeatGas: .24
+      },
+      notes: {
+        fieldDataNotes: '',
+        fanMotorNotes: '',
+        fanSetupNotes: '',
+        fluidNotes: ''
       }
     }
     return newFsat;

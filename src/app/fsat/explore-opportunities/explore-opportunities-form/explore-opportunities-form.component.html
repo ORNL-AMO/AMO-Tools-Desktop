@@ -15,14 +15,14 @@
         [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-fan-data-form>
 
     </li>
-    <!-- <li>
+    <li>
       <div class="checkbox">
         <label class="group-label" for="modifyCalculationMethod">
           <input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')"
-            [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation" /> Optimize Pump and Motor Combination for a Fixed Specific Speed
+            [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize" /> Optimize Fan and Motor Combination for a Fixed Specific Speed
         </label>
       </div>
-      <ul *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
+      <ul *ngIf="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
         <li>
           <div class="checkbox">
             <label for="showSizeMargin">
@@ -35,7 +35,7 @@
             </div>
             <div class="form-group">
               <div name="sizeMargin" class="input-group">
-                <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.margin"
+                <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.sizeMargin"
                   (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
                 <span class="input-group-addon units">%</span>
               </div>
@@ -43,6 +43,6 @@
           </form>
         </li>
       </ul>
-    </li> -->
+    </li>
   </ul>
 </div>

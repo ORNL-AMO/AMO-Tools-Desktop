@@ -15,7 +15,10 @@ export class FanFieldDataService {
       pressure: [obj.pressure, Validators.required],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
-      cost: [obj.cost, Validators.required]
+      cost: [obj.cost, Validators.required],
+      specificHeatRatio: [obj.specificHeatRatio, Validators.required],
+      compressibilityFactor: [obj.compressibilityFactor, Validators.required]
+
     })
     return form;
   }
