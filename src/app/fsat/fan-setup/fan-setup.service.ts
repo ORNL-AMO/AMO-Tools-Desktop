@@ -17,4 +17,14 @@ export class FanSetupService {
     })
     return form;
   }
+
+  getObjFromForm(form: FormGroup): FanSetup {
+    let obj: FanSetup = {
+      fanType: form.controls.fanType.value,
+      fanSpeed: form.controls.fanSpeed.value,
+      drive: form.controls.drive.value,
+      stages: form.controls.stages.value
+    }
+    return obj;
+  }
 }

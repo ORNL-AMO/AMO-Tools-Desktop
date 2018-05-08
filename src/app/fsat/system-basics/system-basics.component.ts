@@ -15,7 +15,7 @@ export class SystemBasicsComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<Settings>();
 
 
   settingsForm: FormGroup; 
@@ -28,6 +28,11 @@ export class SystemBasicsComponent implements OnInit {
 
 
   save(){
-    this.emitSave.emit(true);
+    let id: number = this.settings.id;
+    let createdDate = this.settings.createdDate;
+    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.settings.id = id;
+    this.settings.createdDate = createdDate;
+    this.emitSave.emit(this.settings);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
 import { FanSetup } from '../../shared/models/fans';
@@ -17,6 +17,9 @@ export class FanSetupComponent implements OnInit {
   fanSetup: FanSetup;
   @Input()
   modificationIndex: number;
+  @Output('emitSave')
+  emitSave = new EventEmitter<FanSetup>();
+
 
   fanTypes: Array<string> = [
     'Airfoil (SISW)',
@@ -78,7 +81,8 @@ export class FanSetupComponent implements OnInit {
   }
 
   save(){
-
+    this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    this.emitSave.emit(this.fanSetup);
   }
 
   subtractNum(){

@@ -22,4 +22,19 @@ export class FanFieldDataService {
     })
     return form;
   }
+
+  getObjFromForm(form: FormGroup): FieldData {
+    let newData: FieldData = {
+      operatingFraction: form.controls.operatingFraction.value,
+      flowRate: form.controls.flowRate.value,
+      inletPressure: form.controls.inletPressure.value,
+      outletPressure: form.controls.outletPressure.value,
+      loadEstimatedMethod: form.controls.loadEstimatedMethod.value,
+      motorPower: form.controls.motorPower.value,
+      cost: form.controls.cost.value,
+      specificHeatRatio: form.controls.specificHeatRatio.value,
+      compressibilityFactor: form.controls.compressibilityFactor.value
+    }
+    return newData;
+  }
 }

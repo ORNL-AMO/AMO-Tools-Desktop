@@ -11,7 +11,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 
@@ -144,8 +144,15 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  saveSettings() {
+  saveSettings(newSettings: Settings) {
+    this.settings = newSettings;
     //TODO:implement saving settings
+    if (this.isAssessmentSettings) {
+      this.indexedDbService.putSettings(this.settings).then(() => {
+        this.settingsDbService.setAll().then(() => {
+        });
+      })
+    }
   }
 
 
@@ -209,6 +216,25 @@ export class FsatComponent implements OnInit {
     this.addNewModal.onHidden.subscribe(() => {
       this.save();
     })
+  }
+  saveGasDensity(newDensity: BaseGasDensity) {
+    this._fsat.baseGasDensity = newDensity;
+    this.save();
+  }
+
+  saveFanMotor(newFanMotor: FanMotor) {
+    this._fsat.fanMotor = newFanMotor;
+    this.save();
+  }
+
+  saveFanSetup(newFanSetup: FanSetup) {
+    this._fsat.fanSetup = newFanSetup;
+    this.save();
+  }
+
+  saveFieldData(newFieldData: FieldData) {
+    this._fsat.fieldData = newFieldData;
+    this.save();
   }
 
   save() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
@@ -22,6 +22,8 @@ export class FanMotorComponent implements OnInit {
   fanMotor: FanMotor;
   @Input()
   modificationIndex: number;
+  @Output('emitSave')
+  emitSave = new EventEmitter<FanMotor>();
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -336,6 +338,7 @@ export class FanMotorComponent implements OnInit {
   }
 
   save() {
-
+    this.fanMotor = this.fanMotorService.getObjFromForm(this.fanMotorForm);
+    this.emitSave.emit(this.fanMotor);
   }
 }

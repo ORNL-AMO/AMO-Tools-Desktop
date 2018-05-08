@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
@@ -26,6 +26,9 @@ export class FanFieldDataComponent implements OnInit {
   loadEstimationMethod: string;
   @Input()
   baseline: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<FieldData>();
+
 
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
 
@@ -127,7 +130,8 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   save() {
-
+    this.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
+    this.emitSave.emit(this.fieldData);
   }
 
   checkFlowRate(bool?: boolean) {

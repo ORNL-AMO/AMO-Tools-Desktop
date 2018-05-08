@@ -117,6 +117,7 @@ export class SettingsService {
       electricityCost: form.controls.electricityCost.value,
       densityMeasurement: form.controls.densityMeasurement.value
     };
+    console.log(tmpSettings.densityMeasurement)
     return tmpSettings;
   }
 

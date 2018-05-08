@@ -35,7 +35,6 @@ export class FsatTabsComponent implements OnInit {
 
     this.modSubscription = this.compareService.selectedModification.subscribe(val => {
       this.selectedModification = val;
-      console.log(this.selectedModification);
       this.cd.detectChanges();
     })
   }
