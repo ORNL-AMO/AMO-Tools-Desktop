@@ -4,6 +4,7 @@ import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
 import { BaseGasDensity } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -23,7 +24,9 @@ export class FsatFluidComponent implements OnInit {
   selected: boolean;
   @Input()
   modificationIndex: number;
-
+  @Input()
+  settings: Settings;
+  
   gasDensityForm: FormGroup;
 
   methods: Array<{ display: string, value: string }> = [

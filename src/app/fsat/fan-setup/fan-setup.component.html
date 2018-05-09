@@ -45,10 +45,10 @@
     <div class="form-group">
       <label for="stages">Stages</label>
       <div name="stages" class="incrementor form-control input-group">
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
+        <button class="btn input-group-btn" [disabled]="!selected || fanForm.controls.stages.value == 1" (click)="subtractStage()">
           <i class="fa fa-minus"></i>
         </button>
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
+        <button class="btn input-group-btn" [disabled]="!selected" (click)="addStage()">
           <i class="fa fa-plus"></i>
         </button>
         <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" (input)="save()"

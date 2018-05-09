@@ -43,7 +43,7 @@ export class FanFieldDataComponent implements OnInit {
   opFractionError: string = null;
   ratedPowerError: string = null;
   marginError: string = null;
-
+  outletPressureError: string = null;
   fieldDataForm: FormGroup;
   constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -224,6 +224,18 @@ export class FanFieldDataComponent implements OnInit {
     return true;
   }
 
+  checkOutletPressure(bool?: boolean){
+    if(!bool){
+      this.save();
+    }
+
+    if(this.fieldDataForm.controls.outletPressure.value <= 0){
+      this.outletPressureError = 'Must be greater then 0';
+    }else{
+      this.outletPressureError = null;
+    }
+  }
+
   optimizeCalc(bool: boolean) {
     if (!bool || !this.selected) {
       this.fieldDataForm.controls.sizeMargin.disable();
@@ -236,5 +248,18 @@ export class FanFieldDataComponent implements OnInit {
       optimizeCalculation: bool
     });
     this.save();
+  }
+
+
+  estimateOutletPressure(){
+    //todo
+  }
+
+  estimateInletPressure(){
+    //todo
+  }
+
+  calculatCompressibility(){
+    //todo
   }
 }

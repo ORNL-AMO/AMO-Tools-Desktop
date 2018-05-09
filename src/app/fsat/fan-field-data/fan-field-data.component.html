@@ -25,44 +25,41 @@
     </div>
 
     <div class="form-group">
-      <label for="flowRate">Flow Rate</label>
-      <div class="input-group">
-        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
-          (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
-
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
-    </div>
-
-    <div class="form-group">
       <label for="inletPressure">
         Inlet Pressure
-        <!-- <a class="form-text small click-link" (click)="showAmcaModal()">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a> -->
+        <a class="form-text small click-link" (click)="estimateInletPressure()">Estimate Inlet Pressure</a>
       </label>
       <div class="input-group">
-        <input name="inletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
+        <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
           (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
+        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
     </div>
+
     <div class="form-group">
       <label for="outletPressure">
         Outlet Pressure
-        <!-- <a class="form-text small click-link" (click)="showAmcaModal()">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a> -->
+        <a class="form-text small click-link" (click)="estimateOutletPressure()">Estimate Outlet Pressure</a>
       </label>
       <div class="input-group">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
-          (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
+          (input)="checkOutletPressure()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
       </div>
-      <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
+      <span class="alert-danger pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span>
     </div>
-
-    <div>
-      <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Estimate Flow Rate and Pressure with Pitot Tube Analysis</a>
+    <div class="form-group">
+      <label for="flowRate">Flow Rate
+          <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Calculate Flow Rate and Pressures</a>
+      </label>
+      <div class="input-group">
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
+          (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
     </div>
 
     <div class="form-group" *ngIf="baseline">
@@ -84,7 +81,15 @@
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
     </div>
-
+    <div class="form-group" *ngIf="baseline">
+      <label for="measuredVoltage">Measured Voltage</label>
+      <div class="input-group">
+        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
+          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
+        <span class="units">V</span>
+      </div>
+      <!-- <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span> -->
+    </div>
     <div class="form-group">
       <label for="specificHeatRatio">Specific Heat Ratio (&gamma;)</label>
       <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
@@ -92,7 +97,9 @@
     </div>
 
     <div class="form-group">
-      <label for="compressibilityFactor">Compressibility Factor</label>
+      <label for="compressibilityFactor">Compressibility Factor
+          <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled':!selected}">Calculate Flow Rate and Pressures</a>
+      </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
         [readonly]="!selected">

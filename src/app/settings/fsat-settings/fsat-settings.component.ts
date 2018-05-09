@@ -20,21 +20,16 @@ export class FsatSettingsComponent implements OnInit {
   temperatureMeasurements: Array<any> = [];
 
   flowOptions: Array<string> = [
-    'gpm',
-    'MGD',
-    'm3/h',
-    'L/s',
-    'm3/min',
-    'impgpm'
+    'ft3/h',
+    'm3/h'
   ];
 
   pressureOptions: Array<string> = [
-    'psi',
     'Pa',
     'torr',
     'mmHG',
-    'inH2o'
-    //TODO: mm W.C (milimeter water column)
+    'inH2o',
+    'mmH2o'
   ];
   powerOptions: Array<string> = [
     'kW',
@@ -48,9 +43,7 @@ export class FsatSettingsComponent implements OnInit {
 
   densityOptions: Array<string> = [
     'kgNm3',
-    'kgL',
-    'lbscf',
-    'lbgal'
+    'lbscf'
   ]
   constructor(private convertUnitsService: ConvertUnitsService) { }
 

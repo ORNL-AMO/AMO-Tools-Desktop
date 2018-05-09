@@ -247,23 +247,24 @@ export class AssessmentService {
   getNewFsat(): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        operatingFraction: 0,
+        operatingFraction: 1,
         flowRate: 1800,
         inletPressure: 10,
         outletPressure: 10,
         loadEstimatedMethod: 'Power',
         motorPower: 12,
-        cost: 1,
+        cost: .06,
         compressibilityFactor: 1,
-        specificHeatRatio: 1.4
+        specificHeatRatio: 1.4,
+        measuredVoltage: 460
       },
       fanMotor: {
-        frequency: '50 Hz',
+        frequency: '60 Hz',
         horsePower: 5,
         motorRPM: 3000,
         efficiencyClass: 'Standard Efficiency',
         efficiency: 0,
-        motorVoltage: 0,
+        motorVoltage: 460,
         fullLoadAmps: 0,
         sizeMargin: 0
       },
@@ -271,7 +272,7 @@ export class AssessmentService {
         fanType: 'Airfoil (SISW)',
         fanSpeed: 0,
         drive: 'Direct Drive',
-        stages: 0
+        stages: 1
       },
       baseGasDensity: {
         dryBulbTemp: 123,

@@ -10,7 +10,7 @@ export class SettingsService {
   setDontShow: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder) {
     this.setDontShow = new BehaviorSubject<boolean>(false);
-   }
+  }
 
   getSettingsForm(): FormGroup {
     return this.formBuilder.group({
@@ -77,7 +77,9 @@ export class SettingsService {
       'fuelCost': [settings.fuelCost || 3.99],
       'steamCost': [settings.steamCost || 4.69],
       'electricityCost': [settings.electricityCost || .066],
-      'densityMeasurement': [settings.densityMeasurement]
+      'densityMeasurement': [settings.densityMeasurement || 'lbscf'],
+      'fanFlowRate': [settings.fanFlowRate || 'ft3/h'],
+      'fanPressureMeasurement': [settings.fanPressureMeasurement || 'inH2o']
     });
   }
 
@@ -115,9 +117,10 @@ export class SettingsService {
       fuelCost: form.controls.fuelCost.value,
       steamCost: form.controls.steamCost.value,
       electricityCost: form.controls.electricityCost.value,
-      densityMeasurement: form.controls.densityMeasurement.value
+      densityMeasurement: form.controls.densityMeasurement.value,
+      fanFlowRate: form.controls.fanFlowRate.value,
+      fanPressureMeasurement: form.controls.fanPressureMeasurement.value
     };
-    console.log(tmpSettings.densityMeasurement)
     return tmpSettings;
   }
 
@@ -153,7 +156,9 @@ export class SettingsService {
       fuelCost: settings.fuelCost,
       steamCost: settings.steamCost,
       electricityCost: settings.electricityCost,
-      densityMeasurement: settings.densityMeasurement
+      densityMeasurement: settings.densityMeasurement,
+      fanFlowRate: settings.fanFlowRate,
+      fanPressureMeasurement: settings.fanPressureMeasurement
     }
     return newSettings;
   }
@@ -176,7 +181,10 @@ export class SettingsService {
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
         phastRollupElectricityUnit: 'MMBtu',
-        phastRollupSteamUnit: 'MMBtu'
+        phastRollupSteamUnit: 'MMBtu',
+        densityMeasurement: 'lbscf',
+        fanFlowRate: 'ft3/h',
+        fanPressureMeasurement: 'inH2o'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -199,7 +207,10 @@ export class SettingsService {
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
         phastRollupElectricityUnit: 'GJ',
-        phastRollupSteamUnit: 'GJ'
+        phastRollupSteamUnit: 'GJ',
+        densityMeasurement: 'kgNm3',
+        fanFlowRate: 'm3/h',
+        fanPressureMeasurement: 'mmH2o'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -257,8 +268,8 @@ export class SettingsService {
     return settings;
   }
 
-  setTemperatureUnit(settings: Settings): Settings{
-    if(settings.unitsOfMeasure == 'Imperial'){
+  setTemperatureUnit(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
       settings.temperatureMeasurement = 'F';
     } else if (settings.unitsOfMeasure == 'Metric') {
       settings.temperatureMeasurement = 'C';

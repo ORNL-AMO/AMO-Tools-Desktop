@@ -18,7 +18,8 @@ export class FanFieldDataService {
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, Validators.required],
       specificHeatRatio: [obj.specificHeatRatio, Validators.required],
-      compressibilityFactor: [obj.compressibilityFactor, Validators.required]
+      compressibilityFactor: [obj.compressibilityFactor, Validators.required],
+      measuredVoltage: [obj.measuredVoltage, Validators.required]
     })
     return form;
   }
@@ -33,7 +34,8 @@ export class FanFieldDataService {
       motorPower: form.controls.motorPower.value,
       cost: form.controls.cost.value,
       specificHeatRatio: form.controls.specificHeatRatio.value,
-      compressibilityFactor: form.controls.compressibilityFactor.value
+      compressibilityFactor: form.controls.compressibilityFactor.value,
+      measuredVoltage: form.controls.measuredVoltage.value
     }
     return newData;
   }

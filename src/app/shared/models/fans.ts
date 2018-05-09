@@ -33,7 +33,8 @@ export interface FieldData {
   loadEstimatedMethod: string,
   motorPower: number,
   specificHeatRatio: number,
-  compressibilityFactor: number
+  compressibilityFactor: number,
+  measuredVoltage: number
 }
 
 export interface FanMotor {

@@ -85,11 +85,19 @@ export class FanSetupComponent implements OnInit {
     this.emitSave.emit(this.fanSetup);
   }
 
-  subtractNum(){
-
+  addStage(){
+    let currentStage: number = this.fanForm.controls.stages.value;
+    this.fanForm.patchValue({
+      stages: (currentStage+1)
+    })
+    this.save();
   }
 
-  addNum(){
-
+  subtractStage(){
+    let currentStage: number = this.fanForm.controls.stages.value;
+    this.fanForm.patchValue({
+      stages: (currentStage-1)
+    })
+    this.save();
   }
 }
