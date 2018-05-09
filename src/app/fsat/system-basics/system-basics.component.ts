@@ -30,9 +30,11 @@ export class SystemBasicsComponent implements OnInit {
   save(){
     let id: number = this.settings.id;
     let createdDate = this.settings.createdDate;
+    let assessmentId: number = this.settings.assessmentId;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
     this.settings.createdDate = createdDate;
+    this.settings.assessmentId = assessmentId;
     this.emitSave.emit(this.settings);
   }
 }
