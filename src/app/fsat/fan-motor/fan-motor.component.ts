@@ -5,6 +5,7 @@ import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FanMotor } from '../../shared/models/fans';
+import { HelpPanelService } from '../help-panel/help-panel.service';
 
 @Component({
   selector: 'app-fan-motor',
@@ -54,7 +55,7 @@ export class FanMotorComponent implements OnInit {
   ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
   fanMotorForm: FormGroup;
-  constructor(private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -110,7 +111,7 @@ export class FanMotorComponent implements OnInit {
     this.save();
   }
   focusField(str: string) {
-    // this.helpPanelService.currentField.next(str);
+    this.helpPanelService.currentField.next(str);
   }
   modifyPowerArrays() {
     if (this.fanMotorForm.controls.efficiencyClass.value === 'Premium') {

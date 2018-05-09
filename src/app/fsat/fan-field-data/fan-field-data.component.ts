@@ -5,6 +5,7 @@ import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FieldData } from '../../shared/models/fans';
+import { HelpPanelService } from '../help-panel/help-panel.service';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -45,7 +46,7 @@ export class FanFieldDataComponent implements OnInit {
   marginError: string = null;
   outletPressureError: string = null;
   fieldDataForm: FormGroup;
-  constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -90,7 +91,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   focusField(str: string) {
-    // this.helpPanelService.currentField.next(str);
+    this.helpPanelService.currentField.next(str);
   }
 
   getDisplayUnit(unit: any) {
@@ -224,14 +225,14 @@ export class FanFieldDataComponent implements OnInit {
     return true;
   }
 
-  checkOutletPressure(bool?: boolean){
-    if(!bool){
+  checkOutletPressure(bool?: boolean) {
+    if (!bool) {
       this.save();
     }
 
-    if(this.fieldDataForm.controls.outletPressure.value <= 0){
+    if (this.fieldDataForm.controls.outletPressure.value <= 0) {
       this.outletPressureError = 'Must be greater then 0';
-    }else{
+    } else {
       this.outletPressureError = null;
     }
   }
@@ -239,10 +240,10 @@ export class FanFieldDataComponent implements OnInit {
   optimizeCalc(bool: boolean) {
     if (!bool || !this.selected) {
       this.fieldDataForm.controls.sizeMargin.disable();
-     // this.fieldDataForm.controls.fixedSpeed.disable();
+      // this.fieldDataForm.controls.fixedSpeed.disable();
     } else {
       this.fieldDataForm.controls.sizeMargin.enable();
-     // this.fieldDataForm.controls.fixedSpeed.enable();
+      // this.fieldDataForm.controls.fixedSpeed.enable();
     }
     this.fieldDataForm.patchValue({
       optimizeCalculation: bool
@@ -251,15 +252,15 @@ export class FanFieldDataComponent implements OnInit {
   }
 
 
-  estimateOutletPressure(){
+  estimateOutletPressure() {
     //todo
   }
 
-  estimateInletPressure(){
+  estimateInletPressure() {
     //todo
   }
 
-  calculatCompressibility(){
+  calculatCompressibility() {
     //todo
   }
 }

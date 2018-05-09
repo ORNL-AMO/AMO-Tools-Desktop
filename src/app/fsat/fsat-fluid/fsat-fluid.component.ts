@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { BaseGasDensity } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
+import { HelpPanelService } from '../help-panel/help-panel.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -40,7 +41,7 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ]
-  constructor(private fsatService: FsatService, private fsatFluidService: FsatFluidService) { }
+  constructor(private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -83,8 +84,8 @@ export class FsatFluidComponent implements OnInit {
     this.emitSave.emit(this.baseGasDensity);
   }
 
-  focusField() {
-
+  focusField(str: string) {
+    this.helpPanelService.currentField.next(str);
   }
 
   getDensity() {

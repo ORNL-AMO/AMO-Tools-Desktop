@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-fan-motor-help',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fan-motor-help.component.css']
 })
 export class FanMotorHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
 
   constructor() { }
 

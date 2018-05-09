@@ -1,3 +1,170 @@
-<p>
-  fan-field-data-help works!
-</p>
+<div class="help-header">
+
+  <h3>Enter measured field data to calculate your system's annual savings potential.</h3>
+  <!-- <p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
+    </p> -->
+
+</div>
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'operatingFraction'">
+    <div class="card-header">
+      Operating Fraction
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Operating Fraction represents the fraction of calender hours the equipment is running. It is used in calculating the annual
+        cost results.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Minimum Value Allowed:
+        <strong>0</strong>
+        <br> Maximum Value Allowed:
+        <strong>1</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'cost'">
+    <div class="card-header">
+      Cost
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Per unit cost of electricity in ($/kWh).
+      </p>
+      <p>
+        The simplest approach is to simply divide the monthly (or annual) electric energy cost by the corresponding period's energy
+        consumption, both of which are normally included in electric bills. It is recommended to include demand charges,
+        power factor-related penalties, and other issues because they can have a significant impact on the the average per
+        unit energy cost.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>Currency</strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
+        <br> Maximum Value Allowed:
+        <strong>1</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'loadEstimatedMethod'">
+    <div class="card-header">
+      Load Estimation Method
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Load Estimation Method can either be one of two choices:
+        <u>Power</u> or
+        <u>Current</u>. Both of which calculate
+        <u>Motor Input</u> which will be used for efficiency calculations.
+      </p>
+      <p>
+        The preferred load estimation method is power. However, if a power measurement is not practical, current can be used.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Options:
+        <strong>Power</strong> or
+        <strong>Current</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'motorPower'">
+    <div class="card-header">
+      Motor Power or Motor Current
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Either Motor Power (kW) or Motor Current (amps) will be displayed, depending on the Load Estimation Method selected. Power
+        is the preferred measurement, but unless a permanently-installed power meter is available, is much more intrusive
+        and challenging.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>kW or amps</strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
+        <br> Maximum Value Allowed:
+        <strong>None</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'measuredVoltage'">
+    <div class="card-header">
+      Measured Voltage
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the specified
+        Load estimation method. If Power is the Load estimation method, the current is estimated from power and voltage.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>Volts</strong>
+        <br> Minimum Value Suggested:
+        <strong>1 V</strong>
+        <br> Maximum Value Suggested:
+        <strong>13800 V</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+</div>

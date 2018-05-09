@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
 import { FanSetup } from '../../shared/models/fans';
+import { HelpPanelService } from '../help-panel/help-panel.service';
 
 @Component({
   selector: 'app-fan-setup',
@@ -42,7 +43,7 @@ export class FanSetupComponent implements OnInit {
   ];
 
   fanForm: FormGroup;
-  constructor(private fanSetupService: FanSetupService) { }
+  constructor(private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -76,8 +77,8 @@ export class FanSetupComponent implements OnInit {
     this.fanForm.controls.drive.enable();
   }
 
-  focusField(){
-
+  focusField(str: string){
+    this.helpPanelService.currentField.next(str);
   }
 
   save(){

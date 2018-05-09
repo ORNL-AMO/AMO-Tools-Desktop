@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-fan-field-data-help',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fan-field-data-help.component.css']
 })
 export class FanFieldDataHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
 
   constructor() { }
 
