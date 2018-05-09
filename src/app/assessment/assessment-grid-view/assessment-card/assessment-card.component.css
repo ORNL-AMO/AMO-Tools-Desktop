@@ -3,12 +3,12 @@
     height: 18px;
   }
 
-  .summary-card-header.phast{
+  .phast .summary-card-header{
     border-bottom: #BF3D00 groove 2px;
     border-image: linear-gradient(to right,#F0F3F4, #BF3D00) 50 / 2;
   }
 
-  .summary-card-header.psat{
+  .psat .summary-card-header{
     border-bottom: #2980b9 groove 2px;
     border-image: linear-gradient(to right,#F0F3F4, #2980b9) 50 / 2;
   }
