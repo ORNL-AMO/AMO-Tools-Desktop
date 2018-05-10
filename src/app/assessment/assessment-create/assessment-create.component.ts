@@ -10,6 +10,9 @@ import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Assessment } from '../../shared/models/assessment';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-assessment-create',
@@ -21,19 +24,21 @@ export class AssessmentCreateComponent implements OnInit {
   directory: Directory;
   @Input()
   settings: Settings;
-  @ViewChildren('assessmentName') vc;
   @Output('hideModal')
   hideModal = new EventEmitter<boolean>();
   @Input()
   type: string;
 
-  newAssessment: FormGroup;
+  newAssessmentForm: FormGroup;
   selectedEquip: string = 'new';
   showDropdown: boolean = false;
   selectedAssessment: string = 'Select Pump';
-  allAssessments: any[] = new Array();
-  filteredAssessments: any[] = new Array();
+  allAssessments: Array<Assessment>;
+  filteredAssessments: Array<Assessment>;
   canCreate: boolean;
+  directories: Array<Directory>;
+  showNewFolder: boolean = false;
+  newFolderForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
@@ -41,23 +46,25 @@ export class AssessmentCreateComponent implements OnInit {
     private router: Router,
     private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService,
-    private assessmentDbService: AssessmentDbService) { }
+    private assessmentDbService: AssessmentDbService,
+    private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
-
-    this.newAssessment = this.initForm();
+    this.directories = this.directoryDbService.getAll();
+    this.newAssessmentForm = this.initForm();
+    this.newFolderForm = this.initFolderForm();
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
     this.canCreate = true;
     if (this.type) {
-      this.newAssessment.patchValue({
+      this.newAssessmentForm.patchValue({
         assessmentType: this.type
       })
     }
+
   }
 
   ngAfterViewInit() {
@@ -67,7 +74,8 @@ export class AssessmentCreateComponent implements OnInit {
   initForm() {
     return this.formBuilder.group({
       'assessmentName': ['New Assessment', Validators.required],
-      'assessmentType': ['Pump', Validators.required]
+      'assessmentType': ['Pump', Validators.required],
+      'directoryId': [this.directory.id, Validators.required]
     });
   }
 
@@ -75,9 +83,6 @@ export class AssessmentCreateComponent implements OnInit {
   @ViewChild('createModal') public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
-    this.createModal.onShown.subscribe(() => {
-      this.vc.first.nativeElement.select();
-    })
   }
 
   hideCreateModal(bool?: boolean) {
@@ -92,20 +97,20 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   createAssessment() {
-    if (this.newAssessment.valid && this.canCreate) {
+    if (this.newAssessmentForm.valid && this.canCreate) {
       this.canCreate = false;
       this.hideCreateModal(true);
       this.createModal.onHidden.subscribe(() => {
         this.assessmentService.tab = 'system-setup';
-        if (this.newAssessment.controls.assessmentType.value == 'Pump') {
+        if (this.newAssessmentForm.controls.assessmentType.value == 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
-          tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
+          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           let tmpPsat = this.assessmentService.getNewPsat();
           tmpAssessment.psat = tmpPsat;
           if (this.settings.powerMeasurement != 'hp') {
             tmpAssessment.psat.inputs.motor_rated_power = 150;
           }
-          tmpAssessment.directoryId = this.directory.id;
+          tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.assessmentDbService.setAll().then(() => {
               tmpAssessment.id = assessmentId;
@@ -114,13 +119,13 @@ export class AssessmentCreateComponent implements OnInit {
             })
           })
         }
-        else if (this.newAssessment.controls.assessmentType.value == 'Furnace') {
+        else if (this.newAssessmentForm.controls.assessmentType.value == 'Furnace') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
-          tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
+          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           let tmpPhast = this.assessmentService.getNewPhast();
           tmpAssessment.phast = tmpPhast;
           tmpAssessment.phast.setupDone = false;
-          tmpAssessment.directoryId = this.directory.id;
+          tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
           tmpAssessment.phast.operatingCosts = {
             electricityCost: this.settings.electricityCost || .066,
             steamCost: this.settings.steamCost || 4.69,
@@ -164,4 +169,73 @@ export class AssessmentCreateComponent implements OnInit {
     }
   }
 
+  getAllDirectories() {
+    this.directories = this.directoryDbService.getAll();
+    // _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
+    // _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+  }
+
+  getParentDirStr(id: number) {
+    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    if (parentDir) {
+      let str = parentDir.name + '/';
+      while (parentDir.parentDirectoryId) {
+        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        str = parentDir.name + '/' + str;
+      }
+      return str;
+    } else {
+      return '';
+    }
+  }
+
+
+  addFolder() {
+    this.showNewFolder = true;
+  }
+
+  cancelNewFolder() {
+    this.showNewFolder = false;
+  }
+
+
+  createFolder() {
+    let tmpFolder: Directory = {
+      name: this.newFolderForm.controls.folderName.value,
+      parentDirectoryId: this.newFolderForm.controls.directoryId.value
+    }
+    let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
+    delete tmpSettings.facilityInfo;
+    delete tmpSettings.id;
+    if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
+      tmpSettings.facilityInfo = {
+        companyName: this.newFolderForm.controls.companyName.value,
+        facilityName: this.newFolderForm.controls.facilityName.value,
+        date: new Date().toLocaleDateString()
+      }
+    }
+    this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
+      tmpSettings.directoryId = newDirId;
+      this.directoryDbService.setAll().then(() => {
+        this.indexedDbService.addSettings(tmpSettings).then(() => {
+          this.settingsDbService.setAll().then(() => {
+            this.getAllDirectories();
+            this.newAssessmentForm.patchValue({
+              'directoryId': newDirId
+            })
+            this.cancelNewFolder();
+          })
+        })
+      })
+    })
+  }
+
+  initFolderForm() {
+    return this.formBuilder.group({
+      'folderName': ['', Validators.required],
+      'companyName': [''],
+      'facilityName': [''],
+      'directoryId': [this.directory.id, Validators.required]
+    })
+  }
 }
