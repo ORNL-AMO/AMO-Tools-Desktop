@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
@@ -83,12 +83,19 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.buildChart();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.chartContainerWidth && !changes.chartContainerWidth.firstChange) {
+      this.initCanvas();
+      this.buildChart();
+    }
+  }
+
 
   initData() {
     //hard coded values will always be the same, these are for metric
     //temperature default is Celcius
     this.tempArray = [0.01, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 373.95, 370, 360, 350, 340, 330, 320, 310, 300, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0.01];
-    //entropy default is kg/kg*C
+    //entropy default is kJ/kg*C
     this.entropyArray = [0, 0.0763, 0.1511, 0.2245, 0.2965, 0.3672, 0.4368, 0.5051, 0.5724, 0.6386, 0.7038, 0.768, 0.8313, 0.8937, 0.9551, 1.0158, 1.0756, 1.1346, 1.1929, 1.2504, 1.3072, 1.4188, 1.5279, 1.6346, 1.7392, 1.8418, 1.9426, 2.0417, 2.1392, 2.2355, 2.3305, 2.4245, 2.5177, 2.6101, 2.702, 2.7935, 2.8849, 2.9765, 3.0685, 3.1612, 3.2552, 3.351, 3.4494, 3.5518, 3.6601, 3.7784, 3.9167, 4.1112, 4.407, 4.8012, 5.0536, 5.211, 5.3356, 5.4422, 5.5372, 5.6244, 5.7059, 5.7834, 5.8579, 5.9304, 6.0016, 6.0721, 6.1423, 6.2128, 6.284, 6.3563, 6.4302, 6.5059, 6.584, 6.665, 6.7491, 6.8371, 6.9293, 7.0264, 7.1291, 7.2381, 7.3541, 7.4151, 7.4781, 7.5434, 7.6111, 7.6812, 7.754, 7.8296, 7.9081, 7.9898, 8.0748, 8.1633, 8.2555, 8.3517, 8.452, 8.5566, 8.666, 8.7803, 8.8998, 9.0248, 9.1555];
 
     this.pressure0001t = [0, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 11, 97, 208];
@@ -211,7 +218,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
   convertVal(val: number, from: string, to: string) {
     if (val != undefined) {
       val = this.convertUnitsService.value(val).from(from).to(to);
-      // val = this.roundVal(val, 3);
     }
     return val;
   }
@@ -225,10 +231,14 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.htmlElement = this.ngChart.nativeElement;
     this.host = d3.select(this.htmlElement);
 
-
-    //temp hard coded dimensions for testing
-    this.chartContainerHeight = 800;
-    this.chartContainerWidth = 600;
+    if (!this.chartContainerHeight || this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
+      console.log('chartContainerHeight undefined || false || <= 0');
+      this.chartContainerHeight = 800;
+    }
+    if (!this.chartContainerWidth || this.chartContainerWidth === undefined || this.chartContainerWidth <= 0) {
+      console.log('chartContainerWidth undefined || false || <= 0');
+      this.chartContainerWidth = 600;
+    }
 
     //these default values are for metric
     this.xMax = 11;
@@ -245,6 +255,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   buildChart() {
+    this.host.html('');
     this.margin = {
       top: 20,
       right: 20,
