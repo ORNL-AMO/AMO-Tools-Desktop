@@ -1,7 +1,7 @@
 <div class="phast">
   <div class="row modify-conditions panel-container">
     <!--modExists-->
-    <div *ngIf="modExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div *ngIf="modExists" class="col-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <div class="header">
         <h3>Select Potential Adjustment Projects</h3>
       </div>
@@ -11,7 +11,7 @@
       <app-explore-phast-opportunities-form *ngIf="modExists" [phast]="phast" (emitCalculate)="getResults()" [settings]="settings"
         [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)" (changeTab)="changeTab($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities-form>
     </div>
-    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
+    <div class="col-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
       <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"
         [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab" [containerHeight]="containerHeight"></app-losses-result-panel>
     </div>
@@ -25,7 +25,7 @@
       </p> -->
     </div>
 
-    <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
+    <div class="col-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">
       <div class="header">
         <h3>Help</h3>
       </div>
