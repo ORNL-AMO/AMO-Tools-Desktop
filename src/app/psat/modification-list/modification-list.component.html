@@ -59,6 +59,7 @@
           <div class="col-5">
             <div class="d-flex flex-wrap">
               <div *ngFor="let badge of getBadges(modification.psat)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
+              <div *ngIf="modification.psat.inputs.optimize_calculation" class="badge badge-secondary ml-auto">Optimized</div>
             </div>
           </div>
         </div>
