@@ -126,6 +126,10 @@
     .print-div{
         display: none;
     }
+
+    .print-height{
+        height: 100% !important;
+    }
 }
 
 .phast-modal .modal-dialog,
@@ -143,6 +147,11 @@
 .psat-modal .modal-header{
     background-color: #2980b9;
     color: #fff;
+}
+
+.phast-modal .modal-body,
+.psat-modal .modal-body{
+    height: 85vh;
 }
 
 
