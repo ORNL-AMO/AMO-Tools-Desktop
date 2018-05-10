@@ -114,14 +114,10 @@ export class PhastReportComponent implements OnInit {
     },100)
   }
 
-
   getContainerHeight(){
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    console.log(btnHeight);
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    console.log(headerHeight);
     this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
-    console.log(this.reportContainerHeight);
   }
 
   initPrintLogic() {

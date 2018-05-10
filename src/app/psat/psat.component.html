@@ -1,4 +1,4 @@
-<div #content class="psat-container" *ngIf="assessment && settings">
+<div #content class="psat-container psat" *ngIf="assessment && settings">
   <div #header class="hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
     <!--system-setup-->
@@ -86,27 +86,16 @@
   </div>
 
   <!-- sankey -->
-  <div class="row" *ngIf="mainTab == 'sankey'">
-    <div class="col-12">
-      <div class="row justify-content-center">
-        <div class="col-12 ">
-          <div class="row" *ngIf="psatOptionsLength > 1">
-            <div class="col-1"></div>
-            <div class="col-10">
-              <div class="form-group">
-                <select name="psatSelect" class="form-control mx-auto" id="psatSelect" [(ngModel)]="psat1">
-                  <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
-            </div>
-          </div>
-        </div>
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="p-1 mx-auto">
+      <div class="form-group" *ngIf="psatOptionsLength > 1">
+        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" [(ngModel)]="psat1">
+          <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
+        </select>
       </div>
+    </div>
+    <div class="sankey-padding">
+      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
     </div>
   </div>
 
@@ -116,7 +105,7 @@
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-psat-report [psat]="_psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
-        (exportData)="exportData()"></app-psat-report>
+        (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
     </div>
   </div>
   <!--end report-->

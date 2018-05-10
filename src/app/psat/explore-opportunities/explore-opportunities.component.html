@@ -16,7 +16,7 @@
 			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 			<p>Data will be copied from your current baseline condition.</p>
 		  </div>
-		<div class="col-6 help-panel">
+		<div class="col-6 help-panel pr-0">
 			<div class="row" #resultTabs>
 				<ul class="tabs primary tab-row">
 					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
@@ -35,14 +35,13 @@
 				</app-explore-opportunities-help>
 			</div>
 			
-			<div class=" scroll-item" [ngStyle]="{'height.px': helpHeight}">
-				<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-				*ngIf="tabSelect == 'sankey' && modificationExists">
+			<div *ngIf="tabSelect == 'sankey' && modificationExists" class=" scroll-item" [ngStyle]="{'height.px': helpHeight}">
+				<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings">
 				</app-explore-opportunities-sankey>
 			</div>
-			<div class="panel-results scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="modificationExists">
+			<div class="panel-results scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="modificationExists && tabSelect == 'results'">
 				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
-				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name">
 				</app-explore-opportunities-results>
 			</div>
 			<div  *ngIf="!modificationExists && tabSelect != 'help'">

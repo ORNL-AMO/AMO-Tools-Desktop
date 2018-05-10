@@ -251,7 +251,6 @@ export class PsatComponent implements OnInit {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-        console.log('change');
       }, 100);
     }
   }
