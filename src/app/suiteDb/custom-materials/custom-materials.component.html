@@ -1,131 +1,178 @@
 <div class="row">
-  <div class="col-10 mx-auto">
-    <div class="tab-content content-container">
-      <div class="card-form">
-        <label class="group-label general">Custom Flue Gas Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('flue')">Add Flue Gas Material</a>
-        <p class="help-text">View, create, edit your custom flue gas materials.</p>
+  <div class="col-11 mx-auto pt-3">
+    <div class="card card-item">
+      <div class="card-header">
+        Custom Materials Management
+      </div>
+      <div class="card-body p-1">
+        <div class="actions d-flex align-items-center">
+          <div class="d-flex flex-wrap">
+            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()">Delete</button>
+            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="emitExport()">Export</button>
+            <button class="btn btn-secondary action-btn" type="button" (click)="emitImport()">Import</button>
+          </div>
+          <label class="ml-auto select-all">
+            <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />
+            <a>Select all folder content</a>
+          </label>
+          <!-- <a (click)="emitImport()">Import...</a> -->
+        </div>
+        <p class="help-text text-center">View, create, or edit your custom materials.</p>
       </div>
     </div>
-    <app-custom-flue-gas-materials [settings]="settings" [showModal]="showFlueModal"></app-custom-flue-gas-materials>
-  </div>
-</div>
-<div class="row">
-  <div class="col-10 mx-auto">
-    <div class="section-divider"></div>
   </div>
 </div>
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Solid/Liquid Flue Gas Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('solid-liquid-flue')">Add Solid/Liquid Flue Gas Material</a>
-        <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p>
+        <label class="group-label general" (click)="toggleMaterial('flue')">Flue Gas Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showFlueMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showFlueMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showFlueMaterials" (click)="toggleModal('flue')">+Add New Flue Gas Material</a>
+        <!-- <p class="help-text">View, create, edit your custom flue gas materials.</p> -->
       </div>
     </div>
-    <app-custom-solid-liquid-flue-gas-materials [settings]="settings" [showModal]="showSolidLiquidFlueModal"></app-custom-solid-liquid-flue-gas-materials>
+    <app-custom-flue-gas-materials *ngIf="showFlueMaterials" [settings]="settings" [showModal]="showFlueModal"></app-custom-flue-gas-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
-</div>
+</div> -->
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Gas Load Charge Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('gas-load')">Add Gas Load Charge Material</a>
-        <p class="help-text">View, create, edit your custom gas load charge materials.</p>
+        <label class="group-label general" (click)="toggleMaterial('solid-liquid-flue')">Solid/Liquid Flue Gas Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLiquidFlueMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLiquidFlueMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showSolidLiquidFlueMaterials" (click)="toggleModal('solid-liquid-flue')">+Add New Solid/Liquid Flue Gas Material</a>
+        <!-- <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p> -->
       </div>
     </div>
-    <app-custom-gas-load-charge-materials [settings]="settings" [showModal]="showGasLoadChargeModal"></app-custom-gas-load-charge-materials>
+    <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"></app-custom-solid-liquid-flue-gas-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
-</div>
+</div> -->
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Liquid Load Charge Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('liquid-load')">Add Liquid Load Charge Material</a>
-        <p class="help-text">View, create, edit your custom liquid load charge materials.</p>
+        <label class="group-label general" (click)="toggleMaterial('gas-load')">Gas Load Charge Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showGasLoadChargeMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showGasLoadChargeMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showGasLoadChargeMaterials" (click)="toggleModal('gas-load')">+Add New Gas Load Charge Material</a>
+        <!-- <p class="help-text">View, create, edit your custom gas load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-liquid-load-charge-materials [settings]="settings" [showModal]="showLiquidLoadChargeModal"></app-custom-liquid-load-charge-materials>
+    <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"></app-custom-gas-load-charge-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
-</div>
+</div> -->
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Solid Load Charge Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('solid-load')">Add Solid Load Charge Material</a>
-        <p class="help-text">View, create, edit your custom solid load charge materials.</p>
+        <label class="group-label general" (click)="toggleMaterial('liquid-load')">Liquid Load Charge Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showLiquidLoadChargeMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showLiquidLoadChargeMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showLiquidLoadChargeMaterials" (click)="toggleModal('liquid-load')">+Add New Liquid Load Charge Material</a>
+        <!-- <p class="help-text">View, create, edit your custom liquid load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-solid-load-charge-materials [settings]="settings" [showModal]="showSolidLoadChargeModal"></app-custom-solid-load-charge-materials>
+    <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"></app-custom-liquid-load-charge-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
-</div>
+</div> -->
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Atmosphere Specific Heat Materials</label>
-        <a class="click-link pull-right small" (click)="toggleModal('atmosphere-material')">Add Atmosphere Specific Heat Material</a>
-        <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p>
+        <label class="group-label general" (click)="toggleMaterial('solid-load')">Solid Load Charge Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showSolidLoadChargeMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showSolidLoadChargeMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showSolidLoadChargeMaterials" (click)="toggleModal('solid-load')">+Add New Solid Load Charge Material</a>
+        <!-- <p class="help-text">View, create, edit your custom solid load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-atmosphere-specific-heat-materials [settings]="settings" [showModal]="showAtmosphereModal"></app-custom-atmosphere-specific-heat-materials>
+    <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"></app-custom-solid-load-charge-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
-</div>
+</div> -->
 
 
 <div class="row">
-  <div class="col-10 mx-auto">
+  <div class="col-11 mx-auto">
     <div class="tab-content content-container">
       <div class="card-form">
-        <label class="group-label general">Custom Wall Losses Surfaces</label>
-        <a class="click-link pull-right small" (click)="toggleModal('wall-surface')">Add Wall Losses Surfaces</a>
-        <p class="help-text">View, create, edit your custom wall losses surfaces.</p>
+        <label class="group-label general" (click)="toggleMaterial('atmosphere-material')">Atmosphere Specific Heat Materials
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showAtmosphereMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showAtmosphereMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showAtmosphereMaterials" (click)="toggleModal('atmosphere-material')">+Add New Atmosphere Specific Heat Material</a>
+        <!-- <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p> -->
       </div>
     </div>
-    <app-custom-wall-losses-surfaces [settings]="settings" [showModal]="showWallSurfaceModal"></app-custom-wall-losses-surfaces>
+    <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"></app-custom-atmosphere-specific-heat-materials>
   </div>
 </div>
-<div class="row">
-  <div class="col-10 mx-auto">
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
     <div class="section-divider"></div>
   </div>
+</div> -->
+
+
+<div class="row mb-5">
+  <div class="col-11 mx-auto">
+    <div class="tab-content content-container">
+      <div class="card-form">
+        <label class="group-label general" (click)="toggleMaterial('wall-surface')">Wall Loss Surfaces
+          <span class="fa fa-chevron-up pull-right" *ngIf="!showWallSurfaceMaterials"></span>
+          <span class="fa fa-chevron-down pull-right" *ngIf="showWallSurfaceMaterials"></span>
+        </label>
+        <a class="click-link pull-right small" *ngIf="showWallSurfaceMaterials" (click)="toggleModal('wall-surface')">+Add New Wall Loss Surface</a>
+        <!-- <p class="help-text">View, create, edit your custom wall losses surfaces.</p> -->
+      </div>
+    </div>
+    <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"></app-custom-wall-losses-surfaces>
+  </div>
 </div>
+<!-- <div class="row">
+  <div class="col-11 mx-auto">
+    <div class="section-divider"></div>
+  </div>
+</div> -->

@@ -110,3 +110,7 @@ a:not([href]):not([tabindex]):hover {
     text-decoration: underline;
     cursor: pointer;
   }
+
+  .modal-dialog{
+    top: .5rem;
+  }

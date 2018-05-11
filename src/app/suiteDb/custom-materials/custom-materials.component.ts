@@ -18,15 +18,18 @@ export class CustomMaterialsComponent implements OnInit {
   showAtmosphereModal: boolean = false;
   showWallSurfaceModal: boolean = false;
 
+  showFlueMaterials: boolean = false;
+  showSolidLiquidFlueMaterials: boolean = false;
+  showGasLoadChargeMaterials: boolean = false;
+  showLiquidLoadChargeMaterials: boolean = false;
+  showSolidLoadChargeMaterials: boolean = false;
+  showAtmosphereMaterials: boolean = false;
+  showWallSurfaceMaterials: boolean = false;
+  
+
   constructor() { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.showGasLoadChargeModal) {
-      console.log('custom materials change showGasLoadChargeModal');
-    }
   }
 
   toggleModal(material: string) {
@@ -58,4 +61,38 @@ export class CustomMaterialsComponent implements OnInit {
 
   }
 
+
+  toggleMaterial(material: string) {
+    switch (material) {
+      case 'flue':
+        this.showFlueMaterials = !this.showFlueMaterials;
+        break;
+      case 'solid-liquid-flue':
+        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials;
+        break;
+      case 'gas-load':
+        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials;
+        break;
+      case 'liquid-load':
+        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials;
+        break;
+      case 'solid-load':
+        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials;
+        break;
+      case 'atmosphere-material':
+        this.showAtmosphereMaterials = !this.showAtmosphereMaterials;
+        break;
+      case 'wall-surface':
+        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials;
+        break;
+      default:
+        break;
+    }
+
+  }
+
+
+  checkSelected(){
+    return true;
+  }
 }
