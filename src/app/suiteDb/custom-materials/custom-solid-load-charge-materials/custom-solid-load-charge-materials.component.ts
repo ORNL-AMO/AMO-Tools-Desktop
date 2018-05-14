@@ -17,6 +17,8 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
 
   solidChargeMaterials: Array<SolidLoadChargeMaterial>;
   editExistingMaterial: boolean = false;
@@ -29,6 +31,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.solidChargeMaterials = new Array<SolidLoadChargeMaterial>();
     this.getCustomMaterials();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
       if (val) {
@@ -47,15 +50,19 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
+      }
+    }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
       }
     }
   }
 
   getCustomMaterials() {
-    this.solidChargeMaterials = new Array<SolidLoadChargeMaterial>();
     this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
       this.solidChargeMaterials = idbResults;
     });

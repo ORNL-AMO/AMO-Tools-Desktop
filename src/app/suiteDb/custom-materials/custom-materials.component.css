@@ -65,3 +65,16 @@
 .btn{
     padding: 6px;
 }
+
+
+.modal-body h6{
+    border-bottom: solid;
+}
+
+.material-item{
+    font-style: italic;
+}
+
+.modal-dialog{
+    top: 1rem;
+}

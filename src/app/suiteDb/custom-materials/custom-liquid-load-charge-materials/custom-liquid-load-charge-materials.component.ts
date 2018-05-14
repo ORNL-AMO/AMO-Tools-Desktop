@@ -17,6 +17,8 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   settings: Settings
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
 
   liquidChargeMaterials: Array<LiquidLoadChargeMaterial>;
   existingMaterial: LiquidLoadChargeMaterial;
@@ -30,6 +32,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
     this.getCustomMaterials();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
       if (val) {
@@ -48,15 +51,19 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
+      }
+    }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
       }
     }
   }
   
   getCustomMaterials() {
-    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
     this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
       this.liquidChargeMaterials = idbResults;
     });

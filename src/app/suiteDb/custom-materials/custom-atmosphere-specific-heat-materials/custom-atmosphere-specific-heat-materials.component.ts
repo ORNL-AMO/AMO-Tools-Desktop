@@ -17,6 +17,9 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
+
 
   editExistingMaterial: boolean = false;
   existingMaterial: AtmosphereSpecificHeat;
@@ -30,6 +33,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
     this.customMaterialService.selectedAtmosphere = new Array();
     this.getCustomMaterials();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
@@ -48,15 +52,19 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
+      }
+    }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
       }
     }
   }
 
   getCustomMaterials() {
-    this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
     this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
       this.atmosphereSpecificHeatMaterials = idbResults;
     });

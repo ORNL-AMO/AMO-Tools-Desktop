@@ -18,6 +18,8 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
 
   editExistingMaterial: boolean = false;
   existingMaterial: GasLoadChargeMaterial;
@@ -30,6 +32,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();
     this.getCustomMaterials();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
       if(val){
@@ -48,15 +51,19 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
   
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
+      }
+    }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
       }
     }
   }
 
   getCustomMaterials() {
-    this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();
     this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
       this.gasChargeMaterials = idbResults;
     });

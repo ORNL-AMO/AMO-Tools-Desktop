@@ -19,6 +19,8 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -33,7 +35,9 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.flueGasMaterials = new Array<FlueGasMaterial>();
     this.getCustomMaterials();
+    this.customMaterialService.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
       if (val) {
         this.getSelected();
@@ -50,15 +54,19 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
+      }
+    }
   }
-
+  
   getCustomMaterials() {
-    this.flueGasMaterials = new Array<FlueGasMaterial>();
     this.indexedDbService.getFlueGasMaterials().then(idbResults => {
       this.flueGasMaterials = idbResults;
     });
