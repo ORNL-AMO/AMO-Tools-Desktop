@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { CustomMaterialsService } from './custom-materials.service';
 
 @Component({
   selector: 'app-custom-materials',
@@ -25,11 +26,15 @@ export class CustomMaterialsComponent implements OnInit {
   showSolidLoadChargeMaterials: boolean = false;
   showAtmosphereMaterials: boolean = false;
   showWallSurfaceMaterials: boolean = false;
-  
 
-  constructor() { }
+  isAllSelected: boolean = false;
+  constructor(private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.customMaterialService.getSelected.next(false);
   }
 
   toggleModal(material: string) {
@@ -91,8 +96,25 @@ export class CustomMaterialsComponent implements OnInit {
 
   }
 
-
-  checkSelected(){
+  checkSelected() {
     return true;
+  }
+
+  signalSelectAll() {
+    this.customMaterialService.selectAll.next(this.isAllSelected);
+  }
+
+
+  delete() {
+    this.customMaterialService.getSelected.next(true);
+    this.customMaterialService.exportSelected();
+  }
+
+  export() {
+
+  }
+
+  import() {
+
   }
 }

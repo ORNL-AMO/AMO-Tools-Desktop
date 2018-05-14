@@ -1,8 +1,8 @@
-<div class="row w-100">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let solidLiquidFlueGasMaterial of solidLiquidFlueGasMaterials; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{solidLiquidFlueGasMaterial.substance}}
+        <input type="checkbox" [(ngModel)]="solidLiquidFlueGasMaterial.selected"> {{solidLiquidFlueGasMaterial.substance}}
         <i (click)="editMaterial(solidLiquidFlueGasMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">

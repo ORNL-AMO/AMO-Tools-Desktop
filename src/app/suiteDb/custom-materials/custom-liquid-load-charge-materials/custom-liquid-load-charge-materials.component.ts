@@ -4,7 +4,9 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SuiteDbService } from '../../suite-db.service';
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
-
+import { CustomMaterialsService } from '../custom-materials.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-custom-liquid-load-charge-materials',
   templateUrl: './custom-liquid-load-charge-materials.component.html',
@@ -22,21 +24,28 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   deletingMaterial: boolean = false;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
+  selectedSub: Subscription;
+  selectAllSub: Subscription;
 
-
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
     this.getCustomMaterials();
+    this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
+      if (val) {
+        this.getSelected();
+      }
+    })
+
+    this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
+      this.selectAll(val);
+    })
   }
 
-  getCustomMaterials() {
-    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
-    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
-      this.liquidChargeMaterials = idbResults;
-    });
+  ngOnDestroy(){
+    this.selectAllSub.unsubscribe();
+    this.selectedSub.unsubscribe();
   }
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.showModal.firstChange) {
@@ -44,6 +53,13 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
         this.showMaterialModal();
       }
     }
+  }
+  
+  getCustomMaterials() {
+    this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
+    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
+      this.liquidChargeMaterials = idbResults;
+    });
   }
 
   editMaterial(id: number) {
@@ -74,5 +90,14 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
     this.editExistingMaterial = false;
     this.deletingMaterial = false;
     this.getCustomMaterials();
+  }
+  getSelected() {
+    let selected: Array<LiquidLoadChargeMaterial> = _.filter(this.liquidChargeMaterials, (material) => { return material.selected == true });
+    this.customMaterialService.selectedLiquidLoadCharge = selected;
+  }
+  selectAll(val: boolean) {
+    this.liquidChargeMaterials.forEach(material => {
+      material.selected = val;
+    })
   }
 }

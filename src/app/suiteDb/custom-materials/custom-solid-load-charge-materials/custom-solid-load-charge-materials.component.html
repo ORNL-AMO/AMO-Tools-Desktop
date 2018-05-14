@@ -1,8 +1,8 @@
-<div class="row w-100">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let solidChargeMaterial of solidChargeMaterials; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{solidChargeMaterial.substance}}
+        <input type="checkbox" [(ngModel)]="solidChargeMaterial.selected"> {{solidChargeMaterial.substance}}
         <i class="fa fa-edit pull-right" (click)="editMaterial(solidChargeMaterial.id)"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">

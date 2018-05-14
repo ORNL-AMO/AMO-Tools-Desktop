@@ -1,8 +1,8 @@
-<div class="row w-100">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let atmosphereSpecificHeatMaterial of atmosphereSpecificHeatMaterials; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{atmosphereSpecificHeatMaterial.substance}}
+        <input type="checkbox" [(ngModel)]="atmosphereSpecificHeatMaterial.selected"> {{atmosphereSpecificHeatMaterial.substance}}
         <i (click)="editMaterial(atmosphereSpecificHeatMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">
@@ -34,8 +34,8 @@
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content tab-content">
-        <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-atmosphere-specific-heat-material>
+      <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-atmosphere-specific-heat-material>
     </div>
   </div>
 </div>

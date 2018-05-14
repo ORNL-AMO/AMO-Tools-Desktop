@@ -1,8 +1,8 @@
-<div class="row w-100">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let wallLossesSurface of wallLossesSurfaces; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{wallLossesSurface.surface}}
+        <input type="checkbox" [(ngModel)]="wallLossesSurface.selected"> {{wallLossesSurface.surface}}
         <i class="fa fa-edit pull-right" (click)="editMaterial(wallLossesSurface.id)"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">

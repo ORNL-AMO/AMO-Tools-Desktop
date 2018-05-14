@@ -7,9 +7,9 @@
       <div class="card-body p-1">
         <div class="actions d-flex align-items-center">
           <div class="d-flex flex-wrap">
-            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()">Delete</button>
-            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="emitExport()">Export</button>
-            <button class="btn btn-secondary action-btn" type="button" (click)="emitImport()">Import</button>
+            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="delete()">Delete</button>
+            <button class="btn btn-secondary action-btn" [disabled]="!checkSelected()" type="button" (click)="export()">Export</button>
+            <button class="btn btn-secondary action-btn" type="button" (click)="import()">Import</button>
           </div>
           <label class="ml-auto select-all">
             <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" />

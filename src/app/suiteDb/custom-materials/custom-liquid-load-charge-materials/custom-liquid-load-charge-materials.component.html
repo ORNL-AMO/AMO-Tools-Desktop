@@ -1,8 +1,8 @@
-<div class="row w-100">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let liquidChargeMaterial of liquidChargeMaterials; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{liquidChargeMaterial.substance}}
+        <input type="checkbox" [(ngModel)]="liquidChargeMaterial.selected"> {{liquidChargeMaterial.substance}}
         <i (click)="editMaterial(liquidChargeMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">

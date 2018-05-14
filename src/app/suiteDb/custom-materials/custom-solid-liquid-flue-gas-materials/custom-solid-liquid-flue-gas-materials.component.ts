@@ -4,6 +4,9 @@ import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SuiteDbService } from '../../suite-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { CustomMaterialsService } from '../custom-materials.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-custom-solid-liquid-flue-gas-materials',
@@ -21,18 +24,26 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   deletingMaterial: boolean = false;
   existingMaterial: SolidLiquidFlueGasMaterial;
   @ViewChild('materialModal') public materialModal: ModalDirective;
-
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  selectedSub: Subscription;
+  selectAllSub: Subscription;
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
     this.getCustomMaterials();
+    this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
+      if (val) {
+        this.getSelected();
+      }
+    })
+
+    this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
+      this.selectAll(val);
+    })
   }
 
-  getCustomMaterials() {
-    this.solidLiquidFlueGasMaterials = new Array<SolidLiquidFlueGasMaterial>();
-    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
-      this.solidLiquidFlueGasMaterials = idbResults;
-    });
+  ngOnDestroy() {
+    this.selectAllSub.unsubscribe();
+    this.selectedSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -41,6 +52,13 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
         this.showMaterialModal();
       }
     }
+  }
+
+  getCustomMaterials() {
+    this.solidLiquidFlueGasMaterials = new Array<SolidLiquidFlueGasMaterial>();
+    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(idbResults => {
+      this.solidLiquidFlueGasMaterials = idbResults;
+    });
   }
 
   editMaterial(id: number) {
@@ -71,5 +89,15 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
     this.editExistingMaterial = false;
     this.deletingMaterial = false;
     this.getCustomMaterials();
+  }
+
+  getSelected() {
+    let selected: Array<SolidLiquidFlueGasMaterial> = _.filter(this.solidLiquidFlueGasMaterials, (material) => { return material.selected == true });
+    this.customMaterialService.selectedSolidLiquidFlueGas = selected
+  }
+  selectAll(val: boolean) {
+    this.solidLiquidFlueGasMaterials.forEach(material => {
+      material.selected = val;
+    })
   }
 }

@@ -26,6 +26,7 @@ import { CustomSolidLiquidFlueGasMaterialsComponent } from './custom-materials/c
 import { CustomAtmosphereSpecificHeatMaterialsComponent } from './custom-materials/custom-atmosphere-specific-heat-materials/custom-atmosphere-specific-heat-materials.component';
 import { CustomWallLossesSurfacesComponent } from './custom-materials/custom-wall-losses-sufaces/custom-wall-losses-surfaces.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { CustomMaterialsService } from './custom-materials/custom-materials.service';
 @NgModule({
     imports: [
         FormsModule,
@@ -35,7 +36,8 @@ import { ModalModule } from 'ngx-bootstrap';
         ModalModule
     ],
     providers: [
-        SuiteDbService
+        SuiteDbService,
+        CustomMaterialsService
     ],
     declarations: [
         FlueGasMaterialComponent,
