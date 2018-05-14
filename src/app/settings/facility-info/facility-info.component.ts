@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Settings } from '../../shared/models/settings';
+import { Settings, FacilityInfo, Contact, StreetAddress } from '../../shared/models/settings';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PhonePipe } from '../../shared/pipes/phone.pipe';
 
@@ -37,21 +37,40 @@ export class FacilityInfoComponent implements OnInit {
         date: [date]
       })
     }
-    else{
+    else {
+      let facilityContactInfo: Contact = this.settings.facilityInfo.facilityContact;
+      let assessmentContact: Contact = this.settings.facilityInfo.assessmentContact;
+      if (!facilityContactInfo) {
+        facilityContactInfo = this.getEmptyContact();
+      }
+      if (!assessmentContact) {
+        assessmentContact = this.getEmptyContact();
+      }
+      let address: StreetAddress = this.settings.facilityInfo.address;
+      if (!address) {
+        address = {
+          street: '',
+          city: '',
+          state: '',
+          country: '',
+          zip: ''
+        }
+      }
+
       this.facilityForm = this.formBuilder.group({
         facilityName: [this.settings.facilityInfo.facilityName],
         companyName: [this.settings.facilityInfo.companyName],
-        street: [this.settings.facilityInfo.address.street],
-        city: [this.settings.facilityInfo.address.city],
-        state: [this.settings.facilityInfo.address.state],
-        country: [this.settings.facilityInfo.address.country],
-        zip: [this.settings.facilityInfo.address.zip],
-        facilityContactName: [this.settings.facilityInfo.facilityContact.contactName],
-        facilityPhoneNumber: [this.settings.facilityInfo.facilityContact.phoneNumber],
-        facilityEmail: [this.settings.facilityInfo.facilityContact.email],
-        assessmentContactName: [this.settings.facilityInfo.assessmentContact.contactName],
-        assessmentPhoneNumber: [this.settings.facilityInfo.assessmentContact.phoneNumber],
-        assessmentEmail: [this.settings.facilityInfo.assessmentContact.email],
+        street: [address.street],
+        city: [address.city],
+        state: [address.state],
+        country: [address.country],
+        zip: [address.zip],
+        facilityContactName: [facilityContactInfo.contactName],
+        facilityPhoneNumber: [facilityContactInfo.phoneNumber],
+        facilityEmail: [facilityContactInfo.email],
+        assessmentContactName: [assessmentContact.contactName],
+        assessmentPhoneNumber: [assessmentContact.phoneNumber],
+        assessmentEmail: [assessmentContact.email],
         date: [this.settings.facilityInfo.date]
       })
     }
@@ -82,6 +101,16 @@ export class FacilityInfoComponent implements OnInit {
       date: this.facilityForm.controls.date.value
     }
     this.close.emit(true);
+  }
+
+
+  getEmptyContact(): Contact {
+    let contact: Contact = {
+      contactName: undefined,
+      phoneNumber: undefined,
+      email: undefined
+    }
+    return contact;
   }
 
 }
