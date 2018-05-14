@@ -53,7 +53,8 @@
         <!-- <p class="help-text">View, create, edit your custom solid/liquid flue gas materials.</p> -->
       </div>
     </div>
-    <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal" [importing]="importing"></app-custom-solid-liquid-flue-gas-materials>
+    <app-custom-solid-liquid-flue-gas-materials *ngIf="showSolidLiquidFlueMaterials" [settings]="settings" [showModal]="showSolidLiquidFlueModal"
+      [importing]="importing"></app-custom-solid-liquid-flue-gas-materials>
   </div>
 </div>
 
@@ -70,7 +71,8 @@
         <!-- <p class="help-text">View, create, edit your custom gas load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal" [importing]="importing"></app-custom-gas-load-charge-materials>
+    <app-custom-gas-load-charge-materials *ngIf="showGasLoadChargeMaterials" [settings]="settings" [showModal]="showGasLoadChargeModal"
+      [importing]="importing"></app-custom-gas-load-charge-materials>
   </div>
 </div>
 
@@ -87,7 +89,8 @@
         <!-- <p class="help-text">View, create, edit your custom liquid load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal" [importing]="importing"></app-custom-liquid-load-charge-materials>
+    <app-custom-liquid-load-charge-materials *ngIf="showLiquidLoadChargeMaterials" [settings]="settings" [showModal]="showLiquidLoadChargeModal"
+      [importing]="importing"></app-custom-liquid-load-charge-materials>
   </div>
 </div>
 
@@ -104,7 +107,8 @@
         <!-- <p class="help-text">View, create, edit your custom solid load charge materials.</p> -->
       </div>
     </div>
-    <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal" [importing]="importing"></app-custom-solid-load-charge-materials>
+    <app-custom-solid-load-charge-materials *ngIf="showSolidLoadChargeMaterials" [settings]="settings" [showModal]="showSolidLoadChargeModal"
+      [importing]="importing"></app-custom-solid-load-charge-materials>
   </div>
 </div>
 
@@ -121,7 +125,8 @@
         <!-- <p class="help-text">View, create, edit your custom atmosphere specific heat materials.</p> -->
       </div>
     </div>
-    <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal" [importing]="importing"></app-custom-atmosphere-specific-heat-materials>
+    <app-custom-atmosphere-specific-heat-materials *ngIf="showAtmosphereMaterials" [settings]="settings" [showModal]="showAtmosphereModal"
+      [importing]="importing"></app-custom-atmosphere-specific-heat-materials>
   </div>
 </div>
 
@@ -138,10 +143,12 @@
         <!-- <p class="help-text">View, create, edit your custom wall losses surfaces.</p> -->
       </div>
     </div>
-    <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal" [importing]="importing"></app-custom-wall-losses-surfaces>
+    <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
+      [importing]="importing"></app-custom-wall-losses-surfaces>
   </div>
 </div>
 
+<!--Export Modal-->
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
@@ -152,34 +159,34 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" *ngIf="exportModalOpen">
-        <div class="d-flex flex-column" *ngIf="selectedMaterialData.atmosphereSpecificHeat.length != 0">
+      <div class="modal-body scroll-item" *ngIf="exportModalOpen">
+        <div class="pb-1" *ngIf="selectedMaterialData.atmosphereSpecificHeat.length != 0">
           <h6>Atmosphere Specific Heat</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.atmosphereSpecificHeat">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.flueGasMaterial.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.flueGasMaterial.length != 0">
           <h6>Flue Gas Materials</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.flueGasMaterial">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.gasLoadChargeMaterial.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.gasLoadChargeMaterial.length != 0">
           <h6>Gas Load Charge Materials</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.gasLoadChargeMaterial">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.liquidLoadChargeMaterial.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.liquidLoadChargeMaterial.length != 0">
           <h6>Liquid Load Charge Materials</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.liquidLoadChargeMaterial">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.solidLiquidFlueGasMaterial.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.solidLiquidFlueGasMaterial.length != 0">
           <h6>Solid-Liquid Flue Gas Materials</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.solidLiquidFlueGasMaterial">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.solidLoadChargeMaterial.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.solidLoadChargeMaterial.length != 0">
           <h6>Solid Load Charge Materials</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.solidLoadChargeMaterial">{{material.substance}}</div>
         </div>
-        <div *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
+        <div class="pb-1" *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
           <h6>Wall Loss Surfaces</h6>
-          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.substance}}</div>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
         </div>
       </div>
       <div class="modal-footer">
@@ -189,13 +196,13 @@
   </div>
 </div>
 
-
+<!--Import Modal-->
 <div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        Export Custom Materials
+        Import Custom Materials
         <button class="close" aria-label="Close" (click)="hideImportModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -215,7 +222,7 @@
                 <div class="bounce2"></div>
                 <div class="bounce3"></div>
               </div>
-              <h1>Importing Data...</h1>
+              <h3>Importing Data...</h3>
             </div>
           </div>
         </div>
@@ -223,6 +230,76 @@
       <div class="modal-footer">
         <button [disabled]="isValidFile !== true" class="btn btn-primary pull-right" (click)="importFile()">Import</button>
         <button class="btn btn-secondary pull-left" (click)="hideImportModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Delete Modal-->
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Delete Custom Materials
+        <button class="close" aria-label="Close" (click)="hideDeleteModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body scroll-item" *ngIf="deleteModalOpen && !importing">
+        <div class="pb-1" *ngIf="selectedMaterialData.atmosphereSpecificHeat.length != 0">
+          <h6>Atmosphere Specific Heat</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.atmosphereSpecificHeat">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.flueGasMaterial.length != 0">
+          <h6>Flue Gas Materials</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.flueGasMaterial">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.gasLoadChargeMaterial.length != 0">
+          <h6>Gas Load Charge Materials</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.gasLoadChargeMaterial">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.liquidLoadChargeMaterial.length != 0">
+          <h6>Liquid Load Charge Materials</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.liquidLoadChargeMaterial">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.solidLiquidFlueGasMaterial.length != 0">
+          <h6>Solid-Liquid Flue Gas Materials</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.solidLiquidFlueGasMaterial">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.solidLoadChargeMaterial.length != 0">
+          <h6>Solid Load Charge Materials</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.solidLoadChargeMaterial">{{material.substance}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
+          <h6>Wall Loss Surfaces</h6>
+          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="deleteModalOpen && importing">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="main-content" style="text-align: center;">
+              <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+              </div>
+              <h3>Deleting Data...</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="d-flex">
+          <div class="w-75">
+            <p class="text-center small">Are you sure you want to
+              <span class="delete">delete</span> these materials? This cannot be undone.</p>
+          </div>
+          <div class="p-3">
+            <button class="btn btn-danger pull-right" (click)="deleteData()">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

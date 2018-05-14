@@ -78,3 +78,12 @@
 .modal-dialog{
     top: 1rem;
 }
+
+.delete{
+    color: red;
+}
+
+.modal-body{
+    max-height: 70vh;
+    overflow: auto;
+}

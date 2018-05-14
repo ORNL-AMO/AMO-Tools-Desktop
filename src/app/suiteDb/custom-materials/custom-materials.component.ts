@@ -30,9 +30,10 @@ export class CustomMaterialsComponent implements OnInit {
   showWallSurfaceMaterials: boolean = false;
 
   isAllSelected: boolean = false;
-
+  deleteModalOpen: boolean = false;
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
+  @ViewChild('deleteModal') public deleteModal: ModalDirective;
   selectedMaterialData: MaterialData;
   exportModalOpen: boolean = false;
   fileReference: any;
@@ -107,7 +108,21 @@ export class CustomMaterialsComponent implements OnInit {
   }
 
   checkSelected() {
-    return true;
+    this.customMaterialService.getSelected.next(true);
+    let test = this.customMaterialService.buildSelectedData();
+    if (
+      test.atmosphereSpecificHeat.length != 0 ||
+      test.flueGasMaterial.length != 0 ||
+      test.gasLoadChargeMaterial.length != 0 ||
+      test.liquidLoadChargeMaterial.length != 0 ||
+      test.solidLiquidFlueGasMaterial.length != 0 ||
+      test.solidLoadChargeMaterial.length != 0 ||
+      test.wallLossesSurface.length != 0
+    ) {
+      return true
+    } else {
+      return false
+    }
   }
 
   signalSelectAll() {
@@ -115,8 +130,29 @@ export class CustomMaterialsComponent implements OnInit {
   }
 
 
+  deleteData() {
+    this.customMaterialService.deleteSelected(this.selectedMaterialData);
+    this.importing = true;
+    setTimeout(() => {
+      this.importing = false;
+      this.hideDeleteModal();
+    }, 1500)
+  }
+
   delete() {
     this.customMaterialService.getSelected.next(true);
+    this.selectedMaterialData = this.customMaterialService.buildSelectedData();
+    this.showDeleteModal();
+  }
+
+  showDeleteModal() {
+    this.deleteModalOpen = true;
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModalOpen = false;
+    this.deleteModal.hide();
   }
 
   export() {
@@ -125,16 +161,17 @@ export class CustomMaterialsComponent implements OnInit {
     this.showExportModal();
   }
 
-  exportData(){
+  exportData() {
     this.importExportService.downloadMaterialData(this.selectedMaterialData);
+    this.hideExportModal();
   }
 
-  showExportModal(){
+  showExportModal() {
     this.exportModalOpen = true;
     this.exportModal.show();
   }
 
-  hideExportModal(){
+  hideExportModal() {
     this.exportModalOpen = false;
     this.exportModal.hide();
   }
@@ -155,11 +192,11 @@ export class CustomMaterialsComponent implements OnInit {
   }
 
 
-  showImportModal(){
+  showImportModal() {
     this.importModal.show();
   }
 
-  hideImportModal(){
+  hideImportModal() {
     this.importModal.hide();
   }
 

@@ -45,10 +45,6 @@ export class CustomMaterialsService {
     return data;
   }
 
-  deleteSelected() {
-
-  }
-
   importSelected(data: MaterialData) {
     if (data.atmosphereSpecificHeat.length != 0) {
       this.importAtmosphere(data.atmosphereSpecificHeat)
@@ -78,8 +74,10 @@ export class CustomMaterialsService {
     data.forEach(material => {
       delete material.id;
       material.selected = false;
-      this.indexedDbService.addAtmosphereSpecificHeat(material);
-      this.suiteDbService.insertAtmosphereSpecificHeat(material);
+      let test: boolean = this.suiteDbService.insertAtmosphereSpecificHeat(material);
+      if (test == true) {
+        this.indexedDbService.addAtmosphereSpecificHeat(material);
+      }
     })
   }
 
@@ -148,6 +146,100 @@ export class CustomMaterialsService {
       }
     })
   }
+
+  deleteSelected(data: MaterialData) {
+    if (data.atmosphereSpecificHeat.length != 0) {
+      this.deleteAtmosphere(data.atmosphereSpecificHeat)
+    }
+    if (data.flueGasMaterial.length != 0) {
+      this.deleteFlueGas(data.flueGasMaterial)
+    }
+    if (data.gasLoadChargeMaterial.length != 0) {
+      this.deleteGasLoadCharge(data.gasLoadChargeMaterial)
+    }
+    if (data.liquidLoadChargeMaterial.length != 0) {
+      this.deleteLiquidLoadCharge(data.liquidLoadChargeMaterial)
+    }
+    if (data.solidLiquidFlueGasMaterial.length != 0) {
+      this.deleteSolidLiquidFlueGas(data.solidLiquidFlueGasMaterial)
+    }
+    if (data.solidLoadChargeMaterial.length != 0) {
+      this.deleteSolidLoadChargeMaterial(data.solidLoadChargeMaterial)
+    }
+    if (data.wallLossesSurface.length != 0) {
+      this.deleteWallLossSurfaces(data.wallLossesSurface)
+    }
+  }
+
+
+  deleteAtmosphere(data: Array<AtmosphereSpecificHeat>) {
+    let sdbMaterials: Array<AtmosphereSpecificHeat> = this.suiteDbService.selectAtmosphereSpecificHeat();
+    data.forEach(material => {
+      this.indexedDbService.deleteAtmosphereSpecificHeat(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteAtmosphereSpecificHeat(sdbId);
+    })
+  }
+
+  deleteFlueGas(data: Array<FlueGasMaterial>) {
+    let sdbMaterials: Array<FlueGasMaterial> = this.suiteDbService.selectGasFlueGasMaterials();
+    data.forEach(material => {
+      this.indexedDbService.deleteFlueGasMaterial(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteGasFlueGasMaterial(sdbId);
+    })
+  }
+
+  deleteGasLoadCharge(data: Array<GasLoadChargeMaterial>) {
+    let sdbMaterials: Array<GasLoadChargeMaterial> = this.suiteDbService.selectGasLoadChargeMaterials();
+    data.forEach(material => {
+      this.indexedDbService.deleteGasLoadChargeMaterial(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteGasLoadChargeMaterial(sdbId);
+    })
+  }
+
+  deleteLiquidLoadCharge(data: Array<LiquidLoadChargeMaterial>) {
+    let sdbMaterials: Array<LiquidLoadChargeMaterial> = this.suiteDbService.selectLiquidLoadChargeMaterials();
+    data.forEach(material => {
+      this.indexedDbService.deleteLiquidLoadChargeMaterial(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteLiquidLoadChargeMaterial(sdbId);
+    })
+  }
+
+  deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
+    let sdbMaterials: Array<SolidLiquidFlueGasMaterial> = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    data.forEach(material => {
+      this.indexedDbService.deleteSolidLiquidFlueGasMaterial(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteSolidLiquidFlueGasMaterial(sdbId);
+    })
+  }
+
+  deleteSolidLoadChargeMaterial(data: Array<SolidLoadChargeMaterial>) {
+    let sdbMaterials: Array<SolidLoadChargeMaterial> = this.suiteDbService.selectSolidLoadChargeMaterials();
+    data.forEach(material => {
+      this.indexedDbService.deleteSolidLoadChargeMaterial(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance == sdbMaterial.substance }).id;
+      this.suiteDbService.deleteSolidLoadChargeMaterial(sdbId);
+    })
+  }
+
+  deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
+    let sdbMaterials: Array<WallLossesSurface> = this.suiteDbService.selectWallLossesSurface();
+    data.forEach(material => {
+      this.indexedDbService.deleteWallLossesSurface(material.id);
+      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.surface == sdbMaterial.surface }).id;
+      this.suiteDbService.deleteWallLossesSurface(sdbId);
+    })
+  }
+
+
+
+
+
+
 }
 
 
