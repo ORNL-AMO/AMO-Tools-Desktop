@@ -97,7 +97,9 @@ export class PsatComponent implements OnInit {
   secondaryTabSub: Subscription;
   calcTabSub: Subscription;
   openModSub: Subscription;
+  screenshotSubscription: Subscription;
   showAdd: boolean;
+  screenshotHeight: number;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -202,6 +204,11 @@ export class PsatComponent implements OnInit {
         }
       })
     })
+
+    this.screenshotSubscription = this.assessmentService.screenShotHeight.subscribe(val => {
+      this.screenshotHeight = val;
+      this.getContainerHeight();
+    })
   }
 
   ngOnDestroy() {
@@ -215,6 +222,7 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
+    this.screenshotSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -234,7 +242,7 @@ export class PsatComponent implements OnInit {
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
-        let contentHeight = this.content.nativeElement.clientHeight;
+        let contentHeight = this.content.nativeElement.clientHeight - this.screenshotHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
         let footerHeight = 0;
         if (this.footer) {

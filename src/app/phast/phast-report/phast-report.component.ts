@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef, SimpleChanges } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -33,10 +33,15 @@ export class PhastReportComponent implements OnInit {
   inRollup: boolean;
   @Input()
   quickReport: boolean;
+  @Input()
+  containerHeight: number;
 
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+
+  @ViewChild('reportBtns') reportBtns: ElementRef;
+  @ViewChild('reportHeader') reportHeader: ElementRef;
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
@@ -52,11 +57,10 @@ export class PhastReportComponent implements OnInit {
   printReportGraphs: boolean = false;
   printReportSankey: boolean = false;
   printInputSummary: boolean = false;
-
+  reportContainerHeight: number;
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
-    console.log('init');
     this.initPrintLogic();
     this.createdDate = new Date();
     if (this.settings) {
@@ -97,7 +101,23 @@ export class PhastReportComponent implements OnInit {
     });
   }
 
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.containerHeight && !changes.containerHeight.firstChange){
+      this.getContainerHeight();
+    }
+  }
+
   ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    },100)
+  }
+
+  getContainerHeight(){
+    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
   }
 
   initPrintLogic() {

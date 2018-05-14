@@ -1,5 +1,5 @@
-<div class="card">
-  <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+  <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <span (click)="goToAssessment(assessment)" *ngIf="assessment.type != 'FSAT'">
       <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
@@ -41,7 +41,10 @@
           <div class="form-group" *ngIf="directories">
             <label>Move Assessment to Different Folder</label>
             <select class="form-control w-100" formControlName="directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
             </select>
           </div>
         </form>

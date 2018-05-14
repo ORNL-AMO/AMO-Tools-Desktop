@@ -1,5 +1,5 @@
 <div class="help-panel">
-    <div class="row m-0" *ngIf="!inSetup">
+    <div class="row m-0" *ngIf="!inSetup" #resultTabs>
         <ul class="tabs primary tab-row">
             <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
                 <a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -12,30 +12,32 @@
             </li>
         </ul>
     </div>
-    <div *ngIf="inSetup" class="header">
-        <h3>Help</h3>
-    </div>
-    <div class="psat-notes" *ngIf="inSetup || tabSelect == 'help'">
-        <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
+    <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}">
+        <div *ngIf="inSetup" class="header">
+            <h3>Help</h3>
+        </div>
+        <div class="psat-notes" *ngIf="inSetup || tabSelect == 'help'">
+            <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
 
-        <app-pump-fluid-help [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
+            <app-pump-fluid-help [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
 
-        <app-motor-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
+            <app-motor-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
 
-        <app-field-data-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'field-data'"></app-field-data-help>
+            <app-field-data-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'field-data'"></app-field-data-help>
 
-        <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
-    </div>
-    <div *ngIf="tabSelect == 'notes'">
-        <div *ngIf="modification" class="col-12 no-padding-left"></div>
-        <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab" (emitSave)="save()"></app-modify-conditions-notes>
-        <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
-            You must add a modification to take notes on it.
+            <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
+        </div>
+        <div *ngIf="tabSelect == 'notes'">
+            <div *ngIf="modification" class="col-12 no-padding-left"></div>
+            <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab" (emitSave)="save()"></app-modify-conditions-notes>
+            <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
+                You must add a modification to take notes on it.
+            </div>
+        </div>
+        <div class="panel-results" *ngIf="tabSelect == 'results' && !inSetup">
+            <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex"
+                [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings">
+            </app-explore-opportunities-results>
         </div>
     </div>
-    <div class="panel-results" *ngIf="tabSelect == 'results' && !inSetup">
-            <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
-            [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings">
-           </app-explore-opportunities-results>
-        </div>
 </div>

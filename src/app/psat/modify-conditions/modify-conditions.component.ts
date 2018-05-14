@@ -26,6 +26,8 @@ export class ModifyConditionsComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
+  @Input()
+  containerHeight: number;
   // @Input()
   // emitPrint: boolean;
 

@@ -1,6 +1,6 @@
 <div class="container-fluid psat">
-	<div class="row modify-conditions panel-container">
-		<div *ngIf="modificationExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+	<div class="row panel-container">
+		<div *ngIf="modificationExists" class="col-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<div class="header">
 				<h3>Select Potential Adjustment Projects</h3>
 			</div>
@@ -16,8 +16,8 @@
 			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 			<p>Data will be copied from your current baseline condition.</p>
 		  </div>
-		<div class="col-md-6 help-panel">
-			<div class="row">
+		<div class="col-6 help-panel pr-0">
+			<div class="row" #resultTabs>
 				<ul class="tabs primary tab-row">
 					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
 						<a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -30,19 +30,18 @@
 					</li>
 				</ul>
 			</div>
-			<div class="explore-help-panel" *ngIf="tabSelect == 'help'">
+			<div class="explore-help-panel scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="tabSelect == 'help'">
 				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat">
 				</app-explore-opportunities-help>
 			</div>
 			
-
-			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-			 *ngIf="tabSelect == 'sankey' && modificationExists">
-			</app-explore-opportunities-sankey>
-
-			<div class="panel-results" *ngIf="modificationExists">
+			<div *ngIf="tabSelect == 'sankey' && modificationExists" class=" scroll-item" [ngStyle]="{'height.px': helpHeight}">
+				<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings">
+				</app-explore-opportunities-sankey>
+			</div>
+			<div class="panel-results scroll-item" [ngStyle]="{'height.px': helpHeight}" *ngIf="modificationExists && tabSelect == 'results'">
 				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
-				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name">
 				</app-explore-opportunities-results>
 			</div>
 			<div  *ngIf="!modificationExists && tabSelect != 'help'">

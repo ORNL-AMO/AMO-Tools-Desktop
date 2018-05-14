@@ -26,6 +26,10 @@
     .date-modified {
         font-size: 18px;
     }
+    
+    .print-height{
+        height: 100% !important;
+    }
 }
 
 .print-div{

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
@@ -26,6 +26,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
+  @ViewChild('resultTabs') resultTabs: ElementRef;
 
   annualSavings: number = 0;
   percentSavings: number = 0;
@@ -43,6 +44,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
+  helpHeight: number;
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -58,6 +60,26 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.getResults();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      if (!changes.containerHeight.firstChange) {
+        this.getContainerHeight();
+      }
+    }
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight && this.resultTabs) {
+      let tabHeight = this.resultTabs.nativeElement.clientHeight;
+      this.helpHeight = this.containerHeight - tabHeight;
+    }
+  }
   // checkForExploreMod() {
   //   let i = 0;
   //   this.psat.modifications.forEach(mod => {
