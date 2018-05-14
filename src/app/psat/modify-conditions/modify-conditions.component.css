@@ -26,3 +26,7 @@
 .help-panel{
     padding-left: 0px;
 }
+
+.row-min-height{
+    min-height: 100%;
+  }

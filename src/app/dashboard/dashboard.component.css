@@ -27,7 +27,7 @@
   }
   .landing-screen::-webkit-scrollbar-thumb,
   .sidebar-bg::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
+  background-color: #156739;
   outline: 1px solid slategrey;
   }
 

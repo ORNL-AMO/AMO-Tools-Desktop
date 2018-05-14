@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatService } from '../psat.service';
@@ -38,9 +38,12 @@ export class PsatReportComponent implements OnInit {
   quickReport: boolean;
   @Input()
   printView: boolean;
+  @Input()
+  containerHeight: number;
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
-
+  @ViewChild('reportBtns') reportBtns: ElementRef;
+  @ViewChild('reportHeader') reportHeader: ElementRef;
 
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
@@ -56,7 +59,7 @@ export class PsatReportComponent implements OnInit {
   numMods: number = 0;
   currentTab: string = 'results';
   createdDate: Date;
-
+  reportContainerHeight: number;
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
 
   ngOnInit() {
@@ -100,6 +103,24 @@ export class PsatReportComponent implements OnInit {
         this.showPrint = true;
       }
     }
+  }
+  
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.containerHeight && !changes.containerHeight.firstChange){
+      this.getContainerHeight();
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    },100)
+  }
+
+  getContainerHeight(){
+    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
   }
 
   setTab(str: string) {

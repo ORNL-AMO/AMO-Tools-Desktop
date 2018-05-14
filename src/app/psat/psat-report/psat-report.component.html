@@ -13,7 +13,7 @@
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
-    <div class="report-header" [ngClass]="{'hide-print': inPsat}">
+    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPsat}">
 
         <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="showModal()">Print</button>
@@ -86,48 +86,40 @@
 
     <div class="report-data" *ngIf="psat.setupDone">
 
-        <ul class="tabs primary hide-print">
+        <ul #reportBtns class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Result Data</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+            </li><!--
+            --><li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
                 <a>Report Graphs</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+            </li><!--
+            --><li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
                 <a>Sankey</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+            </li><!--
+            --><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Summary</a>
-            </li>
-            <!--
-            -->
-            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+            </li><!--
+            --><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
                 <a>Facility Info</a>
             </li>
         </ul>
 
-        <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' || showPrint">
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-        <div class="input-data results scroll-item" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)">
+        <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
-        <div class="results scroll-item" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)">
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
             </app-output-summary>
         </div>
-        <div class="results scroll-item" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))">
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-psat-report-graphs [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
                 [printGraphs]="printReportGraphs"></app-psat-report-graphs>
         </div>
-        <div class="results scroll-item" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)">
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-psat-report-sankey [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="printReportSankey"></app-psat-report-sankey>
         </div>
 
