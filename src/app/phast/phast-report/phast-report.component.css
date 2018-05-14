@@ -31,6 +31,10 @@
     .print-div{
         display: none;
     }
+
+    .print-height{
+        height: 100% !important;
+    }
 }
 
 .print-div{

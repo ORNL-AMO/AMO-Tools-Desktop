@@ -87,6 +87,8 @@ export class FolderContactInfoComponent implements OnInit {
         } else {
           this.showAddress = false;
         }
+      } else {
+        this.showAddress = false;
       }
 
       if (this.settings.facilityInfo.facilityContact) {
@@ -95,6 +97,8 @@ export class FolderContactInfoComponent implements OnInit {
         } else {
           this.showFacilityContact = false;
         }
+      } else {
+        this.showFacilityContact = false;
       }
 
       if (this.settings.facilityInfo.assessmentContact) {
@@ -103,6 +107,8 @@ export class FolderContactInfoComponent implements OnInit {
         } else {
           this.showAssessmentContact = false;
         }
+      } else {
+        this.showAssessmentContact = false;
       }
 
       if (!this.showFacilityContact && !this.showAddress && !this.showAssessmentContact) {
@@ -116,6 +122,9 @@ export class FolderContactInfoComponent implements OnInit {
       }
     } else {
       this.showNoData = true;
+      this.showAddress = false;
+      this.showAssessmentContact = false;
+      this.showFacilityContact = false;
     }
   }
 

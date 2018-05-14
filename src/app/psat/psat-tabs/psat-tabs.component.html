@@ -49,6 +49,10 @@
   </div>
 </div>
 
+<nav *ngIf="currentTab == 'modify-conditions'" class="hide-print">
+  <app-modify-conditions-tabs></app-modify-conditions-tabs>
+</nav>
+
 
 <ul class="tabs subtabs psat" *ngIf="mainTab == 'calculators'">
   <li [ngClass]="{'active': calcTab == 'system-curve'}">
@@ -70,3 +74,5 @@
     <a (click)="changeCalcTab('pump-curve')">Pump Curve</a>
   </li>
 </ul>
+
+

@@ -342,7 +342,7 @@
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   }
   .scroll-item::-webkit-scrollbar-thumb{
-  background-color: darkgrey;
+	background-color: #156739;
   outline: 1px solid slategrey;
   }
 

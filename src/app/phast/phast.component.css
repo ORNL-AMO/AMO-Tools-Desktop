@@ -29,3 +29,7 @@
 .list-modal .modal-body{
     max-height: 80vh;
 }
+
+.sankey-padding{
+    padding-bottom:4rem;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { Modification, PsatInputs } from '../../shared/models/psat';
@@ -29,6 +29,10 @@ export class HelpPanelComponent implements OnInit {
   saveClicked: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  containerHeight: number;
+  @ViewChild('resultTabs') resultTabs: ElementRef;
+
 
   tabSelect: string = 'results';
   baselineResults: PsatOutputs;
@@ -36,6 +40,7 @@ export class HelpPanelComponent implements OnInit {
   annualSavings: number;
   percentSavings: number;
   getResultsSub: Subscription;
+  helpHeight: number;
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -61,7 +66,26 @@ export class HelpPanelComponent implements OnInit {
   ngOnDestroy(){
     this.getResultsSub.unsubscribe();
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      if (!changes.containerHeight.firstChange) {
+        this.getContainerHeight();
+      }
+    }
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight && this.resultTabs) {
+      let tabHeight = this.resultTabs.nativeElement.clientHeight;
+      this.helpHeight = this.containerHeight - tabHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }

@@ -67,23 +67,23 @@
   <!--Report-->
   <div *ngIf="mainTab == 'report'" class="row justify-content-center">
     <div class="col-11">
-      <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-phast-report>
+      <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true" [containerHeight]="containerHeight"></app-phast-report>
     </div>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="row">
-    <div class="col-10 mx-auto">
-      <div class="form-group">
-        <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
-          <option [ngValue]="_phast">Baseline</option>
-          <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
-        </select>
+    <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+      <div class="p-1 mx-auto">
+        <div class="form-group">
+          <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="sankeyPhast">
+            <option [ngValue]="_phast">Baseline</option>
+            <option *ngFor="let mod of _phast.modifications" [ngValue]="mod.phast">{{mod.phast.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div *ngIf="sankeyPhast" class="sankey-padding">
+        <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
       </div>
     </div>
-    <div *ngIf="sankeyPhast" class="col-12">
-      <app-sankey [phast]="sankeyPhast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
-    </div>
-  </div>
 
   <!--Diagram-->
   <div *ngIf="mainTab =='diagram'" class="tab-content">
@@ -105,7 +105,8 @@
     <div class="pull-right">
       <button class="btn btn-primary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next && selectedLossTab.next)"
         (click)="nextStep()">Next</button>
-      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && (!stepTab.next || !selectedLossTab.next)" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && (!stepTab.next || !selectedLossTab.next)" [disabled]="!_phast.setupDone"
+        (click)="goToAssessment()">Go To Assessment</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
     </div>
   </div>

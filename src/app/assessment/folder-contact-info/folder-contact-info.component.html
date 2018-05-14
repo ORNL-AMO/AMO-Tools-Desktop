@@ -11,20 +11,23 @@
                 <td>{{settings.facilityInfo.companyName}}</td>
               </tr>
             </table>
-            <table class="table" *ngIf="showAddress || showFacilityContact" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+            <table class="table" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
               <tr>
                 <td class="bold" colspan="2">
                   Assessment Contact
                 </td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.assessmentContact.contactName}}</td>
+                <td colspan="2" *ngIf="showAssessmentContact">{{settings.facilityInfo.assessmentContact.contactName}}</td>
+                <td colspan="2" *ngIf="!showAssessmentContact">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.assessmentContact.phoneNumber | phone}}</td>
+                <td colspan="2" *ngIf="showAssessmentContact">{{settings.facilityInfo.assessmentContact.phoneNumber | phone}}</td>
+                <td colspan="2" *ngIf="!showAssessmentContact">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.assessmentContact.email}}</td>
+                <td colspan="2" *ngIf="showAssessmentContact">{{settings.facilityInfo.assessmentContact.email}}</td>
+                <td colspan="2" *ngIf="!showAssessmentContact">&mdash;</td>
               </tr>
             </table>
           </div>
@@ -35,20 +38,23 @@
                 <td>{{settings.facilityInfo.facilityName}}</td>
               </tr>
             </table>
-            <table class="table" *ngIf="showAddress || showFacilityContact || showAssessmentContact" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+            <table class="table" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
               <tr>
                 <td class="bold" colspan="2">
                   Facility Contact
                 </td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.facilityContact.contactName}}</td>
+                <td colspan="2" *ngIf="showFacilityContact">{{settings.facilityInfo.facilityContact.contactName}}</td>
+                <td colspan="2" *ngIf="!showFacilityContact">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.facilityContact.phoneNumber | phone}}</td>
+                <td colspan="2" *ngIf="showFacilityContact">{{settings.facilityInfo.facilityContact.phoneNumber | phone}}</td>
+                <td colspan="2" *ngIf="!showFacilityContact">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.facilityContact.email}}</td>
+                <td colspan="2" *ngIf="showFacilityContact">{{settings.facilityInfo.facilityContact.email}}</td>
+                <td colspan="2" *ngIf="!showFacilityContact">&mdash;</td>
               </tr>
             </table>
           </div>
@@ -59,20 +65,23 @@
                 <td>{{settings.facilityInfo.date}}</td>
               </tr>
             </table>
-            <table class="table" *ngIf="showAddress || showFacilityContact || showAssessmentContact" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
+            <table class="table" [ngClass]="{'collapsed-row': !isExpanded, 'expanded-row': isExpanded}">
               <tr>
                 <td class="bold" colspan="2">
                   Address
                 </td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.address.street}},</td>
+                <td colspan="2" *ngIf="showAddress">{{settings.facilityInfo.address.street}},</td>
+                <td colspan="2" *ngIf="!showAddress">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}</td>
+                <td colspan="2" *ngIf="showAddress">{{settings.facilityInfo.address.city}}, {{settings.facilityInfo.address.state}} {{settings.facilityInfo.address.zip}}</td>
+                <td colspan="2" *ngIf="!showAddress">&mdash;</td>
               </tr>
               <tr>
-                <td colspan="2">{{settings.facilityInfo.address.country}}</td>
+                <td colspan="2" *ngIf="showAddress">{{settings.facilityInfo.address.country}}</td>
+                <td colspan="2" *ngIf="!showAddress">&mdash;</td>
               </tr>
             </table>
           </div>
