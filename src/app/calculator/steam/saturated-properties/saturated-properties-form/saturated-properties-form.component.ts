@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesInput, SaturatedPropertiesOutput } from "../../../../shared/models/steam";
@@ -15,6 +15,12 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   saturatedPropertiesForm: FormGroup;
   @Input()
   settings: Settings;
+  @Output()
+  emitCalculate = new EventEmitter<SaturatedPropertiesInput>();
+  @Output()
+  emitSetPressureOrTemperature = new EventEmitter<number>();
+  @Input()
+  output: SaturatedPropertiesOutput;
 
   readonly pressureCheck: PressureProperties = {
     'psi': {
@@ -41,7 +47,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   pressureError: string = null;
 
   input: SaturatedPropertiesInput;
-  output: SaturatedPropertiesOutput;
+  // output: SaturatedPropertiesOutput;
 
   constructor(private steamService: SteamService) { }
 
@@ -49,19 +55,19 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     this.input = {
       saturatedPressure: 0
     };
-    this.output = {
-      saturatedPressure: 0,
-      saturatedTemperature: 0,
-      liquidEnthalpy: 0,
-      gasEnthalpy: 0,
-      evaporationEnthalpy: 0,
-      liquidEntropy: 0,
-      gasEntropy: 0,
-      evaporationEntropy: 0,
-      liquidVolume: 0,
-      gasVolume: 0,
-      evaporationVolume: 0
-    };
+    // this.output = {
+    //   saturatedPressure: 0,
+    //   saturatedTemperature: 0,
+    //   liquidEnthalpy: 0,
+    //   gasEnthalpy: 0,
+    //   evaporationEnthalpy: 0,
+    //   liquidEntropy: 0,
+    //   gasEntropy: 0,
+    //   evaporationEntropy: 0,
+    //   liquidVolume: 0,
+    //   gasVolume: 0,
+    //   evaporationVolume: 0
+    // };
     this.calculate();
   }
 
@@ -85,9 +91,11 @@ export class SaturatedPropertiesFormComponent implements OnInit {
       }
       this.input.saturatedTemperature = temperature;
     }
-    this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
+    // this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
 
-    return 0;
+    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
+    this.emitCalculate.emit(this.input);
+    // return 0;
   }
 
   getDisplayUnit(unit: string) {

@@ -5,6 +5,8 @@ import { SettingsService } from "../../../settings/settings.service";
 import { ConvertUnitsService } from "../../../shared/convert-units/convert-units.service";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
+import { SteamPropertiesOutput, SteamPropertiesInput } from '../../../shared/models/steam';
+import { SteamService } from '../steam.service';
 
 
 @Component({
@@ -21,9 +23,10 @@ export class SteamPropertiesComponent implements OnInit {
   chartContainerWidth: number;
 
   steamPropertiesForm: FormGroup;
-  tabSelect = 'results';
+  steamPropertiesOutput: SteamPropertiesOutput;
+  tabSelect: string = 'results';
 
-  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
     this.steamPropertiesForm = this.formBuilder.group({
@@ -39,11 +42,14 @@ export class SteamPropertiesComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
 
-
-    this.chartContainerHeight = 800;
-    // this.chartContainerWidth = this.getChartWidth();
+    this.steamPropertiesOutput = {
+      pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
+    };
   }
 
+  ngAfterViewInit() {
+    this.changeDetectorRef.detectChanges();
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -51,22 +57,26 @@ export class SteamPropertiesComponent implements OnInit {
 
   getChartWidth(): number {
     if (this.lineChartContainer) {
-      // this.changeDetectorRef.detectChanges();
-      return this.lineChartContainer.nativeElement.clientWidth;
+      this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
+      return this.chartContainerWidth;
     }
     else {
-      return 0;
+      return 600;
     }
   }
 
   getChartHeight(): number {
     if (this.lineChartContainer) {
-      return this.lineChartContainer.nativeElement.clientHeight;
+      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .8;
+      return this.chartContainerHeight;
     }
     else {
-      return 0;
+      return 800;
     }
   }
 
 
+  calculate(input: SteamPropertiesInput) {
+    this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+  }
 }

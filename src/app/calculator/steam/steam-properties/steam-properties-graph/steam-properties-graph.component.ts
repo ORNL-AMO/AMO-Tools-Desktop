@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import * as d3 from 'd3';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SteamPropertiesOutput } from '../../../../shared/models/steam';
 @Component({
   selector: 'app-steam-properties-graph',
   templateUrl: './steam-properties-graph.component.html',
@@ -20,10 +21,16 @@ export class SteamPropertiesGraphComponent implements OnInit {
   printView: boolean;
   @Input()
   exportName: string;
+  @Input()
+  steamPropertiesOutput: SteamPropertiesOutput;
 
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
 
+  defaultEntropyUnit: string = 'kJkgK';
+  defaultTempUnit: string = 'C';
+  dataPopulated: boolean = false;
+  canvasReady: boolean = false;
   tempArray: Array<number>;
   entropyArray: Array<number>;
   pressure0001t: Array<number>;
@@ -75,6 +82,8 @@ export class SteamPropertiesGraphComponent implements OnInit {
   height: number;
   margin: { top: number, right: number, bottom: number, left: number };
 
+  point: any;
+
   constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -83,10 +92,17 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.buildChart();
   }
 
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartContainerWidth && !changes.chartContainerWidth.firstChange) {
-      this.initCanvas();
-      this.buildChart();
+    if (changes.chartContainerWidth || changes.chartContainerHeight) {
+      if (this.dataPopulated && this.canvasReady) {
+        this.buildChart();
+      }
+    }
+    if (changes.steamPropertiesOutput && !changes.steamPropertiesOutput.firstChange) {
+      if (this.dataPopulated && this.canvasReady) {
+        this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+      }
     }
   }
 
@@ -95,7 +111,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
     //hard coded values will always be the same, these are for metric
     //temperature default is Celcius
     this.tempArray = [0.01, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 373.95, 370, 360, 350, 340, 330, 320, 310, 300, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0.01];
-    //entropy default is kJ/kg*C
+    //entropy default is kJ/kg*K
     this.entropyArray = [0, 0.0763, 0.1511, 0.2245, 0.2965, 0.3672, 0.4368, 0.5051, 0.5724, 0.6386, 0.7038, 0.768, 0.8313, 0.8937, 0.9551, 1.0158, 1.0756, 1.1346, 1.1929, 1.2504, 1.3072, 1.4188, 1.5279, 1.6346, 1.7392, 1.8418, 1.9426, 2.0417, 2.1392, 2.2355, 2.3305, 2.4245, 2.5177, 2.6101, 2.702, 2.7935, 2.8849, 2.9765, 3.0685, 3.1612, 3.2552, 3.351, 3.4494, 3.5518, 3.6601, 3.7784, 3.9167, 4.1112, 4.407, 4.8012, 5.0536, 5.211, 5.3356, 5.4422, 5.5372, 5.6244, 5.7059, 5.7834, 5.8579, 5.9304, 6.0016, 6.0721, 6.1423, 6.2128, 6.284, 6.3563, 6.4302, 6.5059, 6.584, 6.665, 6.7491, 6.8371, 6.9293, 7.0264, 7.1291, 7.2381, 7.3541, 7.4151, 7.4781, 7.5434, 7.6111, 7.6812, 7.754, 7.8296, 7.9081, 7.9898, 8.0748, 8.1633, 8.2555, 8.3517, 8.452, 8.5566, 8.666, 8.7803, 8.8998, 9.0248, 9.1555];
 
     this.pressure0001t = [0, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 11, 97, 208];
@@ -146,72 +162,54 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.pressure100t = [1, 37, 79, 125, 177, 234, 297, 364, 433, 501, 574, 664, 788, 955];
     this.pressure100e = [0.00, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5];
 
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.tempArray = this.convertArray(this.tempArray, true);
-      this.entropyArray = this.convertArray(this.entropyArray, false);
-
-      this.pressure0001t = this.convertArray(this.pressure0001t, true);
-      this.pressure0001e = this.convertArray(this.pressure0001e, false);
-
-      this.pressure001t = this.convertArray(this.pressure001t, true);
-      this.pressure001e = this.convertArray(this.pressure001e, false);
-
-      this.pressure01t = this.convertArray(this.pressure01t, true);
-      this.pressure01e = this.convertArray(this.pressure01e, false);
-
-      this.pressure1t = this.convertArray(this.pressure1t, true);
-      this.pressure1e = this.convertArray(this.pressure1e, false);
-
-      this.pressure2t = this.convertArray(this.pressure2t, true);
-      this.pressure2e = this.convertArray(this.pressure2e, false);
-
-      this.pressure5t = this.convertArray(this.pressure5t, true);
-      this.pressure5e = this.convertArray(this.pressure5e, false);
-
-      this.pressure10t = this.convertArray(this.pressure10t, true);
-      this.pressure10e = this.convertArray(this.pressure10e, false);
-
-      this.pressure20t = this.convertArray(this.pressure20t, true);
-      this.pressure20e = this.convertArray(this.pressure20e, false);
-
-      this.pressure30t = this.convertArray(this.pressure30t, true);
-      this.pressure30e = this.convertArray(this.pressure30e, false);
-
-      this.pressure40t = this.convertArray(this.pressure40t, true);
-      this.pressure40e = this.convertArray(this.pressure40e, false);
-
-      this.pressure50t = this.convertArray(this.pressure50t, true);
-      this.pressure50e = this.convertArray(this.pressure50e, false);
-
-      this.pressure60t = this.convertArray(this.pressure60t, true);
-      this.pressure60e = this.convertArray(this.pressure60e, false);
-
-      this.pressure70t = this.convertArray(this.pressure70t, true);
-      this.pressure70e = this.convertArray(this.pressure70e, false);
-
-      this.pressure80t = this.convertArray(this.pressure80t, true);
-      this.pressure80e = this.convertArray(this.pressure80e, false);
-
-      this.pressure90t = this.convertArray(this.pressure90t, true);
-      this.pressure90e = this.convertArray(this.pressure90e, false);
-
-      this.pressure100t = this.convertArray(this.pressure100t, true);
-      this.pressure100e = this.convertArray(this.pressure100e, false);
+    if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
+      this.entropyArray = this.convertArray(this.entropyArray, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure0001e = this.convertArray(this.pressure0001e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure001e = this.convertArray(this.pressure001e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure01e = this.convertArray(this.pressure01e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure1e = this.convertArray(this.pressure1e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure2e = this.convertArray(this.pressure2e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure5e = this.convertArray(this.pressure5e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure10e = this.convertArray(this.pressure10e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure20e = this.convertArray(this.pressure20e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure30e = this.convertArray(this.pressure30e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure40e = this.convertArray(this.pressure40e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure50e = this.convertArray(this.pressure50e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure60e = this.convertArray(this.pressure60e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure70e = this.convertArray(this.pressure70e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure80e = this.convertArray(this.pressure80e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure90e = this.convertArray(this.pressure90e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.pressure100e = this.convertArray(this.pressure100e, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
     }
+
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
+      this.tempArray = this.convertArray(this.tempArray, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure0001t = this.convertArray(this.pressure0001t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure001t = this.convertArray(this.pressure001t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure01t = this.convertArray(this.pressure01t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure1t = this.convertArray(this.pressure1t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure2t = this.convertArray(this.pressure2t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure5t = this.convertArray(this.pressure5t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure10t = this.convertArray(this.pressure10t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure20t = this.convertArray(this.pressure20t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure30t = this.convertArray(this.pressure30t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure40t = this.convertArray(this.pressure40t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure50t = this.convertArray(this.pressure50t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure60t = this.convertArray(this.pressure60t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure70t = this.convertArray(this.pressure70t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure80t = this.convertArray(this.pressure80t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure90t = this.convertArray(this.pressure90t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.pressure100t = this.convertArray(this.pressure100t, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+    }
+    this.dataPopulated = true;
   }
 
-  convertArray(oldArray: Array<number>, temperature: boolean): Array<number> {
+  convertArray(oldArray: Array<number>, from: string, to: string): Array<number> {
     let convertedArray = new Array<number>();
-    if (temperature) {
-      for (let i = 0; i < oldArray.length; i++) {
-        convertedArray.push(this.convertVal(oldArray[i], 'C', 'F'));
-      }
+    for (let i = 0; i < oldArray.length; i++) {
+      convertedArray.push(this.convertVal(oldArray[i], from, to));
     }
-    else {
-      for (let i = 0; i < oldArray.length; i++) {
-        convertedArray.push(this.convertVal(oldArray[i], 'kJkgC', 'btulbF'));
-      }
-    }
+
     return convertedArray;
   }
 
@@ -231,27 +229,24 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.htmlElement = this.ngChart.nativeElement;
     this.host = d3.select(this.htmlElement);
 
-    if (!this.chartContainerHeight || this.chartContainerHeight === undefined || this.chartContainerHeight <= 0) {
-      console.log('chartContainerHeight undefined || false || <= 0');
-      this.chartContainerHeight = 800;
-    }
-    if (!this.chartContainerWidth || this.chartContainerWidth === undefined || this.chartContainerWidth <= 0) {
-      console.log('chartContainerWidth undefined || false || <= 0');
-      this.chartContainerWidth = 600;
-    }
-
     //these default values are for metric
+    //x values are entropy, default is kJkgK
     this.xMax = 11;
     this.xMin = 0;
+    //y values are temperature, default is C
     this.yMax = 2000;
     this.yMin = -100;
 
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.xMax = this.convertVal(this.xMax, 'kJkgC', 'btulbF');
-      this.xMin = this.convertVal(this.xMin, 'kJkgC', 'btulbF');
-      this.yMax = this.convertVal(this.yMax, 'C', 'F');
-      this.yMin = this.convertVal(this.yMin, 'C', 'F');
+    if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
+      this.xMax = this.convertVal(this.xMax, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
+      this.xMin = this.convertVal(this.xMin, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
     }
+
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
+      this.yMax = this.convertVal(this.yMax, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+      this.yMin = this.convertVal(this.yMin, this.defaultTempUnit, this.settings.steamTemperatureMeasurement);
+    }
+    this.canvasReady = true;
   }
 
   buildChart() {
@@ -324,16 +319,21 @@ export class SteamPropertiesGraphComponent implements OnInit {
     //main dataset with area
     let dataset = this.getDataSet(this.tempArray, this.entropyArray);
 
-    // add the area
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      x.domain([this.convertVal(0, 'kJkgC', 'btulbF'), this.convertVal(11, 'kJkgC', 'btulbF')]);
-      y.domain([this.convertVal(0, 'C', 'F'), this.convertVal(2000, 'C', 'F')]);
+    //update domains to keep area from expanding to negative values
+    if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
+      x.domain([this.convertVal(0, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement), this.convertVal(11, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement)]);
     }
     else {
       x.domain([0, 11]);
-      y.domain([0, 2000]);
     }
 
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
+      y.domain([this.convertVal(0, this.defaultTempUnit, this.settings.steamTemperatureMeasurement), this.convertVal(2000, this.defaultTempUnit, this.settings.steamTemperatureMeasurement)]);
+    }
+    else {
+      y.domain([0, 2000]);
+    }
+    // add the area
     this.svg.append("path")
       .data([dataset])
       .attr("class", "area")
@@ -427,11 +427,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      this.yAxisLabel = "Temperature &#8457;";
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
+      this.yAxisLabel = "Temperature &#8457;"; // F
     }
     else {
-      this.yAxisLabel = "Temperature &#8451;";
+      this.yAxisLabel = "Temperature &#8451;"; // C
     }
     this.svg.append("text")
       .attr("transform", "rotate(-90)")
@@ -444,11 +444,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   addXAxisLabel() {
-    if (this.settings.unitsOfMeasure == 'Imperial') {
+    if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
       this.xAxisLabel = "Entropy (Btu/lb&#8457;)";
     }
     else {
-      this.xAxisLabel = "Entropy (kJ/kg&#8451;)";
+      this.xAxisLabel = "Entropy (kJ/kg-K)";
     }
     this.svg.append("text")
       .attr("transform", "translate(" + (this.width / 2) + " ," + (this.height + this.margin.top + 20) + ")")
@@ -456,6 +456,47 @@ export class SteamPropertiesGraphComponent implements OnInit {
       .style('font-size', '16px')
       .html(this.xAxisLabel);
   }
+
+
+
+  plotPoint(temp: number, entropy: number) {
+    if (this.svg) {
+
+      let x = d3.scaleLinear().range([0, this.width]);
+      let y = d3.scaleLinear().range([this.height, 0]);
+
+      //define domain for x and y axis
+      x.domain([this.xMin, this.xMax]);
+      y.domain([this.yMin, this.yMax]);
+
+      let dataset = {
+        'temperature': temp,
+        'entropy': entropy
+      }
+
+      if (this.point === undefined || !this.point) {
+
+        this.svg.selectAll('circle').remove();
+
+        this.point = this.svg.append('circle')
+          .attr("r", 5)
+          .attr("cx", x(dataset.entropy))
+          .attr("cy", y(dataset.temperature))
+          .style('fill', 'green');
+
+      }
+      else {
+        // apply a transition
+        this.point.transition()
+          .duration(600)
+          .ease(d3.easePoly)
+          .attr('cx', x(dataset.entropy))
+          .attr('cy', y(dataset.temperature));
+      }
+    }
+  }
+
+
 
   downloadChart(): void {
     if (!this.exportName) {

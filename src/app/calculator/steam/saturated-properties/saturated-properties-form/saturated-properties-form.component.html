@@ -15,7 +15,7 @@
       <label for="saturatedPressure">Saturated Pressure</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="calculate()">
-        <span class="input-group-addon units">{{settings.pressureMeasurement}}</span>
+        <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
         <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
     </div>
