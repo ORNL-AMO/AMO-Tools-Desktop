@@ -144,6 +144,7 @@ Tabs
 
       .tabs.subtabs.fsat .active .step-number{
         background: #FFE400;
+        color: black;
       }
 
       .disabled .step-number {
