@@ -74,6 +74,7 @@ export class FlueGasMaterialComponent implements OnInit {
         this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
         this.setExisting();
       });
+      this.checkEditMaterialName();
     }
     else {
       this.canAdd = true;

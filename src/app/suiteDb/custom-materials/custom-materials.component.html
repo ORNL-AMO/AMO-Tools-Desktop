@@ -228,8 +228,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button [disabled]="isValidFile !== true" class="btn btn-primary pull-right" (click)="importFile()">Import</button>
-        <button class="btn btn-secondary pull-left" (click)="hideImportModal()">Cancel</button>
+        <div class="d-flex flex-column w-100">
+          <p class="danger text-center small">{{importFileError}}</p>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-secondary" (click)="hideImportModal()">Cancel</button>
+            <button [disabled]="isValidFile !== true" class="btn btn-primary" (click)="importFile()">Import</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
