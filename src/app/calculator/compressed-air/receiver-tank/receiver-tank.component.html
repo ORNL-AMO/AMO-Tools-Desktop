@@ -20,11 +20,22 @@
               <app-dedicated-storage-form *ngIf="method == 1"></app-dedicated-storage-form>
               <app-metered-storage-form *ngIf="method == 2"></app-metered-storage-form>
               <app-delay-method-form *ngIf="method == 3"></app-delay-method-form>
-              <app-air-capacity-form *ngIf="method == 4"></app-air-capacity-form>
+            </form>
+          </div>
+        </div>
+
+        <div class="header">
+          <h3>Usable Air Capacity Calculations</h3>
+        </div>
+        <div class="row">
+          <div class="col-12 tab-content">
+            <form>
+              <app-air-capacity-form></app-air-capacity-form>
             </form>
           </div>
         </div>
       </div>
+
       <div class="col-6 align-top">
         <div class="help-panel">
           <div class="header">
@@ -35,7 +46,9 @@
             <app-dedicated-storage-help *ngIf="method == 1"></app-dedicated-storage-help>
             <app-metered-storage-help *ngIf="method == 2"></app-metered-storage-help>
             <app-delay-method-help *ngIf="method == 3"></app-delay-method-help>
-            <app-air-capacity-help *ngIf="method == 4"></app-air-capacity-help>
+          </div>
+          <div class="tab-content">
+            <app-air-capacity-help></app-air-capacity-help>
           </div>
         </div>
       </div>

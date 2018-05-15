@@ -23,11 +23,7 @@ export class ReceiverTankComponent implements OnInit {
     {
       name: 'Bridging Compressor Reaction Delay',
       value: 3
-    },
-    {
-      name: 'Usable Air Capacity',
-      value: 4
-    },
+    }
   ];
   method: number = 0;
 
