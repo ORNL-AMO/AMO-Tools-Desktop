@@ -1,8 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SettingsService } from "../../../settings/settings.service";
-import {Settings} from "../../../shared/models/settings";
+import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { SaturatedPropertiesOutput, SaturatedPropertiesInput } from '../../../shared/models/steam';
+import { SteamService } from '../steam.service';
 
 @Component({
   selector: 'app-saturated-properties',
@@ -13,10 +15,16 @@ export class SaturatedPropertiesComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  saturatedPropertiesForm: FormGroup;
-  tabSelect = 'results';
+  @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
+  chartContainerHeight: number;
+  chartContainerWidth: number;
 
-  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService) { }
+  saturatedPropertiesForm: FormGroup;
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  pressureOrTemperature: number;
+  tabSelect: string = 'results';
+
+  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
     this.saturatedPropertiesForm = this.formBuilder.group({
@@ -31,8 +39,55 @@ export class SaturatedPropertiesComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+
+    this.saturatedPropertiesOutput = {
+      saturatedPressure: 0,
+      saturatedTemperature: 0,
+      liquidEnthalpy: 0,
+      gasEnthalpy: 0,
+      evaporationEnthalpy: 0,
+      liquidEntropy: 0,
+      gasEntropy: 0,
+      evaporationEntropy: 0,
+      liquidVolume: 0,
+      gasVolume: 0,
+      evaporationVolume: 0
+    };
   }
 
-  setTab(str: string) { }
+  ngAfterViewInit() {
+    this.changeDetectorRef.detectChanges();
+  }
 
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  getChartWidth(): number {
+    if (this.lineChartContainer) {
+      this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
+      return this.chartContainerWidth;
+    }
+    else {
+      return 600;
+    }
+  }
+
+  getChartHeight(): number {
+    if (this.lineChartContainer) {
+      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .8;
+      return this.chartContainerHeight;
+    }
+    else {
+      return 800;
+    }
+  }
+
+  setPressureOrTemperature(val: number) {
+    this.pressureOrTemperature = val;
+  }
+
+  calculate(input: SaturatedPropertiesInput) {
+    this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+  }
 }

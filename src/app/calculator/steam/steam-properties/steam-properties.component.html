@@ -12,11 +12,11 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-steam-properties-form [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings"> </app-steam-properties-form>
+            <app-steam-properties-form [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings" [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
           </div>
         </div>
       </div>
-      <div class="col-6 align-top">
+      <div #lineChartContainer class="col-6 align-top">
         <div class="help-panel">
           <div class="row">
             <ul class="tabs primary tab-row">
@@ -30,7 +30,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <!--<app-percent-load-estimation-graph *ngIf="tabSelect == 'results'" [loadEstimationResult]="loadEstimationResult"></app-percent-load-estimation-graph>-->
+                <app-steam-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [steamPropertiesOutput]="steamPropertiesOutput"></app-steam-properties-graph>
             </div>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">

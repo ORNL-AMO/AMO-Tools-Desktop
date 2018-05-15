@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesInput, SteamPropertiesOutput } from "../../../../shared/models/steam";
@@ -15,7 +15,9 @@ export class SteamPropertiesFormComponent implements OnInit {
   steamPropertiesForm: FormGroup;
   @Input()
   settings: Settings;
-
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<SteamPropertiesInput>();
+  @Input()
   steamPropertiesOutput: SteamPropertiesOutput;
 
   pressureError: string = null;
@@ -69,9 +71,9 @@ export class SteamPropertiesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.steamPropertiesOutput = {
-      pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
-    };
+    // this.steamPropertiesOutput = {
+    //   pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
+    // };
     this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
     this.calculate();
   }
@@ -116,8 +118,9 @@ export class SteamPropertiesFormComponent implements OnInit {
     if (this.pressureError !== null || this.quantityValueError !== null) {
       return;
     }
-
-    this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+    
+    // this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+    this.emitCalculate.emit(input);
   }
 
 }
