@@ -21,13 +21,13 @@ export class CustomMaterialsComponent implements OnInit {
   showAtmosphereModal: boolean = false;
   showWallSurfaceModal: boolean = false;
 
-  showFlueMaterials: boolean = false;
-  showSolidLiquidFlueMaterials: boolean = false;
-  showGasLoadChargeMaterials: boolean = false;
-  showLiquidLoadChargeMaterials: boolean = false;
-  showSolidLoadChargeMaterials: boolean = false;
-  showAtmosphereMaterials: boolean = false;
-  showWallSurfaceMaterials: boolean = false;
+  showFlueMaterials: boolean = true;
+  showSolidLiquidFlueMaterials: boolean = true;
+  showGasLoadChargeMaterials: boolean = true;
+  showLiquidLoadChargeMaterials: boolean = true;
+  showSolidLoadChargeMaterials: boolean = true;
+  showAtmosphereMaterials: boolean = true;
+  showWallSurfaceMaterials: boolean = true;
 
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
@@ -205,13 +205,21 @@ export class CustomMaterialsComponent implements OnInit {
     fr.readAsText(this.fileReference.target.files[0]);
     fr.onloadend = (e) => {
       let importJson = JSON.parse(fr.result);
-      delete importJson.origin;
-      this.importing = true;
-      this.customMaterialService.importSelected(importJson);
-      setTimeout(() => {
-        this.importing = false;
-        this.hideImportModal();
-      }, 1500)
+      if(importJson.origin){
+        if(importJson.origin == 'AMO-TOOLS-DESKTOP-MATERIALS'){
+          delete importJson.origin;
+          this.importing = true;
+          this.customMaterialService.importSelected(importJson);
+          setTimeout(() => {
+            this.importing = false;
+            this.hideImportModal();
+          }, 1500)
+        }else if(importJson.origin == 'AMO-TOOLS-DESKTOP'){
+
+        }else{
+          
+        }
+      }
     }
   }
 }
