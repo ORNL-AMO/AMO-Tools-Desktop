@@ -24,7 +24,9 @@ export class SlagFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
+  @Input()
+  inSetup: boolean;
+  
   firstChange: boolean = true;
   constructor(private slagCompareService: SlagCompareService) { }
 
@@ -66,7 +68,7 @@ export class SlagFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.slagCompareService.baselineSlag && this.slagCompareService.modifiedSlag) {
+    if (this.slagCompareService.baselineSlag && this.slagCompareService.modifiedSlag && !this.inSetup) {
       return true;
     } else {
       return false;

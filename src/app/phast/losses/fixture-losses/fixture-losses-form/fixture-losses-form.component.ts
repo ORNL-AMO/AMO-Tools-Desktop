@@ -31,6 +31,8 @@ export class FixtureLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -169,7 +171,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
   canCompare() {
-    if (this.fixtureLossesCompareService.baselineFixtureLosses && this.fixtureLossesCompareService.modifiedFixtureLosses) {
+    if (this.fixtureLossesCompareService.baselineFixtureLosses && this.fixtureLossesCompareService.modifiedFixtureLosses && !this.inSetup) {
       return true;
     } else {
       return false;

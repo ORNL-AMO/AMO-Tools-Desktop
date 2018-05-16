@@ -31,6 +31,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+
   tabSelect: string = 'results';
   currentField: string = 'default';
   toggleCalculate: boolean = false;
@@ -63,11 +64,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.firstChange) {
-        if (changes.exploreModIndex) {
-          this.toastyService.clearAll();
-          this.checkExists();
-          this.checkExploreOpps();
-        }
+        this.toastyService.clearAll();
+        this.checkExists();
+        this.checkExploreOpps();
       }
     }
   }
@@ -123,7 +122,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.lossesService.openNewModal.next(true);
   }
 
-  addNewMod(){
+  addNewMod() {
     this.emitAddNewMod.emit(true);
   }
 }

@@ -87,6 +87,7 @@ export class LossesComponent implements OnInit {
       this.isModalOpen = val;
     })
     this.lossesService.updateTabs.next(true);
+    this.saveModifications();
   }
 
 
@@ -112,8 +113,7 @@ export class LossesComponent implements OnInit {
         this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }
     }
-
-    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex);
+    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex, this.inSetup);
     this.saved.emit(true);
     this.toggleCalculate = !this.toggleCalculate;
     if (this.phast.modifications.length != 0) {

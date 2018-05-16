@@ -15,7 +15,8 @@ import { Subscription } from 'rxjs';
 export class WallTabComponent implements OnInit {
   @Input()
   phast: PHAST;
-
+  @Input()
+  inSetup: boolean;
   badgeHover: boolean;
   displayTooltip: boolean;
 
@@ -56,7 +57,7 @@ export class WallTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     } else if (this.inputError) {
       badgeStr = ['input-error'];
-    } else if (this.isDifferent) {
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -79,7 +80,7 @@ export class WallTabComponent implements OnInit {
         }
       })
     }
-    if (this.wallLossCompareService.modifiedWallLosses) {
+    if (this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
       this.wallLossCompareService.modifiedWallLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

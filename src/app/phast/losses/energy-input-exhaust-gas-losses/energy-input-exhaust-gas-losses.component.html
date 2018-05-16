@@ -25,7 +25,7 @@
     <div class="col-12">
       <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [availableHeat]="availableHeat"
-        [settings]="settings" (inputError)="setError($event)"></app-energy-input-exhaust-gas-form>
+        [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-energy-input-exhaust-gas-form>
     </div>
   </div>
   <div class="row loss-total" [ngClass]="{'input-error': showError == true}">

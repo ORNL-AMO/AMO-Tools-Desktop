@@ -24,7 +24,7 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-extended-surface-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"></app-extended-surface-losses-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-extended-surface-losses-form>
     </div>
   </div>
   <div class="row loss-results" [ngClass]="{'input-error': showError == true}">

@@ -31,6 +31,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -249,7 +251,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
   canCompare() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials) {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
       if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
         return true;
       } else {

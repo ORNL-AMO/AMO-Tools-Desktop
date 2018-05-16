@@ -33,7 +33,9 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  inSetup: boolean;
+  
   combustionError: string = null;
   heatError: string = null;
   firstChange: boolean = true;
@@ -121,7 +123,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
+    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       return true;
     } else {
       return false;

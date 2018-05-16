@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 export class SlagTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -55,7 +57,7 @@ export class SlagTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     }else if(this.inputError){
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    }else if(this.isDifferent && !this.inSetup){
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -78,7 +80,7 @@ export class SlagTabComponent implements OnInit {
         }
       })
     }
-    if (this.slagCompareService.modifiedSlag) {
+    if (this.slagCompareService.modifiedSlag && !this.inSetup) {
       this.slagCompareService.modifiedSlag.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

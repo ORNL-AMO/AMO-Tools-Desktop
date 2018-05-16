@@ -26,6 +26,8 @@ export class GasCoolingLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   specificHeatError: string = null;
   gasFlowError: string = null;
@@ -106,7 +108,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
     this.calculate.emit(true)
   }
   canCompare() {
-    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
       if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
         return true
       } else {
@@ -118,7 +120,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
 
   compareCoolingMedium(): boolean {
-    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+    if (this.canCompare()) {
       return this.coolingLossesCompareService.compareCoolingMedium(this.lossIndex);
     } else {
       return false;

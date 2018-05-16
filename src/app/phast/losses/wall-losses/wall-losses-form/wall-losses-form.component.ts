@@ -29,6 +29,9 @@ export class WallLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
+
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -162,7 +165,7 @@ export class WallLossesFormComponent implements OnInit {
     this.lossesService.modalOpen.next(this.showModal);
   }
   canCompare() {
-    if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses) {
+    if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
       return true;
     } else {
       return false;

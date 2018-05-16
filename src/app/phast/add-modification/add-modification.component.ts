@@ -64,6 +64,9 @@ export class AddModificationComponent implements OnInit {
         operationsNotes: ''
       }
     }
+    if(this.currentTab == 'explore-opportunities'){
+      tmpModification.exploreOpportunities = true;
+    }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));

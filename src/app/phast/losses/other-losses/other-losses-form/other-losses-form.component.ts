@@ -24,6 +24,8 @@ export class OtherLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
 
   firstChange: boolean = true;
   resultsUnit: string;
@@ -65,7 +67,7 @@ export class OtherLossesFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss) {
+    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss && !this.inSetup) {
       return true;
     } else {
       return false;

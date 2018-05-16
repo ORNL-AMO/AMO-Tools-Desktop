@@ -126,6 +126,9 @@ export class UnitConverterComponent implements OnInit {
     {
       measure: 'volumetricEnergy',
       display: 'Volumetric Energy'
+    }, {
+      measure: 'specificVolume',
+      display: 'Specific Volume'
     }
   ]
 
