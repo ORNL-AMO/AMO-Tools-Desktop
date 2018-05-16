@@ -1,10 +1,8 @@
-
-
-<div class="row">
+<div class="d-flex flex-wrap w-100">
   <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let flueGasMaterial of flueGasMaterials; let i = index">
     <div class="card card-item">
       <div class="card-header summary-card-header phast">
-        {{flueGasMaterial.substance}}
+        <input type="checkbox" [(ngModel)]="flueGasMaterial.selected"> {{flueGasMaterial.substance}}
         <i (click)="editMaterial(flueGasMaterial.id)" class="fa fa-edit pull-right"></i>
       </div>
       <div class="card-body scroll-item summary-card-body">
@@ -155,11 +153,9 @@
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div>
-        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-flue-gas-material>
-      </div>
+    <div class="modal-content tab-content">
+      <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-flue-gas-material>
     </div>
   </div>
 </div>

@@ -5,6 +5,9 @@ import { Settings } from '../../../shared/models/settings';
 import { LossesService } from '../../../phast/losses/losses.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SuiteDbService } from '../../suite-db.service';
+import { CustomMaterialsService } from '../custom-materials.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-custom-flue-gas-materials',
@@ -16,6 +19,8 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -24,27 +29,47 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   existingMaterial: FlueGasMaterial;
   deletingMaterial: boolean = false;
   options: any;
+  selectedSub: Subscription;
+  selectAllSub: Subscription;
 
-
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.flueGasMaterials = new Array<FlueGasMaterial>();
     this.getCustomMaterials();
+    this.customMaterialService.selectedFlueGas = new Array<FlueGasMaterial>();
+    this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
+      if (val) {
+        this.getSelected();
+      }
+    })
+    this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
+      this.selectAll(val);
+    })
   }
 
-  getCustomMaterials() {
-    this.flueGasMaterials = new Array<FlueGasMaterial>();
-    this.indexedDbService.getFlueGasMaterials().then(idbResults => {
-      this.flueGasMaterials = idbResults;
-    });
+  ngOnDestroy(){
+    this.selectAllSub.unsubscribe();
+    this.selectedSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
+      }
+    }
+  }
+  
+  getCustomMaterials() {
+    this.indexedDbService.getFlueGasMaterials().then(idbResults => {
+      this.flueGasMaterials = idbResults;
+    });
   }
 
   editMaterial(id: number) {
@@ -75,5 +100,15 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
     this.editExistingMaterial = false;
     this.deletingMaterial = false;
     this.getCustomMaterials();
+  }
+
+  getSelected() {
+    let selected: Array<FlueGasMaterial> = _.filter(this.flueGasMaterials, (material) => { return material.selected == true });
+    this.customMaterialService.selectedFlueGas = selected;
+  }
+  selectAll(val: boolean) {
+    this.flueGasMaterials.forEach(material => {
+      material.selected = val;
+    })
   }
 }

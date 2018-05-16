@@ -1,5 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { CustomMaterialsService, MaterialData } from './custom-materials.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { ImportExportService } from '../../shared/import-export/import-export.service';
 
 @Component({
   selector: 'app-custom-materials',
@@ -18,15 +21,33 @@ export class CustomMaterialsComponent implements OnInit {
   showAtmosphereModal: boolean = false;
   showWallSurfaceModal: boolean = false;
 
-  constructor() { }
+  showFlueMaterials: boolean = true;
+  showSolidLiquidFlueMaterials: boolean = true;
+  showGasLoadChargeMaterials: boolean = true;
+  showLiquidLoadChargeMaterials: boolean = true;
+  showSolidLoadChargeMaterials: boolean = true;
+  showAtmosphereMaterials: boolean = true;
+  showWallSurfaceMaterials: boolean = true;
+
+  isAllSelected: boolean = false;
+  deleteModalOpen: boolean = false;
+  @ViewChild('exportModal') public exportModal: ModalDirective;
+  @ViewChild('importModal') public importModal: ModalDirective;
+  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  selectedMaterialData: MaterialData;
+  exportModalOpen: boolean = false;
+  fileReference: any;
+  isValidFile: boolean;
+  importing: boolean = false;
+
+  importFileError: string;
+  constructor(private customMaterialService: CustomMaterialsService, private importExportService: ImportExportService) { }
 
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.showGasLoadChargeModal) {
-      console.log('custom materials change showGasLoadChargeModal');
-    }
+  ngOnDestroy() {
+    this.customMaterialService.getSelected.next(false);
   }
 
   toggleModal(material: string) {
@@ -58,4 +79,152 @@ export class CustomMaterialsComponent implements OnInit {
 
   }
 
+
+  toggleMaterial(material: string) {
+    switch (material) {
+      case 'flue':
+        this.showFlueMaterials = !this.showFlueMaterials;
+        break;
+      case 'solid-liquid-flue':
+        this.showSolidLiquidFlueMaterials = !this.showSolidLiquidFlueMaterials;
+        break;
+      case 'gas-load':
+        this.showGasLoadChargeMaterials = !this.showGasLoadChargeMaterials;
+        break;
+      case 'liquid-load':
+        this.showLiquidLoadChargeMaterials = !this.showLiquidLoadChargeMaterials;
+        break;
+      case 'solid-load':
+        this.showSolidLoadChargeMaterials = !this.showSolidLoadChargeMaterials;
+        break;
+      case 'atmosphere-material':
+        this.showAtmosphereMaterials = !this.showAtmosphereMaterials;
+        break;
+      case 'wall-surface':
+        this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials;
+        break;
+      default:
+        break;
+    }
+
+  }
+
+  checkSelected() {
+    this.customMaterialService.getSelected.next(true);
+    let test = this.customMaterialService.buildSelectedData();
+    if (
+      test.atmosphereSpecificHeat.length != 0 ||
+      test.flueGasMaterial.length != 0 ||
+      test.gasLoadChargeMaterial.length != 0 ||
+      test.liquidLoadChargeMaterial.length != 0 ||
+      test.solidLiquidFlueGasMaterial.length != 0 ||
+      test.solidLoadChargeMaterial.length != 0 ||
+      test.wallLossesSurface.length != 0
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  signalSelectAll() {
+    this.customMaterialService.selectAll.next(this.isAllSelected);
+  }
+
+
+  deleteData() {
+    this.customMaterialService.deleteSelected(this.selectedMaterialData);
+    this.importing = true;
+    setTimeout(() => {
+      this.importing = false;
+      this.hideDeleteModal();
+    }, 1500)
+  }
+
+  delete() {
+    this.customMaterialService.getSelected.next(true);
+    this.selectedMaterialData = this.customMaterialService.buildSelectedData();
+    this.showDeleteModal();
+  }
+
+  showDeleteModal() {
+    this.deleteModalOpen = true;
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModalOpen = false;
+    this.deleteModal.hide();
+  }
+
+  export() {
+    this.customMaterialService.getSelected.next(true);
+    this.selectedMaterialData = this.customMaterialService.buildSelectedData();
+    this.showExportModal();
+  }
+
+  exportData() {
+    this.importExportService.downloadMaterialData(this.selectedMaterialData);
+    this.hideExportModal();
+  }
+
+  showExportModal() {
+    this.exportModalOpen = true;
+    this.exportModal.show();
+  }
+
+  hideExportModal() {
+    this.exportModalOpen = false;
+    this.exportModal.hide();
+  }
+
+
+  setImportFile($event) {
+    this.importFileError = null;
+    if ($event.target.files) {
+      if ($event.target.files.length != 0) {
+        let regex = /.json$/;
+        if (regex.test($event.target.files[0].name)) {
+          this.fileReference = $event;
+          this.isValidFile = true;
+        } else {
+          this.isValidFile = false;
+        }
+      }
+    }
+  }
+
+
+  showImportModal() {
+    this.importModal.show();
+  }
+
+  hideImportModal() {
+    this.importFileError = null;
+    this.importModal.hide();
+  }
+
+  importFile() {
+    let fr: FileReader = new FileReader();
+    fr.readAsText(this.fileReference.target.files[0]);
+    fr.onloadend = (e) => {
+      let importJson = JSON.parse(fr.result);
+      if(importJson.origin){
+        if(importJson.origin == 'AMO-TOOLS-DESKTOP-MATERIALS'){
+          this.importFileError = null;
+          delete importJson.origin;
+          this.importing = true;
+          this.customMaterialService.importSelected(importJson);
+          setTimeout(() => {
+            this.importing = false;
+            this.hideImportModal();
+          }, 1500)
+        }else if(importJson.origin == 'AMO-TOOLS-DESKTOP'){
+          this.importFileError = 'This file can only be imported in your assessment dashboard. Use this import area for custom materials.';
+        }else{
+          this.importFileError = 'Unrecognized file, please only import files generated by this application.';
+        }
+      }
+    }
+  }
 }
