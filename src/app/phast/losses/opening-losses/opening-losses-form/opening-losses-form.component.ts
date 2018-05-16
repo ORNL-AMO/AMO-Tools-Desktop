@@ -28,6 +28,8 @@ export class OpeningLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   totalArea: number = 0.0;
 
@@ -200,7 +202,7 @@ export class OpeningLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
   canCompare() {
-    if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses) {
+    if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses && !this.inSetup) {
       return true;
     } else {
       return false;

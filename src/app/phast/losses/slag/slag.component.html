@@ -24,7 +24,7 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-slag-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup"></app-slag-form>
     </div>
   </div>
   <div class="row loss-results loss-total">

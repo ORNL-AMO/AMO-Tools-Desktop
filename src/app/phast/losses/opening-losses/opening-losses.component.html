@@ -23,7 +23,7 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-opening-losses-form (changeField)="changeField($event)" [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"></app-opening-losses-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-opening-losses-form>
     </div>
   </div>
   <div class="row loss-results" [ngClass]="{'input-error': showError == true}">

@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 export class AuxiliaryPowerTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -55,7 +57,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     } else if (this.inputError) {
       badgeStr = ['input-error'];
-    } else if (this.isDifferent) {
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -79,7 +81,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
         }
       })
     }
-    if (this.auxiliaryPowerCompareService.modifiedAuxLosses) {
+    if (this.auxiliaryPowerCompareService.modifiedAuxLosses && !this.inSetup) {
       this.auxiliaryPowerCompareService.modifiedAuxLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

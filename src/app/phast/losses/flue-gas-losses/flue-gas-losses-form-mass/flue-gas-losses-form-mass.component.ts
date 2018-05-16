@@ -30,7 +30,9 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
-
+  @Input()
+  inSetup: boolean;
+  
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   moistureInAirCompositionError: string = null;
@@ -231,7 +233,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss) {
+    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
       if (this.flueGasCompareService.compareLossType(this.lossIndex) == false) {
         return true;
       } else {

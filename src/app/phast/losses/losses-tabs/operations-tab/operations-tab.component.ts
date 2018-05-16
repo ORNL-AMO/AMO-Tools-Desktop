@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 export class OperationsTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -55,7 +57,7 @@ export class OperationsTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     }else if(this.inputError){
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    }else if(this.isDifferent && !this.inSetup){
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;

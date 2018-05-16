@@ -27,6 +27,8 @@ export class ExhaustGasFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
 
   firstChange: boolean = true;
   constructor(private windowRefService: WindowRefService, private exhaustGasCompareService: ExhaustGasCompareService, private exhaustGasService: ExhaustGasService) { }
@@ -69,7 +71,7 @@ export class ExhaustGasFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses) {
+    if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses && !this.inSetup) {
       return true;
     } else {
       return false;

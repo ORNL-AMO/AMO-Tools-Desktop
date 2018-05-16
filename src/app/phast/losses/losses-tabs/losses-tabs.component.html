@@ -1,21 +1,21 @@
 <ul class="tabs subtabs phast">
   <li *ngFor="let tab of lossTabs" [ngClass]="{'active': selectedTab.step == tab.step}" (click)="tabChange(tab)">
-    <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast"></app-operations-tab>
-    <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast"></app-charge-material-tab>
-    <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast"></app-atmosphere-tab>
-    <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast"></app-auxiliary-power-tab>
-    <app-cooling-tab *ngIf="tab.componentStr == 'cooling-losses'" [phast]="phast"></app-cooling-tab>
-    <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast"></app-energy-input-exhaust-gas-tab>
-    <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast"></app-energy-input-tab>
-    <app-extended-surface-tab *ngIf="tab.componentStr == 'extended-surface-losses'" [phast]="phast"></app-extended-surface-tab>
-    <app-fixture-tab *ngIf="tab.componentStr == 'fixture-losses'" [phast]="phast"></app-fixture-tab>
-    <app-flue-gas-tab *ngIf="tab.componentStr == 'flue-gas-losses'" [phast]="phast"></app-flue-gas-tab>
-    <app-gas-leakage-tab *ngIf="tab.componentStr == 'gas-leakage-losses'" [phast]="phast"></app-gas-leakage-tab>
-    <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast"></app-opening-tab>
-    <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast"></app-other-tab>
-    <app-slag-tab *ngIf="tab.componentStr == 'slag'" [phast]="phast"></app-slag-tab>
-    <app-system-efficiency-tab *ngIf="tab.componentStr == 'heat-system-efficiency'" [phast]="phast"></app-system-efficiency-tab>
-    <app-wall-tab *ngIf="tab.componentStr == 'wall-losses'" [phast]="phast"></app-wall-tab>
-    <app-exhaust-gas-tab *ngIf="tab.componentStr == 'exhaust-gas'" [phast]="phast"></app-exhaust-gas-tab>
+    <app-operations-tab *ngIf="tab.componentStr == 'operations'" [phast]="phast" [inSetup]="inSetup"></app-operations-tab>
+    <app-charge-material-tab *ngIf="tab.componentStr == 'charge-material'" [phast]="phast" [inSetup]="inSetup"></app-charge-material-tab>
+    <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast" [inSetup]="inSetup"></app-atmosphere-tab>
+    <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast" [inSetup]="inSetup"></app-auxiliary-power-tab>
+    <app-cooling-tab *ngIf="tab.componentStr == 'cooling-losses'" [phast]="phast" [inSetup]="inSetup"></app-cooling-tab>
+    <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast" [inSetup]="inSetup"></app-energy-input-exhaust-gas-tab>
+    <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast" [inSetup]="inSetup"></app-energy-input-tab>
+    <app-extended-surface-tab *ngIf="tab.componentStr == 'extended-surface-losses'" [phast]="phast" [inSetup]="inSetup"></app-extended-surface-tab>
+    <app-fixture-tab *ngIf="tab.componentStr == 'fixture-losses'" [phast]="phast" [inSetup]="inSetup"></app-fixture-tab>
+    <app-flue-gas-tab *ngIf="tab.componentStr == 'flue-gas-losses'" [phast]="phast" [inSetup]="inSetup"></app-flue-gas-tab>
+    <app-gas-leakage-tab *ngIf="tab.componentStr == 'gas-leakage-losses'" [phast]="phast" [inSetup]="inSetup"></app-gas-leakage-tab>
+    <app-opening-tab *ngIf="tab.componentStr == 'opening-losses'" [phast]="phast" [inSetup]="inSetup"></app-opening-tab>
+    <app-other-tab *ngIf="tab.componentStr == 'other-losses'" [phast]="phast" [inSetup]="inSetup"></app-other-tab>
+    <app-slag-tab *ngIf="tab.componentStr == 'slag'" [phast]="phast" [inSetup]="inSetup"></app-slag-tab>
+    <app-system-efficiency-tab *ngIf="tab.componentStr == 'heat-system-efficiency'" [phast]="phast" [inSetup]="inSetup"></app-system-efficiency-tab>
+    <app-wall-tab *ngIf="tab.componentStr == 'wall-losses'" [phast]="phast" [inSetup]="inSetup"></app-wall-tab>
+    <app-exhaust-gas-tab *ngIf="tab.componentStr == 'exhaust-gas'" [phast]="phast" [inSetup]="inSetup"></app-exhaust-gas-tab>
   </li>
 </ul>

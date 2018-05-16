@@ -28,7 +28,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   modExists: boolean;
   @Input()
   modificationIndex: number;
-
+  
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
 
@@ -119,7 +119,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   compareEfficiency() {
-    if (this.heatSystemEfficiencyCompareService.baseline && this.heatSystemEfficiencyCompareService.modification) {
+    if (this.heatSystemEfficiencyCompareService.baseline && this.heatSystemEfficiencyCompareService.modification && !this.inSetup) {
       return this.heatSystemEfficiencyCompareService.compareEfficiency();
     } else {
       return false;
