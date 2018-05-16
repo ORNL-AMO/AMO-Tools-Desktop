@@ -25,6 +25,7 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesForm: FormGroup;
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
+  currentField: string = 'pressure';
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
@@ -53,6 +54,11 @@ export class SteamPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  setField(str: string) {
+    console.log('setField = ' + str);
+    this.currentField = str;
   }
 
   getChartWidth(): number {

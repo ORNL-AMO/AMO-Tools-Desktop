@@ -17,6 +17,8 @@ export class SteamPropertiesFormComponent implements OnInit {
   settings: Settings;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<SteamPropertiesInput>();
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   @Input()
   steamPropertiesOutput: SteamPropertiesOutput;
 
@@ -80,6 +82,25 @@ export class SteamPropertiesFormComponent implements OnInit {
 
   getDisplayUnit(unit: string) {
     return this.steamService.getDisplayUnit(unit);
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
+
+  focusVariableField(i: number) {
+    if (i == 0) {
+      this.focusField('temp');
+    }
+    else if (i == 1) {
+      this.focusField('enthalpy');
+    }
+    else if (i == 2) {
+      this.focusField('entropy');
+    }
+    else {
+      this.focusField('quality');
+    }
   }
 
   calculate() {

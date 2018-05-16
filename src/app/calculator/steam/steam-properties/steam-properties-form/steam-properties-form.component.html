@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="pressure">Pressure</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (input)="calculate()">
+        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (focus)="focusField('pressure')" (input)="calculate()">
         <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
         <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
@@ -28,7 +28,7 @@
       <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 2" for="quantityValue">Specific Entropy</label>
       <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">Quality</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" (input)="calculate()" autofocus>
+        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();" (input)="calculate()" (focus)="focusVariableField(steamPropertiesForm.controls.thermodynamicQuantity.value)" autofocus>
         <span class="input-group-addon units">{{quantityValueUnits}}</span>
         <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null">{{quantityValueError}}</span>
       </div>

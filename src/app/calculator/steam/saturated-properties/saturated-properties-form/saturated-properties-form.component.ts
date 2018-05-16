@@ -72,6 +72,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   }
 
   calculate() {
+    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
     this.temperatureError = this.pressureError = null;
 
     if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
@@ -93,10 +94,10 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     }
     // this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
 
-    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
     this.emitCalculate.emit(this.input);
     // return 0;
   }
+
 
   getDisplayUnit(unit: string) {
     return this.steamService.getDisplayUnit(unit);
