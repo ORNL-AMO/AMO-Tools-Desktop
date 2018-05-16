@@ -31,7 +31,7 @@ export class SteamPropertiesComponent implements OnInit {
 
   ngOnInit() {
     this.steamPropertiesForm = this.formBuilder.group({
-      'pressure': [0, Validators.required],
+      'pressure': [0.2, Validators.required],
       'thermodynamicQuantity': [0, Validators.required],
       'quantityValue': [0, Validators.required]
     });
