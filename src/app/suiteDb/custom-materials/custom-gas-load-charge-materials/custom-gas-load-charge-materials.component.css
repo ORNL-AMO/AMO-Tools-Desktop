@@ -110,3 +110,19 @@ a:not([href]):not([tabindex]):hover {
     text-decoration: underline;
     cursor: pointer;
   }
+
+
+  .modal-dialog{
+    top: .5rem;
+  }
+
+  .fa-edit:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .fa-edit{
+    padding-top: 4px;
+    font-size: larger;
+  }

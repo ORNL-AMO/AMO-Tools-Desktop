@@ -25,7 +25,9 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
-
+  @Input()
+  inSetup: boolean;
+  
   specificHeatError: string = null;
   firstChange: boolean = true;
   temperatureError: string = null;
@@ -107,7 +109,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     this.calculate.emit(true)
   }
   canCompare() {
-    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
       if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
         return true
       } else {

@@ -85,6 +85,13 @@
     border-bottom: #FFE400 groove 2px;
 }
 
+.steam .panel-tab-item.active{
+    border: none;
+    border-bottom: #2C3E50 solid 2px;
+}
+
+
+
 .header h3{
     margin-left: 5px;
 }
@@ -111,6 +118,10 @@
 
 .compressed-air .header{
     border-bottom: #A569BD groove 2px;
+}
+
+.steam .header{
+   border-bottom: #2C3E50 solid 2px;
 }
 
 .general .btn-secondary:not([disabled]):not(.disabled).active{
@@ -227,6 +238,10 @@
 
 .general .group-label{
     border-bottom: #145A32 solid 2px;
+}
+
+.steam .group-label{
+    border-bottom: #2C3E50 solid 2px;
 }
 
 .loss-label{

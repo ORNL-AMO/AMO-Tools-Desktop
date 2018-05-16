@@ -90,6 +90,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.initData();
     this.initCanvas();
     this.buildChart();
+    if (this.dataPopulated && this.canvasReady && this.steamPropertiesOutput !== undefined && this.steamPropertiesOutput !== null) {
+      if (this.steamPropertiesOutput.specificEntropy != 0 && this.steamPropertiesOutput.specificEntropy !== null && this.steamPropertiesOutput.temperature != 0 && this.steamPropertiesOutput.temperature !== null) {
+        this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+      }
+    }
   }
 
 
@@ -231,11 +236,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
     //these default values are for metric
     //x values are entropy, default is kJkgK
-    this.xMax = 11;
+    this.xMax = 10;
     this.xMin = 0;
     //y values are temperature, default is C
-    this.yMax = 2000;
-    this.yMin = -100;
+    this.yMax = 600;
+    this.yMin = -30;
 
     if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
       this.xMax = this.convertVal(this.xMax, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
@@ -252,7 +257,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
   buildChart() {
     this.host.html('');
     this.margin = {
-      top: 20,
+      top: 0,
       right: 20,
       bottom: 50,
       left: 70
@@ -321,17 +326,17 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
     //update domains to keep area from expanding to negative values
     if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
-      x.domain([this.convertVal(0, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement), this.convertVal(11, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement)]);
+      x.domain([this.convertVal(0, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement), this.convertVal(10, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement)]);
     }
     else {
-      x.domain([0, 11]);
+      x.domain([0, 10]);
     }
 
     if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
-      y.domain([this.convertVal(0, this.defaultTempUnit, this.settings.steamTemperatureMeasurement), this.convertVal(2000, this.defaultTempUnit, this.settings.steamTemperatureMeasurement)]);
+      y.domain([this.convertVal(0, this.defaultTempUnit, this.settings.steamTemperatureMeasurement), this.convertVal(600, this.defaultTempUnit, this.settings.steamTemperatureMeasurement)]);
     }
     else {
-      y.domain([0, 2000]);
+      y.domain([0, 600]);
     }
     // add the area
     this.svg.append("path")
@@ -451,7 +456,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
       this.xAxisLabel = "Entropy (kJ/kg-K)";
     }
     this.svg.append("text")
-      .attr("transform", "translate(" + (this.width / 2) + " ," + (this.height + this.margin.top + 20) + ")")
+      .attr("transform", "translate(" + (this.width / 2) + " ," + (this.height + 40) + ")")
       .style("text-anchor", "middle")
       .style('font-size', '16px')
       .html(this.xAxisLabel);

@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 export class EnergyInputExhaustGasTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -56,7 +58,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     } else if (this.inputError) {
       badgeStr = ['input-error'];
-    } else if (this.isDifferent) {
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -79,7 +81,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
         }
       })
     }
-    if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
+    if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

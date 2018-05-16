@@ -36,6 +36,21 @@ export class ImportExportService {
     dlLink.click();
   }
 
+  downloadMaterialData(data: any) {
+    data.origin = 'AMO-TOOLS-DESKTOP-MATERIALS';
+    let stringifyData = JSON.stringify(data);
+    let doc = this.windowRefService.getDoc();
+    let dlLink = doc.createElement("a");
+    let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
+    dlLink.setAttribute("href", dataStr);
+    const date = new Date();
+    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+    dlLink.setAttribute('download', 'ExportedMaterialData_' + dateStr + '.json');
+    dlLink.click();
+  }
+
+
+
   downloadImage(data: any) {
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");

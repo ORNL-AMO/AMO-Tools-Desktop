@@ -67,7 +67,6 @@ export class FixtureLossesComponent implements OnInit {
       this._fixtureLosses = new Array();
     }
     this.initForms();
-
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();

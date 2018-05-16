@@ -24,6 +24,9 @@ export class EnergyInputFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
+
   flowInput: boolean;
   firstChange: boolean = true;
   constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }
@@ -79,7 +82,7 @@ export class EnergyInputFormComponent implements OnInit {
     this.flowInput = !this.flowInput;
   }
   canCompare() {
-    if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput) {
+    if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
       return true;
     } else {
       return false;

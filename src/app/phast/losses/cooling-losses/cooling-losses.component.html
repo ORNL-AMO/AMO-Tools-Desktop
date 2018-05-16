@@ -44,10 +44,10 @@
       </div>
       <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" (inputError)="setError($event)"></app-liquid-cooling-losses-form>
+        [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-liquid-cooling-losses-form>
       <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Gas'" [(lossesForm)]="loss.gasCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" (inputError)="setError($event)"></app-gas-cooling-losses-form>
+        [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-gas-cooling-losses-form>
     </div>
   </div>
   <div class="row loss-total" [ngClass]="{'input-error': showError == true}">

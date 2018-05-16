@@ -31,6 +31,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
@@ -163,7 +165,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
+    if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
       return true;
     } else {
       return false;

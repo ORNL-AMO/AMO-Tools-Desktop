@@ -45,7 +45,7 @@ export class ModificationListComponent implements OnInit {
   }
 
   selectModification(index: number) {
-    this.phastCompareService.setCompareVals(this.phast, index);
+    this.phastCompareService.setCompareVals(this.phast, index, false);
     this.lossesService.updateTabs.next(true);
     this.initDropdown()
     this.close.emit(true);
@@ -109,7 +109,7 @@ export class ModificationListComponent implements OnInit {
     this.dropdown.splice(index, 1);
     this.deleteArr.splice(index, 1);
     if (this.phast.modifications.length == 0) {
-      this.phastCompareService.setCompareVals(this.phast, 0);
+      this.phastCompareService.setCompareVals(this.phast, 0, true);
     } else if (index == this.modificationIndex) {
       this.selectModification(0);
     } else if (index < this.modificationIndex) {

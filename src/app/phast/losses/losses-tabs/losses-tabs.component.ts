@@ -15,7 +15,9 @@ export class LossesTabsComponent implements OnInit {
   settings: Settings;
   @Input()
   phast: PHAST;
-
+  @Input()
+  inSetup: boolean;
+  
   selectedTab: LossTab;
 
   numCharge: number;

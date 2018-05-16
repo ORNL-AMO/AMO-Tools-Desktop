@@ -10,6 +10,7 @@
 
 .group-label.general{
     border-bottom: groove 2px #808B96;
+    padding: 4px;
 }
 
 .btn-danger{
@@ -33,4 +34,60 @@
 
 .btn-expand:hover {
     cursor: pointer;
+}
+
+.content-container{
+    padding: 1rem;
+    margin-bottom: 0px;
+    margin-top: 1rem;
+    box-shadow: 3px 0px 5px 2px grey;
+  }
+
+  p.help-text{
+      margin-bottom: 0px;
+  }
+
+
+  .group-label.general:hover{
+    background-color: #D5D8DC;
+    cursor: pointer;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+  }
+
+  .actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+
+.btn{
+    padding: 6px;
+}
+
+
+.modal-body h6{
+    border-bottom: solid;
+}
+
+.material-item{
+    font-style: italic;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.delete{
+    color: red;
+}
+
+.modal-body{
+    max-height: 70vh;
+    overflow: auto;
+}
+
+p.danger{
+    color: red;
 }

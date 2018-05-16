@@ -22,6 +22,9 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   lossIndex: number;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
+
   firstChange: boolean = true;
   voltageError: string = null;
 
@@ -87,7 +90,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses) {
+    if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses && !this.inSetup) {
       return true;
     } else {
       return false;

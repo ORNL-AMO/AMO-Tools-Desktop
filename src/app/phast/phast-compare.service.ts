@@ -49,13 +49,16 @@ export class PhastCompareService {
   }
 
 
-  setCompareVals(phast: PHAST, selectedModIndex: number) {
+  setCompareVals(phast: PHAST, selectedModIndex: number, inSetup: boolean) {
     if (phast.losses) {
       this.setBaseline(phast.losses);
 
     }
-    if (phast.modifications) {
+    if (phast.modifications && !inSetup) {
       if (phast.modifications.length != 0) {
+        if(!selectedModIndex){
+          selectedModIndex = 0;
+        }
         this.selectedModification.next(phast.modifications[selectedModIndex].phast);
         this.setModified(phast.modifications[selectedModIndex].phast.losses);
         if (phast.modifications[selectedModIndex].phast) {

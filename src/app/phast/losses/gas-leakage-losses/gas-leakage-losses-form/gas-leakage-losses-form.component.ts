@@ -25,6 +25,8 @@ export class GasLeakageLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   openingAreaError: string = null;
   specificGravityError: string = null;
@@ -105,7 +107,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.gasLeakageCompareService.baselineLeakageLoss && this.gasLeakageCompareService.modifiedLeakageLoss) {
+    if (this.gasLeakageCompareService.baselineLeakageLoss && this.gasLeakageCompareService.modifiedLeakageLoss && !this.inSetup) {
       return true;
     } else {
       return false;

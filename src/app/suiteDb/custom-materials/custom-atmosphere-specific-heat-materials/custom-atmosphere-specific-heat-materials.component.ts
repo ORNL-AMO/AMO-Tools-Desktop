@@ -4,7 +4,9 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AtmosphereSpecificHeat } from '../../../shared/models/materials';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { SuiteDbService } from '../../suite-db.service';
-
+import { CustomMaterialsService } from '../custom-materials.service';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-custom-atmosphere-specific-heat-materials',
   templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
@@ -15,6 +17,9 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   settings: Settings;
   @Input()
   showModal: boolean;
+  @Input()
+  importing: boolean;
+
 
   editExistingMaterial: boolean = false;
   existingMaterial: AtmosphereSpecificHeat;
@@ -22,26 +27,48 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat>;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
+  selectedSub: Subscription;
+  selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
+    this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
+    this.customMaterialService.selectedAtmosphere = new Array();
     this.getCustomMaterials();
+    this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
+      if(val){
+        this.getSelected();
+      }
+    })
+    this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
+      this.selectAll(val);
+    })
   }
 
-  getCustomMaterials() {
-    this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
-    this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
-      this.atmosphereSpecificHeatMaterials = idbResults;
-    });
+  ngOnDestroy(){
+    this.selectAllSub.unsubscribe();
+    this.selectedSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.showModal.firstChange) {
+    if (changes.showModal && !changes.showModal.firstChange) {
       if (changes.showModal.currentValue != changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
+    if(changes.importing){
+      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+        this.getCustomMaterials();
+      }
+    }
+  }
+
+  getCustomMaterials() {
+    this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
+      this.atmosphereSpecificHeatMaterials = idbResults;
+    });
+
   }
 
   editMaterial(id: number) {
@@ -67,10 +94,21 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   hideMaterialModal(event?: any) {
+    this.customMaterialService.selectedAtmosphere = new Array();
     this.materialModal.hide();
     this.showModal = false;
     this.editExistingMaterial = false;
     this.deletingMaterial = false;
     this.getCustomMaterials();
+  }
+
+  getSelected() {
+    let selected: Array<AtmosphereSpecificHeat> = _.filter(this.atmosphereSpecificHeatMaterials, (material) => { return material.selected == true });
+    this.customMaterialService.selectedAtmosphere = selected;
+  }
+  selectAll(val: boolean) {
+    this.atmosphereSpecificHeatMaterials.forEach(material => {
+      material.selected = val;
+    })
   }
 }

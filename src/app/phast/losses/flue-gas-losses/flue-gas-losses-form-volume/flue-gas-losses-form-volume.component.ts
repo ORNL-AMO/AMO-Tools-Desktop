@@ -28,6 +28,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
@@ -216,7 +219,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
 
   canCompare() {
-    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss) {
+    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
       if (this.flueGasCompareService.compareLossType(this.lossIndex) == false) {
         return true;
       } else {
