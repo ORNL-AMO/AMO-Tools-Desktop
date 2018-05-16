@@ -38,12 +38,13 @@ export class SteamService {
   }
 
   steamProperties(steamPropertiesInput: SteamPropertiesInput, settings: Settings): SteamPropertiesOutput {
-    let input = steamPropertiesInput;
+    let input: SteamPropertiesInput = steamPropertiesInput;
     input.pressure = this.convertUnitsService.value(input.pressure).from(settings.steamPressureMeasurement).to('MPa');
     input.quantityValue = this.convertSteamPropertiesQuantityValue(input, settings, true);
 
-    let output = steamAddon.steamProperties(steamPropertiesInput);
+    let output: SteamPropertiesOutput = steamAddon.steamProperties(steamPropertiesInput);
     output.pressure = this.convertUnitsService.value(output.pressure).from('MPa').to(settings.steamPressureMeasurement);
+    output.specificVolume = this.convertUnitsService.value(output.specificVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
     this.convertSteamPropertiesQuantityValue(input, settings, false, output);
     return output;
   }
@@ -65,6 +66,10 @@ export class SteamService {
 
     output.saturatedPressure = this.convertUnitsService.value(output.saturatedPressure).from('MPa').to(settings.steamPressureMeasurement);
     output.saturatedTemperature = this.convertUnitsService.value(output.saturatedTemperature - 273.15).from('C').to(settings.steamTemperatureMeasurement);
+
+    output.evaporationVolume = this.convertUnitsService.value(output.evaporationVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
+    output.gasVolume = this.convertUnitsService.value(output.gasVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
+    output.liquidVolume = this.convertUnitsService.value(output.liquidVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
 
     return output;
   }
