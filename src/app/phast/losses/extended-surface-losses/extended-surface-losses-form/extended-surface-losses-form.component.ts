@@ -25,6 +25,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   surfaceAreaError: string = null;
   firstChange: boolean = true;
@@ -99,7 +101,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface) {
+    if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface && !this.inSetup) {
       return true;
     } else {
       return false;

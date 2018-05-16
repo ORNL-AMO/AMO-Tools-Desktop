@@ -24,7 +24,7 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-exhaust-gas-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup"></app-exhaust-gas-form>
     </div>
   </div>
   <div class="row loss-total">

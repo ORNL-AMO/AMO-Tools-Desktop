@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 export class SystemEfficiencyTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -47,7 +49,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
     let badgeStr: Array<string> = ['success'];
     if (this.missingData || !this.efficiencyDone) {
       badgeStr = ['missing-data'];
-    } else if (this.isDifferent) {
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -70,7 +72,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
         testVal = true
       }
     }
-    if (this.heatSystemEfficiencyCompareService.modification) {
+    if (this.heatSystemEfficiencyCompareService.modification && !this.inSetup) {
       if (!this.heatSystemEfficiencyCompareService.modification.systemEfficiency) {
         testVal = true
       }

@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 export class GasLeakageTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -56,7 +58,7 @@ export class GasLeakageTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     }else if(this.inputError){
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    }else if(this.isDifferent && !this.inSetup){
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -79,7 +81,7 @@ export class GasLeakageTabComponent implements OnInit {
         }
       })
     }
-    if (this.gasLeakageCompareService.modifiedLeakageLoss) {
+    if (this.gasLeakageCompareService.modifiedLeakageLoss && !this.inSetup) {
       this.gasLeakageCompareService.modifiedLeakageLoss.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

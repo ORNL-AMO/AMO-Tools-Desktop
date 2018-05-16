@@ -15,6 +15,8 @@ import { Subscription } from 'rxjs';
 export class OpeningTabComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  inSetup: boolean;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -55,7 +57,7 @@ export class OpeningTabComponent implements OnInit {
       badgeStr = ['missing-data'];
     }else if(this.inputError){
       badgeStr = ['input-error'];
-    }else if(this.isDifferent){
+    }else if(this.isDifferent && !this.inSetup){
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -78,7 +80,7 @@ export class OpeningTabComponent implements OnInit {
         }
       })
     }
-    if (this.openingLossesCompareService.modifiedOpeningLosses) {
+    if (this.openingLossesCompareService.modifiedOpeningLosses && !this.inSetup) {
       this.openingLossesCompareService.modifiedOpeningLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
           testVal = true;

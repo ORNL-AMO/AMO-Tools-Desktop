@@ -32,6 +32,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   settings: Settings;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
@@ -176,7 +178,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.calculate.emit(true);
   }
   canCompare() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials) {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
       if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
         return true;
       } else {
