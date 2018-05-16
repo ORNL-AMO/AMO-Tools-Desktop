@@ -72,7 +72,6 @@ export class LossesComponent implements OnInit {
     if (!this.inSetup) {
       this.baselineSelected = false;
       this.modificationSelected = true;
-      this.saveModifications();
     }
 
     if (this.modificationExists && this.inSetup) {
@@ -88,6 +87,7 @@ export class LossesComponent implements OnInit {
       this.isModalOpen = val;
     })
     this.lossesService.updateTabs.next(true);
+    this.saveModifications();
   }
 
 

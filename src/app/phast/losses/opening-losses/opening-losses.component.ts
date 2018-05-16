@@ -49,7 +49,8 @@ export class OpeningLossesComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.addLossToggle) {
         this.addLoss();
-      } else if (changes.modificationIndex) {
+      } else if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+        console.log('change')
         this._openingLosses = new Array();
         this.initForms();
       }

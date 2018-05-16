@@ -61,7 +61,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getArea();
+    this.getArea(true);
     this.checkSurfaceEmissivity(true);
     this.checkTemperature(true);
     this.checkTimeOpen(true);
@@ -141,15 +141,15 @@ export class OpeningLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
   }
-  getArea() {
+  getArea(bool?: boolean) {
     let smallUnit = 'in';
     let largeUnit = 'ft';
     if (this.settings.unitsOfMeasure == 'Metric') {
       smallUnit = 'mm';
       largeUnit = 'm';
     }
-    this.checkNumOpenings();
-    this.checkOpeningDimensions();
+    this.checkNumOpenings(bool);
+    this.checkOpeningDimensions(bool);
     if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
       this.totalArea = 0;
       return;
@@ -162,7 +162,6 @@ export class OpeningLossesFormComponent implements OnInit {
 
         let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
-        this.startSavePolling();
       }
     } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
@@ -177,10 +176,13 @@ export class OpeningLossesFormComponent implements OnInit {
           heightFeet = this.convertUnitsService.value(heightInches).from(smallUnit).to(largeUnit);
         }
         this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.controls.numberOfOpenings.value;
-        this.startSavePolling();
       }
     } else {
       this.totalArea = 0.0;
+    }
+
+    if (!bool) {
+      this.startSavePolling();
     }
   }
   focusField(str: string) {
