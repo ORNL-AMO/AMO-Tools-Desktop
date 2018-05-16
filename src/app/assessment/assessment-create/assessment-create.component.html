@@ -40,14 +40,6 @@
               <option [ngValue]="'Fan'">Fan</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-control-label" for="assessmentName">Assessment Name</label>
-            <input class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
-            <div class="help-text">
-              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
-              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
-            </div>
-          </div>
 
           <div class="form-group" *ngIf="directories">
             <label>Folder Location</label>
