@@ -5,8 +5,8 @@
       <label for="pressureOrTemperature">Pressure or Temperature</label>
       <div class="input-group calc-addon-group">
         <select name="pressureOrTemperature" class="form-control" formControlName="pressureOrTemperature" id="pressureOrTemperature" (change)="calculate()" autofocus>
-          <option [ngValue]=0>Saturated Pressure</option>
-          <option [ngValue]=1>Saturated Temperature</option>
+          <option [ngValue]="0">Saturated Pressure</option>
+          <option [ngValue]="1">Saturated Temperature</option>
         </select>
       </div>
     </div>

@@ -24,6 +24,8 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   exportName: string;
   @Input()
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  @Input()
+  plotReady: boolean;
 
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
@@ -94,9 +96,11 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     this.initData();
     this.initCanvas();
     this.buildChart();
-    if (this.dataPopulated && this.canvasReady && this.saturatedPropertiesOutput !== undefined && this.saturatedPropertiesOutput !== null) {
-      if (this.saturatedPropertiesOutput.gasEntropy != 0 && this.saturatedPropertiesOutput.gasEntropy !== null && this.saturatedPropertiesOutput.liquidEntropy !== 0 && this.saturatedPropertiesOutput.liquidEntropy !== null)
+    // if (this.dataPopulated && this.canvasReady && this.saturatedPropertiesOutput !== undefined && this.saturatedPropertiesOutput !== null) {
+    if (this.dataPopulated && this.canvasReady && this.plotReady) {
+      // if (this.plotReady) {
       this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
+      // }
     }
   }
 
@@ -107,7 +111,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
       }
     }
     if (changes.saturatedPropertiesOutput && !changes.saturatedPropertiesOutput.firstChange) {
-      if (this.dataPopulated && this.canvasReady) {
+      if (this.dataPopulated && this.canvasReady && this.plotReady) {
         this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
       }
     }
@@ -254,7 +258,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   buildChart() {
     this.host.html('');
     this.margin = {
-      top: 0,
+      top: 10,
       right: 20,
       bottom: 50,
       left: 70
@@ -298,11 +302,13 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
     // add the X Axis
     this.svg.append("g")
+      .attr('class', 'x-axis')
       .attr("transform", "translate(0," + svgHeight + ")")
       .call(d3.axisBottom(x));
 
     // add the Y Axis
     this.svg.append("g")
+      .attr('class', 'y-axis')
       .call(d3.axisLeft(y));
 
     //add x grid lines
@@ -477,8 +483,12 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
         'temperature': temp,
         'entropy': gasEntropy
       }
+      console.log('temp = ' + temp);
+      console.log('liquidEntropy = ' + liquidEntropy);
+      console.log('gasEntropy = ' + gasEntropy);
 
       let lineDataset = this.getDataSet([temp, temp], [liquidEntropy, gasEntropy]);
+      console.log(lineDataset);
 
       let valueLine = d3.line()
         .x(function (d) {
@@ -489,6 +499,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
         });
 
       if (this.plottedLine === undefined || !this.plottedLine) {
+        console.log('initializing plottedLine');
         this.plottedLine = this.svg.append('path')
           .data([lineDataset])
           .attr('class', 'plotted-line')
@@ -498,6 +509,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
           .style('stroke-width', '2px');
       }
       else {
+        console.log('updating plottedLine');
         this.plottedLine.data([lineDataset])
           .transition()
           .duration(600)
@@ -506,11 +518,13 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
       }
 
       if (this.pointA === undefined || !this.pointA) {
+        console.log('initializing pointA');
         this.pointA = this.svg.append('circle')
           .attr("r", 5)
           .attr("cx", x(pointADataset.entropy))
           .attr("cy", y(pointADataset.temperature))
           .style('fill', 'green');
+        console.log(this.pointA);
       }
       else {
         // apply a transition
