@@ -65,6 +65,8 @@ export class AssessmentSettingsComponent implements OnInit {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     tmpSettings.directoryId = this.directory.id;
     tmpSettings.id = this.settings.id;
+    tmpSettings.appVersion = this.settings.appVersion;
+    tmpSettings.disableTutorial = this.settings.disableTutorial;
     let oldSettings = this.settings;
     this.indexedDbService.putSettings(tmpSettings).then(
       results => {
