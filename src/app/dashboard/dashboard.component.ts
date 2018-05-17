@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService) {
+    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -139,6 +139,7 @@ export class DashboardComponent implements OnInit {
       this.workingDirectory.calculators.push(tmpCalc);
       this.calcDataExists = false;
     }
+    this.changeDetectorRef.detectChanges();    
   }
 
   addCalculatorData(calcualtorData: Calculator) {
