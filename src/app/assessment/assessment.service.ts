@@ -271,8 +271,7 @@ export class AssessmentService {
       fanSetup: {
         fanType: 'Airfoil (SISW)',
         fanSpeed: 0,
-        drive: 'Direct Drive',
-        stages: 1
+        drive: 'Direct Drive'
       },
       baseGasDensity: {
         dryBulbTemp: 123,

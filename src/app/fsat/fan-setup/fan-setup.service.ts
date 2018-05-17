@@ -12,8 +12,7 @@ export class FanSetupService {
     let form: FormGroup = this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
       fanSpeed: [obj.fanSpeed, Validators.required],
-      drive: [obj.drive, Validators.required],
-      stages: [obj.stages, Validators.required]
+      drive: [obj.drive, Validators.required]
     })
     return form;
   }
@@ -22,8 +21,7 @@ export class FanSetupService {
     let obj: FanSetup = {
       fanType: form.controls.fanType.value,
       fanSpeed: form.controls.fanSpeed.value,
-      drive: form.controls.drive.value,
-      stages: form.controls.stages.value
+      drive: form.controls.drive.value
     }
     return obj;
   }

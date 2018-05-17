@@ -53,7 +53,6 @@ export interface FanSetup {
   fanType: string,
   fanSpeed: number,
   drive: string,
-  stages: number,
   fanSpecified?: number
 }
 //
