@@ -73,10 +73,10 @@ export class O2EnrichmentFormComponent implements OnInit {
       canCalculate = false;
       this.error.flueGasTempEnriched = 'Flue gas temperature Enriched must be between 0 and 4000 deg F';
     }
-    if (this.o2Enrichment.flueGasTemp < this.o2Enrichment.flueGasTempEnriched) {
-      canCalculate = false;
-      this.error.flueGasTemp = 'Flue gas temperature must be greater than or equal to the enriched flue gas temperature';
-    }
+    // if (this.o2Enrichment.flueGasTemp < this.o2Enrichment.flueGasTempEnriched) {
+    //   canCalculate = false;
+    //   this.error.flueGasTemp = 'Flue gas temperature must be greater than or equal to the enriched flue gas temperature';
+    // }
     if (canCalculate) {
       this.calculate.emit(true);
     }
