@@ -73,6 +73,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   }
 
   calculate() {
+    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
     this.temperatureError = this.pressureError = null;
     this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
 
@@ -98,6 +99,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     this.emitCalculate.emit(this.input);
     // return 0;
   }
+
 
   getDisplayUnit(unit: string) {
     return this.steamService.getDisplayUnit(unit);

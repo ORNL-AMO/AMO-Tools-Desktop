@@ -33,7 +33,12 @@
               <app-saturated-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [saturatedPropertiesOutput]="saturatedPropertiesOutput" [plotReady]="plotReady"></app-saturated-properties-graph>
             </div>
           </div>
-          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <app-saturated-properties-help [currentField]="currentField"></app-saturated-properties-help>
+            </div>
+          </div>
+          <!-- <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">
               <div class="calc-help">
                 <h3>Saturated Properties Help</h3>
@@ -42,7 +47,7 @@
                 </p>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
