@@ -1,10 +1,21 @@
 <div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
-  <div class="card-header summary-card-header">
+  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
-    <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
-    <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
-    <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
+    <div class="p-1 d-flex align-items-center">
+      <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+      <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+      <a (click)="goToAssessment(assessment)" class="pl-1">{{assessment.name}}</a>
+    </div>
+    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+      </button>
+      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+        <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+        <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+        <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+      </div>
+    </div>
   </div>
   <div class="card-body scroll-item summary-card-body">
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
@@ -36,13 +47,71 @@
           <div class="form-group" *ngIf="directories">
             <label>Move Assessment to Different Folder</label>
             <select class="form-control w-100" formControlName="directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
             </select>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="copyForm">
+      <div class="modal-header">
+        Create {{assessment.name}} Copy
+        <button class="close" (click)="hideCopyModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="copyForm">
+          <div class="form-group">
+            <label>Edit Assessment Name</label>
+            <input type="text" class="form-control w-100" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Move Assessment to Different Folder</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="createCopy()">Create Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Delete {{assessment.name}}
+        <button class="close" (click)="hideDeleteModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>
       </div>
     </div>
   </div>

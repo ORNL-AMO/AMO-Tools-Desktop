@@ -13,17 +13,23 @@
     <!-- <div class="last-updated" *ngIf="!isSetup"><br>Asset not setup</div> -->
 
   </div>
-  <div>
-    <span class="fa fa-edit pull-right" (click)="showEditModal()"></span>
+  <div class="btn-group pull-right">
+    <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+    </button>
+    <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+      <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+      <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+      <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+    </div>
   </div>
-  <div class="actions" *ngIf="isSetup">
+  <div class="actions pt-1" *ngIf="isSetup">
     <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
     <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
     <a (click)="showReportModal()">Quick Report</a>
-    <a (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
+    <a class="mr-0" (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
 
   </div>
-  <div class="actions" *ngIf="!isSetup">
+  <div class="actions pt-1" *ngIf="!isSetup">
     <div class="last-updated">Asset not setup</div>
   </div>
 </div>
@@ -65,8 +71,8 @@
 </div>
 
 
-<div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
+<div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -79,6 +85,61 @@
           [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
         <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings" [psat]="assessment.psat"
           [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="copyForm">
+      <div class="modal-header">
+        Create {{assessment.name}} Copy
+        <button class="close" (click)="hideCopyModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="copyForm">
+          <div class="form-group">
+            <label>Edit Assessment Name</label>
+            <input type="text" class="form-control w-100" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Move Assessment to Different Folder</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="createCopy()">Create Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Delete {{assessment.name}}
+        <button class="close" (click)="hideDeleteModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>
       </div>
     </div>
   </div>
