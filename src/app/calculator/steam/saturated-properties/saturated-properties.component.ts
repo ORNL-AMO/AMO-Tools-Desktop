@@ -30,9 +30,9 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   ngOnInit() {
     this.saturatedPropertiesForm = this.formBuilder.group({
-      'pressureOrTemperature': [.2, Validators.required],
-      'saturatedPressure': [0, Validators.required],
-      'saturatedTemperature': [32, Validators.required]
+      'pressureOrTemperature': [0, Validators.required],
+      'saturatedPressure': [100, Validators.required],
+      'saturatedTemperature': [100, Validators.required]
     });
 
     if (!this.settings) {
@@ -104,5 +104,5 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
 
-  
+
 }

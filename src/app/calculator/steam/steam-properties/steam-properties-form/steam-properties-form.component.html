@@ -61,7 +61,7 @@
     <div class="form-group">
       <label class="small"><strong>Specific Volume</strong></label>
       <div class="small text-center"><strong>{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}</strong>
-        <span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"><strong></strong></span>
+        <strong><span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span></strong>
       </div>
     </div>
   </form>
