@@ -34,6 +34,8 @@ export class ImportExportComponent implements OnInit {
   gatheringSettings: any;
   noDirAssessmentItems: Array<ImportExportAssessment>;
   showCalcs: boolean = false;
+  showDirs: boolean = false;
+  canExport: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -47,7 +49,17 @@ export class ImportExportComponent implements OnInit {
           }
         }
       }
+      if(this.exportData.directories){
+        if(this.exportData.directories.length != 0){
+          this.showDirs = true;
+        }
+      }
+      this.test();
     }
+  }
+
+  test(){
+    this.canExport = this.importExportService.test(this.exportData);
   }
 
   getDirAssessments(id: number) {
