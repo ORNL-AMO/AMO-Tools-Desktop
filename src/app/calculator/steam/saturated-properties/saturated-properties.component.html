@@ -30,7 +30,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <app-saturated-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [saturatedPropertiesOutput]="saturatedPropertiesOutput"></app-saturated-properties-graph>
+              <app-saturated-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [saturatedPropertiesOutput]="saturatedPropertiesOutput" [plotReady]="plotReady"></app-saturated-properties-graph>
             </div>
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'help'">
