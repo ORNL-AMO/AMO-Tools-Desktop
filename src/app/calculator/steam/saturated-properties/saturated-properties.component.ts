@@ -23,14 +23,16 @@ export class SaturatedPropertiesComponent implements OnInit {
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
   pressureOrTemperature: number;
   tabSelect: string = 'results';
+  currentField: string = 'pressure';
+
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
     this.saturatedPropertiesForm = this.formBuilder.group({
-      'pressureOrTemperature': [.2, Validators.required],
-      'saturatedPressure': [0, Validators.required],
-      'saturatedTemperature': [32, Validators.required]
+      'pressureOrTemperature': [0, Validators.required],
+      'saturatedPressure': [100, Validators.required],
+      'saturatedTemperature': [100, Validators.required]
     });
 
     if (!this.settings) {
@@ -63,6 +65,10 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.tabSelect = str;
   }
 
+  setField(str: string) {
+    this.currentField = str;
+  }
+
   getChartWidth(): number {
     if (this.lineChartContainer) {
       this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
@@ -85,9 +91,18 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   setPressureOrTemperature(val: number) {
     this.pressureOrTemperature = val;
+    if (val == 1) {
+      this.setField('temp');
+    }
+    else {
+      this.setField('pressure');
+    }
   }
 
   calculate(input: SaturatedPropertiesInput) {
     this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
   }
+
+
+
 }

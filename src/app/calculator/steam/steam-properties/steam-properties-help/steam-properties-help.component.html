@@ -1,0 +1,145 @@
+<div class="calc-help" style="margin-top: 0px;">
+  <div class="help-content">
+
+    <div class="card" *ngIf="currentField == 'pressure'">
+      <div class="card-header">
+        Pressure
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Absolute Pressure of the steam.
+        </p>
+        <label>
+          <u>
+            <strong>Input</strong>
+          </u>
+        </label>
+        <p>
+          Units:
+          <strong> kPa </strong>or
+          <strong> psi </strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'quantityType'">
+      <div class="card-header">
+        Quantity Type
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          To determine steam and liquid water properties, a second state variable, in addition to pressure is required.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'temp'">
+      <div class="card-header">
+        Temperature
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Temperature of the steam.
+        </p>
+        <label>
+          <u>
+            <strong>Input</strong>
+          </u>
+        </label>
+        <p>
+          Units:
+          <strong> C </strong>or
+          <strong> F </strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'enthalpy'">
+      <div class="card-header">
+        Specific Enthalpy
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Specific Enthalpy (h) is the combination of the steam’s internal energy and the work needed to make room for the material,
+          compared to the standard state, in terms of mass.
+        </p>
+        <label>
+          <u>
+            <strong>Input</strong>
+          </u>
+        </label>
+        <p>
+          Units:
+          <strong> kJ/kg </strong>or
+          <strong> Btu/lb </strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'entropy'">
+      <div class="card-header">
+        Specific Entropy
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          in terms of mass.
+        </p>
+        <label>
+          <u>
+            <strong>Input</strong>
+          </u>
+        </label>
+        <p>
+          Units:
+          <strong> kJ/kgK </strong>or
+          <strong> Btu/lbF </strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'quality'">
+      <div class="card-header">
+        Quality
+      </div>
+      <div class="card-block">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam.
+        </p>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
