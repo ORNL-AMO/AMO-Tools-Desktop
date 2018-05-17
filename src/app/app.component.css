@@ -1119,6 +1119,16 @@ Calculators
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
+.fan-icon {
+  width: 3.5rem;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+
 .ico-col{
   padding-top: 5px;
 }
