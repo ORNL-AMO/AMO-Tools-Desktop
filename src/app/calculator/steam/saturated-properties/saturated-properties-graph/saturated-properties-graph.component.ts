@@ -113,7 +113,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
             }
           }, 500);
         }
-
       }
       else {
         if (this.dataPopulated && this.canvasReady && this.plotReady && this.saturatedPropertiesOutput !== undefined) {

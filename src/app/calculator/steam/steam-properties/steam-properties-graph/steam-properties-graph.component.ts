@@ -103,17 +103,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.initData();
     this.initCanvas();
     this.buildChart();
-    // if (this.dataPopulated && this.canvasReady && this.steamPropertiesOutput !== undefined && this.steamPropertiesOutput !== null) {
-    if (this.dataPopulated && this.canvasReady && this.plotReady) {
-      console.log('steamPropertiesOutput not null');
-      // if (this.steamPropertiesOutput.specificEntropy != 0 && this.steamPropertiesOutput.specificEntropy !== null && this.steamPropertiesOutput.temperature != 0 && this.steamPropertiesOutput.temperature !== null) {
-      console.log('about to plotPoint');
-      this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-      // }
-      // else {
-      //   console.log('not plotting point');
-      // }
-    }
   }
 
 
@@ -123,9 +112,21 @@ export class SteamPropertiesGraphComponent implements OnInit {
         this.buildChart();
       }
     }
+
     if (changes.steamPropertiesOutput) {
-      if (this.dataPopulated && this.canvasReady && this.plotReady) {
-        this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+      if (changes.steamPropertiesOutput.firstChange) {
+        if (this.steamPropertiesOutput !== undefined) {
+          setTimeout(() => {
+            if (this.dataPopulated && this.canvasReady && this.plotReady) {
+              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+            }
+          }, 500);
+        }
+      }
+      else {
+        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
+          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+        }
       }
     }
   }
@@ -583,8 +584,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
       }
 
       if (this.point === undefined || !this.point) {
-        console.log('initializing point');
-        console.log(dataset);
         this.svg.selectAll('circle').remove();
 
         this.point = this.svg.append('circle')
@@ -594,7 +593,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
           .style('fill', 'green');
       }
       else {
-        console.log('transitioning');
         // apply a transition
         this.point.transition()
           .duration(600)
