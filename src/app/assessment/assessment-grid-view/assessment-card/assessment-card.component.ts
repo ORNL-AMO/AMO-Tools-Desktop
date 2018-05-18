@@ -5,8 +5,10 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Directory } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-assessment-card',
@@ -24,17 +26,30 @@ export class AssessmentCardComponent implements OnInit {
 
   isFirstChange: boolean = true;
   @ViewChild('editModal') public editModal: ModalDirective;
-
+  @ViewChild('copyModal') public copyModal: ModalDirective;
+  @ViewChild('deleteModal') public deleteModal: ModalDirective;
   directories: Array<Directory>;
 
   editForm: FormGroup;
-  constructor(private assessmentService: AssessmentService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService) { }
+  copyForm: FormGroup;
+
+  dropdownOpen: boolean = false;
+  assessmentCopy: Assessment;
+  settingsCopy: Settings;
+  constructor(private assessmentService: AssessmentService,
+    private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
+    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
 
 
   ngOnInit() {
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;
     }
+    this.assessmentCopy = JSON.parse(JSON.stringify(this.assessment));
+    delete this.assessmentCopy.id;
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    this.settingsCopy = JSON.parse(JSON.stringify(tmpSettings));
+    delete this.settingsCopy.id;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -58,16 +73,52 @@ export class AssessmentCardComponent implements OnInit {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
       this.editForm = this.formBuilder.group({
-        'name': [this.assessment.name],
-        'directoryId': [this.assessment.directoryId]
+        'name': [this.assessment.name, Validators.required],
+        'directoryId': [this.assessment.directoryId, Validators.required]
       })
       this.editModal.show();
     })
   }
 
+
   hideEditModal() {
     this.editModal.hide();
   }
+
+  showCopyModal() {
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.copyForm = this.formBuilder.group({
+        'name': [this.assessment.name + ' (copy)', Validators.required],
+        'directoryId': [this.assessment.directoryId, Validators.required]
+      })
+      this.copyModal.show();
+    })
+  }
+
+  hideCopyModal() {
+    this.copyModal.hide();
+  }
+
+  createCopy() {
+    this.assessmentCopy.name = this.copyForm.controls.name.value;
+    this.assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
+    this.assessmentCopy.createdDate = new Date();
+    this.assessmentCopy.modifiedDate = new Date();
+    this.indexedDbService.addAssessment(this.assessmentCopy).then(newAssessmentId => {
+      this.settingsCopy.assessmentId = newAssessmentId;
+      this.indexedDbService.addSettings(this.settingsCopy).then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.assessmentDbService.setAll().then(() => {
+            this.changeDirectory.emit(true);
+            this.hideCopyModal();
+          })
+        })
+      })
+    })
+  }
+
+
 
   getParentDirStr(id: number) {
     let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
@@ -89,4 +140,32 @@ export class AssessmentCardComponent implements OnInit {
       })
     })
   }
+
+  showDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  showDeleteModal() {
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModal.hide();
+  }
+
+  deleteAssessment() {
+    let deleteSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    this.indexedDbService.deleteAssessment(this.assessment.id).then(() => {
+      this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
+        this.assessmentDbService.setAll().then(() => {
+          this.settingsDbService.setAll().then(() => {
+            this.hideDeleteModal();
+            this.changeDirectory.emit(true);
+          })
+        })
+      })
+    })
+  }
+
+
 }

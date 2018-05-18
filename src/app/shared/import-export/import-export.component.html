@@ -19,7 +19,7 @@
           </li>
         </ul>
       </li>
-      <li>
+      <li *ngIf="showDirs">
         <span class="bold">Directories</span>
         <ul>
           <li *ngFor="let dirItem of exportData.directories">
@@ -35,22 +35,25 @@
       </li>
     </ul>
   </div>
-  <div class="row">
+  <div class="row card-footer">
+    <div *ngIf="!canExport" class="col-12">
+      <p class="text-center small danger">Too much data to export, please choose less data to export.</p>
+    </div>
     <div class="col-12">
-      <button class="btn btn-primary pull-right" (click)="buildExportJSON()">Export as .json</button>
+      <button class="btn btn-primary pull-right" [disabled]="!canExport" (click)="buildExportJSON()">Export as .json</button>
       <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>
     </div>
   </div>
 </div>
 
 <div *ngIf="import">
-  <div class="row">
+  <div class="row pb-3">
     <div class="col-12 form-group">
       <input type="file" class="form-control-file" (change)="setImportFile($event)">
       <span class="alert-danger small" *ngIf="validFile == false">Invalid File Type - Must have a .json file extension</span>
     </div>
   </div>
-  <div class="row" style="padding-top: 15px;">
+  <div class="row card-footer" style="padding-top: 15px;">
     <div class="col-12">
       <button [disabled]="validFile !== true" class="btn btn-primary pull-right" (click)="importFile()">Import</button>
       <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>

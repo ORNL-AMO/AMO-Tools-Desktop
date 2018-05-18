@@ -83,7 +83,6 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     });
-    this.assessmentService.showFeedback.next(false);
     this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
       if (val.length != 0) {
         this.reportRollupService.initPhastCompare(val);
@@ -134,7 +133,6 @@ export class ReportRollupComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.assessmentService.showFeedback.next(true);
     this.reportRollupService.initSummary();
     if (this.reportAssessmentsSub) this.reportAssessmentsSub.unsubscribe();
     if (this.phastAssessmentsSub) this.phastAssessmentsSub.unsubscribe();
