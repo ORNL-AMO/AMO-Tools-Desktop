@@ -30,29 +30,30 @@ export interface FieldData {
   flowRate: number,
   inletPressure: number,
   outletPressure: number,
-  loadEstimatedMethod: string,
+  loadEstimatedMethod: number,
   motorPower: number,
   specificHeatRatio: number,
   compressibilityFactor: number,
-  measuredVoltage: number
+  measuredVoltage: number,
+
 }
 
 export interface FanMotor {
-  frequency: string,
-  horsePower: number,
-  motorRPM: number,
-  efficiencyClass: string,
-  efficiency?: number,
-  motorVoltage: number,
+  lineFrequency: number,
+  motorRatedPower: number,
+  motorRpm: number,
+  efficiencyClass: number,
+  specifiedEfficiency?: number,
+  motorRatedVoltage: number,
   fullLoadAmps: number,
   optimize?: boolean,
   sizeMargin?: number
 }
 
 export interface FanSetup {
-  fanType: string,
+  fanType: number,
   fanSpeed: number,
-  drive: string,
+  drive: number,
   fanSpecified?: number
 }
 //
@@ -192,46 +193,163 @@ export interface PlaneResult {
 }
 
 export interface FanCurveInputData {
-    //baseGasDensity?
-    density: number, 
-    //results density?
-    densityCorrected: number, 
-    //synchronous speed?
-    speed: number, 
-    //Converted Power?
-    speedCorrected: number,
-    //global barometric pressure?
-    pressureBarometric: number, 
-    //
-    pressureBarometricCorrected: number, 
-    //power factor at load?
-    pt1Factor: number,
-    //no idea where these come from
-    gamma: number, 
-    gammaCorrected: number, 
-    area1: number, 
-    area2: number, 
-    
-    curveType: string,
-    //Do array values have a data patern?
-    //[x, y, z] what are x,y,z?
-    //traverse plane data?
-    //BaseCurveData: Array<Array<number>
-    BaseCurveData: [
-        [0, 22.3, 115],
-        [14410, 22.5, 154],
-        [28820, 22.3, 194],
-        [43230, 21.8, 241],
-        [57640, 21.2, 293],
-        [72050, 20.3, 349],
-        [86460, 19.3, 406],
-        [100871, 18, 462],
-        [115281, 16.5, 515],
-        [129691, 14.8, 566],
-        [144101, 12.7, 615],
-        [158511, 10.2, 667],
-        [172921, 7.3, 725],
-        [187331, 3.7, 789],
-        [201741, -0.8, 861]
-    ]
+  //baseGasDensity?
+  density: number,
+  //results density?
+  densityCorrected: number,
+  //synchronous speed?
+  speed: number,
+  //Converted Power?
+  speedCorrected: number,
+  //global barometric pressure?
+  pressureBarometric: number,
+  //
+  pressureBarometricCorrected: number,
+  //power factor at load?
+  pt1Factor: number,
+  //no idea where these come from
+  gamma: number,
+  gammaCorrected: number,
+  area1: number,
+  area2: number,
+
+  curveType: string,
+  //Do array values have a data patern?
+  //[x, y, z] what are x,y,z?
+  //traverse plane data?
+  //BaseCurveData: Array<Array<number>
+  BaseCurveData: [
+    [0, 22.3, 115],
+    [14410, 22.5, 154],
+    [28820, 22.3, 194],
+    [43230, 21.8, 241],
+    [57640, 21.2, 293],
+    [72050, 20.3, 349],
+    [86460, 19.3, 406],
+    [100871, 18, 462],
+    [115281, 16.5, 515],
+    [129691, 14.8, 566],
+    [144101, 12.7, 615],
+    [158511, 10.2, 667],
+    [172921, 7.3, 725],
+    [187331, 3.7, 789],
+    [201741, -0.8, 861]
+  ]
 }
+
+
+export interface FsatInput {
+  fanSpeed: number,
+  drive: number,
+  lineFrequency: number,
+  motorRatedPower: number,
+  motorRpm: number,
+  efficiencyClass: number,
+  specifiedEfficiency: number,
+  motorRatedVoltage: number,
+  fullLoadAmps: number,
+  sizeMargin: number,
+  measuredVoltage: number,
+  measuredAmps: number,
+  flowRate: number,
+  inletPressure: number,
+  outletPressure: number,
+  compressibilityFactor: number,
+  operatingFraction: number,
+  unitCost: number,
+  airDensity: number,
+
+  //existing
+  loadEstimationMethod?: number,
+  measuredPower?: number,
+  //modified
+  fanEfficiency?: number
+  //optimal
+  fanType?: number
+};
+
+
+export interface FsatOutput {
+  fanEfficiency: number,
+  motorRatedPower: number,
+  motorShaftPower: number,
+  fanShaftPower: number,
+  motorEfficiency: number,
+  motorPowerFactor: number,
+  motorCurrent: number,
+  motorPower: number,
+  annualEnergy: number,
+  annualCost: number,
+  fanEnergyIndex: number,
+  //modified
+  estimatedFLA?: number
+}
+
+
+var existingOutput: FsatOutput = {
+  fanEfficiency: 0.595398315,
+  motorRatedPower: 600.0,
+  motorShaftPower: 590.622186263,
+  fanShaftPower: 590.622186263,
+  motorEfficiency: 0.9578351108,
+  motorPowerFactor: 0.8577466651,
+  motorCurrent: 673.1011529439,
+  motorPower: 460.0,
+  annualEnergy: 4029.6,
+  annualCost: 241.776,
+  estimatedFLA: 683.2505707137,
+  fanEnergyIndex: 1.247872,
+}
+
+var modifiedOutput: FsatOutput = {
+  fanEfficiency: 0.595398315,
+  motorRatedPower: 600.0,
+  motorShaftPower: 590.622186263,
+  fanShaftPower: 590.622186263,
+  motorEfficiency: 0.957835,
+  motorPowerFactor: 0.857748,
+  motorCurrent: 673.100309,
+  motorPower: 460.000144,
+  annualEnergy: 4029.601262,
+  annualCost: 241.776076,
+  fanEnergyIndex: 1.247872,
+}
+
+var optimalOutput: FsatOutput = {
+  fanEfficiency: 0.756578,
+  motorRatedPower: 500.0,
+  motorShaftPower: 464.7970806678,
+  fanShaftPower: 464.7970806678,
+  motorEfficiency: 0.9599974605,
+  motorPowerFactor: 0.854272,
+  motorCurrent: 530.661126,
+  motorPower: 361.187025,
+  annualEnergy: 3163.998343,
+  annualCost: 189.839901,
+  fanEnergyIndex: 1.237779
+}
+
+
+var input: FsatInput = {
+  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
+  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
+  "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
+  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
+  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02
+};
+
+var modifiedInput: FsatInput = {
+  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
+  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
+  "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
+  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
+  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315
+};
+
+var optimal: FsatInput = {
+  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 500, "motorRpm": 1180,
+  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
+  "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
+  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
+  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0
+};

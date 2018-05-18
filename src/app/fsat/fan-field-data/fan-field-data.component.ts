@@ -33,9 +33,9 @@ export class FanFieldDataComponent implements OnInit {
 
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
 
-  loadEstimateMethods: Array<string> = [
-    'Power',
-    'Current'
+  loadEstimateMethods: Array<{ value: number, display: string }> = [
+    { value: 0, display: 'Power' },
+    { value: 1, display: 'Current' }
   ];
 
   flowError: string = null;

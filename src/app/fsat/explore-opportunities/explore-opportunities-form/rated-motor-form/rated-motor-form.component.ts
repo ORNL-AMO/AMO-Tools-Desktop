@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../../psat/psat.service';
-
+import { EfficiencyClasses } from '../../../fanOptions';
 
 @Component({
   selector: 'app-rated-motor-form',
@@ -39,16 +39,19 @@ export class RatedMotorFormComponent implements OnInit {
   horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
   kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
   kWattsPremium: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355];
-  efficiencyClasses: Array<string> = [
-    'Standard Efficiency',
-    'Energy Efficient',
-    'Premium',
-    // When the user chooses specified, they need a place to put the efficiency value
-    'Specified'
-  ];
+  // efficiencyClasses: Array<string> = [
+  //   'Standard Efficiency',
+  //   'Energy Efficient',
+  //   'Premium',
+  //   // When the user chooses specified, they need a place to put the efficiency value
+  //   'Specified'
+  // ];
+
+  efficiencyClasses: Array<{value: number, display: string}>
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.efficiencyClasses = EfficiencyClasses;
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
       this.options2 = this.horsePowers;
@@ -82,13 +85,13 @@ export class RatedMotorFormComponent implements OnInit {
     // if (isBaseline) {
     //   if (this.fsat.fanMotor.efficiency_class === this.psatService.getEfficienyClassEnum('Premium')) {
     //     if (this.settings.powerMeasurement === 'hp') {
-    //       if (this.fsat.fanMotor.horsePower > 500) {
-    //         this.fsat.fanMotor.horsePower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
+    //       if (this.fsat.fanMotor.motorRatedPower > 500) {
+    //         this.fsat.fanMotor.motorRatedPower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
     //       }
     //       this.options = this.horsePowersPremium;
     //     } else {
-    //       if (this.fsat.fanMotor.horsePower > 355) {
-    //         this.fsat.fanMotor.horsePower = this.kWattsPremium[this.kWattsPremium.length - 1];
+    //       if (this.fsat.fanMotor.motorRatedPower > 355) {
+    //         this.fsat.fanMotor.motorRatedPower = this.kWattsPremium[this.kWattsPremium.length - 1];
     //       }
     //       this.options = this.kWattsPremium;
     //     }
@@ -102,13 +105,13 @@ export class RatedMotorFormComponent implements OnInit {
     // } else {
     //   if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency_class === this.psatService.getEfficienyClassEnum('Premium')) {
     //     if (this.settings.powerMeasurement === 'hp') {
-    //       if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower > 500) {
-    //         this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
+    //       if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower > 500) {
+    //         this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
     //       }
     //       this.options2 = this.horsePowersPremium;
     //     } else {
-    //       if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower > 355) {
-    //         this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower = this.kWattsPremium[this.kWattsPremium.length - 1];
+    //       if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower > 355) {
+    //         this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower = this.kWattsPremium[this.kWattsPremium.length - 1];
     //       }
     //       this.options2 = this.kWattsPremium;
     //     }
@@ -131,7 +134,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initMotorEfficiency() {
-    if (this.fsat.fanMotor.efficiency != this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency) {
+    if (this.fsat.fanMotor.specifiedEfficiency != this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.specifiedEfficiency) {
       this.showMotorEfficiency = true;
     } else {
       this.showMotorEfficiency = false;
@@ -139,7 +142,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initRatedMotorPower() {
-    if (this.fsat.fanMotor.horsePower != this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower) {
+    if (this.fsat.fanMotor.motorRatedPower != this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower) {
       this.showRatedMotorPower = true;
     } else {
       this.showRatedMotorPower = false;
@@ -175,10 +178,10 @@ export class RatedMotorFormComponent implements OnInit {
     // this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiencyClass = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
     // this.fsat.fanMotor.efficiencyClass = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
     // if (!this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency) {
-    //   this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency = 90;
+    //   this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.specifiedEfficiency = 90;
     // }
     // if (!this.fsat.fanMotor.efficiency) {
-    //   this.fsat.fanMotor.efficiency = 90;
+    //   this.fsat.fanMotor.specifiedEfficiency = 90;
     // }
     // this.modifyPowerArrays(true);
     // this.modifyPowerArrays(false);
@@ -189,12 +192,12 @@ export class RatedMotorFormComponent implements OnInit {
     if (this.tmpModificationEfficiencyClass == 'Specified') {
       this.showMotorEfficiency = true;
     } else {
-      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency = null;
+      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.specifiedEfficiency = null;
     }
     if (this.tmpBaselineEfficiencyClass == 'Specified') {
       this.showMotorEfficiency = true;
     } else {
-      this.fsat.fanMotor.efficiency = null;
+      this.fsat.fanMotor.specifiedEfficiency = null;
     }
     if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
       this.showMotorEfficiency = false;
@@ -234,20 +237,20 @@ export class RatedMotorFormComponent implements OnInit {
     let val;
     if (num == 1) {
       if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.fsat.fanMotor.horsePower).from(this.settings.powerMeasurement).to('kW');
+        val = this.convertUnitsService.value(this.fsat.fanMotor.motorRatedPower).from(this.settings.powerMeasurement).to('kW');
       } else {
-        val = this.fsat.fanMotor.horsePower;
+        val = this.fsat.fanMotor.motorRatedPower;
       }
       val = val * 1.5;
     } else if (num == 2) {
       if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower).from(this.settings.powerMeasurement).to('kW');
+        val = this.convertUnitsService.value(this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower).from(this.settings.powerMeasurement).to('kW');
       } else {
-        val = this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower;
+        val = this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower;
       }
       val = val * 1.5;
     }
-    let compareVal = this.fsat.fanMotor.horsePower;
+    let compareVal = this.fsat.fanMotor.motorRatedPower;
     if (compareVal > val) {
       if (num == 1) {
         this.ratedPowerError1 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
@@ -276,7 +279,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
   toggleMotorRatedPower() {
     if (this.showRatedMotorPower == false) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.horsePower = this.fsat.fanMotor.horsePower;
+      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.motorRatedPower = this.fsat.fanMotor.motorRatedPower;
       this.calculate();
     }
   }
@@ -290,7 +293,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
   toggleMotorEfficiency() {
     if (this.showMotorEfficiency == false) {
-      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.efficiency = this.fsat.fanMotor.efficiency;
+      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.specifiedEfficiency = this.fsat.fanMotor.specifiedEfficiency;
       this.calculate();
     }
   }

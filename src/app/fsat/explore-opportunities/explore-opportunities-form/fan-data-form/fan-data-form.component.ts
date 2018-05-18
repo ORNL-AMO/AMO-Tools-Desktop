@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
+import { FanTypes, Drives } from '../../../fanOptions';
 @Component({
   selector: 'app-fan-data-form',
   templateUrl: './fan-data-form.component.html',
@@ -18,25 +19,28 @@ export class FanDataFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
-  fanTypes: Array<string> = [
-    'Airfoil (SISW)',
-    'Backward Curved (SISW)',
-    'Radial (SISW)',
-    'Radial Tip (SISW)',
-    'Backward Inclined (SISW)',
-    'Airfoil (DIDW)',
-    'Backward Inclined (DIDW)',
-    'ICF Air handling',
-    'ICF Material handling',
-    'ICF Long shavings'
-  ]
+  // fanTypes: Array<string> = [
+  //   'Airfoil (SISW)',
+  //   'Backward Curved (SISW)',
+  //   'Radial (SISW)',
+  //   'Radial Tip (SISW)',
+  //   'Backward Inclined (SISW)',
+  //   'Airfoil (DIDW)',
+  //   'Backward Inclined (DIDW)',
+  //   'ICF Air handling',
+  //   'ICF Material handling',
+  //   'ICF Long shavings'
+  // ]
 
-  drives: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
-  ];
+  // drives: Array<string> = [
+  //   'Direct Drive',
+  //   'V-Belt Drive',
+  //   'Notched V-Belt Drive',
+  //   'Synchronous Belt Drive'
+  // ];
+
+  drives: Array<{display: string, value: number}>;
+  fanTypes: Array<{display: string, value: number}>;
   showPumpData: boolean = false;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
@@ -46,6 +50,8 @@ export class FanDataFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.drives = Drives;
+    this.fanTypes = FanTypes;
     this.init();
   }
 
@@ -70,7 +76,7 @@ export class FanDataFormComponent implements OnInit {
   initPumpType() {
     if (this.fsat.fanSetup.fanType != this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType) {
       this.showFanType = true;
-    }else{
+    } else {
       this.showFanType = false;
     }
   }
@@ -78,7 +84,7 @@ export class FanDataFormComponent implements OnInit {
   initMotorDrive() {
     if (this.fsat.fanSetup.drive != this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive) {
       this.showMotorDrive = true;
-    }else{
+    } else {
       this.showMotorDrive = false;
     }
   }
@@ -86,7 +92,7 @@ export class FanDataFormComponent implements OnInit {
   initFanSpecified() {
     if (this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanSpecified != this.fsat.fanSetup.fanSpecified) {
       this.showFanSpecified = true;
-    }else{
+    } else {
       this.showFanSpecified = false;
     }
 
@@ -95,7 +101,7 @@ export class FanDataFormComponent implements OnInit {
   initFanData() {
     if (this.showMotorDrive || this.showFanSpecified || this.showFanType) {
       this.showPumpData = true;
-    }else{
+    } else {
       this.showPumpData = false;
     }
   }
@@ -179,17 +185,17 @@ export class FanDataFormComponent implements OnInit {
   }
 
   checkFanTypes() {
-    if (this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType == 'Specified Optimal Efficiency') {
+    if (this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType == 10) {
       this.showFanSpecified = true;
     } else {
       this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanSpecified = null;
     }
-    if (this.fsat.fanSetup.fanType == 'Specified Optimal Efficiency') {
+    if (this.fsat.fanSetup.fanType == 10) {
       this.showFanSpecified = true;
     } else {
       this.fsat.fanSetup.fanSpecified = null;
     }
-    if (this.fsat.fanSetup.fanType != 'Specified Optimal Efficiency' && this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType != 'Specified Optimal Efficiency') {
+    if (this.fsat.fanSetup.fanType != 10 && this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType != 10) {
       this.showFanSpecified = false;
     }
   }

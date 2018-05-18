@@ -251,7 +251,7 @@ export class AssessmentService {
         flowRate: 1800,
         inletPressure: 10,
         outletPressure: 10,
-        loadEstimatedMethod: 'Power',
+        loadEstimatedMethod: 0,
         motorPower: 12,
         cost: .06,
         compressibilityFactor: 1,
@@ -259,19 +259,19 @@ export class AssessmentService {
         measuredVoltage: 460
       },
       fanMotor: {
-        frequency: '60 Hz',
-        horsePower: 5,
-        motorRPM: 3000,
-        efficiencyClass: 'Standard Efficiency',
-        efficiency: 0,
-        motorVoltage: 460,
+        lineFrequency: 60,
+        motorRatedPower: 5,
+        motorRpm: 3000,
+        efficiencyClass: 0,
+        specifiedEfficiency: 0,
+        motorRatedVoltage: 460,
         fullLoadAmps: 0,
         sizeMargin: 0
       },
       fanSetup: {
-        fanType: 'Airfoil (SISW)',
+        fanType: 0,
         fanSpeed: 0,
-        drive: 'Direct Drive'
+        drive: 0
       },
       baseGasDensity: {
         dryBulbTemp: 123,

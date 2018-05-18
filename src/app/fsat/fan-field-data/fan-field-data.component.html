@@ -66,18 +66,18 @@
       <label for="loadEstimatedMethod">Load Estimation Method</label>
       <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="save()"
         (focus)="focusField('loadEstimatedMethod')">
-        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
+        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method.value">{{method.display}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="baseline">
-      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Power'">Motor Power</label>
-      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Current'">Motor Current</label>
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">Motor Power</label>
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">Motor Current</label>
       <div class="input-group">
         <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower"
           (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Power'">hp</span>
-        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 'Current'">A</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">hp</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">A</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
     </div>
@@ -85,7 +85,7 @@
       <label for="measuredVoltage">Measured Voltage</label>
       <div class="input-group">
         <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
-          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
+          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();" [readonly]="!selected">
         <span class="units">V</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span> -->

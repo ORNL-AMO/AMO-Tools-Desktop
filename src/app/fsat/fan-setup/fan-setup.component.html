@@ -12,15 +12,15 @@
     <div class="form-group">
       <label for="fanType">Fan Type</label>
       <select class="form-control" name="fanType" formControlName="fanType" id="fanType" (change)="save()" (focus)="focusField('fanType')">
-        <option *ngFor="let fanType of fanTypes" [ngValue]="fanType">{{fanType}}</option>
+        <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
     </div>
 
-    <!-- <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 'Specified Optimal Efficiency'">
+    <!-- <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 12">
       <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
       <div class="input-group">
         <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
-          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
+          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
     </div> -->
@@ -38,7 +38,7 @@
     <div class="form-group">
       <label for="drive">Drive</label>
       <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="save()" (focus)="focusField('drive')">
-        <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
+        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
   </div>
