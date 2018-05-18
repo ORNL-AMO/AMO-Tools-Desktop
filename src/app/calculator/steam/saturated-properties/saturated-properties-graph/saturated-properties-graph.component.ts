@@ -96,12 +96,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     this.initData();
     this.initCanvas();
     this.buildChart();
-    // if (this.dataPopulated && this.canvasReady && this.saturatedPropertiesOutput !== undefined && this.saturatedPropertiesOutput !== null) {
-    if (this.dataPopulated && this.canvasReady && this.plotReady) {
-      // if (this.plotReady) {
-      this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
-      // }
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -110,9 +104,21 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
         this.buildChart();
       }
     }
-    if (changes.saturatedPropertiesOutput && !changes.saturatedPropertiesOutput.firstChange) {
-      if (this.dataPopulated && this.canvasReady && this.plotReady) {
-        this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
+    if (changes.saturatedPropertiesOutput) {
+      if (changes.saturatedPropertiesOutput.firstChange) {
+        if (this.saturatedPropertiesOutput !== undefined) {
+          setTimeout(() => {
+            if (this.dataPopulated && this.canvasReady && this.plotReady) {
+              this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
+            }
+          }, 500);
+        }
+
+      }
+      else {
+        if (this.dataPopulated && this.canvasReady && this.plotReady && this.saturatedPropertiesOutput !== undefined) {
+          this.plotPoint(this.saturatedPropertiesOutput.saturatedTemperature, this.saturatedPropertiesOutput.liquidEntropy, this.saturatedPropertiesOutput.gasEntropy);
+        }
       }
     }
   }
@@ -483,12 +489,8 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
         'temperature': temp,
         'entropy': gasEntropy
       }
-      console.log('temp = ' + temp);
-      console.log('liquidEntropy = ' + liquidEntropy);
-      console.log('gasEntropy = ' + gasEntropy);
 
       let lineDataset = this.getDataSet([temp, temp], [liquidEntropy, gasEntropy]);
-      console.log(lineDataset);
 
       let valueLine = d3.line()
         .x(function (d) {
@@ -499,7 +501,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
         });
 
       if (this.plottedLine === undefined || !this.plottedLine) {
-        console.log('initializing plottedLine');
         this.plottedLine = this.svg.append('path')
           .data([lineDataset])
           .attr('class', 'plotted-line')
@@ -509,7 +510,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
           .style('stroke-width', '2px');
       }
       else {
-        console.log('updating plottedLine');
         this.plottedLine.data([lineDataset])
           .transition()
           .duration(600)
@@ -518,13 +518,11 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
       }
 
       if (this.pointA === undefined || !this.pointA) {
-        console.log('initializing pointA');
         this.pointA = this.svg.append('circle')
           .attr("r", 5)
           .attr("cx", x(pointADataset.entropy))
           .attr("cy", y(pointADataset.temperature))
           .style('fill', 'green');
-        console.log(this.pointA);
       }
       else {
         // apply a transition

@@ -52,9 +52,21 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
+
+    //debug
     this.input = {
-      saturatedPressure: 0
+      saturatedPressure: 0,
+      saturatedTemperature: 0
     };
+
+
+    //real version
+    // this.input = {
+    //   saturatedPressure: 100,
+    //   saturatedTemperature: 100
+    // };
+
+
     // this.output = {
     //   saturatedPressure: 0,
     //   saturatedTemperature: 0,

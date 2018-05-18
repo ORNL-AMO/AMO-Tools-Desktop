@@ -27,6 +27,8 @@ export class SteamPropertiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string = 'pressure';
 
+  plotReady: boolean = false;
+
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -83,6 +85,8 @@ export class SteamPropertiesComponent implements OnInit {
 
 
   calculate(input: SteamPropertiesInput) {
+    console.log('calculate()');
     this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+    this.plotReady = true;
   }
 }
