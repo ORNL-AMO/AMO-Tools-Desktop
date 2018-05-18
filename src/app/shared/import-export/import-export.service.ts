@@ -21,7 +21,18 @@ export class ImportExportService {
     this.toggleDownload = new BehaviorSubject<boolean>(null);
    }
 
-  test() { }
+  test(data: any) { 
+    data.origin = 'AMO-TOOLS-DESKTOP';
+    let stringifyData = JSON.stringify(data);
+    let doc = this.windowRefService.getDoc();
+    let dlLink = doc.createElement("a");
+    let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
+    if(dataStr.length > 2090000){
+      return false;
+    }else{
+      return true;
+    }
+  }
 
   downloadData(data: any) {
     data.origin = 'AMO-TOOLS-DESKTOP';

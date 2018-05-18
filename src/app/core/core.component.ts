@@ -24,29 +24,11 @@ import { ExportService } from '../shared/import-export/export.service';
 export class CoreComponent implements OnInit {
   showUpdateModal: boolean;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.getScreenshotHeight();
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    this.getScreenshotHeight();
-  }
-
-  @ViewChild('screenshotBar') screenshotBar: ElementRef;
-  // @ViewChild('coreContainer') coreContainer: ElementRef;
-  // @ViewChild('tutorialModal') public tutorialModal: ModalDirective;
-
   gettingData: boolean = false;
-  showFeedback: boolean = true;
 
   showScreenshot: boolean = true;
-  screenshotHeight: number;
   showTutorial: boolean = false;
   hideTutorial: boolean = true;
-  toggleDownloadSub: Subscription;
-  showFeedbackSub: Subscription;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
   dirSub: Subscription;
@@ -73,19 +55,10 @@ export class CoreComponent implements OnInit {
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 
-    this.toggleDownloadSub = this.importExportService.toggleDownload.subscribe((val) => {
-      if (val == true) {
-        this.downloadData();
-      }
-    })
     if (this.electronService.process.platform == 'win32') {
       this.showScreenshot = false;
     }
 
-    this.showFeedbackSub = this.assessmentService.showFeedback.subscribe(val => {
-      this.showFeedback = val;
-      this.changeDetectorRef.detectChanges();
-    })
     this.openingTutorialSub = this.assessmentService.openingTutorial.subscribe(val => {
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
@@ -102,20 +75,12 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.showFeedbackSub) this.showFeedbackSub.unsubscribe();
     if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
-    if (this.toggleDownloadSub) this.toggleDownloadSub.unsubscribe();
     if (this.dirSub) this.dirSub.unsubscribe();
     if (this.calcSub) this.calcSub.unsubscribe();
     if (this.assessmentSub) this.assessmentSub.unsubscribe();
     if (this.settingsSub) this.settingsSub.unsubscribe();
     this.exportService.exportAllClick.next(false);
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.getScreenshotHeight();
-    }, 100);
   }
 
   initData() {
@@ -149,95 +114,16 @@ export class CoreComponent implements OnInit {
     })
   }
 
-  takeScreenShot() {
-    this.importExportService.takeScreenShot();
-  }
 
-  hideFeedback() {
-    this.showFeedback = false;
-  }
-
-  downloadData() {
-    // this.gettingData = true;
-    // this.importExportService.initAllDirectories().then((allDirs) => {
-    //   this.importExportService.selectedItems = new Array<any>();
-    //   this.importExportService.getSelected(allDirs);
-    //   setTimeout(() => {
-    //     this.importExportService.exportData = new Array();
-    //     this.importExportService.selectedItems.forEach(item => {
-    //       this.importExportService.getAssessmentSettings(item);
-    //     })
-    //     setTimeout(() => {
-    //       this.gettingData = false;
-    //       this.importExportService.downloadData(this.importExportService.exportData);
-    //     }, 1000)
-    //   }, 500)
-    // });
-    this.exportService.exportAllClick.next(true);
-  }
-
-  mailTo() {
-    this.importExportService.openMailTo();
-  }
 
   closeModal() {
     this.showUpdateModal = false;
   }
 
 
-  getScreenshotHeight() {
-    if (this.screenshotBar) {
-      if (this.screenshotHeight != this.screenshotBar.nativeElement.clientHeight) {
-        this.screenshotHeight = this.screenshotBar.nativeElement.clientHeight
-      }
-      if (this.windowRefService.nativeWindow.pageYOffset >> 0) {
-        let scrollTest = this.screenshotBar.nativeElement.clientHeight - this.screenshotBar.nativeElement.scrollHeight;
-        if (scrollTest <= 0) {
-          this.screenshotHeight = 0;
-        }
-      }
-      this.assessmentService.screenShotHeight.next(this.screenshotHeight);
-    }
-  }
-
   closeTutorial() {
     this.assessmentService.tutorialShown = true;
     this.showTutorial = false;
     this.hideTutorial = true;
   }
-
-
-  // setDirectorySub() {
-  //   this.dirSub = this.indexedDbService.setAllDirs.subscribe(val => {
-  //     if (val) {
-  //       this.directoryDbService.setAll();
-  //     }
-  //   })
-  // }
-
-  // setCalcSub() {
-  //   this.calcSub = this.indexedDbService.setAllCalcs.subscribe(val => {
-  //     if (val) {
-  //       this.calculatorDbService.setAll();
-  //     }
-  //   })
-  // }
-
-  // setAssessmentSub() {
-  //   this.assessmentSub = this.indexedDbService.setAllAssessments.subscribe(val => {
-  //     if (val) {
-  //       this.assessmentDbService.setAll();
-  //     }
-  //   })
-  // }
-
-  // setSettingSub() {
-  //   this.settingsSub = this.indexedDbService.setAllSettings.subscribe(val => {
-  //     if (val) {
-  //       this.settingsDbService.setAll();
-  //     }
-  //   })
-  // }
-
-
 }

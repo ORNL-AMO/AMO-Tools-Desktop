@@ -1,5 +1,5 @@
 .export-content{
-    max-height: 75vh;
+    max-height: 65vh;
     overflow-y: auto;
 }
 
@@ -16,3 +16,7 @@
     color: #BF3D00;
   }
     
+
+.danger{
+    color: red;
+}

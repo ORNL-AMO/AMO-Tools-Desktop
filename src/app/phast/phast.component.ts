@@ -56,7 +56,6 @@ export class PhastComponent implements OnInit {
   selectedLossTab: LossTab;
   calcTab: string;
   assessmentTab: string = 'explore-opportunities';
-  screenshotHeight: number = 0;
   sankeyPhast: PHAST;
   modificationIndex: number;
   mainTabSubscription: Subscription;
@@ -66,7 +65,6 @@ export class PhastComponent implements OnInit {
   lossesTabSubscription: Subscription;
   assessmentTabSubscription: Subscription;
   calcTabSubscription: Subscription;
-  screenshotSubscription: Subscription;
   openModListSubscription: Subscription;
   selectedModSubscription: Subscription;
   addNewSubscription: Subscription;
@@ -153,12 +151,6 @@ export class PhastComponent implements OnInit {
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
-    //screenShotHeight used for calculating container height, set in core.component
-    //remove when screenshot is removed
-    this.screenshotSubscription = this.assessmentService.screenShotHeight.subscribe(val => {
-      this.screenshotHeight = val;
-      this.getContainerHeight();
-    })
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
       if (val) {
@@ -203,7 +195,6 @@ export class PhastComponent implements OnInit {
     this.lossesTabSubscription.unsubscribe();
     this.assessmentTabSubscription.unsubscribe();
     this.calcTabSubscription.unsubscribe();
-    this.screenshotSubscription.unsubscribe();
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.phastCompareService.selectedModification.next(undefined);
@@ -214,7 +205,7 @@ export class PhastComponent implements OnInit {
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
-        let contentHeight = this.content.nativeElement.clientHeight - this.screenshotHeight;
+        let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
         let footerHeight = 0;
         if (this.footer) {
