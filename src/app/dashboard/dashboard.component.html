@@ -9,7 +9,7 @@
             </app-sidebar>
         </div>
 
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+        <div class="col-10 pb-4" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
@@ -22,7 +22,7 @@
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
+        <div class="col-10 dashboard-scroll pb-4 scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'tutorials'">
