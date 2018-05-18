@@ -54,7 +54,8 @@ export interface FanSetup {
   fanType: number,
   fanSpeed: number,
   drive: number,
-  fanSpecified?: number
+  fanSpecified?: number,
+  fanEfficiency?: number
 }
 //
 
@@ -258,14 +259,14 @@ export interface FsatInput {
   operatingFraction: number,
   unitCost: number,
   airDensity: number,
-
+  userInputFanEfficiency?: number,
   //existing
   loadEstimationMethod?: number,
   measuredPower?: number,
-  //modified
+  //modified, optimal
   fanEfficiency?: number
-  //optimal
-  fanType?: number
+  fanType?: number,
+  isSpecified: boolean
 };
 
 
@@ -284,72 +285,3 @@ export interface FsatOutput {
   //modified
   estimatedFLA?: number
 }
-
-
-var existingOutput: FsatOutput = {
-  fanEfficiency: 0.595398315,
-  motorRatedPower: 600.0,
-  motorShaftPower: 590.622186263,
-  fanShaftPower: 590.622186263,
-  motorEfficiency: 0.9578351108,
-  motorPowerFactor: 0.8577466651,
-  motorCurrent: 673.1011529439,
-  motorPower: 460.0,
-  annualEnergy: 4029.6,
-  annualCost: 241.776,
-  estimatedFLA: 683.2505707137,
-  fanEnergyIndex: 1.247872,
-}
-
-var modifiedOutput: FsatOutput = {
-  fanEfficiency: 0.595398315,
-  motorRatedPower: 600.0,
-  motorShaftPower: 590.622186263,
-  fanShaftPower: 590.622186263,
-  motorEfficiency: 0.957835,
-  motorPowerFactor: 0.857748,
-  motorCurrent: 673.100309,
-  motorPower: 460.000144,
-  annualEnergy: 4029.601262,
-  annualCost: 241.776076,
-  fanEnergyIndex: 1.247872,
-}
-
-var optimalOutput: FsatOutput = {
-  fanEfficiency: 0.756578,
-  motorRatedPower: 500.0,
-  motorShaftPower: 464.7970806678,
-  fanShaftPower: 464.7970806678,
-  motorEfficiency: 0.9599974605,
-  motorPowerFactor: 0.854272,
-  motorCurrent: 530.661126,
-  motorPower: 361.187025,
-  annualEnergy: 3163.998343,
-  annualCost: 189.839901,
-  fanEnergyIndex: 1.237779
-}
-
-
-var input: FsatInput = {
-  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
-  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
-  "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
-  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
-  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02
-};
-
-var modifiedInput: FsatInput = {
-  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
-  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
-  "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
-  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
-  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315
-};
-
-var optimal: FsatInput = {
-  "fanSpeed": 1180, "drive": 0, "lineFrequency": 0, "motorRatedPower": 500, "motorRpm": 1180,
-  "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
-  "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
-  "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
-  "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0
-};

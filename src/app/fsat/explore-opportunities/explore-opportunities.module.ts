@@ -8,12 +8,14 @@ import { SystemDataFormComponent } from './explore-opportunities-form/system-dat
 import { RatedMotorFormComponent } from './explore-opportunities-form/rated-motor-form/rated-motor-form.component';
 import { FanDataFormComponent } from './explore-opportunities-form/fan-data-form/fan-data-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FsatResultsModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesHelpComponent, ExploreOpportunitiesFormComponent, SystemDataFormComponent, RatedMotorFormComponent, FanDataFormComponent],
   providers: [ExploreOpportunitiesService],

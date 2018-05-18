@@ -63,17 +63,19 @@ export class FsatService {
   //fsat results
 
   getResults(fsat: FSAT, resultType: string): FsatOutput {
-   let input:FsatInput = {
+    let input: FsatInput = {
       fanSpeed: fsat.fanSetup.fanSpeed,
       drive: fsat.fanSetup.drive,
       lineFrequency: fsat.fanMotor.lineFrequency,
       motorRatedPower: fsat.fanMotor.motorRatedPower,
       motorRpm: fsat.fanMotor.motorRpm,
       efficiencyClass: fsat.fanMotor.efficiencyClass,
+      fanEfficiency: fsat.fanSetup.fanEfficiency,
+      //motor
       specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
       motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
       fullLoadAmps: fsat.fanMotor.fullLoadAmps,
-      sizeMargin: fsat.fanMotor.sizeMargin,
+      sizeMargin: fsat.fanMotor.sizeMargin | 0,
       measuredVoltage: fsat.fieldData.measuredVoltage,
       //???????
       measuredAmps: fsat.fieldData.motorPower,
@@ -84,17 +86,25 @@ export class FsatService {
       operatingFraction: fsat.fieldData.operatingFraction,
       unitCost: fsat.fieldData.cost,
       airDensity: fsat.baseGasDensity.gasDensity,
+      isSpecified: false
     };
-
-    if(resultType == 'existing'){
+    if (resultType == 'existing') {
       input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
       input.measuredPower = fsat.fieldData.motorPower;
       return this.fanResultsExisting(input);
-    }else if(resultType == 'optimal'){
-      input.fanEfficiency = fsat.fanSetup.fanSpecified;
+    } else if (resultType == 'optimal') {
+      input.fanType = fsat.fanSetup.fanType;
+      if (fsat.fanSetup.fanType == 12) {
+        input.isSpecified = true;
+        input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
+      }
       return this.fanResultsOptimal(input);
-    }else if(resultType == 'modified'){
-      input.fanType = fsat.fanSetup.fanType
+    } else if (resultType == 'modified') {
+      input.fanType = fsat.fanSetup.fanType;
+      if (fsat.fanSetup.fanType == 12) {
+        input.isSpecified = true;
+        input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
+      }
       return this.fanResultsModified(input);
     }
   }
