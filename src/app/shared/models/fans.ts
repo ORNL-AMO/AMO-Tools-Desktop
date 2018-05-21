@@ -35,6 +35,8 @@ export interface FieldData {
   specificHeatRatio: number,
   compressibilityFactor: number,
   measuredVoltage: number,
+  inletPressureData?: InletPressureData,
+  outletPressureData?: OutletPressureData
 
 }
 
@@ -284,4 +286,25 @@ export interface FsatOutput {
   fanEnergyIndex: number,
   //modified
   estimatedFLA?: number
+}
+
+
+export interface InletPressureData {
+  inletLoss: number,
+  inletDuctworkLoss: number,
+  systemDamperLoss: number,
+  airTreatmentLoss: number,
+  flowMeasurementLoss: number,
+  inletDamperLoss: number,
+  processRequirements: number,
+  inletSystemEffectLoss: number,
+  calculatedInletPressure: number
+}
+
+export interface OutletPressureData {
+  outletSystemEffectLoss: number,
+  outletDamperLoss: number,
+  airTreatmentLoss: number,
+  systemDamperLoss: number,
+  processRequirements: number
 }

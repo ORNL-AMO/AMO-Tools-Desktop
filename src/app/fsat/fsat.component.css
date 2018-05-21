@@ -18,3 +18,6 @@
     padding-top: 0px;
     padding-bottom: 0px;
 } */
+.modal-open {
+    z-index: initial !important;
+}

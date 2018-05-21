@@ -50,6 +50,7 @@ export class FsatComponent implements OnInit {
   showAdd: boolean;
   isModalOpen: boolean;
   openModSub: Subscription;
+  modalOpenSubscription: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -111,6 +112,11 @@ export class FsatComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     })
+
+      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+        this.isModalOpen = isOpen;
+      })
+
   }
 
   ngOnDestroy() {

@@ -27,7 +27,7 @@
     <div class="form-group">
       <label for="inletPressure">
         Inlet Pressure
-        <a class="form-text small click-link" (click)="estimateInletPressure()">Estimate Inlet Pressure</a>
+        <a class="form-text small click-link" (click)="showInletPressureModal()">Estimate Inlet Pressure</a>
       </label>
       <div class="input-group">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
@@ -51,7 +51,7 @@
     </div>
     <div class="form-group">
       <label for="flowRate">Flow Rate
-          <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Calculate Flow Rate and Pressures</a>
+        <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Calculate Flow Rate and Pressures</a>
       </label>
       <div class="input-group">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
@@ -98,7 +98,7 @@
 
     <div class="form-group">
       <label for="compressibilityFactor">Compressibility Factor
-          <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled':!selected}">Calculate Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled':!selected}">Calculate Compressibility Factor</a>
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
@@ -106,3 +106,25 @@
     </div>
   </div>
 </form>
+
+
+
+
+<div bsModal #inletPressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="inletPressureModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideInletPressureModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <app-calculate-inlet-pressure [settings]="settings" [inletPressureData]="fieldData.inletPressureData" (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="hideInletPressureModal()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>

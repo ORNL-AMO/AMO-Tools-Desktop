@@ -1,0 +1,11 @@
+.btn-primary{
+    padding: 6px;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}

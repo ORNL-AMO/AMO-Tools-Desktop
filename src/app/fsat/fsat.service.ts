@@ -14,6 +14,7 @@ export class FsatService {
   assessmentTab: BehaviorSubject<string>;
   openNewModal: BehaviorSubject<boolean>;
   openModificationModal: BehaviorSubject<boolean>;
+  modalOpen: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.initData();
   }
@@ -25,6 +26,7 @@ export class FsatService {
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   test() {
