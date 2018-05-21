@@ -27,14 +27,25 @@ export class SteamPropertiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string = 'pressure';
 
+  plotReady: boolean = false;
+
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
+
+    //debug
     this.steamPropertiesForm = this.formBuilder.group({
-      'pressure': [100, Validators.required],
+      'pressure': [0, Validators.required],
       'thermodynamicQuantity': [0, Validators.required],
-      'quantityValue': [100, Validators.required]
+      'quantityValue': [0, Validators.required]
     });
+
+    //real version
+    // this.steamPropertiesForm = this.formBuilder.group({
+    //   'pressure': [100, Validators.required],
+    //   'thermodynamicQuantity': [0, Validators.required],
+    //   'quantityValue': [100, Validators.required]
+    // });
 
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -57,7 +68,6 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   setField(str: string) {
-    console.log('setField = ' + str);
     this.currentField = str;
   }
 
@@ -84,5 +94,6 @@ export class SteamPropertiesComponent implements OnInit {
 
   calculate(input: SteamPropertiesInput) {
     this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+    this.plotReady = true;
   }
 }

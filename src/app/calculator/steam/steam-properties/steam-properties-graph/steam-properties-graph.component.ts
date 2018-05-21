@@ -23,9 +23,16 @@ export class SteamPropertiesGraphComponent implements OnInit {
   exportName: string;
   @Input()
   steamPropertiesOutput: SteamPropertiesOutput;
+  @Input()
+  plotReady: boolean;
 
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
+
+  xMaxDefault: number = 10;
+  xMinDefault: number = 0;
+  yMaxDefault: number = 600;
+  yMinDefault: number = -30;
 
   defaultEntropyUnit: string = 'kJkgK';
   defaultTempUnit: string = 'C';
@@ -74,6 +81,12 @@ export class SteamPropertiesGraphComponent implements OnInit {
   yAxisLabel: string;
   yAxisTicks: Array<number>;
   xAxisTicks: Array<number>;
+  xAxis: any;
+  yAxis: any;
+  xAxisGridLines: any;
+  yAxisGridLines: any;
+  defaultLines: any;
+  curveArea: any;
 
   htmlElement: any;
   host: d3.Selection<any>;
@@ -90,11 +103,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.initData();
     this.initCanvas();
     this.buildChart();
-    if (this.dataPopulated && this.canvasReady && this.steamPropertiesOutput !== undefined && this.steamPropertiesOutput !== null) {
-      if (this.steamPropertiesOutput.specificEntropy != 0 && this.steamPropertiesOutput.specificEntropy !== null && this.steamPropertiesOutput.temperature != 0 && this.steamPropertiesOutput.temperature !== null) {
-        this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-      }
-    }
   }
 
 
@@ -104,9 +112,21 @@ export class SteamPropertiesGraphComponent implements OnInit {
         this.buildChart();
       }
     }
-    if (changes.steamPropertiesOutput && !changes.steamPropertiesOutput.firstChange) {
-      if (this.dataPopulated && this.canvasReady) {
-        this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+
+    if (changes.steamPropertiesOutput) {
+      if (changes.steamPropertiesOutput.firstChange) {
+        if (this.steamPropertiesOutput !== undefined) {
+          setTimeout(() => {
+            if (this.dataPopulated && this.canvasReady && this.plotReady) {
+              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+            }
+          }, 500);
+        }
+      }
+      else {
+        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
+          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+        }
       }
     }
   }
@@ -236,11 +256,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
     //these default values are for metric
     //x values are entropy, default is kJkgK
-    this.xMax = 10;
-    this.xMin = 0;
+    this.xMax = this.xMaxDefault;
+    this.xMin = this.xMinDefault;
     //y values are temperature, default is C
-    this.yMax = 600;
-    this.yMin = -30;
+    this.yMax = this.yMaxDefault;
+    this.yMin = this.yMinDefault;
 
     if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
       this.xMax = this.convertVal(this.xMax, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement);
@@ -257,7 +277,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
   buildChart() {
     this.host.html('');
     this.margin = {
-      top: 0,
+      top: 10,
       right: 20,
       bottom: 50,
       left: 70
@@ -299,23 +319,25 @@ export class SteamPropertiesGraphComponent implements OnInit {
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
     // add the X Axis
-    this.svg.append("g")
+    this.xAxis = this.svg.append("g")
+      .attr('class', 'x-axis')
       .attr("transform", "translate(0," + svgHeight + ")")
       .call(d3.axisBottom(x));
 
     // add the Y Axis
-    this.svg.append("g")
+    this.yAxis = this.svg.append("g")
+      .attr('class', 'y-axis')
       .call(d3.axisLeft(y));
 
     //add x grid lines
-    this.svg.append("g")
+    this.xAxisGridLines = this.svg.append("g")
       .attr("class", "grid")
       .style('stroke-width', '.5px')
       .style('stroke', 'lightgrey')
       .attr("transform", "translate(0," + svgHeight + ")")
       .call(this.addXGridLines().tickSize(-svgHeight).tickFormat(""));
     //add y grid lines
-    this.svg.append("g")
+    this.yAxisGridLines = this.svg.append("g")
       .attr("class", "grid")
       .style('stroke-width', '.5px')
       .style('stroke', 'lightgrey')
@@ -326,17 +348,17 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
     //update domains to keep area from expanding to negative values
     if (this.settings.steamSpecificEntropyMeasurement !== undefined && this.settings.steamSpecificEntropyMeasurement != this.defaultEntropyUnit) {
-      x.domain([this.convertVal(0, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement), this.convertVal(10, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement)]);
+      x.domain([this.convertVal(0, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement), this.convertVal(this.xMax, this.defaultEntropyUnit, this.settings.steamSpecificEntropyMeasurement)]);
     }
     else {
-      x.domain([0, 10]);
+      x.domain([0, this.xMax]);
     }
 
     if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement != this.defaultTempUnit) {
-      y.domain([this.convertVal(0, this.defaultTempUnit, this.settings.steamTemperatureMeasurement), this.convertVal(600, this.defaultTempUnit, this.settings.steamTemperatureMeasurement)]);
+      y.domain([this.convertVal(0, this.defaultTempUnit, this.settings.steamTemperatureMeasurement), this.convertVal(this.yMax, this.defaultTempUnit, this.settings.steamTemperatureMeasurement)]);
     }
     else {
-      y.domain([0, 600]);
+      y.domain([0, this.yMax]);
     }
     // add the area
     this.svg.append("path")
@@ -463,12 +485,94 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
 
+  rescaleAxis() {
+    let x = d3.scaleLinear().range([0, this.width]);
+    let y = d3.scaleLinear().range([this.height, 0]);
+
+    //define domain for x and y axis
+    x.domain([this.xMin, this.xMax]);
+    y.domain([this.yMin, this.yMax]);
+
+    //rescale x axis
+    this.xAxis.transition()
+      .duration(600)
+      .ease(d3.easePoly)
+      .call(d3.axisBottom(x));
+
+    //rescale x axis grid
+    this.xAxisGridLines.transition()
+      .duration(600)
+      .ease(d3.easePoly)
+      .call(this.addXGridLines().tickSize(-this.height).tickFormat(""));
+
+    //rescale y axis
+    this.yAxis.transition()
+      .duration(600)
+      .ease(d3.easePoly)
+      .call(d3.axisLeft(y));
+
+    //rescale y axis grid
+    this.yAxisGridLines.transition()
+      .duration(600)
+      .ease(d3.easePoly)
+      .call(this.addYGridLines().tickSize(-this.width).tickFormat(""));
+
+    //rescale value line for default pressure lines
+    let valueLine = d3.line()
+      .x(function (d) {
+        return x(d.entropy);
+      })
+      .y(function (d) {
+        return y(d.temperature);
+      });
+
+    //rescale default pressure lines
+    this.defaultLines = d3.selectAll('.line')
+      .transition()
+      .duration(600)
+      .ease(d3.easePoly)
+      .attr('d', valueLine);
+  }
+
+  checkRescale(entropy: number, temp: number) {
+    let rescale = false;
+
+    //check for x domain rescale
+    if (entropy > (this.xMax * 0.9)) {
+      this.xMax = Math.round(entropy + 1);
+      rescale = true;
+    }
+    else if (this.xMax > this.xMaxDefault) {
+      if (entropy < (this.xMax * 0.8)) {
+        this.xMax = Math.max(Math.round(entropy + 2), this.xMaxDefault);
+        rescale = true;
+      }
+    }
+
+    //check for y domain rescale
+    if (temp > (this.yMax * 0.9)) {
+      this.yMax = Math.round((temp + (temp * 0.2)) / 10) * 10;
+      rescale = true;
+    }
+    else if (this.yMax > this.yMaxDefault) {
+      if (temp < (this.yMax * 0.65)) {
+        this.yMax = Math.max(Math.round((temp * 1.5) / 10) * 10, this.yMaxDefault);
+        rescale = true;
+      }
+    }
+
+    return rescale;
+  }
 
   plotPoint(temp: number, entropy: number) {
     if (this.svg) {
 
       let x = d3.scaleLinear().range([0, this.width]);
       let y = d3.scaleLinear().range([this.height, 0]);
+
+      if (this.checkRescale(entropy, temp)) {
+        this.rescaleAxis();
+      }
 
       //define domain for x and y axis
       x.domain([this.xMin, this.xMax]);
@@ -480,7 +584,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
       }
 
       if (this.point === undefined || !this.point) {
-
         this.svg.selectAll('circle').remove();
 
         this.point = this.svg.append('circle')
@@ -488,7 +591,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
           .attr("cx", x(dataset.entropy))
           .attr("cy", y(dataset.temperature))
           .style('fill', 'green');
-
       }
       else {
         // apply a transition
@@ -500,7 +602,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
       }
     }
   }
-
 
 
   downloadChart(): void {

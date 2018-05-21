@@ -26,13 +26,15 @@ export class SaturatedPropertiesComponent implements OnInit {
   currentField: string = 'pressure';
 
 
+  plotReady: boolean = false;
+
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
     this.saturatedPropertiesForm = this.formBuilder.group({
       'pressureOrTemperature': [0, Validators.required],
-      'saturatedPressure': [100, Validators.required],
-      'saturatedTemperature': [100, Validators.required]
+      'saturatedPressure': [0, Validators.required],
+      'saturatedTemperature': [0, Validators.required]
     });
 
     if (!this.settings) {
@@ -101,6 +103,7 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   calculate(input: SaturatedPropertiesInput) {
     this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+    this.plotReady = true;
   }
 
 

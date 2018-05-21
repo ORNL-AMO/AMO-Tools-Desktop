@@ -73,11 +73,10 @@ export class SteamPropertiesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.steamPropertiesOutput = {
-    //   pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
-    // };
+    this.steamPropertiesOutput = {
+      pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
+    };
     this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
-    this.calculate();
   }
 
   getDisplayUnit(unit: string) {
