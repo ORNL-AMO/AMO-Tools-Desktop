@@ -35,7 +35,6 @@ export class FsatResultsPanelComponent implements OnInit {
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.baselineResults = this.fsatService.getResults(this.fsat, 'existing');
       this.fsat.modifications[this.modificationIndex].fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
-      console.log(this.baselineResults.fanEfficiency)
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       let modResultType: string = 'modified';
       if(this.fsat.modifications[this.modificationIndex].fsat.fanMotor.optimize){
