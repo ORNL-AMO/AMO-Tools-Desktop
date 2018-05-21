@@ -8,26 +8,26 @@
   </div>
   <div class="setup-form-group">
     <div class="form-group">
-      <label for="frequency">Line Frequency</label>
-      <select name="frequency" class="form-control number-input-field" id="frequency" formControlName="frequency" (change)="changeLineFreq()"
+      <label for="lineFrequency">Line Frequency</label>
+      <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency" formControlName="lineFrequency" (change)="changeLineFreq()"
         (focus)="focusField('lineFrequency')">
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
+        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="horsePower">Rated Motor Power</label>
-      <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="checkRatedPower()"
-        (focus)="focusField('horsePower')">
+      <label for="motorRatedPower">Rated Motor Power</label>
+      <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower" (change)="checkRatedPower()"
+        (focus)="focusField('motorRatedPower')">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
       <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null && !psat.inputs.optimize_calculation">{{ratedPowerError}}</span>
     </div>
 
     <div class="form-group">
-      <label for="motorRPM">Motor RPM</label>
-      <div name="motorRPM" class="input-group">
-        <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" (input)="checkMotorRpm()"
+      <label for="motorRpm">Motor RPM</label>
+      <div name="motorRpm" class="input-group">
+        <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="checkMotorRpm()"
           (focus)="focusField('motorRPM')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
       </div>
@@ -38,24 +38,24 @@
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
         (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="fanMotorForm.controls.efficiencyClass.value == 'Specified'">
-      <label for="efficiency">Efficiency</label>
+    <div class="form-group" *ngIf="fanMotorForm.controls.efficiencyClass.value == 3">
+      <label for="specifiedEfficiency">Efficiency</label>
       <div class="input-group">
-        <input name="efficiency" type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency"
-          (input)="checkEfficiency()" (focus)="focusField('efficiency')" onfocus="this.select();" [readonly]="!selected">
+        <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control" id="specifiedEfficiency" formControlName="specifiedEfficiency"
+          (input)="checkEfficiency()" (focus)="focusField('specifiedEfficiency')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
     </div>
 
     <div class="form-group">
-      <label for="motorVoltage">Rated Voltage</label>
+      <label for="motorRatedVoltage">Rated Voltage</label>
       <div class="input-group">
-        <input name="motorVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage"
+        <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorRatedVoltage" formControlName="motorRatedVoltage"
           (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">V</span>
       </div>

@@ -34,4 +34,8 @@
             You must add a modification to take notes on it.
         </div>
     </div>
+
+    <div *ngIf="tabSelect == 'results' && !inSetup">
+        <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex"></app-fsat-results-panel>
+    </div>
 </div>

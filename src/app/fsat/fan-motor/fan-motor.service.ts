@@ -9,12 +9,12 @@ export class FanMotorService {
 
   getFormFromObj(obj: FanMotor): FormGroup {
     let form = this.formBuilder.group({
-      frequency: [obj.frequency, Validators.required],
-      horsePower: [obj.horsePower, Validators.required],
-      motorRPM: [obj.motorRPM, Validators.required],
+      lineFrequency: [obj.lineFrequency, Validators.required],
+      motorRatedPower: [obj.motorRatedPower, Validators.required],
+      motorRpm: [obj.motorRpm, Validators.required],
       efficiencyClass: [obj.efficiencyClass, Validators.required],
-      efficiency: [obj.efficiency],
-      motorVoltage: [obj.motorVoltage, Validators.required],
+      specifiedEfficiency: [obj.specifiedEfficiency],
+      motorRatedVoltage: [obj.motorRatedVoltage, Validators.required],
       fullLoadAmps: [obj.fullLoadAmps, Validators.required]
     })
     return form;
@@ -22,12 +22,12 @@ export class FanMotorService {
 
   getObjFromForm(form: FormGroup): FanMotor {
     let obj: FanMotor = {
-      frequency: form.controls.frequency.value,
-      horsePower: form.controls.horsePower.value,
-      motorRPM: form.controls.motorRPM.value,
+      lineFrequency: form.controls.lineFrequency.value,
+      motorRatedPower: form.controls.motorRatedPower.value,
+      motorRpm: form.controls.motorRpm.value,
       efficiencyClass: form.controls.efficiencyClass.value,
-      efficiency: form.controls.efficiency.value,
-      motorVoltage: form.controls.motorVoltage.value,
+      specifiedEfficiency: form.controls.specifiedEfficiency.value,
+      motorRatedVoltage: form.controls.motorRatedVoltage.value,
       fullLoadAmps: form.controls.fullLoadAmps.value
     }
     return obj;

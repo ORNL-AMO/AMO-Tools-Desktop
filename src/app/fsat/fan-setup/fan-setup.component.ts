@@ -3,7 +3,7 @@ import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
 import { FanSetup } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-
+import { FanTypes, Drives } from '../fanOptions';
 @Component({
   selector: 'app-fan-setup',
   templateUrl: './fan-setup.component.html',
@@ -21,41 +21,24 @@ export class FanSetupComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<FanSetup>();
 
-
-  fanTypes: Array<string> = [
-    'Airfoil (SISW)',
-    'Backward Curved (SISW)',
-    'Radial (SISW)',
-    'Radial Tip (SISW)',
-    'Backward Inclined (SISW)',
-    'Airfoil (DIDW)',
-    'Backward Inclined (DIDW)',
-    'ICF Air handling',
-    'ICF Material handling',
-    'ICF Long shavings'
-  ]
-
-  drives: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
-  ];
-
+  drives: Array<{ display: string, value: number }>;
+  fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
   constructor(private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
+    this.drives = Drives;
+    this.fanTypes = FanTypes;
     this.init();
-    if(!this.selected){
+    if (!this.selected) {
       this.disableForm();
     }
   }
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.selected && !changes.selected.firstChange){
-      if(this.selected){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected) {
         this.enableForm();
-      }else{
+      } else {
         this.disableForm();
       }
     }
@@ -64,8 +47,8 @@ export class FanSetupComponent implements OnInit {
     }
   }
 
-  init(){
-    this.fanForm =  this.fanSetupService.getFormFromObj(this.fanSetup);
+  init() {
+    this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup);
   }
   disableForm() {
     this.fanForm.controls.fanType.disable();
@@ -77,11 +60,11 @@ export class FanSetupComponent implements OnInit {
     this.fanForm.controls.drive.enable();
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.helpPanelService.currentField.next(str);
   }
 
-  save(){
+  save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
     this.emitSave.emit(this.fanSetup);
   }

@@ -30,30 +30,32 @@ export interface FieldData {
   flowRate: number,
   inletPressure: number,
   outletPressure: number,
-  loadEstimatedMethod: string,
+  loadEstimatedMethod: number,
   motorPower: number,
   specificHeatRatio: number,
   compressibilityFactor: number,
-  measuredVoltage: number
+  measuredVoltage: number,
+
 }
 
 export interface FanMotor {
-  frequency: string,
-  horsePower: number,
-  motorRPM: number,
-  efficiencyClass: string,
-  efficiency?: number,
-  motorVoltage: number,
+  lineFrequency: number,
+  motorRatedPower: number,
+  motorRpm: number,
+  efficiencyClass: number,
+  specifiedEfficiency?: number,
+  motorRatedVoltage: number,
   fullLoadAmps: number,
   optimize?: boolean,
   sizeMargin?: number
 }
 
 export interface FanSetup {
-  fanType: string,
+  fanType: number,
   fanSpeed: number,
-  drive: string,
-  fanSpecified?: number
+  drive: number,
+  fanSpecified?: number,
+  fanEfficiency?: number
 }
 //
 
@@ -192,46 +194,94 @@ export interface PlaneResult {
 }
 
 export interface FanCurveInputData {
-    //baseGasDensity?
-    density: number, 
-    //results density?
-    densityCorrected: number, 
-    //synchronous speed?
-    speed: number, 
-    //Converted Power?
-    speedCorrected: number,
-    //global barometric pressure?
-    pressureBarometric: number, 
-    //
-    pressureBarometricCorrected: number, 
-    //power factor at load?
-    pt1Factor: number,
-    //no idea where these come from
-    gamma: number, 
-    gammaCorrected: number, 
-    area1: number, 
-    area2: number, 
-    
-    curveType: string,
-    //Do array values have a data patern?
-    //[x, y, z] what are x,y,z?
-    //traverse plane data?
-    //BaseCurveData: Array<Array<number>
-    BaseCurveData: [
-        [0, 22.3, 115],
-        [14410, 22.5, 154],
-        [28820, 22.3, 194],
-        [43230, 21.8, 241],
-        [57640, 21.2, 293],
-        [72050, 20.3, 349],
-        [86460, 19.3, 406],
-        [100871, 18, 462],
-        [115281, 16.5, 515],
-        [129691, 14.8, 566],
-        [144101, 12.7, 615],
-        [158511, 10.2, 667],
-        [172921, 7.3, 725],
-        [187331, 3.7, 789],
-        [201741, -0.8, 861]
-    ]
+  //baseGasDensity?
+  density: number,
+  //results density?
+  densityCorrected: number,
+  //synchronous speed?
+  speed: number,
+  //Converted Power?
+  speedCorrected: number,
+  //global barometric pressure?
+  pressureBarometric: number,
+  //
+  pressureBarometricCorrected: number,
+  //power factor at load?
+  pt1Factor: number,
+  //no idea where these come from
+  gamma: number,
+  gammaCorrected: number,
+  area1: number,
+  area2: number,
+
+  curveType: string,
+  //Do array values have a data patern?
+  //[x, y, z] what are x,y,z?
+  //traverse plane data?
+  //BaseCurveData: Array<Array<number>
+  BaseCurveData: [
+    [0, 22.3, 115],
+    [14410, 22.5, 154],
+    [28820, 22.3, 194],
+    [43230, 21.8, 241],
+    [57640, 21.2, 293],
+    [72050, 20.3, 349],
+    [86460, 19.3, 406],
+    [100871, 18, 462],
+    [115281, 16.5, 515],
+    [129691, 14.8, 566],
+    [144101, 12.7, 615],
+    [158511, 10.2, 667],
+    [172921, 7.3, 725],
+    [187331, 3.7, 789],
+    [201741, -0.8, 861]
+  ]
+}
+
+
+export interface FsatInput {
+  fanSpeed: number,
+  drive: number,
+  lineFrequency: number,
+  motorRatedPower: number,
+  motorRpm: number,
+  efficiencyClass: number,
+  specifiedEfficiency: number,
+  motorRatedVoltage: number,
+  fullLoadAmps: number,
+  sizeMargin: number,
+  measuredVoltage: number,
+  measuredAmps: number,
+  flowRate: number,
+  inletPressure: number,
+  outletPressure: number,
+  compressibilityFactor: number,
+  operatingFraction: number,
+  unitCost: number,
+  airDensity: number,
+  userInputFanEfficiency?: number,
+  //existing
+  loadEstimationMethod?: number,
+  measuredPower?: number,
+  //modified, optimal
+  fanEfficiency?: number
+  fanType?: number,
+  isSpecified: boolean
+};
+
+
+export interface FsatOutput {
+  fanEfficiency: number,
+  motorRatedPower: number,
+  motorShaftPower: number,
+  fanShaftPower: number,
+  motorEfficiency: number,
+  motorPowerFactor: number,
+  motorCurrent: number,
+  motorPower: number,
+  annualEnergy: number,
+  annualCost: number,
+  fanEnergyIndex: number,
+  //modified
+  estimatedFLA?: number
 }

@@ -44,6 +44,7 @@
 				<!-- <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
 				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results> -->
+				<app-fsat-results-panel [fsat]="assessment.fsat" [settings]="settings" [modificationIndex]="modificationIndex"></app-fsat-results-panel>
 			</div>
 			<div  *ngIf="!modificationExists && tabSelect != 'help'">
 				<!--Placeholder for help text -->

@@ -58,7 +58,7 @@
 
   <!-- Help Panel -->
   <div class="col-4 help-panel pl-0">
-    <app-help-panel *ngIf="modificationExists" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-help-panel>
+    <app-help-panel *ngIf="modificationExists" [fsat]="assessment.fsat" [settings]="settings" [modificationIndex]="modificationIndex"></app-help-panel>
     <div *ngIf="!modificationExists">
       <div class="header">
         <h3>Help</h3>

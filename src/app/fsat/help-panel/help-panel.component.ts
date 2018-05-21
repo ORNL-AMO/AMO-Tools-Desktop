@@ -18,7 +18,10 @@ export class HelpPanelComponent implements OnInit {
   inSetup: boolean;
   @Input()
   fsat: FSAT;
-  
+  @Input()
+  modificationIndex: number;
+
+
   currentField: string;
   tabSelect: string = 'help';
   currentFieldSub: Subscription;
