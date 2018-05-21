@@ -162,24 +162,24 @@ export class FanMotorComponent implements OnInit {
   }
 
   getFullLoadAmps() {
-    if (!this.disableFLA()) {
-      //TODO: update get efficiency
-      // let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.fanMotorForm);
-      let estEfficiency = this.psatService.estFLA(
-        this.fanMotorForm.controls.motorRatedPower.value,
-        this.fanMotorForm.controls.motorRpm.value,
-        this.fanMotorForm.controls.lineFrequency.value,
-        this.fanMotorForm.controls.efficiencyClass.value,
-        0,
-        this.fanMotorForm.controls.motorRatedVoltage.value,
-        this.settings
-      );
+    // if (!this.disableFLA()) {
+    //   //TODO: update get efficiency
+    //   // let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.fanMotorForm);
+    //   let estEfficiency = this.psatService.estFLA(
+    //     this.fanMotorForm.controls.motorRatedPower.value,
+    //     this.fanMotorForm.controls.motorRpm.value,
+    //     this.fanMotorForm.controls.lineFrequency.value,
+    //     this.fanMotorForm.controls.efficiencyClass.value,
+    //     0,
+    //     this.fanMotorForm.controls.motorRatedVoltage.value,
+    //     this.settings
+    //   );
 
-      this.fanMotorForm.patchValue({
-        fullLoadAmps: estEfficiency
-      });
-      this.checkFLA();
-    }
+    //   this.fanMotorForm.patchValue({
+    //     fullLoadAmps: estEfficiency
+    //   });
+    //   this.checkFLA();
+    // }
   }
   defaultRpm() {
     if (this.fanMotorForm.controls.lineFrequency.value == '60 Hz') {
