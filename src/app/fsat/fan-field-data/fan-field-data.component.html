@@ -27,7 +27,7 @@
     <div class="form-group">
       <label for="inletPressure">
         Inlet Pressure
-        <a class="form-text small click-link" (click)="showInletPressureModal()">Estimate Inlet Pressure</a>
+        <a class="form-text small click-link" (click)="showInletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Inlet Pressure</a>
       </label>
       <div class="input-group">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
@@ -40,7 +40,7 @@
     <div class="form-group">
       <label for="outletPressure">
         Outlet Pressure
-        <a class="form-text small click-link" (click)="showOutletPressureModal()">Estimate Outlet Pressure</a>
+        <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Outlet Pressure</a>
       </label>
       <div class="input-group">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
@@ -51,7 +51,7 @@
     </div>
     <div class="form-group">
       <label for="flowRate">Flow Rate
-        <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled':!selected}">Calculate Flow Rate and Pressures</a>
+        <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate Flow Rate and Pressures</a>
       </label>
       <div class="input-group">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
@@ -98,7 +98,7 @@
 
     <div class="form-group">
       <label for="compressibilityFactor">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled':!selected}">Calculate Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"

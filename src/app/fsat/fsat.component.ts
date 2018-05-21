@@ -130,6 +130,7 @@ export class FsatComponent implements OnInit {
     this.selectedModSubscription.unsubscribe();
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
+    this.modalOpenSubscription.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {

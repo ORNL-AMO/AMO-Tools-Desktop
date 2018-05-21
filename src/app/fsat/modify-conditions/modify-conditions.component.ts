@@ -27,12 +27,17 @@ export class ModifyConditionsComponent implements OnInit {
   modifyConditionsTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
-
+  isModalOpen: boolean = false;
+  modalOpenSubscription: Subscription;
   constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
+    })
+
+    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
     })
   }
 
@@ -41,6 +46,7 @@ export class ModifyConditionsComponent implements OnInit {
 
   ngOnDestroy() {
     this.modifyConditionsTabSub.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
   }
 
   togglePanel(bool: boolean) {
@@ -102,8 +108,8 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  saveModExtra(newFsat: FSAT){
+  saveModExtra(newFsat: FSAT) {
     this.assessment.fsat.modifications[this.modificationIndex].fsat = newFsat;
-    this.saveAssessment();   
+    this.saveAssessment();
   }
 }

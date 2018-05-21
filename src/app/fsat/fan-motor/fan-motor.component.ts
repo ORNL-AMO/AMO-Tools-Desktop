@@ -247,18 +247,19 @@ export class FanMotorComponent implements OnInit {
     if (!bool) {
       this.save();
     }
-    if (this.fanMotorForm.controls.motorRatedVoltage.value != '') {
-      let tmp = this.psatService.checkMotorVoltage(this.fanMotorForm.controls.motorRatedVoltage.value);
-      if (tmp.message) {
-        this.voltageError = tmp.message;
-      } else {
-        this.voltageError = null;
-      }
-      return tmp.valid;
-    }
-    else {
-      return null;
-    }
+    // if (this.fanMotorForm.controls.motorRatedVoltage.value != '') {
+    //   let tmp = this.psatService.checkMotorVoltage(this.fanMotorForm.controls.motorRatedVoltage.value);
+    //   if (tmp.message) {
+    //     this.voltageError = tmp.message;
+    //   } else {
+    //     this.voltageError = null;
+    //   }
+    //   return tmp.valid;
+    // }
+    // else {
+    //   return null;
+    // }
+    return null;
   }
   checkMotorRpm(bool?: boolean) {
     if (!bool) {
