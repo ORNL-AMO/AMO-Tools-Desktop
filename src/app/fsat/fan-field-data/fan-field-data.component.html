@@ -40,7 +40,7 @@
     <div class="form-group">
       <label for="outletPressure">
         Outlet Pressure
-        <a class="form-text small click-link" (click)="estimateOutletPressure()">Estimate Outlet Pressure</a>
+        <a class="form-text small click-link" (click)="showOutletPressureModal()">Estimate Outlet Pressure</a>
       </label>
       <div class="input-group">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
@@ -110,20 +110,21 @@
 
 
 
-<div bsModal #inletPressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="inletPressureModalLabel"
+<div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pressureModalLabel"
   aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" aria-label="Close" (click)="hideInletPressureModal()">
+        <button class="close" aria-label="Close" (click)="hidePressureModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body p-0">
-        <app-calculate-inlet-pressure [settings]="settings" [inletPressureData]="fieldData.inletPressureData" (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="fieldData.inletPressureData" (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="fieldData.outletPressureData" (emitSave)="saveOutletPressure($event)"></app-calculate-outlet-pressure>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" (click)="hideInletPressureModal()">Done</button>
+        <button class="btn btn-primary" (click)="hidePressureModal()">Done</button>
       </div>
     </div>
   </div>

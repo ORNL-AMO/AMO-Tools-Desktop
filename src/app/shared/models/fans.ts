@@ -306,5 +306,6 @@ export interface OutletPressureData {
   outletDamperLoss: number,
   airTreatmentLoss: number,
   systemDamperLoss: number,
-  processRequirements: number
+  processRequirements: number,
+  calculatedOutletPressure: number
 }

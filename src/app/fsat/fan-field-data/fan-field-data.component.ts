@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { FieldData, InletPressureData } from '../../shared/models/fans';
+import { FieldData, InletPressureData, OutletPressureData } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
 
@@ -33,7 +33,7 @@ export class FanFieldDataComponent implements OnInit {
 
 
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
-  @ViewChild('inletPressureModal') public inletPressureModal: ModalDirective;
+  @ViewChild('pressureModal') public pressureModal: ModalDirective;
 
   loadEstimateMethods: Array<{ value: number, display: string }> = [
     { value: 0, display: 'Power' },
@@ -48,6 +48,7 @@ export class FanFieldDataComponent implements OnInit {
   marginError: string = null;
   outletPressureError: string = null;
   fieldDataForm: FormGroup;
+  pressureCalcType: string;
   constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -134,8 +135,10 @@ export class FanFieldDataComponent implements OnInit {
 
   save() {
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
+    let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     this.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
     this.fieldData.inletPressureData = tmpInletPressureData;
+    this.fieldData.outletPressureData = tmpOutletPressureData;
     this.emitSave.emit(this.fieldData);
   }
 
@@ -269,19 +272,34 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   showInletPressureModal(){
+    this.pressureCalcType = 'inlet';
     this.fsatService.modalOpen.next(true);
-    this.inletPressureModal.show();
-
+    this.pressureModal.show();
   }
 
-  hideInletPressureModal(){
+  showOutletPressureModal(){
+    this.pressureCalcType = 'outlet';
+    this.fsatService.modalOpen.next(true);
+    this.pressureModal.show();
+  }
+
+
+  hidePressureModal(){
     this.fsatService.modalOpen.next(false);
-    this.inletPressureModal.hide();
+    this.pressureModal.hide();
+  }
+
+  saveOutletPressure(outletPressureData: OutletPressureData){
+    this.fieldData.outletPressureData = outletPressureData;
+    this.fieldDataForm.patchValue({
+      outletPressure: outletPressureData.calculatedOutletPressure
+    });
+    this.save();
   }
 
 
   saveInletPressure(inletPressureData: InletPressureData){
-    // this.fieldData.inletPressureData = inletPressureData;
+    this.fieldData.inletPressureData = inletPressureData;
     this.fieldDataForm.patchValue({
       inletPressure: inletPressureData.calculatedInletPressure
     })
