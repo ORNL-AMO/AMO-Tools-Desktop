@@ -53,8 +53,10 @@ export class SaturatedPropertiesFormComponent implements OnInit {
 
   ngOnInit() {
     this.input = {
-      saturatedPressure: 0
+      saturatedPressure: 0,
+      saturatedTemperature: 0
     };
+
     // this.output = {
     //   saturatedPressure: 0,
     //   saturatedTemperature: 0,
@@ -68,12 +70,14 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     //   gasVolume: 0,
     //   evaporationVolume: 0
     // };
-    this.calculate();
+
+    // this.calculate();
   }
 
   calculate() {
     this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
     this.temperatureError = this.pressureError = null;
+    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
 
     if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
       const pressure = this.saturatedPropertiesForm.controls.saturatedPressure.value;
@@ -95,7 +99,6 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     // this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
 
     this.emitCalculate.emit(this.input);
-    // return 0;
   }
 
 
