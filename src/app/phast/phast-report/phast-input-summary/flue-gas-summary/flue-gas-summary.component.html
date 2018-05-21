@@ -35,10 +35,20 @@
                 Type Of Fuel
               </td>
               <td [ngClass]="{'indicate-report-field-different':typeDiff[index] == true}">
-                {{data.baseline.type}}
+                <span *ngIf="data.baseline.type == 'By Volume'">
+                  Gas
+                </span>
+                <span *ngIf="data.baseline.type == 'By Mass'">
+                  Solid/Liquid
+                </span>
               </td>
               <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.type, mod.type, 'typeDiff', index)}">
-                {{mod.type}}
+                <span *ngIf="mod.type == 'By Volume'">
+                  Gas
+                </span>
+                <span *ngIf="mod.type == 'By Mass'">
+                  Solid/Liquid
+                </span>
               </td>
             </tr>
             <tr>
