@@ -1,0 +1,72 @@
+<div class="card" *ngIf="!currentField">
+  <div class="card-header">
+    Motor Drive Comparison Help
+  </div>
+  <div class="card-block small">
+    <p>
+      Adjust operating conditions to compare energy use and energy costs of different motor drive types.
+    </p>
+  </div>
+</div>
+
+
+<div class="card" *ngIf="currentField == 'motorPower'">
+  <div class="card-header">
+    Motor Power
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The power rating of equipment is the highest power input allowed to flow through the motor.
+    </p>
+  </div>
+</div>
+<div class="card" *ngIf="currentField == 'annualOperatingHours'">
+  <div class="card-header">
+    Annual Operating Hours
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      Number of hours of operation in a year.
+    </p>
+  </div>
+</div>
+<div class="card" *ngIf="currentField == 'averageMotorLoad'">
+  <div class="card-header">
+    Average Motor Load
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      NEEDED
+    </p>
+  </div>
+</div>
+<div class="card" *ngIf="currentField == 'electricityCost'">
+  <div class="card-header">
+    Electricity Cost
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      Cost of electricity per kilowatt.
+    </p>
+  </div>
+</div>

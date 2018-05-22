@@ -1,0 +1,54 @@
+<div class="output-summary">
+  <div class="summary-table">
+    <label class="group-label">Results</label>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Drive Type</th>
+          <th>Annual Energy Use</th>
+          <th>Annual Energy Cost</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>(kW/yr)</th>
+          <th>($/yr)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Notched V Belt Drive
+          </td>
+          <td>
+            {{results.notchedResults.annualEnergyUse | sigFigs:'5'}}
+          </td>
+          <td>
+            {{results.notchedResults.energyCost | currency:'USD'}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Synchronous Belt Drive
+          </td>
+          <td>
+            {{results.synchronousBeltDrive.annualEnergyUse | sigFigs:'5'}}
+          </td>
+          <td>
+            {{results.synchronousBeltDrive.energyCost | currency:'USD'}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            V Belt Drive
+          </td>
+          <td>
+            {{results.vBeltResults.annualEnergyUse | sigFigs:'5'}}
+          </td>
+          <td>
+            {{results.vBeltResults.energyCost | currency:'USD'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
