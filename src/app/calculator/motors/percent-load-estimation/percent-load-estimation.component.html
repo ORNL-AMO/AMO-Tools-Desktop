@@ -23,7 +23,7 @@
             </form>
             <div class="form-section">
               <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData" (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form>
-              <app-field-measurement-form *ngIf="loadEstimationMethod == 1" ></app-field-measurement-form>
+              <app-field-measurement-form *ngIf="loadEstimationMethod == 1" [data]="fieldMeasurementData" (emitCalculate)="calculateFieldMeasurementMethod($event)"></app-field-measurement-form>
             </div>
           </div>
         </div>
@@ -42,7 +42,8 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <app-percent-load-estimation-graph *ngIf="tabSelect == 'results'" [loadEstimationResult]="percentLoadEstimation"></app-percent-load-estimation-graph>
+              <app-percent-load-estimation-graph [loadEstimationResult]="percentLoadEstimation"></app-percent-load-estimation-graph>
+              <app-field-measurement-table *ngIf="loadEstimationMethod == 1" [fieldMeasurementResults]="fieldMeasurementResults"></app-field-measurement-table>
             </div>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">

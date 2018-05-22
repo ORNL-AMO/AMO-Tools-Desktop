@@ -12,6 +12,8 @@ export class FieldMeasurementFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<FieldMeasurementInputs>();
 
+  amps: string = 'Amps';
+  volts: string = 'Volts';
   constructor() { }
 
   ngOnInit() {

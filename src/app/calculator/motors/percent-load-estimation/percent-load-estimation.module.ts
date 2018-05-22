@@ -8,6 +8,7 @@ import { PercentLoadEstimationComponent } from "./percent-load-estimation.compon
 import { SlipMethodFormComponent } from './slip-method-form/slip-method-form.component';
 import { FieldMeasurementFormComponent } from './field-measurement-form/field-measurement-form.component';
 import { FieldMeasurementService } from './field-measurement.service';
+import { FieldMeasurementTableComponent } from './field-measurement-table/field-measurement-table.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { FieldMeasurementService } from './field-measurement.service';
     PercentLoadEstimationComponent,
     PercentLoadEstimationGraphComponent,
     SlipMethodFormComponent,
-    FieldMeasurementFormComponent
+    FieldMeasurementFormComponent,
+    FieldMeasurementTableComponent
   ],
   exports: [
     PercentLoadEstimationComponent

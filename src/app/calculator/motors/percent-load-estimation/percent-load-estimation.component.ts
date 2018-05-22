@@ -86,10 +86,14 @@ export class PercentLoadEstimationComponent implements OnInit {
       / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
   }
 
-  calculateFieldMeasurementMethod(data: FieldMeasurementInputs){
+  calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {
     this.fieldMeasurementData = data;
     this.fieldMeasurementResults = this.fieldMeasurementService.getResults(data);
-    this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
+    if (isNaN(this.fieldMeasurementResults.percentLoad) == false && this.fieldMeasurementResults.percentLoad != Infinity) {
+      this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
+    } else {
+      this.percentLoadEstimation = 0;
+    }
   }
 
 }
