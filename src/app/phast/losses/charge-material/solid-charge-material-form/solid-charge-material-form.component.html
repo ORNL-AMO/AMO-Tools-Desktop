@@ -73,19 +73,20 @@
 
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature(), 'invalid': chargeMaterialForm.controls.initialTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidInitialTemperature(), 'error': initialTempError !== null, 'invalid': chargeMaterialForm.controls.initialTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
           id="initialTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="initialTempError !== null">{{initialTempError}}</span>
     </div>
 
 
     <div class="form-group">
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSolidDischargeTemperature(), 'error': dischargeTempError !== null, 'invalid': chargeMaterialForm.controls.chargeMaterialDischargeTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSolidDischargeTemperature(), 'error': dischargeTempError !== null || initialTempError !== null, 'invalid': chargeMaterialForm.controls.chargeMaterialDischargeTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
           id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('chargeMaterialDischargeTemperature')"
           (blur)="focusOut()">
