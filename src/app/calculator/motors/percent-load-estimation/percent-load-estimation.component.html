@@ -22,7 +22,6 @@
               </div>
             </form>
             <div class="form-section">
-              <!-- <app-percent-load-estimation-form [(percentLoadEstimationForm)]="percentLoadEstimationForm" [settings]="settings" (emitCalculate)="calculate()"></app-percent-load-estimation-form> -->
               <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData" (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form>
               <app-field-measurement-form *ngIf="loadEstimationMethod == 1" ></app-field-measurement-form>
             </div>
