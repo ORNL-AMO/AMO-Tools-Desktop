@@ -26,6 +26,14 @@ export class PercentLoadEstimationComponent implements OnInit {
   percentLoadEstimationForm: FormGroup;
   tabSelect: string = 'results';
   toggleCalculate = false;
+  loadEstimationMethod: number = 0;
+  percentLoadEstimation: number;
+
+  slipMethodData: SlipMethod = {
+    synchronousSpeed: 0,
+    measuredSpeed: 0,
+    nameplateFullLoadSpeed: 0
+  }
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService) { }
 
@@ -66,8 +74,20 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   calculate() {
-    this.loadEstimationResult = ((this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.measuredSpeed.value)
+    this.percentLoadEstimation = ((this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.measuredSpeed.value)
       / (this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value)) * 100;
   }
 
+  calculateSlipMethod(data: SlipMethod){
+    this.percentLoadEstimation = ((data.synchronousSpeed - data.measuredSpeed)
+      / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
+  }
+
+}
+
+
+export interface SlipMethod {
+  synchronousSpeed: number,
+  measuredSpeed: number,
+  nameplateFullLoadSpeed: number
 }

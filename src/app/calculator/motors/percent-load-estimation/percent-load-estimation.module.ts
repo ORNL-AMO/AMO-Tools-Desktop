@@ -5,7 +5,8 @@ import { SharedModule } from "../../../shared/shared.module";
 
 import { PercentLoadEstimationGraphComponent } from './percent-load-estimation-graph/percent-load-estimation-graph.component';
 import { PercentLoadEstimationComponent } from "./percent-load-estimation.component";
-import { PercentLoadEstimationFormComponent } from './percent-load-estimation-form/percent-load-estimation-form.component';
+import { SlipMethodFormComponent } from './slip-method-form/slip-method-form.component';
+import { FieldMeasurementFormComponent } from './field-measurement-form/field-measurement-form.component';
 
 @NgModule({
   imports: [
@@ -16,8 +17,9 @@ import { PercentLoadEstimationFormComponent } from './percent-load-estimation-fo
   ],
   declarations: [
     PercentLoadEstimationComponent,
-    PercentLoadEstimationFormComponent,
-    PercentLoadEstimationGraphComponent
+    PercentLoadEstimationGraphComponent,
+    SlipMethodFormComponent,
+    FieldMeasurementFormComponent
   ],
   exports: [
     PercentLoadEstimationComponent
