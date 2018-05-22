@@ -38,6 +38,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   firstChange: boolean = true;
 
+  initialTempError: string = null;
   specificHeatError: string = null;
   latentHeatError: string = null;
   heatOfLiquidError: string = null;
@@ -187,7 +188,14 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       this.dischargeTempError = null;
     }
 
-    if (this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
+    if (this.chargeMaterialForm.controls.initialTemperature.value < this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be less than Outlet Temperature";
+    }
+    else {
+      this.initialTempError = null;
+    }
+
+    if (this.initialTempError || this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
       this.inputError.emit(true);
       this.chargeMaterialCompareService.inputError.next(true);
     } else {
