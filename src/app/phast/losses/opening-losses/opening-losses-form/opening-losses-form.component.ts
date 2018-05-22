@@ -59,6 +59,14 @@ export class OpeningLossesFormComponent implements OnInit {
     }
   }
 
+  updateViewFactor() {
+    if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
+      this.totalArea = 0;
+      return;
+    }
+    this.calculateViewFactor();
+  }
+
 
   ngOnInit() {
     this.getArea(true);
