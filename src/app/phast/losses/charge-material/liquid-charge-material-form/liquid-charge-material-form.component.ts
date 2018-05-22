@@ -39,6 +39,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
+
+  initialTempError: string = null;
   dischargeTempError: string = null;
   specificHeatLiquidError: string = null;
   specificHeatVaporError: string = null;
@@ -171,7 +173,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.dischargeTempError = null;
     }
 
-    if (this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {
+    if (this.chargeMaterialForm.controls.initialTemperature.value < this.chargeMaterialForm.controls.dischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be less than Outlet Temperature";
+    }
+    else {
+      this.initialTempError = null;
+    }
+
+    if (this.initialTempError || this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {
       this.inputError.emit(true);
       this.chargeMaterialCompareService.inputError.next(true);
     } else {

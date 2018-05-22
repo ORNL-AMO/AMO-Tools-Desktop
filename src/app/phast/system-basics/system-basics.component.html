@@ -12,7 +12,7 @@
 <div class="setup-form-group">
   <div class="row">
     <div class="col-12">
-      <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges($event)"></app-application-settings>
+      <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges($event)"></app-application-settings>
     </div>
   </div>
 

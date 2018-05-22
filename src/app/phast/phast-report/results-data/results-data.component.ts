@@ -36,6 +36,8 @@ export class ResultsDataComponent implements OnInit {
   lossUnit: string;
   selectedModificationIndex: number;
 
+  sigFigsCount: number;
+
   numMods: number = 0;
 
   constructor(private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
@@ -63,13 +65,16 @@ export class ResultsDataComponent implements OnInit {
     if (this.phast.modifications) {
       this.numMods = this.phast.modifications.length;
     }
+
+    this.setSigFigsCount();
   }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleCalculate) {
       this.getResults();
     }
-    if(changes.modificationIndex){
+    if (changes.modificationIndex) {
       this.getResults();
     }
   }
@@ -78,7 +83,7 @@ export class ResultsDataComponent implements OnInit {
   }
 
   getResults() {
-  this.modificationResults = new Array<PhastResults>();
+    this.modificationResults = new Array<PhastResults>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
@@ -97,5 +102,18 @@ export class ResultsDataComponent implements OnInit {
     } else {
       this.baseLineResults = this.phastResultsService.initResults();
     }
+  }
+
+  setSigFigsCount() {
+    if (this.settings.energyResultUnit !== undefined) {
+      console.log('energyResultUnit = ' + this.settings.energyResultUnit);
+      if (this.settings.energyResultUnit.trim() == 'MMBtu' || this.settings.energyResultUnit.trim() == 'GJ' || this.settings.energyResultUnit.trim() == 'kWh') {
+        this.sigFigsCount = 2;
+      }
+      else {
+        this.sigFigsCount = 0;
+      }
+    }
+    console.log('sigFigsCount = ' + this.sigFigsCount);
   }
 }

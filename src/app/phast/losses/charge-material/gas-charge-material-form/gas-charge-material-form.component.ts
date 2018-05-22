@@ -40,6 +40,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
   showModal: boolean = false;
+
+  initialTempError: string = null;
   dischargeTempError: string = null;
   specificHeatGasError: string = null;
   feedGasRateError: string = null;
@@ -164,7 +166,14 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = null;
     }
 
-    if (this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError) {
+    if (this.chargeMaterialForm.controls.initialTemperature.value < this.chargeMaterialForm.controls.dischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be less than Outlet Temperature";
+    }
+    else {
+      this.initialTempError = null;
+    }
+
+    if (this.initialTempError || this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError) {
       this.inputError.emit(true);
       this.chargeMaterialCompareService.inputError.next(true);
     } else {

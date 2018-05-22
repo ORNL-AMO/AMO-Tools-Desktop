@@ -36,6 +36,7 @@ export class AssessmentCardComponent implements OnInit {
   dropdownOpen: boolean = false;
   assessmentCopy: Assessment;
   settingsCopy: Settings;
+  copyModifications: boolean = false;
   constructor(private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
@@ -90,7 +91,8 @@ export class AssessmentCardComponent implements OnInit {
       this.directories = dirs;
       this.copyForm = this.formBuilder.group({
         'name': [this.assessment.name + ' (copy)', Validators.required],
-        'directoryId': [this.assessment.directoryId, Validators.required]
+        'directoryId': [this.assessment.directoryId, Validators.required],
+        'copyModifications': [false]
       })
       this.copyModal.show();
     })
@@ -105,6 +107,15 @@ export class AssessmentCardComponent implements OnInit {
     this.assessmentCopy.directoryId = this.copyForm.controls.directoryId.value;
     this.assessmentCopy.createdDate = new Date();
     this.assessmentCopy.modifiedDate = new Date();
+
+    if(this.copyForm.controls.copyModifications.value == false){
+      if(this.assessmentCopy.type == 'PHAST'){
+        this.assessmentCopy.phast.modifications = new Array();
+      }else if(this.assessmentCopy.type == 'PSAT'){
+        this.assessmentCopy.psat.modifications = new Array();
+      }
+    }
+
     this.indexedDbService.addAssessment(this.assessmentCopy).then(newAssessmentId => {
       this.settingsCopy.assessmentId = newAssessmentId;
       this.indexedDbService.addSettings(this.settingsCopy).then(() => {
