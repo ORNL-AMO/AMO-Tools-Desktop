@@ -28,12 +28,13 @@ export class MeteredFuelFormComponent implements OnInit {
   inElectricity: boolean;
 
   fuelTypes: FlueGasMaterial[];
-  fuelFlowInput: boolean;
+  setMeteredEnergy: boolean;
 
   constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.getFuelTypes(true);
+    this.calculate();
   }
 
   getFuelTypes(bool?: boolean) {
@@ -53,7 +54,10 @@ export class MeteredFuelFormComponent implements OnInit {
   }
 
   showHideInputField() {
-    this.fuelFlowInput = !this.fuelFlowInput;
+    this.inputs.userDefinedMeteredEnergy = !this.inputs.userDefinedMeteredEnergy;
+    if(!this.inputs.userDefinedMeteredEnergy){
+      this.calculate();
+    }
   }
 
   setProperties() {
@@ -71,18 +75,17 @@ export class MeteredFuelFormComponent implements OnInit {
       }
       this.inputs.heatingValue = heatingVal;
     }
-    this.setFlowRate();
-  }
-
-  setFlowRate() {
-    //added if so that HHV input also calls setFlowRate() before calculate()
-    if (this.fuelFlowInput) {
-      this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue * this.inputs.collectionTime/1000000;
-    }
     this.calculate();
   }
 
+  setFlowRate() {
+    this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue * this.inputs.collectionTime / 1000000;
+  }
+
   calculate() {
+    if (!this.inputs.userDefinedMeteredEnergy) {
+      this.setFlowRate();
+    }
     this.emitSave.emit(true);
     this.emitCalculate.emit(true);
   }
