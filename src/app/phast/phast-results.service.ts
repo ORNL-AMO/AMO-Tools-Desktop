@@ -60,7 +60,7 @@ export class PhastResultsService {
   getResults(phast: PHAST, settings: Settings): PhastResults {
     let resultCats: ShowResultsCategories = this.getResultCategories(settings);
     let results: PhastResults = this.initResults();
-    results.exothermicHeat = this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials, settings);
+    results.exothermicHeat = 0 - Math.abs(this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials, settings));
     results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
     results.grossHeatInput = results.totalInput;
 
@@ -100,7 +100,14 @@ export class PhastResultsService {
     }
     if (resultCats.showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
       results.totalExhaustGasEAF = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings);
-      results.grossHeatInput = results.totalInput - results.exothermicHeat;
+      
+      //debug
+      console.log('results.totalInput = ' + results.totalInput);
+      console.log('results.exothermicHeat = ' + results.exothermicHeat);
+      results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat);
+
+      //real version
+      // results.grossHeatInput = results.totalInput - results.exothermicHeat;
     }
 
 
