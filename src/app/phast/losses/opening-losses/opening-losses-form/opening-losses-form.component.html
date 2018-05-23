@@ -15,7 +15,7 @@
       </label>
 
       <input [readonly]="!baselineSelected" name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="numberOfOpenings"
-        id="numberOfOpenings" onfocus="this.select();" (input)="getArea()" (focus)="focusField('numberOfOpenings')" (blur)="focusOut()"
+        id="numberOfOpenings" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('numberOfOpenings')" (blur)="focusOut()"
         [ngClass]="{'indicate-different': compareNumberOfOpenings(), 'error': numOpeningsError !== null, 'invalid': openingLossesForm.controls.numberOfOpenings.status == 'INVALID'}">
       <span class="alert-warning pull-right small" *ngIf="numOpeningsError !== null">{{numOpeningsError}}</span>
     </div>
@@ -24,7 +24,7 @@
       <label class="small" for="wallThickness">Furnace Wall Thickness</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareThickness(), 'error': thicknessError !== null, 'invalid': openingLossesForm.controls.wallThickness.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="wallThickness"
-          id="wallThickness" onfocus="this.select();" (input)="checkThickness()" (focus)="focusField('wallThickness')" (blur)="focusOut()">
+          id="wallThickness" onfocus="this.select();" (input)="checkThickness(); updateViewFactor()" (focus)="focusField('wallThickness')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
@@ -36,7 +36,7 @@
       <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareLengthOfOpening(), 'error': lengthError !== null, 'invalid': openingLossesForm.controls.lengthOfOpening.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="lengthOfOpening"
-          id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
+          id="lengthOfOpening" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
@@ -47,7 +47,7 @@
       <label class="small" for="heightOfOpening">Height of Openings</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareHeightOfOpening(), 'error': heightError !== null, 'invalid': openingLossesForm.controls.heightOfOpening.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heightOfOpening"
-          id="heightOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
+          id="heightOfOpening" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
@@ -69,7 +69,7 @@
 
     <div class="form-group">
       <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
-        <a id="{{'viewFactor_'+lossIndex}}" class="form-text small click-link" (click)="calculateViewFactor()">Calculate View Factor</a>
+        <!-- <a id="{{'viewFactor_'+lossIndex}}" class="form-text small click-link" (click)="calculateViewFactor()">Calculate View Factor</a> -->
       </label>
 
       <input [readonly]="!baselineSelected" name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="viewFactor"

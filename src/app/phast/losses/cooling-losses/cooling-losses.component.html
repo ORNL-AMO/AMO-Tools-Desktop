@@ -6,7 +6,7 @@
 <div class="card-form" *ngFor="let loss of _coolingLosses; let lossIndex = index">
   <div class="row">
     <div class="col-12">
-      <form class="name-input-form" [formGroup]="loss.gasCoolingForm" *ngIf="loss.coolingMedium == 'Gas'">
+      <form class="name-input-form" [formGroup]="loss.gasCoolingForm" *ngIf="loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air' || loss.coolingMedium == 'Other Gas'">
         <div class="input-group">
           <span class="input-group-addon units left" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
@@ -18,7 +18,7 @@
           </span>
         </div>
       </form>
-      <form class="name-input-form" [formGroup]="loss.liquidCoolingForm" *ngIf="loss.coolingMedium == 'Liquid'">
+      <form class="name-input-form" [formGroup]="loss.liquidCoolingForm" *ngIf="loss.coolingMedium == 'Liquid' || loss.coolingMedium == 'Water' || loss.coolingMedium == 'Other Liquid'">
         <div class="input-group">
           <span class="input-group-addon units left" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
@@ -38,14 +38,16 @@
         <label class="small" for="coolingMedium">Cooling Medium</label>
         <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="saveLosses()" [disabled]="!baselineSelected || lossesLocked"
           (focus)="changeField('coolingMedium')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
-          <option>Gas</option>
-          <option>Liquid</option>
+          <option [ngValue]="'Gas'">Air</option>
+          <option [ngValue]="'Liquid'">Water</option>
+          <option [ngValue]="'Other Gas'">Other Gas</option>
+          <option [ngValue]="'Other Liquid'">Other Liquid</option>
         </select>
       </div>
-      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
+      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid' || loss.coolingMedium == 'Water' || loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-liquid-cooling-losses-form>
-      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Gas'" [(lossesForm)]="loss.gasCoolingForm"
+      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air' || loss.coolingMedium == 'Other Gas'" [(lossesForm)]="loss.gasCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-gas-cooling-losses-form>
     </div>

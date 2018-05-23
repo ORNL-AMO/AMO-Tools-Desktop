@@ -49,6 +49,8 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    // console.log('gas-cooling-loss-form');
+    // console.log(this.lossesForm);
     this.checkInputError(true);
     if (!this.baselineSelected) {
       this.disableForm();

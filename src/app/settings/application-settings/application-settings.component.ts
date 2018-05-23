@@ -17,6 +17,8 @@ export class ApplicationSettingsComponent implements OnInit {
   inPsat: boolean;
   @Input()
   generalSettings: boolean;
+  @Input()
+  inPhast: boolean;
 
   languages: Array<string> = [
     'English'
