@@ -37,6 +37,17 @@
             </p>
           </div>
         </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!-- <img src="assets/images/load-est.png" class="ico-size4"> -->
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('motor-drive')"> Motor Drive</a>
+            <p>
+              Calculates Motor Drive Properties
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,18 +56,22 @@
 
 
 
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
-    <app-nema-energy-efficiency></app-nema-energy-efficiency>
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
+  <app-nema-energy-efficiency></app-nema-energy-efficiency>
 </div>
 
 
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'motor-performance'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'motor-performance'">
   <app-motor-performance></app-motor-performance>
 </div>
 
 
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'percent-load-estimation'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'percent-load-estimation'">
   <app-percent-load-estimation></app-percent-load-estimation>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'motor-drive'">
+  <app-motor-drive></app-motor-drive>
 </div>
 
 

@@ -1,0 +1,30 @@
+.input-group-text{
+    font-size: small;
+    padding: 6px;
+}
+
+.disabled-input{
+    text-align: center;
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;
+}
+
+
+.form-control{
+    font-size: small;
+}
+
+
+.form-padding{
+    padding-top: 15px;
+}
+
+.hide-text{
+    opacity: 0;
+}
+
+.form-control.auto-width{
+    width: auto !important;
+    min-width: 0px;
+    text-align: center;
+}
