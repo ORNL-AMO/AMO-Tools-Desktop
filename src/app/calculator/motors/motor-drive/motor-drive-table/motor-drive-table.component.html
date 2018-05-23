@@ -10,20 +10,31 @@
         </tr>
         <tr>
           <th></th>
-          <th>(kW/yr)</th>
-          <th>($/yr)</th>
+          <th>(MWh/yr)</th>
+          <th>($k/yr)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
+            V Belt Drive
+          </td>
+          <td>
+            {{results.vBeltResults.annualEnergyUse | number:'1.0-0'}}
+          </td>
+          <td>
+            {{results.vBeltResults.energyCost | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        </tr>
+        <tr>
+          <td>
             Notched V Belt Drive
           </td>
           <td>
-            {{results.notchedResults.annualEnergyUse | sigFigs:'5'}}
+            {{results.notchedResults.annualEnergyUse | number:'1.0-0'}}
           </td>
           <td>
-            {{results.notchedResults.energyCost | currency:'USD'}}
+            {{results.notchedResults.energyCost | currency:'USD':'symbol':'0.0-0'}}
           </td>
         </tr>
         <tr>
@@ -31,21 +42,10 @@
             Synchronous Belt Drive
           </td>
           <td>
-            {{results.synchronousBeltDrive.annualEnergyUse | sigFigs:'5'}}
+            {{results.synchronousBeltDrive.annualEnergyUse | number:'1.0-0'}}
           </td>
           <td>
-            {{results.synchronousBeltDrive.energyCost | currency:'USD'}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            V Belt Drive
-          </td>
-          <td>
-            {{results.vBeltResults.annualEnergyUse | sigFigs:'5'}}
-          </td>
-          <td>
-            {{results.vBeltResults.energyCost | currency:'USD'}}
+            {{results.synchronousBeltDrive.energyCost | currency:'USD':'symbol':'0.0-0'}}
           </td>
         </tr>
       </tbody>
