@@ -1,0 +1,57 @@
+<div class="output-summary pt-5">
+  <div class="summary-table">
+    <label class="group-label">Results</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="w-75">
+            Average Current
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.averageCurrent | sigFigs:'5'}} A
+          </td>
+        </tr>
+        <tr>
+          <td class="w-75">
+            Average Voltage
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.averageVoltage | sigFigs:'5'}} V
+          </td>
+        </tr>
+        <tr>
+          <td class="w-75">
+            Input Power
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.inputPower | sigFigs:'5'}} kW
+          </td>
+        </tr>
+        <tr>
+          <td class="w-75">
+            Percent Load
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.percentLoad | number:'1.0-0'}} %
+          </td>
+        </tr>
+        <tr>
+          <td class="w-75">
+            Maximum Voltage Deviation from Average
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.maxVoltageDeviation | sigFigs:'5'}} V
+          </td>
+        </tr>
+        <tr>
+          <td class="w-75">
+            Voltage Unbalanced
+          </td>
+          <td class="w-25 text-center">
+            {{fieldMeasurementResults.voltageUnbalance | number:'1.0-0'}} %
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
