@@ -100,10 +100,10 @@
                 Excess Air
               </td>
               <td [ngClass]="{'indicate-report-field-different':excessAirDiff[index] == true}">
-                {{data.baseline.excessAir}}
+                {{data.baseline.excessAir | sigFigs:'4'}}
               </td>
               <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.excessAir, mod.excessAir, 'excessAirDiff', index)}">
-                {{mod.excessAir}}
+                {{mod.excessAir | sigFigs:'4'}}
               </td>
             </tr>
             <tr>
