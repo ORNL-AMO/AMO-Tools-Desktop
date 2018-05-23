@@ -3,12 +3,20 @@
   <table class="table table-hover table-striped">
     <thead>
       <tr>
-        <th>{{lossUnit}}</th>
+        <th>Energy Loss/Use</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline
         </th>
         <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
         </th>
         <th *ngIf="!inSetup && modification != undefined">{{modification.phast.name}}</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{lossUnit}}
+        </th>
+        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{lossUnit}}
+        </th>
+        <th *ngIf="!inSetup && modification != undefined">{{lossUnit}}</th>
       </tr>
     </thead>
     <tbody>
@@ -121,11 +129,11 @@
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showFlueGas">
-        <td>Available Heat</td>
-        <td *ngIf="baseLineResults.flueGasAvailableHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.flueGasAvailableHeat | number:'2.1-1'}} %</td>
+        <td>Available Heat (%)</td>
+        <td *ngIf="baseLineResults.flueGasAvailableHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.flueGasAvailableHeat | number:'2.1-1'}}%</td>
         <td *ngIf="!baseLineResults.flueGasAvailableHeat" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.flueGasAvailableHeat">{{mod.flueGasAvailableHeat | number:'2.1-1'}} %</span>
+          <span *ngIf="mod.flueGasAvailableHeat">{{mod.flueGasAvailableHeat | number:'2.1-1'}}%</span>
           <span *ngIf="!mod.flueGasAvailableHeat">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -149,10 +157,10 @@
       </tr>
       <tr *ngIf="showResultsCats.showEnInput2">
         <td>Energy Input Available Heat</td>
-        <td *ngIf="baseLineResults.availableHeatPercent" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.availableHeatPercent | number:'1.0-0'}} %</td>
+        <td *ngIf="baseLineResults.availableHeatPercent" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.availableHeatPercent | number:'1.0-0'}}%</td>
         <td *ngIf="!baseLineResults.availableHeatPercent" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.availableHeatPercent">{{mod.availableHeatPercent | number:'1.0-0'}} %</span>
+          <span *ngIf="mod.availableHeatPercent">{{mod.availableHeatPercent | number:'1.0-0'}}%</span>
           <span *ngIf="!mod.availableHeatPercent">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -176,7 +184,7 @@
       </tr>
       <tr *ngIf="showResultsCats.showSystemEff">
         <td>System Efficiency</td>
-        <td *ngIf="baseLineResults.heatingSystemEfficiency" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.heatingSystemEfficiency | number:'1.0-0'}} %</td>
+        <td *ngIf="baseLineResults.heatingSystemEfficiency" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.heatingSystemEfficiency | number:'1.0-0'}}%</td>
         <td *ngIf="!baseLineResults.heatingSystemEfficiency" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.heatingSystemEfficiency">{{mod.heatingSystemEfficiency | sigFigs:sigFigCount}}</span>
