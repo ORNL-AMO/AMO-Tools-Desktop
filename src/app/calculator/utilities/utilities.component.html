@@ -36,11 +36,11 @@
             <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
             <p>
               The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
-              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
-              Electricity Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual
-              Operating hours. This calculator is not intended to estimate the economic performance of a specific
-              CHP project, rather it is intended to only give the user an initial understanding of whether
-              CHP has the potential to provide economic savings at their facility.
+              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual Electricity
+              Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours. This calculator
+              is not intended to estimate the economic performance of a specific CHP project, rather it is intended to only
+              give the user an initial understanding of whether CHP has the potential to provide economic savings at their
+              facility.
             </p>
           </div>
         </div>
@@ -52,6 +52,17 @@
             <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
             <p>
               Cash flow diagram displays the revenues (savings) and costs associated with an investment.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!-- <img src="assets/images/cash-flow.png" class="ico-size3"> -->
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('power-factor-correction')">Power Factor Correction</a>
+            <p>
+              DESCRIPTION NEEDED
             </p>
           </div>
         </div>
@@ -75,4 +86,8 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pre-assessment'">
   <app-pre-assessment></app-pre-assessment>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'power-factor-correction'">
+  <app-power-factor-correction></app-power-factor-correction>
 </div>
