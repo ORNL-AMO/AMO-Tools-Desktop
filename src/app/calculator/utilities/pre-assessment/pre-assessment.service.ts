@@ -22,6 +22,7 @@ export class PreAssessmentService {
     //calculation logic to get results (in pre-assessment.component.ts)
     let i = preAssessments.length - 1;
     preAssessments.forEach(assessment => {
+      assessment = this.checkCost(assessment, settings);
       if (assessment.type == 'Metered') {
         if (assessment.meteredEnergy) {
           results.push(this.calculateMetered(assessment, settings));
@@ -40,27 +41,40 @@ export class PreAssessmentService {
     return results;
   }
 
+  checkCost(assessment: PreAssessment, settings: Settings): PreAssessment{
+    if(!assessment.fuelCost){
+      assessment.fuelCost = settings.fuelCost;
+    }
+    if(!assessment.steamCost){
+      assessment.steamCost = settings.steamCost;
+    }
+    if(!assessment.electricityCost){
+      assessment.electricityCost = settings.electricityCost;
+    }
+    return assessment;
+  }
+
   calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
       //may need to convert to MMBtu, fuel /MMBtu
-      let energyCost = tmpResults * settings.fuelCost;
+      let energyCost = tmpResults * assessment.fuelCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
       tmpResults = this.convertSteamResults(tmpResults, settings);
       //May need to convert to MMBtu, steam /MMBtu
-      let energyCost = tmpResults * settings.steamCost;
+      let energyCost = tmpResults * assessment.steamCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
     else if (assessment.settings.energySourceType == 'Electricity' || assessment.settings.energySourceType == 'Hybrid') {
       let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
       //may need conversion
-      let energyCost = tmpResults * settings.electricityCost;
+      let energyCost = tmpResults * assessment.electricityCost;
       tmpResults = this.convertElectrotechResults(tmpResults, settings);
       let tmpFuelResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
       //may need conversion
-      energyCost = energyCost + (tmpFuelResults * settings.fuelCost);
+      energyCost = energyCost + (tmpFuelResults * assessment.fuelCost);
       tmpResults = tmpFuelResults + tmpResults;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
@@ -69,20 +83,20 @@ export class PreAssessmentService {
   calculateDesigned(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      let energyCost = tmpResults * settings.fuelCost;
+      let energyCost = tmpResults * assessment.fuelCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
       tmpResults = this.convertSteamResults(tmpResults, settings);
-      let energyCost = tmpResults * settings.steamCost;
+      let energyCost = tmpResults * assessment.steamCost;
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);
     }
     else if (assessment.settings.energySourceType == 'Electricity' || assessment.settings.energySourceType == 'Hybrid') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      let energyCost = tmpResults * settings.electricityCost;
+      let energyCost = tmpResults * assessment.electricityCost;
       tmpResults = this.convertElectrotechResults(tmpResults, settings);
       let tmpFuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      energyCost = energyCost + (tmpFuelResults * settings.fuelCost);
+      energyCost = energyCost + (tmpFuelResults * assessment.fuelCost);
       tmpResults = tmpFuelResults + tmpResults;
 
       return this.addResult(tmpResults, assessment.name, assessment.borderColor, energyCost);

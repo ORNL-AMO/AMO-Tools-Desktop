@@ -197,7 +197,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div> -->
-            <div class="modal-body" *ngIf="showPreAssessment">
+            <div class="modal-body tab-content" *ngIf="showPreAssessment">
                 <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[selectedCalcIndex]" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
             <div class="modal-footer justify-content-center">
