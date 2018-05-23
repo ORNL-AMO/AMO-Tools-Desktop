@@ -89,10 +89,10 @@
                 Oxygen In Flue Gas
               </td>
               <td [ngClass]="{'indicate-report-field-different':oxygenInFlueGasDiff[index] == true}">
-                {{data.baseline.oxygenInFlueGas}}
+                {{data.baseline.oxygenInFlueGas | number:'1.0-1'}}%
               </td>
               <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.oxygenInFlueGas, mod.oxygenInFlueGas, 'oxygenInFlueGasDiff', index)}">
-                {{mod.oxygenInFlueGas}}
+                {{mod.oxygenInFlueGas | number:'1.0-1'}}%
               </td>
             </tr>
             <tr>
@@ -100,10 +100,10 @@
                 Excess Air
               </td>
               <td [ngClass]="{'indicate-report-field-different':excessAirDiff[index] == true}">
-                {{data.baseline.excessAir}}
+                {{data.baseline.excessAir | number:'1.0-1'}}%
               </td>
               <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.excessAir, mod.excessAir, 'excessAirDiff', index)}">
-                {{mod.excessAir}}
+                {{mod.excessAir | number:'1.0-1'}}%
               </td>
             </tr>
             <tr>
