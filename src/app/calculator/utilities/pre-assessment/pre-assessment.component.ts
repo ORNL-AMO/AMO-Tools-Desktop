@@ -165,7 +165,8 @@ export class PreAssessmentComponent implements OnInit {
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
-      borderColor: this.assessmentGraphColors[this.preAssessments.length]
+      borderColor: this.assessmentGraphColors[this.preAssessments.length],
+      electric: true
     });
 
     this.nameIndex++;
