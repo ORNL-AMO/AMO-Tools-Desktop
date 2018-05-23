@@ -101,13 +101,7 @@ export class PhastResultsService {
     if (resultCats.showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
       results.totalExhaustGasEAF = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings);
       
-      //debug
-      console.log('results.totalInput = ' + results.totalInput);
-      console.log('results.exothermicHeat = ' + results.exothermicHeat);
       results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat);
-
-      //real version
-      // results.grossHeatInput = results.totalInput - results.exothermicHeat;
     }
 
 
