@@ -23,7 +23,7 @@ import { PlanarResultsComponent } from './planar-results/planar-results.componen
     SharedModule
   ],
   declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent],
-  exports: [Fsat203Component],
-  providers: [Fsat203Service, FanDataComponent]
+  exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent],
+  providers: [Fsat203Service]
 })
 export class Fsat203Module { }

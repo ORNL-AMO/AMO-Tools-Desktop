@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { FieldData, InletPressureData, OutletPressureData } from '../../shared/models/fans';
+import { FieldData, InletPressureData, OutletPressureData, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
 
@@ -30,6 +30,8 @@ export class FanFieldDataComponent implements OnInit {
   baseline: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FieldData>();
+  @Input()
+  fsat: FSAT;
 
 
   @ViewChild('amcaModal') public amcaModal: ModalDirective;

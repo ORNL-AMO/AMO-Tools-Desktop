@@ -3,12 +3,13 @@
     <div class="header">
       <h3>Calculate Flow and Pressures</h3>
     </div>
-    <app-flow-pressures-form></app-flow-pressures-form>
+    <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)"></app-flow-pressures-form>
   </div>
   <div class="w-50 p-2 help-panel">
     <div class="header">
       <h3>Help</h3>
     </div>
     <app-flow-pressures-help [currentField]="currentField"></app-flow-pressures-help>
+    <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs"></app-planar-results>
   </div>
 </div>
