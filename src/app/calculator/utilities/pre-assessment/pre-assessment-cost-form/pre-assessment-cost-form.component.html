@@ -1,29 +1,33 @@
-<div class="tab-content">
-  <label class="group-label">Energy Costs for Operation
-  </label>
-  <div class="form-group">
-    <label for="fuelCost">Fuel</label>
-    <div class="input-group">
-      <input name="fuelCost" [disabled]="inModal" type="number" step=".01" class="form-control" id="fuelCost" [(ngModel)]="settings.fuelCost" (input)="calculate()">
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+<!-- <div class="tab-content"> -->
+<!-- <label class="group-label">Energy Costs for Operation
+  </label> -->
+<form class="pt-0">
+  <div class="form-section mt-0 pt-0">
+    <div class="form-group">
+      <label for="fuelCost">Fuel Cost</label>
+      <div class="input-group">
+        <input name="fuelCost" type="number" step=".01" class="form-control" id="fuelCost" [(ngModel)]="preAssessment.fuelCost" (input)="calculate()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="steamCost">Steam Cost</label>
+      <div class="input-group">
+        <input name="steamCost" type="number" step=".01" class="form-control" id="steamCost" [(ngModel)]="preAssessment.steamCost"
+          (input)="calculate()">
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
+        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="electricityCost">Electricity Cost</label>
+      <div class="input-group">
+        <input name="electricityCost" type="number" step=".01" class="form-control" id="electricityCost" [(ngModel)]="preAssessment.electricityCost"
+          (input)="calculate()">
+        <span class="units input-group-addon">$/kWh</span>
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="steamCost">Steam</label>
-    <div class="input-group">
-      <input name="steamCost" [disabled]="inModal" type="number" step=".01" class="form-control" id="steamCost" [(ngModel)]="settings.steamCost" (input)="calculate()">
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="electricityCost">Electricity</label>
-    <div class="input-group">
-      <input name="electricityCost" [disabled]="inModal" type="number" step=".01" class="form-control" id="electricityCost" [(ngModel)]="settings.electricityCost"
-        (input)="calculate()">
-      <span class="units input-group-addon">$/kWh</span>
-    </div>
-  </div>
-  <p class="text-help" *ngIf="inModal">Values taken from folder settings</p>
-</div>
+</form>
+<!-- </div> -->

@@ -43,6 +43,11 @@
         <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
       </div>
     </div>
+    <div class="row">
+      <div class="mx-auto col-12">
+        <app-pre-assessment-cost-form [settings]="settings" (emitCalculate)="calculate()" [preAssessment]="assessment"></app-pre-assessment-cost-form>
+      </div>
+    </div>
     <div class="row form-results">
       <div class="col-6">
         <span class="pull-right">Energy Used</span>
