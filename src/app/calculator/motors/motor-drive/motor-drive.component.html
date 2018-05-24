@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row general">
+<div class="panel-container row general">
     <div class="col-12">
       <div class="row align-items-top calculator-panel">
         <div class="modification panel-column col-6 align-top">
@@ -21,7 +21,7 @@
             <div class="row">
               <ul class="tabs primary tab-row">
                 <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                  <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
+                  <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
                 </li><!--
                 --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                   <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
@@ -37,7 +37,7 @@
             </div>
             <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
               <div class="col-11">
-                <!-- <app-motor-drive-graph></app-motor-drive-graph> -->
+                <app-motor-drive-graph [results]="outputData"></app-motor-drive-graph>
                 <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
               </div>
             </div>
