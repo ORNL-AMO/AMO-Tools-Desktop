@@ -14,5 +14,8 @@ export interface PreAssessment {
     borderColor?: string,
     fuelCost?: number,
     steamCost?: number,
-    electricityCost?: number
+    electricityCost?: number,
+    fuel?: boolean,
+    electric?: boolean,
+    steam?: boolean
 }
