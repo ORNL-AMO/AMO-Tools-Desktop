@@ -9,7 +9,7 @@
     <div class="header">
       <h3>Baseline</h3>
     </div>
-    <div class="losses-container fsat-losses-container">
+    <div class="fsat-losses-container">
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
         [modificationIndex]="modificationIndex" (emitSave)="saveBaselineGasDensity($event)"></app-fsat-fluid>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Forms -->
-    <div class="losses-container fsat-losses-container">
+    <div class="fsat-losses-container">
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
         [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)"></app-fsat-fluid>

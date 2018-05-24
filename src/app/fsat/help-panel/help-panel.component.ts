@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { FsatService } from '../fsat.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { FSAT } from '../../shared/models/fans';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-help-panel',
@@ -27,7 +28,7 @@ export class HelpPanelComponent implements OnInit {
   currentFieldSub: Subscription;
   stepTab: string;
   stepTabSub: Subscription;
-  constructor(private helpPanelService: HelpPanelService, private fsatService: FsatService, private modifyConditionsService: ModifyConditionsService) { }
+  constructor(private helpPanelService: HelpPanelService, private settingsDbService: SettingsDbService, private fsatService: FsatService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
     this.currentFieldSub = this.helpPanelService.currentField.subscribe(val => {
@@ -42,6 +43,9 @@ export class HelpPanelComponent implements OnInit {
       this.stepTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
         this.stepTab = val;
       })
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
