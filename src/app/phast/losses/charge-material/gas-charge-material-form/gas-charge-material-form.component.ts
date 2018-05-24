@@ -166,8 +166,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = null;
     }
 
-    if (this.chargeMaterialForm.controls.initialTemperature.value < this.chargeMaterialForm.controls.dischargeTemperature.value) {
-      this.initialTempError = "Initial Temperature cannot be less than Outlet Temperature";
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.dischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be greater than Outlet Temperature";
     }
     else {
       this.initialTempError = null;
