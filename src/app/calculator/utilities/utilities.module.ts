@@ -14,6 +14,7 @@ import { CashFlowFormComponent } from './cash-flow/cash-flow-form/cash-flow-form
 import { CashFlowDiagramComponent } from './cash-flow/cash-flow-diagram/cash-flow-diagram.component';
 import { CashFlowService } from './cash-flow/cash-flow.service';
 import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
+import { PowerFactorCorrectionModule } from './power-factor-correction/power-factor-correction.module';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
         ReactiveFormsModule,
         SharedModule,
         CombinedHeatPowerModule,
-        PreAssessmentModule
+        PreAssessmentModule,
+        PowerFactorCorrectionModule
     ],
     providers: [
         CashFlowService,

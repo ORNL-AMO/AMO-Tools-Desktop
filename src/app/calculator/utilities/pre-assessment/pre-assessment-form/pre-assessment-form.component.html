@@ -28,10 +28,9 @@
     <div class="row">
       <div class="col btn-col">
         <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.settings.energySourceType == 'Electricity'}">Electric</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.settings.energySourceType == 'Fuel'}">Fuel</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Hybrid')" [ngClass]="{'active': assessment.settings.energySourceType == 'Hybrid'}">Hybrid</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.settings.energySourceType == 'Steam'}">Steam-based</button>
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.electric == true}">Electric</button>
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.fuel == true}">Fuel</button>
+          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.steam == true}">Steam-based</button>
         </div>
       </div>
     </div>

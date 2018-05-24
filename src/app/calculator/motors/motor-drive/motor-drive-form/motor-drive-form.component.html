@@ -32,7 +32,7 @@
     <div class="input-group calc-addon-group">
       <input name="electricityCost" type="number" min="0" step="any" max="100" class="form-control" id="electricityCost"
         [(ngModel)]="data.electricityCost" (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
-      <span class="units">$/kw</span>
+      <span class="units">$/kWh</span>
     </div>
     <!-- <span class="alert-danger small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span> -->
   </div>

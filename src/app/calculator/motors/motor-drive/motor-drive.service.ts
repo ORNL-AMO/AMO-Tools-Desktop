@@ -14,16 +14,16 @@ export class MotorDriveService {
 
     let motorDriveOutputs: MotorDriveOutputs = {
       vBeltResults: {
-        energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost),
-        annualEnergyUse: vBeltEnergyUsed
+        energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost) / 1000,
+        annualEnergyUse: vBeltEnergyUsed / 1000
       },
       synchronousBeltDrive: {
-        energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost),
-        annualEnergyUse: synchronousBeltEnergyUsed
+        energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost) / 1000,
+        annualEnergyUse: synchronousBeltEnergyUsed / 1000
       },
       notchedResults: {
-        energyCost: this.getCost(notchedEnergyUsed, data.electricityCost),
-        annualEnergyUse: notchedEnergyUsed
+        energyCost: this.getCost(notchedEnergyUsed, data.electricityCost) / 1000,
+        annualEnergyUse: notchedEnergyUsed / 1000
       }
     }
     return motorDriveOutputs;
@@ -42,11 +42,11 @@ export class MotorDriveService {
   }
 
   getSynchronousEnergyUse(data: number): number {
-    return data / .95;
+    return data / .98;
   }
 
   getNotchedEnergyUse(data: number): number {
-    return data / .98;
+    return data / .95;
   }
 
 }

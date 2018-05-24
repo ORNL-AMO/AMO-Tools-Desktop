@@ -10,7 +10,7 @@
     <!-- <label class="hide-text">Place Holder</label> -->
     <div class="input-group flex-nowrap">
       <div class="input-group-prepend">
-        <span class="input-group-text hide-text pt-0 pb-0">1</span>
+        <span class="input-group-text hide-text pt-0 pb-0">A</span>
       </div>
       <input type="number" step="any" name="amps" type="text" class="form-control auto-width disabled-input" [disabled]="true"
         [(ngModel)]="amps">
@@ -22,7 +22,7 @@
     <!-- <label>Phase 1</label> -->
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
-        <span class="input-group-text pt-0 pb-0">1</span>
+        <span class="input-group-text pt-0 pb-0">A</span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase1Amps" [(ngModel)]="data.phase1Amps" (input)="calculate()"
         onfocus="this.select();">
@@ -31,7 +31,7 @@
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
-        <span class="input-group-text pt-0 pb-0">2
+        <span class="input-group-text pt-0 pb-0">B
         </span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase2Voltage" [(ngModel)]="data.phase2Voltage" (input)="calculate()"
@@ -41,7 +41,7 @@
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
-        <span class="input-group-text pt-0 pb-0">3</span>
+        <span class="input-group-text pt-0 pb-0">C</span>
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase3Amps" [(ngModel)]="data.phase3Amps" (input)="calculate()"
         onfocus="this.select();">
