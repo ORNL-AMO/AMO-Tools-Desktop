@@ -35,8 +35,7 @@ export class ResultsDataComponent implements OnInit {
   showResultsCats: ShowResultsCategories;
   lossUnit: string;
   selectedModificationIndex: number;
-
-  sigFigsCount: number;
+  decimalCount: string;
 
   numMods: number = 0;
 
@@ -107,10 +106,10 @@ export class ResultsDataComponent implements OnInit {
   setSigFigsCount() {
     if (this.settings.energyResultUnit !== undefined) {
       if (this.settings.energyResultUnit.trim() == 'MMBtu' || this.settings.energyResultUnit.trim() == 'GJ' || this.settings.energyResultUnit.trim() == 'kWh') {
-        this.sigFigsCount = 2;
+        this.decimalCount = '1.2-2';
       }
       else {
-        this.sigFigsCount = 0;
+        this.decimalCount = '1.0-0';
       }
     }
   }
