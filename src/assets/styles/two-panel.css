@@ -387,3 +387,9 @@
     background-color: #BF3D00;
     outline: 1px solid slategrey;
     }
+
+
+    .fsat .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #FFE400;
+        outline: 1px solid slategrey;
+    }

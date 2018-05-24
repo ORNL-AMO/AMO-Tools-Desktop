@@ -29,6 +29,10 @@ export class FsatResultsPanelComponent implements OnInit {
     if (changes.fsat && !changes.fsat.firstChange) {
       this.getResults();
     }
+
+    if(changes.modificationIndex && !changes.modificationIndex.firstChange){
+      this.getResults();
+    }
   }
 
   getResults() {
@@ -41,7 +45,9 @@ export class FsatResultsPanelComponent implements OnInit {
         modResultType = 'optimal';
       }
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, modResultType);
+      this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
+      this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;
+      this.modificationResults.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, this.modificationResults.annualCost);
     }
   }
-
 }

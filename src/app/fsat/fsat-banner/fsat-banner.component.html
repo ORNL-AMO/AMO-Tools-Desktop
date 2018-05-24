@@ -34,7 +34,7 @@
         <li class="disabled" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">
           <span>Diagram</span>
         </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
+        <li [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
           <span>Report</span>
         </li>
         <li class="disabled" [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">

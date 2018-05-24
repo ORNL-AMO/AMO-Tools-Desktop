@@ -51,6 +51,7 @@ import { CalculateInletPressureComponent } from './fan-field-data/calculate-inle
 import { CalculateInletPressureHelpComponent } from './fan-field-data/calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
 import { CalculateOutletPressureComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure.component';
 import { CalculateOutletPressureHelpComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
+import { FsatReportModule } from './fsat-report/fsat-report.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -63,7 +64,8 @@ import { CalculateOutletPressureHelpComponent } from './fan-field-data/calculate
     ModalModule,
     SharedModule,
     ExploreOpportunitiesModule,
-    FsatResultsModule
+    FsatResultsModule,
+    FsatReportModule
   ],
   declarations: [
     FsatComponent,
