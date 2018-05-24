@@ -1,0 +1,22 @@
+<form>
+  <div class="form-group">
+    <label for="currentDemand">Current Demand</label>
+    <div class="input-group">
+      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.currentDemand" id="currentDemand"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentDemand')">
+      <span class="input-group-addon units">A</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="currentPowerFactor">Current Power Factor</label>
+    <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor" id="currentPowerFactor"
+      (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
+  </div>
+
+  <div class="form-group">
+    <label for="proposedPowerFactor">Proposed Power Factor</label>
+    <input name="proposedPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.proposedPowerFactor" id="proposedPowerFactor"
+      (input)="calculate()" onfocus="this.select();" (focus)="focusField('proposedPowerFactor')">
+  </div>
+</form>
