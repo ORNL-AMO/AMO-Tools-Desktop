@@ -188,8 +188,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       this.dischargeTempError = null;
     }
 
-    if (this.chargeMaterialForm.controls.initialTemperature.value < this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value) {
-      this.initialTempError = "Initial Temperature cannot be less than Outlet Temperature";
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be greater than Outlet Temperature";
     }
     else {
       this.initialTempError = null;

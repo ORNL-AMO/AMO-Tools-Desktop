@@ -11,5 +11,8 @@ export interface PreAssessment {
     settings?: Settings,
     collapsed?: boolean,
     collapsedState?: string,
-    borderColor?: string
+    borderColor?: string,
+    fuelCost?: number,
+    steamCost?: number,
+    electricityCost?: number
 }
