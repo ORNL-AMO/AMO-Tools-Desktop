@@ -76,7 +76,7 @@
       <div class="input-group">
         <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower"
           (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">hp</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">kW</span>
         <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">A</span>
       </div>
       <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
