@@ -106,7 +106,6 @@ export class ResultsDataComponent implements OnInit {
 
   setSigFigsCount() {
     if (this.settings.energyResultUnit !== undefined) {
-      console.log('energyResultUnit = ' + this.settings.energyResultUnit);
       if (this.settings.energyResultUnit.trim() == 'MMBtu' || this.settings.energyResultUnit.trim() == 'GJ' || this.settings.energyResultUnit.trim() == 'kWh') {
         this.sigFigsCount = 2;
       }
@@ -114,6 +113,5 @@ export class ResultsDataComponent implements OnInit {
         this.sigFigsCount = 0;
       }
     }
-    console.log('sigFigsCount = ' + this.sigFigsCount);
   }
 }
