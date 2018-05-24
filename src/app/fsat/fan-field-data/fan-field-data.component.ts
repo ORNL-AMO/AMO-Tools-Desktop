@@ -117,10 +117,9 @@ export class FanFieldDataComponent implements OnInit {
 
 
   showAmcaModal() {
-    if (this.selected) {
-      // this.openHeadTool.emit(true);
-      this.amcaModal.show();
-    }
+    this.pressureCalcType = 'flow';
+    this.fsatService.modalOpen.next(true);
+    this.pressureModal.show();
   }
 
   hideAmcaModal() {

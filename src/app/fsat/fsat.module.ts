@@ -52,6 +52,10 @@ import { CalculateInletPressureHelpComponent } from './fan-field-data/calculate-
 import { CalculateOutletPressureComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure.component';
 import { CalculateOutletPressureHelpComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
 import { FsatReportModule } from './fsat-report/fsat-report.module';
+import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow-pressures/calculate-flow-pressures.component';
+import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
+import { FlowPressuresHelpComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-help/flow-pressures-help.component';
+import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -100,7 +104,7 @@ import { FsatReportModule } from './fsat-report/fsat-report.module';
      CalculateInletPressureComponent, 
      CalculateInletPressureHelpComponent, 
      CalculateOutletPressureComponent, 
-     CalculateOutletPressureHelpComponent
+     CalculateOutletPressureHelpComponent, CalculateFlowPressuresComponent, FlowPressuresFormComponent, FlowPressuresHelpComponent, FanBasicsComponent
   ],
   providers: [
     FsatService, 
