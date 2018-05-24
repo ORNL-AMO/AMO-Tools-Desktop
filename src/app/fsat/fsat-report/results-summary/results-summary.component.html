@@ -17,7 +17,7 @@
         </td>
         <td class="percent-graph" *ngFor="let modification of modificationResults">
           <div class="col-10 mx-auto gauge-chart-width" *ngIf="modification.percentSavings">
-            <app-percent-graph [value]="modification.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'fsat-opportunities-savings'"></app-percent-graph>
+            <app-percent-graph [value]="modification.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
           </div>
           <div *ngIf="!modification.percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>

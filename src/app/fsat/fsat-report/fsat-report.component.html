@@ -16,8 +16,8 @@
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inFsat}">
 
       <div *ngIf="inFsat && !quickReport" class="btn-group hide-print">
-          <button class="btn btn-secondary" (click)="showModal()">Print</button>
-          <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+          <button class="btn btn-secondary" (click)="showModal()" [disabled]="true">Print</button>
+          <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
       </div>
       <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 

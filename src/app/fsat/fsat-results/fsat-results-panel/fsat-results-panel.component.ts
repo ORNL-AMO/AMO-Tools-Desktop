@@ -29,6 +29,10 @@ export class FsatResultsPanelComponent implements OnInit {
     if (changes.fsat && !changes.fsat.firstChange) {
       this.getResults();
     }
+
+    if(changes.modificationIndex && !changes.modificationIndex.firstChange){
+      this.getResults();
+    }
   }
 
   getResults() {
