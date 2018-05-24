@@ -12,7 +12,7 @@ export class PreAssessmentMeteredComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
+  emitChangeField = new EventEmitter<{inputField: string, energyType: string}>();
   @Input()
   settings: Settings;
   constructor() { }
@@ -51,8 +51,16 @@ export class PreAssessmentMeteredComponent implements OnInit {
     this.emitCalculate.emit(true);
   }
 
-  changeField(str: string){
-    this.emitChangeField.emit(str);
+  changeFuelField(str: string){
+    this.emitChangeField.emit({inputField: str, energyType: 'Fuel'});
+  }
+
+  changeElectricField(str: string){
+    this.emitChangeField.emit({inputField: str, energyType: 'Electric'});
+  }
+
+  changeSteamField(str: string){
+    this.emitChangeField.emit({inputField: str, energyType: 'Steam'});
   }
 
 }

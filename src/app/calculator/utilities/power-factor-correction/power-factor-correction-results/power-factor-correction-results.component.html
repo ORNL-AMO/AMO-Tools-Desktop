@@ -1,0 +1,63 @@
+<div class="output-summary">
+  <div class="summary-table">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>
+            Actual Demand
+          </td>
+          <td>
+            {{results.actualDemand | sigFigs:'5'}}
+          </td>
+          <td>
+            kW
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Apparent Power
+          </td>
+          <td>
+            {{results.apparentPower | sigFigs:'5'}}
+          </td>
+          <td>
+            kVA
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Current Reactive Power
+          </td>
+          <td>
+            {{results.currentReactivePower | sigFigs:'5'}}
+          </td>
+          <td>
+            kVAR
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Demand Savings
+          </td>
+          <td>
+            {{results.demandSavings | sigFigs:'5'}}
+          </td>
+          <td>
+            kW
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Capacitance Required
+          </td>
+          <td>
+            {{results.capacitanceRequired | sigFigs:'5'}}
+          </td>
+          <td>
+            kVAR
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

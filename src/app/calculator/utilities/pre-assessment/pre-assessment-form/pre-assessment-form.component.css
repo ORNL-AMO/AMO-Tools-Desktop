@@ -101,3 +101,7 @@ h5{
 .form-results{
     font-size: small;
 }
+
+.pre-assessment-form label, .pre-assessment-form input{
+    font-size: small;
+}

@@ -14,7 +14,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
+  emitChangeField = new EventEmitter<{ inputField: string, energyType: string }>();
   @Input()
   settings: Settings;
   constructor() { }
@@ -32,26 +32,22 @@ export class PreAssessmentDesignedComponent implements OnInit {
     }
   }
 
-  addZone() {
-    if (this.assessment.settings.energySourceType == 'Fuel') {
-      this.addFuelZone();
-    } else if (this.assessment.settings.energySourceType == 'Steam') {
-      this.addSteamZone();
-    } else if (this.assessment.settings.energySourceType == 'Electricity') {
-      this.addElectricityZone();
-    }
-    else if (this.assessment.settings.energySourceType == 'Hybrid') {
-      this.addElectricityZone();
-      this.addFuelZone();
-    }
-  }
+  // addZone() {
+  //   if (this.assessment.settings.energySourceType == 'Fuel') {
+  //     this.addFuelZone();
+  //   } else if (this.assessment.settings.energySourceType == 'Steam') {
+  //     this.addSteamZone();
+  //   } else if (this.assessment.settings.energySourceType == 'Electricity') {
+  //     this.addElectricityZone();
+  //   }
+  //   else if (this.assessment.settings.energySourceType == 'Hybrid') {
+  //     this.addElectricityZone();
+  //     this.addFuelZone();
+  //   }
+  // }
 
   calculate() {
     this.emitCalculate.emit(true);
-  }
-
-  changeField(str: string) {
-    this.emitChangeField.emit(str);
   }
 
   addElectricityZone() {
@@ -60,7 +56,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
     }
     let tmpZone: DesignedEnergyElectricity = {
-      name: 'Zone #' + eqNum,
+      name: 'Electric Zone #' + eqNum,
       kwRating: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
@@ -74,7 +70,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
     }
     let tmpZone: DesignedEnergyFuel = {
-      name: 'Zone #' + eqNum,
+      name: 'Fuel Zone #' + eqNum,
       fuelType: 0,
       percentCapacityUsed: 0,
       totalBurnerCapacity: 0,
@@ -89,7 +85,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
     }
     let tmpZone: DesignedEnergySteam = {
-      name: 'Zone #' + eqNum,
+      name: 'Steam Zone #' + eqNum,
       totalHeat: 0,
       steamFlow: 0,
       percentCapacityUsed: 0,
@@ -108,5 +104,18 @@ export class PreAssessmentDesignedComponent implements OnInit {
 
   removeElectricityZone(num: number) {
     this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
+  }
+
+
+  changeFuelField(str: string) {
+    this.emitChangeField.emit({ inputField: str, energyType: 'Fuel' });
+  }
+
+  changeElectricField(str: string) {
+    this.emitChangeField.emit({ inputField: str, energyType: 'Electric' });
+  }
+
+  changeSteamField(str: string) {
+    this.emitChangeField.emit({ inputField: str, energyType: 'Steam' });
   }
 }
