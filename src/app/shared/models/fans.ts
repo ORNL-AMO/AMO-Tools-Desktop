@@ -285,7 +285,10 @@ export interface FsatOutput {
   annualCost: number,
   fanEnergyIndex: number,
   //modified
-  estimatedFLA?: number
+  estimatedFLA?: number,
+  percentSavings?: number,
+  energySavings?: number,
+  annualSavings?: number
 }
 
 

@@ -10,18 +10,18 @@
       </tr>
     </thead>
     <tbody>
-      <!-- <tr>
+      <tr>
         <td>Percent Savings (%)</td>
         <td>
           &mdash; &mdash;
         </td>
         <td class="percent-graph">
-          <div class="col-10 mx-auto gauge-chart-width" *ngIf="percentSavings">
-            <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
+          <div class="col-10 mx-auto gauge-chart-width" *ngIf="modificationResults.percentSavings">
+            <app-percent-graph [value]="modificationResults.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'fsat-opportunities-savings'"></app-percent-graph>
           </div>
-          <div *ngIf="!percentSavings" class="mx-auto">&mdash; &mdash;</div>
+          <div *ngIf="!modificationResults.percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>
-      </tr> -->
+      </tr>
       <tr>
         <td>Fan efficiency (%)</td>
         <td>{{baselineResults.fanEfficiency | number:'2.0-1'}}</td>
@@ -72,25 +72,25 @@
         <th *ngIf="modificationResults.annualEnergy" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</th>
         <td *ngIf="!modificationResults.annualEnergy">&mdash;</td>
       </tr>
-      <!-- <tr>
+      <tr>
         <th>Annual Energy Savings (MWh)</th>
         <th>&mdash;</th>
-        <th *ngIf="getDiff(baselineResults.annualEnergy, modificationResults.annualEnergy)" [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annualEnergy, modificationResults.annualEnergy) | number:'2.0-0'}}</th>
-        <td *ngIf="!getDiff(baselineResults.annualEnergy, modificationResults.annualEnergy)">&mdash;</td>
-      </tr> -->
+        <th *ngIf="modificationResults.energySavings" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</th>
+        <th *ngIf="!modificationResults.energySavings">&mdash;</th>
+      </tr>
       <tr>
         <th>Annual Cost</th>
         <th>{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
-        <th *ngIf="modificationResults.annualCost" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
+        <th *ngIf="modificationResults.annualCost" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
         <td *ngIf="!modificationResults.annualCost">&mdash;</td>
       </tr>
       <tr>
         <th>Annual Savings</th>
         <th>&mdash;</th>
-        <th *ngIf="annualSavings" [ngClass]="{'positive-savings': percentSavings > 10}">
-          {{annualSavings | currency:'USD':'symbol':'2.0-0'}}
+        <th *ngIf="modificationResults.annualCost" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
+          {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}
         </th>
-        <td *ngIf="!annualSavings">&mdash;</td>
+        <td *ngIf="!modificationResults.annualSavings">&mdash;</td>
       </tr>
       <!-- <tr *ngIf="fsat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
         <td></td>

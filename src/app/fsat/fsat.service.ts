@@ -122,5 +122,10 @@ export class FsatService {
     return fanAddon.fanResultsOptimal(input);
   }
 
+
+  getSavingsPercentage(baselineCost: number, modificationCost: number): number {
+    let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
+    return tmpSavingsPercent;
+  }
 }
 
