@@ -17,6 +17,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
 
   planeResults: PlaneResults;
   mockInputs: Fan203Inputs;
+  tabSelect: string = 'results';
   constructor(private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -26,6 +27,9 @@ export class CalculateFlowPressuresComponent implements OnInit {
     }
     if (!this.fsat.fanRatedInfo) {
       this.fsat.fanRatedInfo = mockData.FanRatedInfo;
+      this.fsat.fanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
+      this.fsat.fanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
+      
     }
     this.calculate(this.fsat);
   }
@@ -34,7 +38,6 @@ export class CalculateFlowPressuresComponent implements OnInit {
   calculate(fsat: FSAT) {
     this.fsat.fanRatedInfo = fsat.fanRatedInfo;
     this.fsat.planeData = fsat.planeData;
-    console.log(this.fsat.planeData.outletSEF);
     this.mockInputs = {
       FanRatedInfo: this.fsat.fanRatedInfo,
       PlaneData: this.fsat.planeData,
@@ -42,5 +45,10 @@ export class CalculateFlowPressuresComponent implements OnInit {
       BaseGasDensity: this.fsat.baseGasDensity
     }
     this.planeResults = this.fsatService.getPlaneResults(this.mockInputs);
+  }
+
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }

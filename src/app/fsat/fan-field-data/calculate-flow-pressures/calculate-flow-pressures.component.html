@@ -5,11 +5,27 @@
     </div>
     <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)"></app-flow-pressures-form>
   </div>
-  <div class="w-50 p-2 help-panel">
-    <div class="header">
-      <h3>Help</h3>
+  <div class="w-50 help-panel">
+      <ul class="tabs primary tab-row">
+        <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Results</a>
+        </li><!--
+      --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+    <div class="d-flex justify-content-center data-row" *ngIf="tabSelect == 'results'">
+      <div class="p-2">
+        <!--results-->
+        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true"></app-planar-results>
+      </div>
     </div>
-    <app-flow-pressures-help [currentField]="currentField"></app-flow-pressures-help>
-    <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs"></app-planar-results>
+    <div class="d-flex justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+      <div class="p-2">
+        <div class="calc-help">
+          <app-flow-pressures-help [currentField]="currentField"></app-flow-pressures-help>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -13,6 +13,8 @@ export class PlanarResultsComponent implements OnInit {
   showFull: boolean;
   @Input()
   inputs: Fan203Inputs;
+  @Input()
+  inModal: boolean;
   constructor() { }
 
   ngOnInit() {

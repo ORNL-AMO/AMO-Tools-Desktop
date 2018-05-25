@@ -35,7 +35,8 @@ export class FanDataComponent implements OnInit {
   plane4Done: boolean;
   @Input()
   plane5Done: boolean;
-
+  @Input()
+  inModal: boolean;
 
   stepTab: string = 'plane-info';
   showReadings: boolean = false;

@@ -26,6 +26,6 @@
     <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="fsat.planeData" [fanRatedInfo]="fsat.fanRatedInfo" (emitSave)="savePlane($event)"
       (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done" [plane2Done]="plane2Done"
       [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone" [plane4Done]="plane4Done" [plane5Done]="plane5Done"
-      (emitSavePlaneData)="savePlaneData($event)"></app-fan-data>
+      (emitSavePlaneData)="savePlaneData($event)" [inModal]="true"></app-fan-data>
   </div>
 </div>
