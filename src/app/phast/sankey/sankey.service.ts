@@ -10,7 +10,6 @@ import * as d3 from 'd3';
 export class SankeyService {
 
   baseSize: number = 300;
-  exothermicHeat: number = 0;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
@@ -72,13 +71,6 @@ export class SankeyService {
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
     results.nodes = this.getNodes(results, settings);
-
-
-    if (phastResults.exothermicHeat) {
-      console.log('exothermicHeat = ' + phastResults.exothermicHeat);
-      this.exothermicHeat = phastResults.exothermicHeat;
-    }
-
     return results;
   }
 
@@ -282,18 +274,6 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-
-
-    //exothermic heat
-    if (this.exothermicHeat < 0) {
-      console.log('we have exothermic heat = ' + this.exothermicHeat);
-      
-    }
-    else {
-      console.log('there is no exothermic heat');
-    }
-
-
 
     spacing = scale(interIndex);
     tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
