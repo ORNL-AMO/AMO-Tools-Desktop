@@ -28,6 +28,10 @@ export class PowerFactorCorrectionService {
 
   capacitanceRequired(data: PowerFactorCorrectionInputs): number {
     let actualDemand: number = this.actualDemand(data);
-    return actualDemand * Math.tan(Math.acos(data.currentPowerFactor) - Math.acos(data.proposedPowerFactor));
+    let B: number = Math.acos(data.currentPowerFactor);
+    let C: number = Math.acos(data.proposedPowerFactor);
+    let diff: number = Math.tan(B) - Math.tan(C);;
+    let result: number = actualDemand * diff;
+    return result;
   }
 }
