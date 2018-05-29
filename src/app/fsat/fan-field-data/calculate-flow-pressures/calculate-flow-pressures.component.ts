@@ -16,7 +16,9 @@ export class CalculateFlowPressuresComponent implements OnInit {
   settings: Settings;
   @Output('saveFlowAndPressure')
   saveFlowAndPressure = new EventEmitter<FSAT>();
-
+  @Input()
+  bodyHeight: number;
+  
   planeResults: PlaneResults;
   mockInputs: Fan203Inputs;
   tabSelect: string = 'results';

@@ -27,3 +27,6 @@ tbody{
     transition: all .5s ease-in-out;
 }
 
+.scroll-item{
+    overflow-x: hidden;
+}

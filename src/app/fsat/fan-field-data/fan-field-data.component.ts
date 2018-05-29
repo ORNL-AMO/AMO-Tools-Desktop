@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
@@ -33,10 +33,11 @@ export class FanFieldDataComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-
+  @ViewChild('modalBody') public modalBody: ElementRef;
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
   @ViewChild('pressureModal') public pressureModal: ModalDirective;
 
+  bodyHeight: number;
   loadEstimateMethods: Array<{ value: number, display: string }> = [
     { value: 0, display: 'Power' },
     { value: 1, display: 'Current' }
@@ -58,6 +59,10 @@ export class FanFieldDataComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+
+    this.pressureModal.onShown.subscribe(()=> {
+      this.getBodyHeight();
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -326,5 +331,13 @@ export class FanFieldDataComponent implements OnInit {
       flowRate: this.fieldData.flowRate
     })
     this.save();
+  }
+
+  getBodyHeight(){
+    if(this.modalBody){
+      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
+    }else{
+      this.bodyHeight = 0;
+    }
   }
 }

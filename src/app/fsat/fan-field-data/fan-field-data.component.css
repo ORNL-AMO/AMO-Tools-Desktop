@@ -9,3 +9,8 @@
 .modal-header, .modal-footer{
     padding: 6px;
 }
+
+
+.modal-content{
+    height: 85vh;
+}
