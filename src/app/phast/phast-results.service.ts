@@ -120,7 +120,7 @@ export class PhastResultsService {
         let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
         results.energyInputHeatDelivered = tmpResults.heatDelivered;
         results.totalExhaustGas = tmpResults.exhaustGasLosses;
-        results.grossHeatInput = results.totalInput - results.exothermicHeat + tmpResults.exhaustGasLosses;
+        results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + tmpResults.exhaustGasLosses;
         results.availableHeatPercent = tmpResults.availableHeat;
       }
     }
@@ -129,7 +129,8 @@ export class PhastResultsService {
       results.heatingSystemEfficiency = phast.systemEfficiency;
       let grossHeatInput = (results.totalInput / (phast.systemEfficiency / 100));
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
-      results.grossHeatInput = results.totalInput + results.totalSystemLosses - results.exothermicHeat;
+
+      results.grossHeatInput = results.totalInput + results.totalSystemLosses - Math.abs(results.exothermicHeat);
     }
 
     if (resultCats.showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
@@ -154,7 +155,7 @@ export class PhastResultsService {
             results.totalFlueGas = results.flueGasSystemLosses;
           }
         }
-        results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - results.exothermicHeat;
+        results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - Math.abs(results.exothermicHeat);
       }
     }
     return results;

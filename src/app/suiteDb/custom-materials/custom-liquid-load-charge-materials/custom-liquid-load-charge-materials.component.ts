@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-custom-liquid-load-charge-materials',
   templateUrl: './custom-liquid-load-charge-materials.component.html',
@@ -29,7 +30,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();
@@ -45,7 +46,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectAllSub.unsubscribe();
     this.selectedSub.unsubscribe();
   }
@@ -56,16 +57,28 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
         this.showMaterialModal();
       }
     }
-    if(changes.importing){
-      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+    if (changes.importing) {
+      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
         this.getCustomMaterials();
       }
     }
   }
-  
+
+  convertAllMaterials() {
+    for (let i = 0; i < this.liquidChargeMaterials.length; i++) {
+      this.liquidChargeMaterials[i].specificHeatLiquid = this.convertUnitsService.value(this.liquidChargeMaterials[i].specificHeatLiquid).from('btulbF').to('kJkgC');
+      this.liquidChargeMaterials[i].specificHeatVapor = this.convertUnitsService.value(this.liquidChargeMaterials[i].specificHeatVapor).from('btulbF').to('kJkgC');
+      this.liquidChargeMaterials[i].vaporizationTemperature = this.convertUnitsService.value(this.liquidChargeMaterials[i].vaporizationTemperature).from('F').to('C');
+      this.liquidChargeMaterials[i].latentHeat = this.convertUnitsService.value(this.liquidChargeMaterials[i].latentHeat).from('btulbF').to('kJkgC');
+    }
+  }
+
   getCustomMaterials() {
     this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
       this.liquidChargeMaterials = idbResults;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.convertAllMaterials();
+      }
     });
   }
 

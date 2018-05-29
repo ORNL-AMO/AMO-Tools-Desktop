@@ -5,7 +5,8 @@
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
                 (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
-                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToMaterials)="showCustomMaterials()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
+                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToMaterials)="showCustomMaterials()"
+                (emitGoToContact)="showContact()" (openModal)="openModal($event)">
             </app-sidebar>
         </div>
 
@@ -38,7 +39,7 @@
             <app-acknowledgments-page></app-acknowledgments-page>
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'settings'">
-            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
+            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="getWorkingDirectoryData()"></app-assessment-settings>
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'custom-materials'">
             <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
