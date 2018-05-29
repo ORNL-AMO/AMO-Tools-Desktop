@@ -133,3 +133,22 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .card-item{
     box-shadow: 3px 0px 5px 2px gray;
   } 
+
+
+  /* Fan flow rate pressure modal colors */
+
+  .flow-rate{
+    color: #8E44AD;
+    font-weight: bold;
+  }
+
+
+  .inlet-pressure{
+    color: #3498DB;
+    font-weight: bold;
+  }
+
+  .outlet-pressure{
+   color: #DC7633;
+   font-weight: bold;
+  }

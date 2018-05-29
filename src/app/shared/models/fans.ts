@@ -7,7 +7,7 @@ export interface FSAT {
   fanSetup?: FanSetup,
   baseGasDensity?: BaseGasDensity,
   notes: Notes,
-  implementationCosts?: number
+  implementationCosts?: number,
 }
 
 export interface Modification {
@@ -36,8 +36,10 @@ export interface FieldData {
   compressibilityFactor: number,
   measuredVoltage: number,
   inletPressureData?: InletPressureData,
-  outletPressureData?: OutletPressureData
-
+  outletPressureData?: OutletPressureData,
+  fanRatedInfo?: FanRatedInfo,
+  planeData?: PlaneData,
+  pressureCalcResultType?: string
 }
 
 export interface FanMotor {
@@ -112,15 +114,15 @@ export interface PlaneData {
 }
 
 export interface BaseGasDensity {
-  dryBulbTemp: number;
-  staticPressure: number;
-  barometricPressure: number;
-  gasDensity: number;
-  gasType: string;
-  conditionLocation: number,
-  specificGravity: number;
+  dryBulbTemp?: number;
+  staticPressure?: number;
+  barometricPressure?: number;
+  gasDensity?: number;
+  gasType?: string;
+  conditionLocation?: number,
+  specificGravity?: number;
   // used for gasDensity Calculations
-  inputType: string; // relativeHumidity, dewPoint, or wetBulb are the options
+  inputType?: string; // relativeHumidity, dewPoint, or wetBulb are the options
   dewPoint?: number,
   relativeHumidity?: number,
   wetBulbTemp?: number,

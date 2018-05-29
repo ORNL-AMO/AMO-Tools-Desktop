@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-12">
     <label class="group-label">
-      <span class="step-number">3</span>Input Plane Data
+      <span class="step-number" *ngIf="!inModal">3</span>
+      <span class="step-number" *ngIf="inModal">2</span>Input Plane Data
+
       <span class="fa fa-exclamation-circle pull-right" *ngIf="!planeDataDone"></span>
       <span class="fa fa-check pull-right" *ngIf="planeDataDone"></span>
     </label>
