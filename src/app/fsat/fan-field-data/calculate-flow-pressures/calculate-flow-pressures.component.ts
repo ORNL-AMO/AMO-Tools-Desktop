@@ -20,6 +20,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
   planeResults: PlaneResults;
   mockInputs: Fan203Inputs;
   tabSelect: string = 'results';
+  isDataMissing: boolean = false;
   constructor(private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -30,13 +31,13 @@ export class CalculateFlowPressuresComponent implements OnInit {
     if (!this.fsat.fieldData.fanRatedInfo) {
       this.fsat.fieldData.fanRatedInfo = mockData.FanRatedInfo;
     }
-    if(!this.fsat.fieldData.pressureCalcResultType){
+    if (!this.fsat.fieldData.pressureCalcResultType) {
       this.fsat.fieldData.pressureCalcResultType = 'static';
     }
     //use assessment data
     this.fsat.fieldData.fanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
     this.fsat.fieldData.fanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
-    this.fsat.fieldData.fanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;      
+    this.fsat.fieldData.fanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;
     this.calculate(this.fsat);
   }
 
@@ -50,11 +51,12 @@ export class CalculateFlowPressuresComponent implements OnInit {
       FanShaftPower: undefined,
       BaseGasDensity: this.fsat.baseGasDensity
     }
+    this.isDataMissing = false;
     this.planeResults = this.fsatService.getPlaneResults(this.mockInputs);
-    if(this.fsat.fieldData.pressureCalcResultType == 'static'){
+    if (this.fsat.fieldData.pressureCalcResultType == 'static') {
       this.fsat.fieldData.inletPressure = this.roundVal(this.planeResults.FanInletFlange.staticPressure, 5);
       this.fsat.fieldData.outletPressure = this.roundVal(this.planeResults.FanOrEvaseOutletFlange.staticPressure, 5);
-    }else if(this.fsat.fieldData.pressureCalcResultType == 'total'){
+    } else if (this.fsat.fieldData.pressureCalcResultType == 'total') {
       this.fsat.fieldData.inletPressure = this.roundVal(this.planeResults.FanInletFlange.gasTotalPressure, 5);
       this.fsat.fieldData.outletPressure = this.roundVal(this.planeResults.FanOrEvaseOutletFlange.gasTotalPressure, 5);
     }
@@ -62,7 +64,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.saveFlowAndPressure.emit(this.fsat);
   }
 
-  roundVal(val, digits): number{
+  roundVal(val, digits): number {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
   }
 
@@ -70,8 +72,12 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setPressureCalcType(str:string){
+  setPressureCalcType(str: string) {
     this.fsat.fieldData.pressureCalcResultType = str;
     this.calculate(this.fsat);
+  }
+
+  setDataMissing() {
+    this.isDataMissing = true;
   }
 }

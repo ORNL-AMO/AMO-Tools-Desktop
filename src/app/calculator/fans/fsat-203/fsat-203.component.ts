@@ -237,7 +237,6 @@ export class Fsat203Component implements OnInit {
     } else {
       this.plane3cDone = true;
     }
-
   }
 
   checkShaftPower() {

@@ -3,7 +3,7 @@
     <div class="header">
       <h3>Calculate Flow and Pressures</h3>
     </div>
-    <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)"></app-flow-pressures-form>
+    <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)" (emitDataMissing)="setDataMissing()"></app-flow-pressures-form>
   </div>
   <div class="w-50 help-panel">
     <ul class="tabs primary tab-row">
@@ -42,6 +42,9 @@
         <!--results-->
         <label class="group-label">Full Planar Results</label>
         <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
+        <p *ngIf="isDataMissing" class="alert-danger">
+          Data missing, complete form to calculate results.
+        </p>
       </div>
     </div>
     <div class="d-flex justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
