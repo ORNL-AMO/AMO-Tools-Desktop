@@ -33,12 +33,12 @@
         <td *ngIf="showFull">Fan Inlet Flange</td>
         <td>{{planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.area | sigFigs: '6'}}</td>
-        <td>{{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
+        <td  [ngClass]="{'flow-rate': inModal == true}">{{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
         <td>{{planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.dryBulbTemp | sigFigs: '6'}}</td>
-        <td>{{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
+        <td  [ngClass]="{'inlet-pressure': pressureCalcType == 'static'}">{{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
         <td>{{planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-        <td>{{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+        <td  [ngClass]="{'inlet-pressure': pressureCalcType == 'total'}">{{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>
@@ -49,9 +49,9 @@
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp | sigFigs: '6'}}</td>
-        <td>{{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
+        <td  [ngClass]="{'outlet-pressure': pressureCalcType == 'static'}">{{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-        <td>{{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
+        <td  [ngClass]="{'outlet-pressure': pressureCalcType == 'total'}">{{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
       <tr>

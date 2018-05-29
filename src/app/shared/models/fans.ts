@@ -8,8 +8,6 @@ export interface FSAT {
   baseGasDensity?: BaseGasDensity,
   notes: Notes,
   implementationCosts?: number,
-  fanRatedInfo?: FanRatedInfo,
-  planeData?: PlaneData
 }
 
 export interface Modification {
@@ -38,8 +36,10 @@ export interface FieldData {
   compressibilityFactor: number,
   measuredVoltage: number,
   inletPressureData?: InletPressureData,
-  outletPressureData?: OutletPressureData
-
+  outletPressureData?: OutletPressureData,
+  fanRatedInfo?: FanRatedInfo,
+  planeData?: PlaneData,
+  pressureCalcResultType?: string
 }
 
 export interface FanMotor {

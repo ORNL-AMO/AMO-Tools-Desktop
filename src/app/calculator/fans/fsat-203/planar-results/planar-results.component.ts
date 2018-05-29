@@ -15,6 +15,10 @@ export class PlanarResultsComponent implements OnInit {
   inputs: Fan203Inputs;
   @Input()
   inModal: boolean;
+  @Input()
+  pressureCalcType: string;
+
+
   constructor() { }
 
   ngOnInit() {

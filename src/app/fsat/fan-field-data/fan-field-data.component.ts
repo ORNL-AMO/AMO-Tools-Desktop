@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { FieldData, InletPressureData, OutletPressureData, FSAT } from '../../shared/models/fans';
+import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
 
@@ -137,9 +137,15 @@ export class FanFieldDataComponent implements OnInit {
   save() {
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
+    let tmpPlaneData: PlaneData = this.fieldData.planeData;
+    let tmpfanRatedInfo: FanRatedInfo = this.fieldData.fanRatedInfo;
+    let tmpCalcType: string = this.fieldData.pressureCalcResultType;
     this.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
     this.fieldData.inletPressureData = tmpInletPressureData;
     this.fieldData.outletPressureData = tmpOutletPressureData;
+    this.fieldData.planeData = tmpPlaneData;
+    this.fieldData.fanRatedInfo = tmpfanRatedInfo;
+    this.fieldData.pressureCalcResultType = tmpCalcType;
     this.emitSave.emit(this.fieldData);
   }
 
@@ -286,6 +292,7 @@ export class FanFieldDataComponent implements OnInit {
 
 
   hidePressureModal(){
+    this.pressureCalcType = undefined;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
@@ -293,7 +300,7 @@ export class FanFieldDataComponent implements OnInit {
   saveOutletPressure(outletPressureData: OutletPressureData){
     this.fieldData.outletPressureData = outletPressureData;
     this.fieldDataForm.patchValue({
-      outletPressure: outletPressureData.calculatedOutletPressure
+      outletPressure: this.fieldData.outletPressureData
     });
     this.save();
   }
@@ -302,7 +309,21 @@ export class FanFieldDataComponent implements OnInit {
   saveInletPressure(inletPressureData: InletPressureData){
     this.fieldData.inletPressureData = inletPressureData;
     this.fieldDataForm.patchValue({
-      inletPressure: inletPressureData.calculatedInletPressure
+      inletPressure: this.fieldData.inletPressureData
+    })
+    this.save();
+  }
+
+  saveFlowAndPressure(fsat: FSAT){
+    this.fieldData.inletPressure = fsat.fieldData.inletPressure;
+    this.fieldData.outletPressure = fsat.fieldData.outletPressure;
+    this.fieldData.flowRate = fsat.fieldData.flowRate;
+    this.fieldData.fanRatedInfo = fsat.fieldData.fanRatedInfo;
+    this.fieldData.planeData = fsat.fieldData.planeData;
+    this.fieldDataForm.patchValue({
+      inletPressure: this.fieldData.inletPressure,
+      outletPressure: this.fieldData.outletPressure,
+      flowRate: this.fieldData.flowRate
     })
     this.save();
   }

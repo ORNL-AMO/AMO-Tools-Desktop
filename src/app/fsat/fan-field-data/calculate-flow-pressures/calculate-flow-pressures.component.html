@@ -1,4 +1,4 @@
-<div class="panel-container d-flex w-100">
+<div class="panel-container d-flex w-100 fsat">
   <div class="panel-column w-50 p-2">
     <div class="header">
       <h3>Calculate Flow and Pressures</h3>
@@ -6,18 +6,42 @@
     <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)"></app-flow-pressures-form>
   </div>
   <div class="w-50 help-panel">
-      <ul class="tabs primary tab-row">
-        <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li><!--
+    <ul class="tabs primary tab-row">
+      <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+        <a (click)="setTab('results')">Results</a>
+      </li><!--
       --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-    <div class="d-flex justify-content-center data-row" *ngIf="tabSelect == 'results'">
+        <a (click)="setTab('help')">Help</a>
+      </li>
+    </ul>
+    <div class="d-flex flex-column justify-content-center data-row" *ngIf="tabSelect == 'results'">
+      <div class="d-flex w-100 justify-content-center">
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="setPressureCalcType('static')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'static'}">Use Static Pressure</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="setPressureCalcType('total')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'total'}">Use Total Pressure</button>
+        </div>
+      </div>
       <div class="p-2">
+        <label class="group-label">Assessment Data</label>
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td>Inlet Pressure</td>
+              <td class="inlet-pressure">{{fsat.fieldData.inletPressure | sigFigs: '6'}} in. wg</td>
+            </tr>
+            <tr>
+              <td>Outlet Pressure</td>
+              <td class="outlet-pressure">{{fsat.fieldData.outletPressure | sigFigs: '6'}} in. wg</td>
+            </tr>
+            <tr>
+              <td>Flow Rate</td>
+              <td class="flow-rate">{{fsat.fieldData.flowRate | sigFigs: '6'}} cfm</td>
+            </tr>
+          </tbody>
+        </table>
         <!--results-->
-        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true"></app-planar-results>
+        <label class="group-label">Full Planar Results</label>
+        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
       </div>
     </div>
     <div class="d-flex justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">

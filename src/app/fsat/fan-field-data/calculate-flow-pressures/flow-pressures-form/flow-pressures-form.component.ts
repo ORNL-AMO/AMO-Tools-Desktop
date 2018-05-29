@@ -36,12 +36,12 @@ export class FlowPressuresFormComponent implements OnInit {
   }
 
   savePlaneData(data: PlaneData) {
-    this.fsat.planeData = data;
+    this.fsat.fieldData.planeData = data;
     this.calculate();
   }
 
   saveBasics(data: FanRatedInfo) {
-    this.fsat.fanRatedInfo = data;
+    this.fsat.fieldData.fanRatedInfo = data;
     this.calculate();
   }
 
@@ -52,19 +52,19 @@ export class FlowPressuresFormComponent implements OnInit {
   savePlane(event: { planeNumber: string, plane: Plane }) {
     //logic for saving planes
     if (event.planeNumber == '1') {
-      this.fsat.planeData.FanInletFlange = event.plane;
+      this.fsat.fieldData.planeData.FanInletFlange = event.plane;
       // this.checkPlane(event.planeNumber);
     } else if (event.planeNumber == '2') {
-      this.fsat.planeData.FanEvaseOrOutletFlange = event.plane;
+      this.fsat.fieldData.planeData.FanEvaseOrOutletFlange = event.plane;
       //  this.checkPlane(event.planeNumber);
     } else if (event.planeNumber == '3a') {
-      this.fsat.planeData.FlowTraverse = event.plane;
+      this.fsat.fieldData.planeData.FlowTraverse = event.plane;
       // this.checkPlane('3a');
     } else if (event.planeNumber == '4') {
-      this.fsat.planeData.InletMstPlane = event.plane;
+      this.fsat.fieldData.planeData.InletMstPlane = event.plane;
       //  this.checkPlane('4');
     } else if (event.planeNumber == '5') {
-      this.fsat.planeData.OutletMstPlane = event.plane;
+      this.fsat.fieldData.planeData.OutletMstPlane = event.plane;
       // this.checkPlane('5');
     }
     this.calculate();
@@ -73,9 +73,9 @@ export class FlowPressuresFormComponent implements OnInit {
 
   saveAddlTraversePlane(event: { planeNumber: string, plane: Plane }) {
     if (event.planeNumber == '3b') {
-      this.fsat.planeData.AddlTraversePlanes[0] = event.plane;
+      this.fsat.fieldData.planeData.AddlTraversePlanes[0] = event.plane;
     } else if (event.planeNumber == '3c') {
-      this.fsat.planeData.AddlTraversePlanes[1] = event.plane;
+      this.fsat.fieldData.planeData.AddlTraversePlanes[1] = event.plane;
     }
     this.calculate();
   }
