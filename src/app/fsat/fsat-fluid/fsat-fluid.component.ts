@@ -6,6 +6,7 @@ import { BaseGasDensity } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -27,7 +28,7 @@ export class FsatFluidComponent implements OnInit {
   modificationIndex: number;
   @Input()
   settings: Settings;
-  
+
   gasDensityForm: FormGroup;
 
   methods: Array<{ display: string, value: string }> = [
@@ -41,7 +42,7 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ]
-  constructor(private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
+  constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -126,5 +127,100 @@ export class FsatFluidComponent implements OnInit {
     })
     this.save();
   }
+
+
+  canCompare() {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isDryBulbTempDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDryBulbTempDifferent();
+    } else {
+      return false;
+    }
+  }
+  isStaticPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isStaticPressureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isBarometricPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isBarometricPressureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isGasDensityDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isGasDensityDifferent();
+    } else {
+      return false;
+    }
+  }
+  isGasTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isGasTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+  isConditionLocationDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isConditionLocationDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecificGravityDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificGravityDifferent();
+    } else {
+      return false;
+    }
+  }
+  isInputTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isInputTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+  isDewPointDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDewPointDifferent();
+    } else {
+      return false;
+    }
+  }
+  isRelativeHumidityDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isRelativeHumidityDifferent();
+    } else {
+      return false;
+    }
+  }
+  isWetBulbTempDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isWetBulbTempDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecificHeatGasDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificHeatGasDifferent();
+    } else {
+      return false;
+    }
+  }
+
 
 }
