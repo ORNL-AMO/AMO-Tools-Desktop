@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { HelpPanelService } from '../../help-panel/help-panel.service';
 
 @Component({
   selector: 'app-modify-field-data-form',
@@ -28,7 +29,7 @@ export class ModifyFieldDataFormComponent implements OnInit {
   
   modifyFieldDataForm: FormGroup;
   marginError: string = null;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.getForm();
@@ -49,8 +50,8 @@ export class ModifyFieldDataFormComponent implements OnInit {
     })
   }
 
-  focusField(){
-
+  focusField(str: string) {
+    this.helpPanelService.currentField.next(str);
   }
 
 

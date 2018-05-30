@@ -7,7 +7,7 @@
 
 </div>
 
-<div class="help-content pt-0 pr-1">
+<div class="help-content pt-0">
   <div class="card" *ngIf="currentField == 'operatingFraction'">
     <div class="card-header">
       Operating Fraction
@@ -337,6 +337,53 @@
         <strong>13800 V</strong>
         <br>
       </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'sizeMargin'">
+    <div class="card-header">
+      Size Margin
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        This Size Margin is added to the motor selected for the optimal application.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>Percent</strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
+        <br> Maximum Value Allowed:
+        <strong>100</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'implementationCosts'">
+    <div class="card-header">
+      Implementation Costs
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        NEEDED
+      </p>
+
     </div>
   </div>
 </div>

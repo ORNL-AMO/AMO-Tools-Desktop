@@ -10,7 +10,7 @@
     <div class="form-group">
       <label for="lineFrequency">Line Frequency</label>
       <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency" formControlName="lineFrequency" (change)="changeLineFreq()"
-        (focus)="focusField('lineFrequency')">
+        (focus)="focusField('lineFrequency')" [ngClass]="{'indicate-different': isLineFrequencyDifferent()}">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
       </select>
     </div>
@@ -18,7 +18,7 @@
     <div class="form-group">
       <label for="motorRatedPower">Rated Motor Power</label>
       <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower" (change)="checkRatedPower()"
-        (focus)="focusField('motorRatedPower')">
+        (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent()}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
       <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null && !psat.inputs.optimize_calculation">{{ratedPowerError}}</span>
@@ -26,7 +26,7 @@
 
     <div class="form-group">
       <label for="motorRpm">Motor RPM</label>
-      <div name="motorRpm" class="input-group">
+      <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent()}">
         <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="checkMotorRpm()"
           (focus)="focusField('motorRPM')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
@@ -37,14 +37,14 @@
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
+        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="fanMotorForm.controls.efficiencyClass.value == 3">
       <label for="specifiedEfficiency">Efficiency</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent()}">
         <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control" id="specifiedEfficiency" formControlName="specifiedEfficiency"
           (input)="checkEfficiency()" (focus)="focusField('specifiedEfficiency')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
@@ -54,7 +54,7 @@
 
     <div class="form-group">
       <label for="motorRatedVoltage">Rated Voltage</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent()}">
         <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorRatedVoltage" formControlName="motorRatedVoltage"
           (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">V</span>
@@ -67,7 +67,7 @@
         Full-Load Amps
         <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent()}">
         <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
           (input)="checkFLA()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">A</span>

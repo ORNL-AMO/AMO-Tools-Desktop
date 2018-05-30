@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { FanMotor } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { EfficiencyClasses } from '../fanOptions';
+import { CompareService } from '../compare.service';
 @Component({
   selector: 'app-fan-motor',
   templateUrl: './fan-motor.component.html',
@@ -68,7 +69,7 @@ export class FanMotorComponent implements OnInit {
   ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
   fanMotorForm: FormGroup;
-  constructor(private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
+  constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.efficiencyClasses = EfficiencyClasses;
@@ -358,5 +359,63 @@ export class FanMotorComponent implements OnInit {
   save() {
     this.fanMotor = this.fanMotorService.getObjFromForm(this.fanMotorForm);
     this.emitSave.emit(this.fanMotor);
+  }
+
+  canCompare() {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isLineFrequencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isLineFrequencyDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedPowerDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedPowerDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRpmDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRpmDifferent();
+    } else {
+      return false;
+    }
+  }
+  isEfficiencyClassDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isEfficiencyClassDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedEfficiencyDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedVoltageDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorRatedVoltageDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMotorFullLoadAmpsDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMotorFullLoadAmpsDifferent();
+    } else {
+      return false;
+    }
   }
 }

@@ -343,7 +343,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT) {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT && !this.inSetup) {
       return true;
     } else {
       return false;

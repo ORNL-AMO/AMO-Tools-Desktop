@@ -335,8 +335,8 @@ export class CompareService {
     }
   }
 
-  //FanMotor
-  checkFanMotorDifferent(baseline?: FSAT, modification?: FSAT) {
+  //Fan Field Data
+  checkFanFieldDataDifferent(baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;
     }
@@ -529,4 +529,151 @@ export class CompareService {
   //     return false;
   //   }
   // }
+
+  //Fan Motor
+  checkFanMotorDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isLineFrequencyDifferent(baseline, modification) ||
+        this.isMotorRatedPowerDifferent(baseline, modification) ||
+        this.isMotorRpmDifferent(baseline, modification) ||
+        this.isEfficiencyClassDifferent(baseline, modification) ||
+        this.isSpecifiedEfficiencyDifferent(baseline, modification) ||
+        this.isMotorRatedVoltageDifferent(baseline, modification) ||
+        this.isMotorFullLoadAmpsDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
+  }
+
+  isLineFrequencyDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.lineFrequency != modification.fanMotor.lineFrequency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedPowerDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.motorRatedPower != modification.fanMotor.motorRatedPower) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isMotorRpmDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.motorRpm != modification.fanMotor.motorRpm) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isEfficiencyClassDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.efficiencyClass != modification.fanMotor.efficiencyClass) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedEfficiencyDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.specifiedEfficiency != modification.fanMotor.specifiedEfficiency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isMotorRatedVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.motorRatedVoltage != modification.fanMotor.motorRatedVoltage) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isMotorFullLoadAmpsDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanMotor.fullLoadAmps != modification.fanMotor.fullLoadAmps) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+
+
 }
