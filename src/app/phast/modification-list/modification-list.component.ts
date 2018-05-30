@@ -44,11 +44,13 @@ export class ModificationListComponent implements OnInit {
     this.deleteArr = Array<boolean>(this.phast.modifications.length);
   }
 
-  selectModification(index: number) {
+  selectModification(index: number, close?: boolean) {
     this.phastCompareService.setCompareVals(this.phast, index, false);
     this.lossesService.updateTabs.next(true);
     this.initDropdown()
-    this.close.emit(true);
+    if(close){
+      this.close.emit(true);
+    }
   }
 
   goToModification(index: number, componentStr: string) {
@@ -57,7 +59,7 @@ export class ModificationListComponent implements OnInit {
       return tab.componentStr == componentStr;
     })
     this.lossesService.lossesTab.next(selectedTab.step);
-    this.selectModification(index);
+    this.selectModification(index, true);
   }
 
   selectModificationBadge(modifiction: PHAST, index: number) {
@@ -111,9 +113,9 @@ export class ModificationListComponent implements OnInit {
     if (this.phast.modifications.length == 0) {
       this.phastCompareService.setCompareVals(this.phast, 0, true);
     } else if (index == this.modificationIndex) {
-      this.selectModification(0);
+      this.selectModification(0, false);
     } else if (index < this.modificationIndex) {
-      this.selectModification(this.modificationIndex - 1);
+      this.selectModification(this.modificationIndex - 1, false);
     }
     this.save.emit(true);
   }
@@ -170,7 +172,7 @@ export class ModificationListComponent implements OnInit {
     this.deleteArr.push(false);
     this.phast.modifications.push(tmpModification);
     this.save.emit(true);
-    this.selectModification(this.phast.modifications.length - 1);
+    this.selectModification(this.phast.modifications.length - 1, true);
     this.newModificationName = undefined;
   }
 
