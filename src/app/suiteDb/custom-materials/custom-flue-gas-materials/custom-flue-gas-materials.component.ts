@@ -8,6 +8,7 @@ import { SuiteDbService } from '../../suite-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-custom-flue-gas-materials',
@@ -32,7 +33,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.flueGasMaterials = new Array<FlueGasMaterial>();
@@ -48,7 +49,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectAllSub.unsubscribe();
     this.selectedSub.unsubscribe();
   }
@@ -59,16 +60,27 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
         this.showMaterialModal();
       }
     }
-    if(changes.importing){
-      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+    if (changes.importing) {
+      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
         this.getCustomMaterials();
       }
     }
   }
-  
+
+  convertAllMaterials() {
+    for (let i = 0; i < this.flueGasMaterials.length; i++) {
+      this.flueGasMaterials[i].heatingValue = this.convertUnitsService.value(this.flueGasMaterials[i].heatingValue).from('btuLb').to('kJkg');
+      this.flueGasMaterials[i].heatingValueVolume = this.convertUnitsService.value(this.flueGasMaterials[i].heatingValueVolume).from('btuSCF').to('kJNm3');
+    }
+  }
+
+
   getCustomMaterials() {
     this.indexedDbService.getFlueGasMaterials().then(idbResults => {
       this.flueGasMaterials = idbResults;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.convertAllMaterials();
+      }
     });
   }
 

@@ -274,6 +274,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
+
     spacing = scale(interIndex);
     tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
