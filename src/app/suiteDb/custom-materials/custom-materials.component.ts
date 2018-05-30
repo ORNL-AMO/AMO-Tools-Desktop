@@ -44,6 +44,7 @@ export class CustomMaterialsComponent implements OnInit {
   constructor(private customMaterialService: CustomMaterialsService, private importExportService: ImportExportService) { }
 
   ngOnInit() {
+    console.log('settings.unitsOfMeasure = ' + this.settings.unitsOfMeasure);
   }
 
   ngOnDestroy() {

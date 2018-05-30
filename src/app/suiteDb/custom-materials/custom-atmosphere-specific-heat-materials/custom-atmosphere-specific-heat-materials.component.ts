@@ -7,6 +7,7 @@ import { SuiteDbService } from '../../suite-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-custom-atmosphere-specific-heat-materials',
   templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
@@ -30,14 +31,14 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.atmosphereSpecificHeatMaterials = new Array<AtmosphereSpecificHeat>();
     this.customMaterialService.selectedAtmosphere = new Array();
     this.getCustomMaterials();
     this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
-      if(val){
+      if (val) {
         this.getSelected();
       }
     })
@@ -46,7 +47,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectAllSub.unsubscribe();
     this.selectedSub.unsubscribe();
   }
@@ -57,16 +58,25 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
         this.showMaterialModal();
       }
     }
-    if(changes.importing){
-      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+    if (changes.importing) {
+      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
         this.getCustomMaterials();
       }
+    }
+  }
+
+  convertAllMaterials() {
+    for (let i = 0; i < this.atmosphereSpecificHeatMaterials.length; i++) {
+      this.atmosphereSpecificHeatMaterials[i].specificHeat = this.convertUnitsService.value(this.atmosphereSpecificHeatMaterials[i].specificHeat).from('btulbF').to('kJkgC');
     }
   }
 
   getCustomMaterials() {
     this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
       this.atmosphereSpecificHeatMaterials = idbResults;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.convertAllMaterials();
+      }
     });
 
   }
