@@ -28,6 +28,8 @@ export class CompareService {
     }
   }
 
+
+  ///fsat-fluid (baseGasDensity)
   checkFluidDifferent(baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;
@@ -253,6 +255,77 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.baseGasDensity.specificHeatGas != modification.baseGasDensity.specificHeatGas) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  //fan-setup (FanSetup)
+  //TODO: Add Specified Fan Type logic
+  checkFanSetupDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isFanTypeDifferent(baseline, modification) ||
+        this.isFanSpeedDifferent(baseline, modification) ||
+        this.isDriveDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
+  }
+  isFanTypeDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanSetup.fanType != modification.fanSetup.fanType) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isFanSpeedDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanSetup.fanSpeed != modification.fanSetup.fanSpeed) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isDriveDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanSetup.drive != modification.fanSetup.drive) {
         return true;
       } else {
         return false;

@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { FanSetup } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
+import { CompareService } from '../compare.service';
 @Component({
   selector: 'app-fan-setup',
   templateUrl: './fan-setup.component.html',
@@ -24,7 +25,7 @@ export class FanSetupComponent implements OnInit {
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
-  constructor(private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
+  constructor(private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.drives = Drives;
@@ -68,4 +69,37 @@ export class FanSetupComponent implements OnInit {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
     this.emitSave.emit(this.fanSetup);
   }
+
+  canCompare() {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isFanTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFanTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isFanSpeedDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFanSpeedDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isDriveDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDriveDifferent();
+    } else {
+      return false;
+    }
+  }
+
 }
