@@ -4,6 +4,8 @@ import { FSAT } from '../../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { EfficiencyClasses } from '../../../fanOptions';
+import { HelpPanelService } from '../../../help-panel/help-panel.service';
+import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 
 @Component({
   selector: 'app-rated-motor-form',
@@ -19,8 +21,6 @@ export class RatedMotorFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
 
   showRatedMotorPower: boolean = false;
   showEfficiencyClass: boolean = false;
@@ -48,7 +48,7 @@ export class RatedMotorFormComponent implements OnInit {
   // ];
 
   efficiencyClasses: Array<{value: number, display: string}>
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
     this.efficiencyClasses = EfficiencyClasses;
@@ -163,7 +163,8 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.changeField.emit(str);
+    this.helpPanelService.currentField.next(str);
+    this.modifyConditionsService.modifyConditionsTab.next('fan-motor')
   }
   getUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);

@@ -8,19 +8,13 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-import { HelpPanelComponent } from './help-panel/help-panel.component';
-import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
 
-import { FsatBasicsHelpComponent } from './help-panel/fsat-basics-help/fsat-basics-help.component';
-import { HelpPanelService } from './help-panel/help-panel.service';
 import { FsatInfoComponent } from './fsat-info/fsat-info.component';
 import { FanCurveDataComponent } from './fan-curve-data/fan-curve-data.component';
 import { OperatingPointsComponent } from './operating-points/operating-points.component';
 import { OperatingPointsFormComponent } from './operating-points/operating-points-form/operating-points-form.component';
 import { RatedOperatingPointsComponent } from './rated-operating-points/rated-operating-points.component';
 import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
-import { FanCurveDataHelpComponent } from './help-panel/fan-curve-data-help/fan-curve-data-help.component';
-import { OperatingPointsHelpComponent } from './help-panel/operating-points-help/operating-points-help.component';
 import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
@@ -41,21 +35,14 @@ import { AddModificationComponent } from './add-modification/add-modification.co
 import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { ModifyFieldDataFormComponent } from './modify-conditions/modify-field-data-form/modify-field-data-form.component';
-import { FanFieldDataHelpComponent } from './help-panel/fan-field-data-help/fan-field-data-help.component';
-import { FanMotorHelpComponent } from './help-panel/fan-motor-help/fan-motor-help.component';
-import { FanSetupHelpComponent } from './help-panel/fan-setup-help/fan-setup-help.component';
-import { FsatFluidHelpComponent } from './help-panel/fsat-fluid-help/fsat-fluid-help.component';
-import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-notes/modify-conditions-notes.component';
 import { FsatResultsModule } from './fsat-results/fsat-results.module';
 import { CalculateInletPressureComponent } from './fan-field-data/calculate-inlet-pressure/calculate-inlet-pressure.component';
-import { CalculateInletPressureHelpComponent } from './fan-field-data/calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
 import { CalculateOutletPressureComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure.component';
-import { CalculateOutletPressureHelpComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
 import { FsatReportModule } from './fsat-report/fsat-report.module';
 import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow-pressures/calculate-flow-pressures.component';
 import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
-import { FlowPressuresHelpComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-help/flow-pressures-help.component';
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
+import { HelpPanelModule } from './help-panel/help-panel.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -69,51 +56,42 @@ import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/fl
     SharedModule,
     ExploreOpportunitiesModule,
     FsatResultsModule,
-    FsatReportModule
+    FsatReportModule,
+    HelpPanelModule
   ],
   declarations: [
     FsatComponent,
     FsatBannerComponent,
     FsatTabsComponent,
     SystemBasicsComponent,
-    HelpPanelComponent,
-    SystemBasicsHelpComponent,
-    FsatBasicsHelpComponent,
     FsatInfoComponent,
     FanCurveDataComponent,
     OperatingPointsComponent,
     OperatingPointsFormComponent,
     RatedOperatingPointsComponent,
     RatedOperatingPointsFormComponent,
-    FanCurveDataHelpComponent,
-    OperatingPointsHelpComponent,
     FsatFluidComponent,
     FanSetupComponent,
-    FanMotorComponent, 
-    FanFieldDataComponent, 
-    ModifyConditionsComponent, 
-    ModifyConditionsTabsComponent, 
+    FanMotorComponent,
+    FanFieldDataComponent,
+    ModifyConditionsComponent,
+    ModifyConditionsTabsComponent,
     AddModificationComponent,
-     ModificationListComponent, 
-     ModifyFieldDataFormComponent, 
-     FanFieldDataHelpComponent, 
-     FanMotorHelpComponent, 
-     FanSetupHelpComponent, 
-     FsatFluidHelpComponent, 
-     ModifyConditionsNotesComponent, 
-     CalculateInletPressureComponent, 
-     CalculateInletPressureHelpComponent, 
-     CalculateOutletPressureComponent, 
-     CalculateOutletPressureHelpComponent, CalculateFlowPressuresComponent, FlowPressuresFormComponent, FlowPressuresHelpComponent, FanBasicsComponent
+    ModificationListComponent,
+    ModifyFieldDataFormComponent,
+    CalculateInletPressureComponent,
+    CalculateOutletPressureComponent,
+    CalculateFlowPressuresComponent,
+    FlowPressuresFormComponent,
+    FanBasicsComponent
   ],
   providers: [
-    FsatService, 
-    HelpPanelService, 
-    FsatFluidService, 
-    FanSetupService, 
-    FanMotorService, 
-    PsatService, 
-    FanFieldDataService, 
+    FsatService,
+    FsatFluidService,
+    FanSetupService,
+    FanMotorService,
+    PsatService,
+    FanFieldDataService,
     ModifyConditionsService,
     CompareService
   ],

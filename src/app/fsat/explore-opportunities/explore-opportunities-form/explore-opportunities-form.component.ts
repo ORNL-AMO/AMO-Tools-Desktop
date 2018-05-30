@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
+import { HelpPanelService } from '../../help-panel/help-panel.service';
+import { ModifyConditionsService } from '../../modify-conditions/modify-conditions.service';
 
 @Component({
   selector: 'app-explore-opportunities-form',
@@ -14,23 +16,18 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   fsat:FSAT;
   @Input()
   exploreModIndex: number;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
 
   showSizeMargin: boolean;
-  constructor() { }
+  constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
     this.checkOptimized();
   }
   
-  focusField(str: string) {
-    this.changeField.emit(str);
-  }
 
   calculate() {
     this.save();
@@ -56,5 +53,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
         this.showSizeMargin = true;
       }
     }
+  }
+
+  focusField(str: string){
+    this.helpPanelService.currentField.next(str);
+    this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
   }
 }

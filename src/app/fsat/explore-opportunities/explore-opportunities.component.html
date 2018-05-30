@@ -31,7 +31,7 @@
 				</ul>
 			</div>
 			<div class="explore-help-panel" *ngIf="tabSelect == 'help'">
-				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings">
+				<app-explore-opportunities-help [settings]="settings">
 				</app-explore-opportunities-help>
 			</div>
 			
@@ -40,7 +40,7 @@
 			 *ngIf="tabSelect == 'sankey' && modificationExists">
 			</app-explore-opportunities-sankey> -->
 
-			<div class="panel-results" *ngIf="modificationExists">
+			<div class="panel-results" *ngIf="modificationExists && tabSelect == 'results'">
 				<!-- <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
 				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results> -->

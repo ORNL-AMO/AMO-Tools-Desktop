@@ -3,6 +3,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { FsatService } from '../../../fsat.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { HelpPanelService } from '../../../help-panel/help-panel.service';
+import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 
 @Component({
   selector: 'app-system-data-form',
@@ -18,8 +20,6 @@ export class SystemDataFormComponent implements OnInit {
   fsat: FSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
 
   showSystemData: boolean = false;
   showCost: boolean = false;
@@ -36,8 +36,7 @@ export class SystemDataFormComponent implements OnInit {
   opFractionError2: string = null;
 
   tmpBaselineName: string = 'Baseline';
-  constructor(private fsatService: FsatService, private convertUnitsService: ConvertUnitsService) {
-
+  constructor(private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) {
   }
 
   ngOnInit() {
@@ -155,7 +154,8 @@ export class SystemDataFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-      this.changeField.emit(str);
+    this.helpPanelService.currentField.next(str);
+    this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
   }
 
   checkOpFraction(num: number) {

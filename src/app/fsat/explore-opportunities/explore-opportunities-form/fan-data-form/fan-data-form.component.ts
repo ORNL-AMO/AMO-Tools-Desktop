@@ -2,6 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
+import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
+import { HelpPanelService } from '../../../help-panel/help-panel.service';
 @Component({
   selector: 'app-fan-data-form',
   templateUrl: './fan-data-form.component.html',
@@ -16,8 +18,6 @@ export class FanDataFormComponent implements OnInit {
   fsat: FSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
 
   // fanTypes: Array<string> = [
   //   'Airfoil (SISW)',
@@ -47,7 +47,7 @@ export class FanDataFormComponent implements OnInit {
   showFanSpecified: boolean = false;
   specifiedError1: string = null;
   specifiedError2: string = null;
-  constructor() { }
+  constructor(private modifyConditionsService: ModifyConditionsService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.drives = Drives;
@@ -205,6 +205,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.changeField.emit(str);
+    this.helpPanelService.currentField.next(str);
+    this.modifyConditionsService.modifyConditionsTab.next('fan-setup')
   }
 }
