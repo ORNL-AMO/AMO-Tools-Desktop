@@ -10,13 +10,14 @@
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();" [readonly]="!selected">
+        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();" [readonly]="!selected"
+        [ngClass]="{'indicate-different': isOperatingFractionDifferent()}">
       <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
     </div>
 
     <div class="form-group">
       <label for="cost">Cost</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent()}">
         <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="cost" (input)="checkCost()"
           (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>
@@ -29,7 +30,7 @@
         Inlet Pressure
         <a class="form-text small click-link" (click)="showInletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Inlet Pressure</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isInletPressureDifferent()}">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
           (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
@@ -42,7 +43,7 @@
         Outlet Pressure
         <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Outlet Pressure</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent()}">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
           (input)="checkOutletPressure()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
@@ -53,7 +54,7 @@
       <label for="flowRate">Flow Rate
         <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate Flow Rate and Pressures</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
           (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
@@ -93,7 +94,8 @@
     <div class="form-group">
       <label for="specificHeatRatio">Specific Heat Ratio (&gamma;)</label>
       <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
-        id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected">
+        id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected"
+        [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent()}">
     </div>
 
     <div class="form-group">
@@ -102,7 +104,7 @@
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
-        [readonly]="!selected">
+        [readonly]="!selected" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
     </div>
   </div>
 </form>
@@ -120,9 +122,12 @@
         </button>
       </div>
       <div #modalBody class="modal-body p-0">
-        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="fieldData.inletPressureData" (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
-        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="fieldData.outletPressureData" (emitSave)="saveOutletPressure($event)"></app-calculate-outlet-pressure>
-        <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow'" [settings]="settings" [fsat]="fsat" (saveFlowAndPressure)="saveFlowAndPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-flow-pressures>
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="fieldData.inletPressureData"
+          (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="fieldData.outletPressureData"
+          (emitSave)="saveOutletPressure($event)"></app-calculate-outlet-pressure>
+        <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow'" [settings]="settings" [fsat]="fsat" (saveFlowAndPressure)="saveFlowAndPressure($event)"
+          [bodyHeight]="bodyHeight"></app-calculate-flow-pressures>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" (click)="hidePressureModal()">Done</button>

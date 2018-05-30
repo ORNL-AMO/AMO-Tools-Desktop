@@ -334,4 +334,199 @@ export class CompareService {
       return false;
     }
   }
+
+  //FanMotor
+  checkFanMotorDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      return (
+        this.isOperatingFractionDifferent(baseline, modification) ||
+        this.isCostDifferent(baseline, modification) ||
+        this.isFlowRateDifferent(baseline, modification) ||
+        this.isInletPressureDifferent(baseline, modification) ||
+        this.isOutletPressureDifferent(baseline, modification) ||
+        this.isSpecificHeatRatioDifferent(baseline, modification) ||
+        this.isCompressibilityFactorDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
+  }
+
+  isOperatingFractionDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.operatingFraction != modification.fieldData.operatingFraction) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isCostDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.cost != modification.fieldData.cost) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isFlowRateDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.flowRate != modification.fieldData.flowRate) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isInletPressureDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.inletPressure != modification.fieldData.inletPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isOutletPressureDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.outletPressure != modification.fieldData.outletPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  //only baseline
+  // isLoadEstimatedMethodDifferent(baseline?: FSAT, modification?: FSAT) {
+  //   if (!baseline) {
+  //     baseline = this.baselineFSAT;
+  //   }
+  //   if (!modification) {
+  //     modification = this.modifiedFSAT;
+  //   }
+  //   if (baseline && modification) {
+  //     if (baseline.fieldData.loadEstimatedMethod != modification.fieldData.loadEstimatedMethod) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // isMotorPowerDifferent(baseline?: FSAT, modification?: FSAT) {
+  //   if (!baseline) {
+  //     baseline = this.baselineFSAT;
+  //   }
+  //   if (!modification) {
+  //     modification = this.modifiedFSAT;
+  //   }
+  //   if (baseline && modification) {
+  //     if (baseline.fieldData.motorPower != modification.fieldData.motorPower) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  isSpecificHeatRatioDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.specificHeatRatio != modification.fieldData.specificHeatRatio) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isCompressibilityFactorDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fieldData.compressibilityFactor != modification.fieldData.compressibilityFactor) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // isMeasuredVoltageDifferent(baseline?: FSAT, modification?: FSAT) {
+  //   if (!baseline) {
+  //     baseline = this.baselineFSAT;
+  //   }
+  //   if (!modification) {
+  //     modification = this.modifiedFSAT;
+  //   }
+  //   if (baseline && modification) {
+  //     if (baseline.fieldData.measuredVoltage != modification.fieldData.measuredVoltage) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }

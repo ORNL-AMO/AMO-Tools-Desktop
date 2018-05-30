@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -52,7 +53,7 @@ export class FanFieldDataComponent implements OnInit {
   outletPressureError: string = null;
   fieldDataForm: FormGroup;
   pressureCalcType: string;
-  constructor(private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
+  constructor(private compareService: CompareService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.init();
@@ -60,7 +61,7 @@ export class FanFieldDataComponent implements OnInit {
       this.disableForm();
     }
 
-    this.pressureModal.onShown.subscribe(()=> {
+    this.pressureModal.onShown.subscribe(() => {
       this.getBodyHeight();
     })
   }
@@ -283,26 +284,26 @@ export class FanFieldDataComponent implements OnInit {
     //todo
   }
 
-  showInletPressureModal(){
+  showInletPressureModal() {
     this.pressureCalcType = 'inlet';
     this.fsatService.modalOpen.next(true);
     this.pressureModal.show();
   }
 
-  showOutletPressureModal(){
+  showOutletPressureModal() {
     this.pressureCalcType = 'outlet';
     this.fsatService.modalOpen.next(true);
     this.pressureModal.show();
   }
 
 
-  hidePressureModal(){
+  hidePressureModal() {
     this.pressureCalcType = undefined;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
 
-  saveOutletPressure(outletPressureData: OutletPressureData){
+  saveOutletPressure(outletPressureData: OutletPressureData) {
     this.fieldData.outletPressureData = outletPressureData;
     this.fieldDataForm.patchValue({
       outletPressure: this.fieldData.outletPressureData
@@ -311,7 +312,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
 
-  saveInletPressure(inletPressureData: InletPressureData){
+  saveInletPressure(inletPressureData: InletPressureData) {
     this.fieldData.inletPressureData = inletPressureData;
     this.fieldDataForm.patchValue({
       inletPressure: this.fieldData.inletPressureData
@@ -319,7 +320,7 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-  saveFlowAndPressure(fsat: FSAT){
+  saveFlowAndPressure(fsat: FSAT) {
     this.fieldData.inletPressure = fsat.fieldData.inletPressure;
     this.fieldData.outletPressure = fsat.fieldData.outletPressure;
     this.fieldData.flowRate = fsat.fieldData.flowRate;
@@ -333,11 +334,92 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-  getBodyHeight(){
-    if(this.modalBody){
+  getBodyHeight() {
+    if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
-    }else{
+    } else {
       this.bodyHeight = 0;
     }
   }
+
+  canCompare() {
+    if (this.compareService.baselineFSAT && this.compareService.modifiedFSAT) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isOperatingFractionDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperatingFractionDifferent();
+    } else {
+      return false;
+    }
+  }
+  isCostDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCostDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFlowRateDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFlowRateDifferent();
+    } else {
+      return false;
+    }
+  }
+  isInletPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isInletPressureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isOutletPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOutletPressureDifferent();
+    } else {
+      return false;
+    }
+  }
+  // isLoadEstimatedMethodDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isLoadEstimatedMethodDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // isMotorPowerDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isMotorPowerDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  isSpecificHeatRatioDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecificHeatRatioDifferent();
+    } else {
+      return false;
+    }
+  }
+  isCompressibilityFactorDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCompressibilityFactorDifferent();
+    } else {
+      return false;
+    }
+  }
+  // isMeasuredVoltageDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isMeasuredVoltageDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+
 }
