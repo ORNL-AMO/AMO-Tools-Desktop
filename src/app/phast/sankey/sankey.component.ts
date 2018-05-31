@@ -113,20 +113,39 @@ export class SankeyComponent implements OnInit {
       y: this.availableHeatPercent.y
     }];
 
+
     //create node linkes
     let links = new Array<any>();
     let i = 0;
+    console.log('results.nodes.length = ' + results.nodes.length);
     for (i; i < results.nodes.length - 2;) {
       links.push({ source: i, target: i + 1 });
+
+      console.log('i = ' + i);
       if (i != 0) {
         links.push({ source: i, target: i + 2 });
+        if (results.nodes[i + 1].input) {
+          console.log('next i is input');
+          links.push({ source: i + 1, target: i + 2 });
+          i = i + 2;
+          break;
+        }
         i = i + 2;
       } else {
         i = i + 1;
       }
     }
     //extra push for output
-    links.push({ source: i, target: i + 1 })
+    links.push({ source: i, target: i + 1 });
+
+    console.log('links = ');
+    console.log(links);
+    console.log('results.nodes[5]=');
+    console.log(results.nodes[5]);
+    console.log('results.nodes[6]=');
+    console.log(results.nodes[6]);
+    console.log('results.nodes[7]=');
+    console.log(results.nodes[7]);
 
 
     if (this.printView) {
@@ -134,13 +153,8 @@ export class SankeyComponent implements OnInit {
         .call(() => {
           this.calcSankey(results.nodes);
         })
-        //debug
         .attr("width", "100%")
         .attr("height", "80%")
-
-        //real version
-        // .attr("width", "2400px")
-        // .attr("height", "800px")
         .attr("viewBox", "0 0 " + width + " " + height)
         .attr("preserveAspectRatio", "xMinYMin")
         .append("g");
@@ -232,7 +246,9 @@ export class SankeyComponent implements OnInit {
         }
       })
       .attr("dy", (d) => {
-        if (d.input) {
+        if (d.input && d.name != "Exothermic Heat") {
+          console.log('d.input');
+          console.log(d);
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + labelFontSize + labelPadding - 182;
           } else if (this.location !== 'sankey-diagram') {
@@ -295,7 +311,7 @@ export class SankeyComponent implements OnInit {
         }
       })
       .attr("dy", (d) => {
-        if (d.input) {
+        if (d.input && d.name != "Exothermic Heat") {
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 182;
           } else if (this.location !== 'sankey-diagram') {
@@ -422,6 +438,13 @@ export class SankeyComponent implements OnInit {
             }
           }
         }
+        else if (d.name == 'Exothermic Heat') {
+          console.log("d.name = " + d.name);
+          // d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
+          d.displaySize = this.calcDisplayValue(this.baseSize, Math.abs(d.value), nodes[0].value);
+          // d.y += (nodes[i - 1].displaySize * 2) + alterVal;
+
+        }
       }
     });
     return nodes;
@@ -433,15 +456,59 @@ export class SankeyComponent implements OnInit {
 
 
   makeLinks(d, nodes) {
+    console.log('makeLinks()');
 
     var linkGen = d3.line()
       .curve(d3.curveMonotoneX);
 
     var points = [];
     if (nodes[d.source].input) {
+      console.log('nodes[d.source].name = ' + nodes[d.source].name);
+      console.log('SOURCE IS INPUT');
+      // console.log(nodes[d.source]);
+
+      console.log('');
+      console.log('GROSS HEAT');
+      console.log("=== source ===");
+      console.log(d.source);
+      console.log(nodes[d.source]);
+      console.log("==============");
+      console.log('');
+      console.log('=== target ===');
+      console.log(d.target);
+      console.log(nodes[d.target]);
+      console.log("==============");
+      console.log('');
+
       points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
     }
+
+    // if (nodes[d.target].name == 'Exothermic Heat') {
+    //   console.log('');
+    //   console.log('found exothermic');
+    //   console.log("=== source ===");
+    //   console.log(d.source);
+    //   console.log(nodes[d.source]);
+    //   console.log("==============");
+    //   console.log('');
+    //   console.log('=== target ===');
+    //   console.log(d.target);
+    //   console.log(nodes[d.target]);
+    //   console.log("==============");
+    //   points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+    //   points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+    // }
+
+    // if (nodes[d.target].input) {
+    //   console.log('d.target.input');
+    //   console.log('source = ');
+    //   console.log(nodes[d.source]);
+    //   console.log('target = ')
+    //   points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+    //   points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+    // }
+
     // If it links up with an inter or usefulOutput then go strait tot the interNode
     else if (nodes[d.target].inter || nodes[d.target].usefulOutput) {
       points.push([(nodes[d.source].x - 5), (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);

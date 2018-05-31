@@ -74,8 +74,8 @@ export class SankeyService {
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
     results.nodes = this.getNodes(results, settings);
-    console.log('results = ');
-    console.log(results);
+    // console.log('results = ');
+    // console.log(results);
     return results;
   }
 
@@ -115,6 +115,10 @@ export class SankeyService {
       arrowCount++;
     }
     if (results.totalWallLoss) {
+      arrowCount++;
+    }
+    //debug
+    if (this.exothermicHeat != 0) {
       arrowCount++;
     }
 
@@ -178,7 +182,7 @@ export class SankeyService {
     }
     // end flue gas arrow
 
-    
+
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
       spacing = scale(interIndex);
@@ -281,11 +285,11 @@ export class SankeyService {
     }
 
 
-    //check here for exothermic heat value, label TRUE for 'input' boolean
+    //check here for exothermic heat value, TRUE for 'input' boolean
     if (this.exothermicHeat != 0) {
-      console.log('this.exothermicHeat = ' + this.exothermicHeat);
       spacing = scale(interIndex);
-      tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, top, unit, false);
+      // tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, top, unit, false);
+      tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, false, unit, false);
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
