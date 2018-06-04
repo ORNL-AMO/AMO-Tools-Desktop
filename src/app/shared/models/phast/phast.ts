@@ -125,7 +125,8 @@ export interface PhastResults {
   flueGasAvailableHeat: number,
   grossHeatInput: number,
   heatingSystemEfficiency: number,
-  availableHeatPercent: number
+  availableHeatPercent: number,
+  electricalHeatDelivered?: number
 }
 
 export interface ShowResultsCategories {

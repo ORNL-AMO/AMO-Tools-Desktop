@@ -203,12 +203,21 @@
 
       <tr *ngIf="showResultsCats.showEnInput1 || showResultsCats.showEnInput2">
         <td *ngIf="showResultsCats.showEnInput1">Heat Delivered</td>
-        <td *ngIf="showResultsCats.showEnInput2">User Defined Heat Delivered</td>
+        <td *ngIf="showResultsCats.showEnInput2">Fuel Heat Delivered</td>
         <td *ngIf="baseLineResults.energyInputHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.energyInputHeatDelivered | number: decimalCount}}</td>
         <td *ngIf="!baseLineResults.energyInputHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.energyInputHeatDelivered">{{mod.energyInputHeatDelivered | number: decimalCount}}</span>
           <span *ngIf="!mod.energyInputHeatDelivered">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr *ngIf="showResultsCats.showEnInput2">
+        <td *ngIf="showResultsCats.showEnInput2">Electrical Heat Delivered</td>
+        <td *ngIf="baseLineResults.electricalHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.electricalHeatDelivered | number: decimalCount}}</td>
+        <td *ngIf="!baseLineResults.electricalHeatDelivered" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.electricalHeatDelivered">{{mod.electricalHeatDelivered | number: decimalCount}}</span>
+          <span *ngIf="!mod.electricalHeatDelivered">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput1">
