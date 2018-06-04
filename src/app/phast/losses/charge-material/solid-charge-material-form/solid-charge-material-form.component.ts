@@ -52,6 +52,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterialId: any;
   selectedMaterial: any;
   dischargeTempError: string = null;
+  dischargeOverMeltError: string = null;
+  initialOverMeltError: string = null;
   showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
   }
@@ -194,6 +196,14 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     else {
       this.initialTempError = null;
     }
+
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value && this.chargeMaterialForm.controls.percentChargeMelted.value <= 0) {
+      this.initialOverMeltError = "The initial temperature is higher than the melting point, please enter proper percentage for charge melted.";
+    }
+    else {
+      this.initialOverMeltError = null;
+    }
+
 
     if (this.initialTempError || this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
       this.inputError.emit(true);
