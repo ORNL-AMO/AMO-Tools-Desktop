@@ -13,7 +13,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -27,7 +27,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -41,7 +41,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
