@@ -45,6 +45,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
   calculationWarning: string = null;
+  combustionAirTempWarning: string = null;
   showModal: boolean = false;
   calcMethodExcessAir: boolean;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private phastService: PhastService) { }
@@ -136,6 +137,15 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
     this.calculationWarning = null;
+    this.combustionAirTempWarning = null;
+
+    if (this.flueGasLossForm.controls.combustionAirTemperature.value > this.flueGasLossForm.controls.flueGasTemperature.value) {
+      this.combustionAirTempWarning = "Combustion air temperature must be less than flue gas temperature";
+    }
+    else {
+      this.combustionAirTempWarning = null;
+    }
+
     if (!this.calcMethodExcessAir) {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
@@ -158,7 +168,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         o2InFlueGas: this.calculationFlueGasO2
       });
     }
-    if (this.calculationWarning) {
+    if (this.calculationWarning || this.combustionAirTempWarning) {
       this.inputError.emit(true);
       this.flueGasCompareService.inputError.next(true);
     } else {

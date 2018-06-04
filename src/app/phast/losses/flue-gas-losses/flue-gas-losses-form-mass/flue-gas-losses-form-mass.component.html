@@ -64,13 +64,14 @@
 
     <div class="form-group">
       <label class="small" for="combustionAirTemperature">Combustion Air Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareMassCombustionAirTemperature(), 'invalid': flueGasLossForm.controls.combustionAirTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareMassCombustionAirTemperature(), 'error': combustionAirTempWarning !== null, 'invalid': flueGasLossForm.controls.combustionAirTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="combustionAirTemperature"
           id="combustionAirTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('combustionAirTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="combustionAirTempWarning !== null">{{combustionAirTempWarning}}</span>
     </div>
 
     <div class="form-group">

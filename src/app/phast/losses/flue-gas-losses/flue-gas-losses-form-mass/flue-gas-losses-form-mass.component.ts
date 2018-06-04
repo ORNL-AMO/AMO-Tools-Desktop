@@ -37,6 +37,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   moistureInAirCompositionError: string = null;
   unburnedCarbonInAshError: string = null;
+  combustionAirTempWarning: string = null;
   firstChange: boolean = true;
   options: any;
   showModal: boolean = false;
@@ -137,6 +138,15 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
     this.calculationWarning = null;
+    this.combustionAirTempWarning = null;
+
+    if (this.flueGasLossForm.controls.combustionAirTemperature.value > this.flueGasLossForm.controls.flueGasTemperature.value) {
+      this.combustionAirTempWarning = "Combustion air temperature must be less than flue gas temperature";
+    }
+    else {
+      this.combustionAirTempWarning = null;
+    }
+
     if (!this.calcMethodExcessAir) {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
@@ -200,7 +210,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.unburnedCarbonInAshError = null;
     }
 
-    if (this.moistureInAirCompositionError || this.unburnedCarbonInAshError) {
+    if (this.moistureInAirCompositionError || this.unburnedCarbonInAshError || this.combustionAirTempWarning) {
       this.inputError.emit(true);
       this.flueGasCompareService.inputError.next(true);
     } else {
