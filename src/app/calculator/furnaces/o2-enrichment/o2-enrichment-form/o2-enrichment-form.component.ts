@@ -53,6 +53,14 @@ export class O2EnrichmentFormComponent implements OnInit {
       canCalculate = false;
       this.error.combAirTempEnriched = 'Combustion air preheat temperature must be between 0 and 2000 deg F';
     }
+    if (this.o2Enrichment.combAirTemp > this.o2Enrichment.flueGasTemp) {
+      canCalculate = false;
+      this.error.combAirTemp = 'Combustion air temperature must be less than flue gas temperature';
+    }
+    if (this.o2Enrichment.combAirTempEnriched > this.o2Enrichment.flueGasTempEnriched) {
+      canCalculate = false;
+      this.error.combAirTempEnriched = 'Enriched combustion air temperature must be less than enriched flue gas temperature';
+    }
     // if (this.o2Enrichment.combAirTemp < this.o2Enrichment.combAirTempEnriched) {
     //   canCalculate = false;
     //   this.error.combAirTemp = 'Combustion air preheat temperature must be greater than or equal to the oxygen enriched air mixture preheat temperature';
