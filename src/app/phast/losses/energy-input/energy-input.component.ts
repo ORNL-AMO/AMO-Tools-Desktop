@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input',
@@ -35,12 +36,16 @@ export class EnergyInputComponent implements OnInit {
   modExists: boolean;
   @Input()
   modificationIndex: number;
+  @Input()
+  phast: PHAST;
 
   _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService) { }
+  energyInputTotal: number = 0;
+  electricalHeatDelivered: number = 0;
+  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -130,11 +135,16 @@ export class EnergyInputComponent implements OnInit {
         heatDelivered: calculation.heatDelivered,
         totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
       }
+      let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      this.energyInputTotal = tmpResults.grossHeatInput;
+      this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
     } else {
       loss.results = {
         heatDelivered: null,
         totalChemicalEnergyInput: null
       }
+      this.energyInputTotal = 0;
+      this.electricalHeatDelivered = 0;
     }
   }
 
