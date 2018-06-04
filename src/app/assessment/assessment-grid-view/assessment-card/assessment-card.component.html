@@ -4,6 +4,7 @@
     <div class="p-1 d-flex align-items-center">
       <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
       <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+      <img *ngIf="assessment.type == 'FSAT'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
       <a (click)="goToAssessment(assessment)" class="pl-1">{{assessment.name}}</a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
@@ -111,7 +112,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+        <p class="text-center small">Are you sure you want to delete this assessment? This
+          <span class="danger">cannot</span> be undone.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>

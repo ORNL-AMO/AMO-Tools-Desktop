@@ -12,6 +12,10 @@
     border-bottom: #2980b9 groove 2px;
     border-image: linear-gradient(to right,#F0F3F4, #2980b9) 50 / 2;
   }
+
+  .summary-card-header.fsat{
+    border-bottom: #FFE400 groove 2px;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;

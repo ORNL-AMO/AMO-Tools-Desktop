@@ -110,8 +110,10 @@ export class ModificationListComponent implements OnInit {
     this.rename.splice(index, 1);
     this.dropdown.splice(index, 1);
     this.deleteArr.splice(index, 1);
+    console.log(this.phast.modifications);
     if (this.phast.modifications.length == 0) {
       this.phastCompareService.setCompareVals(this.phast, 0, true);
+      this.close.emit(true);
     } else if (index == this.modificationIndex) {
       this.selectModification(0, false);
     } else if (index < this.modificationIndex) {
