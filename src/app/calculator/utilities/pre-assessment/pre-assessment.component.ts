@@ -183,16 +183,6 @@ export class PreAssessmentComponent implements OnInit {
     this.calculate();
   }
 
-  updateCosts(){
-    this.preAssessments.forEach(assessment => {
-      assessment.settings.fuelCost = this.settings.fuelCost;
-      assessment.settings.steamCost = this.settings.steamCost;
-      assessment.settings.electricityCost = this.settings.electricityCost;
-    })
-    this.calculate();
-  }
-
-
   collapsePreAssessment(assessment: PreAssessment) {
     assessment.collapsed = !assessment.collapsed;
     if (assessment.collapsed) {
