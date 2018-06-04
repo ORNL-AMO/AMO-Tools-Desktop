@@ -111,6 +111,7 @@ export class ModificationListComponent implements OnInit {
     this.deleteArr.splice(index, 1);
     if (this.psat.modifications.length == 0) {
       this.compareService.setCompareVals(this.psat, 0);
+      this.close.emit(true);
     } else if (index == this.modificationIndex) {
       this.selectModification(0);
     } else if (index < this.modificationIndex) {
