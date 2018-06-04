@@ -49,6 +49,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   chargeReactedError: string = null;
   heatOfReactionError: string = null;
   materialLatentHeatError: string = null;
+  inletOverVaporizingError: string = null;
+  outletOverVaporizingError: string = null;
   showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -178,6 +180,19 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
     else {
       this.initialTempError = null;
+    }
+
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.materialVaporizingTemperature.value && this.chargeMaterialForm.controls.liquidVaporized.value <= 0) {
+      this.inletOverVaporizingError = "The initial temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    }
+    else {
+      this.inletOverVaporizingError = null;
+    }
+    if (this.chargeMaterialForm.controls.dischargeTemperature.value > this.chargeMaterialForm.controls.materialVaporizingTemperature.value && this.chargeMaterialForm.controls.liquidVaporized.value <= 0) {
+      this.outletOverVaporizingError = "The discharge temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    }
+    else {
+      this.outletOverVaporizingError = null;
     }
 
     if (this.initialTempError || this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {

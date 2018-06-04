@@ -70,19 +70,20 @@
 
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkInitialTempDiff(), 'error': initialTempError !== null, 'invalid': chargeMaterialForm.controls.initialTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': checkInitialTempDiff(), 'error': initialTempError !== null || inletOverVaporizingError !== null, 'invalid': chargeMaterialForm.controls.initialTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
           id="initialTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('initialTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="inletOverVaporizingError !== null">{{inletOverVaporizingError}}</span>
       <span class="alert-warning pull-right small" *ngIf="initialTempError !== null">{{initialTempError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="dischargeTemperature">Discharge Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': checkDischargeTempDiff(), 'error': dischargeTempError !== null || initialTempError !== null, 'invalid': chargeMaterialForm.controls.dischargeTemperature.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': checkDischargeTempDiff(), 'error': dischargeTempError !== null || initialTempError !== null || outletOverVaporizingError !== null, 'invalid': chargeMaterialForm.controls.dischargeTemperature.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'dischargeTemperature_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="dischargeTemperature"
           id="dischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('dischargeTemperature')"
           (blur)="focusOut()">
@@ -90,6 +91,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="dischargeTempError !== null">{{dischargeTempError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="outletOverVaporizingError !== null">{{outletOverVaporizingError}}</span>
     </div>
 
     <div class="form-group">
