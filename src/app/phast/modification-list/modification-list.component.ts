@@ -112,6 +112,7 @@ export class ModificationListComponent implements OnInit {
     this.deleteArr.splice(index, 1);
     if (this.phast.modifications.length == 0) {
       this.phastCompareService.setCompareVals(this.phast, 0, true);
+      this.close.emit(true);
     } else if (index == this.modificationIndex) {
       this.selectModification(0, false);
     } else if (index < this.modificationIndex) {
