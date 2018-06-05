@@ -26,11 +26,14 @@
     </div>
 
     <div class="row">
-      <div class="col btn-col">
+      <div class="col btn-col d-flex flex-column">
         <div class="btn-group btn-group-sm align-self-center">
           <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.electric == true}">Electric</button>
           <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.fuel == true}">Fuel</button>
           <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.steam == true}">Steam-based</button>
+        </div>
+        <div class="pl-1 pr-1 pb-1">
+          <span class="text-muted small mx-auto">Select multiple energy source types for hybrid units.</span>
         </div>
       </div>
     </div>
@@ -47,14 +50,14 @@
         <app-pre-assessment-cost-form [settings]="settings" (emitCalculate)="calculate()" [preAssessment]="assessment"></app-pre-assessment-cost-form>
       </div>
     </div>
-    <div class="row form-results">
+    <div class="row form-results bold">
       <div class="col-6">
         <span class="pull-right">Energy Used</span>
       </div>
       <div class="col-6">
         <span class="pull-left">{{getEnergyUsed(assessment) | sigFigs:'6'}}
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMbtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
         </span>
       </div>
       <div class="col-6">
