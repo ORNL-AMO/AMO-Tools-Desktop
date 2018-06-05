@@ -122,6 +122,7 @@ export class PhastResultsService {
         results.totalExhaustGas = tmpResults.exhaustGasLosses;
         results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + tmpResults.exhaustGasLosses;
         results.availableHeatPercent = tmpResults.availableHeat;
+        results.electricalHeatDelivered = results.grossHeatInput - results.energyInputHeatDelivered;
       }
     }
 
