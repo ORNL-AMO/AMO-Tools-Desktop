@@ -1673,6 +1673,15 @@ No Data Messaging
   margin-top: 6px;
 }
 
+.phast-losses-container .no-data.no-data-phast.no-data-no-add:hover{
+  cursor: default;
+  background-color: #ABB2B9;
+}
+
+.phast-losses-container .no-data.no-data-phast.no-data-no-add h4 {
+  color: black;
+  text-decoration: none;
+}
 
 /*
 Toasty Overrides ================================= */

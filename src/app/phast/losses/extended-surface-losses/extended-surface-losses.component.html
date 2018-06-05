@@ -3,6 +3,10 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_surfaceLosses.length == 0 && lossesLocked) || (_surfaceLosses.length == 0 && !inSetup)">
+  <h3>You have no Extended Surface Losses</h3>
+  <h4>To add Extended Surface Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
 
 <div class="card-form" *ngFor="let loss of _surfaceLosses; let lossIndex = index;">
   <div class="row">

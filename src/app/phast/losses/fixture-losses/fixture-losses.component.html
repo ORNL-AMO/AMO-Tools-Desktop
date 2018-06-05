@@ -3,6 +3,12 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_fixtureLosses.length == 0 && lossesLocked) || (_fixtureLosses.length == 0 && !inSetup)">
+  <h3>You have no Fixture Losses</h3>
+  <h4>To add Fixture Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
+
+
 <div class="card-form" *ngFor="let loss of _fixtureLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">

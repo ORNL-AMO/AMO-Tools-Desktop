@@ -3,6 +3,11 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_coolingLosses.length == 0 && lossesLocked) || (_coolingLosses.length == 0 && !inSetup)">
+  <h3>You have no Cooling Losses</h3>
+  <h4>To add Cooling Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
+
 <div class="card-form" *ngFor="let loss of _coolingLosses; let lossIndex = index">
   <div class="row">
     <div class="col-12">
@@ -68,7 +73,7 @@
     </div>
   </div>
 </div>
-<div class="row loss-total">
+<div class="row loss-total" *ngIf="total">
   <div class="col-12">
     <div class="form-group">
       <label class="bold">Cooling Total</label>

@@ -2,6 +2,10 @@
   <h3>You have no Other Losses</h3>
   <h4>Add some now.</h4>
 </div>
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_otherLosses.length == 0 && lossesLocked) || (_otherLosses.length == 0 && !inSetup)">
+  <h3>You have no Other Losses</h3>
+  <h4>To add Other Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
 
 <div class="card-form" *ngFor="let loss of _otherLosses; let lossIndex = index;">
   <div class="row">
