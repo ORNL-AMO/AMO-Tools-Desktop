@@ -1560,7 +1560,8 @@ Help Panel Cards
 }
 
 .help-header, .help-content {
-  padding: 25px 0px;
+  padding-top: 1rem;
+  padding-bottom: 0px;
 }
   .wrapper .help-header {
     padding-top: 0;
