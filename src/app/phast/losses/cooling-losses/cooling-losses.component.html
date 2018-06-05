@@ -52,17 +52,32 @@
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-gas-cooling-losses-form>
     </div>
   </div>
-  <div class="row loss-total" [ngClass]="{'input-error': showError == true}">
+  <div class="row" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="bold">Cooling Total</label>
-        <div *ngIf="loss.heatLoss" class="text-center bold">
+        <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air' || loss.coolingMedium == 'Other Gas'">{{loss.gasCoolingForm.controls.name.value}} Total</label>
+        <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Liquid' || loss.coolingMedium == 'Water' || loss.coolingMedium == 'Other Liquid'">{{loss.liquidCoolingForm.controls.name.value}} Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center small bold">
           {{loss.heatLoss| sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="!loss.heatLoss" class="text-center bold">
+        <div *ngIf="!loss.heatLoss" class="text-center small bold">
           &mdash; &mdash;
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row loss-total">
+  <div class="col-12">
+    <div class="form-group">
+      <label class="bold">Cooling Total</label>
+      <div *ngIf="total" class="text-center bold">
+        {{total| sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+      <div *ngIf="!total" class="text-center bold">
+        &mdash; &mdash;
       </div>
     </div>
   </div>

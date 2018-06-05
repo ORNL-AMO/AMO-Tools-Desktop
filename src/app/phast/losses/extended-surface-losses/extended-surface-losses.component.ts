@@ -42,7 +42,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -120,6 +120,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._surfaceLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: any) {
