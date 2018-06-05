@@ -28,8 +28,6 @@ export class FixtureLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -69,7 +67,6 @@ export class FixtureLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -95,11 +92,6 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._fixtureLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   addLoss() {
     this._fixtureLosses.push({
       form: this.fixtureLossesService.initForm(this._fixtureLosses.length + 1),

@@ -27,8 +27,6 @@ export class OtherLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -54,7 +52,6 @@ export class OtherLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -88,12 +85,6 @@ export class OtherLossesComponent implements OnInit {
 
   collapseLoss(loss: OtherLossObj) {
     loss.collapse = !loss.collapse;
-  }
-
-  disableForms() {
-    this._otherLosses.forEach(loss => {
-      loss.form.disable();
-    })
   }
 
   addLoss() {

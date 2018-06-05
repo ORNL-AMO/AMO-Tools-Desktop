@@ -29,8 +29,6 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -75,22 +73,14 @@ export class CoolingLossesComponent implements OnInit {
 
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
-  disableForms() {
-    this._coolingLosses.forEach(loss => {
-      loss.gasCoolingForm.disable();
-      loss.liquidCoolingForm.disable();
-    })
-  }
   initCoolingLosses() {
     let lossIndex = 1;
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
       if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air' || loss.coolingLossType == 'Other Gas') {
-        // console.log('loss.coolingLossType = ' + loss.coolingLossType);
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss),
@@ -98,7 +88,6 @@ export class CoolingLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        // console.log('tmpLoss.coolingMedium = ' + tmpLoss.coolingMedium);
       } else if (loss.coolingLossType == 'Liquid' || loss.coolingLossType == 'Water' || loss.coolingLossType == 'Other Liquid') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,

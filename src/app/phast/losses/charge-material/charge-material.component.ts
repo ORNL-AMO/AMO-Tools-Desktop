@@ -29,8 +29,6 @@ export class ChargeMaterialComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -83,17 +81,9 @@ export class ChargeMaterialComponent implements OnInit {
     }
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
-
-  disableForms() {
-    this._chargeMaterial.forEach(loss => {
-      loss.solidForm.disable();
-      loss.liquidForm.disable();
-      loss.gasForm.disable();
-    })
-  }
+  
   initChargeMaterial() {
     let lossIndex = 1;
     this.losses.chargeMaterials.forEach(loss => {

@@ -28,8 +28,6 @@ export class OpeningLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -42,7 +40,7 @@ export class OpeningLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   total: number = 0;
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,7 +48,6 @@ export class OpeningLossesComponent implements OnInit {
       if (changes.addLossToggle) {
         this.addLoss();
       } else if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
-        console.log('change')
         this._openingLosses = new Array();
         this.initForms();
       }
@@ -72,8 +69,7 @@ export class OpeningLossesComponent implements OnInit {
     }
     this.initForms();
     if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
+         this.lossesLocked = true;
     }
   }
 
@@ -112,11 +108,6 @@ export class OpeningLossesComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
 
-  disableForms() {
-    this._openingLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   removeLoss(lossIndex: number) {
     this._openingLosses.splice(lossIndex, 1);
     this.saveLosses();
@@ -165,7 +156,7 @@ export class OpeningLossesComponent implements OnInit {
 
   setError(bool: boolean) {
     this.showError = bool;
-  }  
+  }
   getTotal() {
     return _.sumBy(this._openingLosses, 'totalOpeningLosses');
   }
