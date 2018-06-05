@@ -41,7 +41,6 @@ export class LossesComponent implements OnInit {
   addLossToggle: boolean = false;
   showNotes: boolean = false;
   isLossesSetup: boolean;
-  showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
   lossesTabs: Array<LossTab>;

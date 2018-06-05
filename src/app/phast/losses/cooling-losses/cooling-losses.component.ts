@@ -41,6 +41,7 @@ export class CoolingLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   disableType: boolean = false;
+  total: number;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -141,6 +142,7 @@ export class CoolingLossesComponent implements OnInit {
   removeLoss(lossIndex) {
     this._coolingLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
   calculate(loss: CoolingLossObj) {
     if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air' || loss.coolingMedium == 'Other Gas') {
@@ -159,6 +161,7 @@ export class CoolingLossesComponent implements OnInit {
         loss.heatLoss = null;
       }
     }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
@@ -204,7 +207,6 @@ export class CoolingLossesComponent implements OnInit {
       tmpCoolingLosses.push(tmpCoolingLoss);
       lossIndex++;
     })
-
     this.losses.coolingLosses = tmpCoolingLosses;
     this.savedLoss.emit(true);
   }
@@ -227,6 +229,10 @@ export class CoolingLossesComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  getTotal(){
+    return _.sumBy(this._coolingLosses, 'heatLoss');
   }
 }
 

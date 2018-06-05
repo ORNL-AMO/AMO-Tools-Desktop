@@ -39,7 +39,7 @@ export class GasLeakageLossesComponent implements OnInit {
   lossesLocked: boolean = false;
   resultsUnit: string;
   showError: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +111,7 @@ export class GasLeakageLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._leakageLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: GasLeakageObj) {

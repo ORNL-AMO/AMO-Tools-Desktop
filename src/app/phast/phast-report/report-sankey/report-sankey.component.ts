@@ -41,6 +41,8 @@ export class ReportSankeyComponent implements OnInit {
   ngOnInit() {
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
+    this.assessmentName = this.assessmentName.replace('(', '');
+    this.assessmentName = this.assessmentName.replace(')','');
     this.phastOptions = new Array<any>();
     this.phastOptions.push({name: 'Baseline', phast: this.phast});
     this.phast1 = this.phastOptions[0];

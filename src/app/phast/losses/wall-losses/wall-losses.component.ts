@@ -124,6 +124,7 @@ export class WallLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._wallLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   //calculate wall loss results

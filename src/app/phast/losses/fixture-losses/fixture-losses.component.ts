@@ -39,7 +39,7 @@ export class FixtureLossesComponent implements OnInit {
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -104,6 +104,7 @@ export class FixtureLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._fixtureLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: FixtureLossObj) {

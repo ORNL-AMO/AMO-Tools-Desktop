@@ -39,8 +39,8 @@ export class OpeningLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  total: number = 0;
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
+  total: number;
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +111,7 @@ export class OpeningLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._openingLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: OpeningLossObj) {

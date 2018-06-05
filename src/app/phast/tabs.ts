@@ -74,6 +74,7 @@ export const defaultTabs: Array<LossTab> = [
     {
         tabName: 'Cooling',
         componentStr: 'cooling-losses',  
+        showAdd: true
     },
     {
         tabName: 'Atmosphere',

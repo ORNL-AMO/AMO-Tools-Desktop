@@ -36,7 +36,7 @@ export class OtherLossesComponent implements OnInit {
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   resultsUnit: string;
   constructor(private otherLossesService: OtherLossesService) { }
 
@@ -99,6 +99,7 @@ export class OtherLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._otherLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   renameLoss() {
