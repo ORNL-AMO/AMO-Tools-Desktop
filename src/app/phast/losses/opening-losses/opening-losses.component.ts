@@ -41,7 +41,7 @@ export class OpeningLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
 
 
@@ -50,7 +50,6 @@ export class OpeningLossesComponent implements OnInit {
       if (changes.addLossToggle) {
         this.addLoss();
       } else if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
-        console.log('change')
         this._openingLosses = new Array();
         this.initForms();
       }
@@ -120,6 +119,7 @@ export class OpeningLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._openingLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: OpeningLossObj) {

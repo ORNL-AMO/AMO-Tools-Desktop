@@ -48,11 +48,7 @@ export class ChargeMaterialComponent implements OnInit {
     heatRequired: number,
     netHeatLoss: number,
     endoExoHeat: number
-  } = {
-      heatRequired: 0,
-      netHeatLoss: 0,
-      endoExoHeat: 0
-    };
+  };
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -160,6 +156,7 @@ export class ChargeMaterialComponent implements OnInit {
   removeMaterial(lossIndex: number) {
     this._chargeMaterial.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   collapseLoss(loss: ChargeMaterialObj) {
