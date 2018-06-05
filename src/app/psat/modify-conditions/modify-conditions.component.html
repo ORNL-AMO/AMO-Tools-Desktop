@@ -49,15 +49,15 @@
 
         </div>
       </div>
+      <!-- No content message -->
+      <div class="col-6 no-data" *ngIf="!modificationExists" (click)="addModification()">
+        <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
+          opportunities.
+        </h3>
+        <button type="button" class="btn btn-primary">Add Modified Condition</button>
+        <p>Data will be copied from your current baseline condition.</p>
+      </div>
     </div>
-  </div>
-  <!-- No content message -->
-  <div class="col-4 no-data" *ngIf="!modificationExists" (click)="addModification()">
-    <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
-      opportunities.
-    </h3>
-    <button type="button" class="btn btn-primary">Add Modified Condition</button>
-    <p>Data will be copied from your current baseline condition.</p>
   </div>
 
   <!-- Help Panel -->
@@ -68,7 +68,7 @@
       <div class="header">
         <h3>Help</h3>
       </div>
-      <p>Add Modification to view results</p>
+      <p class="p-4 text-muted">Add a modification to view results.</p>
     </div>
   </div>
 

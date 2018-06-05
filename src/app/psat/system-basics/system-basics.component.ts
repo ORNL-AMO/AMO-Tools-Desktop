@@ -124,6 +124,7 @@ export class SystemBasicsComponent implements OnInit {
     if (psat.inputs.fluidTemperature) {
       if (this.settings.temperatureMeasurement && this.oldSettings.temperatureMeasurement) {
         psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(this.oldSettings.temperatureMeasurement).to(this.settings.temperatureMeasurement);
+        psat.inputs.fluidTemperature = this.convertUnitsService.roundVal(psat.inputs.fluidTemperature, 2);
       }
     }
     return psat;
