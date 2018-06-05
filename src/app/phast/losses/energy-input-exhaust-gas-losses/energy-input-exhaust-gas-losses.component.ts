@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -35,6 +36,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   modExists: boolean;
   @Input()
   modificationIndex: number;
+  @Input()
+  phast: PHAST;
 
   _exhaustGasLosses: Array<EnInputExGasObj>;
   firstChange: boolean = true;
@@ -42,7 +45,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   showError: boolean = false;
-  constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService) { }
+  electricalHeatDelivered: number = 0;
+  energyInputTotal: number = 0;
+  constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastResultsService: PhastResultsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -125,9 +130,14 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       loss.heatLoss = results.heatDelivered;
       loss.exhaustGas = results.exhaustGasLosses;
       this.availableHeat = results.availableHeat;
+      let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      this.energyInputTotal = tmpResults.grossHeatInput;
+      this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss;
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;
+      this.energyInputTotal = 0;
+      this.electricalHeatDelivered = 0;
     }
   }
 

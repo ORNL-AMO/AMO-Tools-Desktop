@@ -22,7 +22,6 @@ export class PreAssessmentService {
     //calculation logic to get results (in pre-assessment.component.ts)
     let i = preAssessments.length - 1;
     preAssessments.forEach(assessment => {
-      assessment = this.checkCost(assessment, settings);
       if (assessment.type == 'Metered') {
         if (assessment.meteredEnergy) {
           results.push(this.calculateMetered(assessment, settings));
@@ -39,19 +38,6 @@ export class PreAssessmentService {
     });
 
     return results;
-  }
-
-  checkCost(assessment: PreAssessment, settings: Settings): PreAssessment {
-    if (!assessment.fuelCost) {
-      assessment.fuelCost = settings.fuelCost;
-    }
-    if (!assessment.steamCost) {
-      assessment.steamCost = settings.steamCost;
-    }
-    if (!assessment.electricityCost) {
-      assessment.electricityCost = settings.electricityCost;
-    }
-    return assessment;
   }
 
   calculateMetered(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {

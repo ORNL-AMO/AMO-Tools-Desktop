@@ -43,12 +43,38 @@
     </div>
     <div class="col-12">
       <div class="form-group">
-        <label class="bold">Energy Input Total</label>
+        <label class="bold">Exhaust Gas Losses</label>
         <div *ngIf="loss.exhaustGas" class="text-center bold">
           {{loss.exhaustGas | sigFigs:'6'}}
           <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.exhaustGas" class="text-center bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <label class="bold">Electrical Heat Delivered</label>
+        <div *ngIf="electricalHeatDelivered" class="text-center bold">
+          {{electricalHeatDelivered | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!electricalHeatDelivered" class="text-center bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <label class="bold">Energy Input Total</label>
+        <div *ngIf="energyInputTotal" class="text-center bold">
+          {{energyInputTotal | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!energyInputTotal" class="text-center bold">
           &mdash; &mdash;
         </div>
       </div>
