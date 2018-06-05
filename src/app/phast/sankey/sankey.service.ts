@@ -11,8 +11,11 @@ export class SankeyService {
 
   baseSize: number = 300;
   exothermicHeat: number;
+  exothermicHeatSpacing: number;
+  outputRatio: number;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
@@ -74,9 +77,12 @@ export class SankeyService {
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
     results.nodes = this.getNodes(results, settings);
-    // console.log('results = ');
-    // console.log(results);
+
     return results;
+  }
+
+  setOutputRatio(input: number, output: number) {
+
   }
 
 
@@ -117,10 +123,6 @@ export class SankeyService {
     if (results.totalWallLoss) {
       arrowCount++;
     }
-    //debug
-    if (this.exothermicHeat != 0) {
-      arrowCount++;
-    }
 
     let unit: string;
     if (settings.energyResultUnit != 'kWh') {
@@ -136,13 +138,9 @@ export class SankeyService {
     results.nodes.push(tmpNode);
     let interIndex = 2;
 
-
-    //debug
     ventOffsetX = (275 * interIndex);
-
-    //real version
-    // ventOffsetX = (250 * interIndex);
     spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
+    let exoSpacing = spacing * arrowCount + ventOffsetX;
 
     var scale = d3.scaleLinear()
       .domain([2, interIndex + arrowCount + 1])
@@ -285,21 +283,8 @@ export class SankeyService {
     }
 
 
-    //check here for exothermic heat value, TRUE for 'input' boolean
-    if (this.exothermicHeat != 0) {
-      spacing = scale(interIndex);
-      // tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, top, unit, false);
-      tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, false, unit, false);
-      results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
-      results.nodes.push(tmpNode);
-      interIndex++;
-      top = !top;
-    }
-
-
-
     spacing = scale(interIndex);
+    this.exothermicHeatSpacing = exoSpacing;
     tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
@@ -352,6 +337,14 @@ export class SankeyService {
       nodes: new Array<SankeyNode>()
     }
     return results;
+  }
+
+  getExothermicHeat(): number {
+    return this.exothermicHeat;
+  }
+
+  getExothermicHeatSpacing(): number {
+    return this.exothermicHeatSpacing;
   }
 }
 

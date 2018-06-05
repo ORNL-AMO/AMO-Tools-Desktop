@@ -21,7 +21,13 @@ const width = 2650,
   topReportPositionY = 125,
   bottomReportPositionY = 1250,
   availableHeatX = 450,
-  availableHeatY = 740;
+  availableHeatY = 740,
+  exothermicX = 1925,
+  exothermicY = 945,
+  exothermicLineX0 = 1925,
+  exothermicLineY0 = 920,
+  exothermicLineX1 = 2020,
+  exothermicLineY1 = 830;
 
 
 @Component({
@@ -58,6 +64,8 @@ export class SankeyComponent implements OnInit {
   minSize: number = 3;
 
   availableHeatPercent: { val: number, name: string, x: number, y: number };
+  exothermicHeat: { val: number, name: string, x: number, y: number, units: string };
+  usefulOutputY: number;
 
 
   constructor(private phastResultService: PhastResultsService, private phastService: PhastService, private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
@@ -93,6 +101,10 @@ export class SankeyComponent implements OnInit {
     }
   }
 
+  calculateExothermicPlacement() {
+
+  }
+
   makeSankey() {
     let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
     if (results.totalInput > 0) {
@@ -113,23 +125,13 @@ export class SankeyComponent implements OnInit {
       y: this.availableHeatPercent.y
     }];
 
-
     //create node linkes
     let links = new Array<any>();
     let i = 0;
-    console.log('results.nodes.length = ' + results.nodes.length);
     for (i; i < results.nodes.length - 2;) {
       links.push({ source: i, target: i + 1 });
-
-      console.log('i = ' + i);
       if (i != 0) {
         links.push({ source: i, target: i + 2 });
-        if (results.nodes[i + 1].input) {
-          console.log('next i is input');
-          links.push({ source: i + 1, target: i + 2 });
-          i = i + 2;
-          break;
-        }
         i = i + 2;
       } else {
         i = i + 1;
@@ -137,15 +139,6 @@ export class SankeyComponent implements OnInit {
     }
     //extra push for output
     links.push({ source: i, target: i + 1 });
-
-    console.log('links = ');
-    console.log(links);
-    console.log('results.nodes[5]=');
-    console.log(results.nodes[5]);
-    console.log('results.nodes[6]=');
-    console.log(results.nodes[6]);
-    console.log('results.nodes[7]=');
-    console.log(results.nodes[7]);
 
 
     if (this.printView) {
@@ -247,8 +240,6 @@ export class SankeyComponent implements OnInit {
       })
       .attr("dy", (d) => {
         if (d.input && d.name != "Exothermic Heat") {
-          console.log('d.input');
-          console.log(d);
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + labelFontSize + labelPadding - 182;
           } else if (this.location !== 'sankey-diagram') {
@@ -387,6 +378,66 @@ export class SankeyComponent implements OnInit {
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
       .attr("fill", "white");
+
+
+
+    //exothermic heat
+    let tmpExothermicHeat = this.sankeyService.getExothermicHeat();
+    if (tmpExothermicHeat != 0 && tmpExothermicHeat !== null) {
+
+      let exothermicXSpacing = this.sankeyService.getExothermicHeatSpacing() - 100;
+
+      let exothermicHeat = [{
+        val: Math.abs(tmpExothermicHeat),
+        name: "Exothermic Heat",
+        x: exothermicXSpacing,
+        y: exothermicY,
+        units: this.settings.energyResultUnit
+      }];
+
+      var exothermicHeatText = svg.data(exothermicHeat)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          return d.y;
+        })
+        .text((d) => {
+          return d.name
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+      exothermicHeatText = svg.data(exothermicHeat)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          if (this.location === 'sankey-diagram') {
+            return d.y + labelFontSize + 1 + "px";
+          }
+          else {
+            return d.y + reportFontSize + 1 + "px";
+          }
+        })
+        .text((d) => {
+          return d.val + " " + d.units;
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+      var exothermicLine = svg.append("line")
+        .style("stroke", "black")
+        .attr("x1", exothermicXSpacing)
+        .attr("y1", exothermicLineY0)
+        .attr("x2", exothermicXSpacing + 90)
+        .attr("y2", this.usefulOutputY)
+        .style("stroke-width", "1.5px");
+    }
   }
 
   //positions elements
@@ -424,8 +475,8 @@ export class SankeyComponent implements OnInit {
 
             //Since this is a static diagram this can be place, but if the final output is off take out the bellow code.
             alterVal -= d.displaySize;
-
             d.y += (d.displaySize + alterVal);
+            this.usefulOutputY = d.y + d.displaySize;
           }
           else {
             if (d.top) {
@@ -439,7 +490,6 @@ export class SankeyComponent implements OnInit {
           }
         }
         else if (d.name == 'Exothermic Heat') {
-          console.log("d.name = " + d.name);
           // d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
           d.displaySize = this.calcDisplayValue(this.baseSize, Math.abs(d.value), nodes[0].value);
           // d.y += (nodes[i - 1].displaySize * 2) + alterVal;
@@ -456,58 +506,16 @@ export class SankeyComponent implements OnInit {
 
 
   makeLinks(d, nodes) {
-    console.log('makeLinks()');
 
     var linkGen = d3.line()
       .curve(d3.curveMonotoneX);
 
     var points = [];
     if (nodes[d.source].input) {
-      console.log('nodes[d.source].name = ' + nodes[d.source].name);
-      console.log('SOURCE IS INPUT');
-      // console.log(nodes[d.source]);
-
-      console.log('');
-      console.log('GROSS HEAT');
-      console.log("=== source ===");
-      console.log(d.source);
-      console.log(nodes[d.source]);
-      console.log("==============");
-      console.log('');
-      console.log('=== target ===');
-      console.log(d.target);
-      console.log(nodes[d.target]);
-      console.log("==============");
-      console.log('');
 
       points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
     }
-
-    // if (nodes[d.target].name == 'Exothermic Heat') {
-    //   console.log('');
-    //   console.log('found exothermic');
-    //   console.log("=== source ===");
-    //   console.log(d.source);
-    //   console.log(nodes[d.source]);
-    //   console.log("==============");
-    //   console.log('');
-    //   console.log('=== target ===');
-    //   console.log(d.target);
-    //   console.log(nodes[d.target]);
-    //   console.log("==============");
-    //   points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
-    //   points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
-    // }
-
-    // if (nodes[d.target].input) {
-    //   console.log('d.target.input');
-    //   console.log('source = ');
-    //   console.log(nodes[d.source]);
-    //   console.log('target = ')
-    //   points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
-    //   points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
-    // }
 
     // If it links up with an inter or usefulOutput then go strait tot the interNode
     else if (nodes[d.target].inter || nodes[d.target].usefulOutput) {
