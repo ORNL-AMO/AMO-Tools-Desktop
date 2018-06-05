@@ -10,6 +10,7 @@ import * as d3 from 'd3';
 export class SankeyService {
 
   baseSize: number = 300;
+  exothermicHeat: number;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
@@ -17,6 +18,8 @@ export class SankeyService {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
+
+    this.exothermicHeat = phastResults.exothermicHeat;
     // let constant = 1;
     // if (settings.energySourceType != 'Electricity') {
     //   constant = 1000000
@@ -71,6 +74,8 @@ export class SankeyService {
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
     results.nodes = this.getNodes(results, settings);
+    // console.log('results = ');
+    // console.log(results);
     return results;
   }
 
@@ -110,6 +115,10 @@ export class SankeyService {
       arrowCount++;
     }
     if (results.totalWallLoss) {
+      arrowCount++;
+    }
+    //debug
+    if (this.exothermicHeat != 0) {
       arrowCount++;
     }
 
@@ -173,7 +182,7 @@ export class SankeyService {
     }
     // end flue gas arrow
 
-    
+
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
       spacing = scale(interIndex);
@@ -274,6 +283,21 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
+
+
+    //check here for exothermic heat value, TRUE for 'input' boolean
+    if (this.exothermicHeat != 0) {
+      spacing = scale(interIndex);
+      // tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, top, unit, false);
+      tmpNode = this.createNode("Exothermic Heat", Math.abs(this.exothermicHeat), 0, 0, spacing, 0, true, false, false, false, unit, false);
+      results.nodes.push(tmpNode);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
+      results.nodes.push(tmpNode);
+      interIndex++;
+      top = !top;
+    }
+
+
 
     spacing = scale(interIndex);
     tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
