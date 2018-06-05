@@ -30,6 +30,18 @@ tr > th:not(:first-child){
   border-bottom: 2px groove #bf3d00;
 }
 
+.panel-table td:first-child,
+.panel-table th:first-child {
+    width: 50%;
+}
+
+.panel-table td:not(:first-child),
+.panel-table th:not(:first-child) {
+    width: 25%;
+}
+
+
+
 @media print {
     .output-summary .table th,
     .output-summary .table td {
