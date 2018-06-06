@@ -28,8 +28,6 @@ export class FixtureLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -41,7 +39,7 @@ export class FixtureLossesComponent implements OnInit {
   _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -69,7 +67,6 @@ export class FixtureLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -95,11 +92,6 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._fixtureLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   addLoss() {
     this._fixtureLosses.push({
       form: this.fixtureLossesService.initForm(this._fixtureLosses.length + 1),
@@ -112,6 +104,7 @@ export class FixtureLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._fixtureLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: FixtureLossObj) {

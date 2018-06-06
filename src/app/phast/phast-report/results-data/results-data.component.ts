@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-results-data',
@@ -38,7 +39,7 @@ export class ResultsDataComponent implements OnInit {
   decimalCount: string;
 
   numMods: number = 0;
-
+  selectedPhastsSub: Subscription;
   constructor(private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -49,8 +50,8 @@ export class ResultsDataComponent implements OnInit {
       this.lossUnit = 'kW';
     }
 
-    if (!this.inPhast) {
-      this.reportRollupService.selectedPhasts.subscribe(val => {
+    if (this.inReport) {
+      this.selectedPhastsSub = this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
           val.forEach(assessment => {
             if (assessment.assessmentId == this.assessment.id) {
@@ -77,6 +78,11 @@ export class ResultsDataComponent implements OnInit {
       this.getResults();
     }
   }
+
+  ngOnDestory(){
+    if(this.selectedPhastsSub){this.selectedPhastsSub.unsubscribe;}
+  }
+
   useModification() {
     this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }

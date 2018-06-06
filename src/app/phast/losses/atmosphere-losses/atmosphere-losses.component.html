@@ -8,6 +8,14 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_atmosphereLosses.length == 0 && lossesLocked) || (_atmosphereLosses.length == 0 && !inSetup)">
+  <h3>You have no Atmosphere Losses</h3>
+  <h4>To add Atmosphere Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
+
+
+
+
 <div class="card-form" *ngFor="let loss of _atmosphereLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
@@ -17,7 +25,7 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>

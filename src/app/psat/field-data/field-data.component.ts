@@ -331,7 +331,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   canCompare() {
-    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT) {
+    if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT && !this.inSetup) {
       return true;
     } else {
       return false;

@@ -28,8 +28,6 @@ export class WallLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -75,7 +73,6 @@ export class WallLossesComponent implements OnInit {
 
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -105,12 +102,6 @@ export class WallLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._wallLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
-
   addLoss() {
     //add new empty loss to component data
     this._wallLosses.push({
@@ -133,6 +124,7 @@ export class WallLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._wallLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   //calculate wall loss results

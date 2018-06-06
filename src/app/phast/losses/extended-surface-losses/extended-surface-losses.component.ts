@@ -29,8 +29,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -42,7 +40,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,10 +67,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this._surfaceLosses = new Array();
     }
     this.initForms();
-
+    
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -96,18 +93,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       })
       this.total = this.getTotal();
     }
-
-    if (this.inSetup && this.modExists) {
-      this.lossesLocked = true;
-      this.disableForms();
-    }
   }
 
-  disableForms() {
-    this._surfaceLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   addLoss() {
     this._surfaceLosses.push({
       form: this.extendedSurfaceLossesService.initForm(this._surfaceLosses.length + 1),
@@ -120,6 +107,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._surfaceLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: any) {

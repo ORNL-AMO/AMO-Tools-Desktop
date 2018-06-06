@@ -12,13 +12,13 @@
 <div class="setup-form-group">
   <div class="row">
     <div class="col-12">
-      <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges($event)"></app-application-settings>
+      <app-application-settings [inPhast]="true" [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges(true)"></app-application-settings>
     </div>
   </div>
 
   <div class="row">
     <div class="col-12">
-      <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges()" [disable]="lossesExist"></app-phast-settings>
+      <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveChanges(true)" [disable]="lossesExist"></app-phast-settings>
     </div>
   </div>
   <div class="row">
@@ -26,7 +26,7 @@
       <form>
         <div class="form-group">
           <label class="group-label w-100">Equipment Notes</label>
-          <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges()" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
+          <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges(true)" [(ngModel)]="phast.equipmentNotes" placeholder="Add additional information for your equipment"></textarea>
         </div>
       </form>
     </div>
@@ -37,7 +37,7 @@
         <div class="form-group">
           <label class="group-label w-100">
             Operating Conditions at time of Assessment</label>
-          <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges()" [(ngModel)]="phast.operatingHours.operatingConditions"
+          <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges(true)" [(ngModel)]="phast.operatingHours.operatingConditions"
             placeholder="Add note for operating conditions"></textarea>
         </div>
       </form>

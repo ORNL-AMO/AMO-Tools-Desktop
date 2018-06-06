@@ -28,20 +28,18 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   resultsUnit: string;
   showError: boolean = false;
-  total: number = 0;
+  total: number;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,7 +67,6 @@ export class GasLeakageLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
   initForms() {
@@ -94,12 +91,6 @@ export class GasLeakageLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._leakageLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
-
   addLoss() {
     this._leakageLosses.push({
       form: this.gasLeakageLossesService.initForm(this._leakageLosses.length + 1),
@@ -120,6 +111,7 @@ export class GasLeakageLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._leakageLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   calculate(loss: GasLeakageObj) {

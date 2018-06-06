@@ -27,8 +27,6 @@ export class OtherLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -38,7 +36,7 @@ export class OtherLossesComponent implements OnInit {
   _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
-  total: number = 0;
+  total: number;
   resultsUnit: string;
   constructor(private otherLossesService: OtherLossesService) { }
 
@@ -54,7 +52,6 @@ export class OtherLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -90,12 +87,6 @@ export class OtherLossesComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
 
-  disableForms() {
-    this._otherLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
-
   addLoss() {
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
@@ -108,6 +99,7 @@ export class OtherLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     this._otherLosses.splice(lossIndex, 1);
     this.saveLosses();
+    this.total = this.getTotal();
   }
 
   renameLoss() {

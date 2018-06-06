@@ -3,6 +3,11 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_chargeMaterial.length == 0 && lossesLocked) || (_chargeMaterial.length == 0 && !inSetup)">
+  <h3>You have no Charge Material</h3>
+  <h4>To add Charge Material you will need to delete your current modifications and return to system setup.</h4>
+</div>
+
 <div class="card-form" *ngFor="let material of _chargeMaterial; let lossIndex = index">
   <div class="row">
     <div class="col-12">
@@ -13,7 +18,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -27,7 +32,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -41,7 +46,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -55,7 +60,7 @@
       <div class="form-section">
         <div class="form-group">
           <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected || lossesLocked"
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
             (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>
@@ -113,7 +118,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="total">
   <div class="col-12 loss-total">
     <div class="d-flex">
       <div class="w-50 bold">

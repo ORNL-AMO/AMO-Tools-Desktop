@@ -3,6 +3,10 @@
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_auxiliaryPowerLosses.length == 0 && lossesLocked) || (_auxiliaryPowerLosses.length == 0 && !inSetup)">
+  <h3>You have no Auxiliary Power Losses</h3>
+  <h4>To add Auxiliary Power Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
 
 <div class="card-form" *ngFor="let loss of _auxiliaryPowerLosses; let lossIndex = index;">
   <div class="row">
@@ -13,7 +17,7 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
