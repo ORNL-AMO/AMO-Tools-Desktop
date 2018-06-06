@@ -25,10 +25,6 @@ const width = 2650,
   styleUrls: ['./psat-sankey.component.css']
 })
 export class PsatSankeyComponent implements OnInit {
-  // @Input()
-  // assessment: Assessment;
-  // @Input()
-  // saveClicked: boolean;
   @Input()
   psat: PSAT;   //baseline
   @Input()
@@ -39,12 +35,11 @@ export class PsatSankeyComponent implements OnInit {
   printView: boolean;
   @Input()
   modIndex: number;
-
+  @Input()
+  assessmentName: string;
   @ViewChild("ngChart") ngChart: ElementRef;
 
-  //debug, set false when finished
-  debugFlag: boolean = true;
-
+  isBaseline: boolean;
 
   annualSavings: number;
   percentSavings: number;
@@ -76,6 +71,24 @@ export class PsatSankeyComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (this.location != "sankey-diagram") {
+      // this.location = this.location + this.modIndex.toString();
+      if (this.location == 'baseline') {
+        this.location = this.assessmentName + '-baseline';
+        this.isBaseline = true;
+      }
+      else {
+        this.location = this.assessmentName + '-modification';
+        this.isBaseline = false;
+      }
+
+      if (this.printView) {
+        this.location = this.location + '-' + this.modIndex;
+      }
+      this.location = this.location.replace(/ /g, "");
+      this.location = this.location.replace(/[\])}[{(]/g, '');
+      this.location = this.location.replace(/#/g, "");
+    }
   }
 
   ngAfterViewInit() {
@@ -87,6 +100,17 @@ export class PsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
+        if (this.location != "sankey-diagram") {
+          if (this.isBaseline) {
+            this.location = this.assessmentName + '-baseline';
+          }
+          else {
+            this.location = this.assessmentName + '-modification';
+          }
+          this.location = this.location.replace(/ /g, "");
+          this.location = this.location.replace(/[\])}[{(]/g, '');
+          this.location = this.location.replace(/#/g, "");
+        }
         this.getResults();
         this.makeSankey();
       }
@@ -295,12 +319,13 @@ export class PsatSankeyComponent implements OnInit {
     var color = this.findColor(nodes[0].value);
 
     this.makeGradient(color, nodes, links);
+    let location = this.location;
 
     svg.selectAll('marker')
       .data(links)
       .enter().append('svg:marker')
       .attr('id', function (d) {
-        return 'psat-end-' + d.target;
+        return 'psat-end-' + location + '-' + d.target;
       })
       .attr('orient', 'auto')
       .attr('refX', .1)
@@ -323,7 +348,7 @@ export class PsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#psat-linear-gradient-" + i + ")";
+        return "url(" + window.location + "#psat-" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -540,11 +565,12 @@ export class PsatSankeyComponent implements OnInit {
 
 
   makeGradient(color, nodes, links) {
+    let location = this.location;
     links.forEach(function (d, i) {
       var link_data = d;
       svg.append("linearGradient")
         .attr("id", function () {
-          return "psat-linear-gradient-" + i;
+          return "psat-" + location + "-linear-gradient-" + i;
         })
         .attr("gradientUnits", "userSpaceOnUse")
         .attr("x1", nodes[link_data.source].x)
@@ -586,8 +612,9 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   getEndMarker(d, nodes) {
+    let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#psat-end-" + d.target + ")";
+      return "url(" + window.location + "#psat-end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -597,12 +624,13 @@ export class PsatSankeyComponent implements OnInit {
   updateColors(nodes, links) {
 
     // make a new gradient
+    let location = this.location;
     var color = this.findColor(nodes[0].value);
 
     nodes.forEach(function (d, i) {
       var node_data = d;
       if (!d.inter || d.output) {
-        svg.select("#psat-end-" + i)
+        svg.select("#psat-end-" + location + "-" + i)
           .attr("fill", function () {
             return color(node_data.value);
           })
@@ -611,7 +639,7 @@ export class PsatSankeyComponent implements OnInit {
 
     links.forEach(function (d, i) {
       var link_data = d;
-      svg.select("#psat-linear-gradient-" + i)
+      svg.select("#psat-" + location + "-linear-gradient-" + i)
         .attr("x1", nodes[link_data.source].x)
         .attr("y1", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].output) {
