@@ -36,7 +36,6 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
   inSetup: boolean;
   
-  combustionError: string = null;
   heatError: string = null;
   firstChange: boolean = true;
   constructor(private windowRefService: WindowRefService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastService: PhastService) { }
@@ -71,30 +70,20 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.settings.unitsOfMeasure === 'Imperial') {
-      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 300) {
-        this.combustionError = 'Combustion Air Temperature cannot be less than 300 degrees F';
-      } else {
-        this.combustionError = null;
-      }
       if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 40) {
-        this.heatError = 'Exhaust Gas Temperature cannot be less than 40 degrees F';
+        this.heatError = 'Exhaust Gas Temperature cannot be less than 40 ';
       } else {
         this.heatError = null;
       }
     }
     if (this.settings.unitsOfMeasure === 'Metric') {
-      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 150) {
-        this.combustionError = 'Combustion Air Temperature cannot be less than 150 degrees C';
-      } else {
-        this.combustionError = null;
-      }
       if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 4) {
-        this.heatError = 'Exhaust Gas Temperature cannot be less than 4 degrees C';
+        this.heatError = 'Exhaust Gas Temperature cannot be less than 4 ';
       } else {
         this.heatError = null;
       }
     }
-    if (this.combustionError || this.heatError) {
+    if (this.heatError) {
       this.inputError.emit(true);
       this.energyInputExhaustGasCompareService.inputError.next(true);
     } else {
