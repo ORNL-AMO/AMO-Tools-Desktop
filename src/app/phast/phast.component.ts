@@ -158,12 +158,10 @@ export class PhastComponent implements OnInit {
       }
     })
     this.selectedModSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-      console.log(mod);
       if (mod && this._phast) {
         this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
           return val.phast.name == mod.name
         })
-        console.log(this.modificationIndex);
       } else {
         this.modificationIndex = undefined;
       }

@@ -91,7 +91,7 @@
           <h3 *ngIf="phast.modifications[modificationIndex]">{{phast.modifications[modificationIndex].phast.name}}</h3>
         </div>
 
-        <div class="losses-container phast-losses-container" *ngIf="modificationIndex">
+        <div class="losses-container phast-losses-container" *ngIf="modificationIndex || modificationIndex == 0">
           <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
             [(losses)]="phast.modifications[modificationIndex].phast.losses" *ngIf="selectedTab.componentStr == 'charge-material'"
             [settings]="settings" [isLossesSetup]="isLossesSetup" [modificationIndex]="modificationIndex"></app-charge-material>
