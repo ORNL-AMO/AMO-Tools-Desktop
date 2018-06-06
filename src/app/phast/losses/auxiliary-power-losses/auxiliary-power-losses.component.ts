@@ -28,14 +28,12 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   inputError: boolean = false;
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<AuxPowLossObj>;
@@ -68,7 +66,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
     this.initForms();
     if (this.inSetup && this.modExists) {
-      this.disableForms();
       this.lossesLocked = true;
     }
   }
@@ -94,11 +91,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._auxiliaryPowerLosses.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   addLoss() {
     this._auxiliaryPowerLosses.push({
       form: this.auxiliaryPowerLossesService.initForm(this._auxiliaryPowerLosses.length + 1),

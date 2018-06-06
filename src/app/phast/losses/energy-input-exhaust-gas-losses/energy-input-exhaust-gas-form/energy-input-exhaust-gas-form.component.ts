@@ -36,6 +36,8 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
   inSetup: boolean;
   
+
+  combustionTempError: string = null;
   heatError: string = null;
   firstChange: boolean = true;
   constructor(private windowRefService: WindowRefService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastService: PhastService) { }
@@ -83,7 +85,15 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
         this.heatError = null;
       }
     }
-    if (this.heatError) {
+
+    if (this.exhaustGasForm.controls.combustionAirTemp.value >= this.exhaustGasForm.controls.exhaustGasTemp.value) {
+      this.combustionTempError = 'Combustion air temperature must be less than exhaust gas temperature';
+    }
+    else {
+      this.combustionTempError = null;
+    }
+
+    if (this.combustionTempError || this.heatError) {
       this.inputError.emit(true);
       this.energyInputExhaustGasCompareService.inputError.next(true);
     } else {
