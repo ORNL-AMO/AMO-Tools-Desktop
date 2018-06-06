@@ -83,19 +83,19 @@
           <span class="bold">Modification</span> ({{phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingType}})
         </label>
         <div class="form-group">
-          <label class="small" for="numberOfOpenings" aria-describedby="numberOfOpeningsHelp">Number of Openings
+          <label class="small" for="{{'numberOfOpeningsMod_'+lossIndex}}" aria-describedby="numberOfOpeningsHelp">Number of Openings
             <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
           </label>
-          <input name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].numberOfOpenings"
-            id="numberOfOpenings" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
+          <input name="{{'numberOfOpeningsMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].numberOfOpenings"
+            id="{{'numberOfOpeningsMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
             (focus)="focusField('numberOfOpenings')" (blur)="focusOut()">
           <span class="alert-warning pull-right small" *ngIf="numOpeningsError1[index] !== null">{{numOpeningsError2[index]}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="wallThickness">Furnace Wall Thickness</label>
           <div class="input-group">
-            <input name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].thickness"
-              id="wallThickness" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
+            <input name="{{'wallThicknessMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].thickness"
+              id="{{'wallThicknessMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('wallThickness')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
@@ -104,10 +104,10 @@
         </div>
 
         <div class="form-group">
-          <label *ngIf="loss.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
-          <label *ngIf="loss.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
+          <label *ngIf="loss.openingType != 'Round'" class="small" for="{{'lengthOfOpeningMod_'+lossIndex}}">Length of Openings</label>
+          <label *ngIf="loss.openingType == 'Round'" class="small" for="{{'lengthOfOpeningMod_'+lossIndex}}">Diameter of Openings</label>
           <div class="input-group">
-            <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].lengthOfOpening"
+            <input name="{{'lengthOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].lengthOfOpening"
               id="lengthOfOpening" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
@@ -117,10 +117,10 @@
         </div>
 
         <div class="form-group" *ngIf="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].openingType != 'Round'">
-          <label class="small" for="heightOfOpening">Height of Openings</label>
+          <label class="small" for="{{'heightOfOpeningMod_'+lossIndex}}">Height of Openings</label>
           <div class="input-group">
-            <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].heightOfOpening"
-              id="heightOfOpening" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
+            <input name="{{'heightOfOpeningMod_'+lossIndex}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.openingLosses[index].heightOfOpening"
+              id="{{'heightOfOpeningMod_'+lossIndex}}" onfocus="this.select();" (input)="getArea(2, phast.modifications[exploreModIndex].phast.losses.openingLosses[index], index)"
               (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
