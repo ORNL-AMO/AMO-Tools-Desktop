@@ -158,10 +158,12 @@ export class PhastComponent implements OnInit {
       }
     })
     this.selectedModSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
+      console.log(mod);
       if (mod && this._phast) {
         this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
           return val.phast.name == mod.name
         })
+        console.log(this.modificationIndex);
       } else {
         this.modificationIndex = undefined;
       }
@@ -399,6 +401,7 @@ export class PhastComponent implements OnInit {
   }
 
   saveNewMod(mod: Modification) {
+    console.log('save');
     this._phast.modifications.push(mod);
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
