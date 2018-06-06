@@ -150,11 +150,6 @@ export class LossesComponent implements OnInit {
     this.phast.disableSetupDialog = true;
   }
 
-  lossesSetup() {
-    this.saved.emit(true);
-    this.isLossesSetup = true;
-  }
-
   newModification() {
     this.lossesService.openNewModal.next(true);
   }

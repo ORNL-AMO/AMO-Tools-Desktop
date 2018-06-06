@@ -28,14 +28,12 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
@@ -69,7 +67,6 @@ export class GasLeakageLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
   initForms() {
@@ -92,12 +89,6 @@ export class GasLeakageLossesComponent implements OnInit {
       })
       this.total = this.getTotal();
     }
-  }
-
-  disableForms() {
-    this._leakageLosses.forEach(loss => {
-      loss.form.disable();
-    })
   }
 
   addLoss() {

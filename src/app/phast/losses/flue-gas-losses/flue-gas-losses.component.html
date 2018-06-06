@@ -17,7 +17,7 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
@@ -29,7 +29,7 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
@@ -41,7 +41,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked"
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
           (focus)="changeField('measurementType')" (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>

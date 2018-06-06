@@ -27,8 +27,6 @@ export class SlagComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -67,7 +65,6 @@ export class SlagComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
   initForms() {
@@ -89,12 +86,6 @@ export class SlagComponent implements OnInit {
         this._slagLosses.push(tmpLoss);
       })
     }
-  }
-
-  disableForms() {
-    this._slagLosses.forEach(loss => {
-      loss.form.disable();
-    })
   }
 
   addLoss() {

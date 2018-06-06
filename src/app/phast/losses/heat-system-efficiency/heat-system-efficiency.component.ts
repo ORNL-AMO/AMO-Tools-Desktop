@@ -49,25 +49,25 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
     this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
 
-    if (!this.baselineSelected) {
-      this.disableForm();
-    } else {
-      this.enableForm();
-    }
+    // if (!this.baselineSelected) {
+    //   this.disableForm();
+    // } else {
+    //   this.enableForm();
+    // }
     this.calculate(true);
 
-    if (this.inSetup && this.modExists) {
-      this.disableForm();
-    }
+    // if (this.inSetup && this.modExists) {
+    //   this.disableForm();
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
+      // if (!this.baselineSelected) {
+      //   this.disableForm();
+      // } else {
+      //   this.enableForm();
+      // }
       if (changes.modificationIndex) {
         this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
       }
@@ -88,13 +88,13 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     })
   }
 
-  disableForm() {
-    // this.efficiencyForm.disable();
-  }
+  // disableForm() {
+  //   // this.efficiencyForm.disable();
+  // }
 
-  enableForm() {
-    // this.efficiencyForm.enable();
-  }
+  // enableForm() {
+  //   // this.efficiencyForm.enable();
+  // }
 
   saveLosses() {
     this.phast.systemEfficiency = this.efficiencyForm.controls.efficiency.value;
