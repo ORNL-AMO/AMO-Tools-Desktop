@@ -10,13 +10,19 @@ import * as d3 from 'd3';
 export class SankeyService {
 
   baseSize: number = 300;
+  exothermicHeat: number;
+  exothermicHeatSpacing: number;
+  outputRatio: number;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
+
+    this.exothermicHeat = phastResults.exothermicHeat;
     // let constant = 1;
     // if (settings.energySourceType != 'Electricity') {
     //   constant = 1000000
@@ -71,7 +77,12 @@ export class SankeyService {
     results.availableHeatPercent = (1 - ((results.totalSystemLosses + results.totalFlueGas + results.totalExhaustGas) / results.totalInput)) * 100;
 
     results.nodes = this.getNodes(results, settings);
+
     return results;
+  }
+
+  setOutputRatio(input: number, output: number) {
+
   }
 
 
@@ -127,13 +138,9 @@ export class SankeyService {
     results.nodes.push(tmpNode);
     let interIndex = 2;
 
-
-    //debug
     ventOffsetX = (275 * interIndex);
-
-    //real version
-    // ventOffsetX = (250 * interIndex);
     spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
+    let exoSpacing = spacing * arrowCount + ventOffsetX;
 
     var scale = d3.scaleLinear()
       .domain([2, interIndex + arrowCount + 1])
@@ -173,7 +180,7 @@ export class SankeyService {
     }
     // end flue gas arrow
 
-    
+
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
       spacing = scale(interIndex);
@@ -275,7 +282,9 @@ export class SankeyService {
       top = !top;
     }
 
+
     spacing = scale(interIndex);
+    this.exothermicHeatSpacing = exoSpacing;
     tmpNode = this.createNode("Charge Material", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
@@ -328,6 +337,14 @@ export class SankeyService {
       nodes: new Array<SankeyNode>()
     }
     return results;
+  }
+
+  getExothermicHeat(): number {
+    return this.exothermicHeat;
+  }
+
+  getExothermicHeatSpacing(): number {
+    return this.exothermicHeatSpacing;
   }
 }
 
