@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MeteredEnergyResults, MeteredEnergyElectricity, MeteredEnergyFuel, MeteredEnergySteam } from '../../shared/models/phast/meteredEnergy';
+import { MeteredEnergyResults, MeteredEnergyElectricity, MeteredEnergyFuel, MeteredEnergySteam, MeteredEnergy } from '../../shared/models/phast/meteredEnergy';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -10,7 +10,7 @@ export class MeteredEnergyService {
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
-  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings, fuelInput?: MeteredEnergyFuel): MeteredEnergyResults {
+  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //meteredEnergyUsed = Electricity Used during collection / Collection Time
     let meteredEnergyUsed = this.calcElectricityUsed(input);
@@ -36,19 +36,19 @@ export class MeteredEnergyService {
       calculatedEnergyIntensity: calculated.energyIntensity,
       calculatedElectricityUsed: calculated.electricityUsed
     }
-    if (fuelInput) {
-      let fuelResults: MeteredEnergyResults = this.meteredFuel(fuelInput, phast, settings);
-      if (settings.unitsOfMeasure == 'Metric') {
-        fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('GJ').to('kWh');
-        fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('GJ').to('kWh');
-      } else {
-        fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('MMBtu').to('kWh');
-        fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('MMBtu').to('kWh');
-      }
-      tmpResults.meteredEnergyUsed += fuelResults.meteredEnergyUsed;
-      tmpResults.meteredEnergyIntensity += fuelResults.meteredEnergyIntensity;
-      tmpResults.meteredElectricityUsed += fuelResults.meteredElectricityUsed;
-    }
+    // if (fuelInput) {
+    //   let fuelResults: MeteredEnergyResults = this.meteredFuel(fuelInput, phast, settings);
+    //   if (settings.unitsOfMeasure == 'Metric') {
+    //     fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('GJ').to('kWh');
+    //     fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('GJ').to('kWh');
+    //   } else {
+    //     fuelResults.meteredEnergyUsed = this.convertUnitsService.value(fuelResults.meteredEnergyUsed).from('MMBtu').to('kWh');
+    //     fuelResults.meteredEnergyIntensity = this.convertUnitsService.value(fuelResults.meteredEnergyIntensity).from('MMBtu').to('kWh');
+    //   }
+    //   tmpResults.meteredEnergyUsed += fuelResults.meteredEnergyUsed;
+    //   tmpResults.meteredEnergyIntensity += fuelResults.meteredEnergyIntensity;
+    //   tmpResults.meteredElectricityUsed += fuelResults.meteredElectricityUsed;
+    // }
     return tmpResults;
   }
 
@@ -149,5 +149,48 @@ export class MeteredEnergyService {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
     }
     return val;
+  }
+
+
+  calculateMeteredEnergy(phast: PHAST, settings: Settings): MeteredEnergyResults{
+    let results: MeteredEnergyResults = {
+      meteredEnergyUsed: 0,
+      meteredEnergyIntensity: 0,
+      meteredElectricityUsed: 0,
+      calculatedFuelEnergyUsed: 0,
+      calculatedEnergyIntensity: 0,
+      calculatedElectricityUsed: 0
+    };
+    let steamResults: MeteredEnergyResults = results;
+    let fuelResults: MeteredEnergyResults = results;
+    let electricityResults: MeteredEnergyResults = results;
+
+    if(phast.meteredEnergy.steam){
+      steamResults = this.meteredSteam(phast.meteredEnergy.meteredEnergySteam, phast, settings)
+    }
+    if(phast.meteredEnergy.electricity){
+      electricityResults = this.meteredElectricity(phast.meteredEnergy.meteredEnergyElectricity, phast, settings);
+    }
+    if(phast.meteredEnergy.fuel){
+      fuelResults = this.meteredFuel(phast.meteredEnergy.meteredEnergyFuel, phast, settings);
+    }
+
+    results.meteredEnergyUsed = steamResults.meteredEnergyUsed + electricityResults.meteredEnergyUsed + fuelResults.meteredEnergyUsed;
+    results.meteredEnergyIntensity = steamResults.meteredEnergyIntensity + electricityResults.meteredEnergyIntensity + fuelResults.meteredEnergyIntensity;
+    results.meteredElectricityUsed = steamResults.meteredElectricityUsed + electricityResults.meteredElectricityUsed + fuelResults.meteredElectricityUsed;
+    if(steamResults.calculatedElectricityUsed){
+      results.calculatedFuelEnergyUsed = steamResults.calculatedFuelEnergyUsed;
+      results.calculatedEnergyIntensity = steamResults.calculatedEnergyIntensity;
+      results.calculatedElectricityUsed = steamResults.calculatedElectricityUsed;
+    }else if(electricityResults.calculatedElectricityUsed){
+      results.calculatedFuelEnergyUsed = electricityResults.calculatedFuelEnergyUsed;
+      results.calculatedEnergyIntensity = electricityResults.calculatedEnergyIntensity;
+      results.calculatedElectricityUsed = electricityResults.calculatedElectricityUsed;
+    }else if(fuelResults.calculatedElectricityUsed){
+      results.calculatedFuelEnergyUsed = fuelResults.calculatedFuelEnergyUsed;
+      results.calculatedEnergyIntensity = fuelResults.calculatedEnergyIntensity;
+      results.calculatedElectricityUsed = fuelResults.calculatedElectricityUsed;
+    }
+    return results;
   }
 }

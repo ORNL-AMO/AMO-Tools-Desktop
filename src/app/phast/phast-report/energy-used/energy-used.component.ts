@@ -105,7 +105,7 @@ export class EnergyUsedComponent implements OnInit {
     this.electricEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
       if (this.phast.meteredEnergy.meteredEnergyElectricity) {
-        this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings, this.phast.meteredEnergy.meteredEnergyFuel);
+        this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
       }
     }
 
