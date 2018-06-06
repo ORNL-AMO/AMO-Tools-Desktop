@@ -29,8 +29,6 @@ export class EnergyInputComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -74,7 +72,6 @@ export class EnergyInputComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -102,11 +99,6 @@ export class EnergyInputComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._energyInputs.forEach(loss => {
-      loss.form.disable();
-    })
-  }
   addLoss() {
     this._energyInputs.push({
       form: this.energyInputService.initForm(this._energyInputs.length + 1),

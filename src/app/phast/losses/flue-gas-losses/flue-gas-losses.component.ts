@@ -28,8 +28,6 @@ export class FlueGasLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
@@ -58,7 +56,6 @@ export class FlueGasLossesComponent implements OnInit {
     this.initFlueGasses()
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -76,12 +73,6 @@ export class FlueGasLossesComponent implements OnInit {
     }
   }
 
-  disableForms() {
-    this._flueGasLosses.forEach(loss => {
-      loss.formByMass.disable();
-      loss.formByVolume.disable();
-    })
-  }
   initFlueGasses() {
     if (this.losses.flueGasLosses) {
       let lossIndex = 1;

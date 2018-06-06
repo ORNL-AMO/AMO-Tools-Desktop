@@ -29,14 +29,12 @@ export class AtmosphereLossesComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   _atmosphereLosses: Array<AtmoLossObj>;
   firstChange: boolean = true;
   inputError: boolean = false;
@@ -72,7 +70,6 @@ export class AtmosphereLossesComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -95,12 +92,6 @@ export class AtmosphereLossesComponent implements OnInit {
         this._atmosphereLosses.push(tmpLoss);
       })
     }
-  }
-
-  disableForms() {
-    this._atmosphereLosses.forEach(loss => {
-      loss.form.disable();
-    })
   }
 
   addLoss() {

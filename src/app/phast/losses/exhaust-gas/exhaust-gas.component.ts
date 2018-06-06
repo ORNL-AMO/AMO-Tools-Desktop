@@ -29,14 +29,12 @@ export class ExhaustGasComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  isLossesSetup: boolean;
-  @Input()
   inSetup: boolean;
   @Input()
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   _exhaustGasLosses: Array<ExhaustGasObj>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -69,7 +67,6 @@ export class ExhaustGasComponent implements OnInit {
     this.initForms();
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
-      this.disableForms();
     }
   }
 
@@ -92,12 +89,6 @@ export class ExhaustGasComponent implements OnInit {
         this._exhaustGasLosses.push(tmpLoss);
       })
     }
-  }
-
-  disableForms() {
-    this._exhaustGasLosses.forEach(loss => {
-      loss.form.disable();
-    })
   }
 
   addLoss() {
