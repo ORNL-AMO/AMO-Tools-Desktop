@@ -40,7 +40,7 @@ export class SystemBasicsComponent implements OnInit {
     //phast need energyResultUnit
     if (this.settingsForm.controls.energyResultUnit.value == '' || !this.settingsForm.controls.energyResultUnit.value) {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
-      this.saveChanges();
+      this.saveChanges(true);
     }
     //oldSettings used for comparing if units update needed
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
