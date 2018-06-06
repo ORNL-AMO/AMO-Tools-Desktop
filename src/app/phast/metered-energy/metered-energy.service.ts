@@ -175,9 +175,9 @@ export class MeteredEnergyService {
       fuelResults = this.meteredFuel(phast.meteredEnergy.meteredEnergyFuel, phast, settings);
     }
 
-    results.meteredEnergyUsed = steamResults.meteredEnergyUsed + electricityResults.meteredEnergyUsed + fuelResults.meteredEnergyUsed;
-    results.meteredEnergyIntensity = steamResults.meteredEnergyIntensity + electricityResults.meteredEnergyIntensity + fuelResults.meteredEnergyIntensity;
-    results.meteredElectricityUsed = steamResults.meteredElectricityUsed + electricityResults.meteredElectricityUsed + fuelResults.meteredElectricityUsed;
+    results.meteredEnergyUsed = steamResults.meteredEnergyUsed + this.convertElectrotechResults(electricityResults.meteredEnergyUsed, settings) + fuelResults.meteredEnergyUsed;
+    results.meteredEnergyIntensity = steamResults.meteredEnergyIntensity + this.convertElectrotechResults(electricityResults.meteredEnergyIntensity, settings) + fuelResults.meteredEnergyIntensity;
+    results.meteredElectricityUsed = steamResults.meteredElectricityUsed + this.convertElectrotechResults(electricityResults.meteredElectricityUsed, settings) + fuelResults.meteredElectricityUsed;
     if(steamResults.calculatedElectricityUsed){
       results.calculatedFuelEnergyUsed = steamResults.calculatedFuelEnergyUsed;
       results.calculatedEnergyIntensity = steamResults.calculatedEnergyIntensity;
@@ -192,5 +192,24 @@ export class MeteredEnergyService {
       results.calculatedElectricityUsed = fuelResults.calculatedElectricityUsed;
     }
     return results;
+  }
+
+
+  convertSteamResults(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to('GJ');
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
+    }
+    return val;
+  }
+
+  convertElectrotechResults(val: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kWh').to('GJ');
+    } else {
+      val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
+    }
+    return val;
   }
 }

@@ -1,9 +1,11 @@
 export interface DesignedEnergy {
     designedEnergyFuel?: DesignedEnergyFuel[]
     designedEnergySteam?: DesignedEnergySteam[]
-    designedEnergyElectricity?: DesignedEnergyElectricity[]
+    designedEnergyElectricity?: DesignedEnergyElectricity[],
+    steam?: boolean,
+    fuel?: boolean,
+    electricity?: boolean
 }
-
 
 export interface DesignedEnergyFuel {
     name: string,
