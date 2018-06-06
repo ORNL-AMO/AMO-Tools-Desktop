@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="baseEfficiency">Modification System Efficiency</label>
+          <label for="modEfficiency">Modification System Efficiency</label>
           <div class="input-group">
             <input name="modEfficiency" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.systemEfficiency" id="modEfficiency" onfocus="this.select();"
               (input)="calculate()" (focus)="focusField('efficiency')">

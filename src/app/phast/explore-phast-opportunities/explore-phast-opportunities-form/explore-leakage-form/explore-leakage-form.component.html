@@ -30,10 +30,10 @@
           <span class="alert-warning pull-right small" *ngIf="draftPressureError1[index] !== null">{{draftPressureError1[index]}}</span>
         </div>
         <div class="form-group">
-          <label class="small" for="{{'draftPressure_'+index}}">Modification Draft Pressure</label>
+          <label class="small" for="{{'draftPressureMod_'+index}}">Modification Draft Pressure</label>
           <div class="input-group">
-            <input name="{{'draftPressure_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure"
-              id="{{'draftPressure_'+index}}" onfocus="this.select();" (input)="checkPressure(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure, index)"
+            <input name="{{'draftPressureMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure"
+              id="{{'draftPressureMod_'+index}}" onfocus="this.select();" (input)="checkPressure(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].draftPressure, index)"
               (focus)="focusField('draftPressure')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in. H
               <sub>2</sub>O</span>
