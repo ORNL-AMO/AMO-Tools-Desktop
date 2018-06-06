@@ -29,13 +29,14 @@
     </div>
     <div class="form-group">
       <label class="small" for="combustionAirTemp">Combustion Air Temp</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareCombustionAirTemp(), 'error': combustionError !== null, 'invalid': exhaustGasForm.controls.combustionAirTemp.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCombustionAirTemp(), 'error': combustionError !== null || combustionTempError !== null, 'invalid': exhaustGasForm.controls.combustionAirTemp.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'combustionAirTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="combustionAirTemp"
           id="combustionAirTemp" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('combustionAirTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="combustionError !== null">{{combustionError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="combustionTempError !== null">{{combustionTempError}}</span>
     </div>
     <div class="form-group">
       <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
