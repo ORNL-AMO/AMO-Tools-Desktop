@@ -18,7 +18,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -32,7 +32,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -46,7 +46,7 @@
               <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
               <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
             </span>
-            <input [readonly]="!baselineSelected" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
+            <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
             <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
               <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
             </span>
@@ -60,7 +60,7 @@
       <div class="form-section">
         <div class="form-group">
           <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected || lossesLocked"
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
             (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>
