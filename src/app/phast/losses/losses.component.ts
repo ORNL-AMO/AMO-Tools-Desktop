@@ -86,7 +86,7 @@ export class LossesComponent implements OnInit {
       this.isModalOpen = val;
     })
     this.lossesService.updateTabs.next(true);
-    this.saveModifications();
+    this.saveModifications(true);
   }
 
 
@@ -106,8 +106,8 @@ export class LossesComponent implements OnInit {
     this.currentField = $event;
   }
 
-  saveModifications() {
-    if (this.phast.modifications[this.modificationIndex]) {
+  saveModifications(bool?: boolean) {
+    if (this.phast.modifications[this.modificationIndex] && !bool) {
       if (this.phast.modifications[this.modificationIndex].exploreOpportunities) {
         this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }

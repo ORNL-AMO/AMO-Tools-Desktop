@@ -47,7 +47,7 @@ export class ExploreWallFormComponent implements OnInit {
     let index: number = 0;
     this.phast.losses.wallLosses.forEach(loss => {
       let check: boolean = this.initSurfaceTemp(loss.surfaceTemperature, this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature);
-      if (!this.showSurfaceTemp && check) {
+      if (!this.showWall && check) {
         this.showWall = check;
       }
       this.showSurfaceTemp.push(check);
