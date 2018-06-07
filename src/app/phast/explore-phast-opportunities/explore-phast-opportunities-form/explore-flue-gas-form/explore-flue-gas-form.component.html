@@ -50,10 +50,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="modified02">Modified Oxygen in Flue Gas</label>
+          <label for="modifiedO2">Modified Oxygen in Flue Gas</label>
           <div class="input-group" *ngIf="modifiedFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
-            <input name="modified02" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
-              id="modified02" onfocus="this.select();" (input)="calculateExcessAir(modifiedFlueGas,2)" (focus)="focusField('o2InFlueGas')"
+            <input name="modifiedO2" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
+              id="modifiedO2" onfocus="this.select();" (input)="calculateExcessAir(modifiedFlueGas,2)" (focus)="focusField('o2InFlueGas')"
               (blur)="focusOut()">
             <span class="input-group-addon units">%</span>
           </div>

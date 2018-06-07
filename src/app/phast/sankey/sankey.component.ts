@@ -47,6 +47,8 @@ export class SankeyComponent implements OnInit {
   printView: boolean;
   @Input()
   modIndex: number;
+  @Input()
+  assessmentName: string;
 
   //real version
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -73,7 +75,22 @@ export class SankeyComponent implements OnInit {
 
   ngOnInit() {
     if (this.location != "sankey-diagram") {
-      this.location = this.location + this.modIndex.toString();
+      // this.location = this.location + this.modIndex.toString();
+      if (this.location == 'baseline') {
+        this.location = this.assessmentName + '-baseline';
+        this.isBaseline = true;
+      }
+      else {
+        this.location = this.assessmentName + '-modification';
+        this.isBaseline = false;
+      }
+
+      if (this.printView) {
+        this.location = this.location + '-' + this.modIndex;
+      }
+      this.location = this.location.replace(/ /g, "");
+      this.location = this.location.replace(/[\])}[{(]/g, '');
+      this.location = this.location.replace(/#/g, "");
     }
   }
 
@@ -86,6 +103,17 @@ export class SankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.phast) {
       if (!changes.phast.firstChange) {
+        if (this.location != "sankey-diagram") {
+          if (this.isBaseline) {
+            this.location = this.assessmentName + '-baseline';
+          }
+          else {
+            this.location = this.assessmentName + '-modification';
+          }
+          this.location = this.location.replace(/ /g, "");
+          this.location = this.location.replace(/[\])}[{(]/g, '');
+          this.location = this.location.replace(/#/g, "");
+        }
         this.makeSankey();
       }
     }
@@ -116,7 +144,8 @@ export class SankeyComponent implements OnInit {
 
   sankey(results: FuelResults) {
     // Remove  all Sankeys
-    d3.select('#' + this.location).selectAll('svg').remove();
+    if (this.isBaseline && this.printView) { }
+    else { d3.select('#' + this.location).selectAll('svg').remove(); }
 
     let availableHeat = [{
       val: this.availableHeatPercent.val,
@@ -169,12 +198,14 @@ export class SankeyComponent implements OnInit {
     var color = this.findColor(results.nodes[0].value);
     this.makeGradient(color, results.nodes, links);
 
+    let location = this.location;
+
     //arrows are created, positioned, and colored
     svg.selectAll('marker')
       .data(links)
       .enter().append('svg:marker')
       .attr('id', function (d) {
-        return 'end-' + d.target;
+        return 'end-' + location + '-' + d.target;
       })
       .attr('orient', 'auto')
       .attr('refX', .1)
@@ -186,7 +217,6 @@ export class SankeyComponent implements OnInit {
       .append('svg:path')
       .attr("d", "M0,-2.5 L2,0 L0,2.5");
 
-
     // Draw links to the svg
     var link = svg.append("g")
       .attr("class", "links")
@@ -197,7 +227,7 @@ export class SankeyComponent implements OnInit {
         return this.makeLinks(d, results.nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")";
+        return "url(" + window.location + "#" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -425,7 +455,7 @@ export class SankeyComponent implements OnInit {
           }
         })
         .text((d) => {
-          return d.val + " " + d.units;
+          return d.val.toFixed(2) + " " + d.units;
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
@@ -542,11 +572,13 @@ export class SankeyComponent implements OnInit {
 
   makeGradient(color, nodes, links) {
 
+    let location = this.location;
+
     links.forEach(function (d, i) {
       var link_data = d;
       svg.append("linearGradient")
         .attr("id", function () {
-          return "linear-gradient-" + i;
+          return location + "-linear-gradient-" + i;
         })
         .attr("gradientUnits", "userSpaceOnUse")
         .attr("x1", nodes[link_data.source].x)
@@ -589,8 +621,9 @@ export class SankeyComponent implements OnInit {
 
 
   getEndMarker(d, nodes) {
+    let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].usefulOutput) {
-      return "url(" + window.location + "#end-" + d.target + ")";
+      return "url(" + window.location + "#end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -602,11 +635,12 @@ export class SankeyComponent implements OnInit {
 
     // make a new gradient
     var color = this.findColor(nodes[0].value);
+    let location = this.location;
 
     nodes.forEach(function (d, i) {
       var node_data = d;
       if (!d.inter || d.usefulOutput) {
-        this.svg.select("#end-" + i)
+        this.svg.select("#end-" + location + "-" + i)
           .attr("fill", function () {
             return color(node_data.value);
           })
@@ -615,7 +649,8 @@ export class SankeyComponent implements OnInit {
 
     links.forEach(function (d, i) {
       var link_data = d;
-      this.svg.select("#linear-gradient-" + i)
+      let location = this.location;
+      this.svg.select("#" + location + "-linear-gradient-" + i)
         .attr("x1", nodes[link_data.source].x)
         .attr("y1", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {

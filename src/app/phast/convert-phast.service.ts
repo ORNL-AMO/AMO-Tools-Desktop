@@ -31,7 +31,7 @@ export class ConvertPhastService {
   convertVal(val: number, from: string, to: string) {
     if (val != undefined) {
       val = this.convertUnitsService.value(val).from(from).to(to);
-      val = this.roundVal(val, 3);
+      val = this.roundVal(val, 4);
     }
     return val;
   }
