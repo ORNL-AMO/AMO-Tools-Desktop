@@ -236,7 +236,7 @@ export class ReportGraphsComponent implements OnInit {
     pieData.push({ label: "System Eff.: " + totalSystemLosses.toFixed(0) + "%", val: totalSystemLosses });
     pieData.push({ label: "Slag: " + totalSlag.toFixed(0) + "%", val: totalSlag });
     pieData.push({ label: "Auxiliary: " + totalAuxPower.toFixed(0) + "%", val: totalAuxPower });
-    pieData.push({ label: "Other: " + totalFlueGas.toFixed(0) + "%", val: totalOtherLoss });
+    pieData.push({ label: "Other: " + totalOtherLoss.toFixed(0) + "%", val: totalOtherLoss });
     return pieData;
   }
 
