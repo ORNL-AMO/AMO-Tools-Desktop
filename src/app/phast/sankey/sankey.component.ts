@@ -425,7 +425,7 @@ export class SankeyComponent implements OnInit {
           }
         })
         .text((d) => {
-          return d.val + " " + d.units;
+          return d.val.toFixed(2) + " " + d.units;
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
