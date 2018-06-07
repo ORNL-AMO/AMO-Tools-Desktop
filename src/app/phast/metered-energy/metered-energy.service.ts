@@ -19,6 +19,7 @@ export class MeteredEnergyService {
     if (phast.losses) {
       sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     }
+    console.log(sumFeedRate);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection (aux) / collection time (aux)
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
@@ -75,6 +76,7 @@ export class MeteredEnergyService {
     if (phast.losses) {
       sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     }
+    console.log(sumFeedRate);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
@@ -109,6 +111,7 @@ export class MeteredEnergyService {
     if (phast.losses) {
       sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     }
+    console.log(sumFeedRate);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
