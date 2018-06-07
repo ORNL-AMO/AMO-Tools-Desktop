@@ -20,7 +20,7 @@
     </div>
 
     <div class="col-9" [ngClass]="{'right-panel': !printView}">
-      <app-sankey [phast]="phast1.phast" [settings]="settings" [location]="assessmentName + '-baseline-sankey-'" [printView]="false"
+      <app-sankey [phast]="phast1.phast" [settings]="settings" [location]="'baseline'" [assessmentName]="assessmentName" [printView]="false"
         [modIndex]="0"></app-sankey>
     </div>
 
@@ -42,7 +42,7 @@
       </table>
     </div>
     <div class="col-9" [ngClass]="{'right-panel': !printView}" *ngIf="phast2">
-      <app-sankey [phast]="phast2.phast" [settings]="settings" [location]="assessmentName + '-modification-sankey-'" [printView]="false"
+      <app-sankey [phast]="phast2.phast" [settings]="settings" [location]="'modification'" [assessmentName]="assessmentName" [printView]="false"
         [modIndex]="0"></app-sankey>
     </div>
   </div>
