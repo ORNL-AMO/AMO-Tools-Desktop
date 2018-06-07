@@ -72,6 +72,14 @@ export const pressure = {
       }
       , to_anchor: 9.8064
     },
+    mmH2o: {
+      name: {
+        singular: 'Millimeter of Water'
+        , plural: 'Millimeters of Water',
+        display: '(mm H₂O)'
+      }
+      , to_anchor: 0.00980665
+    },
     ftH2o: {
       name: {
         singular: 'Foot of Water'

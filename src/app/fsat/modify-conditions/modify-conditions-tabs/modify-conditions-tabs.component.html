@@ -1,0 +1,14 @@
+<ul class="tabs subtabs psat fsat">
+  <li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fsat-fluid'}">
+    <a class="nav-link small" (click)="changeModTab('fsat-fluid')">Fluid</a>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-setup'}">
+    <a class="nav-link small" (click)="changeModTab('fan-setup')">Fan</a>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-motor'}">
+    <a class="nav-link small" (click)="changeModTab('fan-motor')">Motor</a>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-field-data'}">
+    <a class="nav-link small" (click)="changeModTab('fan-field-data')">Field Data</a>
+  </li>
+</ul>

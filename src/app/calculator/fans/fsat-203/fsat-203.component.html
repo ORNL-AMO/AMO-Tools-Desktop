@@ -1,0 +1,109 @@
+<div class="modify-conditions panel-container row fsat">
+    <div class="col-12">
+        <div class="row align-items-top calculator-panel">
+            <div class="modification panel-column col-6 align-top" [ngClass]="{'col-12': formSelect == 'results'}">
+                <div class="header">
+                    <h3 *ngIf="formSelect != 'results'">
+                        <!-- <img src="assets/images/pump-eff.png" class="ico-size">-->Operating Points Calculator</h3>
+                    <h3 *ngIf="formSelect == 'results'">Operating Points Calculator - Results</h3>
+                </div>
+                <div class="row" *ngIf="formSelect == 'none' && formSelect != 'results'">
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fsat-basics')">
+                            <span class="step-number">1</span>Basic Fan Info
+                            <span class="fa fa-exclamation-circle pull-right" *ngIf="!basicsDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="basicsDone"></span>
+                        </label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('gas-density')">
+                            <span class="step-number">2</span>Establish Gas Density
+                            <span class="fa fa-exclamation-circle pull-right" *ngIf="!gasDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="gasDone"></span>
+                        </label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fan-data')">
+                            <span class="step-number">3</span>Input Plane Data
+                            <span class="fa fa-exclamation-circle pull-right" *ngIf="!planeDataDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="planeDataDone"></span>
+                        </label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('fan-shaft-power')">
+                            <span class="step-number">4</span>Fan Shaft Power
+                            <span class="fa fa-exclamation-circle pull-right" *ngIf="!shaftPowerDone"></span>
+                            <span class="fa fa-check pull-right" *ngIf="shaftPowerDone"></span>
+                        </label>
+                    </div>
+                    <div class="col-12">
+                        <label class="group-label" (click)="goToForm('results')">
+                            <span class="fa fa-calculator"></span>View Full Results
+                        </label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="formSelect != 'none' && formSelect != 'results'">
+                    <div class="col-12">
+                        <!--forms-->
+                        <a class="click-link small pull-left" (click)="goToForm('none')">
+                            <span class="fa fa-chevron-left"></span> Return to Setup</a>
+                        <br>
+                        <app-fsat-basics *ngIf="formSelect == 'fsat-basics'" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="saveBasics($event)"
+                            [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)"></app-fsat-basics>
+                        <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
+                            [gasDone]="gasDone"></app-gas-density>
+                        <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
+                        <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="savePlane($event)"
+                            (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
+                            [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone"
+                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)"></app-fan-data>
+                        <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power' && settings" [fanShaftPower]="inputs.FanShaftPower" (emitSave)="saveShaftPower($event)"
+                            [shaftPowerDone]="shaftPowerDone" [settings]="settings"></app-fan-shaft-power>
+                        <!-- <div class="row continue-btn-row justify-content-center">
+                            <div class="col text-center">
+                                <button class="btn btn-primary continue-btn" (click)="goToForm('none')">Continue Setup</button>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div *ngIf="formSelect == 'results'" class="row">
+                    <div class="col-12">
+                        <a class="click-link small pull-left" (click)="goToForm('none')">
+                            <span class="fa fa-chevron-left"></span> Return to Setup</a>
+                        <br>
+                        <app-planar-results [planeResults]="planeResults" [showFull]="true" [inputs]="inputs"></app-planar-results>
+                        <app-fsat-203-results [results]="results"></app-fsat-203-results>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 align-top" *ngIf="formSelect != 'results'">
+                <div class="help-panel">
+                    <div class="row">
+                        <ul class="tabs primary tab-row">
+                            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a (click)="setTab('results')">Results</a>
+                            </li><!--
+                            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a (click)="setTab('help')">Help</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+                        <div class="col-12">
+                            <!--results-->
+                            <app-planar-results *ngIf="formSelect == 'fan-data'" [planeResults]="planeResults" [inputs]="inputs"></app-planar-results>
+                            <app-fsat-203-results *ngIf="formSelect == 'fan-shaft-power'" [results]="results"></app-fsat-203-results>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+                        <div class="col-11">
+                            <div class="calc-help">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

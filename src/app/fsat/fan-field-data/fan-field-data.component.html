@@ -1,0 +1,137 @@
+<form [formGroup]="fieldDataForm">
+  <div *ngIf="inSetup" class="row">
+    <div class="col-12">
+      <div class="header">
+        <h3>Field Data</h3>
+      </div>
+    </div>
+  </div>
+  <div class="setup-form-group">
+    <div class="form-group">
+      <label for="operatingFraction">Operating Fraction</label>
+      <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
+        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();" [readonly]="!selected"
+        [ngClass]="{'indicate-different': isOperatingFractionDifferent()}">
+      <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="cost">Cost</label>
+      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent()}">
+        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="cost" (input)="checkCost()"
+          (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="inletPressure">
+        Inlet Pressure
+        <a class="form-text small click-link" (click)="showInletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Inlet Pressure</a>
+      </label>
+      <div class="input-group" [ngClass]="{'indicate-different': isInletPressureDifferent()}">
+        <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
+          (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+      </div>
+      <!-- <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span> -->
+    </div>
+
+    <div class="form-group">
+      <label for="outletPressure">
+        Outlet Pressure
+        <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Outlet Pressure</a>
+      </label>
+      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent()}">
+        <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
+          (input)="checkOutletPressure()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span>
+    </div>
+    <div class="form-group">
+      <label for="flowRate">Flow Rate
+        <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate Flow Rate and Pressures</a>
+      </label>
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
+          (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
+      <label for="loadEstimatedMethod">Load Estimation Method</label>
+      <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="save()"
+        (focus)="focusField('loadEstimatedMethod')">
+        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method.value">{{method.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">Motor Power</label>
+      <label for="motorPower" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">Motor Current</label>
+      <div class="input-group">
+        <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="motorPower"
+          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">kW</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">A</span>
+      </div>
+      <!-- <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span> -->
+    </div>
+    <div class="form-group" *ngIf="baseline">
+      <label for="measuredVoltage">Measured Voltage</label>
+      <div class="input-group">
+        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
+          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();" [readonly]="!selected">
+        <span class="units">V</span>
+      </div>
+      <!-- <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span> -->
+    </div>
+    <div class="form-group">
+      <label for="specificHeatRatio">Specific Heat Ratio (&gamma;)</label>
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
+        id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected"
+        [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent()}">
+    </div>
+
+    <div class="form-group">
+      <label for="compressibilityFactor">Compressibility Factor
+        <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
+      </label>
+      <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
+        id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
+        [readonly]="!selected" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
+    </div>
+  </div>
+</form>
+
+
+
+
+<div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pressureModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hidePressureModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-0">
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="fieldData.inletPressureData"
+          (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="fieldData.outletPressureData"
+          (emitSave)="saveOutletPressure($event)"></app-calculate-outlet-pressure>
+        <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow'" [settings]="settings" [fsat]="fsat" (saveFlowAndPressure)="saveFlowAndPressure($event)"
+          [bodyHeight]="bodyHeight"></app-calculate-flow-pressures>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="hidePressureModal()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
