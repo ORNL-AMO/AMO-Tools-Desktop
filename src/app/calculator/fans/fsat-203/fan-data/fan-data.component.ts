@@ -3,6 +3,7 @@ import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared
 
 import * as _ from 'lodash';
 import { FsatService } from '../../../../fsat/fsat.service';
+import { Settings } from 'electron';
 @Component({
   selector: 'app-fan-data',
   templateUrl: './fan-data.component.html',
@@ -37,7 +38,9 @@ export class FanDataComponent implements OnInit {
   plane5Done: boolean;
   @Input()
   inModal: boolean;
-
+  @Input()
+  settings: Settings;
+  
   stepTab: string = 'plane-info';
   showReadings: boolean = false;
   velocityData: { pv3: number, percent75Rule: number };

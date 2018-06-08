@@ -49,14 +49,14 @@
                             <span class="fa fa-chevron-left"></span> Return to Setup</a>
                         <br>
                         <app-fsat-basics *ngIf="formSelect == 'fsat-basics'" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="saveBasics($event)"
-                            [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)"></app-fsat-basics>
+                            [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)" [settings]="settings"></app-fsat-basics>
                         <app-gas-density *ngIf="formSelect == 'gas-density'" [fanGasDensity]="inputs.BaseGasDensity" (emitSave)="saveDensity($event)"
-                            [gasDone]="gasDone"></app-gas-density>
+                            [gasDone]="gasDone" [settings]="settings"></app-gas-density>
                         <!-- <a *ngIf="!showBasics" class="click-link small pull-right" (click)="editBasics()">Modify Fan Basics</a><br> -->
                         <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="savePlane($event)"
                             (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
                             [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone"
-                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)"></app-fan-data>
+                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)" [settings]="settings"></app-fan-data>
                         <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power' && settings" [fanShaftPower]="inputs.FanShaftPower" (emitSave)="saveShaftPower($event)"
                             [shaftPowerDone]="shaftPowerDone" [settings]="settings"></app-fan-shaft-power>
                         <!-- <div class="row continue-btn-row justify-content-center">
