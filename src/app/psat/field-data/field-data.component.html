@@ -64,7 +64,8 @@
       <div class="input-group">
         <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkRatedPower()"
           (focus)="focusField('motorPower')" onfocus="this.select();">
-        <span class="input-group units">kW</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
     </div>
