@@ -210,7 +210,7 @@ export class SettingsService {
         phastRollupSteamUnit: 'GJ',
         densityMeasurement: 'kgNm3',
         fanFlowRate: 'm3/h',
-        fanPressureMeasurement: 'mmH2o'
+        fanPressureMeasurement: 'Pa'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
