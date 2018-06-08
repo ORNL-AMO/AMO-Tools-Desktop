@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
-import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam } from '../../../../../shared/models/phast/designedEnergy'
+import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy'
 
 import { Settings } from '../../../../../shared/models/settings';
 @Component({
@@ -21,91 +21,109 @@ export class PreAssessmentDesignedComponent implements OnInit {
 
   ngOnInit() {
     if (!this.assessment.designedEnergy) {
-      // this.assessment.designedEnergy = {
-      //   designedEnergyElectricity: new Array<DesignedEnergyElectricity>(),
-      //   designedEnergyFuel: new Array<DesignedEnergyFuel>(),
-      //   designedEnergySteam: new Array<DesignedEnergySteam>()
-      // }
-      this.addElectricityZone();
-      this.addFuelZone();
-      this.addSteamZone();
+      this.initializeNew();
     }
   }
 
-  // addZone() {
-  //   if (this.assessment.settings.energySourceType == 'Fuel') {
-  //     this.addFuelZone();
-  //   } else if (this.assessment.settings.energySourceType == 'Steam') {
-  //     this.addSteamZone();
-  //   } else if (this.assessment.settings.energySourceType == 'Electricity') {
-  //     this.addElectricityZone();
-  //   }
-  //   else if (this.assessment.settings.energySourceType == 'Hybrid') {
-  //     this.addElectricityZone();
-  //     this.addFuelZone();
-  //   }
-  // }
+
+  initializeNew() {
+    let steam: boolean = false;
+    let electricity: boolean = false;
+    let fuel: boolean = false;
+    if (this.settings.energySourceType == 'Steam') {
+      steam = true;
+    }
+    if (this.settings.energySourceType == 'Fuel') {
+      fuel = true;
+    }
+    if (this.settings.energySourceType == 'Electricity') {
+      electricity = true;
+    }
+    this.assessment.designedEnergy = {
+      zones: new Array<DesignedZone>(),
+      fuel: fuel,
+      steam: steam,
+      electricity: electricity
+    }
+    this.addZone();
+  }
+
+  setElectricity() {
+    this.assessment.designedEnergy.electricity = !this.assessment.designedEnergy.electricity;
+    if (!this.assessment.designedEnergy.electricity) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergyElectricity = this.getEmptyElectricityInput();
+      })
+    }
+    this.calculate();
+  }
+
+  setFuel() {
+    this.assessment.designedEnergy.fuel = !this.assessment.designedEnergy.fuel;
+    if (!this.assessment.designedEnergy.fuel) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergyFuel = this.getEmptyFuelInput();
+      })
+    }
+    this.calculate();
+  }
+
+  setSteam() {
+    this.assessment.designedEnergy.steam = !this.assessment.designedEnergy.steam;
+    if (!this.assessment.designedEnergy.steam) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergySteam = this.getEmptySteamInput();
+      })
+    }
+    this.calculate();
+  }
+
+
+  addZone() {
+    let zoneNum: number = this.assessment.designedEnergy.zones.length + 1;
+    this.assessment.designedEnergy.zones.push({
+      name: 'Zone #' + zoneNum,
+      designedEnergyElectricity: this.getEmptyElectricityInput(),
+      designedEnergyFuel: this.getEmptyFuelInput(),
+      designedEnergySteam: this.getEmptySteamInput()
+    })
+    this.calculate();
+  }
+
+  removeZone(index: number){
+    this.assessment.designedEnergy.zones.splice(index,1);
+    this.calculate();
+  }
+
+  getEmptySteamInput(): DesignedEnergySteam {
+    return {
+      totalHeat: 0,
+      steamFlow: 0,
+      percentCapacityUsed: 0,
+      percentOperatingHours: 0
+    }
+  }
+
+  getEmptyFuelInput(): DesignedEnergyFuel {
+    return {
+      fuelType: 0,
+      percentCapacityUsed: 0,
+      totalBurnerCapacity: 0,
+      percentOperatingHours: 0
+    }
+  }
+
+  getEmptyElectricityInput(): DesignedEnergyElectricity {
+    return {
+      kwRating: 0,
+      percentCapacityUsed: 0,
+      percentOperatingHours: 0
+    }
+  }
 
   calculate() {
     this.emitCalculate.emit(true);
   }
-
-  addElectricityZone() {
-    let eqNum = 1;
-    // if (this.assessment.designedEnergy.designedEnergyElectricity) {
-    //   eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
-    // }
-    // let tmpZone: DesignedEnergyElectricity = {
-    //   name: 'Electric Zone #' + eqNum,
-    //   kwRating: 0,
-    //   percentCapacityUsed: 0,
-    //   percentOperatingHours: 0
-    // }
-    // this.assessment.designedEnergy.designedEnergyElectricity.push(tmpZone);
-  }
-
-  addFuelZone() {
-    let eqNum = 1;
-    // if (this.assessment.designedEnergy.designedEnergyFuel) {
-    //   eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
-    // }
-    // let tmpZone: DesignedEnergyFuel = {
-    //   name: 'Fuel Zone #' + eqNum,
-    //   fuelType: 0,
-    //   percentCapacityUsed: 0,
-    //   totalBurnerCapacity: 0,
-    //   percentOperatingHours: 0
-    // }
-    // this.assessment.designedEnergy.designedEnergyFuel.push(tmpZone);
-  }
-
-  addSteamZone() {
-    let eqNum = 1;
-    // if (this.assessment.designedEnergy.designedEnergySteam) {
-    //   eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
-    // }
-    // let tmpZone: DesignedEnergySteam = {
-    //   name: 'Steam Zone #' + eqNum,
-    //   totalHeat: 0,
-    //   steamFlow: 0,
-    //   percentCapacityUsed: 0,
-    //   percentOperatingHours: 0
-    // }
-    // this.assessment.designedEnergy.designedEnergySteam.push(tmpZone);
-  }
-
-  removeFuelZone(num: number) {
-   // this.assessment.designedEnergy.designedEnergyFuel.splice(num, 1);
-  }
-
-  removeSteamZone(num: number) {
-  //  this.assessment.designedEnergy.designedEnergySteam.splice(num, 1);
-  }
-
-  removeElectricityZone(num: number) {
-   // this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
-  }
-
 
   changeFuelField(str: string) {
     this.emitChangeField.emit({ inputField: str, energyType: 'Fuel' });
