@@ -184,10 +184,7 @@ export class DesignedEnergyService {
       calculatedEnergyIntensity: 0,
       calculatedElectricityUsed: 0
     };
-    let sumFeedRate = 0;
-    if (phast.losses) {
-      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
-    }
+
     let steamEnergyUsed: number = 0;
     let electricityEnergyUsed: number = 0;
     let fuelEnergyUsed: number = 0;
@@ -198,17 +195,25 @@ export class DesignedEnergyService {
       fuelEnergyUsed += this.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
     })
     steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
-    electricityEnergyUsed = this.convertResult(electricityEnergyUsed, settings);
+    electricityEnergyUsed = this.convertUnitsService.value(electricityEnergyUsed).from('kWh').to(settings.energyResultUnit);
     fuelEnergyUsed = this.convertResult(fuelEnergyUsed, settings);
     tmpResults.designedEnergyUsed = steamEnergyUsed + electricityEnergyUsed + fuelEnergyUsed;
-    tmpResults.designedEnergyIntensity = (tmpResults.designedEnergyUsed / sumFeedRate) | 0;
+
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
+    tmpResults.designedEnergyIntensity = (tmpResults.designedEnergyUsed / sumFeedRate);
+    console.log(tmpResults.designedEnergyIntensity)
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     tmpResults.designedElectricityUsed = designedElectricityUsed;
+    console.log(tmpResults.designedElectricityUsed)
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
     tmpResults.calculatedElectricityUsed = calculated.electricityUsed;
     tmpResults.calculatedEnergyIntensity = calculated.energyIntensity;
     tmpResults.calculatedFuelEnergyUsed = calculated.fuelEnergyUsed;
+    
     return tmpResults;
   }
 

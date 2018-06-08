@@ -109,14 +109,15 @@ export class EnergyUsedComponent implements OnInit {
       }
     }
 
-    // if (this.phast.designedEnergy) {
-    //   if (this.phast.designedEnergy.designedEnergyElectricity) {
-    //     let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
-    //     fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
-    //     let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
-    //     this.designedResults = this.designedEnergyService.sumFuelElectric(fuelResults, elecResults);
-    //   }
-    // }
+     if (this.phast.designedEnergy) {
+       if (this.phast.designedEnergy) {
+        //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+        //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
+        //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+         this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
+        console.log(this.designedResults);
+       }
+     }
   }
 
   setSteamVals(tmpResults: PhastResults) {
@@ -125,6 +126,16 @@ export class EnergyUsedComponent implements OnInit {
       if (this.phast.meteredEnergy.meteredEnergySteam) {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
         this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
+      }
+    }
+
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy) {
+       //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+       //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
+       //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
+       console.log(this.designedResults);
       }
     }
 
@@ -146,7 +157,15 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
       }
     }
-
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy) {
+       //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+       //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
+       //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
+       console.log(this.designedResults);
+      }
+    }
     // if (this.phast.designedEnergy) {
     //   if (this.phast.designedEnergy.designedEnergyFuel) {
     //     this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
