@@ -107,7 +107,8 @@
       <div class="input-group">
         <input name="originalPressure" type="number" step="any" class="form-control" formControlName="originalPressure" id="originalPressure"
           (input)="save()" (focus)="focusField('originalPressure')" onfocus="this.select();">
-        <span class="input-group-addon units">in. Hg</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. Hg</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kPa</span>
       </div>
     </div>
     <div class="form-group">
@@ -143,7 +144,7 @@
       <div class="input-group">
         <input name="convertedPressure" type="number" step="any" class="form-control" formControlName="convertedPressure" id="convertedPressure"
           (input)="save()" (focus)="focusField('convertedPressure')" onfocus="this.select();">
-        <span class="input-group-addon units">in. Hg</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. Hg</span>     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kPa</span>
       </div>
     </div>
     <div class="form-group">

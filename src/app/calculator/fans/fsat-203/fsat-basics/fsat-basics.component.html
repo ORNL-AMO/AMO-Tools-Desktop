@@ -51,7 +51,8 @@
     <div class="input-group">
       <input name="pressureBarometricCorrected" type="number" step="any" class="form-control" formControlName="pressureBarometricCorrected"
         id="pressureBarometricCorrected" (input)="save()" (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
-      <span class="input-group-addon units">in. Hg</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. Hg</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kPa</span>
     </div>
   </div>
   <div class="form-group">
