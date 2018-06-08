@@ -87,7 +87,7 @@ export class JsonToCsvService {
       MotorFieldVoltage: psat.inputs.motor_field_voltage ? psat.inputs.motor_field_voltage : null,
       MotorFieldVoltageUnit: psat.inputs.motor_field_voltage ? 'V' : null,
       CostKwHour: psat.inputs.cost_kw_hour,
-      CostKwHourUnit: '$/kwh',
+      CostKwHourUnit: '$/kWh',
       LoadFactor: 1,
       PumpEfficiency: tmpResults.pump_efficiency,
       PumpEfficiencyUnit: '%',
