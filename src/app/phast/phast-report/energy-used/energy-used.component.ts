@@ -71,6 +71,12 @@ export class EnergyUsedComponent implements OnInit {
     } else if (this.settings.energySourceType == 'Fuel') {
       this.setFuelVals(tmpResults)
     }
+
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy) {
+        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
+      }
+    }
   }
 
   getUnits() {
@@ -108,16 +114,6 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
       }
     }
-
-     if (this.phast.designedEnergy) {
-       if (this.phast.designedEnergy) {
-        //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
-        //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
-        //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
-         this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
-        console.log(this.designedResults);
-       }
-     }
   }
 
   setSteamVals(tmpResults: PhastResults) {
@@ -128,26 +124,6 @@ export class EnergyUsedComponent implements OnInit {
         this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
       }
     }
-
-    if (this.phast.designedEnergy) {
-      if (this.phast.designedEnergy) {
-       //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
-       //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
-       //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
-        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
-       console.log(this.designedResults);
-      }
-    }
-
-    // if (this.phast.designedEnergy) {
-    //   if (this.phast.designedEnergy.designedEnergySteam) {
-    //     this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
-    //     if (!this.steamHeatingValue) {
-    //       let hhvSum = _.sumBy(this.phast.designedEnergy.designedEnergySteam, 'totalHeat')
-    //       this.steamHeatingValue = hhvSum / this.phast.designedEnergy.designedEnergySteam.length;
-    //     }
-    //   }
-    // }
   }
 
   setFuelVals(tmpResults: PhastResults) {
@@ -157,20 +133,7 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
       }
     }
-    if (this.phast.designedEnergy) {
-      if (this.phast.designedEnergy) {
-       //  let fuelResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
-       //  fuelResults = this.designedEnergyService.convertFuelToElectric(fuelResults, this.settings);
-       //  let elecResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
-        this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
-       console.log(this.designedResults);
-      }
-    }
-    // if (this.phast.designedEnergy) {
-    //   if (this.phast.designedEnergy.designedEnergyFuel) {
-    //     this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
-    //   }
-    // }
+    
     if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
       let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
       this.fuelHeatingValue = gas.heatingValue;

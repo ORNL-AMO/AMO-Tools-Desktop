@@ -204,16 +204,15 @@ export class DesignedEnergyService {
       sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     }
     tmpResults.designedEnergyIntensity = (tmpResults.designedEnergyUsed / sumFeedRate);
-    console.log(tmpResults.designedEnergyIntensity)
+    tmpResults.designedEnergyIntensity = this.convertIntensity(tmpResults.designedEnergyIntensity, settings);
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     tmpResults.designedElectricityUsed = designedElectricityUsed;
-    console.log(tmpResults.designedElectricityUsed)
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
     tmpResults.calculatedElectricityUsed = calculated.electricityUsed;
     tmpResults.calculatedEnergyIntensity = calculated.energyIntensity;
     tmpResults.calculatedFuelEnergyUsed = calculated.fuelEnergyUsed;
-    
+
     return tmpResults;
   }
 
