@@ -39,8 +39,8 @@
   <div class="input-group">
     <input name="fanPower" [(ngModel)]="point.fanPower" type="number" step="any" class="form-control" id="fanPower" onfocus="this.select();"
       (focus)="focusField('fanPower')" (input)="save()">
-    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">hp</span>
-    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kW</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
   </div>
 </div>
 
@@ -70,7 +70,7 @@
   <div class="input-group">
     <input name="staticHead" type="number" step="any" class="form-control" [(ngModel)]="point.staticHead" id="staticHead" (input)="save()"
       (focus)="focusField('staticHead')" onfocus="this.select();">
-    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. wg</span>
-    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">Pa</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
   </div>
 </div>

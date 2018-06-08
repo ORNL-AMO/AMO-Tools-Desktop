@@ -85,8 +85,8 @@
     <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
       <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower" (input)="save()"
         (focus)="focusField('motorShaftPower')" onfocus="this.select();">
-      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">hp</span>
-      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kW</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
     </div>
     <div class="area-val" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
       {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp

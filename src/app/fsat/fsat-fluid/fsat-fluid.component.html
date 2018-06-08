@@ -16,8 +16,8 @@
       <div class="input-group" [ngClass]="{'indicate-different': isBarometricPressureDifferent()}">
         <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
           (input)="getDensity()" (focus)="focusField('barometricPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. Hg</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kPa</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. Hg</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
       </div>
     </div>
     <div class="form-group">
@@ -47,8 +47,8 @@
       <div class="input-group" [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
         <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
           (input)="getDensity()" (focus)="focusField('staticPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">in. wg</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">Pa</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
@@ -98,8 +98,8 @@
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'" [ngClass]="{'indicate-different': isGasDensityDifferent()}">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity" id="gasDensity" (input)="getDensity()"
           (focus)="focusField('gasDensity')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">lb/ft<sup>3</sup></span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kg/m<sup>3</sup></span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/ft<sup>3</sup></span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/m<sup>3</sup></span>
 
       </div>
     </div>
