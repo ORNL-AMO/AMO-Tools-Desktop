@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <input name="baselineCost" [disabled]="true" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('modifyCost')"
                         (input)="checkCost(1)" [(ngModel)]="psat.inputs.cost_kw_hour" />
-                    <span class="input-group-addon units">$/kWH</span>
+                    <span class="input-group-addon units">$/kWh</span>
                 </div>
                 <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
             </div>
