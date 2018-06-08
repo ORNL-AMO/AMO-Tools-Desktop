@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy'
 
@@ -17,6 +17,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
   emitChangeField = new EventEmitter<{ inputField: string, energyType: string }>();
   @Input()
   settings: Settings;
+
   constructor() { }
 
   ngOnInit() {
@@ -25,25 +26,12 @@ export class PreAssessmentDesignedComponent implements OnInit {
     }
   }
 
-
   initializeNew() {
-    let steam: boolean = false;
-    let electricity: boolean = false;
-    let fuel: boolean = false;
-    if (this.settings.energySourceType == 'Steam') {
-      steam = true;
-    }
-    if (this.settings.energySourceType == 'Fuel') {
-      fuel = true;
-    }
-    if (this.settings.energySourceType == 'Electricity') {
-      electricity = true;
-    }
     this.assessment.designedEnergy = {
       zones: new Array<DesignedZone>(),
-      fuel: fuel,
-      steam: steam,
-      electricity: electricity
+      fuel: this.assessment.designedEnergy.fuel,
+      steam: this.assessment.designedEnergy.steam,
+      electricity: this.assessment.designedEnergy.electricity
     }
     this.addZone();
   }

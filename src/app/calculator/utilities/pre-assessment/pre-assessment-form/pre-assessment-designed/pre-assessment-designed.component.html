@@ -4,7 +4,16 @@
     </div>
 </div>
 <form>
-    <div *ngFor="let zone of assessment.designedEnergy.zones">
+    <div *ngFor="let zone of assessment.designedEnergy.zones; let index=index;">
+        <div class="form-group form-section">
+            <div class="input-group">
+                <span class="input-group-addon units left" (click)="removeZone(index)">
+                    <i class="fa fa-times"></i>
+                </span>
+                <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
+                    onfocus="this.select();" />
+            </div>
+        </div>
         <app-designed-energy-electricity-form *ngIf="assessment.designedEnergy.electricity" [inputs]="zone.designedEnergyElectricity"
             (emitCalculate)="calculate()" (changeField)="changeElectricField($event)"></app-designed-energy-electricity-form>
         <app-designed-energy-fuel-form *ngIf="assessment.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel" [settings]="settings"

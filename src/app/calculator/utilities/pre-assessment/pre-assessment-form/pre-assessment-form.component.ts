@@ -81,14 +81,17 @@ export class PreAssessmentFormComponent implements OnInit {
   setFurnaceType(str: string) {
     if (str == 'Electricity') {
       this.assessment.electric = !this.assessment.electric;
+      this.assessment.designedEnergy.electricity = this.assessment.electric;
     }
 
     if (str == 'Steam') {
       this.assessment.steam = !this.assessment.steam;
+      this.assessment.designedEnergy.steam = this.assessment.steam;
     }
 
     if (str == 'Fuel') {
       this.assessment.fuel = !this.assessment.fuel;
+      this.assessment.designedEnergy.fuel = this.assessment.fuel;
     }
     //  this.assessment.settings.energySourceType = str;
     //  this.changeEnergyType();
