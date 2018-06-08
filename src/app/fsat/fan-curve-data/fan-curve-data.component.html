@@ -50,8 +50,8 @@
         <div class="input-group">
           <input name="fanPower" [(ngModel)]="dataRow.fanPower" type="number" step="any" class="form-control" id="fanPower" onfocus="this.select();"
             (focus)="focusField('fanPower')" (input)="save()">
-          <span class=“input-group-addon units” *ngIf=“settings.unitsOfMeasure == ‘Imperial’“>hp</span>
-          <span class=“input-group-addon units” *ngIf=“settings.unitsOfMeasure == ‘Metric’“>kW</span>
+          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Imperial’">hp</span>
+          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == ‘Metric’">kW</span>
         </div>
       </div>
       <div class="col-1" style="height: 100%;">
