@@ -1,0 +1,27 @@
+<table class="steam-table calculator-table">
+  <thead>
+    <tr>
+      <th class="table-col-0">Pressure <br>({{settings.steamPressureMeasurement}})</th>
+      <th class="table-col-1">Temperature <br>({{getDisplayUnit(settings.steamTemperatureMeasurement)}})</th>
+      <th class="table-col-2">Specific Enthalpy <br>({{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}})</th>
+      <th class="table-col-3">Specific Entropy <br>({{getDisplayUnit(settings.steamSpecificEntropyMeasurement)}})</th>
+      <th class="table-col-4">Qunatity Type</th>
+      <th class="table-col-5">Specific Volume <br>(<span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>)</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rowData; let i = index">
+      <td>{{row.pressure | number:'1.0-4'}}</td>
+      <td>{{row.temperature | number:'1.0-4'}}</td>
+      <td>{{row.enthalpy | number:'1.0-4'}}</td>
+      <td>{{row.entropy | number:'1.0-4'}}</td>
+      <td *ngIf="row.thermodynamicQuantity == 0">Temperature</td>
+      <td *ngIf="row.thermodynamicQuantity == 1">Specific Enthalpy</td>
+      <td *ngIf="row.thermodynamicQuantity == 2">Specific Entropy</td>
+      <td *ngIf="row.thermodynamicQuantity == 3">Saturated Quality</td>
+      <td>{{row.volume | number:'1.0-4'}}</td>
+      <td class="delete-row" (click)="deleteRow(i)">Delete</td>
+    </tr>
+  </tbody>
+</table>

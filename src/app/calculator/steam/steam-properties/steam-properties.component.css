@@ -1,0 +1,17 @@
+
+
+.btn-container {
+    text-align: center;
+}
+
+.btn-add-row {
+    border-radius: 4px;
+    margin-top: 20px;
+    border: 0px solid #fff;
+    background-color: #ddd;
+}
+
+.btn-add-row:hover {
+    cursor: pointer;
+    background-color: #aaa;
+}

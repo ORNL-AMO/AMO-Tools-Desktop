@@ -1,0 +1,40 @@
+
+
+.calculator-table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.calculator-table th {
+    font-weight: bold;
+    border-bottom: #2C3E50 solid 3px;
+}
+
+.calculator-table td {
+    border-bottom: #2C3E50 solid 1px;
+}
+
+.calculator-table th, td {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.delete-row {
+    color: red;
+}
+
+.delete-row:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+td.table-col-0:hover {
+    background-color: #aaa;
+}
+
+.table-col-0:hover {
+    background-color: #ccc;
+}

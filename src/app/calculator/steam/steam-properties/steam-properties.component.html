@@ -15,6 +15,16 @@
             <app-steam-properties-form (changeField)="setField($event)" [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings" [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 btn-container">
+            <button (click)="addRow()" class="btn-add-row">Create Row</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-steam-properties-table [data]="data" [settings]="settings"></app-steam-properties-table>
+          </div>
+        </div>
       </div>
       <div #lineChartContainer class="col-6 align-top">
         <div class="help-panel">

@@ -26,12 +26,15 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
   currentField: string = 'pressure';
+  rowData: Array<{ pressure: number, quality: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
+  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   plotReady: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
+    this.rowData = new Array<{ pressure: number, quality: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
 
     //debug
     this.steamPropertiesForm = this.formBuilder.group({
@@ -95,5 +98,19 @@ export class SteamPropertiesComponent implements OnInit {
   calculate(input: SteamPropertiesInput) {
     this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
     this.plotReady = true;
+  }
+
+  addRow() {
+    console.log('this.steamPropertiesOuput = ');
+    console.log(this.steamPropertiesOutput);
+    this.data = {
+      pressure: this.steamPropertiesOutput.pressure,
+      thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
+      temperature: this.steamPropertiesOutput.temperature,
+      enthalpy: this.steamPropertiesOutput.specificEnthalpy,
+      entropy: this.steamPropertiesOutput.specificEntropy,
+      volume: this.steamPropertiesOutput.specificVolume
+    };
+    // this.rowData.push(data);
   }
 }
