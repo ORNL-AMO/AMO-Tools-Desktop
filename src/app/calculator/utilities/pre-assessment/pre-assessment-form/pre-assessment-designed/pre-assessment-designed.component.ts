@@ -21,11 +21,11 @@ export class PreAssessmentDesignedComponent implements OnInit {
 
   ngOnInit() {
     if (!this.assessment.designedEnergy) {
-      this.assessment.designedEnergy = {
-        designedEnergyElectricity: new Array<DesignedEnergyElectricity>(),
-        designedEnergyFuel: new Array<DesignedEnergyFuel>(),
-        designedEnergySteam: new Array<DesignedEnergySteam>()
-      }
+      // this.assessment.designedEnergy = {
+      //   designedEnergyElectricity: new Array<DesignedEnergyElectricity>(),
+      //   designedEnergyFuel: new Array<DesignedEnergyFuel>(),
+      //   designedEnergySteam: new Array<DesignedEnergySteam>()
+      // }
       this.addElectricityZone();
       this.addFuelZone();
       this.addSteamZone();
@@ -52,58 +52,58 @@ export class PreAssessmentDesignedComponent implements OnInit {
 
   addElectricityZone() {
     let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergyElectricity) {
-      eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
-    }
-    let tmpZone: DesignedEnergyElectricity = {
-      name: 'Electric Zone #' + eqNum,
-      kwRating: 0,
-      percentCapacityUsed: 0,
-      percentOperatingHours: 0
-    }
-    this.assessment.designedEnergy.designedEnergyElectricity.push(tmpZone);
+    // if (this.assessment.designedEnergy.designedEnergyElectricity) {
+    //   eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
+    // }
+    // let tmpZone: DesignedEnergyElectricity = {
+    //   name: 'Electric Zone #' + eqNum,
+    //   kwRating: 0,
+    //   percentCapacityUsed: 0,
+    //   percentOperatingHours: 0
+    // }
+    // this.assessment.designedEnergy.designedEnergyElectricity.push(tmpZone);
   }
 
   addFuelZone() {
     let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergyFuel) {
-      eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
-    }
-    let tmpZone: DesignedEnergyFuel = {
-      name: 'Fuel Zone #' + eqNum,
-      fuelType: 0,
-      percentCapacityUsed: 0,
-      totalBurnerCapacity: 0,
-      percentOperatingHours: 0
-    }
-    this.assessment.designedEnergy.designedEnergyFuel.push(tmpZone);
+    // if (this.assessment.designedEnergy.designedEnergyFuel) {
+    //   eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
+    // }
+    // let tmpZone: DesignedEnergyFuel = {
+    //   name: 'Fuel Zone #' + eqNum,
+    //   fuelType: 0,
+    //   percentCapacityUsed: 0,
+    //   totalBurnerCapacity: 0,
+    //   percentOperatingHours: 0
+    // }
+    // this.assessment.designedEnergy.designedEnergyFuel.push(tmpZone);
   }
 
   addSteamZone() {
     let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergySteam) {
-      eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
-    }
-    let tmpZone: DesignedEnergySteam = {
-      name: 'Steam Zone #' + eqNum,
-      totalHeat: 0,
-      steamFlow: 0,
-      percentCapacityUsed: 0,
-      percentOperatingHours: 0
-    }
-    this.assessment.designedEnergy.designedEnergySteam.push(tmpZone);
+    // if (this.assessment.designedEnergy.designedEnergySteam) {
+    //   eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
+    // }
+    // let tmpZone: DesignedEnergySteam = {
+    //   name: 'Steam Zone #' + eqNum,
+    //   totalHeat: 0,
+    //   steamFlow: 0,
+    //   percentCapacityUsed: 0,
+    //   percentOperatingHours: 0
+    // }
+    // this.assessment.designedEnergy.designedEnergySteam.push(tmpZone);
   }
 
   removeFuelZone(num: number) {
-    this.assessment.designedEnergy.designedEnergyFuel.splice(num, 1);
+   // this.assessment.designedEnergy.designedEnergyFuel.splice(num, 1);
   }
 
   removeSteamZone(num: number) {
-    this.assessment.designedEnergy.designedEnergySteam.splice(num, 1);
+  //  this.assessment.designedEnergy.designedEnergySteam.splice(num, 1);
   }
 
   removeElectricityZone(num: number) {
-    this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
+   // this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
   }
 
 

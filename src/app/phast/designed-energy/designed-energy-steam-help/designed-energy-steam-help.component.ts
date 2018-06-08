@@ -14,11 +14,5 @@ export class DesignedEnergySteamHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('init');
   }
-
-  ngOnChanges(){
-    console.log(this.currentField);
-  }
-
 }

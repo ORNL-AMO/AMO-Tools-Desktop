@@ -41,26 +41,26 @@ export class ConvertPhastService {
   }
 
   convertDesignedEnergy(designedEnergy: DesignedEnergy, oldSettings: Settings, newSettings: Settings) {
-    if (designedEnergy.designedEnergyFuel) {
-      designedEnergy.designedEnergyFuel.forEach(val => {
-        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'MMBtu', 'GJ');
-        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'GJ', 'MMBtu');
-        }
-      })
-    }
-    if (designedEnergy.designedEnergySteam) {
-      designedEnergy.designedEnergySteam.forEach(val => {
-        if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-          val.totalHeat = this.convertVal(val.totalHeat, 'kJkg', 'btuLb');
-          val.steamFlow = this.convertVal(val.steamFlow, 'kg', 'lb');
-        } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-          val.totalHeat = this.convertVal(val.totalHeat, 'btuLb', 'kJkg');
-          val.steamFlow = this.convertVal(val.steamFlow, 'lb', 'kg');
-        }
-      })
-    }
+    // if (designedEnergy.designedEnergyFuel) {
+    //   designedEnergy.designedEnergyFuel.forEach(val => {
+    //     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+    //       val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'MMBtu', 'GJ');
+    //     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+    //       val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'GJ', 'MMBtu');
+    //     }
+    //   })
+    // }
+    // if (designedEnergy.designedEnergySteam) {
+    //   designedEnergy.designedEnergySteam.forEach(val => {
+    //     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+    //       val.totalHeat = this.convertVal(val.totalHeat, 'kJkg', 'btuLb');
+    //       val.steamFlow = this.convertVal(val.steamFlow, 'kg', 'lb');
+    //     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+    //       val.totalHeat = this.convertVal(val.totalHeat, 'btuLb', 'kJkg');
+    //       val.steamFlow = this.convertVal(val.steamFlow, 'lb', 'kg');
+    //     }
+    //   })
+    // }
     return designedEnergy;
   }
 

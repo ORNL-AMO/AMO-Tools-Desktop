@@ -169,5 +169,64 @@ export class DesignedEnergyService {
     }
     return val;
   }
+
+
+
+  //6/7/18 update
+  /////////////////////////////////////////////////////////////////////////////////////
+
+  calculateDesignedEnergy(phast: PHAST, settings: Settings): DesignedEnergyResults {
+    let tmpResults: DesignedEnergyResults = {
+      designedEnergyUsed: 0,
+      designedEnergyIntensity: 0,
+      designedElectricityUsed: 0,
+      calculatedFuelEnergyUsed: 0,
+      calculatedEnergyIntensity: 0,
+      calculatedElectricityUsed: 0
+    };
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
+    let steamEnergyUsed: number = 0;
+    let electricityEnergyUsed: number = 0;
+    let fuelEnergyUsed: number = 0;
+
+    phast.designedEnergy.zones.forEach(zone => {
+      steamEnergyUsed += this.calculateSteamZoneEnergyUsed(zone.designedEnergySteam);
+      electricityEnergyUsed += this.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
+      fuelEnergyUsed += this.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
+    })
+    steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
+    electricityEnergyUsed = this.convertResult(electricityEnergyUsed, settings);
+    fuelEnergyUsed = this.convertResult(fuelEnergyUsed, settings);
+    tmpResults.designedEnergyUsed = steamEnergyUsed + electricityEnergyUsed + fuelEnergyUsed;
+    tmpResults.designedEnergyIntensity = (tmpResults.designedEnergyUsed / sumFeedRate) | 0;
+    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
+    let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    tmpResults.designedElectricityUsed = designedElectricityUsed;
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
+    tmpResults.calculatedElectricityUsed = calculated.electricityUsed;
+    tmpResults.calculatedEnergyIntensity = calculated.energyIntensity;
+    tmpResults.calculatedFuelEnergyUsed = calculated.fuelEnergyUsed;
+    return tmpResults;
+  }
+
+  calculateSteamZoneEnergyUsed(designedEnergySteam: DesignedEnergySteam): number {
+    return (designedEnergySteam.totalHeat) * (designedEnergySteam.steamFlow) * (designedEnergySteam.percentCapacityUsed / 100) * (designedEnergySteam.percentOperatingHours / 100);
+  }
+
+  calculateFuelZoneEnergyUsed(designedEnergyFuel: DesignedEnergyFuel): number {
+    return ((designedEnergyFuel.totalBurnerCapacity) * (designedEnergyFuel.percentCapacityUsed / 100) * (designedEnergyFuel.percentOperatingHours / 100));
+  }
+
+  calculateElectricityZoneEnergyUsed(designedEnergyElectricity: DesignedEnergyElectricity): number {
+    return (designedEnergyElectricity.kwRating) * (designedEnergyElectricity.percentCapacityUsed / 100) * (designedEnergyElectricity.percentOperatingHours / 100);
+  }
 }
 
+export interface DesignedResults {
+  designedEnergyUsed: number,
+  designedEnergyIntensity: number,
+  designedElectricityUsed: number,
+}

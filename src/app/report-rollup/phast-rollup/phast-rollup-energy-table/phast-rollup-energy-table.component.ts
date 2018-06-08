@@ -118,16 +118,16 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       }
     }
 
-    if (assessment.phast.designedEnergy) {
-      if (assessment.phast.designedEnergy.designedEnergySteam) {
-        designedResults = this.designedEnergyService.designedEnergySteam(assessment.phast.designedEnergy.designedEnergySteam, assessment, settings);
-        if (!steamHeatingValue) {
-          let hhvSum = _.sumBy(assessment.phast.designedEnergy.designedEnergySteam, 'totalHeat')
-          hhvSum = this.convertUnitsService.value(hhvSum).from(settings.energyResultUnit).to(this.settings.phastRollupUnit)
-          steamHeatingValue = hhvSum / assessment.phast.designedEnergy.designedEnergySteam.length;
-        }
-      }
-    }
+    // if (assessment.phast.designedEnergy) {
+    //   if (assessment.phast.designedEnergy.designedEnergySteam) {
+    //     designedResults = this.designedEnergyService.designedEnergySteam(assessment.phast.designedEnergy.designedEnergySteam, assessment, settings);
+    //     if (!steamHeatingValue) {
+    //       let hhvSum = _.sumBy(assessment.phast.designedEnergy.designedEnergySteam, 'totalHeat')
+    //       hhvSum = this.convertUnitsService.value(hhvSum).from(settings.energyResultUnit).to(this.settings.phastRollupUnit)
+    //       steamHeatingValue = hhvSum / assessment.phast.designedEnergy.designedEnergySteam.length;
+    //     }
+    //   }
+    // }
     tmpItem.hhv = steamHeatingValue;
 
     return tmpItem;
