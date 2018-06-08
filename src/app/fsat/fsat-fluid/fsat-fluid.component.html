@@ -39,7 +39,8 @@
       <div class="input-group" [ngClass]="{'indicate-different': isDryBulbTempDifferent()}">
         <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="getDensity()"
           (focus)="focusField('dryBulbTemp')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
@@ -63,7 +64,8 @@
       <div class="input-group" [ngClass]="{'indicate-different': isWetBulbTempDifferent()}">
         <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp" id="wetBulbTemp" (input)="calcDensityWetBulb()"
           (focus)="focusField('wetBulbTemp')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
@@ -87,7 +89,8 @@
       <div class="input-group" [ngClass]="{'indicate-different': isDewPointDifferent()}">
         <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="dewPoint"
           (input)="calcDensityDewPoint()" (focus)="focusField('dewPoint')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
     <div class="form-group">
