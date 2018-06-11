@@ -13,6 +13,8 @@ export class SankeyService {
   exothermicHeat: number;
   exothermicHeatSpacing: number;
   outputRatio: number;
+  fuelEnergy: number;
+  electricalEnergy: number;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
@@ -21,6 +23,9 @@ export class SankeyService {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
+
+    this.fuelEnergy = phastResults.energyInputHeatDelivered;
+    this.electricalEnergy = phastResults.electricalHeatDelivered;
 
     this.exothermicHeat = phastResults.exothermicHeat;
     // let constant = 1;
@@ -345,6 +350,14 @@ export class SankeyService {
 
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
+  }
+
+  getFuelEnergy(): number {
+    return this.fuelEnergy
+  }
+
+  getElectricalEnergy(): number {
+    return this.electricalEnergy;
   }
 }
 
