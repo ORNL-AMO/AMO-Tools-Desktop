@@ -83,7 +83,7 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   getChartHeight(): number {
     if (this.lineChartContainer) {
-      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .8;
+      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .7;
       return this.chartContainerHeight;
     }
     else {

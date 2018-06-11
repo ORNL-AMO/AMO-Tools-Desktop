@@ -6,6 +6,7 @@ import { SteamPropertiesFormComponent } from './steam-properties-form/steam-prop
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../shared/shared.module";
 import { SteamPropertiesHelpComponent } from './steam-properties-help/steam-properties-help.component';
+import { SteamPropertiesTableComponent } from './steam-properties-table/steam-properties-table.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { SteamPropertiesHelpComponent } from './steam-properties-help/steam-prop
     SteamPropertiesGraphComponent,
     SteamPropertiesComponent,
     SteamPropertiesFormComponent,
-    SteamPropertiesHelpComponent
+    SteamPropertiesHelpComponent,
+    SteamPropertiesTableComponent
   ],
   exports: [
     SteamPropertiesComponent
