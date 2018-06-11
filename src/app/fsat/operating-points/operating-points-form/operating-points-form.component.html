@@ -29,7 +29,8 @@
   <div class="input-group">
     <input name="pressure" [(ngModel)]="point.pressure" type="number" step="any" class="form-control" id="pressure" onfocus="this.select();"
       (focus)="focusField('pressure')" (input)="save()">
-    <span class="input-group-addon units">in.wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
   </div>
 </div>
 
@@ -39,7 +40,8 @@
   <div class="input-group">
     <input name="fanPower" [(ngModel)]="point.fanPower" type="number" step="any" class="form-control" id="fanPower" onfocus="this.select();"
       (focus)="focusField('fanPower')" (input)="save()">
-    <span class="input-group-addon units">hp</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
   </div>
 </div>
 
@@ -69,7 +71,7 @@
   <div class="input-group">
     <input name="staticHead" type="number" step="any" class="form-control" [(ngModel)]="point.staticHead" id="staticHead" (input)="save()"
       (focus)="focusField('staticHead')" onfocus="this.select();">
-    <span class="input-group-addon units">in. wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
   </div>
 </div>
 
@@ -88,7 +90,7 @@
   <div class="input-group">
     <input name="staticHead" type="number" step="any" class="form-control" [(ngModel)]="point.pt1" id="pt1" (input)="save()"
       (focus)="focusField('pt1')" onfocus="this.select();">
-    <span class="input-group-addon units">in. wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
   </div>
 </div>
 
@@ -98,6 +100,6 @@
   <div class="input-group">
     <input name="barometricPressure" type="number" step="any" class="form-control" [(ngModel)]="point.barometricPressure" id="barometricPressure"
       (input)="save()" (focus)="focusField('barometricPressure')" onfocus="this.select();">
-    <span class="input-group-addon units">in. Hg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. Hg</span>     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
   </div>
 </div>

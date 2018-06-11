@@ -5,6 +5,7 @@ import { FanSetup } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
 import { CompareService } from '../compare.service';
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-fan-setup',
   templateUrl: './fan-setup.component.html',
@@ -21,7 +22,9 @@ export class FanSetupComponent implements OnInit {
   modificationIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<FanSetup>();
-
+  @Input()
+  settings: Settings;
+  
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;

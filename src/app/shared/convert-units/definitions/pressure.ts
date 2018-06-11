@@ -56,7 +56,7 @@ export const pressure = {
       }
       , to_anchor: 101.325
     }
-    , mmHG: {
+    , mmHg: {
       name: {
         singular: 'Milimeter of Mercury'
         , plural: 'Milimeters of Mercury',
