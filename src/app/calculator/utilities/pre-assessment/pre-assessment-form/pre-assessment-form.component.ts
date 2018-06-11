@@ -68,7 +68,7 @@ export class PreAssessmentFormComponent implements OnInit {
     this.emitDelete.emit(true);
   }
 
-  changeField(data:{inputField: string, energyType: string }) {
+  changeField(data: { inputField: string, energyType: string }) {
     this.emitChangeField.emit(data.inputField);
     this.emitEnergyType.emit(data.energyType);
     this.changeAssessmentType();
@@ -81,17 +81,23 @@ export class PreAssessmentFormComponent implements OnInit {
   setFurnaceType(str: string) {
     if (str == 'Electricity') {
       this.assessment.electric = !this.assessment.electric;
-      this.assessment.designedEnergy.electricity = this.assessment.electric;
+      if (this.assessment.designedEnergy) {
+        this.assessment.designedEnergy.electricity = this.assessment.electric;
+      }
     }
 
     if (str == 'Steam') {
       this.assessment.steam = !this.assessment.steam;
-      this.assessment.designedEnergy.steam = this.assessment.steam;
+      if (this.assessment.designedEnergy) {
+        this.assessment.designedEnergy.steam = this.assessment.steam;
+      }
     }
 
     if (str == 'Fuel') {
       this.assessment.fuel = !this.assessment.fuel;
-      this.assessment.designedEnergy.fuel = this.assessment.fuel;
+      if (this.assessment.designedEnergy) {
+        this.assessment.designedEnergy.fuel = this.assessment.fuel;
+      }
     }
     //  this.assessment.settings.energySourceType = str;
     //  this.changeEnergyType();

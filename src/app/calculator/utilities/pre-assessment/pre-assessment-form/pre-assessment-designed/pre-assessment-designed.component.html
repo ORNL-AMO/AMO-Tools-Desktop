@@ -3,14 +3,14 @@
         <a class="pull-right small click-link" (click)="addZone()">+Add Zone</a>
     </div>
 </div>
-<form>
+<form *ngIf="assessment.designedEnergy">
     <div *ngFor="let zone of assessment.designedEnergy.zones; let index=index;">
         <div class="form-group form-section">
             <div class="input-group">
                 <span class="input-group-addon units left" (click)="removeZone(index)">
                     <i class="fa fa-times"></i>
                 </span>
-                <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
+                <input name="{{index+'_name'}}" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
                     onfocus="this.select();" />
             </div>
         </div>

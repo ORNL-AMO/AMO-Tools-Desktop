@@ -29,9 +29,9 @@ export class PreAssessmentDesignedComponent implements OnInit {
   initializeNew() {
     this.assessment.designedEnergy = {
       zones: new Array<DesignedZone>(),
-      fuel: this.assessment.designedEnergy.fuel,
-      steam: this.assessment.designedEnergy.steam,
-      electricity: this.assessment.designedEnergy.electricity
+      fuel: this.assessment.fuel,
+      steam: this.assessment.steam,
+      electricity: this.assessment.electric
     }
     this.addZone();
   }
