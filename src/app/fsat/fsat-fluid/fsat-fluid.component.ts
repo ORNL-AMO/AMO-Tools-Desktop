@@ -119,19 +119,98 @@ export class FsatFluidComponent implements OnInit {
     if (this.settings.unitsOfMeasure == 'Imperial') {
       //check in range
       if (this.gasDensityForm.controls.barometricPressure.value < 20) {
-        this.barometricPressureError = 'Value must be greater than or equal to 20';
+        this.barometricPressureError = 'Value must be greater than 20';
       } else if (this.gasDensityForm.controls.barometricPressure.value > 40) {
-        this.barometricPressureError = 'Value must be less than or equal to 40';
+        this.barometricPressureError = 'Value must be less than 40';
+      } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.barometricPressure.value.toString())) {
+        this.barometricPressureError = 'Value may not have more than three decimal places';
       } else {
         //if no error set to null
         this.barometricPressureError = null;
       }
 
+      // dry bulb temp
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dryBulbTemp.value.toString())) {
+        this.dryBulbTempError = 'Value may not have more than one decimal place';
+      }  else {
+        this.dryBulbTempError = null;
+      }
 
-      //add additional checks for this form here if unitsOfMeasure dependent..
+      // wet bulb temp
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
+        this.wetBulbTempError = 'Value may not have more than one decimal place';
+      }  else {
+        this.wetBulbTempError = null;
+      }
+
+      // static pressure
+      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.staticPressure.value.toString())) {
+        this.staticPressureError = 'Value may not have more than two decimal places';
+      }  else {
+        this.staticPressureError = null;
+      }
+
+      // dew point
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
+        this.gasDensityError = 'Value may not have more than one decimal place';
+      }  else {
+        this.gasDensityError = null;
+      }
+
+      // specific gravity
+      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.specificGravity.value.toString())) {
+        this.specificGravityError = 'Value may not have more than two decimal places';
+      }  else {
+        this.specificGravityError = null;
+      }
+
     } else {
-      //need values for metric
-      //add additional checks for this form here if unitsOfMeasure dependent..
+      //metric
+      if (this.gasDensityForm.controls.barometricPressure.value < 65) {
+        this.barometricPressureError = 'Value must be greater than 65';
+      } else if (this.gasDensityForm.controls.barometricPressure.value > 140) {
+        this.barometricPressureError = 'Value must be less than 140';
+      } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.barometricPressure.value.toString())) {
+        this.barometricPressureError = 'Value may not have more than three decimal places';
+      } else {
+        //if no error set to null
+        this.barometricPressureError = null;
+      }
+
+      // dry bulb temp
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dryBulbTemp.value.toString())) {
+        this.dryBulbTempError = 'Value may not have more than one decimal place';
+      }  else {
+        this.dryBulbTempError = null;
+      }
+
+      // wet bulb temp
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
+        this.wetBulbTempError = 'Value may not have more than one decimal place';
+      }  else {
+        this.wetBulbTempError = null;
+      }
+
+      // static pressure
+      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.staticPressure.value.toString())) {
+        this.staticPressureError = 'Value may not have more than two decimal places';
+      }  else {
+        this.staticPressureError = null;
+      }
+
+      // dew point
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
+        this.gasDensityError = 'Value may not have more than one decimal place';
+      }  else {
+        this.gasDensityError = null;
+      }
+
+      // specific gravity
+      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.specificGravity.value.toString())) {
+        this.specificGravityError = 'Value may not have more than two decimal places';
+      }  else {
+        this.specificGravityError = null;
+      }
     }
 
     //add non unitsOfMeasure checks here (% checks usually)
