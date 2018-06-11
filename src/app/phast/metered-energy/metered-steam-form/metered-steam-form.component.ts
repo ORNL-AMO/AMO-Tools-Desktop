@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DesignedEnergyFuel } from '../../../../shared/models/phast/designedEnergy';
-import { Settings } from '../../../../shared/models/settings';
+import { MeteredEnergySteam } from '../../../shared/models/phast/meteredEnergy';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-designed-energy-fuel-form',
-  templateUrl: './designed-energy-fuel-form.component.html',
-  styleUrls: ['./designed-energy-fuel-form.component.css']
+  selector: 'app-metered-steam-form',
+  templateUrl: './metered-steam-form.component.html',
+  styleUrls: ['./metered-steam-form.component.css']
 })
-export class DesignedEnergyFuelFormComponent implements OnInit {
+export class MeteredSteamFormComponent implements OnInit {
   @Input()
-  inputs: DesignedEnergyFuel;
+  inputs: MeteredEnergySteam;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()
@@ -18,6 +18,8 @@ export class DesignedEnergyFuelFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  inCalc: boolean;
 
   constructor() { }
 

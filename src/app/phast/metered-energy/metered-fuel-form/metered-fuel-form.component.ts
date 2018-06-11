@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MeteredEnergyFuel } from '../../../../shared/models/phast/meteredEnergy';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { FlueGasMaterial } from '../../../../shared/models/materials';
-import { Settings } from '../../../../shared/models/settings';
-import { ConvertPhastService } from '../../../convert-phast.service';
-import { PhastService } from "../../../phast.service";
+import { MeteredEnergyFuel } from '../../../shared/models/phast/meteredEnergy';
+import { SuiteDbService } from '../../../suiteDb/suite-db.service';
+import { FlueGasMaterial } from '../../../shared/models/materials';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertPhastService } from '../../convert-phast.service';
+import { PhastService } from "../../phast.service";
 
 @Component({
   selector: 'app-metered-fuel-form',
   templateUrl: './metered-fuel-form.component.html',
-  styleUrls: ['./metered-fuel-form.component.css', '../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./metered-fuel-form.component.css']
 })
 export class MeteredFuelFormComponent implements OnInit {
   @Input()
