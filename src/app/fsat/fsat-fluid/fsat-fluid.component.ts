@@ -103,16 +103,16 @@ export class FsatFluidComponent implements OnInit {
 
   checkForWarnings() {
     //const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
-    const oneDecimalPlace = new RegExp('^\d+(\.?\d{0,3})$');
+    const oneDecimalPlace = new RegExp('^\[0-9]+(.?[0-9]{0,1})$');
 
     // const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
-    const twoDecimalPlaces = new RegExp('\d+(\.\d{0,2})?');
+    const twoDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,2})$');
 
     // const threeDecimalPlaces = new RegExp('\d*(\.)?\d{0,3}');
-    const threeDecimalPlaces = new RegExp('\d+(\.\d{0,3})?');
+    const threeDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,3})$');
 
     // const fourDecimalPlaces = new RegExp('\d*(\.)?\d{0,4}');
-    const fourDecimalPlaces = new RegExp('\d+(\.\d{0,4})?');
+    const fourDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,4})$');
 
 
     //barometricPressure
