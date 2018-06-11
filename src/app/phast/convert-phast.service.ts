@@ -45,9 +45,9 @@ export class ConvertPhastService {
       designedEnergy.zones.forEach(zone => {
         if (designedEnergy.fuel) {
           if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-            zone.designedEnergyFuel.totalBurnerCapacity = this.convertVal(zone.designedEnergyFuel.totalBurnerCapacity, 'MMBtu', 'GJ');
-          } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
             zone.designedEnergyFuel.totalBurnerCapacity = this.convertVal(zone.designedEnergyFuel.totalBurnerCapacity, 'GJ', 'MMBtu');
+          } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+            zone.designedEnergyFuel.totalBurnerCapacity = this.convertVal(zone.designedEnergyFuel.totalBurnerCapacity, 'MMBtu', 'GJ');
           }
         }
 
