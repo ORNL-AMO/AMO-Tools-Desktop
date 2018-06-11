@@ -50,16 +50,16 @@ export class PreAssessmentService {
     let totalResults: number = 0;
     let totalCost: number = 0;
     if (assessment.fuel) {
-      fuelResults = this.meteredEnergyService.calcMeteredEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel);
+      fuelResults = this.meteredEnergyService.calcFuelEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel);
       fuelCost = fuelResults * assessment.fuelCost;
     }
     if (assessment.steam) {
-      steamResults = this.meteredEnergyService.calcMeteredEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
+      steamResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
       steamResults = this.convertSteamResults(steamResults, settings);
       steamCost = steamResults * assessment.steamCost;
     }
     if (assessment.electric) {
-      electricityResults = this.meteredEnergyService.calcMeteredEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity);
+      electricityResults = this.meteredEnergyService.calcElectricEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity);
       electricityCost = electricityResults * assessment.electricityCost;
       electricityResults = this.convertElectrotechResults(electricityResults, settings);
     }

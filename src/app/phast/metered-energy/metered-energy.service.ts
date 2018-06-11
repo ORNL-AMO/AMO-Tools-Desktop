@@ -53,14 +53,14 @@ export class MeteredEnergyService {
   //   return tmpResults;
   // }
 
-  // convertIntensity(num: number, settings: Settings): number {
-  //   if (settings.energyResultUnit == 'MMBtu') {
-  //     num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
-  //   } else if (settings.energyResultUnit == 'GJ') {
-  //     num = this.convertUnitsService.value(num).from('GJ').to('kJ');
-  //   }
-  //   return num;
-  // }
+  //  convertIntensity(num: number, settings: Settings): number {
+  //    if (settings.energyResultUnit == 'MMBtu') {
+  //      num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
+  //    } else if (settings.energyResultUnit == 'GJ') {
+  //      num = this.convertUnitsService.value(num).from('GJ').to('kJ');
+  //    }
+  //    return num;
+  //  }
 
 
   // calcElectricityUsed(input: MeteredEnergyElectricity): number {
@@ -166,18 +166,17 @@ export class MeteredEnergyService {
     let steamEnergyUsed: number = 0;
     let fuelEnergyUsed: number = 0;
     let electricityEnergyUsed: number = 0;
-
     if (phast.meteredEnergy.steam) {
-      steamEnergyUsed = this.calcMeteredEnergyUsed(phast.meteredEnergy.meteredEnergySteam)
+      steamEnergyUsed = this.calcSteamEnergyUsed(phast.meteredEnergy.meteredEnergySteam)
       steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
     }
     if (phast.meteredEnergy.electricity) {
-      fuelEnergyUsed = this.calcMeteredEnergyUsed(phast.meteredEnergy.meteredEnergyElectricity);
-      fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
+      electricityEnergyUsed = this.calcElectricEnergyUsed(phast.meteredEnergy.meteredEnergyElectricity);
+      electricityEnergyUsed = this.convertUnitsService.value(electricityEnergyUsed).from('kWh').to(settings.energyResultUnit);
     }
     if (phast.meteredEnergy.fuel) {
-      electricityEnergyUsed = this.calcMeteredEnergyUsed(phast.meteredEnergy.meteredEnergyFuel);
-      electricityEnergyUsed = this.convertUnitsService.value(electricityEnergyUsed).from('kWh').to(settings.energyResultUnit);
+      fuelEnergyUsed = this.calcFuelEnergyUsed(phast.meteredEnergy.meteredEnergyFuel);
+      //fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
     }
 
     let sumFeedRate = 0;
@@ -186,7 +185,7 @@ export class MeteredEnergyService {
     }
 
     results.meteredEnergyUsed = steamEnergyUsed + fuelEnergyUsed + electricityEnergyUsed;
-    results.meteredEnergyIntensity = results.meteredEnergyUsed / sumFeedRate;
+    results.meteredEnergyIntensity = this.convertIntensity((results.meteredEnergyUsed / sumFeedRate), settings);
     //results.meteredElectricityUsed = steamResults.meteredElectricityUsed + this.convertElectrotechResults(electricityResults.meteredElectricityUsed, settings) + fuelResults.meteredElectricityUsed;
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
     results.calculatedElectricityUsed = calculated.electricityUsed;
@@ -196,8 +195,16 @@ export class MeteredEnergyService {
   }
 
 
-  calcMeteredEnergyUsed(inputs: MeteredEnergySteam | MeteredEnergyFuel | MeteredEnergyElectricity): number {
+  calcElectricEnergyUsed(inputs: MeteredEnergyElectricity): number {
     return inputs.electricityUsed / inputs.electricityCollectionTime;
+  }
+
+  calcSteamEnergyUsed(inputs: MeteredEnergySteam): number {
+    return (inputs.totalHeatSteam * inputs.flowRate / inputs.collectionTime);
+  }
+
+  calcFuelEnergyUsed(inputs: MeteredEnergyFuel): number {
+    return (inputs.fuelEnergy / inputs.collectionTime)
   }
 
   convertSteamEnergyUsed(val: number, settings: Settings) {
@@ -218,5 +225,14 @@ export class MeteredEnergyService {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
     }
     return val;
+  }
+
+  convertIntensity(num: number, settings: Settings): number {
+    if (settings.energyResultUnit == 'MMBtu') {
+      num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
+    } else if (settings.energyResultUnit == 'GJ') {
+      num = this.convertUnitsService.value(num).from('GJ').to('kJ');
+    }
+    return num;
   }
 }

@@ -38,8 +38,6 @@ export class MeteredEnergyComponent implements OnInit {
   ngOnInit() {
     if (!this.phast.meteredEnergy) {
       this.initializeNew()
-    } else {
-      this.initializeExisting();
     }
   }
 
@@ -66,23 +64,23 @@ export class MeteredEnergyComponent implements OnInit {
     }
   }
 
-  initializeExisting() {
-    if (!this.phast.meteredEnergy.meteredEnergyElectricity) {
-      this.phast.meteredEnergy.meteredEnergyElectricity = this.getEmptyElectricityInput();
-    } else if (!this.phast.meteredEnergy.electricity) {
-      this.setElectricity();
-    }
-    if (!this.phast.meteredEnergy.meteredEnergyFuel) {
-      this.phast.meteredEnergy.meteredEnergyFuel = this.getEmptyFuelInput();
-    } else if (!this.phast.meteredEnergy.fuel) {
-      this.setFuel();
-    }
-    if (!this.phast.meteredEnergy.meteredEnergySteam) {
-      this.phast.meteredEnergy.meteredEnergySteam = this.getEmptySteamInput();
-    } else if (!this.phast.meteredEnergy.steam) {
-      this.setSteam();
-    }
-  }
+  // initializeExisting() {
+  //   if (!this.phast.meteredEnergy.meteredEnergyElectricity) {
+  //     this.phast.meteredEnergy.meteredEnergyElectricity = this.getEmptyElectricityInput();
+  //   } else if (!this.phast.meteredEnergy.electricity) {
+  //     this.setElectricity();
+  //   }
+  //   if (!this.phast.meteredEnergy.meteredEnergyFuel) {
+  //     this.phast.meteredEnergy.meteredEnergyFuel = this.getEmptyFuelInput();
+  //   } else if (!this.phast.meteredEnergy.fuel) {
+  //     this.setFuel();
+  //   }
+  //   if (!this.phast.meteredEnergy.meteredEnergySteam) {
+  //     this.phast.meteredEnergy.meteredEnergySteam = this.getEmptySteamInput();
+  //   } else if (!this.phast.meteredEnergy.steam) {
+  //     this.setSteam();
+  //   }
+  // }
 
   emitSave() {
     this.save.emit(true);
