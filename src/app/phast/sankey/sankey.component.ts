@@ -154,6 +154,7 @@ export class SankeyComponent implements OnInit {
       y: this.availableHeatPercent.y
     }];
 
+
     //create node linkes
     let links = new Array<any>();
     let i = 0;
@@ -307,7 +308,7 @@ export class SankeyComponent implements OnInit {
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
 
-
+    let energyUnits;
     //append values and units
     nodes_text = svg.selectAll(".nodetext")
       .data(results.nodes)
@@ -366,12 +367,13 @@ export class SankeyComponent implements OnInit {
       })
       .text((d) => {
         if (!d.inter) {
+          energyUnits = d.units;
           return d.value.toFixed(2) + " " + d.units;
         }
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
 
-
+    //available heat label
     var availableHeatText = svg
       .data(availableHeat)
       .append("text")
@@ -409,6 +411,115 @@ export class SankeyComponent implements OnInit {
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
       .attr("fill", "white");
 
+    //fuel/electric label
+    if (this.sankeyService.getElectricalEnergy() !== null && this.sankeyService.getElectricalEnergy() !== undefined && this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) {
+      let fuel = [{
+        val: this.sankeyService.getFuelEnergy(),
+        name: 'Fuel Energy',
+        x: 145,
+        y: 850,
+        units: energyUnits
+      }];
+
+      let electrical = [{
+        val: this.sankeyService.getElectricalEnergy(),
+        name: 'Electrical Energy',
+        x: 145,
+        y: 950,
+        units: energyUnits
+      }];
+
+      var fuelDeliveredText = svg
+        .data(fuel)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          return d.y;
+        })
+        .text((d) => {
+          return d.name
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+      fuelDeliveredText = svg
+        .data(fuel)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          if (this.location === 'sankey-diagram') {
+            return d.y + labelFontSize + 1 + "px";
+          }
+          else {
+            return d.y + reportFontSize + 1 + "px";
+          }
+        })
+        .text((d) => {
+          return d.val.toFixed(2) + " " + d.units;
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+      var electricalDeliveredText = svg
+        .data(electrical)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          return d.y;
+        })
+        .text((d) => {
+          return d.name
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+      electricalDeliveredText = svg
+        .data(electrical)
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          return d.x;
+        })
+        .attr("dy", function (d) {
+          if (this.location === 'sankey-diagram') {
+            return d.y + labelFontSize + 1 + "px";
+          }
+          else {
+            return d.y + reportFontSize + 1 + "px";
+          }
+        })
+        .text((d) => {
+          return d.val.toFixed(2) + " " + d.units;
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+        .attr("fill", "black");
+
+    }
+
+    var availableHeatText = svg
+      .data(availableHeat)
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dx", function (d) {
+        return d.x;
+      })
+      .attr("dy", function (d) {
+        return d.y;
+      })
+      .text((d) => {
+        return d.name
+      })
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
+      .attr("fill", "white");
 
 
     //exothermic heat
