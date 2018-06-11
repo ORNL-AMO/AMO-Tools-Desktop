@@ -1,16 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MeteredEnergyElectricity } from '../../../../shared/models/phast/meteredEnergy';
+import { MeteredEnergySteam } from '../../../shared/models/phast/meteredEnergy';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-metered-electricity-form',
-  templateUrl: './metered-electricity-form.component.html',
-  styleUrls: ['./metered-electricity-form.component.css', '../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  selector: 'app-metered-steam-form',
+  templateUrl: './metered-steam-form.component.html',
+  styleUrls: ['./metered-steam-form.component.css']
 })
-export class MeteredElectricityFormComponent implements OnInit {
+export class MeteredSteamFormComponent implements OnInit {
   @Input()
-  inputs: MeteredEnergyElectricity;
+  inputs: MeteredEnergySteam;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
@@ -22,7 +25,7 @@ export class MeteredElectricityFormComponent implements OnInit {
 
   ngOnInit() {
   }
- 
+
   focusField(str: string) {
     this.changeField.emit(str);
   }

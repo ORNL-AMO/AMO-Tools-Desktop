@@ -109,10 +109,8 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       cost: assessment.phast.operatingCosts.steamCost
     }
     let steamHeatingValue = 0;
-    let meteredResults, designedResults;
     if (assessment.phast.meteredEnergy) {
       if (assessment.phast.meteredEnergy.meteredEnergySteam) {
-        meteredResults = this.meteredEnergyService.meteredSteam(assessment.phast.meteredEnergy.meteredEnergySteam, assessment, settings);
         steamHeatingValue = assessment.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
         steamHeatingValue = this.convertUnitsService.value(steamHeatingValue).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
       }

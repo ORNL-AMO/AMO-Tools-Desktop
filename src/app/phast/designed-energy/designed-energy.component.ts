@@ -119,8 +119,8 @@ export class DesignedEnergyComponent implements OnInit {
     this.calculate();
   }
 
-  removeZone(index: number){
-    this.phast.designedEnergy.zones.splice(index,1);
+  removeZone(index: number) {
+    this.phast.designedEnergy.zones.splice(index, 1);
     this.calculate();
   }
 
