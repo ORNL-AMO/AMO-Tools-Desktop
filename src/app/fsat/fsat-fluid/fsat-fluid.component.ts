@@ -42,6 +42,9 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ]
+  //need error string for each warning (nameOfInputField + 'Error')
+  //initialize to null
+  barometricPressureError: string = null;
   constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
@@ -81,6 +84,8 @@ export class FsatFluidComponent implements OnInit {
   }
 
   save() {
+    //save is always called on input so add check for warnings call here
+    this.checkForWarnings();
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
     this.emitSave.emit(this.baseGasDensity);
   }
@@ -88,6 +93,29 @@ export class FsatFluidComponent implements OnInit {
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
   }
+
+  checkForWarnings() {
+    //barometricPressure
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      //check in range
+      if (this.gasDensityForm.controls.barometricPressure.value < 20) {
+        this.barometricPressureError = 'Value must be greater than 20';
+      } else if (this.gasDensityForm.controls.barometricPressure.value > 40) {
+        this.barometricPressureError = 'Value must be less than 40';
+      } else {
+        //if no error set to null
+        this.barometricPressureError = null;
+      }
+
+      //add additional checks for this form here if unitsOfMeasure dependent..
+    } else {
+      //need values for metric
+      //add additional checks for this form here if unitsOfMeasure dependent..
+    }
+
+    //add non unitsOfMeasure checks here (% checks usually)
+  }
+
 
   getDensity() {
     if (this.gasDensityForm.controls.inputType.value == 'relativeHumidity') {
