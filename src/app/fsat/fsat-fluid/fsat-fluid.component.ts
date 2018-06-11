@@ -51,7 +51,6 @@ export class FsatFluidComponent implements OnInit {
   dewPointError: string = null;
   specificGravityError: string = null;
   relativeHumidityError: string = null;
-  gasDensityError: string = null;
   specificHeatGasError: string = null;
   constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
@@ -103,10 +102,18 @@ export class FsatFluidComponent implements OnInit {
   }
 
   checkForWarnings() {
-    const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
-    const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
-    const threeDecimalPlaces = new RegExp('\d*(\.)?\d{0,3}');
-    const fourDecimalPlaces = new RegExp('\d*(\.)?\d{0,4}');
+    //const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
+    const oneDecimalPlace = new RegExp('\d+(\.\d{0,1})?');
+
+    // const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
+    const twoDecimalPlaces = new RegExp('\d+(\.\d{0,2})?');
+
+    // const threeDecimalPlaces = new RegExp('\d*(\.)?\d{0,3}');
+    const threeDecimalPlaces = new RegExp('\d+(\.\d{0,3})?');
+
+    // const fourDecimalPlaces = new RegExp('\d*(\.)?\d{0,4}');
+    const fourDecimalPlaces = new RegExp('\d+(\.\d{0,4})?');
+
 
     //barometricPressure
     if (this.settings.unitsOfMeasure == 'Imperial') {
@@ -140,14 +147,14 @@ export class FsatFluidComponent implements OnInit {
       this.relativeHumidityError = null;
     }
 
-    //gasDensity
-    if (this.gasDensityForm.controls.gasDensity.value <= 0) {
-      this.gasDensityError = 'Value must be greater than 0';
-    } else if (!fourDecimalPlaces.test(this.gasDensityForm.controls.gasDensity.value.toString())) {
-      this.gasDensityError = 'Value may not have more than four decimal places';
-    } else {
-      this.gasDensityError = null;
-    }
+    // //gasDensity
+    // if (this.gasDensityForm.controls.gasDensity.value <= 0) {
+    //   this.gasDensityError = 'Value must be greater than 0';
+    // } else if (!fourDecimalPlaces.test(this.gasDensityForm.controls.gasDensity.value.toString())) {
+    //   this.gasDensityError = 'Value may not have more than four decimal places';
+    // } else {
+    //   this.gasDensityError = null;
+    // }
 
     //specificHeat
     if (this.gasDensityForm.controls.specificHeatGas.value <= 0) {
