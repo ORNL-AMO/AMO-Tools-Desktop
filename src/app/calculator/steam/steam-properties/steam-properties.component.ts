@@ -26,26 +26,18 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
   currentField: string = 'pressure';
+  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   plotReady: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
-
-    //debug
     this.steamPropertiesForm = this.formBuilder.group({
       'pressure': [0, Validators.required],
       'thermodynamicQuantity': [0, Validators.required],
       'quantityValue': [0, Validators.required]
     });
-
-    //real version
-    // this.steamPropertiesForm = this.formBuilder.group({
-    //   'pressure': [100, Validators.required],
-    //   'thermodynamicQuantity': [0, Validators.required],
-    //   'quantityValue': [100, Validators.required]
-    // });
 
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -95,5 +87,16 @@ export class SteamPropertiesComponent implements OnInit {
   calculate(input: SteamPropertiesInput) {
     this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
     this.plotReady = true;
+  }
+
+  addRow() {
+    this.data = {
+      pressure: this.steamPropertiesOutput.pressure,
+      thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
+      temperature: this.steamPropertiesOutput.temperature,
+      enthalpy: this.steamPropertiesOutput.specificEnthalpy,
+      entropy: this.steamPropertiesOutput.specificEntropy,
+      volume: this.steamPropertiesOutput.specificVolume
+    };
   }
 }
