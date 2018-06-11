@@ -32,7 +32,7 @@ export class MeteredEnergyResultsComponent implements OnInit {
 
   setEnergyIntensity() {
     let denominator: string = '/lb';
-    if (this.settings.unitsOfMeasure) {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       denominator = '/kg';
     }
 

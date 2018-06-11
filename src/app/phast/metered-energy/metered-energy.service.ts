@@ -5,10 +5,11 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastResultsService } from '../phast-results.service';
+import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 @Injectable()
 export class MeteredEnergyService {
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private auxEquipmentService: AuxEquipmentService) { }
 
   // meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
   //   //Metered Energy Use
@@ -186,7 +187,8 @@ export class MeteredEnergyService {
 
     results.meteredEnergyUsed = steamEnergyUsed + fuelEnergyUsed + electricityEnergyUsed;
     results.meteredEnergyIntensity = this.convertIntensity((results.meteredEnergyUsed / sumFeedRate), settings);
-    //results.meteredElectricityUsed = steamResults.meteredElectricityUsed + this.convertElectrotechResults(electricityResults.meteredElectricityUsed, settings) + fuelResults.meteredElectricityUsed;
+    let auxResults: Array<{name: string, totalPower: number, motorPower: string}> = this.auxEquipmentService.calculate(phast);
+    results.meteredElectricityUsed = this.auxEquipmentService.getResultsSum(auxResults);
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
     results.calculatedElectricityUsed = calculated.electricityUsed;
     results.calculatedEnergyIntensity = calculated.energyIntensity;
