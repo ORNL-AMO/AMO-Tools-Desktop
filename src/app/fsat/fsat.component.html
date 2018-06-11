@@ -10,8 +10,9 @@
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
-        (emitSave)="saveGasDensity($event)"></app-fsat-fluid>
-      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" (emitSave)="saveFanSetup($event)"></app-fan-setup>
+        (emitSave)="saveGasDensity($event)" [settings]="settings"></app-fsat-fluid>
+      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [settings]="settings" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup"
+        (emitSave)="saveFanSetup($event)"></app-fan-setup>
       <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor"
         (emitSave)="saveFanMotor($event)"></app-fan-motor>
       <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"

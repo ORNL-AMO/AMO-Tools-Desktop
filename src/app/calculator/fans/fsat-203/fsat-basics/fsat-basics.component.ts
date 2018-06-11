@@ -3,6 +3,7 @@ import { FanRatedInfo } from '../../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HelpPanelService } from '../../../../fsat/help-panel/help-panel.service';
 import { Fsat203Service } from '../fsat-203.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-fsat-basics',
@@ -18,7 +19,9 @@ export class FsatBasicsComponent implements OnInit {
   emitSave = new EventEmitter<FanRatedInfo>();
   @Output('updateBarometricPressure')
   updateBarometricPressure = new EventEmitter<FanRatedInfo>();
-
+  @Input()
+  settings: Settings;
+  
   ratedInfoForm: FormGroup;
 
   planes: Array<number> = [

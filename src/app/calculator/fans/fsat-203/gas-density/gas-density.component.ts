@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../../shared/models/fans';
 import { Fsat203Service } from '../fsat-203.service';
 import { FsatService } from '../../../../fsat/fsat.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-gas-density',
@@ -16,7 +17,9 @@ export class GasDensityComponent implements OnInit {
   gasDone: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<BaseGasDensity>();
-
+  @Input()
+  settings: Settings;
+  
   gasDensityForm: FormGroup;
 
   methods: Array<{ display: string, value: string }> = [

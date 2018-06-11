@@ -27,7 +27,7 @@ export class FsatSettingsComponent implements OnInit {
   pressureOptions: Array<string> = [
     'Pa',
     'torr',
-    'mmHG',
+    'mmHg',
     'inH2o',
     'mmH2o'
   ];
