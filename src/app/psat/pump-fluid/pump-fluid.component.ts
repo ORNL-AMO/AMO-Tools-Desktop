@@ -117,9 +117,9 @@ export class PumpFluidComponent implements OnInit {
   ngOnInit() {
     this.init();
     if (this.settings.temperatureMeasurement == 'C') {
-      this.tempUnit = '&#8451';
+      this.tempUnit = '&#8451;';
     } else if (this.settings.temperatureMeasurement == 'F') {
-      this.tempUnit = '&#8457';
+      this.tempUnit = '&#8457;';
     }
     // } else if (this.settings.temperatureMeasurement == 'K') {
     //   this.tempUnit = '&#8490';
