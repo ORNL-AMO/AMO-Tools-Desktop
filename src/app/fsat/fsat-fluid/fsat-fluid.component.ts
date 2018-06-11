@@ -103,7 +103,7 @@ export class FsatFluidComponent implements OnInit {
 
   checkForWarnings() {
     //const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
-    const oneDecimalPlace = new RegExp('\d+(\.\d{0,1})?');
+    const oneDecimalPlace = new RegExp('\\d+(\\.?\\d{0,3})');
 
     // const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
     const twoDecimalPlaces = new RegExp('\d+(\.\d{0,2})?');
