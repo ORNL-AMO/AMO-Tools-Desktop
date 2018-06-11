@@ -33,16 +33,17 @@ export class DesignedEnergyResultsComponent implements OnInit {
   }
 
   setEnergyIntensity() {
+    let denominator: string = '/lb';
+    if (this.settings.unitsOfMeasure) {
+      denominator = '/kg';
+    }
+
     if (this.settings.energyResultUnit == 'MMBtu') {
-      this.resultUnits.energyPerMassUnit = 'Btu/lb';
+      this.resultUnits.energyPerMassUnit = 'Btu' + denominator;
     } else if (this.settings.energyResultUnit == 'GJ') {
-      this.resultUnits.energyPerMassUnit = 'kJ/kg';
-    }else{
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
-      } else if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
-      }
+      this.resultUnits.energyPerMassUnit = 'kJ' + denominator;
+    } else {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + denominator;
     }
   }
 }
