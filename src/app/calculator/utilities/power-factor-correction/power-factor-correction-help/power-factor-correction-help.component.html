@@ -1,16 +1,20 @@
-<div class="card" *ngIf="!currentField">
+<div class="card">
   <div class="card-header">
     Power Factor Correction Help
   </div>
-  <div class="card-block small">
+  <div class="card-block small d-flex flex-column">
     <p>
-      Adjust operating conditions to compare energy use and energy costs of different motor drive types.
+      Low power factor means you’re not fully utilizing the electrical power you’re paying for and can contribute to equipment
+      instability and failure, as well as significantly higher than necessary energy costs since it means that more current
+      is required to perform the same amount of work. This calculator is used to identify the capacitance (in kVAR) required
+      for improving the power factor to the proposed level.
     </p>
+    <img class="w-75 mx-auto p-2" src="assets/images/power-factor-correction.png">
   </div>
 </div>
 
 
-<div class="card" *ngIf="currentField == 'currentDemand'">
+<!-- <div class="card" *ngIf="currentField == 'currentDemand'">
   <div class="card-header">
     Current Demand
   </div>
@@ -56,4 +60,4 @@
       DESCRIPTION HERE
     </p>
   </div>
-</div>
+</div>-->
