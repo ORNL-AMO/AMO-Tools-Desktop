@@ -26,7 +26,6 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
   currentField: string = 'pressure';
-  rowData: Array<{ pressure: number, quality: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   plotReady: boolean = false;
@@ -34,21 +33,11 @@ export class SteamPropertiesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
-    this.rowData = new Array<{ pressure: number, quality: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
-
-    //debug
     this.steamPropertiesForm = this.formBuilder.group({
       'pressure': [0, Validators.required],
       'thermodynamicQuantity': [0, Validators.required],
       'quantityValue': [0, Validators.required]
     });
-
-    //real version
-    // this.steamPropertiesForm = this.formBuilder.group({
-    //   'pressure': [100, Validators.required],
-    //   'thermodynamicQuantity': [0, Validators.required],
-    //   'quantityValue': [100, Validators.required]
-    // });
 
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -101,8 +90,6 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   addRow() {
-    console.log('this.steamPropertiesOuput = ');
-    console.log(this.steamPropertiesOutput);
     this.data = {
       pressure: this.steamPropertiesOutput.pressure,
       thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
@@ -111,6 +98,5 @@ export class SteamPropertiesComponent implements OnInit {
       entropy: this.steamPropertiesOutput.specificEntropy,
       volume: this.steamPropertiesOutput.specificVolume
     };
-    // this.rowData.push(data);
   }
 }

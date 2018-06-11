@@ -25,6 +25,8 @@ export class SaturatedPropertiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string = 'pressure';
 
+  data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
+
 
   plotReady: boolean = false;
 
@@ -106,6 +108,21 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.plotReady = true;
   }
 
+  addRow() {
+    this.data = {
+      pressure: this.saturatedPropertiesOutput.saturatedPressure,
+      temperature: this.saturatedPropertiesOutput.saturatedTemperature,
+      satLiquidEnthalpy: this.saturatedPropertiesOutput.liquidEnthalpy,
+      evapEnthalpy: this.saturatedPropertiesOutput.evaporationEnthalpy,
+      satGasEnthalpy: this.saturatedPropertiesOutput.gasEnthalpy,
+      satLiquidEntropy: this.saturatedPropertiesOutput.liquidEntropy,
+      evapEntropy: this.saturatedPropertiesOutput.evaporationEntropy,
+      satGasEntropy: this.saturatedPropertiesOutput.gasEntropy,
+      satLiquidVolume: this.saturatedPropertiesOutput.liquidVolume,
+      evapVolume: this.saturatedPropertiesOutput.evaporationVolume,
+      satGasVolume: this.saturatedPropertiesOutput.gasVolume
+    };
+  }
 
 
 }
