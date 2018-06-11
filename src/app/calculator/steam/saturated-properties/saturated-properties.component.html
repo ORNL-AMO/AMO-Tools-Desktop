@@ -15,6 +15,16 @@
             <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings" [output]="saturatedPropertiesOutput" (emitCalculate)="calculate($event)" (emitSetPressureOrTemperature)="setPressureOrTemperature($event)"> </app-saturated-properties-form>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12 btn-container">
+            <button (click)="addRow()" class="btn-add-row">Create Row</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-saturated-properties-table [data]="data" [settings]="settings"></app-saturated-properties-table>
+          </div>
+        </div>
       </div>
       <div #lineChartContainer class="col-6 align-top">
         <div class="help-panel">

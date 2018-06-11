@@ -6,6 +6,7 @@ import { SaturatedPropertiesFormComponent } from './saturated-properties-form/sa
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../../../shared/shared.module";
 import { SaturatedPropertiesHelpComponent } from './saturated-properties-help/saturated-properties-help.component';
+import { SaturatedPropertiesTableComponent } from './saturated-properties-table/saturated-properties-table.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import { SaturatedPropertiesHelpComponent } from './saturated-properties-help/sa
     SharedModule
   ],
   declarations: [
-    SaturatedPropertiesGraphComponent, SaturatedPropertiesComponent, SaturatedPropertiesFormComponent, SaturatedPropertiesHelpComponent
+    SaturatedPropertiesGraphComponent, SaturatedPropertiesComponent, SaturatedPropertiesFormComponent, SaturatedPropertiesHelpComponent, SaturatedPropertiesTableComponent
   ],
   exports: [
     SaturatedPropertiesComponent
