@@ -3,7 +3,8 @@ import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared
 
 import * as _ from 'lodash';
 import { FsatService } from '../../../../fsat/fsat.service';
-import { Settings } from 'electron';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-fan-data',
   templateUrl: './fan-data.component.html',
