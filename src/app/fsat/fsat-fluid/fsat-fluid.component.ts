@@ -151,7 +151,7 @@ export class FsatFluidComponent implements OnInit {
       }
 
       // dew point
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dewPoint.value.toString())) {
         this.dewPointError = 'Value may not have more than one decimal place';
       }  else {
         this.dewPointError = null;
@@ -199,10 +199,10 @@ export class FsatFluidComponent implements OnInit {
       }
 
       // dew point
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
-        this.gasDensityError = 'Value may not have more than one decimal place';
+      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dewPoint.value.toString())) {
+        this.dewPointError = 'Value may not have more than one decimal place';
       }  else {
-        this.gasDensityError = null;
+        this.dewPointError = null;
       }
 
       // specific gravity
