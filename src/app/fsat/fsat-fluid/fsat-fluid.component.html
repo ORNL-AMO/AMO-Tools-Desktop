@@ -43,6 +43,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="dryBulbTempError !== null">{{dryBulbTempError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
       <label for="staticPressure">Static Pressure (P<sub>so</sub>)</label>
@@ -52,6 +53,7 @@
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="staticPressureError !== null">{{staticPressureError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
       <label for="specificGravity">Gas Specific Gravity (G)</label>
@@ -59,6 +61,7 @@
         <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity"
           (input)="getDensity()" (focus)="focusField('specificGravity')" onfocus="this.select();" [readonly]="!selected">
       </div>
+      <span class="alert-warning pull-right small" *ngIf="specificGravityError !== null">{{specificGravityError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
       <label for="wetBulbTemp">Wet Bulb Temp (T<sub>wo</sub>)</label>
@@ -68,6 +71,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="wetBulbTempError !== null">{{wetBulbTempError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
       <label for="specificHeatGas">Specific Heat Gas</label>
@@ -76,6 +80,7 @@
           (focus)="focusField('specificHeatGas')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">Btu/lb-&#8457;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="specificHeatGasError !== null">{{specificHeatGasError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
       <label for="relativeHumidity">Relative Humidity</label>
@@ -84,6 +89,7 @@
           (input)="calcDensityRelativeHumidity()" (focus)="focusField('relativeHumidity')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="relativeHumidityError !== null">{{relativeHumidityError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
       <label for="dewPoint">Gas Dew Point (T<sub>dp</sub>)</label>
@@ -93,6 +99,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="dewPointError !== null">{{dewPointError}}</span>
     </div>
     <div class="form-group">
       <label for="gasDensity">Gas Density (&rho;<sub>0</sub>)</label>
@@ -105,8 +112,8 @@
           (focus)="focusField('gasDensity')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/ft<sup>3</sup></span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/m<sup>3</sup></span>
-
       </div>
+      <span class="alert-warning pull-right small" *ngIf="gasDensityError !== null">{{gasDensityError}}</span>
     </div>
   </div>
 </form>

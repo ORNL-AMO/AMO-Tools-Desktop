@@ -45,6 +45,14 @@ export class FsatFluidComponent implements OnInit {
   //need error string for each warning (nameOfInputField + 'Error')
   //initialize to null
   barometricPressureError: string = null;
+  dryBulbTempError: string = null;
+  wetBulbTempError: string = null;
+  staticPressureError: string = null;
+  dewPointError: string = null;
+  specificGravityError: string = null;
+  relativeHumidityError: string = null;
+  gasDensityError: string = null;
+  specificHeatGasError: string = null;
   constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
@@ -95,17 +103,23 @@ export class FsatFluidComponent implements OnInit {
   }
 
   checkForWarnings() {
+    const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
+    const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
+    const threeDecimalPlaces = new RegExp('\d*(\.)?\d{0,3}');
+    const fourDecimalPlaces = new RegExp('\d*(\.)?\d{0,4}');
+
     //barometricPressure
     if (this.settings.unitsOfMeasure == 'Imperial') {
       //check in range
       if (this.gasDensityForm.controls.barometricPressure.value < 20) {
-        this.barometricPressureError = 'Value must be greater than 20';
+        this.barometricPressureError = 'Value must be greater than or equal to 20';
       } else if (this.gasDensityForm.controls.barometricPressure.value > 40) {
-        this.barometricPressureError = 'Value must be less than 40';
+        this.barometricPressureError = 'Value must be less than or equal to 40';
       } else {
         //if no error set to null
         this.barometricPressureError = null;
       }
+
 
       //add additional checks for this form here if unitsOfMeasure dependent..
     } else {
@@ -114,6 +128,35 @@ export class FsatFluidComponent implements OnInit {
     }
 
     //add non unitsOfMeasure checks here (% checks usually)
+
+    //relativeHumidity
+    if (this.gasDensityForm.controls.relativeHumidity.value < 0) {
+      this.relativeHumidityError = 'Value must be greater than or equal to 0';
+    } else if (this.gasDensityForm.controls.relativeHumidity.value > 100) {
+      this.relativeHumidityError = 'Value must be less than or equal to 100';
+    } else if (!oneDecimalPlace.test(this.gasDensityForm.controls.relativeHumidity.value.toString())) {
+      this.relativeHumidityError = 'Value may not have more than one decimal place';
+    } else {
+      this.relativeHumidityError = null;
+    }
+
+    //gasDensity
+    if (this.gasDensityForm.controls.gasDensity.value <= 0) {
+      this.gasDensityError = 'Value must be greater than 0';
+    } else if (!fourDecimalPlaces.test(this.gasDensityForm.controls.gasDensity.value.toString())) {
+      this.gasDensityError = 'Value may not have more than four decimal places';
+    } else {
+      this.gasDensityError = null;
+    }
+
+    //specificHeat
+    if (this.gasDensityForm.controls.specificHeatGas.value <= 0) {
+      this.specificHeatGasError = 'Value must be greater than 0';
+    } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.specificHeatGas.value.toString())) {
+      this.specificHeatGasError = 'Value may not have more than three decimal places';
+    } else {
+      this.specificHeatGasError = null;
+    }
   }
 
 
