@@ -12,8 +12,8 @@
   <div class="form-group">
     <label for="temperatureMeasurement">Temperature Measurement</label>
     <select class="form-control" formControlName="steamTemperatureMeasurement" id="temperatureMeasurement" (change)="save()">
-      <option value='F'>Degrees Fahrenheit ( F )</option>
-      <option value='C'>Degrees Celsius ( C )</option>
+      <option value='&#8457;'>Degrees Fahrenheit ( &#8457; )</option>
+      <option value='&#8457;'>Degrees Celsius ( &#8451; )</option>
     </select>
   </div>
 
@@ -21,7 +21,7 @@
     <label for="steamSpecificEnthalpyMeasurement">Specific Enthalpy</label>
     <div class="input-group calc-addon-group">
       <select name="steamSpecificEnthalpyMeasurement" class="form-control" formControlName="steamSpecificEnthalpyMeasurement" id="steamSpecificEnthalpyMeasurement" (change)="save()" autofocus>
-        <option value='btuLb'>British thermal units per Pound ( Btu/lb )</option>
+        <option value='btulb'>British thermal units per Pound ( Btu/lb )</option>
         <option value='kJkg'>Kilojoules per Kilogram ( kJ/kg )</option>
       </select>
     </div>

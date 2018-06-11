@@ -4,7 +4,7 @@ export const temperature = {
             name: {
                 singular: 'Degree Celsius'
                 , plural: 'Degrees Celsius' ,
-                 display:  '(C)'
+                 display:  '(&#8451;)'
             }
             , to_anchor: 1
             , anchor_shift: 0
@@ -24,18 +24,18 @@ export const temperature = {
             name: {
                 singular: 'Degree Fahrenheit'
                 , plural: 'Degrees Fahrenheit' ,
-                 display:  '(F)'
+                 display:  '(&#8457;)'
             }
             , to_anchor: 1
         }
     },
     _anchors: {
         metric: {
-            unit: 'C'
+            unit: '&#8451'
             , transform: function (C) { return C / (5 / 9) + 32 }
         }
         , imperial: {
-            unit: 'F'
+            unit: '&$8457'
             , transform: function (F) { return (F - 32) * (5 / 9) }
         }
     }
