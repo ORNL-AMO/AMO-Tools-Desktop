@@ -1,78 +1,24 @@
-<!-- <div class="row">
+<div class="row">
     <div class="col add-zone">
         <a class="pull-right small click-link" (click)="addZone()">+Add Zone</a>
     </div>
-</div> -->
-<form>
-    <!-- <div *ngIf="assessment.settings.energySourceType == 'Hybrid'">
-        <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity; let index = index">
-            <div class="row">
-                <div class="col">
-                    <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
-                </div>
-                <div class="col">
-                    <a class="pull-right small click-link fa fa-times" (click)="removeElectricityZone(index)"></a>
-                </div>
-            </div>
-            <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
-            <app-designed-energy-fuel-form [inputs]="assessment.designedEnergy.designedEnergyFuel[index]" [settings]="settings"
-                (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form>
-        </div>
-    </div> -->
-    <div *ngIf="assessment.electric">
-        <div class="row">
-            <div class="col add-zone">
-                <a class="pull-right small click-link" (click)="addElectricityZone()">+Add Electric Zone</a>
+</div>
+<form *ngIf="assessment.designedEnergy">
+    <div *ngFor="let zone of assessment.designedEnergy.zones; let index=index;">
+        <div class="form-group form-section">
+            <div class="input-group">
+                <span class="input-group-addon units left" (click)="removeZone(index)">
+                    <i class="fa fa-times"></i>
+                </span>
+                <input name="{{index+'_name'}}" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
+                    onfocus="this.select();" />
             </div>
         </div>
-        <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity; let index = index">
-            <div class="row">
-                <div class="col">
-                    <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
-                </div>
-                <div class="col">
-                    <a class="pull-right small click-link fa fa-times" (click)="removeElectricityZone(index)"></a>
-                </div>
-            </div>
-            <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeElectricField($event)"></app-designed-energy-electricity-form>
-            <!-- <app-designed-energy-fuel-form *ngIf="showFuel" [inputs]="assessment.designedEnergy.designedEnergyFuel[index]" [settings]="settings"
-                (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form> -->
-        </div>
-    </div>
-    <div *ngIf="assessment.fuel">
-        <div class="row">
-            <div class="col add-zone">
-                <a class="pull-right small click-link" (click)="addFuelZone()">+Add Fuel Zone</a>
-            </div>
-        </div>
-        <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyFuel; let index = index">
-            <div class="row">
-                <div class="col">
-                    <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
-                </div>
-                <div class="col">
-                    <a class="pull-right small click-link fa fa-times" (click)="removeFuelZone(index)"></a>
-                </div>
-            </div>
-            <app-designed-energy-fuel-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeFuelField($event)"></app-designed-energy-fuel-form>
-        </div>
-    </div>
-    <div *ngIf="assessment.steam">
-        <div class="row">
-            <div class="col add-zone">
-                <a class="pull-right small click-link" (click)="addSteamZone()">+Add Steam Zone</a>
-            </div>
-        </div>
-        <div *ngFor="let inputs of assessment.designedEnergy.designedEnergySteam; let index = index">
-            <div class="row">
-                <div class="col">
-                    <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
-                </div>
-                <div class="col">
-                    <a class="pull-right small click-link fa fa-times" (click)="removeSteamZone(index)"></a>
-                </div>
-            </div>
-            <app-designed-energy-steam-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeSteamField($event)"></app-designed-energy-steam-form>
-        </div>
+        <app-designed-energy-electricity-form *ngIf="assessment.designedEnergy.electricity" [inputs]="zone.designedEnergyElectricity"
+            (emitCalculate)="calculate()" (changeField)="changeElectricField($event)"></app-designed-energy-electricity-form>
+        <app-designed-energy-fuel-form *ngIf="assessment.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel" [settings]="settings"
+            (emitCalculate)="calculate()" (changeField)="changeFuelField($event)"></app-designed-energy-fuel-form>
+        <app-designed-energy-steam-form *ngIf="assessment.designedEnergy.steam" [inputs]="zone.designedEnergySteam" [settings]="settings"
+            (emitCalculate)="calculate()" (changeField)="changeSteamField($event)"></app-designed-energy-steam-form>
     </div>
 </form>

@@ -50,7 +50,7 @@ export class PreAssessmentService {
     let totalResults: number = 0;
     let totalCost: number = 0;
     if (assessment.fuel) {
-      fuelResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
+      fuelResults = this.meteredEnergyService.calcFuelEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel);
       fuelCost = fuelResults * assessment.fuelCost;
     }
     if (assessment.steam) {
@@ -59,7 +59,7 @@ export class PreAssessmentService {
       steamCost = steamResults * assessment.steamCost;
     }
     if (assessment.electric) {
-      electricityResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
+      electricityResults = this.meteredEnergyService.calcElectricEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity);
       electricityCost = electricityResults * assessment.electricityCost;
       electricityResults = this.convertElectrotechResults(electricityResults, settings);
     }
@@ -77,20 +77,22 @@ export class PreAssessmentService {
     let electricityResults: number = 0;
     let totalResults: number = 0;
     let totalCost: number = 0;
-    if (assessment.fuel) {
-      fuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      fuelCost = fuelResults * assessment.fuelCost;
-    }
-    if (assessment.steam) {
-      steamResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
-      steamResults = this.convertSteamResults(steamResults, settings);
-      steamCost = steamResults * assessment.steamCost;
-    }
-    if (assessment.electric) {
-      electricityResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      electricityCost = electricityResults * assessment.electricityCost;
-      electricityResults = this.convertElectrotechResults(electricityResults, settings);
-    }
+    assessment.designedEnergy.zones.forEach(zone => {
+      if (assessment.designedEnergy.steam) {
+        steamResults += this.designedEnergyService.calculateSteamZoneEnergyUsed(zone.designedEnergySteam);
+      }
+      if (assessment.designedEnergy.fuel) {
+        fuelResults += this.designedEnergyService.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
+      }
+      if (assessment.designedEnergy.electricity) {
+        electricityResults += this.designedEnergyService.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
+      }
+    })
+    fuelCost = fuelResults * assessment.fuelCost;
+    steamResults = this.convertSteamResults(steamResults, settings);
+    steamCost = steamResults * assessment.steamCost;
+    electricityCost = electricityResults * assessment.electricityCost;
+    electricityResults = this.convertElectrotechResults(electricityResults, settings);
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
     return this.addResult(totalResults, assessment.name, assessment.borderColor, totalCost);

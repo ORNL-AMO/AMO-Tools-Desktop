@@ -2,6 +2,9 @@ export interface MeteredEnergy {
     meteredEnergyFuel?: MeteredEnergyFuel,
     meteredEnergyElectricity?: MeteredEnergyElectricity,
     meteredEnergySteam?: MeteredEnergySteam
+    fuel?: boolean,
+    steam?: boolean,
+    electricity?: boolean
 }
 
 

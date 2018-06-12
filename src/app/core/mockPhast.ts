@@ -972,54 +972,54 @@ export const MockPhast: Assessment = {
             ]
         },
         disableSetupDialog: true,
-        designedEnergy: {
-            designedEnergyElectricity: [],
-            designedEnergyFuel: [
-                {
-                    name: "1 Top Preheat",
-                    fuelType: 0,
-                    percentCapacityUsed: 60,
-                    totalBurnerCapacity: 169,
-                    percentOperatingHours: 88
-                },
-                {
-                    name: "2 Bottom Preheat",
-                    fuelType: 0,
-                    percentCapacityUsed: 60,
-                    totalBurnerCapacity: 169,
-                    percentOperatingHours: 88
-                },
-                {
-                    name: "3 Top Heat",
-                    fuelType: 0,
-                    percentCapacityUsed: 80,
-                    totalBurnerCapacity: 81.6,
-                    percentOperatingHours: 88
-                },
-                {
-                    name: "4 Bottom Heat",
-                    fuelType: 0,
-                    percentCapacityUsed: 80,
-                    totalBurnerCapacity: 102,
-                    percentOperatingHours: 88
-                },
-                {
-                    name: "Screen",
-                    fuelType: 0,
-                    percentCapacityUsed: 40,
-                    totalBurnerCapacity: 41.4,
-                    percentOperatingHours: 88
-                },
-                {
-                    name: "Soak",
-                    fuelType: 0,
-                    percentCapacityUsed: 40,
-                    totalBurnerCapacity: 34.8,
-                    percentOperatingHours: 88
-                }
-            ],
-            designedEnergySteam: []
-        },
+        // designedEnergy: {
+        //     designedEnergyElectricity: [],
+        //     designedEnergyFuel: [
+        //         {
+        //             name: "1 Top Preheat",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 60,
+        //             totalBurnerCapacity: 169,
+        //             percentOperatingHours: 88
+        //         },
+        //         {
+        //             name: "2 Bottom Preheat",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 60,
+        //             totalBurnerCapacity: 169,
+        //             percentOperatingHours: 88
+        //         },
+        //         {
+        //             name: "3 Top Heat",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 80,
+        //             totalBurnerCapacity: 81.6,
+        //             percentOperatingHours: 88
+        //         },
+        //         {
+        //             name: "4 Bottom Heat",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 80,
+        //             totalBurnerCapacity: 102,
+        //             percentOperatingHours: 88
+        //         },
+        //         {
+        //             name: "Screen",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 40,
+        //             totalBurnerCapacity: 41.4,
+        //             percentOperatingHours: 88
+        //         },
+        //         {
+        //             name: "Soak",
+        //             fuelType: 0,
+        //             percentCapacityUsed: 40,
+        //             totalBurnerCapacity: 34.8,
+        //             percentOperatingHours: 88
+        //         }
+        //     ],
+        //     designedEnergySteam: []
+        // },
         meteredEnergy: {
             meteredEnergyElectricity: null,
             meteredEnergyFuel: {

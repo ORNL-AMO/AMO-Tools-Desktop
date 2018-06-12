@@ -33,9 +33,9 @@ td{
     margin: 10px;
 }
 
-.assessment-name{
+/* .assessment-name{
     font-size: larger;
-}
+} */
 
 .general .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #145A32;
@@ -87,4 +87,9 @@ td{
 
 .scroll-item{
     overflow-x: hidden;
+}
+
+
+.submit-btn{
+    padding: 6px;
 }

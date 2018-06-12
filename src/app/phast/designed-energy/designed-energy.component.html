@@ -1,3 +1,80 @@
-<app-designed-energy-steam *ngIf="settings.energySourceType == 'Steam'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()" [containerHeight]="containerHeight"></app-designed-energy-steam>
+<!-- <app-designed-energy-steam *ngIf="settings.energySourceType == 'Steam'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()" [containerHeight]="containerHeight"></app-designed-energy-steam>
 <app-designed-energy-fuel *ngIf="settings.energySourceType == 'Fuel'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()" [containerHeight]="containerHeight"></app-designed-energy-fuel>
-<app-designed-energy-electricity *ngIf="settings.energySourceType == 'Electricity'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()" [containerHeight]="containerHeight"></app-designed-energy-electricity>
+<app-designed-energy-electricity *ngIf="settings.energySourceType == 'Electricity'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()" [containerHeight]="containerHeight"></app-designed-energy-electricity> -->
+
+<div class="modify-conditions panel-container row phast">
+    <div class="col-12">
+        <div class="row align-items-top calculator-panel">
+            <div class="modification panel-column col-6 align-top scroll-item" [ngStyle]="{'height.px': containerHeight}">
+                <div class="header">
+                    <h3>Designed Energy</h3>
+                    <h5 class="pull-right panel-add">
+                        <a class="small">
+                            <span (click)="addZone()">+Add Zone</span>
+                        </a>
+                    </h5>
+                </div>
+                <div class="card-form" *ngIf="phast.designedEnergy">
+                    <div class="row">
+                        <div class="col btn-col d-flex flex-column">
+                            <div class="btn-group btn-group-sm align-self-center">
+                                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setElectricity()" [ngClass]="{'active':  phast.designedEnergy.electricity == true}">Electric</button>
+                                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFuel()" [ngClass]="{'active': phast.designedEnergy.fuel == true}">Fuel</button>
+                                <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setSteam()" [ngClass]="{'active':  phast.designedEnergy.steam == true}">Steam-based</button>
+                            </div>
+                            <div class="pl-1 pr-1 pb-1 text-center">
+                                <span class="text-muted small">Select multiple energy source types for hybrid units.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 zone" *ngFor="let zone of phast.designedEnergy.zones; let index=index;">
+                            <div class="form-group form-section">
+                                <div class="input-group">
+                                    <span class="input-group-addon units left" (click)="removeZone(index)">
+                                        <i class="fa fa-times"></i></span>
+                                    <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
+                                        onfocus="this.select();" />
+                                </div>
+                            </div>
+                            <app-designed-energy-steam-form *ngIf="phast.designedEnergy.steam" [inputs]="zone.designedEnergySteam" (emitCalculate)="calculate()"
+                                (emitSave)="emitSave()" (changeField)="setField($event, 'steam')" [settings]="settings"></app-designed-energy-steam-form>
+                            <app-designed-energy-fuel-form *ngIf="phast.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel" (emitCalculate)="calculate()"
+                                (emitSave)="emitSave()" (changeField)="setField($event, 'fuel')" [settings]="settings"></app-designed-energy-fuel-form>
+                            <app-designed-energy-electricity-form *ngIf="phast.designedEnergy.electricity" [inputs]="zone.designedEnergyElectricity"
+                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event, 'electricity')"></app-designed-energy-electricity-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 align-top">
+                <div class="help-panel">
+                    <div class="row">
+                        <ul class="tabs primary tab-row">
+                            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a (click)="setTab('results')">Results</a>
+                            </li><!--
+                            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a (click)="setTab('help')">Help</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+                        <div class="col-11">
+                            <div class="calc-help">
+                                <app-designed-energy-steam-help *ngIf="energySource == 'steam'" [currentField]="currentField"></app-designed-energy-steam-help>
+                                <app-designed-energy-fuel-help *ngIf="energySource == 'fuel'" [currentField]="currentField"></app-designed-energy-fuel-help>
+                                <app-designed-energy-electricity-help *ngIf="energySource == 'electricity'" [currentField]="currentField"></app-designed-energy-electricity-help>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+                        <div class="col-11">
+                            <app-designed-energy-results [results]="results" [settings]="settings"></app-designed-energy-results>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

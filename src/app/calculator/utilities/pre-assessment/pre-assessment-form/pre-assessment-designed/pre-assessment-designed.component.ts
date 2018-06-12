@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
-import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam } from '../../../../../shared/models/phast/designedEnergy'
+import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy'
 
 import { Settings } from '../../../../../shared/models/settings';
 @Component({
@@ -17,95 +17,101 @@ export class PreAssessmentDesignedComponent implements OnInit {
   emitChangeField = new EventEmitter<{ inputField: string, energyType: string }>();
   @Input()
   settings: Settings;
+
   constructor() { }
 
   ngOnInit() {
     if (!this.assessment.designedEnergy) {
-      this.assessment.designedEnergy = {
-        designedEnergyElectricity: new Array<DesignedEnergyElectricity>(),
-        designedEnergyFuel: new Array<DesignedEnergyFuel>(),
-        designedEnergySteam: new Array<DesignedEnergySteam>()
-      }
-      this.addElectricityZone();
-      this.addFuelZone();
-      this.addSteamZone();
+      this.initializeNew();
     }
   }
 
-  // addZone() {
-  //   if (this.assessment.settings.energySourceType == 'Fuel') {
-  //     this.addFuelZone();
-  //   } else if (this.assessment.settings.energySourceType == 'Steam') {
-  //     this.addSteamZone();
-  //   } else if (this.assessment.settings.energySourceType == 'Electricity') {
-  //     this.addElectricityZone();
-  //   }
-  //   else if (this.assessment.settings.energySourceType == 'Hybrid') {
-  //     this.addElectricityZone();
-  //     this.addFuelZone();
-  //   }
-  // }
-
-  calculate() {
-    this.emitCalculate.emit(true);
+  initializeNew() {
+    this.assessment.designedEnergy = {
+      zones: new Array<DesignedZone>(),
+      fuel: this.assessment.fuel,
+      steam: this.assessment.steam,
+      electricity: this.assessment.electric
+    }
+    this.addZone();
   }
 
-  addElectricityZone() {
-    let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergyElectricity) {
-      eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
+  setElectricity() {
+    this.assessment.designedEnergy.electricity = !this.assessment.designedEnergy.electricity;
+    if (!this.assessment.designedEnergy.electricity) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergyElectricity = this.getEmptyElectricityInput();
+      })
     }
-    let tmpZone: DesignedEnergyElectricity = {
-      name: 'Electric Zone #' + eqNum,
-      kwRating: 0,
-      percentCapacityUsed: 0,
-      percentOperatingHours: 0
-    }
-    this.assessment.designedEnergy.designedEnergyElectricity.push(tmpZone);
+    this.calculate();
   }
 
-  addFuelZone() {
-    let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergyFuel) {
-      eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
+  setFuel() {
+    this.assessment.designedEnergy.fuel = !this.assessment.designedEnergy.fuel;
+    if (!this.assessment.designedEnergy.fuel) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergyFuel = this.getEmptyFuelInput();
+      })
     }
-    let tmpZone: DesignedEnergyFuel = {
-      name: 'Fuel Zone #' + eqNum,
-      fuelType: 0,
-      percentCapacityUsed: 0,
-      totalBurnerCapacity: 0,
-      percentOperatingHours: 0
-    }
-    this.assessment.designedEnergy.designedEnergyFuel.push(tmpZone);
+    this.calculate();
   }
 
-  addSteamZone() {
-    let eqNum = 1;
-    if (this.assessment.designedEnergy.designedEnergySteam) {
-      eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
+  setSteam() {
+    this.assessment.designedEnergy.steam = !this.assessment.designedEnergy.steam;
+    if (!this.assessment.designedEnergy.steam) {
+      this.assessment.designedEnergy.zones.forEach(zone => {
+        zone.designedEnergySteam = this.getEmptySteamInput();
+      })
     }
-    let tmpZone: DesignedEnergySteam = {
-      name: 'Steam Zone #' + eqNum,
+    this.calculate();
+  }
+
+
+  addZone() {
+    let zoneNum: number = this.assessment.designedEnergy.zones.length + 1;
+    this.assessment.designedEnergy.zones.push({
+      name: 'Zone #' + zoneNum,
+      designedEnergyElectricity: this.getEmptyElectricityInput(),
+      designedEnergyFuel: this.getEmptyFuelInput(),
+      designedEnergySteam: this.getEmptySteamInput()
+    })
+    this.calculate();
+  }
+
+  removeZone(index: number){
+    this.assessment.designedEnergy.zones.splice(index,1);
+    this.calculate();
+  }
+
+  getEmptySteamInput(): DesignedEnergySteam {
+    return {
       totalHeat: 0,
       steamFlow: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
     }
-    this.assessment.designedEnergy.designedEnergySteam.push(tmpZone);
   }
 
-  removeFuelZone(num: number) {
-    this.assessment.designedEnergy.designedEnergyFuel.splice(num, 1);
+  getEmptyFuelInput(): DesignedEnergyFuel {
+    return {
+      fuelType: 0,
+      percentCapacityUsed: 0,
+      totalBurnerCapacity: 0,
+      percentOperatingHours: 0
+    }
   }
 
-  removeSteamZone(num: number) {
-    this.assessment.designedEnergy.designedEnergySteam.splice(num, 1);
+  getEmptyElectricityInput(): DesignedEnergyElectricity {
+    return {
+      kwRating: 0,
+      percentCapacityUsed: 0,
+      percentOperatingHours: 0
+    }
   }
 
-  removeElectricityZone(num: number) {
-    this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
+  calculate() {
+    this.emitCalculate.emit(true);
   }
-
 
   changeFuelField(str: string) {
     this.emitChangeField.emit({ inputField: str, energyType: 'Fuel' });
