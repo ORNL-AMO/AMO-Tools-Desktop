@@ -5,6 +5,9 @@ import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
 import * as d3 from 'd3';
+import { EnergyInputEAF } from '../../shared/models/phast/losses/energyInputEAF';
+import { EnergyInputExhaustGasLoss } from '../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SankeyService {
@@ -16,7 +19,7 @@ export class SankeyService {
   fuelEnergy: number;
   electricalEnergy: number;
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
@@ -24,7 +27,11 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
-    this.fuelEnergy = phastResults.energyInputHeatDelivered;
+    if (phast.losses.energyInputExhaustGasLoss.length > 0) {
+      this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
+    }
+
+    // this.fuelEnergy = phastResults.energyInputHeatDelivered;
     this.electricalEnergy = phastResults.electricalHeatDelivered;
 
     this.exothermicHeat = phastResults.exothermicHeat;
@@ -350,6 +357,19 @@ export class SankeyService {
 
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
+  }
+
+  setFuelEnergy(fuelEnergy: Array<EnergyInputExhaustGasLoss>, unitsOfMeasure: string) {
+    this.fuelEnergy = 0;
+    for (let i = 0; i < fuelEnergy.length; i++) {
+      this.fuelEnergy = fuelEnergy[i].totalHeatInput;
+    }
+    if (unitsOfMeasure == 'Metric') {
+      this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('GJ').to('kWh');
+    }
+    else {
+      this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('MMBtu').to('kWh');
+    }
   }
 
   getFuelEnergy(): number {
