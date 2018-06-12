@@ -37,6 +37,7 @@ export class MeteredEnergyComponent implements OnInit {
 
   ngOnInit() {
     if (!this.phast.meteredEnergy) {
+      console.log('new');
       this.initializeNew()
     }
   }
