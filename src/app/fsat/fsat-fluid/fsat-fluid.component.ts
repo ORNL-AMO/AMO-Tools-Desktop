@@ -45,12 +45,8 @@ export class FsatFluidComponent implements OnInit {
   //need error string for each warning (nameOfInputField + 'Error')
   //initialize to null
   barometricPressureError: string = null;
-  dryBulbTempError: string = null;
-  wetBulbTempError: string = null;
-  staticPressureError: string = null;
-  dewPointError: string = null;
-  specificGravityError: string = null;
   relativeHumidityError: string = null;
+  gasDensityError: string = null;
   specificHeatGasError: string = null;
   constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
@@ -102,66 +98,15 @@ export class FsatFluidComponent implements OnInit {
   }
 
   checkForWarnings() {
-    //const oneDecimalPlace = new RegExp('\d*(\.)?\d{0,1}');
-    const oneDecimalPlace = new RegExp('^\[0-9]+(.?[0-9]{0,1})$');
-
-    // const twoDecimalPlaces = new RegExp( '\d*(\.)?\d{0,2}');
-    const twoDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,2})$');
-
-    // const threeDecimalPlaces = new RegExp('\d*(\.)?\d{0,3}');
-    const threeDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,3})$');
-
-    // const fourDecimalPlaces = new RegExp('\d*(\.)?\d{0,4}');
-    const fourDecimalPlaces = new RegExp('^[0-9]+(.?[0-9]{0,4})$');
-
-
-    //barometricPressure
     if (this.settings.unitsOfMeasure == 'Imperial') {
-      //check in range
+      //barometricPressure
       if (this.gasDensityForm.controls.barometricPressure.value < 20) {
         this.barometricPressureError = 'Value must be greater than 20';
       } else if (this.gasDensityForm.controls.barometricPressure.value > 40) {
         this.barometricPressureError = 'Value must be less than 40';
-      } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.barometricPressure.value.toString())) {
-        this.barometricPressureError = 'Value may not have more than three decimal places';
       } else {
         //if no error set to null
         this.barometricPressureError = null;
-      }
-
-      // dry bulb temp
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dryBulbTemp.value.toString())) {
-        this.dryBulbTempError = 'Value may not have more than one decimal place';
-      }  else {
-        this.dryBulbTempError = null;
-      }
-
-      // wet bulb temp
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
-        this.wetBulbTempError = 'Value may not have more than one decimal place';
-      }  else {
-        this.wetBulbTempError = null;
-      }
-
-      // static pressure
-      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.staticPressure.value.toString())) {
-        this.staticPressureError = 'Value may not have more than two decimal places';
-      }  else {
-        this.staticPressureError = null;
-      }
-
-      // dew point
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dewPoint.value.toString())) {
-        this.dewPointError = 'Value may not have more than one decimal place';
-      }  else {
-        this.dewPointError = null;
-      }
-
-      // specific gravity
-      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.specificGravity.value.toString())) {
-        this.specificGravityError = 'Value may not have more than two decimal places';
-      }  else {
-        this.specificGravityError = null;
       }
 
     } else {
@@ -170,46 +115,9 @@ export class FsatFluidComponent implements OnInit {
         this.barometricPressureError = 'Value must be greater than 65';
       } else if (this.gasDensityForm.controls.barometricPressure.value > 140) {
         this.barometricPressureError = 'Value must be less than 140';
-      } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.barometricPressure.value.toString())) {
-        this.barometricPressureError = 'Value may not have more than three decimal places';
       } else {
         //if no error set to null
         this.barometricPressureError = null;
-      }
-
-      // dry bulb temp
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dryBulbTemp.value.toString())) {
-        this.dryBulbTempError = 'Value may not have more than one decimal place';
-      }  else {
-        this.dryBulbTempError = null;
-      }
-
-      // wet bulb temp
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.wetBulbTemp.value.toString())) {
-        this.wetBulbTempError = 'Value may not have more than one decimal place';
-      }  else {
-        this.wetBulbTempError = null;
-      }
-
-      // static pressure
-      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.staticPressure.value.toString())) {
-        this.staticPressureError = 'Value may not have more than two decimal places';
-      }  else {
-        this.staticPressureError = null;
-      }
-
-      // dew point
-      if (!oneDecimalPlace.test(this.gasDensityForm.controls.dewPoint.value.toString())) {
-        this.dewPointError = 'Value may not have more than one decimal place';
-      }  else {
-        this.dewPointError = null;
-      }
-
-      // specific gravity
-      if (!twoDecimalPlaces.test(this.gasDensityForm.controls.specificGravity.value.toString())) {
-        this.specificGravityError = 'Value may not have more than two decimal places';
-      }  else {
-        this.specificGravityError = null;
       }
     }
 
@@ -220,26 +128,20 @@ export class FsatFluidComponent implements OnInit {
       this.relativeHumidityError = 'Value must be greater than or equal to 0';
     } else if (this.gasDensityForm.controls.relativeHumidity.value > 100) {
       this.relativeHumidityError = 'Value must be less than or equal to 100';
-    } else if (!oneDecimalPlace.test(this.gasDensityForm.controls.relativeHumidity.value.toString())) {
-      this.relativeHumidityError = 'Value may not have more than one decimal place';
     } else {
       this.relativeHumidityError = null;
     }
 
-    // //gasDensity
-    // if (this.gasDensityForm.controls.gasDensity.value <= 0) {
-    //   this.gasDensityError = 'Value must be greater than 0';
-    // } else if (!fourDecimalPlaces.test(this.gasDensityForm.controls.gasDensity.value.toString())) {
-    //   this.gasDensityError = 'Value may not have more than four decimal places';
-    // } else {
-    //   this.gasDensityError = null;
-    // }
+    //gasDensity
+    if (this.gasDensityForm.controls.gasDensity.value <= 0) {
+      this.gasDensityError = 'Value must be greater than 0';
+    } else {
+      this.gasDensityError = null;
+    }
 
     //specificHeat
     if (this.gasDensityForm.controls.specificHeatGas.value <= 0) {
       this.specificHeatGasError = 'Value must be greater than 0';
-    } else if (!threeDecimalPlaces.test(this.gasDensityForm.controls.specificHeatGas.value.toString())) {
-      this.specificHeatGasError = 'Value may not have more than three decimal places';
     } else {
       this.specificHeatGasError = null;
     }
