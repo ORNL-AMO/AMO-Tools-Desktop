@@ -24,10 +24,12 @@ export class FanSetupComponent implements OnInit {
   emitSave = new EventEmitter<FanSetup>();
   @Input()
   settings: Settings;
-  
+
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
+  fanEfficiencyError: string = null;
+  fanSpeedError: string = null;
   constructor(private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
@@ -68,7 +70,29 @@ export class FanSetupComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  checkForWarnings() {
+    //fanEfficiency.. commented out while custom efficiency not implemented
+    /*
+    if(this.fanForm.controls.fanEfficiency.value < 0) {
+	this.fanEfficiencyError = 'Value must be greater than or equal to 0';
+    } else if (this.fanForm.controls.fanEfficiency.value > 100) {
+	this.fanEfficiencyError = 'Value must be less than or equal to 100';
+    } else {
+	this.fanEfficiencyError = null;
+    }
+    */
+    //fanSpeed
+    if(this.fanForm.controls.fanSpeed.value < 0) {
+	this.fanSpeedError = 'Value must be greater than or equal to 0';
+    } else if (this.fanForm.controls.fanSpeed.value > 5000) {
+	this.fanSpeedError = 'Value must be less than or equal to 5000';
+    } else {
+	this.fanSpeedError = null;
+    }
+  }
+
   save() {
+    this.checkForWarnings();
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
     this.emitSave.emit(this.fanSetup);
   }

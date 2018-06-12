@@ -33,7 +33,7 @@
           (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
       </div>
-      <!-- <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span> -->
+      <span class="alert-danger pull-right small" *ngIf="fanSpeedError !== null">{{fanSpeedError}}</span>
     </div>
 
     <div class="form-group">

@@ -155,6 +155,10 @@ export class FanFieldDataComponent implements OnInit {
     this.emitSave.emit(this.fieldData);
   }
 
+  checkForWarnings() {
+
+  }
+
   checkFlowRate(bool?: boolean) {
     if (!bool) {
       this.save();
