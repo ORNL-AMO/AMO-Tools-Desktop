@@ -177,7 +177,7 @@ export class MeteredEnergyService {
     }
     if (phast.meteredEnergy.fuel) {
       fuelEnergyUsed = this.calcFuelEnergyUsed(phast.meteredEnergy.meteredEnergyFuel);
-      //fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
+      fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
     }
 
     let sumFeedRate = 0;
@@ -187,7 +187,7 @@ export class MeteredEnergyService {
 
     results.meteredEnergyUsed = steamEnergyUsed + fuelEnergyUsed + electricityEnergyUsed;
     results.meteredEnergyIntensity = this.convertIntensity((results.meteredEnergyUsed / sumFeedRate), settings);
-    let auxResults: Array<{name: string, totalPower: number, motorPower: string}> = this.auxEquipmentService.calculate(phast);
+    let auxResults: Array<{ name: string, totalPower: number, motorPower: string }> = this.auxEquipmentService.calculate(phast);
     results.meteredElectricityUsed = this.auxEquipmentService.getResultsSum(auxResults);
     let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
     results.calculatedElectricityUsed = calculated.electricityUsed;
@@ -219,9 +219,7 @@ export class MeteredEnergyService {
   }
 
   convertFuelEnergyUsed(val: number, settings: Settings): number {
-    if (settings.energySourceType == 'Electricity') {
-      val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
-    } else if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
