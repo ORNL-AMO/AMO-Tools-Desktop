@@ -44,13 +44,15 @@ export class FanFieldDataComponent implements OnInit {
     { value: 1, display: 'Current' }
   ];
 
-  flowError: string = null;
+  flowRateError: string = null;
   voltageError: string = null;
   costError: string = null;
   opFractionError: string = null;
   ratedPowerError: string = null;
   marginError: string = null;
   outletPressureError: string = null;
+  specificHeatRatioError: string = null;
+  compressibilityFactorError: string = null;
   fieldDataForm: FormGroup;
   pressureCalcType: string;
   constructor(private compareService: CompareService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
@@ -141,6 +143,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   save() {
+    this.checkForWarnings();
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     let tmpPlaneData: PlaneData = this.fieldData.planeData;
@@ -156,7 +159,30 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   checkForWarnings() {
-
+    //outletPressure
+    if(this.fieldDataForm.controls.outletPressure.value < 0) {
+        this.outletPressureError = 'Value must be greater than or equal to 0';
+    } else {
+	this.outletPressureError = null;
+    }
+    //flowRate
+    if(this.fieldDataForm.controls.flowRate.value < 0) {
+	this.flowRateError = 'Value must be greater than or equal to 0';
+    } else {
+	this.flowRateError = null;
+    }
+    //specificHeatRatio
+    if(this.fieldDataForm.controls.specificHeatRatio.value < 0) {
+	this.specificHeatRatioError = 'Value must be greater than or equal to 0';
+    } else {
+	this.specificHeatRatioError = null;
+    }
+    //compressibilityFactor
+    if(this.fieldDataForm.controls.compressibilityFactor.value < 0) {
+	this.compressibilityFactorError = 'Value must be greater than or equal to 0';
+    } else {
+	this.compressibilityFactorError = null;
+    }
   }
 
   checkFlowRate(bool?: boolean) {
@@ -166,9 +192,9 @@ export class FanFieldDataComponent implements OnInit {
     // if (this.fieldDataForm.controls.flowRate.pristine == false && this.fieldDataForm.controls.flowRate.value != '') {
     //   let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.fieldDataForm.controls.flowRate.value, this.settings);
     //   if (tmp.message) {
-    //     this.flowError = tmp.message;
+    //     this.flowRateError = tmp.message;
     //   } else {
-    //     this.flowError = null;
+    //     this.flowRateError = null;
     //   }
     //   return tmp.valid;
     // }

@@ -60,7 +60,7 @@
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
         <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
       </div>
-      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
+      <span class="alert-danger pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
     </div>
 
     <div class="form-group" *ngIf="baseline">
@@ -96,6 +96,7 @@
       <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
         id="specificHeatRatio" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();" [readonly]="!selected"
         [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent()}">
+      <span class="alert-warning pull-right small" *ngIf="specificHeatRatioError !== null">{{specificHeatRatioError}}</span>
     </div>
 
     <div class="form-group">
@@ -105,6 +106,7 @@
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
         [readonly]="!selected" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
+      <span class="alert-warning pull-right small" *ngIf="compressibilityFactorError !== null">{{compressibilityFactorError}}</span>
     </div>
   </div>
 </form>
