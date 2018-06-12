@@ -158,12 +158,14 @@ export class PhastComponent implements OnInit {
       }
     })
     this.selectedModSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-      if (mod && this._phast) {
-        this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
-          return val.phast.name == mod.name
-        })
-      } else {
-        this.modificationIndex = undefined;
+      if (this.mainTab == 'assessment') {
+        if (mod && this._phast) {
+          this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
+            return val.phast.name == mod.name
+          })
+        } else {
+          this.modificationIndex = undefined;
+        }
       }
     })
 
@@ -399,9 +401,11 @@ export class PhastComponent implements OnInit {
   }
 
   saveNewMod(mod: Modification) {
+    console.log('save new mod');
     this._phast.modifications.push(mod);
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
+    this.saveDb();
   }
 
   setExploreOppsToast(bool: boolean) {
