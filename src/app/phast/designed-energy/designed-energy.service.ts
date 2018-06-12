@@ -77,9 +77,7 @@ export class DesignedEnergyService {
   }
 
   convertFuelEnergyUsed(val: number, settings: Settings): number {
-    if (settings.energySourceType == 'Electricity') {
-      val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
-    } else if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
