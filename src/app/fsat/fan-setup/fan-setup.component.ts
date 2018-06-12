@@ -82,12 +82,12 @@ export class FanSetupComponent implements OnInit {
     }
     */
     //fanSpeed
-    if(this.fanForm.controls.fanSpeed.value < 0) {
-	this.fanSpeedError = 'Value must be greater than or equal to 0';
+    if (this.fanForm.controls.fanSpeed.value < 0) {
+      this.fanSpeedError = 'Fan speed must be greater than or equal to 0';
     } else if (this.fanForm.controls.fanSpeed.value > 5000) {
-	this.fanSpeedError = 'Value must be less than or equal to 5000';
+      this.fanSpeedError = 'Fan speed must be less than or equal to 5000';
     } else {
-	this.fanSpeedError = null;
+      this.fanSpeedError = null;
     }
   }
 

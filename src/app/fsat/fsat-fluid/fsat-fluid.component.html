@@ -108,7 +108,7 @@
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/ft<sup>3</sup></span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/m<sup>3</sup></span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="gasDensityError !== null">{{gasDensityError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="gasDensityError !== null && gasDensityForm.controls.inputType.value != 'custom'">{{gasDensityError}}</span>
     </div>
   </div>
 </form>
