@@ -123,7 +123,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       this.availableHeat = results.availableHeat;
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.energyInputTotal = tmpResults.grossHeatInput;
-      this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss;
+      this.electricalHeatDelivered = this.energyInputTotal - loss.heatLoss - loss.exhaustGas;
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;
