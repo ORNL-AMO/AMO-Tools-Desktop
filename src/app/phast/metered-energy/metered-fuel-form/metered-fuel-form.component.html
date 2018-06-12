@@ -1,0 +1,95 @@
+<form>
+  <div class="form-section">
+    <label>
+      Total Fuel Consumption
+    </label>
+    <div class="form-group">
+      <label for="fuelDescription">Type of Fuel</label>
+      <select name="fuelDescription" id="fuelDescription" class="form-control" (focus)="focusField('fuelDescription')" (change)="getFuelTypes()"
+        [(ngModel)]="inputs.fuelDescription">
+        <option value="gas">Gas</option>
+        <option value="solidLiquid">Solid/Liquid</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="fuelType">Fuel</label>
+      <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="setProperties()" [(ngModel)]="inputs.fuelType">
+        <option *ngFor="let type of fuelTypes" [ngValue]="type.id">{{type.substance}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="heatingValue">Heating Value - HHV</label>
+      <div class="input-group">
+        <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('heatingValue')"
+          [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();" />
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'solidLiquid'" class="input-group-addon units">Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric' && inputs.fuelDescription == 'gas'" class="input-group-addon units">kJ/Nm
+          <sup>3</sup>
+        </span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric' && inputs.fuelDescription == 'solidLiquid'" class="input-group-addon units">kJ/kg</span>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="!inputs.userDefinedMeteredEnergy">
+      <label class="small">
+        Flow Rate During Collection
+        <!-- <a class="click-link small" (click)="showHideInputField()">Calculate using flow rate</a> -->
+      </label>
+      <div class="input-group">
+        <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="focusField('fuelFlowRateInput')"
+          [(ngModel)]="inputs.fuelFlowRateInput" (input)="calculate()" onfocus="this.select();">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
+          <sup>3</sup>/hr</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="fuelEnergy">Metered Fuel Energy
+        <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="!inputs.userDefinedMeteredEnergy">Define Fuel Energy</a>
+        <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="inputs.userDefinedMeteredEnergy">Auto Calculate Fuel Energy</a>
+      </label>
+      <div class="input-group" *ngIf="inputs.userDefinedMeteredEnergy">
+        <input name="fuelEnergy" type="number" step="any" id="fuelEnergy" class="form-control" (focus)="focusField('fuelEnergy')"
+          [(ngModel)]="inputs.fuelEnergy" (input)="calculate()" onfocus="this.select();" />
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ</span>
+      </div>
+      <div *ngIf="!inputs.userDefinedMeteredEnergy" class="small text-center">
+        <span *ngIf="inputs.fuelEnergy">{{inputs.fuelEnergy | number:'1.0-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+        </span>
+        <span *ngIf="!inputs.fuelEnergy">&mdash; &mdash;</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="collectionTime">Data Collection Time</label>
+      <div class="input-group">
+        <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="focusField('collectionTime')"
+          [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();" />
+        <span class="input-group-addon units">hrs</span>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="form-section" *ngIf="!inCalc && !inElectricity">
+    <label>
+      Total Electricity Consumption (Aux. Equipment)
+    </label>
+    <div class="form-group">
+      <label for="electricityUsed">Electricity Used During Data Collection</label>
+      <div class="input-group">
+        <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('electricityUsed')"
+          [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();" />
+        <span class="input-group-addon units">kWh</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="electricityCollectionTime">Data Collection Time</label>
+      <div class="input-group">
+        <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('electricityCollectionTime')"
+          [(ngModel)]="inputs.electricityCollectionTime" (input)="calculate()" onfocus="this.select();" />
+        <span class="input-group-addon units">hrs</span>
+      </div>
+    </div>
+  </div> -->
+</form>
