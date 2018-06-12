@@ -362,7 +362,7 @@ export class SankeyService {
   setFuelEnergy(fuelEnergy: Array<EnergyInputExhaustGasLoss>, unitsOfMeasure: string) {
     this.fuelEnergy = 0;
     for (let i = 0; i < fuelEnergy.length; i++) {
-      this.fuelEnergy = fuelEnergy[i].totalHeatInput;
+      this.fuelEnergy += fuelEnergy[i].totalHeatInput;
     }
     if (unitsOfMeasure == 'Metric') {
       this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('GJ').to('kWh');
