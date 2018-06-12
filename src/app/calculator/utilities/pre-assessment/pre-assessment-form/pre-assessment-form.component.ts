@@ -109,17 +109,37 @@ export class PreAssessmentFormComponent implements OnInit {
 
   getEnergyUsed(assessment: PreAssessment) {
     if (assessment.type == 'Metered') {
-      return this.preAssessmentService.calculateMetered(assessment, assessment.settings).value;
+      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateMetered(assessment, assessment.settings);
+      if (result) {
+        return result.value;
+      } else {
+        return 0;
+      }
     } else if (assessment.type == 'Designed') {
-      return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).value;
+      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateDesigned(assessment, assessment.settings);
+      if (result) {
+        return result.value;
+      } else {
+        return 0;
+      }
     }
   }
 
   getEnergyCost(assessment: PreAssessment) {
     if (assessment.type == 'Metered') {
-      return this.preAssessmentService.calculateMetered(assessment, assessment.settings).energyCost;
+      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateMetered(assessment, assessment.settings);
+      if (result) {
+        return result.energyCost;
+      } else {
+        return 0;
+      }
     } else if (assessment.type == 'Designed') {
-      return this.preAssessmentService.calculateDesigned(assessment, assessment.settings).energyCost;
+      let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateDesigned(assessment, assessment.settings);
+      if (result) {
+        return result.energyCost;
+      } else {
+        return 0;
+      }
     }
   }
 }
