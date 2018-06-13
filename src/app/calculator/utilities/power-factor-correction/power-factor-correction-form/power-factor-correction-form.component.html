@@ -10,7 +10,7 @@
 
   <div class="form-group">
     <label for="lineFrequency">Line Frequency</label>
-    <!-- <select class="form-control" formControlName="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()"> -->
+    <!-- [(ngModel)] signifies a 2-way binding. Changes can be made to that variable from the code or from the html input. -->
     <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
       <option [ngValue]="50">50 Hz</option>
       <option [ngValue]="60">60 Hz</option>
