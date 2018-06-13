@@ -29,8 +29,8 @@ export class FanMotorSummaryComponent implements OnInit {
   specifiedEfficiencyDiff: Array<boolean>;
   motorRatedVoltageDiff: Array<boolean>;
   fullLoadAmpsDiff: Array<boolean>;
-  optimizeDiff: Array<boolean>;
-  sizeMarginDiff: Array<boolean>;
+  //optimizeDiff: Array<boolean>;
+  //sizeMarginDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -42,8 +42,8 @@ export class FanMotorSummaryComponent implements OnInit {
     this.specifiedEfficiencyDiff = new Array<boolean>();
     this.motorRatedVoltageDiff = new Array<boolean>();
     this.fullLoadAmpsDiff = new Array<boolean>();
-    this.optimizeDiff = new Array<boolean>();
-    this.sizeMarginDiff = new Array<boolean>();
+    //this.optimizeDiff = new Array<boolean>();
+    //this.sizeMarginDiff = new Array<boolean>();
 
     if (this.fsat.fanMotor) {
       let mods = new Array<FanMotor>();
@@ -61,8 +61,8 @@ export class FanMotorSummaryComponent implements OnInit {
         this.specifiedEfficiencyDiff.push(false);
         this.motorRatedVoltageDiff.push(false);
         this.fullLoadAmpsDiff.push(false);
-        this.optimizeDiff.push(false);
-        this.sizeMarginDiff.push(false);
+        //this.optimizeDiff.push(false);
+        //this.sizeMarginDiff.push(false);
       }
       this.fanMotor = {
         baseline: this.fsat.fanMotor,
