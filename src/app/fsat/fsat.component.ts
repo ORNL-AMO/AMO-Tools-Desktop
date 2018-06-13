@@ -51,6 +51,13 @@ export class FsatComponent implements OnInit {
   isModalOpen: boolean;
   openModSub: Subscription;
   modalOpenSubscription: Subscription;
+
+
+  fsatOptions: Array<any>;
+  fsatOptionsLength: number;
+  fsat1: FSAT;
+  fsat2: FSAT;
+
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -80,6 +87,7 @@ export class FsatComponent implements OnInit {
           this.modificationExists = false;
         }
         this.getSettings();
+        this.initSankeyList();
       })
     })
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -113,9 +121,9 @@ export class FsatComponent implements OnInit {
       }
     })
 
-      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
-        this.isModalOpen = isOpen;
-      })
+    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
 
   }
 
@@ -137,6 +145,21 @@ export class FsatComponent implements OnInit {
       this.getContainerHeight();
     }, 100);
   }
+
+
+  initSankeyList() {
+    this.fsatOptions = new Array<any>();
+    this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
+    this.fsat1 = this.fsatOptions[0];
+    if (this._fsat.modifications) {
+      this._fsat.modifications.forEach(mod => {
+        this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
+      });
+      this.fsat2 = this.fsatOptions[1];
+      this.fsatOptionsLength = this.fsatOptions.length;
+    }
+  }
+
 
   getContainerHeight() {
     if (this.content) {

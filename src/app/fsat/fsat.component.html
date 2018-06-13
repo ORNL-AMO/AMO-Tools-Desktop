@@ -45,6 +45,17 @@
     </div>
   </div>
 
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'sankey'">
+    <div class="col-11 report-column">
+      <div class="form-group" *ngIf="fsatOptionsLength > 1">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat1">
+          <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
+        </select>
+      </div>
+      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [assessmentName]="assessment.name" [location]="'sankey-diagram'"></app-fsat-sankey>
+    </div>
+  </div>
+
   <div #footer id="fsatFooter" class="footer hide-print row m-0">
     <div class="col-12">
       <div class="pull-right">
