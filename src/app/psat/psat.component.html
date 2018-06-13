@@ -95,7 +95,7 @@
       </div>
     </div>
     <div class="sankey-padding">
-      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
+      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings" [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
     </div>
   </div>
 
