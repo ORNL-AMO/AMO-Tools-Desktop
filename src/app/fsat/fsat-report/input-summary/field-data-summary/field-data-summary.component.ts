@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FieldData } from '../../../../shared/models/fans';
 
@@ -18,15 +18,95 @@ export class FieldDataSummaryComponent implements OnInit {
   //this object will hold all FieldData objects for the assessment
   //we define the baseline and the array of modifications separately for consistency
   fieldData: { baseline: FieldData, modifications: Array<FieldData> };
-  
+
+
+
+
   collapse: boolean = true;
   numMods: number = 0;
 
-  constructor() { }
+  operatingFractionDiff: Array<boolean>;
+  costDiff: Array<boolean>;
+  flowRateDiff: Array<boolean>;
+  inletPressureDiff: Array<boolean>;
+  outletPressureDiff: Array<boolean>;
+  loadEstimatedMethodDiff: Array<boolean>;
+  motorPowerDiff: Array<boolean>;
+  specificHeatRatioDiff: Array<boolean>;
+  compressibilityFactorDiff: Array<boolean>;
+  measuredVoltageDiff: Array<boolean>;
+  pressureCalcResultTypeDiff: Array<boolean>;
+
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.operatingFractionDiff= new Array<boolean>();
+    this.costDiff= new Array<boolean>();
+    this.flowRateDiff= new Array<boolean>();
+    this.inletPressureDiff= new Array<boolean>();
+    this.outletPressureDiff= new Array<boolean>();
+    this.loadEstimatedMethodDiff= new Array<boolean>();
+    this.motorPowerDiff= new Array<boolean>();
+    this.specificHeatRatioDiff= new Array<boolean>();
+    this.compressibilityFactorDiff= new Array<boolean>();
+    this.measuredVoltageDiff= new Array<boolean>();
+    this.pressureCalcResultTypeDiff= new Array<boolean>();
+
+    if (this.fsat.fieldData) {
+
+      let mods = new Array<FieldData>();
+
+      if (this.fsat.modifications) {
+
+        this.numMods = this.fsat.modifications.length;
+
+        for (let i = 0; i < this.fsat.modifications.length; i++) {
+
+          if (this.fsat.modifications[i].fsat.fieldData) {
+            // fieldData changes
+            mods.push(this.fsat.modifications[i].fsat.fieldData);
+          }
+
+        }
+        this.operatingFractionDiff= new Array<boolean>();
+        this.costDiff= new Array<boolean>();
+        this.flowRateDiff= new Array<boolean>();
+        this.inletPressureDiff= new Array<boolean>();
+        this.outletPressureDiff= new Array<boolean>();
+        this.loadEstimatedMethodDiff= new Array<boolean>();
+        this.motorPowerDiff= new Array<boolean>();
+        this.specificHeatRatioDiff= new Array<boolean>();
+        this.compressibilityFactorDiff= new Array<boolean>();
+        this.measuredVoltageDiff= new Array<boolean>();
+        this.pressureCalcResultTypeDiff= new Array<boolean>();
 
 
+      }
+
+      this.fieldData = {
+        baseline: this.fsat.fieldData,
+        modifications: mods
+      };
+    }
+  }
+
+  //function used to check if baseline and modification values are different
+  //called from html
+  //diffBool is name of corresponding input boolean to indicate different
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool][modIndex] != true) {
+        //set true/different
+        this[diffBool][modIndex] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 
 

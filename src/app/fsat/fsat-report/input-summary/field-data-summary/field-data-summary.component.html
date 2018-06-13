@@ -6,18 +6,45 @@
   </div>
 
   <div *ngIf="!collapse || printView">
-    <div class="card-body" *ngFor="let data of fieldData; let index = index;">
+    <div class="card-body">
       <div class="output-summary">
         <table class="table table-hover table-striped">
           <thead>
             <tr>
-
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
+                {{mod.fsat.name}}
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              
-            </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
+              Operating Fraction
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
+              {{fieldData.baseline.operatingFraction}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.operatingFraction, mod.operatingFraction, 'operatingFractionDiff', 0)}">
+              {{mod.operatingFraction}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+              Cost
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+              {{fieldData.baseline.operatingFraction}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.operatingFraction, 'operatingFractionDiff', 0)}">
+              {{mod.cost}}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -25,3 +52,32 @@
   </div>
 
 </div>
+
+<!--
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Field Data
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div> -->

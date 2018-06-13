@@ -22,17 +22,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
-                Barometric Pressure
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
-                {{baseGasDensity.baseline.barometricPressure}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.barometricPressure, mod.barometricPressure, 'barometricPressureDiff', 0)}">
-                {{mod.barometricPressure}}
-              </td>
-            </tr>
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
+              Barometric Pressure
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
+              {{baseGasDensity.baseline.barometricPressure}}
+            </td>
+            <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.barometricPressure, mod.barometricPressure, 'barometricPressureDiff', 0)}">
+              {{mod.barometricPressure}}
+            </td>
+          </tr>
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':gasTypeDiff[0] == true}">

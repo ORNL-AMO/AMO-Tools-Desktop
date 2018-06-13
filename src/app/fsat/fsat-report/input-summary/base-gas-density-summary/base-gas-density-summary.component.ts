@@ -61,17 +61,14 @@ export class BaseGasDensitySummaryComponent implements OnInit {
 
         this.numMods = this.fsat.modifications.length;
         // this.baseGasDensity.modifications = new Array<BaseGasDensity>();
-        
+
         for (let i = 0; i < this.fsat.modifications.length; i++) {
           if (this.fsat.modifications[i].fsat.baseGasDensity) {
             mods.push(this.fsat.modifications[i].fsat.baseGasDensity);
           }
         }
 
-        this.baseGasDensity = {
-          baseline: this.fsat.baseGasDensity,
-          modifications: mods
-        };
+
 
         this.dryBulbTempDiff.push(false);
         this.staticPressureDiff.push(false);
@@ -86,6 +83,11 @@ export class BaseGasDensitySummaryComponent implements OnInit {
         this.wetBulbTempDiff.push(false);
         this.specificHeatGasDiff.push(false);
       }
+
+      this.baseGasDensity = {
+        baseline: this.fsat.baseGasDensity,
+        modifications: mods
+      };
     }
   }
 
