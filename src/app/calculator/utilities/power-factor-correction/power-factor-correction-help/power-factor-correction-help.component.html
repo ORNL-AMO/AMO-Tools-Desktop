@@ -3,12 +3,40 @@
     Power Factor Correction Help
   </div>
   <div class="card-block small d-flex flex-column">
+    <label><u><strong>Description</strong></u></label>
     <p>
-      Low power factor means you’re not fully utilizing the electrical power you’re paying for and can contribute to equipment
-      instability and failure, as well as significantly higher than necessary energy costs since it means that more current
-      is required to perform the same amount of work. This calculator is used to identify the capacitance (in kVAR) required
-      for improving the power factor to the proposed level.
+      Power factor is defined as the ratio of real, useful power to the apparent power which must be supplied. The
+      main cause of low power factor is inductive loads from motors. Low power factor causes you to inefficiently
+      utilize the electrical power you’re paying for and can contribute to equipment instability and failure, as well
+      as significantly higher than necessary energy costs. The purpose of Power Factor Correction is to bring the power
+      factor closer to a value of 1 by absorbing reactive power through adding capacitance. Sometimes, a utility will
+      charge a ‘power factor fee’ for having a power factor lower than 0.95. This calculator is used to identify the
+      capacitance (in micro Faraday) required for improving the power factor to the proposed level.
     </p>
+    <label><u><strong>Inputs</strong></u></label>
+    <ul>
+      <strong>Current Demand</strong> (kW) (0-Infinite)<br/>
+      <strong>Line Frequency</strong> (Hz) (Either 50 Hz or 60 Hz)<br/>
+      <strong>Rated Voltage</strong> (V) (0 – Some value)<br/>
+      <strong>Current Power Factor</strong> (dimensionless)<br/>
+      <strong>Proposed Power Factor</strong> (dimensionless)<br/>
+    </ul>
+    <label><u><strong>Outputs</strong></u></label>
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-actual-demand.png">
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-apparent-power.png">
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-capacitance-required.png">
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-current-reactive-power.png">
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-demand-savings.png">
+    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-new-demand.png">
+    <label><u><strong>Help</strong></u></label>
+    <ul>
+      <strong>Current Demand</strong> – Can either be current measured demand or monthly demand from utility bills.<br/>
+      <strong>Line Frequency</strong> – Utility frequency, line frequency, or mains frequency is the frequency level of the AC
+      electricity used in transmissions and distribution from electricity generation sources to customers.<br/>
+      <strong>Current Power Factor</strong> – Sometimes given in utility bills, otherwise will have to be found through power analysis.<br/>
+      <strong>Proposed Power Factor</strong> – A good goal is whatever value the utility begins to charge a fee at. Otherwise, aim for 95%.<br/>
+    </ul>
+    <label><u><strong>Help Figure</strong></u></label>
     <img class="w-75 mx-auto p-2" src="assets/images/power-factor-correction.png">
   </div>
 </div>
