@@ -130,7 +130,8 @@ export class PsatSankeyComponent implements OnInit {
       if(this.isBaseline){
         this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       }else {
-        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, this.baseline.inputs.efficiency)
+        let existingResults: PsatOutputs = this.psatService.resultsExisting(this.baseline.inputs, this.settings);
+        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, existingResults.pump_efficiency);
       }
     }
     } else {
