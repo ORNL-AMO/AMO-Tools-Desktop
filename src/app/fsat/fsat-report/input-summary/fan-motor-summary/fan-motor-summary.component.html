@@ -1,3 +1,139 @@
-<p>
-  fan-motor-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Fan Motor
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+              Baseline
+            </th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
+              {{mod.fsat.name}}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Line Frequency -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':lineFrequencyDiff[0] == true}">
+              Line Frequency
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':lineFrequencyDiff[0] == true}">
+              {{fanMotor.baseline.lineFrequency}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.lineFrequency, mod.lineFrequency, 'lineFrequencyDiff', 0)}">
+              {{mod.lineFrequency}}
+            </td>
+          </tr>
+          <!-- Motor Rated Power -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':motorRatedPowerDiff[0] == true}">
+              Motor Rated Power
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':motorRatedPowerDiff[0] == true}">
+              {{fanMotor.baseline.motorRatedPower}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.motorRatedPower, mod.motorRatedPower, 'motorRatedPowerDiff', 0)}">
+              {{mod.motorRatedPower}}
+            </td>
+          </tr>
+          <!-- Motor Rpm -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':motorRpmDiff[0] == true}">
+              Motor Rpm
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':motorRpmDiff[0] == true}">
+              {{fanMotor.baseline.motorRpm}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.motorRpm, mod.motorRpm, 'motorRpmDiff', 0)}">
+              {{mod.motorRpm}}
+            </td>
+          </tr>
+          <!-- Efficiency Class -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':efficiencyClassDiff[0] == true}">
+              Efficiency Class
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':efficiencyClassDiff[0] == true}">
+              {{fanMotor.baseline.efficiencyClass}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.efficiencyClass, mod.efficiencyClass, 'efficiencyClassDiff', 0)}">
+              {{mod.efficiencyClass}}
+            </td>
+          </tr>
+          <!-- Specified Efficiency -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':specifiedEfficiencyDiff[0] == true}">
+              Specified Efficiency
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':specifiedEfficiencyDiff[0] == true}">
+              {{fanMotor.baseline.specifiedEfficiency}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.specifiedEfficiency, mod.specifiedEfficiency, 'specifiedEfficiencyDiff', 0)}">
+              {{mod.specifiedEfficiency}}
+            </td>
+          </tr>
+          <!-- Motor Rated Voltage -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':motorRatedVoltageDiff[0] == true}">
+              Motor Rated Voltage
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':motorRatedVoltageDiff[0] == true}">
+              {{fanMotor.baseline.motorRatedVoltage}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.motorRatedVoltage, mod.motorRatedVoltage, 'motorRatedVoltageDiff', 0)}">
+              {{mod.motorRatedVoltage}}
+            </td>
+          </tr>
+          <!-- Full Load Amps -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':fullLoadAmpsDiff[0] == true}">
+              Full Load Amps
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':fullLoadAmpsDiff[0] == true}">
+              {{fanMotor.baseline.fullLoadAmps}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.fullLoadAmps, mod.fullLoadAmps, 'fullLoadAmpsDiff', 0)}">
+              {{mod.fullLoadAmps}}
+            </td>
+          </tr>
+          <!-- Optimize -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':optimizeDiff[0] == true}">
+              Optimize
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':optimizeDiff[0] == true}">
+              {{fanMotor.baseline.optimize}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.optimize, mod.optimize, 'optimizeDiff', 0)}">
+              {{mod.optimize}}
+            </td>
+          </tr>
+          <!-- Size Margin -->
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':sizeMarginDiff[0] == true}">
+              Size Margin
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':sizeMarginDiff[0] == true}">
+              {{fanMotor.baseline.sizeMargin}}
+            </td>
+            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.sizeMargin, mod.sizeMargin, 'sizeMarginDiff', 0)}">
+              {{mod.sizeMargin}}
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
