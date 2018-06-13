@@ -40,17 +40,17 @@ export class FieldDataSummaryComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.operatingFractionDiff= new Array<boolean>();
-    this.costDiff= new Array<boolean>();
-    this.flowRateDiff= new Array<boolean>();
-    this.inletPressureDiff= new Array<boolean>();
-    this.outletPressureDiff= new Array<boolean>();
-    this.loadEstimatedMethodDiff= new Array<boolean>();
-    this.motorPowerDiff= new Array<boolean>();
-    this.specificHeatRatioDiff= new Array<boolean>();
-    this.compressibilityFactorDiff= new Array<boolean>();
-    this.measuredVoltageDiff= new Array<boolean>();
-    this.pressureCalcResultTypeDiff= new Array<boolean>();
+    this.operatingFractionDiff = new Array<boolean>();
+    this.costDiff = new Array<boolean>();
+    this.flowRateDiff = new Array<boolean>();
+    this.inletPressureDiff = new Array<boolean>();
+    this.outletPressureDiff = new Array<boolean>();
+    this.loadEstimatedMethodDiff = new Array<boolean>();
+    this.motorPowerDiff = new Array<boolean>();
+    this.specificHeatRatioDiff = new Array<boolean>();
+    this.compressibilityFactorDiff = new Array<boolean>();
+    this.measuredVoltageDiff = new Array<boolean>();
+    this.pressureCalcResultTypeDiff = new Array<boolean>();
 
     if (this.fsat.fieldData) {
 
@@ -67,26 +67,26 @@ export class FieldDataSummaryComponent implements OnInit {
             mods.push(this.fsat.modifications[i].fsat.fieldData);
           }
 
+          this.operatingFractionDiff.push(false);
+          this.costDiff.push(false);
+          this.flowRateDiff.push(false);
+          this.inletPressureDiff.push(false);
+          this.outletPressureDiff.push(false);
+          this.loadEstimatedMethodDiff.push(false);
+          this.motorPowerDiff.push(false);
+          this.specificHeatRatioDiff.push(false);
+          this.compressibilityFactorDiff.push(false);
+          this.measuredVoltageDiff.push(false);
+          this.pressureCalcResultTypeDiff.push(false);
+
+
         }
-        this.operatingFractionDiff= new Array<boolean>();
-        this.costDiff= new Array<boolean>();
-        this.flowRateDiff= new Array<boolean>();
-        this.inletPressureDiff= new Array<boolean>();
-        this.outletPressureDiff= new Array<boolean>();
-        this.loadEstimatedMethodDiff= new Array<boolean>();
-        this.motorPowerDiff= new Array<boolean>();
-        this.specificHeatRatioDiff= new Array<boolean>();
-        this.compressibilityFactorDiff= new Array<boolean>();
-        this.measuredVoltageDiff= new Array<boolean>();
-        this.pressureCalcResultTypeDiff= new Array<boolean>();
 
-
+        this.fieldData = {
+          baseline: this.fsat.fieldData,
+          modifications: mods
+        };
       }
-
-      this.fieldData = {
-        baseline: this.fsat.fieldData,
-        modifications: mods
-      };
     }
   }
 

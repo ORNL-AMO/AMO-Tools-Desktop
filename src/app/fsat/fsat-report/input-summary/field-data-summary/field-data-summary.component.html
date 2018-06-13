@@ -39,10 +39,118 @@
               Cost
             </td>
             <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-              {{fieldData.baseline.operatingFraction}}
+              {{fieldData.baseline.cost}}
             </td>
-            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.operatingFraction, 'operatingFractionDiff', 0)}">
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.cost, 'costDiff', 0)}">
               {{mod.cost}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+              flowRate
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+              {{fieldData.baseline.flowRate}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.flowRate, mod.flowRate, 'flowRateDiff', 0)}">
+              {{mod.flowRate}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+              inletPressure
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+              {{fieldData.baseline.inletPressure}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.inletPressure, mod.inletPressure, 'inletPressureDiff', 0)}">
+              {{mod.inletPressure}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+              outletPressure
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+              {{fieldData.baseline.outletPressure}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.outletPressure, mod.outletPressure, 'outletPressureDiff', 0)}">
+              {{mod.outletPressure}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+              loadEstimatedMethod
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+              {{fieldData.baseline.loadEstimatedMethod}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
+              {{mod.loadEstimatedMethod}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+              motorPower
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+              {{fieldData.baseline.motorPower}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
+              {{mod.motorPower}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+              specificHeatRatio
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+              {{fieldData.baseline.specificHeatRatio}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
+              {{mod.specificHeatRatio}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+              compressibilityFactor
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+              {{fieldData.baseline.compressibilityFactor}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.compressibilityFactor, mod.compressibilityFactor, 'compressibilityFactorDiff', 0)}">
+              {{mod.compressibilityFactor}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+              measuredVoltage
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+              {{fieldData.baseline.measuredVoltage}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.measuredVoltage, mod.measuredVoltage, 'measuredVoltageDiff', 0)}">
+              {{mod.measuredVoltage}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':pressureCalcResultTypeDiff[0] == true}">
+              pressureCalcResultType
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':pressureCalcResultTypeDiff[0] == true}">
+              {{fieldData.baseline.pressureCalcResultType}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.pressureCalcResultType, mod.pressureCalcResultType, 'pressureCalcResultTypeDiff', 0)}">
+              {{mod.pressureCalcResultType}}
             </td>
           </tr>
           </tbody>
