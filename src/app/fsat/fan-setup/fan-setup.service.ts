@@ -11,6 +11,7 @@ export class FanSetupService {
   getFormFromObj(obj: FanSetup): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
+      fanSpecified: [obj.fanSpecified],
       fanSpeed: [obj.fanSpeed, Validators.required],
       drive: [obj.drive, Validators.required]
     })
@@ -20,6 +21,7 @@ export class FanSetupService {
   getObjFromForm(form: FormGroup): FanSetup {
     let obj: FanSetup = {
       fanType: form.controls.fanType.value,
+      fanSpecified: form.controls.fanSpecified.value,
       fanSpeed: form.controls.fanSpeed.value,
       drive: form.controls.drive.value
     }
