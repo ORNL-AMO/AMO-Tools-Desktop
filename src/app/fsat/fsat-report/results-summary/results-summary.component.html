@@ -23,6 +23,11 @@
         </td>
       </tr>
       <tr>
+        <td>Fan Energy Index</td>
+        <td>{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</td>
+        <td *ngFor="let modResults of modificationResults">{{modResults.fanEnergyIndex | number:'2.0-1'}}</td>
+      </tr>
+      <tr>
         <td>Fan efficiency (%)</td>
         <td>{{baselineResults.fanEfficiency | number:'2.0-1'}}</td>
         <td *ngFor="let modResults of modificationResults">{{modResults.fanEfficiency | number:'2.0-1'}}</td>

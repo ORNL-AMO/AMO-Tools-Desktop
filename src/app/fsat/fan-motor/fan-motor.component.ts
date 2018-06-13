@@ -4,7 +4,7 @@ import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FanMotor } from '../../shared/models/fans';
+import { FanMotor, FieldData } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { EfficiencyClasses } from '../fanOptions';
 import { CompareService } from '../compare.service';
@@ -26,7 +26,8 @@ export class FanMotorComponent implements OnInit {
   modificationIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<FanMotor>();
-
+  @Input()
+  fieldData: FieldData;
   efficiencyClasses: Array<{ value: number, display: string }>
   //   {
   //     value: 0,
@@ -183,13 +184,13 @@ export class FanMotorComponent implements OnInit {
     // }
   }
   defaultRpm() {
-    if (this.fanMotorForm.controls.lineFrequency.value == '60 Hz') {
+    if (this.fanMotorForm.controls.lineFrequency.value == 60) {
       if (this.fanMotorForm.controls.motorRpm.value == 1485) {
         this.fanMotorForm.patchValue({
           motorRPM: 1780
         })
       }
-    } else if (this.fanMotorForm.controls.lineFrequency.value == '50 Hz') {
+    } else if (this.fanMotorForm.controls.lineFrequency.value == 50) {
       if (this.fanMotorForm.controls.motorRpm.value == 1780) {
         this.fanMotorForm.patchValue({
           motorRPM: 1485
@@ -228,7 +229,7 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
     if (this.fanMotorForm.controls.lineFrequency.value > 100) {
-      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
+      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater than 100%";
       return false;
     }
     else if (this.fanMotorForm.controls.lineFrequency.value == 0) {
@@ -248,27 +249,19 @@ export class FanMotorComponent implements OnInit {
     if (!bool) {
       this.save();
     }
-    // if (this.fanMotorForm.controls.motorRatedVoltage.value != '') {
-    //   let tmp = this.psatService.checkMotorVoltage(this.fanMotorForm.controls.motorRatedVoltage.value);
-    //   if (tmp.message) {
-    //     this.voltageError = tmp.message;
-    //   } else {
-    //     this.voltageError = null;
-    //   }
-    //   return tmp.valid;
-    // }
-    // else {
-    //   return null;
-    // }
-    return null;
+    if (this.fanMotorForm.controls.motorRatedVoltage.value < 208) {
+      this.voltageError = "Voltage must be greater than 208";
+    } else if (this.fanMotorForm.controls.motorRatedVoltage.value > 15180) {
+      this.voltageError = "Voltage must be less than 15,180";
+    } else {
+      this.voltageError = null;
+    }
   }
   checkMotorRpm(bool?: boolean) {
     if (!bool) {
       this.save();
     }
     if (this.fanMotorForm.controls.lineFrequency.value && this.fanMotorForm.controls.motorRpm.value != '') {
-      // let frequencyEnum = this.psatService.getLineFreqEnum(this.fanMotorForm.controls.lineFrequency.value);
-      // let effClass = this.psatService.getEfficienyClassEnum(this.fanMotorForm.controls.efficiencyClass.value);
       let tmp = this.psatService.checkMotorRpm(this.fanMotorForm.controls.lineFrequency.value, this.fanMotorForm.controls.motorRpm.value, this.fanMotorForm.controls.efficiencyClass.value);
       if (tmp.message) {
         this.rpmError = tmp.message;
@@ -277,7 +270,7 @@ export class FanMotorComponent implements OnInit {
       }
       return tmp.valid;
     } else if (this.fanMotorForm.controls.motorRpm.value == '') {
-      this.rpmError = 'Required';
+      this.rpmError = 'Field Required';
       return false;
     }
     else {
@@ -290,12 +283,7 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
     this.checkFLA();
-    let motorFieldPower;
-    // if (this.fanMotorForm.controls.loadEstimatedMethod.value == 'Power') {
-    //   motorFieldPower = this.fanMotorForm.controls.motorKW.value;
-    // } else if (this.fanMotorForm.controls.loadEstimatedMethod.value == 'Current') {
-    //   motorFieldPower = this.fanMotorForm.controls.motorAmps.value;
-    // }
+    let motorFieldPower = this.fieldData.motorPower;
     if (motorFieldPower && this.fanMotorForm.controls.motorRatedPower.value) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
