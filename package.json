@@ -18,6 +18,7 @@
     "build-aot": "ng build --aot",
     "build-watch": "ng build --op dist -w",
     "build-prod": "ng build --aot",
+    "build-prod-windows": "./scripts/ng.sh build --prod --aot",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "electron": "electron .",
     "lint": "ng lint",
