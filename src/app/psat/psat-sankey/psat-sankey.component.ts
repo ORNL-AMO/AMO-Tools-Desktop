@@ -5,6 +5,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import * as d3 from 'd3';
+import { PHAST } from '../../shared/models/phast/phast';
+import { CompareService } from '../compare.service';
 var svg;
 
 // use these values to alter label font position and size
@@ -38,7 +40,7 @@ export class PsatSankeyComponent implements OnInit {
   @Input()
   assessmentName: string;
   @ViewChild("ngChart") ngChart: ElementRef;
-
+  @Input()
   isBaseline: boolean;
 
   annualSavings: number;
@@ -67,19 +69,18 @@ export class PsatSankeyComponent implements OnInit {
   motor: number;
   drive: number;
   pump: number;
-
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  baseline: PSAT;
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService) { }
 
   ngOnInit() {
+    this.baseline = this.compareService.baselinePSAT;
     if (this.location != "sankey-diagram") {
       // this.location = this.location + this.modIndex.toString();
       if (this.location == 'baseline') {
         this.location = this.assessmentName + '-baseline';
-        this.isBaseline = true;
       }
       else {
         this.location = this.assessmentName + '-modification';
-        this.isBaseline = false;
       }
 
       if (this.printView) {
@@ -93,7 +94,7 @@ export class PsatSankeyComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getResults();
-    this.makeSankey();
+    this.sankey(this.selectedResults);
   }
 
 
@@ -112,7 +113,7 @@ export class PsatSankeyComponent implements OnInit {
           this.location = this.location.replace(/#/g, "");
         }
         this.getResults();
-        this.makeSankey();
+        this.sankey(this.selectedResults);
       }
     }
   }
@@ -126,20 +127,17 @@ export class PsatSankeyComponent implements OnInit {
       if (this.selectedInputs.optimize_calculation) {
         this.selectedResults = this.psatService.resultsOptimal(this.selectedInputs, this.settings);
       } else {
+      if(this.isBaseline){
         this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
+      }else {
+        let existingResults: PsatOutputs = this.psatService.resultsExisting(this.baseline.inputs, this.settings);
+        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, existingResults.pump_efficiency);
       }
+    }
     } else {
       this.selectedResults = this.psatService.emptyResults();
     }
   }
-
-
-  makeSankey() {
-    let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let results = this.psatService.resultsExisting(tmpInputs, this.settings);
-    this.sankey(results);
-  }
-
 
 
   closeSankey() {
