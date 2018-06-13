@@ -255,7 +255,7 @@ export class AssessmentService {
         measuredVoltage: 460
       },
       fanMotor: {
-        lineFrequency: 0,
+        lineFrequency: 60,
         motorRatedPower: 600,
         motorRpm: 1180,
         efficiencyClass: 1,
