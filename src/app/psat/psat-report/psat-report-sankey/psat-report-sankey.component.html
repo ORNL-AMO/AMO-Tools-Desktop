@@ -20,7 +20,7 @@
     </div>
 
     <div class="col-9" [ngClass]="{'right-panel': !printView}">
-        <app-psat-sankey [psat]="psat1.psat" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings"></app-psat-sankey>
+        <app-psat-sankey [psat]="psat1.psat" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings" [isBaseline]="true"></app-psat-sankey>
       <!-- <app-psat-sankey [psat]="psat1.psat" [location]="assessmentName + '-report-sankey'" [settings]="settings"></app-psat-sankey> -->
     </div>
 
@@ -48,7 +48,7 @@
     </div>
 
     <div class="col-9" [ngClass]="{'right-panel': !printView}">
-        <app-psat-sankey [psat]="psat2.psat" [assessmentName]="assessmentName" [location]="'modification'" [settings]="settings"></app-psat-sankey>
+        <app-psat-sankey [psat]="psat2.psat" [assessmentName]="assessmentName" [location]="'modification'" [settings]="settings" [isBaseline]="false"></app-psat-sankey>
       <!-- <app-psat-sankey [psat]="psat2.psat" [location]="assessmentName + '-modification-report-sankey'" [settings]="settings"></app-psat-sankey> -->
     </div>
 
