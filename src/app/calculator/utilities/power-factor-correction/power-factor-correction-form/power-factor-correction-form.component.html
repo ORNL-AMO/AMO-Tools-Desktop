@@ -10,17 +10,18 @@
 
   <div class="form-group">
     <label for="lineFrequency">Line Frequency</label>
-    <select class="form-control" formControlName="ineFrequency" id="lineFrequency" (change)="save()">
-      <option value='50'>50 Hz</option>
-      <option value='60'>60 Hz</option>
+    <!-- <select class="form-control" formControlName="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()"> -->
+    <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
+      <option [ngValue]="50">50 Hz</option>
+      <option [ngValue]="60">60 Hz</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="ratedVoltage">Rated Voltage</label>
-     <div class="input-group">
-       <input name="ratedVoltage" class="form-control" type="number" step="any" [(ngModel)]="data.ratedVoltage" id="ratedVoltage"
-              (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
+    <div class="input-group">
+      <input name="ratedVoltage" class="form-control" type="number" step="any" [(ngModel)]="data.ratedVoltage" id="ratedVoltage"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
       <span class="input-group-addon units">V</span>
     </div>
   </div>
