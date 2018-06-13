@@ -1,0 +1,53 @@
+<div class="help-header" *ngIf="!inPreAssessment">
+
+  <h3>Designed Energy Help</h3>
+  <p>Enter data about the design of processing heating equipment. This allows the user to compare PHAST calculations to the
+    design of the equipment. This method calculates total energy used by a furnace by multiplying total rated capacity of
+    burners (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and duty cycle</p>
+  <!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
+  </p>-->
+
+</div>
+
+
+<div class="help-content">
+
+  <div class="card" *ngIf="currentField == 'kwRating'">
+    <div class="card-header">
+      kW Rating for all sections
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Total rated capacity of all sections in zone
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'percentCapacityUsed'">
+    <div class="card-header">
+      Percent of Rated Capacity Used
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        % of capacity in use by furnace
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'percentOperatingHours'">
+    <div class="card-header">
+      Percent of Operating Hours
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Percent of operating hours that the zone is running
+      </p>
+    </div>
+  </div>
+</div>

@@ -20,7 +20,7 @@
                         (input)="checkCost(1)" [(ngModel)]="fsat.fieldData.cost" />
                     <span class="input-group-addon units">$/kWH</span>
                 </div>
-                <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
+                <span class="alert-warning pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
             </div>
             <div class="form-group">
                 <label for="modificationCost">Modification Cost</label>
@@ -29,7 +29,7 @@
                         [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.cost" (input)="checkCost(2)" />
                     <span class="input-group-addon units">$/kWh</span>
                 </div>
-                <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
+                <span class="alert-warning pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
             </div>
         </form>
     </li>
@@ -49,7 +49,7 @@
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
                     <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
                 </div>
-                <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
+                <span class="alert-warning pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
             </div>
             <div class="form-group">
                 <label for="modificationFlowRate">Modification Flow Rate</label>
@@ -60,7 +60,7 @@
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
                     <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
                 </div>
-                <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
+                <span class="alert-warning pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
             </div>
         </form>
     </li>
@@ -85,16 +85,16 @@
                 <label for="baselineOutletPressure">Baseline Outlet Pressure</label>
                 <div class="input-group">
                     <input name="baselineOutletPressure" [disabled]="true" type="number" step="any" id="baselineOutletPressure" class="form-control"
-                        (focus)="focusField('outletPressure')" (input)="calculate()" [(ngModel)]="fsat.fieldData.outletPressure" />
+                        (focus)="focusField('outletPressure')" (input)="checkPressure(1)" [(ngModel)]="fsat.fieldData.outletPressure" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
-
                 </div>
+                <span class="alert-warning pull-right small" *ngIf="pressureError1 !== null">{{pressureError1}}</span>
             </div>
             <div class="form-group">
                 <label for="modificationInletPressure">Modification Inlet Pressure</label>
                 <div class="input-group">
                     <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control" (focus)="focusField('inletPressure')"
-                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.inletPressure" />
+                        (input)="checkPressure(1)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.inletPressure" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
                 </div>
             </div>
@@ -105,6 +105,7 @@
                         (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.outletPressure" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.pressureMeasurement)"></span>
                 </div>
+                <span class="alert-warning pull-right small" *ngIf="pressureError2 !== null">{{pressureError2}}</span>
             </div>
         </form>
     </li>
@@ -121,14 +122,14 @@
                 <input name="baselineOperatingFraction" [disabled]="true" type="number" step="any" id="baselineOperatingFraction" class="form-control"
                     (focus)="focusField('operatingFraction')" (input)="checkOpFraction(1)" [(ngModel)]="fsat.fieldData.operatingFraction"
                 />
-                <span class="alert-danger pull-right small" *ngIf="opFractionError1 !== null">{{opFractionError1}}</span>
+                <span class="alert-warning pull-right small" *ngIf="opFractionError1 !== null">{{opFractionError1}}</span>
             </div>
             <div class="form-group">
                 <label for="modificationOperatingFraction">Modification operating fraction</label>
                 <input name="modificationOperatingFraction" type="number" step="0.1" min="0" max="1" id="modificationOperatingFraction" class="form-control"
                     (focus)="focusField('operatingFraction')" (input)="checkOpFraction(2)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.operatingFraction"
                 />
-                <span class="alert-danger pull-right small" *ngIf="opFractionError2 !== null">{{opFractionError2}}</span>
+                <span class="alert-warning pull-right small" *ngIf="opFractionError2 !== null">{{opFractionError2}}</span>
             </div>
         </form>
     </li>

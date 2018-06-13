@@ -4,7 +4,6 @@ import { MeteredEnergyService } from '../../../phast/metered-energy/metered-ener
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
-import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
@@ -20,23 +19,29 @@ export class PreAssessmentService {
     let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
 
     //calculation logic to get results (in pre-assessment.component.ts)
-    let i = preAssessments.length - 1;
     preAssessments.forEach(assessment => {
       if (assessment.type == 'Metered') {
         if (assessment.meteredEnergy) {
-          results.push(this.calculateMetered(assessment, settings));
+          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateMetered(assessment, settings)
+          if (result) {
+            results.push(result);
+          }
         }
       } else if (assessment.type == 'Designed') {
         if (assessment.designedEnergy) {
-          results.push(this.calculateDesigned(assessment, settings));
+          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateDesigned(assessment, settings);
+          if (result) {
+            results.push(result);
+          }
         }
       }
     })
-    let sum = this.getSum(results, resultType);
-    results.forEach(result => {
-      result.percent = this.getResultPercent(result[resultType], sum);
-    });
-
+    if (results.length != 0) {
+      let sum = this.getSum(results, resultType);
+      results.forEach(result => {
+        result.percent = this.getResultPercent(result[resultType], sum);
+      });
+    }
     return results;
   }
 
@@ -49,23 +54,26 @@ export class PreAssessmentService {
     let electricityResults: number = 0;
     let totalResults: number = 0;
     let totalCost: number = 0;
-    if (assessment.fuel) {
-      fuelResults = this.meteredEnergyService.calcFuelUsed(assessment.meteredEnergy.meteredEnergyFuel);
-      fuelCost = fuelResults * assessment.fuelCost;
-    }
-    if (assessment.steam) {
-      steamResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
-      steamResults = this.convertSteamResults(steamResults, settings);
-      steamCost = steamResults * assessment.steamCost;
-    }
-    if (assessment.electric) {
-      electricityResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
-      electricityCost = electricityResults * assessment.electricityCost;
-      electricityResults = this.convertElectrotechResults(electricityResults, settings);
+    if (assessment.meteredEnergy) {
+      if (assessment.fuel) {
+        fuelResults = this.meteredEnergyService.calcFuelEnergyUsed(assessment.meteredEnergy.meteredEnergyFuel);
+        fuelCost = fuelResults * assessment.fuelCost;
+      }
+      if (assessment.steam) {
+        steamResults = this.meteredEnergyService.calcSteamEnergyUsed(assessment.meteredEnergy.meteredEnergySteam);
+        steamResults = this.convertSteamResults(steamResults, settings);
+        steamCost = steamResults * assessment.steamCost;
+      }
+      if (assessment.electric) {
+        electricityResults = this.meteredEnergyService.calcElectricEnergyUsed(assessment.meteredEnergy.meteredEnergyElectricity);
+        electricityCost = electricityResults * assessment.electricityCost;
+        electricityResults = this.convertElectrotechResults(electricityResults, settings);
+      }
     }
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    return this.addResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    return result;
   }
 
   calculateDesigned(assessment: PreAssessment, settings: Settings): { name: string, percent: number, value: number, color: string, energyCost: number } {
@@ -77,44 +85,51 @@ export class PreAssessmentService {
     let electricityResults: number = 0;
     let totalResults: number = 0;
     let totalCost: number = 0;
-    if (assessment.fuel) {
-      fuelResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      fuelCost = fuelResults * assessment.fuelCost;
-    }
-    if (assessment.steam) {
-      steamResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);
-      steamResults = this.convertSteamResults(steamResults, settings);
-      steamCost = steamResults * assessment.steamCost;
-    }
-    if (assessment.electric) {
-      electricityResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
-      electricityCost = electricityResults * assessment.electricityCost;
-      electricityResults = this.convertElectrotechResults(electricityResults, settings);
-    }
+    assessment.designedEnergy.zones.forEach(zone => {
+      if (assessment.designedEnergy.steam) {
+        steamResults += this.designedEnergyService.calculateSteamZoneEnergyUsed(zone.designedEnergySteam);
+      }
+      if (assessment.designedEnergy.fuel) {
+        fuelResults += this.designedEnergyService.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
+      }
+      if (assessment.designedEnergy.electricity) {
+        electricityResults += this.designedEnergyService.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
+      }
+    })
+    fuelCost = fuelResults * assessment.fuelCost;
+    steamResults = this.convertSteamResults(steamResults, settings);
+    steamCost = steamResults * assessment.steamCost;
+    electricityCost = electricityResults * assessment.electricityCost;
+    electricityResults = this.convertElectrotechResults(electricityResults, settings);
     totalResults = electricityResults + steamResults + fuelResults;
     totalCost = electricityCost + steamCost + fuelCost;
-    return this.addResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.buildResult(totalResults, assessment.name, assessment.borderColor, totalCost);
+    return result;
   }
 
   convertSteamResults(val: number, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kJ').to('GJ');
-    } else {
-      val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
+    if (val) {
+      if (settings.unitsOfMeasure == 'Metric') {
+        val = this.convertUnitsService.value(val).from('kJ').to('GJ');
+      } else {
+        val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
+      }
     }
     return val;
   }
 
   convertElectrotechResults(val: number, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('kWh').to('GJ');
-    } else {
-      val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
+    if (val) {
+      if (settings.unitsOfMeasure == 'Metric') {
+        val = this.convertUnitsService.value(val).from('kWh').to('GJ');
+      } else {
+        val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
+      }
     }
     return val;
   }
 
-  addResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
+  buildResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
     if (isNaN(num) != true) {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = {
         name: name,
