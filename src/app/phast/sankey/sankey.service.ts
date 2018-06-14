@@ -18,6 +18,7 @@ export class SankeyService {
   outputRatio: number;
   fuelEnergy: number;
   electricalEnergy: number;
+  chemicalEnergy: number;
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -27,12 +28,35 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
+<<<<<<< HEAD
     if (phast.losses.energyInputExhaustGasLoss.length > 0) {
       this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
     }
 
     // this.fuelEnergy = phastResults.energyInputHeatDelivered;
     this.electricalEnergy = phastResults.electricalHeatDelivered;
+=======
+    console.log('phastResults = ');
+    console.log(phastResults);
+    console.log('results = ');
+    console.log(results);
+    console.log('phast = ');
+    console.log(phast);
+
+    if (phast.losses.energyInputExhaustGasLoss) {
+      if (phast.losses.energyInputExhaustGasLoss.length > 0) {
+        this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
+        this.electricalEnergy = phastResults.electricalHeatDelivered;
+      }
+    }
+
+    if (phast.losses.energyInputEAF) {
+      if (phast.losses.energyInputEAF.length > 0) {
+        this.setChemicalEnergy(phastResults);
+        this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
+      }
+    }
+>>>>>>> fans-copy
 
     this.exothermicHeat = phastResults.exothermicHeat;
     // let constant = 1;
@@ -359,11 +383,30 @@ export class SankeyService {
     return this.exothermicHeatSpacing;
   }
 
+<<<<<<< HEAD
   setFuelEnergy(fuelEnergy: Array<EnergyInputExhaustGasLoss>, unitsOfMeasure: string) {
     this.fuelEnergy = 0;
     for (let i = 0; i < fuelEnergy.length; i++) {
       this.fuelEnergy += fuelEnergy[i].totalHeatInput;
     }
+=======
+  setChemicalEnergy(phastResults: PhastResults) {
+    this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
+  }
+
+
+  getChemicalEnergy(): number {
+    return this.chemicalEnergy;
+  }
+
+  setFuelEnergy(fuelEnergy: Array<any>, unitsOfMeasure: string) {
+    this.fuelEnergy = 0;
+
+    for (let i = 0; i < fuelEnergy.length; i++) {
+      this.fuelEnergy += fuelEnergy[i].totalHeatInput;
+    }
+
+>>>>>>> fans-copy
     if (unitsOfMeasure == 'Metric') {
       this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('GJ').to('kWh');
     }

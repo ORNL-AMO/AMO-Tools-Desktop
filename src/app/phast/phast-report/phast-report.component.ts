@@ -9,7 +9,6 @@ import { ReportRollupService } from '../../report-rollup/report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
 import { PhastReportService } from './phast-report.service';
-import { setTimeout } from 'timers';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';

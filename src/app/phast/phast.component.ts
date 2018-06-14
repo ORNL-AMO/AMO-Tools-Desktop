@@ -10,7 +10,6 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
-import { setTimeout } from 'timers';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastCompareService } from './phast-compare.service';
 import * as _ from 'lodash';
