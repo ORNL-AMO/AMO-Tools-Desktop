@@ -272,7 +272,7 @@ export class AssessmentService {
       baseGasDensity: {
         dryBulbTemp: 123,
         staticPressure: -17.6,
-        barometricPressure: 26.57,
+        barometricPressure: 29.92,
         gasDensity: 1.02,
         gasType: 'AIR',
         //Mark Additions
