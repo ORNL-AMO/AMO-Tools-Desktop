@@ -21,6 +21,9 @@ export class ReportSummaryComponent implements OnInit {
   numPhasts: number;
   @Input()
   numPsats: number;
+  @Input()
+  numFsats: number;
+
 
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();

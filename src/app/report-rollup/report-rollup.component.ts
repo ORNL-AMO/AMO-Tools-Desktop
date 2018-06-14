@@ -28,6 +28,7 @@ export class ReportRollupComponent implements OnInit {
   _reportAssessments: Array<ReportItem>;
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
+  _fsatAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
@@ -44,10 +45,12 @@ export class ReportRollupComponent implements OnInit {
 
   numPhasts: number = 0;
   numPsats: number = 0;
+  numFsats: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
   reportAssessmentsSub: Subscription;
   phastAssessmentsSub: Subscription;
+  fsatAssessmentsSub: Subscription;
   allPhastSub: Subscription;
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
@@ -58,6 +61,7 @@ export class ReportRollupComponent implements OnInit {
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
+    this._fsatAssessments = new Array<ReportItem>();
     this.selectedPhastCalcs = new Array<Calculator>();
     this.selectedPsatCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
@@ -109,14 +113,24 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     });
+
+    this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
+      if (items) {
+        if (items.length != 0) {
+          this._fsatAssessments = items;
+          this.numFsats = this._fsatAssessments.length;
+          this.reportRollupService.initFsatResultsArr(items);
+        }
+      }
+    })
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
         if (items.length != 0) {
           items.forEach(item => {
-            if(item.type == 'furnace'){
+            if (item.type == 'furnace') {
               this.selectedPhastCalcs.push(item);
-            }else if(item.type == 'pump'){
+            } else if (item.type == 'pump') {
               this.selectedPsatCalcs.push(item);
             }
           })
@@ -139,6 +153,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.selectedPhastSub) this.selectedPhastSub.unsubscribe();
     if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
     if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
+    if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
   }
 
   checkSettings() {

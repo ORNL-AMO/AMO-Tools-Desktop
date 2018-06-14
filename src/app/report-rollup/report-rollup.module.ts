@@ -32,6 +32,8 @@ import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-p
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
+import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
+import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
 
 @NgModule({
   imports: [
@@ -42,7 +44,8 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    FsatReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -68,6 +71,7 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     PsatRollupPumpSummaryTableComponent,
     PhastRollupFurnaceSummaryTableComponent,
     PreAssessmentTableComponent,
+    FsatSummaryComponent
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]

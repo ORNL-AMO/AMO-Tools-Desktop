@@ -1,3 +1,4 @@
+<!--PRINT-->
 <div class="report-cover" *ngIf="printView && assessmentsGathered && settings">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
@@ -9,17 +10,18 @@
 
     <p class="report-notes">{{reportNotes}}</p>
 </div>
+
 <div class="row sticky-top" id="reportHeader" *ngIf="printView && assessmentsGathered && settings">
     <div class="col-12">
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
+            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" [numFsats]="numFsats" (showModal)="showModal()"
                 (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
         </div>
     </div>
 </div>
-<!-- End .report-header -->
+<!--END PRINT-->
 
 <div *ngIf="assessmentsGathered && settings">
 
@@ -38,7 +40,7 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numFsats]="numFsats" [numPsats]="numPsats" (showModal)="showModal()"
                     (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
             </div>
         </div>
@@ -65,12 +67,20 @@
                         </span>
                     </a>
                 </li>
+                <li *ngFor="let item of _fsatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
+                    <a class="sb-item">
+                        <!-- <img class="icon-image" src="assets/images/ico-phast-diagram-small.png"> -->
+                        <span>
+                            {{item.assessment.name}}
+                        </span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- End .sidebar -->
 
 
-        <div class="assessment-padding d-flex flex-column scroll-item print-height" [ngStyle]="{'height.px': sidebarHeight}">
+        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100" [ngStyle]="{'height.px': sidebarHeight}">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
                 <div class="row print-break-before">
@@ -98,6 +108,18 @@
                         </app-phast-report>
                     </div>
                 </div>
+
+                <div class="row print-break-before">
+                    <div class="col-12">
+                        <!--fsat print-->
+                    </div>
+                </div>
+                <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
+                    <div class="col-12">
+                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment" [settings]="item.settings"
+                            [inRollup]="true"></app-fsat-report>
+                    </div>
+                </div>
             </div>
 
             <!-- app layout -->
@@ -112,6 +134,11 @@
                     <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment" [inRollup]="true"
                         [settings]="item.settings">
                     </app-phast-report>
+                </div>
+                <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+                    <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment" [inRollup]="true"
+                        [settings]="item.settings">
+                    </app-fsat-report>
                 </div>
             </div>
         </div>
