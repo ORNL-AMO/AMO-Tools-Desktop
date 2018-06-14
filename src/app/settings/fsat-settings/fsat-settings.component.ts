@@ -110,4 +110,10 @@ export class FsatSettingsComponent implements OnInit {
     this.save.emit(true);
   }
 
+  getUnitDisplay(unit: any){
+    if(unit){
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+
 }
