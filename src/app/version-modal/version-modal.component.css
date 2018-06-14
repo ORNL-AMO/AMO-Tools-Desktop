@@ -11,3 +11,7 @@
 li{
     font-size: small;
 }
+
+.modal-body{
+    max-height: 85vh;
+}

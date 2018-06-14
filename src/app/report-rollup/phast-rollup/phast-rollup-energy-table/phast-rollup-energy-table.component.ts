@@ -6,7 +6,6 @@ import { Settings } from '../../../shared/models/settings';
 import { CalculatedByPhast, PhastResults, PHAST } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { setTimeout } from 'timers';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
