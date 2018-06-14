@@ -12,6 +12,8 @@
         </div>
         <div class="row">
           <div class="col-12">
+            <!-- bindings with [] are used to pass data from a parent to a child: [childVariable]="parentVariable" -->
+            <!-- bindings with () are used to define things such as event emitters to tell angular that the child will be sending data back to the parent: (childFunction)="parentFunction($event, args?)" -->
             <app-power-factor-correction-form [data]="inputData" (changeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-power-factor-correction-form>
           </div>
         </div>
