@@ -21,7 +21,8 @@ export class FsatBannerComponent implements OnInit {
   }
   
   changeTab(str: string) {
-    if(str == 'assessment' || str == 'system-setup' || str == 'report')
-    this.fsatService.mainTab.next(str);
+    if(str == 'assessment' || str == 'system-setup' || str == 'report' || str == 'sankey') {
+      this.fsatService.mainTab.next(str);
+    }
   }
 }
