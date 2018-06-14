@@ -72,15 +72,15 @@ export class FanSetupComponent implements OnInit {
 
   checkForWarnings() {
     //fanEfficiency.. commented out while custom efficiency not implemented
-    /*
-    if(this.fanForm.controls.fanEfficiency.value < 0) {
-	this.fanEfficiencyError = 'Value must be greater than or equal to 0';
-    } else if (this.fanForm.controls.fanEfficiency.value > 100) {
-	this.fanEfficiencyError = 'Value must be less than or equal to 100';
+
+    if (this.fanForm.controls.fanSpecified.value < 0) {
+      this.fanEfficiencyError = 'Value must be greater than or equal to 0';
+    } else if (this.fanForm.controls.fanSpecified.value > 100) {
+      this.fanEfficiencyError = 'Value must be less than or equal to 100';
     } else {
-	this.fanEfficiencyError = null;
+      this.fanEfficiencyError = null;
     }
-    */
+
     //fanSpeed
     if (this.fanForm.controls.fanSpeed.value < 0) {
       this.fanSpeedError = 'Fan speed must be greater than or equal to 0';
