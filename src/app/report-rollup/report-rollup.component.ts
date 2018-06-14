@@ -6,7 +6,6 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
-import { setTimeout } from 'timers';
 import { Calculator } from '../shared/models/calculators';
 import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';

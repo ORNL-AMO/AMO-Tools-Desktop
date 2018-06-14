@@ -411,23 +411,29 @@ export class SankeyComponent implements OnInit {
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
       .attr("fill", "white");
 
-    //fuel/electric label
-    if (this.sankeyService.getElectricalEnergy() !== null && this.sankeyService.getElectricalEnergy() !== undefined && this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) {
-      let fuel = [{
-        val: this.sankeyService.getFuelEnergy(),
-        name: 'Fuel Energy',
-        x: 145,
-        y: 850,
-        units: energyUnits
-      }];
+    //fuel label
+    let fuel;
+    if ((this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) || (this.sankeyService.getChemicalEnergy() !== null && this.sankeyService.getChemicalEnergy() !== undefined)) {
 
-      let electrical = [{
-        val: this.sankeyService.getElectricalEnergy(),
-        name: 'Electrical Energy',
-        x: 145,
-        y: 950,
-        units: energyUnits
-      }];
+      if (this.sankeyService.getFuelEnergy() !== null && this.sankeyService.getFuelEnergy() !== undefined) {
+        fuel = [{
+          val: this.sankeyService.getFuelEnergy(),
+          name: 'Fuel Energy',
+          x: 145,
+          y: 850,
+          units: energyUnits
+        }];
+      }
+      else {
+        fuel = [{
+          val: this.sankeyService.getChemicalEnergy(),
+          name: 'Chemical Energy',
+          x: 145,
+          y: 850,
+          units: energyUnits
+        }];
+      }
+
 
       var fuelDeliveredText = svg
         .data(fuel)
@@ -465,6 +471,17 @@ export class SankeyComponent implements OnInit {
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
+    }
+
+    //electrical energy
+    if (this.sankeyService.getElectricalEnergy() !== null && this.sankeyService.getElectricalEnergy() !== undefined) {
+      let electrical = [{
+        val: this.sankeyService.getElectricalEnergy(),
+        name: 'Electrical Energy',
+        x: 145,
+        y: 950,
+        units: energyUnits
+      }];
 
       var electricalDeliveredText = svg
         .data(electrical)
@@ -504,6 +521,7 @@ export class SankeyComponent implements OnInit {
         .attr("fill", "black");
 
     }
+
 
     var availableHeatText = svg
       .data(availableHeat)
