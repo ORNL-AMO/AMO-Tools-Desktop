@@ -265,7 +265,7 @@ export class Fsat203Component implements OnInit {
       length: 32.63,
       area: 390.5539,
       dryBulbTemp: 123,
-      barometricPressure: 26.57,
+      barometricPressure: 29.92,
       numInletBoxes: 0,
       staticPressure: -17.0,
       pitotTubeCoefficient: 0.87292611371180784,
