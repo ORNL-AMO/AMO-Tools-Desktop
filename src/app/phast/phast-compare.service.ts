@@ -69,9 +69,6 @@ export class PhastCompareService {
         this.selectedModification.next(undefined);
         this.setNoModification();
       }
-    } else {
-      this.selectedModification.next(undefined);
-      this.setNoModification();
     }
 
     if (phast.systemEfficiency) {

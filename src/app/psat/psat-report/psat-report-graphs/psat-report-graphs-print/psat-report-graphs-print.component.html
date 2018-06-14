@@ -71,7 +71,7 @@
             <div class="row show-print">
               <div class="col-12">
                 <app-psat-sankey [settings]="settings" [psat]="psatOptions[0].psat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                  [modIndex]="i"></app-psat-sankey>
+                  [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
               </div>
             </div>
             <div class="row show-print print-pad-graph-title" *ngIf="modExists">
@@ -82,7 +82,7 @@
             <div class="row show-print" *ngIf="modExists">
               <div class="col-12">
                 <app-psat-sankey [settings]="settings" [psat]="psatOptions[i].psat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                  [modIndex]="i"></app-psat-sankey>
+                  [modIndex]="i" [isBaseline]="false"></app-psat-sankey>
               </div>
             </div>
           </div>

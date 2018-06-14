@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angu
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastResultsData } from '../report-rollup.service';
-import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-report-summary',

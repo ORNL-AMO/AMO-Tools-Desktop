@@ -6,7 +6,6 @@ import { Settings } from '../../../shared/models/settings';
 import { CalculatedByPhast, PhastResults, PHAST } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { setTimeout } from 'timers';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
@@ -64,7 +63,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -109,23 +108,21 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       cost: assessment.phast.operatingCosts.steamCost
     }
     let steamHeatingValue = 0;
-    let meteredResults, designedResults;
     if (assessment.phast.meteredEnergy) {
       if (assessment.phast.meteredEnergy.meteredEnergySteam) {
-        meteredResults = this.meteredEnergyService.meteredSteam(assessment.phast.meteredEnergy.meteredEnergySteam, assessment, settings);
         steamHeatingValue = assessment.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
         steamHeatingValue = this.convertUnitsService.value(steamHeatingValue).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
       }
     }
 
-    if (assessment.phast.designedEnergy) {
-      if (assessment.phast.designedEnergy.designedEnergySteam) {
-        designedResults = this.designedEnergyService.designedEnergySteam(assessment.phast.designedEnergy.designedEnergySteam, assessment, settings);
-        if (!steamHeatingValue) {
-          let hhvSum = _.sumBy(assessment.phast.designedEnergy.designedEnergySteam, 'totalHeat')
-          hhvSum = this.convertUnitsService.value(hhvSum).from(settings.energyResultUnit).to(this.settings.phastRollupUnit)
-          steamHeatingValue = hhvSum / assessment.phast.designedEnergy.designedEnergySteam.length;
-        }
+    if (assessment.phast.designedEnergy && assessment.phast.designedEnergy.steam) {
+      let hhvSum: number = 0;
+      assessment.phast.designedEnergy.zones.forEach(zone => {
+        hhvSum += zone.designedEnergySteam.totalHeat;
+      })
+      if (!steamHeatingValue) {
+        hhvSum = this.convertUnitsService.value(hhvSum).from(settings.energyResultUnit).to(this.settings.phastRollupUnit)
+        steamHeatingValue = hhvSum / assessment.phast.designedEnergy.zones.length;
       }
     }
     tmpItem.hhv = steamHeatingValue;

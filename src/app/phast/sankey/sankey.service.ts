@@ -5,6 +5,9 @@ import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
 import * as d3 from 'd3';
+import { EnergyInputEAF } from '../../shared/models/phast/losses/energyInputEAF';
+import { EnergyInputExhaustGasLoss } from '../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SankeyService {
@@ -15,8 +18,9 @@ export class SankeyService {
   outputRatio: number;
   fuelEnergy: number;
   electricalEnergy: number;
+  chemicalEnergy: number;
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
@@ -24,8 +28,26 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
-    this.fuelEnergy = phastResults.energyInputHeatDelivered;
-    this.electricalEnergy = phastResults.electricalHeatDelivered;
+    console.log('phastResults = ');
+    console.log(phastResults);
+    console.log('results = ');
+    console.log(results);
+    console.log('phast = ');
+    console.log(phast);
+
+    if (phast.losses.energyInputExhaustGasLoss) {
+      if (phast.losses.energyInputExhaustGasLoss.length > 0) {
+        this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
+        this.electricalEnergy = phastResults.electricalHeatDelivered;
+      }
+    }
+
+    if (phast.losses.energyInputEAF) {
+      if (phast.losses.energyInputEAF.length > 0) {
+        this.setChemicalEnergy(phastResults);
+        this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
+      }
+    }
 
     this.exothermicHeat = phastResults.exothermicHeat;
     // let constant = 1;
@@ -350,6 +372,30 @@ export class SankeyService {
 
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
+  }
+
+  setChemicalEnergy(phastResults: PhastResults) {
+    this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
+  }
+
+
+  getChemicalEnergy(): number {
+    return this.chemicalEnergy;
+  }
+
+  setFuelEnergy(fuelEnergy: Array<any>, unitsOfMeasure: string) {
+    this.fuelEnergy = 0;
+
+    for (let i = 0; i < fuelEnergy.length; i++) {
+      this.fuelEnergy += fuelEnergy[i].totalHeatInput;
+    }
+
+    if (unitsOfMeasure == 'Metric') {
+      this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('GJ').to('kWh');
+    }
+    else {
+      this.fuelEnergy = this.convertUnitsService.value(this.fuelEnergy).from('MMBtu').to('kWh');
+    }
   }
 
   getFuelEnergy(): number {

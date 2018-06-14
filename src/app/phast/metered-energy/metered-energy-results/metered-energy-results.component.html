@@ -10,18 +10,24 @@
     <tbody>
       <tr>
         <td>Fuel Energy Used</td>
-        <td>{{results.meteredEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
-        <td>{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td *ngIf="results.meteredEnergyUsed">{{results.meteredEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td *ngIf="!results.meteredEnergyUsed">&mdash;</td>
+        <td *ngIf="results.calculatedFuelEnergyUsed">{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td *ngIf="!results.calculatedFuelEnergyUsed">&mdash;</td>
       </tr>
       <tr>
         <td>Energy Intensity for Charge Materials</td>
-        <td>{{meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
-        <td>{{calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="results.meteredEnergyIntensity">{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="!results.meteredEnergyIntensity">&mdash;</td>
+        <td *ngIf="results.calculatedEnergyIntensity">{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="!results.calculatedEnergyIntensity">&mdash;</td>
       </tr>
       <tr>
         <td>Electricity Used (Auxiliary)</td>
-        <td>{{results.meteredElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
-        <td>{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td *ngIf="results.meteredElectricityUsed">{{results.meteredElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td *ngIf="!results.meteredElectricityUsed">&mdash;</td>
+        <td *ngIf="results.calculatedElectricityUsed">{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td *ngIf="!results.calculatedElectricityUsed">&mdash;</td>
       </tr>
     </tbody>
   </table>
