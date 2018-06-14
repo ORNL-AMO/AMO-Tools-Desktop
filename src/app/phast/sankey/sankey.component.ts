@@ -50,8 +50,6 @@ export class SankeyComponent implements OnInit {
   modIndex: number;
   @Input()
   assessmentName: string;
-  @Input()
-  assessment: Assessment;
 
   //real version
   @ViewChild("ngChart") ngChart: ElementRef;
