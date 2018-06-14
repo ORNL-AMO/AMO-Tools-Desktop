@@ -19,6 +19,7 @@
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. Hg</span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="barometricPressureError !== null">{{barometricPressureError}}</span>
     </div>
     <div class="form-group">
       <label for="gasType">Gas Type</label>
@@ -75,6 +76,7 @@
           (focus)="focusField('specificHeatGas')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">Btu/lb-&#8457;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="specificHeatGasError !== null">{{specificHeatGasError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
       <label for="relativeHumidity">Relative Humidity</label>
@@ -83,6 +85,7 @@
           (input)="calcDensityRelativeHumidity()" (focus)="focusField('relativeHumidity')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="relativeHumidityError !== null">{{relativeHumidityError}}</span>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
       <label for="dewPoint">Gas Dew Point (T<sub>dp</sub>)</label>
@@ -104,8 +107,8 @@
           (focus)="focusField('gasDensity')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/ft<sup>3</sup></span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/m<sup>3</sup></span>
-
       </div>
+      <span class="alert-warning pull-right small" *ngIf="gasDensityError !== null && gasDensityForm.controls.inputType.value == 'custom'">{{gasDensityError}}</span>
     </div>
   </div>
 </form>

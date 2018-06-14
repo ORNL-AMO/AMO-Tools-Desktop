@@ -4,7 +4,7 @@ import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FanMotor } from '../../shared/models/fans';
+import { FanMotor, FieldData } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { EfficiencyClasses } from '../fanOptions';
 import { CompareService } from '../compare.service';
@@ -26,7 +26,8 @@ export class FanMotorComponent implements OnInit {
   modificationIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<FanMotor>();
-
+  @Input()
+  fieldData: FieldData;
   efficiencyClasses: Array<{ value: number, display: string }>
   //   {
   //     value: 0,
@@ -162,34 +163,45 @@ export class FanMotorComponent implements OnInit {
     // }
   }
 
-  getFullLoadAmps() {
-    // if (!this.disableFLA()) {
-    //   //TODO: update get efficiency
-    //   // let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.fanMotorForm);
-    //   let estEfficiency = this.psatService.estFLA(
-    //     this.fanMotorForm.controls.motorRatedPower.value,
-    //     this.fanMotorForm.controls.motorRpm.value,
-    //     this.fanMotorForm.controls.lineFrequency.value,
-    //     this.fanMotorForm.controls.efficiencyClass.value,
-    //     0,
-    //     this.fanMotorForm.controls.motorRatedVoltage.value,
-    //     this.settings
-    //   );
+  calcFla(): number {
+    let tmpEfficiency: number;
+    //use efficiency class value if not specified efficiency class for efficiency
+    if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
+      tmpEfficiency = this.fanMotorForm.controls.efficiencyClass.value;
+    } else {
+      tmpEfficiency = this.fanMotorForm.controls.specifiedEfficiency.value;
+    }
+    //estFLA method needs: 
+    //lineFrequency as a string with Hz appended to value
+    //efficiencyClass as the string name value
+    let estEfficiency = this.psatService.estFLA(
+      this.fanMotorForm.controls.motorRatedPower.value,
+      this.fanMotorForm.controls.motorRpm.value,
+      this.fanMotorForm.controls.lineFrequency.value + ' Hz',
+      this.psatService.getEfficiencyClassFromEnum(this.fanMotorForm.controls.efficiencyClass.value),
+      tmpEfficiency,
+      this.fanMotorForm.controls.motorRatedVoltage.value,
+      this.settings
+    );
+    return estEfficiency;
+  }
 
-    //   this.fanMotorForm.patchValue({
-    //     fullLoadAmps: estEfficiency
-    //   });
-    //   this.checkFLA();
-    // }
+  getFullLoadAmps() {
+    if (!this.disableFLA()) {
+      this.fanMotorForm.patchValue({
+        fullLoadAmps: this.calcFla()
+      });
+      this.checkFLA();
+    }
   }
   defaultRpm() {
-    if (this.fanMotorForm.controls.lineFrequency.value == '60 Hz') {
+    if (this.fanMotorForm.controls.lineFrequency.value == 60) {
       if (this.fanMotorForm.controls.motorRpm.value == 1485) {
         this.fanMotorForm.patchValue({
           motorRPM: 1780
         })
       }
-    } else if (this.fanMotorForm.controls.lineFrequency.value == '50 Hz') {
+    } else if (this.fanMotorForm.controls.lineFrequency.value == 50) {
       if (this.fanMotorForm.controls.motorRpm.value == 1780) {
         this.fanMotorForm.patchValue({
           motorRPM: 1485
@@ -197,14 +209,14 @@ export class FanMotorComponent implements OnInit {
       }
     }
   }
-  disableFLA() {
+  disableFLA(): boolean {
     if (!this.disableFLAOptimized) {
       if (
         this.fanMotorForm.controls.lineFrequency.status == 'VALID' &&
         this.fanMotorForm.controls.motorRatedPower.status == 'VALID' &&
         this.fanMotorForm.controls.motorRpm.status == 'VALID' &&
         this.fanMotorForm.controls.efficiencyClass.status == 'VALID' &&
-        this.fanMotorForm.controls.motorVoltage.status == 'VALID'
+        this.fanMotorForm.controls.motorRatedVoltage.status == 'VALID'
       ) {
         if (this.fanMotorForm.controls.efficiencyClass.value != 'Specified') {
           return false;
@@ -228,60 +240,43 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
     if (this.fanMotorForm.controls.lineFrequency.value > 100) {
-      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
-      return false;
+      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater than 100%";
     }
     else if (this.fanMotorForm.controls.lineFrequency.value == 0) {
       this.efficiencyError = "Cannot have 0% efficiency";
-      return false;
     }
     else if (this.fanMotorForm.controls.lineFrequency.value < 0) {
       this.efficiencyError = "Cannot have negative efficiency";
-      return false;
     }
     else {
       this.efficiencyError = null;
-      return true;
     }
   }
   checkMotorVoltage(bool?: boolean) {
     if (!bool) {
       this.save();
     }
-    // if (this.fanMotorForm.controls.motorRatedVoltage.value != '') {
-    //   let tmp = this.psatService.checkMotorVoltage(this.fanMotorForm.controls.motorRatedVoltage.value);
-    //   if (tmp.message) {
-    //     this.voltageError = tmp.message;
-    //   } else {
-    //     this.voltageError = null;
-    //   }
-    //   return tmp.valid;
-    // }
-    // else {
-    //   return null;
-    // }
-    return null;
+    if (this.fanMotorForm.controls.motorRatedVoltage.value < 208) {
+      this.voltageError = "Voltage must be greater than 208";
+    } else if (this.fanMotorForm.controls.motorRatedVoltage.value > 15180) {
+      this.voltageError = "Voltage must be less than 15,180";
+    } else {
+      this.voltageError = null;
+    }
   }
   checkMotorRpm(bool?: boolean) {
     if (!bool) {
       this.save();
     }
     if (this.fanMotorForm.controls.lineFrequency.value && this.fanMotorForm.controls.motorRpm.value != '') {
-      // let frequencyEnum = this.psatService.getLineFreqEnum(this.fanMotorForm.controls.lineFrequency.value);
-      // let effClass = this.psatService.getEfficienyClassEnum(this.fanMotorForm.controls.efficiencyClass.value);
       let tmp = this.psatService.checkMotorRpm(this.fanMotorForm.controls.lineFrequency.value, this.fanMotorForm.controls.motorRpm.value, this.fanMotorForm.controls.efficiencyClass.value);
       if (tmp.message) {
         this.rpmError = tmp.message;
       } else {
         this.rpmError = null;
       }
-      return tmp.valid;
     } else if (this.fanMotorForm.controls.motorRpm.value == '') {
-      this.rpmError = 'Required';
-      return false;
-    }
-    else {
-      return null;
+      this.rpmError = 'Field Required';
     }
   }
 
@@ -290,12 +285,7 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
     this.checkFLA();
-    let motorFieldPower;
-    // if (this.fanMotorForm.controls.loadEstimatedMethod.value == 'Power') {
-    //   motorFieldPower = this.fanMotorForm.controls.motorKW.value;
-    // } else if (this.fanMotorForm.controls.loadEstimatedMethod.value == 'Current') {
-    //   motorFieldPower = this.fanMotorForm.controls.motorAmps.value;
-    // }
+    let motorFieldPower = this.fieldData.motorPower;
     if (motorFieldPower && this.fanMotorForm.controls.motorRatedPower.value) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
@@ -308,13 +298,9 @@ export class FanMotorComponent implements OnInit {
       val = val * 1.5;
       if (compare > val) {
         this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
-        return false
       } else {
         this.ratedPowerError = null;
-        return true
       }
-    } else {
-      return true;
     }
   }
 
@@ -322,32 +308,18 @@ export class FanMotorComponent implements OnInit {
     if (!bool) {
       this.save();
     }
-    // let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.fanMotorForm);
-    // let estEfficiency = this.psatService.estFLA(
-    //   this.fanMotorForm.controls.motorRatedPower.value,
-    //   this.fanMotorForm.controls.motorRpm.value,
-    //   this.fanMotorForm.controls.lineFrequency.value,
-    //   this.fanMotorForm.controls.efficiencyClass.value,
-    //   this.fanMotorForm.l
-    //   this.fanMotorForm.controls.motorRatedVoltage.value,
-    //   this.settings
-    // );
-    // this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-    // this.psatService.flaRange.flaMin = estEfficiency * .95;
-
-    // if (this.fanMotorForm.controls.fullLoadAmps.value) {
-    //   if ((this.fanMotorForm.controls.fullLoadAmps.value < this.psatService.flaRange.flaMin) || (this.fanMotorForm.controls.fullLoadAmps.value > this.psatService.flaRange.flaMax)) {
-    //     this.flaError = 'Value is outside expected range';
-    //     return false;
-    //   } else {
-    //     this.flaError = null;
-    //     return true;
-    //   }
-    // } else {
-    //   this.flaError = null;
-    //   return true;
-    // }
-    return true
+    let estEfficiency = this.calcFla();
+    let flaMax = estEfficiency * 1.05;
+    let flaMin = estEfficiency * .95;
+    if (this.fanMotorForm.controls.fullLoadAmps.value) {
+      if ((this.fanMotorForm.controls.fullLoadAmps.value < flaMin) || (this.fanMotorForm.controls.fullLoadAmps.value > flaMax)) {
+        this.flaError = 'Full-load amps value is outside expected range';
+      } else {
+        this.flaError = null;
+      }
+    } else {
+      this.flaError = null;
+    }
   }
 
   changeEfficiencyClass() {
