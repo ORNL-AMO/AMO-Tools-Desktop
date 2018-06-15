@@ -33,7 +33,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isInletPressureDifferent()}">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="inletPressure"
           (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent()}">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="outletPressure"
           (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span>
     </div>

@@ -10,7 +10,7 @@
           <div class="input-group">
             <input name="outletSystemEffectLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletSystemEffectLoss"
               id="outletSystemEffectLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('outletSystemEffectLoss')">
-            <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
           </div>
         </div>
 
@@ -19,7 +19,7 @@
           <div class="input-group">
             <input name="outletDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletDamperLoss"
               id="outletDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('outletDamperLoss')">
-            <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
           </div>
         </div>
         <div class="form-group">
@@ -27,7 +27,7 @@
           <div class="input-group">
             <input name="airTreatmentLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.airTreatmentLoss"
               id="airTreatmentLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('airTreatmentLoss')">
-            <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
           </div>
         </div>
         <div class="form-group">
@@ -35,7 +35,7 @@
           <div class="input-group">
             <input name="systemDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.systemDamperLoss"
               id="systemDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('systemDamperLoss')">
-            <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
           </div>
         </div>
         <div class="form-group">
@@ -43,7 +43,7 @@
           <div class="input-group">
             <input name="processRequirements" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.processRequirements"
               id="processRequirements" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirements')">
-            <span class="input-group-addon units">{{settings.fanPressureMeasurement}}</span>
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
           </div>
         </div>
       </div>
