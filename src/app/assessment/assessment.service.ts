@@ -244,24 +244,24 @@ export class AssessmentService {
     let newFsat: FSAT = {
       fieldData: {
         operatingFraction: 1,
-        flowRate: 129691,
-        inletPressure: -16.36,
-        outletPressure: 1.1,
+        flowRate: null,
+        inletPressure: null,
+        outletPressure: null,
         loadEstimatedMethod: 0,
-        motorPower: 160,
+        motorPower: null,
         cost: .06,
-        compressibilityFactor: .988,
+        compressibilityFactor: 0.988,
         specificHeatRatio: 1.4,
         measuredVoltage: 460
       },
       fanMotor: {
         lineFrequency: 60,
-        motorRatedPower: 600,
-        motorRpm: 1180,
+        motorRatedPower: null,
+        motorRpm: null,
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,
-        fullLoadAmps: 683.2505707137,
+        fullLoadAmps: null,
         sizeMargin: 1
       },
       fanSetup: {
@@ -270,13 +270,13 @@ export class AssessmentService {
         drive: 0
       },
       baseGasDensity: {
-        dryBulbTemp: 123,
-        staticPressure: -17.6,
+        dryBulbTemp: null,
+        staticPressure: null,
         barometricPressure: 29.92,
-        gasDensity: 1.02,
+        gasDensity: 0.0749,
         gasType: 'AIR',
         //Mark Additions
-        inputType: 'relativeHumidity',
+        inputType: 'custom',
         conditionLocation: 4,
         //Method 2 variables
         specificGravity: 1,
