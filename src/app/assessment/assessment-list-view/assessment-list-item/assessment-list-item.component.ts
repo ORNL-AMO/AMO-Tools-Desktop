@@ -50,6 +50,9 @@ export class AssessmentListItemComponent implements OnInit {
       this.isSetup = this.assessment.phast.setupDone;
     } else if (this.assessment.psat) {
       this.isSetup = this.assessment.psat.setupDone;
+    } else if(this.assessment.fsat){
+      //todo: need logic for isSetup in fsat
+      this.isSetup = true;
     }
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;

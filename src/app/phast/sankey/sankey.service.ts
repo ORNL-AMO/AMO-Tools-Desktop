@@ -28,14 +28,18 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
-    if (phast.losses.energyInputExhaustGasLoss) {
+    this.electricalEnergy = null;
+    this.fuelEnergy = null;
+    this.chemicalEnergy = null;
+
+    if (phast.losses.energyInputExhaustGasLoss && !resultCats.showFlueGas && resultCats.showEnInput2) {
       if (phast.losses.energyInputExhaustGasLoss.length > 0) {
         this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
         this.electricalEnergy = phastResults.electricalHeatDelivered;
       }
     }
 
-    if (phast.losses.energyInputEAF) {
+    if (phast.losses.energyInputEAF && !resultCats.showFlueGas && !resultCats.showEnInput2) {
       if (phast.losses.energyInputEAF.length > 0) {
         this.setChemicalEnergy(phastResults);
         this.electricalEnergy = phastResults.grossHeatInput - phastResults.energyInputHeatDelivered;
