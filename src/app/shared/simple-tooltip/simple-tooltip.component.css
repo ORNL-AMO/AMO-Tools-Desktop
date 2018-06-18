@@ -1,0 +1,19 @@
+.tooltip-box {
+    top: initial;
+    position: absolute !important;
+    background-color: rgba(85,85,85,0);
+    color: #fff;
+    padding: 10px;
+    opacity: 0;
+    transition: all ease 0.3s;
+    font-size: 16px;
+    z-index: 5;
+}
+
+.revealed-tooltip-box {
+    display: initial;
+    top: initial;
+    opacity: 1;
+    background-color: rgba(85,85,85,0.9);
+    transition: all ease 0.3s;
+}
