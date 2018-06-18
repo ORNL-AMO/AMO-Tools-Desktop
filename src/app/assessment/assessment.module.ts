@@ -29,6 +29,8 @@ import { FolderContactInfoComponent } from './folder-contact-info/folder-contact
 import { PreAssessmentCardComponent } from './assessment-grid-view/pre-assessment-card/pre-assessment-card.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
 import { PreAssessmentListItemComponent } from './assessment-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
+import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card/fsat-summary-card/fsat-summary-card.component';
+import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
     FolderContactInfoComponent,
     PreAssessmentCardComponent,
     AssessmentDashboardComponent,
-    PreAssessmentListItemComponent
+    PreAssessmentListItemComponent,
+    FsatSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
@@ -67,7 +70,8 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
     ToastyModule,
     ImportExportModule,
     PhastReportModule,
-    PsatModule
+    PsatModule,
+    FsatReportModule
   ],
   providers: []
 })
