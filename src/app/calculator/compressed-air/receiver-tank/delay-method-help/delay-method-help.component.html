@@ -2,7 +2,7 @@
   <p>This method calculates the size of the tank when air is removed from the tank for a few seconds before which the compressor
     can start reacting and pump more air. So an initial pressure might be created, which should be avoided.</p>
   <div class="help-content">
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'distanceToCompressorRoom'">
       <div class="card-header">
         Distance to Compressor Room
       </div>
@@ -10,7 +10,7 @@
         <p>Distance of the event, i.e removing the air, from the compressor room .</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'speedOfAir'">
       <div class="card-header">
         Speed of Air
       </div>
@@ -18,7 +18,7 @@
         <p>Flow rate of air from the tank.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'airDemand'">
       <div class="card-header">
         Air Demand
       </div>
@@ -26,7 +26,7 @@
         <p>Quantity of air that is required for the event.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'allowablePressureDrop'">
       <div class="card-header">
         Allowable Pressure Drop
       </div>
@@ -34,7 +34,7 @@
         <p>Limit on the permissible pressure drop.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'atmosphericPressure'">
       <div class="card-header">
         Atmospheric Pressure
       </div>

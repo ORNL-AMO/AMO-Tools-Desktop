@@ -2,7 +2,7 @@
   <p>When there is a sudden demand of air at relatively high volume, this method is used. In such cases, a secondary air receiver
     close to the point of demand is used.</p>
   <div class="help-content">
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'lengthOfDemand'">
       <div class="card-header">
         Length of Demand
       </div>
@@ -10,7 +10,7 @@
         <p>Time duration for which the compressed air is needed.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'airFlowRequirement'">
       <div class="card-header">
         Air Flow Demand
       </div>
@@ -18,7 +18,7 @@
         <p>The quantity of air needed.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'atmosphericPressure'">
       <div class="card-header">
         Atmospheric Pressure
       </div>
@@ -27,7 +27,7 @@
           at that location can be given.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'initialTankPressure'">
       <div class="card-header">
         Initital Tank Pressure
       </div>
@@ -35,7 +35,7 @@
         <p>Tank pressure before release of air.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'finalTankPressure'">
       <div class="card-header">
         Final Tank Pressure
       </div>
@@ -44,3 +44,4 @@
       </div>
     </div>
   </div>
+</div>

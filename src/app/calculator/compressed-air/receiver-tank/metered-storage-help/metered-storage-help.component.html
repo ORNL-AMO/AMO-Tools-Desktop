@@ -5,7 +5,7 @@
     when it actuates. Here the storage volume is calculated and installed in the same manner as for protecting a critical
     application, but a needle valve is installed instead of a check valve.</p>
   <div class="help-content">
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'lengthOfDemand'">
       <div class="card-header">
         Length of Demand
       </div>
@@ -13,7 +13,7 @@
         <p>Time duration for which the compressed air is needed.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'airFlowRequirement'">
       <div class="card-header">
         Air Flow Demand
       </div>
@@ -21,7 +21,7 @@
         <p>The quantity of air needed.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'meteredControl'">
       <div class="card-header">
         Meterd Flow Control
       </div>
@@ -29,7 +29,7 @@
         <p>Rate of flow through the metering valve (needle valve).</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'atmosphericPressure'">
       <div class="card-header">
         Atmospheric Pressure
       </div>
@@ -38,7 +38,7 @@
           at that location can be given.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'intialTankPressure'">
       <div class="card-header">
         Initital Tank Pressure
       </div>
@@ -46,7 +46,7 @@
         <p>Tank pressure before release of air.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card"  *ngIf="currentField == 'finalTankPressure'">
       <div class="card-header">
         Final Tank Pressure
       </div>
@@ -55,3 +55,4 @@
       </div>
     </div>
   </div>
+</div>

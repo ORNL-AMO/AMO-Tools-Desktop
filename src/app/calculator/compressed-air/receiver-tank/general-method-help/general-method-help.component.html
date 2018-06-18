@@ -1,8 +1,9 @@
 <div class="tab-content">
-  <p>General method is used when the user needs to order a receiver tank to meet the compressed air requirements.
+  <p><br>General method is used when the user needs to order a receiver tank to meet the compressed air requirements.
   </p>
   <div class="help-content">
-    <div class="card">
+
+    <div class="card" *ngIf="currentField == 'airDemand'">
       <div class="card-header">
         Air Demand
       </div>
@@ -10,7 +11,8 @@
         <p>Amount of air needed, which comes out of the receiver tank.</p>
       </div>
     </div>
-    <div class="card">
+
+    <div class="card" *ngIf="currentField == 'allowablePressureDrop'">
       <div class="card-header">
         Allowable Pressure Drop
       </div>
@@ -18,7 +20,7 @@
         <p>The pressure drop inside the receiver tank within the tolerable limits.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'atmosphericPressure'">
       <div class="card-header">
         Atmospheric Pressire
       </div>
@@ -28,3 +30,4 @@
       </div>
     </div>
   </div>
+</div>
