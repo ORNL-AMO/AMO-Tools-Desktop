@@ -5,11 +5,11 @@
       <div class="input-group">
         <input name="motorBhp" class="form-control" type="number" step="any" [(ngModel)]="inputs.motorBhp" id="motorBhp"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('motorBhp')">
-        <span class="input-group-addon units">BHP</span>
+        <span class="input-group-addon units">Bhp</span>
       </div>
     </div>
     <div class="form-group">
-      <label for="bhpUnloaded">Compressor Motor Brake Horse Power Unloaded</label>
+      <label for="bhpUnloaded">Bhp when Unloaded</label>
       <div class="input-group">
         <input name="bhpUnloaded" class="form-control" type="number" step="any" min="0" max="100" [(ngModel)]="inputs.bhpUnloaded" id="bhpUnloaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('bhpUnloaded')">
@@ -23,12 +23,20 @@
              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('annualOperatingHours')">
       <span class="input-group-addon units">h</span>
     </div>
-  </div>
+    </div>
     <div class="form-group">
       <label for="runTimeLoaded">Runtime Loaded</label>
       <div class="input-group">
         <input name="runTimeLoaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeLoaded" id="runTimeLoaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('runTimeLoaded')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="runTimeLoaded">Runtime Unloaded</label>
+      <div class="input-group">
+        <input name="runTimeLoaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeLoaded" id="runTimeUnloaded"
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('runTimeUnloaded')">
         <span class="input-group-addon units">%</span>
       </div>
     </div>

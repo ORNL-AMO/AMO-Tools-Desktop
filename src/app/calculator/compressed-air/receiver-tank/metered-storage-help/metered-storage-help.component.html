@@ -1,11 +1,16 @@
-<div class="tab-content">
-  <p>In metered control, the rate of compressed air flowing to refill a secondary receiver is controlled. If the rate is not
-    controlled, filling the receiver will become a demand event that may cause system problems due to high rate of flow.
-    This is done to protect the entire system from intermittent application, which can cause header pressure fluctuations
-    when it actuates. Here the storage volume is calculated and installed in the same manner as for protecting a critical
-    application, but a needle valve is installed instead of a check valve.</p>
+<div class="card">
+  <div class="card-header">
+    Calculation Method - Metered Storage Help
+  </div>
+  <div class="card-block small d-flex flex-column">
+    <p>In metered control, the rate of compressed air flowing to refill a secondary receiver is controlled. If the rate is not
+      controlled, filling the receiver will become a demand event that may cause system problems due to high rate of flow.
+      This is done to protect the entire system from intermittent application, which can cause header pressure fluctuations
+      when it actuates. Here the storage volume is calculated and installed in the same manner as for protecting a critical
+      application, but a needle valve is installed instead of a check valve.</p>
+
   <div class="help-content">
-    <div class="card"  *ngIf="currentField == 'lengthOfDemand'">
+    <div class="card" *ngIf="currentField == 'currentDemand'">
       <div class="card-header">
         Length of Demand
       </div>
@@ -13,7 +18,7 @@
         <p>Time duration for which the compressed air is needed.</p>
       </div>
     </div>
-    <div class="card"  *ngIf="currentField == 'airFlowRequirement'">
+    <div class="card" *ngIf="currentField == 'airFlowRequirement'">
       <div class="card-header">
         Air Flow Demand
       </div>

@@ -19,7 +19,7 @@
           </div>
           <div class="tab-content">
             <p>There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient C<sub>v</sub>=1. The second one is used for calculating C<sub>v</sub> when the flow rate is known.</p>
-            <div class="card">
+            <div class="card" *ngIf="currentField == 'airPressureIn'">
               <div class="card-header">
                 Inlet Pressure
               </div>
@@ -27,7 +27,7 @@
                 <p>Pressure entering the pneumatic valve.</p>
               </div>
             </div>
-            <div class="card">
+            <div class="card" *ngIf="currentField == 'airPressureOut'">
               <div class="card-header">
                 Outlet Pressure
               </div>
@@ -35,7 +35,7 @@
                 <p>Pressure leaving the pneumatic valve.</p>
               </div>
             </div>
-            <div class="card">
+            <div class="card" *ngIf="currentField == 'flowRate'">
               <div class="card-header">
                 Flow Rate
               </div>
