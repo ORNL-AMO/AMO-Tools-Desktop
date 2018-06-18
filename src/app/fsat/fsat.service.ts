@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT, FsatInput, FsatOutput } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+<<<<<<< HEAD
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FormGroup } from '@angular/forms';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
+=======
+import { Settings } from '../shared/models/settings';
+>>>>>>> issue-1813
 
 declare var fanAddon: any;
 
