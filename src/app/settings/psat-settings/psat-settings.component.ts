@@ -130,6 +130,12 @@ export class PsatSettingsComponent implements OnInit {
     }
   }
 
+  getUnitDisplay(unit: any){
+    if(unit){
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+
   setCustom() {
     this.settingsForm.patchValue({
       unitsOfMeasure: 'Custom'
