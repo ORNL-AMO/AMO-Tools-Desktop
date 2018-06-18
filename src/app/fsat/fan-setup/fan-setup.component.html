@@ -17,14 +17,15 @@
       </select>
     </div>
 
-    <!-- <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 12">
-      <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
+    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12">
+      <label for="fanSpecified">Specify Fan Efficiency</label>
       <div class="input-group">
-        <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
-          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedEfficiency')">
+        <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified"
+          id="fanSpecified" onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
-    </div> -->
+      <span class="alert-warning pull-right small" *ngIf="fanEfficiencyError !== null">{{fanEfficiencyError}}</span>
+    </div>
 
     <div class="form-group">
       <label for="fanSpeed">Fan Speed</label>
