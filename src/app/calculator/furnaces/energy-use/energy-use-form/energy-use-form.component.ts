@@ -23,6 +23,12 @@ export class EnergyUseFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  readonly orificeDiameterRatioCheck: DiameterRatioProperties = {
+    'percentOrifice': {
+      min: 0.7, max: 1.0
+    }
+  };
+
   sectionOptions: any = [
     {
       name: 'Square Edge',
@@ -66,6 +72,8 @@ export class EnergyUseFormComponent implements OnInit {
     }
   ]
 
+  insidePipeDiameterError: string = null;
+
   constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -74,6 +82,12 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   calculate() {
+    const insidePipeDiameter = this.flowCalculations.insidePipeDiameter;
+    const orificeDiameter = this.flowCalculations.orificeDiameter;
+    if (insidePipeDiameter / orificeDiameter > .7) {
+      this.insidePipeDiameterError = 'Orifice diameter must be <70% pipe diameter'
+    }
+
     this.emitCalculate.emit(true);
   }
 
@@ -121,4 +135,15 @@ export class EnergyUseFormComponent implements OnInit {
     }
     this.calculate();
   }
+
+
+}
+
+interface Properties {
+  readonly min: number;
+  readonly max: number;
+}
+
+interface DiameterRatioProperties {
+  readonly percentOrifice: Properties;
 }
