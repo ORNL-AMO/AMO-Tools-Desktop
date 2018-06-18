@@ -21,7 +21,7 @@ export class FsatSettingsComponent implements OnInit {
 
   flowOptions: Array<string> = [
     'ft3/min',
-    'm3/h'
+    'm3/s'
   ];
 
   pressureOptions: Array<string> = [
