@@ -167,7 +167,7 @@ export class SettingsService {
     if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
-        flowMeasurement: 'gpm',
+        flowMeasurement: 'ft3/min',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi',
         temperatureMeasurement: 'F',

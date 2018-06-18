@@ -20,7 +20,7 @@ export class FsatSettingsComponent implements OnInit {
   temperatureMeasurements: Array<any> = [];
 
   flowOptions: Array<string> = [
-    'ft3/h',
+    'ft3/min',
     'm3/h'
   ];
 
