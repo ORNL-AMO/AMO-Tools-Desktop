@@ -366,13 +366,6 @@ export class SankeyService {
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
   }
-
-  setFuelEnergy(fuelEnergy: Array<EnergyInputExhaustGasLoss>, unitsOfMeasure: string) {
-    this.fuelEnergy = 0;
-    for (let i = 0; i < fuelEnergy.length; i++) {
-      this.fuelEnergy += fuelEnergy[i].totalHeatInput;
-    }
-  }
   
   setChemicalEnergy(phastResults: PhastResults) {
     this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
