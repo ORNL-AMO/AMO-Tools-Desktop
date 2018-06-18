@@ -1,0 +1,34 @@
+<div class="card fans">
+  <div class="card-header">
+      <h3>Fans</h3>
+      <span>
+          <span>{{numFsats}}</span>
+      </span>
+  </div>
+  <div class="card-body">
+      <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-8 col-sm-12">
+              <dl class="summary-list mx-auto">
+                  <dt>Maximum Annual
+                      <br/>Cost Savings</dt>
+                  <dd>{{fanSavingPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
+                  <dt>Annual Cost</dt>
+                  <dd>{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
+              </dl>
+          </div>
+          <div class="col-lg-6 col-md-8 col-sm-12">
+              <dl class="summary-list mx-auto">
+                  <dt>Maximum Annual
+                      <br/>Energy Savings</dt>
+                  <dd>{{energySavingsPotential| number:'2.0-0'}} MWh</dd>
+                  <dt>Annual Energy</dt>
+                  <dd>{{totalEnergy| number:'2.0-0'}} MWh
+                  </dd>
+              </dl>
+          </div>
+      </div>
+  </div>
+  <div class="card-footer">
+      Click for details
+  </div>
+</div>

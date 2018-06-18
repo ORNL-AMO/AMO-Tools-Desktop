@@ -33,7 +33,7 @@ export const specificHeat = {
       name: {
         singular: 'British Thermal Unit per Pound Fahrenheit'
         , plural: 'British Thermal Units per Pound Fahrenheit',
-        display: '(Btu/lb-F)'
+        display: '(Btu/lb-&#x2109;)'
       }
       , to_anchor: 1
     }

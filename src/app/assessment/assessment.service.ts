@@ -3,6 +3,8 @@ import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
+import { FSAT } from '../shared/models/fans';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -17,11 +19,37 @@ export class AssessmentService {
   updateAvailable: BehaviorSubject<boolean>;
   openingTutorial: BehaviorSubject<boolean>;
   tutorialShown: boolean = false;
-  constructor() {
+
+  constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.openingTutorial = new BehaviorSubject<boolean>(null);
+  }
+
+  goToAssessment(assessment: Assessment, str?: string, str2?: string) {
+    if (str) {
+      this.tab = str;
+    } else {
+      this.tab = 'system-setup';
+    }
+
+    if (str2) {
+      this.subTab = str2;
+    }
+    if (assessment.type == 'PSAT') {
+      if (assessment.psat.setupDone && !str) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/psat/' + assessment.id);
+    } else if (assessment.type == 'PHAST') {
+      if (assessment.phast.setupDone && !str) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/phast/' + assessment.id);
+    } else if (assessment.type == 'FSAT') {
+      this.router.navigateByUrl('/fsat/' + assessment.id);
+    }
   }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -79,7 +107,7 @@ export class AssessmentService {
         daysPerWeek: 7,
         shiftsPerDay: 3,
         hoursPerShift: 8,
-        hoursPerYear:8736
+        hoursPerYear: 8736
       },
       operatingCosts: {
         fuelCost: 8.00,
@@ -210,5 +238,60 @@ export class AssessmentService {
       fluidTemperature: _fluidTemperature
     };
     return newPsatInputs;
+  }
+
+  getNewFsat(): FSAT {
+    let newFsat: FSAT = {
+      fieldData: {
+        operatingFraction: 1,
+        flowRate: 129691,
+        inletPressure: -16.36,
+        outletPressure: 1.1,
+        loadEstimatedMethod: 0,
+        motorPower: 160,
+        cost: .06,
+        compressibilityFactor: .988,
+        specificHeatRatio: 1.4,
+        measuredVoltage: 460
+      },
+      fanMotor: {
+        lineFrequency: 60,
+        motorRatedPower: 600,
+        motorRpm: 1180,
+        efficiencyClass: 1,
+        specifiedEfficiency: 100,
+        motorRatedVoltage: 460,
+        fullLoadAmps: 683.2505707137,
+        sizeMargin: 1
+      },
+      fanSetup: {
+        fanType: 0,
+        fanSpeed: 1180,
+        drive: 0
+      },
+      baseGasDensity: {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 29.92,
+        gasDensity: 1.02,
+        gasType: 'AIR',
+        //Mark Additions
+        inputType: 'relativeHumidity',
+        conditionLocation: 4,
+        //Method 2 variables
+        specificGravity: 1,
+        wetBulbTemp: 119,
+        relativeHumidity: 0,
+        dewPoint: 0,
+        specificHeatGas: .24
+      },
+      notes: {
+        fieldDataNotes: '',
+        fanMotorNotes: '',
+        fanSetupNotes: '',
+        fluidNotes: ''
+      }
+    }
+    return newFsat;
   }
 }

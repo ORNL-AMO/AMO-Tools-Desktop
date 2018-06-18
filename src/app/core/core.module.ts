@@ -34,6 +34,7 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 
 import { VersionModalComponent } from '../version-modal/version-modal.component';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
+import { FsatModule } from '../fsat/fsat.module';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { MeasurComponent } from '../landing-screen/measur/measur.component';
@@ -81,6 +82,7 @@ import { CoreService } from './core.service';
     SuiteDbModule,
     ImportExportModule,
     ReportRollupModule,
+    FsatModule,
     PreAssessmentModule
   ],
   providers: [

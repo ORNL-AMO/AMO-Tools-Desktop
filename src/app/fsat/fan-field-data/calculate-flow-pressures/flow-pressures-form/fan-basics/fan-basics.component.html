@@ -1,0 +1,58 @@
+<form>
+  <label class="group-label">
+    <span class="step-number">1</span>Basic Fan Info
+    <span class="fa fa-exclamation-circle pull-right" *ngIf="!basicsDone"></span>
+    <span class="fa fa-check pull-right" *ngIf="basicsDone"></span>
+  </label>
+  <div class="form-group">
+    <label for="fanSpeed">Fan Speed</label>
+    <div class="input-group">
+      <input name="fanSpeed" type="number" step="any" class="form-control" [(ngModel)]="fanRatedInfo.fanSpeed" id="fanSpeed" (input)="save()"
+        (focus)="focusField('fanSpeed')" onfocus="this.select();" [disabled]="true">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="motorSpeed">Motor Speed</label>
+    <div class="input-group">
+      <input name="motorSpeed" type="number" step="any" class="form-control" [(ngModel)]="fanRatedInfo.motorSpeed" id="motorSpeed" (input)="save()"
+        (focus)="focusField('motorSpeed')" onfocus="this.select();" [disabled]="true">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="globalBarometricPressure">Barometric Pressure (P<sub>b</sub>)</label>
+    <input name="globalBarometricPressure" type="number" step="any" class="form-control" [(ngModel)]="fanRatedInfo.globalBarometricPressure"
+      id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();" [disabled]="true">
+  </div>
+
+  <div class="form-group">
+    <label for="includesEvase">Rated Fan Performance Includes Evase</label>
+    <div class="input-group">
+      <select class="form-control" name="includesEvase" [(ngModel)]="fanRatedInfo.includesEvase" id="includesEvase" (change)="save()" (focus)="focusField('includesEvase')">
+        <option [ngValue]="'Yes'">Yes</option>
+        <option [ngValue]="'No'">No</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="upDownStream">Plane 5 Upstream or Downstram of Plane 2 (Evase Case)</label>
+    <div class="input-group">
+      <select class="form-control" name="upDownStream" [(ngModel)]="fanRatedInfo.upDownStream" id="upDownStream" (change)="save()" (focus)="focusField('upDownStream')">
+        <option [ngValue]="'Upstream'">Upstream</option>
+        <option [ngValue]="'Downstream'">Downstream</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="traversePlanes">Number of Traverse Planes</label>
+    <div class="input-group">
+      <select class="form-control" name="traversePlanes" [(ngModel)]="fanRatedInfo.traversePlanes" id="traversePlanes" (change)="save()"
+        (focus)="focusField('traversePlanes')">
+        <option *ngFor="let plane of planes" [ngValue]="plane">{{plane}}</option>
+      </select>
+    </div>
+  </div>
+</form>
