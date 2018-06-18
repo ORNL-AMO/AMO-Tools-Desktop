@@ -22,7 +22,6 @@ export class FsatSummaryComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    console.log(this.numFsats);
     this.assessmentSub = this.reportRollupService.fsatAssessments.subscribe(val => {
       this.numFsats = val.length
       if (val.length != 0) {
@@ -31,7 +30,6 @@ export class FsatSummaryComponent implements OnInit {
     })
 
     this.allSub = this.reportRollupService.allFsatResults.subscribe(val => {
-      console.log(val);
       if (val.length != 0) {
         this.reportRollupService.initFsatCompare(val);
       }
@@ -57,7 +55,6 @@ export class FsatSummaryComponent implements OnInit {
   }
 
   calcFsatSums(resultsData: Array<FsatResultsData>) {
-    console.log('calc results')
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;

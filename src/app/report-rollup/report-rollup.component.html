@@ -16,8 +16,8 @@
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" [numFsats]="numFsats" (showModal)="showModal()"
-                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
+            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" [numFsats]="numFsats" (showPhastModal)="showPhastModal()"
+                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"></app-report-summary>
         </div>
     </div>
 </div>
@@ -40,8 +40,8 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numFsats]="numFsats" [numPsats]="numPsats" (showModal)="showModal()"
-                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numFsats]="numFsats" [numPsats]="numPsats" (showPhastModal)="showPhastModal()"
+                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"></app-report-summary>
             </div>
         </div>
     </div>
@@ -196,13 +196,13 @@
 </div>
 
 <!--phast rollup modal-->
-<div bsModal #rollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog" aria-labelledby="rollupModal"
+<div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog" aria-labelledby="phastRollupModal"
     aria-hidden="true" [config]="{backdrop: 'fixed'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5>PHAST Rollup</h5>
-                <button class="close" aria-label="Close" (click)="hideModal()">
+                <button class="close" aria-label="Close" (click)="hidePhastModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -213,7 +213,23 @@
     </div>
 </div>
 
-
+<!--fsat rollup modal -->
+<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog" aria-labelledby="fsatRollupModal"
+    aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>FSAT Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hideFsatModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container fsat scroll-item">
+                <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--units modal-->
 <div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal" aria-hidden="true"

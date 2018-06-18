@@ -41,7 +41,9 @@ export class ReportRollupComponent implements OnInit {
   settings: Settings;
   @ViewChild('psatRollupModal') public psatRollupModal: ModalDirective;
   @ViewChild('unitModal') public unitModal: ModalDirective;
-  @ViewChild('rollupModal') public rollupModal: ModalDirective;
+  @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
+  @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
+
 
   numPhasts: number = 0;
   numPsats: number = 0;
@@ -261,12 +263,12 @@ export class ReportRollupComponent implements OnInit {
     window.scrollBy(0, scrlAmnt)
   }
 
-  showModal() {
-    this.rollupModal.show();
+  showPhastModal() {
+    this.phastRollupModal.show();
   }
 
-  hideModal() {
-    this.rollupModal.hide();
+  hidePhastModal() {
+    this.phastRollupModal.hide();
   }
 
   showUnitModal() {
@@ -283,5 +285,13 @@ export class ReportRollupComponent implements OnInit {
 
   hidePsatModal() {
     this.psatRollupModal.hide();
+  }
+
+  showFsatModal() {
+    this.fsatRollupModal.show();
+  }
+
+  hideFsatModal(){
+    this.fsatRollupModal.hide();
   }
 }
