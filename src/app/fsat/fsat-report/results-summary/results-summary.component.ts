@@ -31,7 +31,7 @@ export class ResultsSummaryComponent implements OnInit {
   }
 
   getResults() {
-    this.baselineResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    this.baselineResults = this.fsatService.getResults(this.fsat, 'existing');
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.fsat.modifications.forEach(mod => {
         mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
@@ -39,7 +39,7 @@ export class ResultsSummaryComponent implements OnInit {
         if (mod.fsat.fanMotor.optimize) {
           modResultType = 'optimal';
         }
-        let modResult: FsatOutput = this.fsatService.getResults(mod.fsat, modResultType, this.settings);
+        let modResult: FsatOutput = this.fsatService.getResults(mod.fsat, modResultType);
         modResult.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, modResult.annualCost);
         modResult.energySavings = this.baselineResults.annualEnergy - modResult.annualEnergy;
         modResult.annualSavings = this.baselineResults.annualCost - modResult.annualCost;
