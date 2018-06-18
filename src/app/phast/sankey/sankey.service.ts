@@ -28,13 +28,6 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
-    console.log('phastResults = ');
-    console.log(phastResults);
-    console.log('results = ');
-    console.log(results);
-    console.log('phast = ');
-    console.log(phast);
-
     if (phast.losses.energyInputExhaustGasLoss) {
       if (phast.losses.energyInputExhaustGasLoss.length > 0) {
         this.setFuelEnergy(phast.losses.energyInputExhaustGasLoss, settings.unitsOfMeasure);
@@ -373,7 +366,7 @@ export class SankeyService {
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
   }
-
+  
   setChemicalEnergy(phastResults: PhastResults) {
     this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
   }
