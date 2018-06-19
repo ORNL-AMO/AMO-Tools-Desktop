@@ -81,7 +81,7 @@ export const EfficiencyClasses: Array<{ value: number, display: string }> = [
   },
   {
     value: 2,
-    display: 'Premium'
+    display: 'Premium Efficient'
   },
   {
     value: 3,
