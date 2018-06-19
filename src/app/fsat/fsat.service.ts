@@ -98,7 +98,7 @@ export class FsatService {
         isSpecified: false
       };
 
-      input = this.convertFsatService.convertInputData(input, settings);
+      input = this.convertFsatService.convertInputDataForCalculations(input, settings);
 
       if (resultType == 'existing') {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;

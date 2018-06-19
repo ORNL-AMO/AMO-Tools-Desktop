@@ -75,6 +75,7 @@ export class FanMotorComponent implements OnInit {
   ngOnInit() {
     this.efficiencyClasses = EfficiencyClasses;
     this.init();
+    console.log(this.settings.powerMeasurement);
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
     } else {

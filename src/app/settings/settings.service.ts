@@ -183,7 +183,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'MMBtu',
         phastRollupSteamUnit: 'MMBtu',
         densityMeasurement: 'lbscf',
-        fanFlowRate: 'ft3/min',
+        fanFlowRate: 'ft3/h',
         fanPressureMeasurement: 'inH2o'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
@@ -209,7 +209,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'GJ',
         phastRollupSteamUnit: 'GJ',
         densityMeasurement: 'kgNm3',
-        fanFlowRate: 'm3/s',
+        fanFlowRate: 'm3/h',
         fanPressureMeasurement: 'Pa'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',

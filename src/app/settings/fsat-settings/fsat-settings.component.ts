@@ -67,7 +67,7 @@ export class FsatSettingsComponent implements OnInit {
         unit: unit,
         display: this.getUnitName(unit)
       }
-      this.pressureMeasurements.push(tmpPossibility);
+      this.powerMeasurements.push(tmpPossibility);
     })
     this.tempOptions.forEach(unit => {
       let tmpPossibility = {
