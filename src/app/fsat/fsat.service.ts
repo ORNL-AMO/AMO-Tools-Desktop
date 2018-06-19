@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT, FsatInput, FsatOutput } from '../shared/models/fans';
-import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FormGroup } from '@angular/forms';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
+import { ConvertFsatService } from './convert-fsat.service';
 
 declare var fanAddon: any;
 
@@ -21,7 +21,7 @@ export class FsatService {
   openNewModal: BehaviorSubject<boolean>;
   openModificationModal: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor(private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
+  constructor(private convertFsatService: ConvertFsatService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
     this.initData();
   }
 
@@ -70,7 +70,7 @@ export class FsatService {
 
   //fsat results
 
-  getResults(fsat: FSAT, resultType: string): FsatOutput {
+  getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
     if (this.checkValid(fsat)) {
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
@@ -97,6 +97,9 @@ export class FsatService {
         airDensity: fsat.baseGasDensity.gasDensity,
         isSpecified: false
       };
+
+      input = this.convertFsatService.convertInputData(input, settings);
+
       if (resultType == 'existing') {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;

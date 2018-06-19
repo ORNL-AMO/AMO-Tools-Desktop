@@ -52,11 +52,11 @@ export class FsatSummaryCardComponent implements OnInit {
     let isValid: boolean = this.fsatService.checkValid(fsat);
     if (isValid) {
       if (fsat.fanMotor.optimize) {
-        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal');
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal', settings);
       } else if (!isModification) {
-        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing');
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing', settings);
       } else {
-        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified');
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified', settings);
       }
     } else {
       return this.fsatService.getEmptyResults();
