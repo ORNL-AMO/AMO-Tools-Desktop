@@ -19,8 +19,13 @@
         <td>Energy Intensity for Charge Materials</td>
         <td *ngIf="results.meteredEnergyIntensity">{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
         <td *ngIf="!results.meteredEnergyIntensity">&mdash;</td>
+<<<<<<< HEAD
+        <td *ngIf="calculatedEnergyIntensity">{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="!calculatedEnergyIntensity">&mdash;</td>
+=======
         <td *ngIf="results.calculatedEnergyIntensity">{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
         <td *ngIf="!results.calculatedEnergyIntensity">&mdash;</td>
+>>>>>>> fans-copy
       </tr>
       <tr>
         <td>Electricity Used (Auxiliary)</td>

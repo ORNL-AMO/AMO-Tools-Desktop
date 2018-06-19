@@ -28,6 +28,7 @@ export class SankeyService {
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
 
+
     this.electricalEnergy = null;
     this.fuelEnergy = null;
     this.chemicalEnergy = null;
@@ -370,7 +371,7 @@ export class SankeyService {
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
   }
-
+  
   setChemicalEnergy(phastResults: PhastResults) {
     this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
   }
