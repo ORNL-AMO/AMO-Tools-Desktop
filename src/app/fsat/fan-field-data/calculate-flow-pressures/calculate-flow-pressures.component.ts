@@ -54,7 +54,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
       BaseGasDensity: this.fsat.baseGasDensity
     }
     this.isDataMissing = false;
-    this.planeResults = this.fsatService.getPlaneResults(this.mockInputs);
+    this.planeResults = this.fsatService.getPlaneResults(this.mockInputs, this.settings);
     if (this.fsat.fieldData.pressureCalcResultType == 'static') {
       this.fsat.fieldData.inletPressure = this.roundVal(this.planeResults.FanInletFlange.staticPressure, 5);
       this.fsat.fieldData.outletPressure = this.roundVal(this.planeResults.FanOrEvaseOutletFlange.staticPressure, 5);

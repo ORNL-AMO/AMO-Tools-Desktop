@@ -1,26 +1,4 @@
-<!-- <form [formGroup]="settingsForm">
-  <div class="form-group">
-    <label>Fan Curve Type</label>
-    <select (change)="emitSave()" class="form-control" formControlName="fanCurveType" id="fanCurveType">
-        <option *ngFor="let option of fanCurveTypes" [ngValue]="option">{{option}}</option>
-      </select>
-  </div>
-
-  <div class="form-group">
-    <label for="fanConvertedConditions">Identify Converted Conditions to Use</label>
-    <select (change)="emitSave()" class="form-control" formControlName="fanConvertedConditions" id="fanConvertedConditions">
-      <option *ngFor="let option of conditions" [ngValue]="option">{{option}}</option>
-    </select>
-  </div>
-</form> -->
-
 <form [formGroup]="settingsForm">
-    <!-- <div class="form-group">
-      <label for="distanceMeasurement">Head Measurement</label>
-      <select class="form-control" formControlName="distanceMeasurement" id="distanceMeasurement" (change)="setCustom()">
-          <option *ngFor="let measurement of distanceMeasurements" [ngValue]="measurement.unit">{{measurement.display}} <span [innerHTML]="getUnitDisplay(measurement.unit)"></span></option>
-      </select>
-    </div> -->
     <div class="form-group">
         <label for="fanPressureMeasurement">Pressure Measurement</label>
         <select class="form-control" formControlName="fanPressureMeasurement" id="fanPressureMeasurement" (change)="setCustom()">

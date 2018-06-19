@@ -163,7 +163,7 @@ export class FsatFluidComponent implements OnInit {
 
   calcDensityWetBulb() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })
@@ -172,7 +172,7 @@ export class FsatFluidComponent implements OnInit {
 
   calcDensityRelativeHumidity() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })
@@ -181,7 +181,7 @@ export class FsatFluidComponent implements OnInit {
 
   calcDensityDewPoint() {
     let tmpObj: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })

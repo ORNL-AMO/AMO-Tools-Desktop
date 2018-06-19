@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { FsatInput, OutletPressureData, InletPressureData, FSAT } from '../shared/models/fans';
+import { FsatInput, OutletPressureData, InletPressureData, FSAT, BaseGasDensity, Plane, FanRatedInfo, PlaneData, Fan203Inputs, PlaneResults, PlaneResult } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
@@ -14,6 +14,82 @@ export class ConvertFsatService {
     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
+    return inputCpy;
+  }
+
+  convertGasDensityForCalculations(inputs: BaseGasDensity, settings: Settings): BaseGasDensity {
+    let inputCpy: BaseGasDensity = JSON.parse(JSON.stringify(inputs));
+    //TODO: Convert to imperial for calcs
+    if (settings.temperatureMeasurement != 'F') {
+      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.temperatureMeasurement).to('F');
+      inputCpy.wetBulbTemp = this.convertUnitsService.value(inputCpy.wetBulbTemp).from(settings.temperatureMeasurement).to('F');
+      inputCpy.dewPoint = this.convertUnitsService.value(inputCpy.dewPoint).from(settings.temperatureMeasurement).to('F');
+    }
+    if (settings.densityMeasurement != 'lbscf') {
+      inputCpy.gasDensity = this.convertUnitsService.value(inputCpy.gasDensity).from(settings.densityMeasurement).to('lbscf');
+    }
+    if (settings.fanBarometricPressure != 'inHg') {
+      inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    if (settings.fanSpecificHeatGas != 'btulbF') {
+      inputCpy.specificHeatGas = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanPressureMeasurement).to('btulbF');
+    }
+    return inputCpy;
+  }
+
+  convertPlaneForCalculations(inputs: Plane, settings: Settings): Plane {
+    let inputCpy: Plane = JSON.parse(JSON.stringify(inputs));
+    //TODO: Convert to imperial for calcs
+    if (settings.fanBarometricPressure != 'inHg') {
+      inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    }
+
+    if (settings.unitsOfMeasure != 'Imperial' && settings.unitsOfMeasure != 'Custom') {
+      inputCpy.area = this.convertUnitsService.value(inputCpy.area).from('m2').to('ft2');
+    }
+    if (settings.temperatureMeasurement != 'F') {
+      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.temperatureMeasurement).to('F');
+    }
+    if (settings.fanPressureMeasurement != 'inH2o' && inputCpy.staticPressure) {
+      inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.staticPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    return inputCpy;
+  }
+
+  convertFanRatedInfoForCalculations(inputs: FanRatedInfo, settings: Settings): FanRatedInfo {
+    let inputCpy: FanRatedInfo = JSON.parse(JSON.stringify(inputs));
+    //TODO: convert to imperial for calcs
+    return inputCpy;
+  }
+
+  convertPlaneDataForCalculations(inputs: PlaneData, settings: Settings): PlaneData {
+    let inputCpy: PlaneData = JSON.parse(JSON.stringify(inputs));
+    //TODO: convert to imperial for calcs
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      inputCpy.totalPressureLossBtwnPlanes1and4 = this.convertUnitsService.value(inputCpy.totalPressureLossBtwnPlanes1and4).from(settings.fanPressureMeasurement).to('inH2o');
+      inputCpy.totalPressureLossBtwnPlanes2and5 = this.convertUnitsService.value(inputCpy.totalPressureLossBtwnPlanes2and5).from(settings.fanPressureMeasurement).to('inH2o');
+      inputCpy.inletSEF = this.convertUnitsService.value(inputCpy.inletSEF).from(settings.fanPressureMeasurement).to('inH2o');
+      inputCpy.outletSEF = this.convertUnitsService.value(inputCpy.outletSEF).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    inputCpy.FanInletFlange = this.convertPlaneForCalculations(inputCpy.FanInletFlange, settings);
+    inputCpy.FanEvaseOrOutletFlange = this.convertPlaneForCalculations(inputCpy.FanEvaseOrOutletFlange, settings);
+    inputCpy.FlowTraverse = this.convertPlaneForCalculations(inputCpy.FlowTraverse, settings);
+    inputCpy.InletMstPlane = this.convertPlaneForCalculations(inputCpy.InletMstPlane, settings);
+    inputCpy.OutletMstPlane = this.convertPlaneForCalculations(inputCpy.OutletMstPlane, settings);
+    inputCpy.AddlTraversePlanes.forEach(plane => {
+      plane = this.convertPlaneForCalculations(plane, settings);
+    });
+    return inputCpy;
+  }
+
+  convertFan203DataForCalculations(input: Fan203Inputs, settings: Settings): Fan203Inputs {
+    let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+    inputCpy.FanRatedInfo = this.convertFanRatedInfoForCalculations(inputCpy.FanRatedInfo, settings);
+    inputCpy.BaseGasDensity = this.convertGasDensityForCalculations(inputCpy.BaseGasDensity, settings);
+    inputCpy.PlaneData = this.convertPlaneDataForCalculations(inputCpy.PlaneData, settings);
     return inputCpy;
   }
 
@@ -64,6 +140,10 @@ export class ConvertFsatService {
     if (oldSettings.fanFlowRate != newSettings.fanFlowRate) {
       inputCpy.fieldData.flowRate = this.convertNum(inputCpy.fieldData.flowRate, oldSettings.fanFlowRate, newSettings.fanFlowRate);
     }
+
+    if (oldSettings.fanSpecificHeatGas != newSettings.fanSpecificHeatGas) {
+      inputCpy.baseGasDensity.specificHeatGas = this.convertNum(inputCpy.baseGasDensity.specificHeatGas, oldSettings.fanSpecificHeatGas, newSettings.fanSpecificHeatGas);
+    }
     // if (oldSettings.powerMeasurement != newSettings.powerMeasurement) {
     //   inputCpy.fieldData.motorPower = this.convertMotorPower(inputCpy.fieldData.motorPower, oldSettings.powerMeasurement, newSettings.powerMeasurement)
     // }
@@ -73,6 +153,31 @@ export class ConvertFsatService {
   // convertMotorPower(motorPower: number, oldPowerMeasurement: string, newPowerMeasurement: string): number {
   //   return 0;
   // }
+
+  convertPlaneResults(results: PlaneResults, settings: Settings): PlaneResults {
+    results.FanInletFlange = this.convertPlaneResult(results.FanInletFlange, settings);
+    results.FanOrEvaseOutletFlange = this.convertPlaneResult(results.FanOrEvaseOutletFlange, settings);
+    results.FlowTraverse = this.convertPlaneResult(results.FlowTraverse, settings);
+    results.InletMstPlane = this.convertPlaneResult(results.InletMstPlane, settings);
+    results.OutletMstPlane = this.convertPlaneResult(results.OutletMstPlane, settings);
+    results.AddlTraversePlanes.forEach(plane => {
+      plane = this.convertPlaneResult(plane, settings);
+    })
+    return results;
+  }
+
+  convertPlaneResult(result: PlaneResult, settings: Settings): PlaneResult {
+    // if(settings.densityMeasurement != ''){
+
+    // }
+    // result.gasDensity: number,
+    //   result.gasTotalPressure: number,
+    //     result.gasVelocity: number,
+    //       result.gasVelocityPressure: number,
+    //         result.gasVolumeFlowRate: number,
+    //           result.staticPressure ?: number
+    return result;
+  }
 
   convertNum(num: number, from: string, to: string): number {
     num = this.convertUnitsService.value(num).from(from).to(to);
