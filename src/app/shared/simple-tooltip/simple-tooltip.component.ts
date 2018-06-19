@@ -41,6 +41,8 @@ export class SimpleTooltipComponent implements OnInit {
   adjustTopStr: string;
   adjustBottomStr: string;
 
+
+
   constructor() { }
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class SimpleTooltipComponent implements OnInit {
       this.adjustLeft = 0;
     }
     if ((this.adjustTop === null || this.adjustTop === undefined) && (this.adjustBottom === null || this.adjustBottom === undefined)) {
-      this.adjustTop = 0;
+      //this.adjustTop = 0;
     }
 
     if (this.adjustPercent) {
