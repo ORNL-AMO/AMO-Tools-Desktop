@@ -1,5 +1,5 @@
 .tooltip-box {
-    top: initial;
+    /* top: initial; */
     position: absolute !important;
     background-color: rgba(85,85,85,0);
     color: #fff;
@@ -12,7 +12,7 @@
 
 .revealed-tooltip-box {
     display: initial;
-    top: initial;
+    /* top: initial; */
     opacity: 1;
     background-color: rgba(85,85,85,0.9);
     transition: all ease 0.3s;

@@ -101,14 +101,14 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
     setTimeout(() => {
       this.checkHover(btnType);
-    }, 1000);
+    }, 700);
   }
 
   hideTooltip(btnType: string) {
 
     if (btnType == 'btnExportChart') {
-      // this.hoverBtnExport = false;
-      // this.displayExportTooltip = false;
+      this.hoverBtnExport = false;
+      this.displayExportTooltip = false;
     }
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;

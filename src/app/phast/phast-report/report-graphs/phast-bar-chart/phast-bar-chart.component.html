@@ -3,4 +3,8 @@
 
   </div>
 </div>
-<span #btnDownload class="bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>
+<div>
+  <span #btnDownload class="bar-chart-btn fa fa-download hide-print" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')"
+    (mouseleave)="hideTooltip('btnExportChart')"></span>
+  <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="-10" [adjustBottom]="-40" [adjustPercent]="false"></app-simple-tooltip>
+</div>
