@@ -89,13 +89,6 @@ export class FsatSettingsComponent implements OnInit {
       }
       this.densityMeasurements.push(tmpPossibility);
     })
-    this.powerOptions.forEach(unit => {
-      let tmpPossibility = {
-        unit: unit,
-        display: this.getUnitName(unit)
-      }
-      this.powerMeasurements.push(tmpPossibility);
-    })
 
     this.barometricPressureOptions.forEach(unit => {
       let tmpPossibility = {

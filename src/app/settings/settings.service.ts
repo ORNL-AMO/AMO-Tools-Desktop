@@ -79,7 +79,8 @@ export class SettingsService {
       'electricityCost': [settings.electricityCost || .066],
       'densityMeasurement': [settings.densityMeasurement || 'lbscf'],
       'fanFlowRate': [settings.fanFlowRate || 'ft3/h'],
-      'fanPressureMeasurement': [settings.fanPressureMeasurement || 'inH2o']
+      'fanPressureMeasurement': [settings.fanPressureMeasurement || 'inH2o'],
+      'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg']
     });
   }
 
@@ -185,7 +186,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'MMBtu',
         phastRollupSteamUnit: 'MMBtu',
         densityMeasurement: 'lbscf',
-        fanFlowRate: 'ft3/h',
+        fanFlowRate: 'ft3/min',
         fanPressureMeasurement: 'inH2o',
         fanBarometricPressure: 'inHg'
         // currentMeasurement: 'A',
@@ -212,7 +213,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'GJ',
         phastRollupSteamUnit: 'GJ',
         densityMeasurement: 'kgNm3',
-        fanFlowRate: 'm3/h',
+        fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
         fanBarometricPressure: 'kPa'
         // currentMeasurement: 'A',
