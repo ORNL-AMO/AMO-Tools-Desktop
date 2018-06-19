@@ -80,7 +80,9 @@ export class SettingsService {
       'densityMeasurement': [settings.densityMeasurement || 'lbscf'],
       'fanFlowRate': [settings.fanFlowRate || 'ft3/h'],
       'fanPressureMeasurement': [settings.fanPressureMeasurement || 'inH2o'],
-      'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg']
+      'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg'],
+      'fanSpecificHeatGas': [settings.fanSpecificHeatGas || 'btulbF'],
+      'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp']
     });
   }
 
@@ -121,7 +123,9 @@ export class SettingsService {
       densityMeasurement: form.controls.densityMeasurement.value,
       fanFlowRate: form.controls.fanFlowRate.value,
       fanPressureMeasurement: form.controls.fanPressureMeasurement.value,
-      fanBarometricPressure: form.controls.fanBarometricPressure.value
+      fanBarometricPressure: form.controls.fanBarometricPressure.value,
+      fanSpecificHeatGas: form.controls.fanSpecificHeatGas.value,
+      fanPowerMeasurement: form.controls.fanPowerMeasurement.value
     };
     return tmpSettings;
   }
@@ -161,7 +165,9 @@ export class SettingsService {
       densityMeasurement: settings.densityMeasurement,
       fanFlowRate: settings.fanFlowRate,
       fanPressureMeasurement: settings.fanPressureMeasurement,
-      fanBarometricPressure: settings.fanBarometricPressure
+      fanBarometricPressure: settings.fanBarometricPressure,
+      fanSpecificHeatGas: settings.fanSpecificHeatGas,
+      fanPowerMeasurement: settings.fanPowerMeasurement
     }
     return newSettings;
   }
@@ -188,7 +194,8 @@ export class SettingsService {
         densityMeasurement: 'lbscf',
         fanFlowRate: 'ft3/min',
         fanPressureMeasurement: 'inH2o',
-        fanBarometricPressure: 'inHg'
+        fanBarometricPressure: 'inHg',
+        fanSpecificHeatGas: 'btulbF'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -215,7 +222,8 @@ export class SettingsService {
         densityMeasurement: 'kgNm3',
         fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
-        fanBarometricPressure: 'kPa'
+        fanBarometricPressure: 'kPa',
+        fanSpecificHeatGas: 'kJkgC'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

@@ -19,6 +19,7 @@ export class FsatSettingsComponent implements OnInit {
   densityMeasurements: Array<any> = [];
   temperatureMeasurements: Array<any> = [];
   barometricPressureMeasurements: Array<any> = [];
+  specificHeatMeasurements: Array<any> = [];
   flowOptions: Array<string> = [
     'ft3/min',
     'm3/s'
@@ -49,6 +50,11 @@ export class FsatSettingsComponent implements OnInit {
   barometricPressureOptions: Array<string> = [
     'kPa',
     'inHg'
+  ]
+
+  specificHeatGasOptions: Array<string> = [
+    'btulbF',
+    'kJkgC'
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
@@ -98,6 +104,14 @@ export class FsatSettingsComponent implements OnInit {
       this.barometricPressureMeasurements.push(tmpPossibility);
     })
 
+    this.specificHeatGasOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.specificHeatMeasurements.push(tmpPossibility);
+    })
+
   }
 
   getUnitName(unit: any) {
@@ -117,8 +131,8 @@ export class FsatSettingsComponent implements OnInit {
     this.save.emit(true);
   }
 
-  getUnitDisplay(unit: any){
-    if(unit){
+  getUnitDisplay(unit: any) {
+    if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }

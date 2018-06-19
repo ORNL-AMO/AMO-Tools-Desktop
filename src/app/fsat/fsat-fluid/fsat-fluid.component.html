@@ -16,8 +16,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isBarometricPressureDifferent()}">
         <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure" id="barometricPressure"
           (input)="getDensity()" (focus)="focusField('barometricPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. Hg</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="barometricPressureError !== null">{{barometricPressureError}}</span>
     </div>
@@ -49,8 +48,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
         <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="staticPressure"
           (input)="getDensity()" (focus)="focusField('staticPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
@@ -74,8 +72,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isSpecificHeatGasDifferent()}">
         <input name="specificHeatGas" type="number" step="any" class="form-control" formControlName="specificHeatGas" id="specificHeatGas" (input)="calcDensityWetBulb()"
           (focus)="focusField('specificHeatGas')" onfocus="this.select();" [readonly]="!selected">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb-&#8457;</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanSpecificHeatGas)"></span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="specificHeatGasError !== null">{{specificHeatGasError}}</span>
     </div>
@@ -100,14 +97,12 @@
     <div class="form-group">
       <label for="gasDensity">Gas Density (&rho;<sub>0</sub>)</label>
       <div class="small text-center" *ngIf="gasDensityForm.controls.inputType.value != 'custom'" [ngClass]="{'indicate-different': isGasDensityDifferent()}">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> {{baseGasDensity.gasDensity | sigFigs: '4'}} lb/ft<sup>3</sup></span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'"> {{baseGasDensity.gasDensity | sigFigs: '4'}} kg/m<sup>3</sup></span>
+        {{baseGasDensity.gasDensity | sigFigs: '4'}} <span [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
       </div>
       <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'" [ngClass]="{'indicate-different': isGasDensityDifferent()}">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity" id="gasDensity" (input)="getDensity()"
           (focus)="focusField('gasDensity')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/ft<sup>3</sup></span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kg/m<sup>3</sup></span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="gasDensityError !== null && gasDensityForm.controls.inputType.value == 'custom'">{{gasDensityError}}</span>
     </div>

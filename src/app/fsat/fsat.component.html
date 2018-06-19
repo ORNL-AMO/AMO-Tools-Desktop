@@ -6,7 +6,7 @@
 
   <div *ngIf="mainTab == 'system-setup'" class="row tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"></app-system-basics>
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
