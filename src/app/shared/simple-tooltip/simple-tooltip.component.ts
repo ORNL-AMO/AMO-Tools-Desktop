@@ -16,7 +16,8 @@ export class SimpleTooltipComponent implements OnInit {
   //these positions will need to be adjusted for the tooltip
   //depending on what type of graph it is being added to.
   //adjustLeft should match the value in the css class for the button element,
-  //adjustTop/adjustBottom, should be the value - 50
+  //adjustBottom, should be the value - 50
+  //adjustTop, should be value + 50
   //If the class uses percentages, provide [adjustPercent]="true", otherwise keep it false.
   //Look for these classes in 'app.component.css' to get the appropriate values:
   //  '.percent-chart-btn'
@@ -51,7 +52,7 @@ export class SimpleTooltipComponent implements OnInit {
       this.adjustLeft = 0;
     }
     if ((this.adjustTop === null || this.adjustTop === undefined) && (this.adjustBottom === null || this.adjustBottom === undefined)) {
-      this.adjustTop = 0;
+      
     }
 
     if (this.adjustPercent) {
