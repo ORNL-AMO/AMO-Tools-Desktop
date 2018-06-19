@@ -20,8 +20,8 @@ export class FsatSettingsComponent implements OnInit {
   temperatureMeasurements: Array<any> = [];
 
   flowOptions: Array<string> = [
-    'ft3/h',
-    'm3/h'
+    'ft3/min',
+    'm3/s'
   ];
 
   pressureOptions: Array<string> = [
