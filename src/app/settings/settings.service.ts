@@ -119,7 +119,8 @@ export class SettingsService {
       electricityCost: form.controls.electricityCost.value,
       densityMeasurement: form.controls.densityMeasurement.value,
       fanFlowRate: form.controls.fanFlowRate.value,
-      fanPressureMeasurement: form.controls.fanPressureMeasurement.value
+      fanPressureMeasurement: form.controls.fanPressureMeasurement.value,
+      fanBarometricPressure: form.controls.fanBarometricPressure.value
     };
     return tmpSettings;
   }
@@ -158,7 +159,8 @@ export class SettingsService {
       electricityCost: settings.electricityCost,
       densityMeasurement: settings.densityMeasurement,
       fanFlowRate: settings.fanFlowRate,
-      fanPressureMeasurement: settings.fanPressureMeasurement
+      fanPressureMeasurement: settings.fanPressureMeasurement,
+      fanBarometricPressure: settings.fanBarometricPressure
     }
     return newSettings;
   }
@@ -184,7 +186,8 @@ export class SettingsService {
         phastRollupSteamUnit: 'MMBtu',
         densityMeasurement: 'lbscf',
         fanFlowRate: 'ft3/h',
-        fanPressureMeasurement: 'inH2o'
+        fanPressureMeasurement: 'inH2o',
+        fanBarometricPressure: 'inHg'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -210,7 +213,8 @@ export class SettingsService {
         phastRollupSteamUnit: 'GJ',
         densityMeasurement: 'kgNm3',
         fanFlowRate: 'm3/h',
-        fanPressureMeasurement: 'Pa'
+        fanPressureMeasurement: 'Pa',
+        fanBarometricPressure: 'kPa'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

@@ -18,7 +18,7 @@ export class FsatSettingsComponent implements OnInit {
   powerMeasurements: Array<any> = [];
   densityMeasurements: Array<any> = [];
   temperatureMeasurements: Array<any> = [];
-
+  barometricPressureMeasurements: Array<any> = [];
   flowOptions: Array<string> = [
     'ft3/min',
     'm3/s'
@@ -45,6 +45,12 @@ export class FsatSettingsComponent implements OnInit {
     'kgNm3',
     'lbscf'
   ]
+
+  barometricPressureOptions: Array<string> = [
+    'kPa',
+    'inHg'
+  ]
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -89,6 +95,14 @@ export class FsatSettingsComponent implements OnInit {
         display: this.getUnitName(unit)
       }
       this.powerMeasurements.push(tmpPossibility);
+    })
+
+    this.barometricPressureOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.barometricPressureMeasurements.push(tmpPossibility);
     })
 
   }
