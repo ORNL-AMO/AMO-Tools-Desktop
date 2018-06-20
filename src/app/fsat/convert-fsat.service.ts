@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { FsatInput, OutletPressureData, InletPressureData, FSAT, BaseGasDensity, Plane, FanRatedInfo, PlaneData, Fan203Inputs, PlaneResults, PlaneResult } from '../shared/models/fans';
+import { FsatInput, OutletPressureData, InletPressureData, FSAT, BaseGasDensity, Plane, FanRatedInfo, PlaneData, Fan203Inputs, PlaneResults, PlaneResult, Fan203Results, FsatOutput } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class ConvertFsatService {
       inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     }
 
-    if (settings.unitsOfMeasure != 'Imperial' && settings.unitsOfMeasure != 'Custom') {
+    if (settings.fanFlowRate != 'ft3/min') {
       inputCpy.area = this.convertUnitsService.value(inputCpy.area).from('m2').to('ft2');
     }
     if (settings.temperatureMeasurement != 'F') {
@@ -62,6 +62,13 @@ export class ConvertFsatService {
   convertFanRatedInfoForCalculations(inputs: FanRatedInfo, settings: Settings): FanRatedInfo {
     let inputCpy: FanRatedInfo = JSON.parse(JSON.stringify(inputs));
     //TODO: convert to imperial for calcs
+    if (settings.densityMeasurement != 'lbscf') {
+      inputs.densityCorrected = this.convertUnitsService.value(inputs.densityCorrected).from(settings.densityMeasurement).to('lbscf')
+    }
+    if (settings.fanBarometricPressure != 'inHg') {
+      inputs.pressureBarometricCorrected = this.convertUnitsService.value(inputs.pressureBarometricCorrected).from(settings.fanBarometricPressure).to('inHg');
+      inputs.globalBarometricPressure = this.convertUnitsService.value(inputs.globalBarometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    }
     return inputCpy;
   }
 
@@ -178,13 +185,38 @@ export class ConvertFsatService {
         result.staticPressure = this.convertUnitsService.value(result.staticPressure).from('inHg').to(settings.fanPressureMeasurement);
       }
     }
-    //     result.gasVelocity: number,
-
     if (settings.fanFlowRate != 'ft3/min') {
+      result.gasVelocity = this.convertUnitsService.value(result.gasVelocity).from('ft/min').to('m/s');
       result.gasVolumeFlowRate = this.convertUnitsService.value(result.gasVolumeFlowRate).from('ft3/min').to(settings.fanFlowRate);
     }
     return result;
   }
+
+  convertFan203Results(results: Fan203Results, settings: Settings): Fan203Results {
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      results.pressureTotalCorrected = this.convertUnitsService.value(results.pressureTotalCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+      results.pressureStaticCorrected = this.convertUnitsService.value(results.pressureStaticCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+      results.staticPressureRiseCorrected = this.convertUnitsService.value(results.staticPressureRiseCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+    }
+    if (settings.fanFlowRate != 'ft3/min') {
+      results.flowCorrected = this.convertUnitsService.value(results.flowCorrected).from('ft3/min').to(settings.fanFlowRate);
+    }
+
+    if (settings.fanPowerMeasurement != 'hp') {
+      results.powerCorrected = this.convertUnitsService.value(results.powerCorrected).from('hp').to(settings.fanPowerMeasurement);
+    }
+    return results;
+  }
+
+  convertFsatOutput(results: FsatOutput, settings: Settings): FsatOutput {
+    if (settings.fanPowerMeasurement != 'hp') {
+      results.fanShaftPower = this.convertUnitsService.value(results.fanShaftPower).from('hp').to(settings.fanPowerMeasurement);
+      results.motorRatedPower = this.convertUnitsService.value(results.motorRatedPower).from('hp').to(settings.fanPowerMeasurement);
+      results.motorShaftPower = this.convertUnitsService.value(results.motorShaftPower).from('hp').to(settings.fanPowerMeasurement);
+    }
+    return results;
+  }
+
 
   convertNum(num: number, from: string, to: string): number {
     num = this.convertUnitsService.value(num).from(from).to(to);

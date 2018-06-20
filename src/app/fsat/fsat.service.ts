@@ -40,9 +40,17 @@ export class FsatService {
     console.log(fanAddon);
   }
 
-  fan203(input: Fan203Inputs): Fan203Results {
+  fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
+    //TODO: convert input
+    input.BaseGasDensity = this.convertFsatService.convertGasDensityForCalculations(input.BaseGasDensity, settings);
+    input.FanRatedInfo = this.convertFsatService.convertFanRatedInfoForCalculations(input.FanRatedInfo, settings);
+    if (input.PlaneData) {
+      input.PlaneData = this.convertFsatService.convertPlaneDataForCalculations(input.PlaneData, settings);
+    }
     input.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
-    return fanAddon.fan203(input);
+    let results: Fan203Results = fanAddon.fan203(input);
+    results = this.convertFsatService.convertFan203Results(results, settings);
+    return results;
   }
 
   getBaseGasDensityDewPoint(inputs: BaseGasDensity, settings: Settings): number {
@@ -84,7 +92,6 @@ export class FsatService {
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     input = this.convertFsatService.convertFan203DataForCalculations(input, settings);
     let results: PlaneResults = fanAddon.getPlaneResults(input);
-    
     return results;
   }
 
@@ -123,26 +130,28 @@ export class FsatService {
       };
 
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
-
+      let results: FsatOutput;
       if (resultType == 'existing') {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
-        return this.fanResultsExisting(input);
+        results = this.fanResultsExisting(input);
       } else if (resultType == 'optimal') {
         input.fanType = fsat.fanSetup.fanType;
         if (fsat.fanSetup.fanType == 12) {
           input.isSpecified = true;
           input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
         }
-        return this.fanResultsOptimal(input);
+        results = this.fanResultsOptimal(input);
       } else if (resultType == 'modified') {
         input.fanType = fsat.fanSetup.fanType;
         if (fsat.fanSetup.fanType == 12) {
           input.isSpecified = true;
           input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
         }
-        return this.fanResultsModified(input);
+        results = this.fanResultsModified(input);
       }
+      results = this.convertFsatService.convertFsatOutput(results, settings);
+      return results;
     } else {
       return this.getEmptyResults();
     }

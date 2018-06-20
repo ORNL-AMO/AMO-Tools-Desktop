@@ -11,15 +11,18 @@
         </td>
         <td *ngIf="showFull"><span>Planar Area</span>
           <br>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm<sup>2</sup></span>
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'|| settings.unitsOfMeasure == 'Custom'">ft<sup>2</sup></span>
+          <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
+          <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
         </td>
         <td><span>Volume Flow</span>
           <br>
           <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
         </td>
         <td><span>Gas Velocity</span>
-          <br>fpm</td>
+          <br>
+          <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft/min</span>
+          <span *ngIf="settings.fanFlowRate == 'm3/s'">m/s</span>
+        </td>
         <td *ngIf="showFull"><span>Dry Bulb Temp</span>
           <br>
           <span *ngIf="settings.temperatureMeasurement == 'F'">&#8457;</span>

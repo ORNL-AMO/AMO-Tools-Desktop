@@ -39,8 +39,8 @@
     <div class="form-group">
       <label for="fanSpeedCorrected">Area</label>
       <div class="area-val">
-        {{planeData.area | sigFigs: '6'}} <span *ngIf="settings.unitsOfMeasure == 'Imperial' || settings.unitsOfMeasure == 'Custom'">ft<sup>2</sup></span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>2</sup></span>
+        {{planeData.area | sigFigs: '6'}} <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
+        <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
       </div>
     </div>
   </div>

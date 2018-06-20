@@ -58,9 +58,9 @@ export class FanDataFormComponent implements OnInit {
 
 
   convertArea(area: number): number {
-    if (this.settings.unitsOfMeasure == 'Imperial' || this.settings.unitsOfMeasure == 'Custom') {
+    if (this.settings.fanFlowRate == 'ft3/min') {
       return this.convertUnitsService.value(area).from('in2').to('ft2');
-    } else {
+    } else if (this.settings.fanFlowRate == 'm3/s') {
       return this.convertUnitsService.value(area).from('mm2').to('m2');
     }
   }
