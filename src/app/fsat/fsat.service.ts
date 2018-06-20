@@ -84,6 +84,7 @@ export class FsatService {
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     input = this.convertFsatService.convertFan203DataForCalculations(input, settings);
     let results: PlaneResults = fanAddon.getPlaneResults(input);
+    
     return results;
   }
 

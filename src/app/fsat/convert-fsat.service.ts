@@ -35,7 +35,7 @@ export class ConvertFsatService {
       inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanPressureMeasurement).to('inH2o');
     }
     if (settings.fanSpecificHeatGas != 'btulbF') {
-      inputCpy.specificHeatGas = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanPressureMeasurement).to('btulbF');
+      inputCpy.specificHeatGas = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanSpecificHeatGas).to('btulbF');
     }
     return inputCpy;
   }
@@ -167,15 +167,22 @@ export class ConvertFsatService {
   }
 
   convertPlaneResult(result: PlaneResult, settings: Settings): PlaneResult {
-    // if(settings.densityMeasurement != ''){
+    if (settings.densityMeasurement != 'lbscf') {
+      result.gasDensity = this.convertUnitsService.value(result.gasDensity).from('lbscf').to(settings.densityMeasurement);
+    }
 
-    // }
-    // result.gasDensity: number,
-    //   result.gasTotalPressure: number,
+    if (settings.fanPressureMeasurement != 'inHg') {
+      result.gasTotalPressure = this.convertUnitsService.value(result.gasTotalPressure).from('inHg').to(settings.fanPressureMeasurement);
+      result.gasVelocityPressure = this.convertUnitsService.value(result.gasVelocityPressure).from('inHg').to(settings.fanPressureMeasurement);
+      if (result.staticPressure) {
+        result.staticPressure = this.convertUnitsService.value(result.staticPressure).from('inHg').to(settings.fanPressureMeasurement);
+      }
+    }
     //     result.gasVelocity: number,
-    //       result.gasVelocityPressure: number,
-    //         result.gasVolumeFlowRate: number,
-    //           result.staticPressure ?: number
+
+    if (settings.fanFlowRate != 'ft3/min') {
+      result.gasVolumeFlowRate = this.convertUnitsService.value(result.gasVolumeFlowRate).from('ft3/min').to(settings.fanFlowRate);
+    }
     return result;
   }
 

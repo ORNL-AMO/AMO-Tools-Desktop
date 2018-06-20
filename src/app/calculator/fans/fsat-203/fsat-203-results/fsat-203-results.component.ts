@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Fan203Results } from '../../../../shared/models/fans';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fsat-203-results',
@@ -9,10 +11,19 @@ import { Fan203Results } from '../../../../shared/models/fans';
 export class Fsat203ResultsComponent implements OnInit {
   @Input()
   results: Fan203Results;
-  
-  constructor() { }
+  @Input()
+  settings: Settings;
+
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
   }
-
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
 }

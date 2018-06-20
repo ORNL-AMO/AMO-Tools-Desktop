@@ -29,7 +29,7 @@ export class FsatSettingsComponent implements OnInit {
     'Pa',
     'torr',
     'mmHg',
-    'inH2o',
+    'inHg',
     'mmH2o'
   ];
   powerOptions: Array<string> = [
