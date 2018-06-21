@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="bhpUnloaded">Bhp when Unloaded</label>
+      <label for="bhpUnloaded">Bhp when Un-loaded</label>
       <div class="input-group">
         <input name="bhpUnloaded" class="form-control" type="number" step="any" min="0" max="100" [(ngModel)]="inputs.bhpUnloaded" id="bhpUnloaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('bhpUnloaded')">
@@ -25,7 +25,7 @@
     </div>
     </div>
     <div class="form-group">
-      <label for="runTimeLoaded">Runtime Loaded</label>
+      <label for="runTimeLoaded">Run-time Loaded</label>
       <div class="input-group">
         <input name="runTimeLoaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeLoaded" id="runTimeLoaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('runTimeLoaded')">
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="runTimeLoaded">Runtime Unloaded</label>
+      <label for="runTimeLoaded">Run-time Un-loaded</label>
       <div class="input-group">
         <input name="runTimeLoaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeLoaded" id="runTimeUnloaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('runTimeUnloaded')">
@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="efficiencyUnloaded">Efficiency Unloaded</label>
+      <label for="efficiencyUnloaded">Efficiency Un-loaded</label>
       <div class="input-group">
         <input name="efficiencyUnloaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.efficiencyUnloaded" id="efficiencyUnloaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('efficiencyUnloaded')">
@@ -67,7 +67,7 @@
   </div>
   <div class="form-section">
     <div class="form-group">
-      <label class="bold">Runtime Unloaded</label>
+      <label class="bold">Run-time Un-loaded</label>
       <div class="text-center small">
         <span *ngIf="outputs.runTimeUnloaded"><strong>{{outputs.runTimeUnloaded | number:'1.0-2'}} %</strong></span>
         <span *ngIf="!outputs.runTimeUnloaded"><strong>&mdash; &mdash;</strong></span>
@@ -81,7 +81,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="bold">Cost for Unloaded Condition</label>
+      <label class="bold">Cost for Un-loaded Condition</label>
       <div class="text-center small">
         <span *ngIf="outputs.costForUnloaded"><strong>$ {{outputs.costForUnloaded | number:'1.0-2'}}</strong></span>
         <span *ngIf="!outputs.costForUnloaded"><strong>&mdash; &mdash;</strong></span>

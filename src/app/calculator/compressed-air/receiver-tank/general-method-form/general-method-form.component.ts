@@ -10,7 +10,7 @@ import { StandaloneService } from '../../../standalone.service';
 export class GeneralMethodFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  
+
   inputs: ReceiverTankGeneral = {
     airDemand: 0,
     allowablePressureDrop: 0,
@@ -28,7 +28,7 @@ export class GeneralMethodFormComponent implements OnInit {
     this.finalTankPressure = StandaloneService.receiverTankSizeGeneral(this.inputs);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

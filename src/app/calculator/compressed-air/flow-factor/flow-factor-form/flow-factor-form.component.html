@@ -4,7 +4,7 @@
       <label for="intelPressure">Intel Pressure</label>
       <div class="input-group">
         <input name="intelPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="intelPressure"
-          (input)="emitChange()" onfocus="this.select();">
+          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
         <span class="input-group-addon units">psi</span>
       </div>
     </div>
@@ -12,7 +12,7 @@
       <label for="outletPressure">Outlet Pressure</label>
       <div class="input-group">
         <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
-          (input)="emitChange()" onfocus="this.select();">
+          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
         <span class="input-group-addon units">psi</span>
       </div>
     </div>
@@ -22,7 +22,7 @@
       </label>
       <div class="input-group">
         <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate" (input)="emitChange()"
-          onfocus="this.select();">
+               onfocus="this.select();" (focus)="changeField('flowRate')">
         <span class="input-group-addon units">SCFM</span>
       </div>
     </div>

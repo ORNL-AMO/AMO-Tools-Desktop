@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    Calculation Method - Metered Storage Help
+    Metered Storage
   </div>
   <div class="card-block small d-flex flex-column">
     <p>In metered control, the rate of compressed air flowing to refill a secondary receiver is controlled. If the rate is not
@@ -10,7 +10,7 @@
       application, but a needle valve is installed instead of a check valve.</p>
 
   <div class="help-content">
-    <div class="card" *ngIf="currentField == 'currentDemand'">
+    <div class="card" *ngIf="currentField == 'lengthOfDemand'">
       <div class="card-header">
         Length of Demand
       </div>
@@ -28,7 +28,7 @@
     </div>
     <div class="card"  *ngIf="currentField == 'meteredControl'">
       <div class="card-header">
-        Meterd Flow Control
+        Metered Flow Control
       </div>
       <div class="card-block">
         <p>Rate of flow through the metering valve (needle valve).</p>
@@ -43,9 +43,9 @@
           at that location can be given.</p>
       </div>
     </div>
-    <div class="card"  *ngIf="currentField == 'intialTankPressure'">
+    <div class="card"  *ngIf="currentField == 'initialTankPressure'">
       <div class="card-header">
-        Initital Tank Pressure
+        Initial Tank Pressure
       </div>
       <div class="card-block">
         <p>Tank pressure before release of air.</p>

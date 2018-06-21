@@ -16,10 +16,12 @@
                   </select>
                 </div>
               </div>
-              <app-general-method-form *ngIf="method == 0" (emitChangeField)="changeField($event)"></app-general-method-form>
-              <app-dedicated-storage-form *ngIf="method == 1" (emitChangeField)="changeField($event)"></app-dedicated-storage-form>
-              <app-metered-storage-form *ngIf="method == 2" (emitChangeField)="changeField($event)"></app-metered-storage-form>
-              <app-delay-method-form *ngIf="method == 3" (emitChangeField)="changeField($event)"></app-delay-method-form>
+              <div>
+                <app-general-method-form *ngIf="method == 0" (emitChangeField)="changeField($event)"></app-general-method-form>
+                <app-dedicated-storage-form *ngIf="method == 1" (emitChangeField)="changeField($event)"></app-dedicated-storage-form>
+                <app-metered-storage-form *ngIf="method == 2" (emitChangeField)="changeField($event)"></app-metered-storage-form>
+                <app-delay-method-form *ngIf="method == 3" (emitChangeField)="changeField($event)"></app-delay-method-form>
+              </div>
             </form>
           </div>
         </div>
@@ -38,18 +40,22 @@
 
       <div class="col-6 align-top">
         <div class="help-panel">
-          <div class="header">
-            <h3>Help</h3>
+          <div class="tab-content" *ngIf="currentField == 'tankSize'  || currentField == 'airPressureIn' || currentField == 'airPressureOut'; else ReceiverTankSize">
+            <div class="header">
+              <h3>Air Capacity Help</h3>
+            </div>
+            <app-air-capacity-help [currentField]="currentField"></app-air-capacity-help>
           </div>
-          <div class="tab-content">
+          <ng-template #ReceiverTankSize>
+            <div class="header">
+              <h3>Size Calculations Help</h3>
+            </div>
             <app-general-method-help *ngIf="method == 0" [currentField]="currentField"></app-general-method-help>
             <app-dedicated-storage-help *ngIf="method == 1" [currentField]="currentField"></app-dedicated-storage-help>
             <app-metered-storage-help *ngIf="method == 2" [currentField]="currentField"></app-metered-storage-help>
             <app-delay-method-help *ngIf="method == 3" [currentField]="currentField"></app-delay-method-help>
-          </div>
-          <div class="tab-content">
-            <app-air-capacity-help [currentField]="currentField"></app-air-capacity-help>
-          </div>
+          </ng-template>
+
         </div>
       </div>
     </div>

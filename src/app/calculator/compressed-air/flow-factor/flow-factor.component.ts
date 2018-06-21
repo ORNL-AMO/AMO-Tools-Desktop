@@ -39,5 +39,11 @@ export class FlowFactorComponent implements OnInit {
 
   setField(str: string) {
     this.currentField = str;
+      this.currentField = str;
   }
+
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
 }
