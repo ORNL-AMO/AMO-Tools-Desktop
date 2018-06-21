@@ -37,7 +37,7 @@ export class MotorComponent implements OnInit {
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
-    'Premium Efficient',
+    'Premium',
     'Specified'
   ];
 
