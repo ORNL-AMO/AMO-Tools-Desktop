@@ -3,6 +3,7 @@ import { FSAT, Fan203Inputs, PlaneResults } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { Fsat203Service } from '../../../calculator/fans/fsat-203/fsat-203.service';
 import { FsatService } from '../../fsat.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-calculate-flow-pressures',
@@ -23,7 +24,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
   mockInputs: Fan203Inputs;
   tabSelect: string = 'results';
   isDataMissing: boolean = false;
-  constructor(private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
+  constructor(private fsat203Service: Fsat203Service, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     let mockData: Fan203Inputs = this.fsat203Service.getMockData();
@@ -81,5 +82,14 @@ export class CalculateFlowPressuresComponent implements OnInit {
 
   setDataMissing() {
     this.isDataMissing = true;
+  }
+
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

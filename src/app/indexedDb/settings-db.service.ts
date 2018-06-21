@@ -67,8 +67,13 @@ export class SettingsDbService {
     if (!settings.temperatureMeasurement) {
       settings = this.settingService.setTemperatureUnit(settings);
     }
+    if (!settings.steamTemperatureMeasurement) {
+      settings = this.settingService.setSteamUnits(settings);
+    }
 
-    settings = this.settingService.setSteamUnits(settings);
+    if(!settings.fanBarometricPressure){
+      settings = this.settingService.setFanUnits(settings);
+    }
 
     if (!settings.fuelCost) {
       settings.fuelCost = 3.99;

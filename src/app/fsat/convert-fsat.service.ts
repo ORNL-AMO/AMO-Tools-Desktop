@@ -42,7 +42,6 @@ export class ConvertFsatService {
 
   convertPlaneForCalculations(inputs: Plane, settings: Settings): Plane {
     let inputCpy: Plane = JSON.parse(JSON.stringify(inputs));
-    //TODO: Convert to imperial for calcs
     if (settings.fanBarometricPressure != 'inHg') {
       inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     }
@@ -61,7 +60,6 @@ export class ConvertFsatService {
 
   convertFanRatedInfoForCalculations(inputs: FanRatedInfo, settings: Settings): FanRatedInfo {
     let inputCpy: FanRatedInfo = JSON.parse(JSON.stringify(inputs));
-    //TODO: convert to imperial for calcs
     if (settings.densityMeasurement != 'lbscf') {
       inputs.densityCorrected = this.convertUnitsService.value(inputs.densityCorrected).from(settings.densityMeasurement).to('lbscf')
     }
