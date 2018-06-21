@@ -4,7 +4,7 @@
       <label for="operatingHours">Operating Time</label>
       <div class="input-group">
         <input name="operatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.operatingTime" id="operatingHours"
-          (input)="emitChange()" onfocus="this.select();">
+          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('operatingHours')">
         <span class="input-group-addon units">hrs/yr</span>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <label for="fillTime">Bag Fill Time</label>
       <div class="input-group">
         <input name="fillTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.bagFillTime" id="fillTime" (input)="emitChange()"
-          onfocus="this.select();">
+               onfocus="this.select();" (focus)="changeField('fillTime')">
         <span class="input-group-addon units">s</span>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <label for="height">Height of Bag</label>
       <div class="input-group">
         <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.heightOfBag" id="height" (input)="emitChange()"
-          onfocus="this.select();">
+               onfocus="this.select();" (focus)="changeField('height')">
         <span class="input-group-addon units">in</span>
       </div>
     </div>
@@ -31,7 +31,7 @@
       <label for="diameter">Diameter of Bag</label>
       <div class="input-group">
         <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameterOfBag" id="diameter" (input)="emitChange()"
-          onfocus="this.select();">
+               onfocus="this.select();" (focus)="changeField('diameter')">
         <span class="input-group-addon units">in</span>
       </div>
     </div>
@@ -48,7 +48,7 @@
       <label for="airBlows">Total Number of Units of Bag</label>
       <div class="input-group">
         <input name="airBlows" class="form-control" type="number" step="any" [(ngModel)]="inputs.numberOfUnits" id="airBlows" (input)="emitChange()"
-          onfocus="this.select();">
+               onfocus="this.select();" (focus)="changeField('airBlows');">
         <span class="input-group-addon units">Airblows</span>
       </div>
     </div>
