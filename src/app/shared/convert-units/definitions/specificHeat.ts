@@ -6,7 +6,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilojoule per Kilogram Celsius'
           , plural: 'Kilojoules per Kilogram Celsius',
-          display: '(kJ/kg-C)'
+          display: '(kJ/kg-&#x2103;)'
         }
         , to_anchor: 1
       }
@@ -14,7 +14,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilojoule per Kilogram Kelvin'
           , plural: 'Kilojoules per Kilogram Kelvin',
-          display: '(kJ/kg-K)'
+          display: '(kJ/kg-&#x212a;)'
         }
         , to_anchor: 1
       }
@@ -22,7 +22,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilocalorie per Kilogram Celsius'
           , plural: 'Kilocalories per Kilogram Celsius',
-          display: '(kcal/kg-C)'
+          display: '(kcal/kg-&#x2103;)'
         }
         , to_anchor: 1 / 0.238845897
       }
