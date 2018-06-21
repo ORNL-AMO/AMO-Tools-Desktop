@@ -267,12 +267,17 @@ export class FsatComponent implements OnInit {
       this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
+    this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         // this.psatService.getResults.next(true);
       })
     })
+  }
+
+  checkSetupDone(fsat: FSAT): boolean {
+    return this.fsatService.checkValid(fsat);
   }
 
   selectModificationModal() {

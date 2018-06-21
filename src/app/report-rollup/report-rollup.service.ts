@@ -16,6 +16,8 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { FSAT, FsatOutput } from '../shared/models/fans';
+import { FsatService } from '../fsat/fsat.service';
 
 
 @Injectable()
@@ -24,10 +26,12 @@ export class ReportRollupService {
   reportAssessments: BehaviorSubject<Array<ReportItem>>;
   phastAssessments: BehaviorSubject<Array<ReportItem>>;
   psatAssessments: BehaviorSubject<Array<ReportItem>>;
+  fsatAssessments: BehaviorSubject<Array<ReportItem>>;
 
   assessmentsArray: Array<ReportItem>;
   phastArray: Array<ReportItem>;
   psatArray: Array<ReportItem>;
+  fsatArray: Array<ReportItem>;
 
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
@@ -36,6 +40,10 @@ export class ReportRollupService {
   selectedPhasts: BehaviorSubject<Array<PhastCompare>>;
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
+
+  selectedFsats: BehaviorSubject<Array<FsatCompare>>;
+  fsatResults: BehaviorSubject<Array<FsatResultsData>>;
+  allFsatResults: BehaviorSubject<Array<AllFsatResultsData>>;
 
 
   calcsArray: Array<Calculator>;
@@ -49,15 +57,18 @@ export class ReportRollupService {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService
+    private calculatorDbService: CalculatorDbService,
+    private fsatService: FsatService
   ) {
     this.initSummary();
   }
 
   initSummary() {
     this.reportAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
-    this.phastAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>())
-    this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>())
+    this.phastAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+    this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+    this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
@@ -67,6 +78,9 @@ export class ReportRollupService {
     this.phastResults = new BehaviorSubject<Array<PhastResultsData>>(new Array<PhastResultsData>());
     this.allPhastResults = new BehaviorSubject<Array<AllPhastResultsData>>(new Array<AllPhastResultsData>());
 
+    this.selectedFsats = new BehaviorSubject<Array<FsatCompare>>(new Array<FsatCompare>());
+    this.fsatResults = new BehaviorSubject<Array<FsatResultsData>>(new Array<FsatResultsData>());
+    this.allFsatResults = new BehaviorSubject<Array<AllFsatResultsData>>(new Array<AllFsatResultsData>());
 
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
@@ -81,6 +95,8 @@ export class ReportRollupService {
       this.psatArray.push({ assessment: assessment, settings: tmpSettings });
     } else if (assessment.phast) {
       this.phastArray.push({ assessment: assessment, settings: tmpSettings });
+    } else if (assessment.fsat) {
+      this.fsatArray.push({ assessment: assessment, settings: tmpSettings })
     }
   }
 
@@ -88,64 +104,49 @@ export class ReportRollupService {
     this.assessmentsArray = new Array<ReportItem>();
     this.phastArray = new Array<ReportItem>();
     this.psatArray = new Array<ReportItem>();
+    this.fsatArray = new Array<ReportItem>();
+
     let selected = directory.assessments.filter((val) => { return val.selected });
     selected.forEach(assessment => {
-        this.pushAssessment(assessment);
+      this.pushAssessment(assessment);
     });
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
-        this.getDirectoryAssessments(subDir.id);
+        this.getChildDirectoryAssessments(subDir.id);
         this.getChildDirectories(subDir);
       }
     })
     this.phastAssessments.next(this.phastArray);
     this.psatAssessments.next(this.psatArray);
+    this.fsatAssessments.next(this.fsatArray);
     this.reportAssessments.next(this.assessmentsArray);
+
   }
 
-  // getDirectoryCalculators(dir: Directory){
-  //   this.indexedDbService.getDirectoryCalculator(dir.id).then(calcs => {
-  //     if(calcs) {
-
-  //     }
-  //   })
-  // }
-
   getChildDirectories(subDir: Directory) {
-    //debug
     let calcs = this.calculatorDbService.getByDirectoryId(subDir.id);
     if (calcs) {
-
-      // if (!this.calcsArray) {
-      //   this.calcsArray = new Array<Calculator>();
-      // }
-
-      //add me to report
-      // console.log("calcs.length = " + calcs.length);
       for (let i = 0; i < calcs.length; i++) {
-        // console.log("calcs[" + i + "].preAssessments.length = " + calcs[i].preAssessments.length);
         if (calcs[i].preAssessments) {
           this.calcsArray.push(calcs[i]);
           this.selectedCalcs.next(this.calcsArray);
         }
       }
     }
-    //real version
     let subDirResults = this.directoryDbService.getSubDirectoriesById(subDir.id);
     if (subDirResults) {
       subDirResults.forEach(dir => {
-        this.getDirectoryAssessments(dir.id);
+        this.getChildDirectoryAssessments(dir.id);
         this.getChildDirectories(dir);
       })
     }
   }
 
 
-  getDirectoryAssessments(dirId: number) {
+  getChildDirectoryAssessments(dirId: number) {
     let results = this.assessmentDbService.getByDirectoryId(dirId);
-    //let selected = results.assessments.filter((val) => { return val.selected })
     results.forEach(assessment => {
-        this.pushAssessment(assessment);
+      this.pushAssessment(assessment);
     });
   }
 
@@ -315,6 +316,85 @@ export class ReportRollupService {
     this.phastResults.next(tmpResultsArr);
   }
 
+  //USED FOR FSAT SUMMARY
+  initFsatCompare(resultsArr: Array<AllFsatResultsData>) {
+    let tmpResults: Array<FsatCompare> = new Array<FsatCompare>();
+    resultsArr.forEach(result => {
+      let minCost = _.minBy(result.modificationResults, (result) => { return result.annualCost })
+      let modIndex = _.findIndex(result.modificationResults, { annualCost: minCost.annualCost });
+      let fsatAssessments = this.fsatAssessments.value;
+      let assessmentIndex = _.findIndex(fsatAssessments, (val) => { return val.assessment.id == result.assessmentId });
+      let item = fsatAssessments[assessmentIndex];
+      if (result.isBaseline) {
+        tmpResults.push({ baseline: item.assessment.fsat, modification: item.assessment.fsat, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+      } else {
+        tmpResults.push({ baseline: item.assessment.fsat, modification: item.assessment.fsat.modifications[modIndex].fsat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+      }
+    });
+    this.selectedFsats.next(tmpResults);
+  }
+
+  updateSelectedFsats(item: ReportItem, modIndex: number) {
+    let tmpSelected = this.selectedFsats.value;
+    if (modIndex != -1) {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.fsat, modification: item.assessment.fsat.modifications[modIndex].fsat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+    } else {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.fsat, modification: item.assessment.fsat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+    }
+    this.selectedFsats.next(tmpSelected);
+  }
+
+  initFsatResultsArr(fsatArr: Array<ReportItem>) {
+    let tmpResultsArr = new Array<AllFsatResultsData>();
+    fsatArr.forEach(val => {
+      //check setupDone when added
+      if (val.assessment.fsat.setupDone && val.assessment.fsat.modifications.length != 0) {
+        let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.assessment.fsat)), 'existing', val.settings);
+        if (val.assessment.fsat.modifications) {
+          if (val.assessment.fsat.modifications.length != 0) {
+            let modResultsArr = new Array<FsatOutput>();
+            val.assessment.fsat.modifications.forEach(mod => {
+              let tmpResults;
+              if (mod.fsat.fanMotor.optimize) {
+                tmpResults = this.fsatService.getResults(JSON.parse(JSON.stringify(mod.fsat)), 'optimal', val.settings);
+              } else {
+                tmpResults = this.fsatService.getResults(JSON.parse(JSON.stringify(mod.fsat)), 'modified', val.settings);
+              }
+              modResultsArr.push(tmpResults);
+            })
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
+          } else {
+            let modResultsArr = new Array<FsatOutput>();
+            modResultsArr.push(baselineResults);
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+          }
+        } else {
+          let modResultsArr = new Array<FsatOutput>();
+          modResultsArr.push(baselineResults);
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+        }
+      }
+    })
+    this.allFsatResults.next(tmpResultsArr);
+  }
+
+  getFsatResultsFromSelected(selectedFsats: Array<FsatCompare>) {
+    let tmpResultsArr = new Array<FsatResultsData>();
+    selectedFsats.forEach(val => {
+      let modificationResults;
+      let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.baseline)), 'existing', val.settings);
+      if (val.modification.fanMotor.optimize) {
+        modificationResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), 'optimal', val.settings);
+      } else {
+        modificationResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), 'modified', val.settings);
+      }
+      tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
+    })
+    this.fsatResults.next(tmpResultsArr);
+  }
+
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
@@ -415,6 +495,35 @@ export interface PhastResultsData {
 export interface AllPhastResultsData {
   baselineResults: ExecutiveSummary,
   modificationResults: Array<ExecutiveSummary>,
+  assessmentId: number,
+  isBaseline?: boolean
+}
+
+export interface FsatCompare {
+  baseline: FSAT,
+  modification: FSAT,
+  assessmentId: number,
+  selectedIndex: number,
+  name: string,
+  assessment: Assessment
+  settings: Settings
+}
+
+export interface FsatResultsData {
+  baselineResults: FsatOutput,
+  modificationResults: FsatOutput,
+  assessmentId: number,
+  name: string,
+  modName: string,
+  baseline: FSAT,
+  modification: FSAT,
+  settings: Settings
+}
+
+
+export interface AllFsatResultsData {
+  baselineResults: FsatOutput,
+  modificationResults: Array<FsatOutput>,
   assessmentId: number,
   isBaseline?: boolean
 }

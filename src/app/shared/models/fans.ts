@@ -8,6 +8,7 @@ export interface FSAT {
   baseGasDensity?: BaseGasDensity,
   notes: Notes,
   implementationCosts?: number,
+  setupDone?: boolean
 }
 
 export interface Modification {
