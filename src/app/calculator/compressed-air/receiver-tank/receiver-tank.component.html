@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col-12 tab-content">
             <form>
-              <app-air-capacity-form></app-air-capacity-form>
+              <app-air-capacity-form (emitChangeField)="changeField($event)"></app-air-capacity-form>
             </form>
           </div>
         </div>
