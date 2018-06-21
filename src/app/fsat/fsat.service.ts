@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT, FsatInput, FsatOutput } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Settings } from '../shared/models/settings';
 
 declare var fanAddon: any;
 
@@ -64,7 +65,7 @@ export class FsatService {
 
   //fsat results
 
-  getResults(fsat: FSAT, resultType: string): FsatOutput {
+  getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
     let input: FsatInput = {
       fanSpeed: fsat.fanSetup.fanSpeed,
       drive: fsat.fanSetup.drive,

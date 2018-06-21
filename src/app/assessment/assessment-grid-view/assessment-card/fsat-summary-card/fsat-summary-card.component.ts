@@ -52,11 +52,11 @@ export class FsatSummaryCardComponent implements OnInit {
     // let tmpForm = this.psatService.getFormFromPsat(psat.inputs);
     // if (tmpForm.status == 'VALID') {
     if (fsat.fanMotor.optimize) {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal');
+      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal', this.settings);
     } else if (!isModification) {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing');
+      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing', this.settings);
     } else {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified');
+      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified', this.settings);
     }
     //  } else {
     //     return this.fsatService.emptyResults();
