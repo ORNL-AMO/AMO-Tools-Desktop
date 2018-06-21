@@ -11,7 +11,7 @@
 <div class="card card-item" *ngIf="preAssessmentExists" [ngClass]="{'psat': calculator.type =='pump', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="calculator.selected">
-    <span class="fa fa-pie-chart"></span>
+    <span class="fa fa-pie-chart pl-1 pr-1"></span>
     <a (click)="showPreAssessment()">{{calculator.name}}</a>
     <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
   </div>
