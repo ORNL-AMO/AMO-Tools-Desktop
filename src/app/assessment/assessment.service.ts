@@ -19,12 +19,16 @@ export class AssessmentService {
   updateAvailable: BehaviorSubject<boolean>;
   openingTutorial: BehaviorSubject<boolean>;
   tutorialShown: boolean = false;
+  dashboardView: BehaviorSubject<string>;
+  workingDirectoryId: BehaviorSubject<number>;
 
   constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.openingTutorial = new BehaviorSubject<boolean>(null);
+    this.dashboardView = new BehaviorSubject<string>(null);
+    this.workingDirectoryId = new BehaviorSubject<number>(null);
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
