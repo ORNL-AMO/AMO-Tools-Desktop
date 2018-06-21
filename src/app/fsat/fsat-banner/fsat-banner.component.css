@@ -62,5 +62,5 @@ ul{
 
 .home-nav-item{
     color: black;
-    border-color: black;
+    border-color: black !important;
 }
