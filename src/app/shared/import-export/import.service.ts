@@ -36,7 +36,7 @@ export class ImportService {
       };
       tmpDirectory = this.buildDir(tmpDirectory, data.directories, true, workingDirectoryId);
       this.addDirectory(tmpDirectory);
-      //add assessments no in directories
+      //Add Assessments no in directories
       let tmpAssessments: Array<ImportExportAssessment> = _.xorBy(this.assessmentsAdded, data.assessments, 'assessment.assessment.id');
       this.addAssessments(tmpAssessments, workingDirectoryId);
     } else if (data.assessments.length != 0) {
