@@ -28,19 +28,19 @@
         <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
           <span>System Setup</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')">
+        <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('assessment')">
           <span>Assessment</span>
         </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('diagram')">
           <span>Diagram</span>
         </li>
-        <li [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
+        <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('report')">
           <span>Report</span>
         </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('sankey')">
           <span>Sankey</span>
         </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
+        <li class="disabled" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('calculators')">
           <span>Calculators</span>
         </li>
       </ul>

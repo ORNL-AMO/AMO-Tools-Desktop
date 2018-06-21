@@ -21,10 +21,13 @@ export class FsatBannerComponent implements OnInit {
       this.mainTab = val;
     })
   }
-  
+
   changeTab(str: string) {
-    if(str == 'assessment' || str == 'system-setup' || str == 'report')
-    this.fsatService.mainTab.next(str);
+    if (str == 'system-setup' || str == 'calculators') {
+      this.fsatService.mainTab.next(str);
+    } else if (this.assessment.fsat.setupDone) {
+      this.fsatService.mainTab.next(str);
+    }
   }
   
   goHome(){

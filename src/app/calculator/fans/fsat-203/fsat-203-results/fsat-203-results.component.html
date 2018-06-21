@@ -21,23 +21,23 @@
     <tbody>
       <tr>
         <td>Converted Flow (Q<sub>c</sub>)</td>
-        <td>{{results.flowCorrected |sigFigs: '6'}} scfm</td>
+        <td>{{results.flowCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></td>
       </tr>
       <tr>
         <td>Converted Total Pressure (P<sub>TC</sub>)</td>
-        <td>{{results.pressureTotalCorrected |sigFigs: '6'}} in. wg</td>
+        <td>{{results.pressureTotalCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
       </tr>
       <tr>
         <td>Converted Static Pressure (P<sub>SC</sub>)</td>
-        <td>{{results.pressureStaticCorrected |sigFigs: '6'}} in. wg</td>
+        <td>{{results.pressureStaticCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
       </tr>
       <tr>
         <td>Converted Static Pressure Rise (SPR<sub>c</sub>)</td>
-        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}} in. wg</td>
+        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
       </tr>
       <tr>
         <td>Converted Power (H<sub>C</sub>)</td>
-        <td>{{results.powerCorrected |sigFigs: '6'}} hp</td>
+        <td>{{results.powerCorrected |sigFigs: '6'}}  <span [innerHTML]="getDisplayUnit(settings.fanPowerMeasurement)"></span></td>
       </tr>
       <tr>
         <td>Converted Compressability Factor (K<sub>pc</sub>)</td>
