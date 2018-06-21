@@ -1,0 +1,60 @@
+<div class="banner fsat navbar">
+  <div class="col-3">
+    <div class="row" *ngIf="assessment">
+      <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+        <img class="img-icon p-0" src="assets/images/fanIcon-4.png">
+      </div>
+      <div class="col">
+        <h2 class="h2-name">
+          {{assessment.name}}
+        </h2>
+        <!-- <h3 class="furnace-name" *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
+              {{settings.furnaceType}}
+            </h3>
+            <h3 class="furnace-name" *ngIf="settings.energySourceType != 'Electricity'">
+              <span *ngIf="settings.energySourceType == 'Fuel'">{{settings.energySourceType}}-fired</span>
+              <span *ngIf="settings.energySourceType == 'Steam'">{{settings.energySourceType}}-based</span>
+            </h3>
+            <h3 class="furnace-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
+              <br>{{settings.customFurnaceName}}</h3> -->
+      </div>
+      <!-- <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small> -->
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="row justify-content-center align-items-center pill-row">
+      <ul class="pills-nav">
+        <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
+          <span>System Setup</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')">
+          <span>Assessment</span>
+        </li>
+        <li class="disabled" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">
+          <span>Diagram</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">
+          <span>Report</span>
+        </li>
+        <li class="disabled" [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">
+          <span>Sankey</span>
+        </li>
+        <li class="disabled" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
+          <span>Calculators</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-3 pr-0">
+    <div class="row align-items-center pill-row">
+      <div class="col-12">
+        <a routerLink="/dashboard" class="btn-dashboard pull-right">
+          <span>&times;</span> Back To Home</a>
+      </div>
+    </div>
+  </div>
+
+
+</div>

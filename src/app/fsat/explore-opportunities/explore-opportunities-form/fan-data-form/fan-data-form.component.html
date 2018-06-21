@@ -1,0 +1,84 @@
+<div class="checkbox">
+  <label class="group-label" for="general3">
+    <input type="checkbox" id="general3" value="true" (focus)="focusField('fanType')" (change)="toggleFanData()" [(ngModel)]="showFanData"
+    /> Adjust Fan Data
+  </label>
+</div>
+<ul *ngIf="showFanData">
+  <li>
+    <div class="checkbox">
+      <label for="modifyFanType">
+        <input type="checkbox" id="modifyFanType" value="true" (focus)="focusField('fanType')" (change)="toggleFanType()" [(ngModel)]="showFanType"
+        /> Modify Fan Type
+      </label>
+    </div>
+    <form *ngIf="showFanType">
+      <div class="form-group">
+        <label for="baselineFanType">Baseline Fan Type</label>
+        <select class="form-control" name="fanType" [disabled]="true" id="fanType" (change)="setFanTypes()" (focus)="focusField('fanType')"
+          [(ngModel)]="fsat.fanSetup.fanType">
+          <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFanType">Modification Fan Type</label>
+        <select class="form-control" name="fanType2" id="fanType2" (change)="setFanTypes()" (focus)="focusField('fanType')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanType">
+          <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
+        </select>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="(fsat.modifications[exploreModIndex].fsat.fanSetup.fanType == 12) && showFanType">
+    <div class="checkbox">
+      <label for="modifiedFanSpecified">
+        <input type="checkbox" id="modifiedFanSpecified" (focus)="focusField('fanSpecified')" [(ngModel)]="showFanSpecified" /> Modify Fan Specified Efficiency
+      </label>
+    </div>
+    <form *ngIf="showFanSpecified">
+      <!-- <div class="form-group">
+          <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
+          <div class="input-group">
+            <input name="baselinePumpSpecified" [disabled]="tmpBaselineFanType != 'Specified Optimal Efficiency'" type="number" step="any"
+              id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.inputs.pump_specified, 1)"
+              [(ngModel)]="psat.inputs.pump_specified" />
+            <span class="input-group-addon units">%</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
+        </div> -->
+      <div class="form-group">
+        <label for="modificationFanSpecified">Modification Fan Specified Efficiency</label>
+        <div class="input-group">
+          <input name="modificationFanSpecified" [disabled]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanType != 12"
+            type="number" step="any" id="modificationFanSpecified" class="form-control" (focus)="focusField('fanSpecified')"
+            (input)="checkEfficiency(fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified, 2)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified"
+          />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyMotorDrive">
+        <input type="checkbox" id="modifyMotorDrive" value="true" (focus)="focusField('drive')" (change)="toggleMotorDrive()" [(ngModel)]="showMotorDrive"
+        /> Modify Motor Drive
+      </label>
+    </div>
+    <form *ngIf="showMotorDrive">
+      <div class="form-group">
+        <label for="baselineMotorDrive">Baseline Motor Drive</label>
+        <select class="form-control" name="drive" [disabled]="true" id="drive" (change)="setMotorDrive()" (focus)="focusField('drive')"
+          [(ngModel)]="fsat.fanSetup.drive">
+          <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationMotorDrive">Modification Motor Drive</label>
+        <select class="form-control" name="drive2" id="drive2" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.drive">
+          <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
+        </select>
+      </div>
+    </form>
+  </li>
+</ul>

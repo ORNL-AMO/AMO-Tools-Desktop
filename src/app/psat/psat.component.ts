@@ -68,7 +68,6 @@ export class PsatComponent implements OnInit {
   display4: boolean;
 
   psat: PSAT;
-  modification: PSAT;
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: PSAT;
@@ -76,8 +75,7 @@ export class PsatComponent implements OnInit {
 
   subTabIndex: number = 0;
 
-  adjustment: PSAT;
-  isValid;
+  isValid: boolean;
 
   _psat: PSAT;
   fieldDataReady: boolean = false;
@@ -367,10 +365,6 @@ export class PsatComponent implements OnInit {
       this.subTab = this.subTabs[this.subTabIndex];
     }
     this.getContainerHeight();
-  }
-
-  selectAdjustment($event) {
-    this.adjustment = $event;
   }
 
   continue(bool?: boolean) {

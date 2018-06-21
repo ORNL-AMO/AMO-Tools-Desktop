@@ -76,7 +76,8 @@
           <div class="input-group">
             <input name="electricalHeatInput3" [(ngModel)]="energyEquivalencyFuel.electricalHeatInput" type="number" step="any" class="form-control"
               id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')" (blur)="focusOut()">
-            <span class="input-group-addon units">kW</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
           </div>
         </div>
       </div>
