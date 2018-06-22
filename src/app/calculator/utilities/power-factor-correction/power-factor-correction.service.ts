@@ -6,32 +6,28 @@ export class PowerFactorCorrectionService {
 
   constructor() { }
 
-  actualDemand(data: PowerFactorCorrectionInputs): number {
-    return data.currentDemand * (data.currentPowerFactor / data.proposedPowerFactor);
+
+
+
+  existingApparentPower(data: PowerFactorCorrectionInputs): number {
+    return data.existingDemand / data.currentPowerFactor;
   }
 
-  apparentPower(data: PowerFactorCorrectionInputs): number {
-    let actualDemand: number = this.actualDemand(data);
-    return actualDemand / data.currentPowerFactor;
+  existingReactivePower(data: PowerFactorCorrectionInputs): number {
+    let apparentPower: number = this.existingApparentPower(data);
+    return Math.sqrt((apparentPower * apparentPower) - (data.existingDemand * data.existingDemand));
   }
 
-  currentReactivePower(data: PowerFactorCorrectionInputs): number {
-    let apparentPower: number = this.apparentPower(data);
-    let actualDemand: number = this.actualDemand(data);
-    return Math.sqrt((apparentPower * apparentPower) - (actualDemand * actualDemand));
+  proposedApparentPower(data: PowerFactorCorrectionInputs): number {
+    return data.existingDemand / data.proposedPowerFactor;
   }
 
-  demandSavings(data: PowerFactorCorrectionInputs): number {
-    let actualDemand: number = this.actualDemand(data);
-    return data.currentDemand - actualDemand;
+  proposedReactivePower(data: PowerFactorCorrectionInputs): number {
+    let apparentPower: number = this.proposedApparentPower(data);
+    return Math.sqrt((apparentPower * apparentPower) - (data.existingDemand * data.existingDemand));
   }
 
-  capacitanceRequired(data: PowerFactorCorrectionInputs): number {
-    let actualDemand: number = this.actualDemand(data);
-    let B: number = Math.acos(data.currentPowerFactor);
-    let C: number = Math.acos(data.proposedPowerFactor);
-    let diff: number = Math.tan(B) - Math.tan(C);;
-    let result: number = actualDemand * diff * 1000;
-    return result;
+  capacitancePowerRequired(data: PowerFactorCorrectionInputs): number {
+    return this.existingReactivePower(data) - this.proposedReactivePower(data);
   }
 }

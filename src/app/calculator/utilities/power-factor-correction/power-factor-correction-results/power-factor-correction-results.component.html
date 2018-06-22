@@ -4,21 +4,10 @@
       <tbody>
         <tr>
           <td>
-            Actual Demand
+            Existing Apparent Power
           </td>
           <td>
-            {{results.actualDemand | sigFigs:'5'}} kW
-          </td>
-          <!-- <td>
-            kW
-          </td> -->
-        </tr>
-        <tr>
-          <td>
-            Apparent Power
-          </td>
-          <td>
-            {{results.apparentPower | sigFigs:'5'}} kVA
+            {{results.existingApparentPower | sigFigs:'5'}} kVA
           </td>
           <!-- <td>
             kVA
@@ -26,10 +15,10 @@
         </tr>
         <tr>
           <td>
-            Current Reactive Power
+            Existing Reactive Power
           </td>
           <td>
-            {{results.currentReactivePower | sigFigs:'5'}} kVAR
+            {{results.existingReactivePower | sigFigs:'5'}} kVAR
           </td>
           <!-- <td>
             kVAR
@@ -37,21 +26,32 @@
         </tr>
         <tr>
           <td>
-            Demand Savings
+            Proposed Apparent Power
           </td>
           <td>
-            {{results.demandSavings | sigFigs:'5'}} kW
+            {{results.proposedApparentPower | sigFigs:'5'}} kVA
           </td>
           <!-- <td>
-            kW
+            kVA
           </td> -->
         </tr>
         <tr>
           <td>
-            Capacitance Required
+            Proposed Reactive Power
           </td>
           <td>
-            {{results.capacitanceRequired | sigFigs:'5'}} kVAR
+            {{results.proposedReactivePower | sigFigs:'5'}} kVAR
+          </td>
+          <!-- <td>
+            kVAR
+          </td> -->
+        </tr>
+        <tr>
+          <td>
+            Capacitance Power Required
+          </td>
+          <td>
+            {{results.capacitancePowerRequired | sigFigs:'5'}} kVAR
           </td>
           <!-- <td>
             kVAR

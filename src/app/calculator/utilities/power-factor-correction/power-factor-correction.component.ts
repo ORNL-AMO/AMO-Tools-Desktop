@@ -10,7 +10,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 export class PowerFactorCorrectionComponent implements OnInit {
 
   inputData: PowerFactorCorrectionInputs = {
-    currentDemand: 100,
+    existingDemand: 100,
     currentPowerFactor: 0.5,
     proposedPowerFactor: 1,
     ratedVoltage: 0,
@@ -57,18 +57,18 @@ export class PowerFactorCorrectionComponent implements OnInit {
   calculate(data: PowerFactorCorrectionInputs) {
     this.inputData = data;
     this.results = {
-      actualDemand: this.powerFactorCorrectionService.actualDemand(data),
-      apparentPower: this.powerFactorCorrectionService.apparentPower(data),
-      currentReactivePower: this.powerFactorCorrectionService.currentReactivePower(data),
-      demandSavings: this.powerFactorCorrectionService.demandSavings(data),
-      capacitanceRequired: this.powerFactorCorrectionService.capacitanceRequired(data)
-    }
+      existingApparentPower: this.powerFactorCorrectionService.existingApparentPower(data),
+      existingReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
+      proposedApparentPower: this.powerFactorCorrectionService.existingApparentPower(data),
+      proposedReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
+      capacitancePowerRequired: this.powerFactorCorrectionService.capacitancePowerRequired(data)
+    };
   }
 }
 
 
 export interface PowerFactorCorrectionInputs {
-  currentDemand: number,
+  existingDemand: number,
   currentPowerFactor: number,
   proposedPowerFactor: number,
   ratedVoltage: number,
@@ -77,9 +77,9 @@ export interface PowerFactorCorrectionInputs {
 
 
 export interface PowerFactorCorrectionOutputs {
-  actualDemand: number,
-  apparentPower: number,
-  currentReactivePower: number,
-  demandSavings: number,
-  capacitanceRequired: number
+  existingApparentPower: number,
+  existingReactivePower: number,
+  proposedApparentPower: number,
+  proposedReactivePower: number,
+  capacitancePowerRequired: number
 }
