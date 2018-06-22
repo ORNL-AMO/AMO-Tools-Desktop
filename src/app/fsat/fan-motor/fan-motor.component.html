@@ -27,7 +27,7 @@
     <div class="form-group">
       <label for="motorRpm">Motor RPM</label>
       <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent()}">
-        <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="checkMotorRpm()"
+        <input type="number" step="10" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="checkMotorRpm()"
           (focus)="focusField('motorRPM')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
       </div>
