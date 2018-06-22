@@ -257,7 +257,7 @@ export class AssessmentService {
       fanMotor: {
         lineFrequency: 60,
         motorRatedPower: null,
-        motorRpm: null,
+        motorRpm: 1234, // should be null.  white screen when null or 0
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,
