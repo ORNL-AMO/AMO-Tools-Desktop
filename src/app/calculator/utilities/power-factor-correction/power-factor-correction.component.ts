@@ -12,9 +12,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   inputData: PowerFactorCorrectionInputs = {
     existingDemand: 100,
     currentPowerFactor: 0.5,
-    proposedPowerFactor: 1,
-    ratedVoltage: 0,
-    lineFrequency: 60
+    proposedPowerFactor: 0.95
   };
   results: PowerFactorCorrectionOutputs;
 
@@ -70,9 +68,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
 export interface PowerFactorCorrectionInputs {
   existingDemand: number,
   currentPowerFactor: number,
-  proposedPowerFactor: number,
-  ratedVoltage: number,
-  lineFrequency: number
+  proposedPowerFactor: number
 }
 
 
