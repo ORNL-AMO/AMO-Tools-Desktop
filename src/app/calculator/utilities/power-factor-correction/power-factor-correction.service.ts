@@ -14,8 +14,7 @@ export class PowerFactorCorrectionService {
   }
 
   existingReactivePower(data: PowerFactorCorrectionInputs): number {
-    let apparentPower: number = this.existingApparentPower(data);
-    return Math.sqrt((apparentPower * apparentPower) - (data.existingDemand * data.existingDemand));
+    return Math.sqrt((this.existingApparentPower(data) * this.existingApparentPower(data)) - (data.existingDemand * data.existingDemand));
   }
 
   proposedApparentPower(data: PowerFactorCorrectionInputs): number {
@@ -23,8 +22,7 @@ export class PowerFactorCorrectionService {
   }
 
   proposedReactivePower(data: PowerFactorCorrectionInputs): number {
-    let apparentPower: number = this.proposedApparentPower(data);
-    return Math.sqrt((apparentPower * apparentPower) - (data.existingDemand * data.existingDemand));
+    return Math.sqrt((this.proposedApparentPower(data) * this.proposedApparentPower(data)) - (data.existingDemand * data.existingDemand));
   }
 
   capacitancePowerRequired(data: PowerFactorCorrectionInputs): number {

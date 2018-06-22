@@ -57,8 +57,8 @@ export class PowerFactorCorrectionComponent implements OnInit {
     this.results = {
       existingApparentPower: this.powerFactorCorrectionService.existingApparentPower(data),
       existingReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
-      proposedApparentPower: this.powerFactorCorrectionService.existingApparentPower(data),
-      proposedReactivePower: this.powerFactorCorrectionService.existingReactivePower(data),
+      proposedApparentPower: this.powerFactorCorrectionService.proposedApparentPower(data),
+      proposedReactivePower: this.powerFactorCorrectionService.proposedReactivePower(data),
       capacitancePowerRequired: this.powerFactorCorrectionService.capacitancePowerRequired(data)
     };
   }

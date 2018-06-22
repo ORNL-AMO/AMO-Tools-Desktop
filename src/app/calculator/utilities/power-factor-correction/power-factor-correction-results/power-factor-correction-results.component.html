@@ -7,55 +7,45 @@
             Existing Apparent Power
           </td>
           <td>
-            {{results.existingApparentPower | sigFigs:'5'}} kVA
+            {{results.existingApparentPower | number:'1.2-2'}} kVA
           </td>
-          <!-- <td>
-            kVA
-          </td> -->
+
         </tr>
         <tr>
           <td>
             Existing Reactive Power
           </td>
           <td>
-            {{results.existingReactivePower | sigFigs:'5'}} kVAR
+            {{results.existingReactivePower | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kVAR
-          </td> -->
+
         </tr>
         <tr>
           <td>
             Proposed Apparent Power
           </td>
           <td>
-            {{results.proposedApparentPower | sigFigs:'5'}} kVA
+            {{results.proposedApparentPower | number:'1.2-2'}} kVA
           </td>
-          <!-- <td>
-            kVA
-          </td> -->
+
         </tr>
         <tr>
           <td>
             Proposed Reactive Power
           </td>
           <td>
-            {{results.proposedReactivePower | sigFigs:'5'}} kVAR
+            {{results.proposedReactivePower | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kVAR
-          </td> -->
+
         </tr>
         <tr>
           <td>
             Capacitance Power Required
           </td>
           <td>
-            {{results.capacitancePowerRequired | sigFigs:'5'}} kVAR
+            {{results.capacitancePowerRequired | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kVAR
-          </td> -->
+
         </tr>
       </tbody>
     </table>
