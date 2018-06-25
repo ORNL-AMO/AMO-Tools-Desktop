@@ -18,9 +18,17 @@
         </h2>
 
         <div class="form-section">
-          <label class="group-label general">General Settings</label>
-          <p class="help-text">These will be default settings for all assessments and folders.</p>
-          <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
+          <!--add click event to call function that toggles section boolean-->
+          <label class="group-label general" (click)="toggleGeneralSettings()">General Settings
+            <!--add chevron for visual effect-->
+            <span *ngIf="!showGeneralSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showGeneralSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <!--add div that checks corresponding boolean-->
+          <div *ngIf="showGeneralSettings">
+            <p class="help-text">These will be default settings for all assessments and folders.</p>
+            <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
+          </div>
         </div>
 
         <div class="form-section psat">
@@ -43,7 +51,9 @@
 
         <div class="reset-data" *ngIf="directory.id == 1">
           <h3>Delete Data</h3>
-          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else. <span class="red">This cannot be undone!</span></p>
+          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else.
+            <span class="red">This cannot be undone!</span>
+          </p>
           <button class="btn btn-danger pull-right" (click)="resetData()">Delete Data</button>
         </div>
 
