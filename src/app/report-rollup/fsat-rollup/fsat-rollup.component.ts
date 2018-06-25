@@ -12,6 +12,7 @@ export class FsatRollupComponent implements OnInit {
   settings: Settings;
   @Input()
   calculators: Array<Calculator>;
+  
   showPreAssessment: boolean = true;
   constructor() { }
 
