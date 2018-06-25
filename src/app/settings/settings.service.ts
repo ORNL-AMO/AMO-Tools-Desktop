@@ -339,7 +339,7 @@ export class SettingsService {
 
 
   setFanUnits(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure == 'Metric' || settings.unitsOfMeasure == 'Other') {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'kgNm3';
       }
@@ -360,7 +360,7 @@ export class SettingsService {
         settings.densityMeasurement = 'lbscf';
       }
       if (!settings.fanFlowRate) {
-        settings.fanFlowRate = 'ft3/h';
+        settings.fanFlowRate = 'ft3/min';
       }
       if (!settings.fanPressureMeasurement) {
         settings.fanPressureMeasurement = 'inH2o';
@@ -376,6 +376,7 @@ export class SettingsService {
     if (!settings.fanPowerMeasurement) {
       settings.fanPowerMeasurement = 'hp';
     }
+    console.log(settings.fanFlowRate)
     return settings;
   }
 }

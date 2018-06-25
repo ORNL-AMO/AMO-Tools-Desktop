@@ -71,7 +71,12 @@ export class SettingsDbService {
       settings = this.settingService.setSteamUnits(settings);
     }
 
-    if(!settings.fanBarometricPressure){
+    if (!settings.densityMeasurement ||
+      !settings.fanFlowRate ||
+      !settings.fanPressureMeasurement ||
+      !settings.fanBarometricPressure ||
+      !settings.fanSpecificHeatGas ||
+      !settings.fanPowerMeasurement) {
       settings = this.settingService.setFanUnits(settings);
     }
 
