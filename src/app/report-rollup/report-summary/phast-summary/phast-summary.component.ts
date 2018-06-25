@@ -22,7 +22,7 @@ export class PhastSummaryComponent implements OnInit {
   totalCost: number = 0;
   totalEnergy: number = 0;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     // this.reportRollupService.phastAssessments.subscribe(val => {

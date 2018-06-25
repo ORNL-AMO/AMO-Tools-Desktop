@@ -1,28 +1,27 @@
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <div class="card">
-    <div class="card-block">
-      <h4>
-        This portion of the application is still in active development.
-      </h4>
-      <h5>
-        Below is a description of what you will find here in the future.
-      </h5>
+<div *ngIf="getSelectedTool() == 'none'">
 
-      <blockquote class="blockquote">
-        <p>
-          This tool helps manufacturers quantify energy use and savings opportunities in manufacturing fan systems.
-        </p>
-      </blockquote>
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list">
+        <h2>Fan Calculators</h2>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('fsat-203')"> Operating Points Calculator</a>
+            <p>
+              <!-- Use head tool calculator to calculate pump head. -->
+            </p>
+          </div>
+        </div>
 
-      <blockquote class="blockquote">
-        <p>
-          Use the fan assessment to understand how well your fan systems are operating, determine the economic benefit of system modifications,
-          and establish which options are most economically viable when multiple opportunities exist for system modification.
-        </p>
-      </blockquote>
+      </div>
     </div>
   </div>
 </div>
 
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fsat-203'">
+    <app-fsat-203></app-fsat-203>
 </div>

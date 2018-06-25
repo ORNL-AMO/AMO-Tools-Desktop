@@ -319,10 +319,10 @@ export class FieldDataComponent implements OnInit {
   optimizeCalc(bool: boolean) {
     if (!bool || !this.selected) {
       this.psatForm.controls.sizeMargin.disable();
-      this.psatForm.controls.fixedSpeed.disable();
+      // this.psatForm.controls.fixedSpeed.disable();
     } else {
       this.psatForm.controls.sizeMargin.enable();
-      this.psatForm.controls.fixedSpeed.enable();
+      // this.psatForm.controls.fixedSpeed.enable();
     }
     this.psatForm.patchValue({
       optimizeCalculation: bool

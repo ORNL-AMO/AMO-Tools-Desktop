@@ -1,0 +1,265 @@
+<div class="help-header pb-1">
+
+  <h3>Enter measured data to calculate your system's annual savings potential.</h3>
+  <!-- <p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering motor data.
+    </p> -->
+
+</div>
+
+<div class="help-content pt-0">
+  <div class="card" *ngIf="currentField == 'lineFrequency'">
+    <div class="card-header">
+      Line Frequency
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Line Frequency is the mains supply frequency. In North America, the standard frequency is 60 HZ. Elsewhere, 50 HZ is often
+        the standard.
+      </p>
+      <p>
+        The only use of this input is to determine the number of poles, based on the specified motor speed.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Options:
+        <strong>50 Hz</strong> or
+        <strong>60 Hz</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'motorRatedPower'">
+    <div class="card-header">
+      Motor Power
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Motor Power represents the rated power for the motor.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>hp, kW</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'motorRpm'">
+    <div class="card-header">
+      Motor RPM
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Motor RPM is the nameplate speed of the motor.
+      </p>
+      <p>
+        This value is used with the line frequency to determine the number of motor poles. This, in turn, is used (along with motor
+        class and size) to estimate motor efficiency and output shaft power for the measured electrical power or current
+        conditions.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>RPM</strong>
+      </p>
+      <p>
+        <strong>Standard Efficient and Energy Efficient</strong>
+        <br> (60 Hz) Minimum Value Allowed:
+        <strong>540</strong>
+        <br> (60 Hz) Maximum Value Allowed:
+        <strong>3600</strong>
+        <br> (50 Hz) Minimum Value Allowed:
+        <strong>450</strong>
+        <br> (50 Hz) Maximum Value Allowed:
+        <strong>3000</strong>
+        <br>
+      </p>
+      <p>
+        <strong>Premium Efficient</strong>
+        <br> (60 Hz) Minimum Value Allowed:
+        <strong>1080</strong>
+        <br> (60 Hz) Maximum Value Allowed:
+        <strong>3600</strong>
+        <br> (50 Hz) Minimum Value Allowed:
+        <strong>900</strong>
+        <br> (50 Hz) Maximum Value Allowed:
+        <strong>3000</strong>
+        <br>
+      </p>
+      <p>
+        *Min/Max values determined by line frequency and efficiency class selection.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'efficiencyClass'">
+    <div class="card-header">
+      Efficiency Class
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate or based on
+        how the motor compares with the NEMA MG 1-2003.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <br>
+      <label>
+        Options: </label>
+      <ul style="list-style: none;">
+        <li>
+          <strong>Standard Efficency</strong>
+          <br> </li>
+        <li>
+          <strong>Energy Efficient</strong>
+          <br> </li>
+        <li>
+          <strong>Premium</strong>
+          <br> </li>
+        <li>
+          <strong>Specified</strong>
+          <br> </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specifiedEfficiency'">
+    <div class="card-header">
+      Efficency
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
+        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
+        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+        operating conditions. Enter this value as a percentage.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Minimum Value Allowed:
+        <strong>1</strong>
+        <br> Maximum Value Allowed:
+        <strong>100</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'motorRatedVoltage'">
+    <div class="card-header">
+      Rated Voltage
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        This voltage is the motor design (nameplate) voltage.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>Volts</strong>
+        <br> Minimum Value Allowed:
+        <strong>208</strong>
+        <br> Maximum Value Allowed:
+        <strong>15180</strong>
+        <br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fullLoadAmps'">
+    <div class="card-header">
+      Full Load Amps
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Full Load Amps represent either the known or estimated amps. This value will be used as a normalizing value in the Field
+        Data section if Current is the selected Load estimation method.
+      </p>
+      <p>
+        If the Full-Load Amps is not known, an estimate can be made by clicking the
+        <strong>"Estimate Full-Load Amps"
+        </strong> button. Note that the correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before
+        the button is pressed.
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Units:
+        <strong>amps</strong>
+        <br> Minimum Value Allowed:
+        <strong>0</strong>
+        <br> Maximum Value Allowed:
+        <strong>None</strong>
+        <br>
+      </p>
+      <!-- <p>
+        An expected range is determined by the provided motor rated power, speed, voltage and class.<br>
+        Expected Minimum Value: <strong>{{getFlaMin() | number:'2.2-2'}}</strong><br>
+        Expected Maximum Value: <strong>{{getFlaMax() | number:'2.2-2'}}</strong><br>
+      </p> -->
+    </div>
+  </div>
+
+</div>

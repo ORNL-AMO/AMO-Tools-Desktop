@@ -66,7 +66,8 @@
       <label class="small" for="electricityInput">Electricty Input</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareElectricityInput(), 'invalid': energyInputForm.controls.electricityInput.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'electricityInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
-        <span class="input-group-addon units">kW</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
       </div>
     </div>
   </div>
