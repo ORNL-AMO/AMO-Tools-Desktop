@@ -23,6 +23,16 @@ export class EnergyUseFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  // keeps a value between a certain range
+  readonly rangeCheck: RangeProperties = {
+    'orificeInsideRatio': {
+      min: null, max: 0.7
+    },
+    'dischargeCoefficient': {
+      min: 0.0, max: 1.0
+    }
+  };
+
   sectionOptions: any = [
     {
       name: 'Square Edge',
@@ -66,6 +76,9 @@ export class EnergyUseFormComponent implements OnInit {
     }
   ]
 
+  insidePipeDiameterError: string = null;
+  dischargeCoefficientError: string = null;
+
   constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -74,6 +87,25 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   calculate() {
+    const insidePipeDiameter = this.flowCalculations.insidePipeDiameter;
+    const orificeDiameter = this.flowCalculations.orificeDiameter;
+    let properties = this.rangeCheck.orificeInsideRatio;
+    if (orificeDiameter / insidePipeDiameter > properties.max) {
+      this.insidePipeDiameterError = 'Orifice diameter cannot be more than ' + properties.max * 100 + '% of pipe diameter';
+    } else {
+      this.insidePipeDiameterError = null;
+    }
+
+    const dischargeCoefficient = this.flowCalculations.dischargeCoefficient;
+    properties = this.rangeCheck.dischargeCoefficient;
+    if (dischargeCoefficient > properties.max || dischargeCoefficient < properties.min) {
+      this.dischargeCoefficientError = 'Discharge coefficient must be between ' + properties.max  + ' and ' + properties.min;
+    } else {
+      this.dischargeCoefficientError = null;
+    }
+
+
+
     this.emitCalculate.emit(true);
   }
 
@@ -121,4 +153,16 @@ export class EnergyUseFormComponent implements OnInit {
     }
     this.calculate();
   }
+
+
+}
+
+interface Properties {
+  readonly min: number;
+  readonly max: number;
+}
+
+interface RangeProperties {
+  readonly orificeInsideRatio: Properties;
+  readonly dischargeCoefficient: Properties;
 }

@@ -7,6 +7,7 @@ import * as d3 from 'd3';
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
 import { PhastResultsService } from '../phast-results.service';
+import { Assessment } from '../../shared/models/assessment';
 
 var svg;
 // use these values to alter label font position and size

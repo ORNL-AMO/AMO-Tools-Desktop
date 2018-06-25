@@ -46,8 +46,8 @@
                 <div class="input-group">
                     <input name="baselineFlowRate" [disabled]="true" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
                         (input)="checkFlowRate(1)" [(ngModel)]="fsat.fieldData.flowRate" />
-                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
-                    <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanFlowRate)"></span>
+                    <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
                 </div>
                 <span class="alert-warning pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
             </div>
@@ -57,8 +57,8 @@
                     <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control" (focus)="focusField('flowRate')"
                         [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.flowRate" (input)="checkFlowRate(2)"
                     />
-                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
-                    <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+                    <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanFlowRate)"></span>
+                    <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
                 </div>
                 <span class="alert-warning pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
             </div>

@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-fsat',
@@ -58,7 +59,8 @@ export class FsatComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
-    private compareService: CompareService) { }
+    private compareService: CompareService,
+    private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -80,6 +82,10 @@ export class FsatComponent implements OnInit {
           this.modificationExists = false;
         }
         this.getSettings();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.fsatService.mainTab.next(tmpTab);
+        }
       })
     })
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -113,9 +119,9 @@ export class FsatComponent implements OnInit {
       }
     })
 
-      this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
-        this.isModalOpen = isOpen;
-      })
+    this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
 
   }
 
@@ -261,12 +267,17 @@ export class FsatComponent implements OnInit {
       this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
+    this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         // this.psatService.getResults.next(true);
       })
     })
+  }
+
+  checkSetupDone(fsat: FSAT): boolean {
+    return this.fsatService.checkValid(fsat);
   }
 
   selectModificationModal() {

@@ -3,15 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
-import { WindowRefService } from '../indexedDb/window-ref.service';
-import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
@@ -26,8 +23,7 @@ import { CoreService } from '../core/core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
-import { PreAssessment } from '../calculator/utilities/pre-assessment/pre-assessment';
-declare const packageJson;
+
 
 @Component({
   selector: 'app-dashboard',
@@ -73,6 +69,8 @@ export class DashboardComponent implements OnInit {
   exportData: ImportExportData;
   exportAllSub: Subscription;
   selectedCalcIndex: number;
+  dashboardViewSub: Subscription;
+  workingDirectorySub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
@@ -104,6 +102,18 @@ export class DashboardComponent implements OnInit {
         this.exportAll();
       }
     })
+    this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(viewStr => {
+      if(viewStr){
+        this.dashboardView = viewStr;
+      }
+    })
+
+    this.workingDirectorySub = this.assessmentService.workingDirectoryId.subscribe(id => {
+      if(id){
+        let directory: Directory = this.directoryDbService.getById(id);
+        this.changeWorkingDirectory(directory)
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -111,6 +121,8 @@ export class DashboardComponent implements OnInit {
     this.createAssessmentSub.unsubscribe();
     if (this.dontShowSub) this.dontShowSub.unsubscribe();
     this.exportAllSub.unsubscribe();
+    this.workingDirectorySub.unsubscribe();
+    this.dashboardViewSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -393,7 +405,6 @@ export class DashboardComponent implements OnInit {
     if (this.workingDirectory.calculators) {
       tmpArray3 = this.workingDirectory.calculators.filter(
         calc => {
-          console.log(calc.selected);
           if (calc.selected) {
             return calc;
           }

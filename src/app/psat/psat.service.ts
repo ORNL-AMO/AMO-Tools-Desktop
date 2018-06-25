@@ -593,7 +593,7 @@ export class PsatService {
       effEnum = 0;
     } else if (effClass === 'Energy Efficient') {
       effEnum = 1;
-    } else if (effClass === 'Premium') {
+    } else if (effClass === 'Premium Efficient' || effClass === 'Premium') {
       effEnum = 2;
     } else if (effClass === 'Specified') {
       effEnum = 3;
@@ -607,7 +607,7 @@ export class PsatService {
     } else if (num === 1) {
       effClass = 'Energy Efficient';
     } else if (num === 2) {
-      effClass = 'Premium';
+      effClass = 'Premium Efficient';
     } else if (num === 3) {
       effClass = 'Specified';
     }
@@ -687,7 +687,7 @@ export class PsatService {
       efficiency = 0;
     } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
       efficiency = 1;
-    } else if (form.controls.efficiencyClass.value === 'Premium') {
+    } else if (form.controls.efficiencyClass.value === 'Premium Efficient' || form.controls.efficiencyClass.value === 'Premium') {
       efficiency = 2;
     } else if (form.controls.efficiencyClass.value == 'Specified') {
       efficiency = form.controls.efficiency.value;

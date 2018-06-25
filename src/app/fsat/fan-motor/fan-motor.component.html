@@ -19,7 +19,7 @@
       <label for="motorRatedPower">Rated Motor Power</label>
       <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower" (change)="checkRatedPower()"
         (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent()}">
-        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
       </select>
       <span class="alert-warning pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
     </div>

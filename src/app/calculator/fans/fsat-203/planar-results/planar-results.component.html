@@ -6,27 +6,44 @@
         <td><span>Plane #</span></td>
         <td *ngIf="showFull"><span>Plane Description</span></td>
         <td><span>Gas Density</span>
-          <br>lbm/ft
-          <sup>3</sup>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
         </td>
         <td *ngIf="showFull"><span>Planar Area</span>
-          <br>ft
-          <sup>2</sup>
+          <br>
+          <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft<sup>2</sup></span>
+          <span *ngIf="settings.fanFlowRate == 'm3/s'">m<sup>2</sup></span>
         </td>
         <td><span>Volume Flow</span>
-          <br>cfm</td>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        </td>
         <td><span>Gas Velocity</span>
-          <br>fpm</td>
+          <br>
+          <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft/min</span>
+          <span *ngIf="settings.fanFlowRate == 'm3/s'">m/s</span>
+        </td>
         <td *ngIf="showFull"><span>Dry Bulb Temp</span>
-          <br>&#8457;</td>
+          <br>
+          <span *ngIf="settings.temperatureMeasurement == 'F'">&#8457;</span>
+          <span *ngIf="settings.temperatureMeasurement == 'C'">&#8451;</span>
+        </td>
         <td><span>Static Pressure</span>
-          <br>in. wg</td>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        </td>
         <td><span>Velocity Pressure</span>
-          <br>in. wg</td>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        </td>
         <td><span>Total Pressure</span>
-          <br>in. wg</td>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        </td>
         <td *ngIf="showFull"><span>Barometric Pressure</span>
-          <br>in. wg</td>
+          <br>
+          <span [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
+        </td>
       </tr>
       <tr>
         <td>1</td>

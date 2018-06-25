@@ -349,6 +349,12 @@ select.form-control:not([size]):not([multiple]) {
     border: #BF3D00 solid !important;
 }
 
+.fsat .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
+
+
 .input-error{
   color: red;
 }
