@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { BaseGasDensity } from '../../../../shared/models/fans';
 import { Fsat203Service } from '../fsat-203.service';
 import { FsatService } from '../../../../fsat/fsat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-gas-density',
@@ -33,7 +34,7 @@ export class GasDensityComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ]
-  constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.gasDensityForm = this.fsat203Service.getGasDensityFormFromObj(this.fanGasDensity);
@@ -61,7 +62,7 @@ export class GasDensityComponent implements OnInit {
 
   calcDensityWetBulb() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })
@@ -70,7 +71,7 @@ export class GasDensityComponent implements OnInit {
 
   calcDensityRelativeHumidity() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })
@@ -79,10 +80,19 @@ export class GasDensityComponent implements OnInit {
 
   calcDensityDewPoint() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
-    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj);
+    let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
     })
     this.save();
+  }
+
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

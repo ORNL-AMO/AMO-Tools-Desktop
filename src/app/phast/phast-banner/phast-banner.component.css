@@ -50,3 +50,9 @@ ul{
 .navbar{
     padding: 0px;
 }
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}

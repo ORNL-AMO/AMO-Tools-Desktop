@@ -29,38 +29,38 @@ export class FsatSummaryCardComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private fsatService: FsatService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    // this.setupDone = this.assessment.psat.setupDone;
-    // if (this.setupDone) {
-    this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-    this.fsatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.fsat)), this.settings);
-    if (this.assessment.fsat.modifications) {
-      this.numMods = this.assessment.fsat.modifications.length;
-      this.assessment.fsat.modifications.forEach(mod => {
-        let modOutputs: FsatOutput = this.getResults(JSON.parse(JSON.stringify(mod.fsat)), this.settings, true);
-        let tmpSavingCalc = this.fsatResults.annualCost - modOutputs.annualCost;
-        let tmpSavingEnergy = this.fsatResults.annualEnergy - modOutputs.annualEnergy;
-        if (tmpSavingCalc > this.maxCostSavings) {
-          this.maxCostSavings = tmpSavingCalc;
-          this.maxEnergySavings = tmpSavingEnergy;
-        }
-      })
+    this.setupDone = this.assessment.fsat.setupDone;
+    if (this.setupDone) {
+      this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
+      this.fsatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.fsat)), this.settings);
+      if (this.assessment.fsat.modifications) {
+        this.numMods = this.assessment.fsat.modifications.length;
+        this.assessment.fsat.modifications.forEach(mod => {
+          let modOutputs: FsatOutput = this.getResults(JSON.parse(JSON.stringify(mod.fsat)), this.settings, true);
+          let tmpSavingCalc = this.fsatResults.annualCost - modOutputs.annualCost;
+          let tmpSavingEnergy = this.fsatResults.annualEnergy - modOutputs.annualEnergy;
+          if (tmpSavingCalc > this.maxCostSavings) {
+            this.maxCostSavings = tmpSavingCalc;
+            this.maxEnergySavings = tmpSavingEnergy;
+          }
+        })
+      }
     }
-    // }
   }
 
   getResults(fsat: FSAT, settings: Settings, isModification?: boolean): FsatOutput {
-    // let tmpForm = this.psatService.getFormFromPsat(psat.inputs);
-    // if (tmpForm.status == 'VALID') {
-    if (fsat.fanMotor.optimize) {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal', this.settings);
-    } else if (!isModification) {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing', this.settings);
+    let isValid: boolean = this.fsatService.checkValid(fsat);
+    if (isValid) {
+      if (fsat.fanMotor.optimize) {
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'optimal', settings);
+      } else if (!isModification) {
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing', settings);
+      } else {
+        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified', settings);
+      }
     } else {
-      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified', this.settings);
+      return this.fsatService.getEmptyResults();
     }
-    //  } else {
-    //     return this.fsatService.emptyResults();
-    // }
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {

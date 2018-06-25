@@ -56,12 +56,15 @@ export class SidebarComponent implements OnInit {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
+    if (!this.workingDirectory.collapsed) {
+      this.toggleDirectoryCollapse(this.workingDirectory);
+    }
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.updateSub.unsubscribe();
   }
 
@@ -69,7 +72,10 @@ export class SidebarComponent implements OnInit {
     if (changes.workingDirectory && !this.firstChange) {
       if (changes.workingDirectory.currentValue) {
         if (changes.workingDirectory.previousValue.id != changes.workingDirectory.currentValue.id) {
-          this.toggleSelected(changes.workingDirectory.currentValue);
+          this.toggleSelected(this.workingDirectory);
+          if (this.workingDirectory.collapsed) {
+            this.toggleDirectoryCollapse(this.workingDirectory);
+          }
         }
       }
     } else if (changes.selectedCalculator && !this.firstChange) {

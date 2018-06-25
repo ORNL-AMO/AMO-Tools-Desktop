@@ -33,6 +33,7 @@
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
           </div>
+          <span class="alert-danger pull-right small" *ngIf="insidePipeDiameterError !== null">{{insidePipeDiameterError}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="orificePressureDrop">Orifice Pressure Drop</label>
@@ -43,14 +44,7 @@
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm W.C.</span>
           </div>
         </div>
-        <div class="form-group">
-          <label class="small" for="operatingTime">Operating Time</label>
-          <div class="input-group">
-            <input name="operatingTime" [(ngModel)]="flowCalculations.operatingTime" type="number" step="any" class="form-control" id="operatingTime"
-              (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingTime')">
-            <span class="input-group-addon units">hrs</span>
-          </div>
-        </div>
+
         <div class="form-group">
           <label class="small" for="sectionType">Type of Orifice</label>
           <div class="input-group">
@@ -85,9 +79,10 @@
         <div class="form-group">
           <label class="small" for="dischargeCoefficient">Coefficient of Discharge</label>
           <div class="input-group">
-            <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step="any" class="form-control"
+            <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step=".1" class="form-control"
               id="dischargeCoefficient" (input)="calculate()" onfocus="this.select();" (focus)="focusField('dischargeCoefficient')">
           </div>
+          <span class="alert-danger pull-right small" *ngIf="dischargeCoefficientError !== null">{{dischargeCoefficientError}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="gasHeatingValue">Heating Value of Gas - HHV</label>
@@ -104,6 +99,18 @@
           <div class="input-group">
             <input name="specificGravity" [(ngModel)]="flowCalculations.specificGravity" type="number" step="any" class="form-control"
               id="specificGravity" (input)="calculate()" onfocus="this.select();" (focus)="focusField('specificGravity')">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-12">
+      <form>
+        <div class="form-group">
+          <label class="small" for="operatingTime">Operating Time</label>
+          <div class="input-group">
+            <input name="operatingTime" [(ngModel)]="flowCalculations.operatingTime" type="number" step="any" class="form-control" id="operatingTime"
+                   (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingTime')">
+            <span class="input-group-addon units">hrs</span>
           </div>
         </div>
       </form>

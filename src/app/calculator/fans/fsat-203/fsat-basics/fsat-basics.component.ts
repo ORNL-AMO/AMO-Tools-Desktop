@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FanRatedInfo } from '../../../../shared/models/fans';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { HelpPanelService } from '../../../../fsat/help-panel/help-panel.service';
 import { Fsat203Service } from '../fsat-203.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fsat-basics',
@@ -28,7 +29,7 @@ export class FsatBasicsComponent implements OnInit {
     1, 2, 3
   ]
 
-  constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService, private fsat203Service: Fsat203Service) { }
+  constructor(private helpPanelService: HelpPanelService, private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo);
@@ -45,5 +46,14 @@ export class FsatBasicsComponent implements OnInit {
   save() {
     this.fanRatedInfo = this.fsat203Service.getBasicsObjectFromForm(this.ratedInfoForm);
     this.emitSave.emit(this.fanRatedInfo);
+  }
+
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

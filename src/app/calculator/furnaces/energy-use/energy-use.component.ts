@@ -45,6 +45,7 @@ export class EnergyUseComponent implements OnInit {
     totalFlow: 0
   };
 
+
   headerHeight: number;
 
   currentField: string = 'orificeDiameter';
@@ -61,6 +62,7 @@ export class EnergyUseComponent implements OnInit {
       this.initDefaultValues(this.settings);
       this.calculate();
     }
+
 
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

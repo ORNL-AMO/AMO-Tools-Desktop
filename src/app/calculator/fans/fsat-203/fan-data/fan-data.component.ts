@@ -85,7 +85,7 @@ export class FanDataComponent implements OnInit {
   }
 
   calcVelocityData(plane: Plane) {
-    this.velocityData = this.fsatService.getVelocityPressureData(plane)
+    this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
   }
 
   saveTraversePlane(plane: Plane, str: string) {

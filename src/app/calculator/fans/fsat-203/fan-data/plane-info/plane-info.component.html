@@ -26,14 +26,20 @@
 
   <div class="form-group">
     <label for="totalPressureLossBtwnPlanes1and4">Total Pressure Loss Between Planes 1 and 4</label>
-    <input name="totalPressureLossBtwnPlanes1and4" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes1and4"
-      id="totalPressureLossBtwnPlanes1and4" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes1and4" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes1and4"
+        id="totalPressureLossBtwnPlanes1and4" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="totalPressureLossBtwnPlanes2and5">Total Pressure Loss Between Planes 2 and 5</label>
-    <input name="totalPressureLossBtwnPlanes2and5" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes2and5"
-      id="totalPressureLossBtwnPlanes2and5" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes2and5" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes2and5"
+        id="totalPressureLossBtwnPlanes2and5" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
   </div>
   <label class="group-label group-label-2">System Effect Data</label>
   <div class="form-group">
@@ -41,7 +47,7 @@
     <div class="input-group">
       <input name="inletSEF" type="number" step="any" class="form-control" formControlName="inletSEF" id="inletSEF" (input)="save()"
         (focus)="focusField('inletSEF')" onfocus="this.select();">
-      <div class="input-group-addon units">in. wg</div>
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
   </div>
   <div class="form-group">
@@ -49,13 +55,14 @@
     <div class="input-group">
       <input name="outletSEF" type="number" step="any" class="form-control" formControlName="outletSEF" id="outletSEF" (input)="save()"
         (focus)="focusField('outletSEF')" onfocus="this.select();">
-      <div class="input-group-addon units">in. wg</div>
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
   </div>
   <div class="form-group">
     <label for="sumSEF">&Sigma; System Effect Factor</label>
     <div class="sef-results">
-      {{sumSEF}} in. wg
+      {{sumSEF}}
+      <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
   </div>
 </form>
