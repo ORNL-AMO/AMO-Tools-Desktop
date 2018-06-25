@@ -33,9 +33,9 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="runTimeLoaded">Run-time Un-loaded</label>
+      <label for="runTimeUnloaded">Run-time Un-loaded</label>
       <div class="input-group">
-        <input name="runTimeLoaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeLoaded" id="runTimeUnloaded"
+        <input name="runTimeUnloaded" class="form-control" type="number" min="0" max="100" step="any" [(ngModel)]="inputs.runTimeUnloaded" id="runTimeUnloaded"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('runTimeUnloaded')">
         <span class="input-group-addon units">%</span>
       </div>

@@ -37,11 +37,6 @@ export class FlowFactorComponent implements OnInit {
     this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
   }
 
-  setField(str: string) {
-    this.currentField = str;
-      this.currentField = str;
-  }
-
   changeField(str: string) {
     this.currentField = str;
   }

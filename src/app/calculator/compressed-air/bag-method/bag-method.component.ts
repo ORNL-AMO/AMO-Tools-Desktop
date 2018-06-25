@@ -33,11 +33,6 @@ export class BagMethodComponent implements OnInit {
     this.outputs = StandaloneService.bagMethod(inputs);
   }
 
-  setField(str: string) {
-    this.currentField = str;
-    this.currentField = str;
-  }
-
   changeField(str: string) {
     this.currentField = str;
   }
