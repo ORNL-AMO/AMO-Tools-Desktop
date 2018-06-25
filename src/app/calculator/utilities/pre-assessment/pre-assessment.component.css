@@ -52,6 +52,12 @@ td{
     transition: all .5s ease-in-out;
 }
 
+.fsat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #FFE400;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
 .general .ico-size3{
     background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
     transition: all .5s ease-in-out;
@@ -64,6 +70,12 @@ td{
     background: linear-gradient(rgba(228, 219, 219, 0.34), #2980b9);
     transition: all .5s ease-in-out;
 }
+
+.fsat .ico-size3{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+    transition: all .5s ease-in-out; 
+}
+
 
 .no-data{
     width: 100%;

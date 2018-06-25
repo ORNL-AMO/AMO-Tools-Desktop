@@ -8,7 +8,7 @@
       <br> PH Pre-Assessment / Screening</a>
   </div>
 </div> -->
-<div class="card card-item" *ngIf="preAssessmentExists" [ngClass]="{'psat': calculator.type =='pump', 'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
+<div class="card card-item" *ngIf="preAssessmentExists" [ngClass]="{'psat': calculator.type =='pump', 'fsat': calculator.type =='fan',  'phast': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="calculator.selected">
     <span class="fa fa-pie-chart"></span>
