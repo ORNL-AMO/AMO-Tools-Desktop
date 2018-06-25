@@ -165,26 +165,30 @@ export class FanMotorComponent implements OnInit {
   }
 
   calcFla(): number {
-    let tmpEfficiency: number;
-    //use efficiency class value if not specified efficiency class for efficiency
-    if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
-      tmpEfficiency = this.fanMotorForm.controls.efficiencyClass.value;
+    if (!this.disableFLA()) {
+      let tmpEfficiency: number;
+      //use efficiency class value if not specified efficiency class for efficiency
+      if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
+        tmpEfficiency = this.fanMotorForm.controls.efficiencyClass.value;
+      } else {
+        tmpEfficiency = this.fanMotorForm.controls.specifiedEfficiency.value;
+      }
+      //estFLA method needs: 
+      //lineFrequency as a string with Hz appended to value
+      //efficiencyClass as the string name value
+      let estEfficiency = this.psatService.estFLA(
+        this.fanMotorForm.controls.motorRatedPower.value,
+        this.fanMotorForm.controls.motorRpm.value,
+        this.fanMotorForm.controls.lineFrequency.value + ' Hz',
+        this.psatService.getEfficiencyClassFromEnum(this.fanMotorForm.controls.efficiencyClass.value),
+        tmpEfficiency,
+        this.fanMotorForm.controls.motorRatedVoltage.value,
+        this.settings
+      );
+      return estEfficiency;
     } else {
-      tmpEfficiency = this.fanMotorForm.controls.specifiedEfficiency.value;
+      return null
     }
-    //estFLA method needs: 
-    //lineFrequency as a string with Hz appended to value
-    //efficiencyClass as the string name value
-    let estEfficiency = this.psatService.estFLA(
-      this.fanMotorForm.controls.motorRatedPower.value,
-      this.fanMotorForm.controls.motorRpm.value,
-      this.fanMotorForm.controls.lineFrequency.value + ' Hz',
-      this.psatService.getEfficiencyClassFromEnum(this.fanMotorForm.controls.efficiencyClass.value),
-      tmpEfficiency,
-      this.fanMotorForm.controls.motorRatedVoltage.value,
-      this.settings
-    );
-    return estEfficiency;
   }
 
   getFullLoadAmps() {
@@ -219,7 +223,7 @@ export class FanMotorComponent implements OnInit {
         this.fanMotorForm.controls.efficiencyClass.status == 'VALID' &&
         this.fanMotorForm.controls.motorRatedVoltage.status == 'VALID'
       ) {
-        if (this.fanMotorForm.controls.efficiencyClass.value != 'Specified') {
+        if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
           return false;
         } else {
           if (this.fanMotorForm.controls.lineFrequency.value) {
