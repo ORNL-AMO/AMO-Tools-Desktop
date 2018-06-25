@@ -271,7 +271,7 @@ export class FsatComponent implements OnInit {
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
-        // this.psatService.getResults.next(true);
+        this.fsatService.updateData.next(true);
       })
     })
   }

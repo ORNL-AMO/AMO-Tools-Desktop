@@ -23,6 +23,7 @@ export class FsatService {
   openNewModal: BehaviorSubject<boolean>;
   openModificationModal: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
+  updateData: BehaviorSubject<boolean>;
   constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
     this.initData();
   }
@@ -35,6 +36,7 @@ export class FsatService {
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.updateData = new BehaviorSubject<boolean>(false)
   }
 
   test() {

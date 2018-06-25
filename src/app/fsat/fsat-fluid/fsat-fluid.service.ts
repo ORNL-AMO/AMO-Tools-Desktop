@@ -45,4 +45,13 @@ export class FsatFluidService {
     }
     return fanGasDensity;
   }
+
+  isFanFluidValid(obj: BaseGasDensity): boolean{
+    let form: FormGroup = this.getGasDensityFormFromObj(obj);
+    if(form.status == 'VALID'){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
