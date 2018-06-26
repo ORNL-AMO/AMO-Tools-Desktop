@@ -29,7 +29,7 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
-    'Premium Efficient',
+    'Premium',
     'Specified'
   ];
   efficiencyError: string = null;

@@ -4,58 +4,48 @@
       <tbody>
         <tr>
           <td>
-            Actual Demand
+            Existing Apparent Power
           </td>
           <td>
-            {{results.actualDemand | sigFigs:'5'}} kW
+            {{results.existingApparentPower | number:'1.2-2'}} kVA
           </td>
-          <!-- <td>
-            kW
-          </td> -->
+
         </tr>
         <tr>
           <td>
-            Apparent Power
+            Existing Reactive Power
           </td>
           <td>
-            {{results.apparentPower | sigFigs:'5'}} kVA
+            {{results.existingReactivePower | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kVA
-          </td> -->
+
         </tr>
         <tr>
           <td>
-            Current Reactive Power
+            Proposed Apparent Power
           </td>
           <td>
-            {{results.currentReactivePower | sigFigs:'5'}} kVAR
+            {{results.proposedApparentPower | number:'1.2-2'}} kVA
           </td>
-          <!-- <td>
-            kVAR
-          </td> -->
+
         </tr>
         <tr>
           <td>
-            Demand Savings
+            Proposed Reactive Power
           </td>
           <td>
-            {{results.demandSavings | sigFigs:'5'}} kW
+            {{results.proposedReactivePower | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kW
-          </td> -->
+
         </tr>
         <tr>
           <td>
-            Capacitance Required
+            Capacitance Power Required
           </td>
           <td>
-            {{results.capacitanceRequired | sigFigs:'5'}} kVAR
+            {{results.capacitancePowerRequired | number:'1.2-2'}} kVAR
           </td>
-          <!-- <td>
-            kVAR
-          </td> -->
+
         </tr>
       </tbody>
     </table>
