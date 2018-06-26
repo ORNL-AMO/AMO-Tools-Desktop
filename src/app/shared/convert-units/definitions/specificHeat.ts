@@ -6,7 +6,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilojoule per Kilogram Celsius'
           , plural: 'Kilojoules per Kilogram Celsius',
-          display: '(kJ/kg-C)'
+          display: '(kJ/kg-&#8451;)'
         }
         , to_anchor: 1
       }
@@ -22,7 +22,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilocalorie per Kilogram Celsius'
           , plural: 'Kilocalories per Kilogram Celsius',
-          display: '(kcal/kg-C)'
+          display: '(kcal/kg-&#8451;)'
         }
         , to_anchor: 1 / 0.238845897
       }
@@ -33,7 +33,7 @@ export const specificHeat = {
       name: {
         singular: 'British Thermal Unit per Pound Fahrenheit'
         , plural: 'British Thermal Units per Pound Fahrenheit',
-        display: '(Btu/lb-F)'
+        display: '(Btu/lb-&#8457;)'
       }
       , to_anchor: 1
     }
