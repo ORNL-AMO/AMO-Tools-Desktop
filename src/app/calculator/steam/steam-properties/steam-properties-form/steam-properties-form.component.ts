@@ -30,10 +30,10 @@ export class SteamPropertiesFormComponent implements OnInit {
   readonly checkQuantity: Array<TemperatureProperties | SpecificEnthalpyProperties | SpecificEntropyProperties | Properties> = [
     {
       'F': {
-        min: 32, max: 1472, type: 'Temperature', displayUnits: 'Fahrenheit'
+        min: 32, max: 1472, type: 'Temperature', displayUnits: '℉'
       },
       'C': {
-        min: 0, max: 800, type: 'Temperature', displayUnits: 'Celsius'
+        min: 0, max: 800, type: 'Temperature', displayUnits: '℃'
       }
     },
     {
@@ -138,7 +138,7 @@ export class SteamPropertiesFormComponent implements OnInit {
     if (this.pressureError !== null || this.quantityValueError !== null) {
       return;
     }
-    
+
     // this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
     this.emitCalculate.emit(input);
   }
