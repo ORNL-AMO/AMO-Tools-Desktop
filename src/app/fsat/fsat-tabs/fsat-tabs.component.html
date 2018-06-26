@@ -10,15 +10,15 @@
           <a (click)="changeStepTab('fsat-fluid')">
             <span class="step-number">2</span>Fluid</a>
         </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-setup'}">
+        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-setup', 'disabled': !fanDisabled}">
           <a (click)="changeStepTab('fan-setup')">
             <span class="step-number">3</span>Fan</a>
         </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-motor'}">
+        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-motor', 'disabled': !motorDisabled}">
           <a (click)="changeStepTab('fan-motor')">
             <span class="step-number">4</span>Motor</a>
         </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-field-data'}">
+        <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-field-data', 'disabled': !fieldDataDisabled}">
           <a (click)="changeStepTab('fan-field-data')">
             <span class="step-number">5</span>Field Data</a>
         </li>

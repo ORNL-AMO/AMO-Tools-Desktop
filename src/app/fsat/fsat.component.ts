@@ -92,10 +92,12 @@ export class FsatComponent implements OnInit {
             this.compareService.setCompareVals(this._fsat, 0);
           } else {
             this.modificationExists = false;
+            this.compareService.setCompareVals(this._fsat);
           }
         } else {
           this._fsat.modifications = new Array<Modification>();
           this.modificationExists = false;
+          this.compareService.setCompareVals(this._fsat);
         }
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
