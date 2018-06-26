@@ -116,18 +116,26 @@ Tabs
       margin-right: 5px;
     }
 
+    .tabs.subtabs.fsat .active.missing-data .step-number,
+    .tabs.subtabs.fsat .missing-data .step-number,
     .tabs.subtabs.phast .active.missing-data .step-number,
     .tabs.subtabs.phast .missing-data .step-number,
     .tabs.subtabs.psat .active.missing-data .step-number,
     .tabs.subtabs.psat .missing-data .step-number {
       background: red;
     }
+
+    .tabs.subtabs.fsat .active.input-error  .step-number,
+    .tabs.subtabs.fsat .input-error  .step-number,
     .tabs.subtabs.phast .active.input-error .step-number,
     .tabs.subtabs.phast .input-error .step-number,
     .tabs.subtabs.psat .active.input-error .step-number,
     .tabs.subtabs.psat .input-error .step-number {
       background: orange;
     }
+
+    .tabs.subtabs.fsat .active.success .step-number,
+    .tabs.subtabs.fsat .success .step-number,
     .tabs.subtabs.phast .active.success .step-number,
     .tabs.subtabs.phast .success .step-number,
     .tabs.subtabs.psat .active.success .step-number,

@@ -108,13 +108,16 @@ export class FsatComponent implements OnInit {
     })
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.getContainerHeight();
     })
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
+      this.getContainerHeight();
     })
 
     this.addNewSub = this.fsatService.openNewModal.subscribe(val => {
@@ -351,7 +354,6 @@ export class FsatComponent implements OnInit {
       let nextTab: string = this.stepTabs[assessmentTabIndex];
       this.fsatService.stepTab.next(nextTab);
     }
-    this.getContainerHeight();
   }
 
   back() {
@@ -359,7 +361,6 @@ export class FsatComponent implements OnInit {
       let assessmentTabIndex: number = this.stepTabIndex - 1;
       let nextTab: string = this.stepTabs[assessmentTabIndex];
       this.fsatService.stepTab.next(nextTab);
-      this.getContainerHeight();
     }
   }
 

@@ -28,6 +28,12 @@ export class FsatTabsComponent implements OnInit {
   motorDisabled: boolean;
   fieldDataDisabled: boolean;
   updateDataSub: Subscription;
+
+  settingsValid: boolean = true;
+  fluidValid: boolean;
+  fanValid: boolean;
+  motorValid: boolean;
+  fieldDataValid: boolean;
   constructor(private fsatService: FsatService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private fsatFluidService: FsatFluidService,
     private fanMotorService: FanMotorService,
@@ -40,7 +46,7 @@ export class FsatTabsComponent implements OnInit {
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.checkDisabled();
+      this.checkValid();
     })
 
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
@@ -53,7 +59,7 @@ export class FsatTabsComponent implements OnInit {
     })
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
-      this.checkDisabled();
+      this.checkValid();
     })
   }
 
@@ -66,19 +72,19 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
-    if(str == 'fan-setup'){
-      if(this.fanDisabled){
+    if (str == 'fan-setup') {
+      if (!this.fanDisabled) {
         this.fsatService.stepTab.next(str);
       }
-    }else if(str == 'fan-motor'){
-      if(this.motorDisabled){
+    } else if (str == 'fan-motor') {
+      if (!this.motorDisabled) {
         this.fsatService.stepTab.next(str);
       }
-    }else if(str == 'fan-field-data'){
-      if(this.fieldDataDisabled){
+    } else if (str == 'fan-field-data') {
+      if (!this.fieldDataDisabled) {
         this.fsatService.stepTab.next(str);
       }
-    }else{
+    } else {
       this.fsatService.stepTab.next(str);
     }
   }
@@ -91,15 +97,37 @@ export class FsatTabsComponent implements OnInit {
     this.fsatService.openModificationModal.next(true);
   }
 
-  checkDisabled() {
+  checkValid(){
+    let baseline: FSAT = this.compareService.baselineFSAT;
+    this.checkFluidValid(baseline);
+    this.checkFanValid(baseline);
+    this.checkMotorValid(baseline);
+    this.checkFieldDataValid(baseline);
+    this.checkDisabled(baseline);
+  }
+
+  checkDisabled(fsat: FSAT) {
     let baseline: FSAT = this.compareService.baselineFSAT;
     if (baseline) {
-      let isValid: boolean = this.fsatFluidService.isFanFluidValid(baseline.baseGasDensity);
-      this.fanDisabled = isValid;
-      isValid = this.fanSetupService.isFanSetupValid(baseline.fanSetup);
-      this.motorDisabled = this.fanDisabled && isValid;
-      isValid = this.fanMotorService.isFanMotorValid(baseline.fanMotor);
-      this.fieldDataDisabled = this.fanDisabled && this.motorDisabled && isValid;
+      this.fanDisabled = !this.fluidValid;
+      this.motorDisabled = !this.fluidValid || !this.fanValid;
+      this.fieldDataDisabled = !this.fluidValid || !this.fanValid && !this.motorValid;
     }
+  }
+
+  checkFluidValid(fsat: FSAT){
+    this.fluidValid = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity);
+  }
+
+  checkFanValid(fsat: FSAT){
+    this.fanValid = this.fanSetupService.isFanSetupValid(fsat.fanSetup);
+  }
+
+  checkMotorValid(fsat: FSAT){
+    this.motorValid = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
+  }
+
+  checkFieldDataValid(fsat: FSAT){
+    this.fieldDataValid = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
   }
 }
