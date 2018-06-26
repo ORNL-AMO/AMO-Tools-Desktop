@@ -32,11 +32,19 @@ export class FsatComponent implements OnInit {
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
   containerHeight: number;
 
+  stepTabs: Array<string> = [
+    'system-basics',
+    'fsat-fluid',
+    'fan-setup',
+    'fan-motor',
+    'fan-field-data'
+  ];
 
   _fsat: FSAT;
   assessment: Assessment;
   mainTab: string;
   stepTab: string;
+  stepTabIndex: number;
   settings: Settings;
   isAssessmentSettings: boolean;
   assessmentTab: string;
@@ -93,6 +101,7 @@ export class FsatComponent implements OnInit {
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
     })
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
@@ -170,7 +179,7 @@ export class FsatComponent implements OnInit {
   }
 
 
-  getSettings(update?: boolean) {
+  getSettings() {
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
       this.settings = tmpSettings;
@@ -288,5 +297,38 @@ export class FsatComponent implements OnInit {
     this.isModalOpen = false;
     this.fsatService.openModificationModal.next(false);
     this.changeModificationModal.hide();
+  }
+
+  getCanContinue() {
+    if(this.stepTab == 'system-basics'){
+      return true;
+    }else if(this.stepTab == 'fsat-fluid'){
+      // this.fsatfluid
+    }else if(this.stepTab == 'fan-setup'){
+      
+    }else if(this.stepTab == 'fan-motor'){
+      
+    }else if(this.stepTab == 'fan-field-data'){
+      
+    }
+  }
+
+  continue() {
+    if (this.stepTab == 'fan-field-data') {
+      this.fsatService.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.stepTabIndex + 1;
+      let nextTab: string = this.stepTabs[assessmentTabIndex];
+      this.fsatService.stepTab.next(nextTab);
+    }
+    this.getContainerHeight();
+  }
+
+  back() {
+    if (this.stepTab != 'system-basics') {
+      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == this.stepTab });
+      this.stepTab = this.stepTabs[assessmentTabIndex--];
+      this.getContainerHeight();
+    }
   }
 }
