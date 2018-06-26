@@ -1,4 +1,4 @@
-<div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }">
+<div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <!-- <div class="drag-handle">
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -50,11 +50,11 @@
         <form [formGroup]="editForm">
           <div class="form-group">
             <label>Edit Assessment Name</label>
-            <input type="text" class="form-control" formControlName="name">
+            <input type="text" class="form-control" formControlName="name" class="form-control w-100">
           </div>
           <div class="form-group" *ngIf="directories">
             <label>Move Assessment to Different Folder</label>
-            <select class="form-control" formControlName="directoryId">
+            <select class="form-control w-100" formControlName="directoryId">
               <option *ngFor="let dir of directories" [ngValue]="dir.id">
                 <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
                 <span class="bold">{{dir.name}}/</span>
@@ -85,6 +85,8 @@
           [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
         <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings" [psat]="assessment.psat"
           [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
+        <app-fsat-report *ngIf="assessment.type == 'FSAT'" [assessment]="assessment" [settings]="settings" [fsat]="assessment.fsat"
+          [inRollup]="false" [inFsat]="true" [quickReport]="true"></app-fsat-report>
       </div>
     </div>
   </div>
@@ -92,7 +94,7 @@
 
 
 <div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="copyForm">
       <div class="modal-header">
@@ -126,7 +128,7 @@
 </div>
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -136,7 +138,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+        <p class="text-center small">Are you sure you want to delete this assessment? This
+          <span class="danger">cannot</span> be undone.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>

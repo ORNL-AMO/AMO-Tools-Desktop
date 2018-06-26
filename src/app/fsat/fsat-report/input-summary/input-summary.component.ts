@@ -12,6 +12,8 @@ export class InputSummaryComponent implements OnInit {
   fsat: FSAT;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
 
   constructor() { }

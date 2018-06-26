@@ -144,7 +144,7 @@ export class FsatReportGraphsComponent implements OnInit {
         resultType = 'modified';
       }
       console.log('resultType = ' + resultType);
-      let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType);
+      let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType, this.settings);
       console.log('tmpOutput = ');
       console.log(tmpOutput);
 

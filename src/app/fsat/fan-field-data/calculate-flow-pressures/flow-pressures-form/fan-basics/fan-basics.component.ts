@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FanRatedInfo } from '../../../../../shared/models/fans';
+import { Settings } from '../../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fan-basics',
@@ -13,19 +15,32 @@ export class FanBasicsComponent implements OnInit {
   basicsDone: number;
   @Output('emitSave')
   emitSave = new EventEmitter<FanRatedInfo>();
+  @Input()
+  settings: Settings;
+
+
   planes: Array<number> = [
     1, 2, 3
   ]
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
   }
 
-  focusField(){
+  focusField() {
 
   }
 
-  save(){
+  save() {
     this.emitSave.emit(this.fanRatedInfo);
+  }
+
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

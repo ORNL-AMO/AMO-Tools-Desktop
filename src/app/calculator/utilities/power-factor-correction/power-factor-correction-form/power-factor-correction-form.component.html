@@ -1,16 +1,15 @@
 <form>
   <div class="form-group">
-    <label for="currentDemand">Current Demand</label>
+    <label for="currentDemand">Existing Demand</label>
     <div class="input-group">
-      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.currentDemand" id="currentDemand"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentDemand')">
+      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.existingDemand" id="currentDemand"
+             (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingDemand')">
       <span class="input-group-addon units">kW</span>
     </div>
   </div>
-
+<!--
   <div class="form-group">
     <label for="lineFrequency">Line Frequency</label>
-    <!-- [(ngModel)] signifies a 2-way binding. Changes can be made to that variable from the code or from the html input. -->
     <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
       <option [ngValue]="50">50 Hz</option>
       <option [ngValue]="60">60 Hz</option>
@@ -25,9 +24,9 @@
       <span class="input-group-addon units">V</span>
     </div>
   </div>
-
+-->
   <div class="form-group">
-    <label for="currentPowerFactor">Current Power Factor</label>
+    <label for="currentPowerFactor">Existing Power Factor</label>
     <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor" id="currentPowerFactor"
       (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
   </div>

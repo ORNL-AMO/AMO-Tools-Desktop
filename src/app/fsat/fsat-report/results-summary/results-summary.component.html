@@ -33,17 +33,17 @@
         <td *ngFor="let modResults of modificationResults">{{modResults.fanEfficiency | number:'2.0-1'}}</td>
       </tr>
       <tr>
-        <td>Motor rated power ({{settings.powerMeasurement}})</td>
+        <td>Motor rated power ({{settings.fanPowerMeasurement}})</td>
         <td>{{baselineResults.motorRatedPower | number:'2.0-0'}}</td>
         <td *ngFor="let modResults of modificationResults">{{modResults.motorRatedPower | number:'2.0-0'}}</td>
       </tr>
       <tr>
-        <td>Motor shaft power ({{settings.powerMeasurement}})</td>
+        <td>Motor shaft power ({{settings.fanPowerMeasurement}})</td>
         <td>{{baselineResults.motorShaftPower | number:'2.0-1'}}</td>
         <td *ngFor="let modResults of modificationResults">{{modResults.motorShaftPower | number:'2.0-1'}}</td>
       </tr>
       <tr>
-        <td>Fan shaft power ({{settings.powerMeasurement}})</td>
+        <td>Fan shaft power ({{settings.fanPowerMeasurement}})</td>
         <td>{{baselineResults.fanShaftPower | number:'2.0-1'}}</td>
         <td *ngFor="let modResults of modificationResults">{{modResults.fanShaftPower | number:'2.0-1'}}</td>
       </tr>

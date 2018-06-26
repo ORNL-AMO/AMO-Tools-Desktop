@@ -59,7 +59,7 @@
       </div>
   </div>
 
-  <div class="report-data">
+  <div class="report-data" *ngIf="fsat.setupDone">
 
       <ul #reportBtns class="tabs primary hide-print">
           <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
@@ -99,9 +99,9 @@
   </div>
   <!-- End .report-data -->
 
-  <!-- <div *ngIf="!fsat.setupDone">
-      <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
-  </div> -->
+    <div *ngIf="!fsat.setupDone">
+    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+  </div>
 
 
 </div>

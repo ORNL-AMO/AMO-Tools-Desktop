@@ -27,21 +27,21 @@
           <tbody>
             <tr>
               <td>Inlet Pressure</td>
-              <td class="inlet-pressure">{{fsat.fieldData.inletPressure | sigFigs: '6'}} in. wg</td>
+              <td class="inlet-pressure">{{fsat.fieldData.inletPressure | sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
             </tr>
             <tr>
               <td>Outlet Pressure</td>
-              <td class="outlet-pressure">{{fsat.fieldData.outletPressure | sigFigs: '6'}} in. wg</td>
+              <td class="outlet-pressure">{{fsat.fieldData.outletPressure | sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
             </tr>
             <tr>
               <td>Flow Rate</td>
-              <td class="flow-rate">{{fsat.fieldData.flowRate | sigFigs: '6'}} cfm</td>
+              <td class="flow-rate">{{fsat.fieldData.flowRate | sigFigs: '6'}}  <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></td>
             </tr>
           </tbody>
         </table>
         <!--results-->
         <label class="group-label">Full Planar Results</label>
-        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
+        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [settings]="settings" [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
         <p *ngIf="isDataMissing" class="alert-danger">
           Data missing, complete form to calculate results.
         </p>

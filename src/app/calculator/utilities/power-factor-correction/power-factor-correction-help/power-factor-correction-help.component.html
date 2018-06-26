@@ -1,22 +1,23 @@
 <div class="card">
-  <div class="card-header">
-    Power Factor Correction Help
+  <div>
+    <div class="card-header">
+      Calculator Description
+    </div>
+    <div class="card-block small d-flex flex-column">
+      <p>
+        Power factor is defined as the ratio of real, useful power to the apparent power which must be supplied. The
+        main cause of low power factor is inductive loads from motors. Low power factor causes you to inefficiently
+        utilize the electrical power you’re paying for and can contribute to equipment instability and failure, as well
+        as significantly higher than necessary energy costs.<br><br> The purpose of Power Factor Correction is to bring the power
+        factor closer to a value of 1 by absorbing reactive power through adding capacitance. Sometimes, a utility will
+        charge a ‘power factor fee’ for having a power factor lower than 0.95.<br><br> This calculator is used to identify the
+        capacitance (in kVAR) required for improving the power factor to the proposed level.
+      </p>
   </div>
-  <div class="card-block small d-flex flex-column">
-    <p>
-      Power factor is defined as the ratio of real, useful power to the apparent power which must be supplied. The
-      main cause of low power factor is inductive loads from motors. Low power factor causes you to inefficiently
-      utilize the electrical power you’re paying for and can contribute to equipment instability and failure, as well
-      as significantly higher than necessary energy costs. The purpose of Power Factor Correction is to bring the power
-      factor closer to a value of 1 by absorbing reactive power through adding capacitance. Sometimes, a utility will
-      charge a ‘power factor fee’ for having a power factor lower than 0.95. This calculator is used to identify the
-      capacitance (in micro Faraday) required for improving the power factor to the proposed level.
-    </p>
-
     <div class="help-content">
-      <div class="card" *ngIf="currentField == 'currentDemand'">
+      <div class="card" *ngIf="currentField == 'existingDemand'">
         <div class="card-header">
-          Current Demand
+          Existing Demand
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
@@ -28,42 +29,9 @@
             Units: <strong> kW </strong><br> Minimum Value Allowed: <strong>0</strong>
         </div>
       </div>
-
-      <div class="card" *ngIf="currentField == 'lineFrequency'">
-        <div class="card-header">
-          Line Frequency
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Utility frequency, line frequency, or mains frequency is the frequency level of the AC electricity used
-            in transmissions and distribution from electricity generation sources to customers.
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong> Hz </strong><br> Minimum Value Allowed: <strong>0</strong>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'ratedVoltage'">
-        <div class="card-header">
-          Rated Voltage
-        </div>
-        <div class="card-block">
-          <p>The rated voltage is the motor design (nameplate) voltage, specifically the Line to Line
-            voltage or simply, Line Voltage. In a single phase system, take the voltage between the live wire and the
-            neutral wire. In a three phase or polyphase system, the Line voltage is the vector sum of the phase to
-            phase voltage across each winding.</p>
-          <p>
-
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong> V </strong><br> Minimum Value Allowed: <strong>0</strong>
-        </div>
-      </div>
       <div class="card" *ngIf="currentField == 'currentPowerFactor'">
         <div class="card-header">
-          Current Power Factor
+          Existing Power Factor
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
@@ -84,20 +52,5 @@
         </div>
       </div>
     </div>
-
-
-   <!--
-   Hi-res images of formulas
-    <label><u><strong>Outputs</strong></u></label>
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-actual-demand.png">
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-apparent-power.png">
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-capacitance-required.png">
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-current-reactive-power.png">
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-demand-savings.png">
-    <img class="w-100 mx-auto p-2" src="assets/images/power-factor-correction-new-demand.png">
-
-    <label><u><strong>Help Figure</strong></u></label>
-    <img class="w-75 mx-auto p-2" src="assets/images/power-factor-correction.png">
   </div>
 </div>
--->

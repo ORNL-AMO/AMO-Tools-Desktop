@@ -7,7 +7,7 @@
             <img src="assets/images/flow.png" class="ico-size2">
           </div>
           <div class="col">
-            <h3>Flow Calculations Energy Use Calculator</h3>
+            <h3>Flow and Energy Used Calculator</h3>
           </div>
         </div>
         <div class="row">
@@ -38,12 +38,12 @@
                       <th>Flow</th>
 
                       <td>
-                        <strong>{{flowCalculationResults.flow | number:'2.2-2'}}</strong>
+                        <strong>{{flowCalculationResults.flow | number:'2.0-0'}}</strong>
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong>Scfh</strong>
+                          <strong> Scfh</strong>
                         </span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong>Nm
+                          <strong> Nm
                             <sup>3</sup>/hr</strong>
                         </span>
                       </td>
@@ -52,12 +52,12 @@
                       <th>Total Flow</th>
 
                       <td>
-                        <strong>{{flowCalculationResults.totalFlow | number:'2.2-2'}}</strong>
+                        <strong>{{flowCalculationResults.totalFlow | number:'2.0-0'}}</strong>
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong>Scf</strong>
+                          <strong> Scf</strong>
                         </span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong>Nm
+                          <strong> Nm
                             <sup>3</sup>
                           </strong>
                         </span>
@@ -66,12 +66,12 @@
                     <tr>
                       <th>Energy Use</th>
                       <td>
-                        <strong>{{flowCalculationResults.heatInput | number:'2.2-2'}}</strong>
+                        <strong>{{flowCalculationResults.heatInput | number:'2.0-0'}}</strong>
                         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong>MMBtu</strong>
+                          <strong> MMBtu</strong>
                         </span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong>GJ</strong>
+                          <strong> GJ</strong>
                         </span>
                       </td>
                     </tr>
