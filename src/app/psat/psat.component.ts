@@ -367,7 +367,7 @@ export class PsatComponent implements OnInit {
     this.getContainerHeight();
   }
 
-  continue(bool?: boolean) {
+  continue() {
     if (this.subTab == 'field-data') {
       this.psatService.mainTab.next('assessment');
     } else {
