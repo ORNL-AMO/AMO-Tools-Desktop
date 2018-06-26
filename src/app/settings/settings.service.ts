@@ -157,7 +157,7 @@ export class SettingsService {
         temperatureMeasurement: 'F',
         steamTemperatureMeasurement: 'F',
         steamPressureMeasurement: 'psi',
-        steamSpecificEnthalpyMeasurement: 'btulb',
+        steamSpecificEnthalpyMeasurement: 'btuLb',
         steamSpecificEntropyMeasurement: 'btulbF',
         steamSpecificVolumeMeasurement: 'ft3lb',
         steamMassFlowMeasurement: 'lbhr',
