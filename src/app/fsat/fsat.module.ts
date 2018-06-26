@@ -44,6 +44,13 @@ import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pres
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { ConvertFsatService } from './convert-fsat.service';
+import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
+import { AchievableEfficiencyModule } from '../calculator/pumps/achievable-efficiency/achievable-efficiency.module';
+import { HeadToolModule } from '../calculator/pumps/head-tool/head-tool.module';
+import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
+import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
+import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
+import { SpecificSpeedModule } from '../calculator/pumps/specific-speed/specific-speed.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -58,7 +65,14 @@ import { ConvertFsatService } from './convert-fsat.service';
     ExploreOpportunitiesModule,
     FsatResultsModule,
     FsatReportModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SystemCurveModule,
+    SpecificSpeedModule,
+    NemaEnergyEfficiencyModule,
+    MotorPerformanceModule,
+    HeadToolModule,
+    AchievableEfficiencyModule, 
+    PumpCurveModule
   ],
   declarations: [
     FsatComponent,

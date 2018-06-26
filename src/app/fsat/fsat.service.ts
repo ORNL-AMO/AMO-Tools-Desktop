@@ -24,6 +24,7 @@ export class FsatService {
   openModificationModal: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
+  calculatorTab: BehaviorSubject<string>;
   constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
     this.initData();
   }
@@ -33,6 +34,7 @@ export class FsatService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+    this.calculatorTab = new BehaviorSubject<string>('system-curve');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);

@@ -64,6 +64,8 @@ export class FsatComponent implements OnInit {
   isModalOpen: boolean;
   openModSub: Subscription;
   modalOpenSubscription: Subscription;
+  calcTab: string;
+  calcTabSubscription: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -145,6 +147,10 @@ export class FsatComponent implements OnInit {
       this.isModalOpen = isOpen;
     })
 
+    this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val =>{ 
+      this.calcTab = val;
+    })
+
   }
 
   ngOnDestroy() {
@@ -159,6 +165,7 @@ export class FsatComponent implements OnInit {
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
     this.modalOpenSubscription.unsubscribe();
+    this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {

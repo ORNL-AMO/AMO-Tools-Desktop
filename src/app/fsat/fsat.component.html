@@ -46,6 +46,17 @@
     </div>
   </div>
 
+
+  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [assessment]="assessment"></app-system-curve>
+    <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [settings]="settings"></app-achievable-efficiency>
+    <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings"></app-motor-performance>
+    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
+    <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings"></app-specific-speed>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [assessment]="assessment"></app-pump-curve>
+  </div>
+
   <div #footer id="fsatFooter" class="footer hide-print">
     <div class="pull-left" *ngIf="stepTab != 'system-basics'">
       <button class="btn btn-default" (click)="back()">Back</button>
