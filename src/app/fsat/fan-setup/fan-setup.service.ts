@@ -27,4 +27,13 @@ export class FanSetupService {
     }
     return obj;
   }
+
+  isFanSetupValid(obj: FanSetup): boolean{
+    let form: FormGroup = this.getFormFromObj(obj);
+    if(form.status == 'VALID'){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
