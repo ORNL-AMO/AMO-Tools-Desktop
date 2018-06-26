@@ -15,6 +15,10 @@ import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } fro
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../assessment/assessment.service';
+import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
+import { FanMotorService } from './fan-motor/fan-motor.service';
+import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
+import { FanSetupService } from './fan-setup/fan-setup.service';
 
 @Component({
   selector: 'app-fsat',
@@ -68,7 +72,11 @@ export class FsatComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private assessmentService: AssessmentService) { }
+    private assessmentService: AssessmentService,
+    private fsatFluidService: FsatFluidService,
+    private fanMotorService: FanMotorService,
+    private fanFieldDataService: FanFieldDataService,
+    private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -280,7 +288,7 @@ export class FsatComponent implements OnInit {
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
-        // this.psatService.getResults.next(true);
+        this.fsatService.updateData.next(true);
       })
     })
   }
@@ -300,16 +308,36 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if(this.stepTab == 'system-basics'){
+    if (this.stepTab == 'system-basics') {
       return true;
-    }else if(this.stepTab == 'fsat-fluid'){
-      // this.fsatfluid
-    }else if(this.stepTab == 'fan-setup'){
-      
-    }else if(this.stepTab == 'fan-motor'){
-      
-    }else if(this.stepTab == 'fan-field-data'){
-      
+    } else if (this.stepTab == 'fsat-fluid') {
+      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-setup') {
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-motor') {
+      let isValid: boolean = this.fanMotorService.isFanMotorValid(this._fsat.fanMotor);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-field-data') {
+      let isValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this._fsat.fieldData);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 

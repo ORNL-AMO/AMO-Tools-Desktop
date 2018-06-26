@@ -39,4 +39,13 @@ export class FanFieldDataService {
     }
     return newData;
   }
+
+  isFanFieldDataValid(obj: FieldData): boolean{
+    let form: FormGroup = this.getFormFromObj(obj);
+    if(form.status == 'VALID'){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
