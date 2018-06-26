@@ -356,9 +356,14 @@ export class FsatComponent implements OnInit {
 
   back() {
     if (this.stepTab != 'system-basics') {
-      let assessmentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == this.stepTab });
-      this.stepTab = this.stepTabs[assessmentTabIndex--];
+      let assessmentTabIndex: number = this.stepTabIndex - 1;
+      let nextTab: string = this.stepTabs[assessmentTabIndex];
+      this.fsatService.stepTab.next(nextTab);
       this.getContainerHeight();
     }
+  }
+
+  goToReport(){
+    this.fsatService.mainTab.next('report')
   }
 }

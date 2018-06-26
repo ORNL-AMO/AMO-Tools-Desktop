@@ -47,7 +47,7 @@
   </div>
 
   <div #footer id="fsatFooter" class="footer hide-print">
-    <div class="pull-left" *ngIf="subTab != 'system-basics' || mainTab == 'assessment'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
