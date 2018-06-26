@@ -129,9 +129,9 @@ export class ReportRollupService {
       for (let i = 0; i < calcs.length; i++) {
         if (calcs[i].preAssessments) {
           this.calcsArray.push(calcs[i]);
-          this.selectedCalcs.next(this.calcsArray);
         }
       }
+      this.selectedCalcs.next(this.calcsArray);
     }
     let subDirResults = this.directoryDbService.getSubDirectoriesById(subDir.id);
     if (subDirResults) {
