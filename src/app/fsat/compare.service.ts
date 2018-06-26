@@ -12,7 +12,7 @@ export class CompareService {
   }
 
 
-  setCompareVals(fsat: FSAT, selectedModIndex: number) {
+  setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
     if (fsat.modifications) {
       if (fsat.modifications.length != 0) {
