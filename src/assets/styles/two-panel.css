@@ -139,7 +139,11 @@
     transition: all .5s ease-in-out;
 }
 
-
+.fsat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #FFE400;
+    transition: all .5s ease-in-out;
+    color: black;
+}
 
 .panel-add a{
     padding-top: 5px;
