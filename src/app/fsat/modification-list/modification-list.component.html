@@ -58,7 +58,8 @@
           </div>
           <div class="col-5">
             <div class="d-flex flex-wrap">
-              <!-- <div *ngFor="let badge of getBadges(modification.fsat)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div> -->
+              <div *ngFor="let badge of getBadges(modification.fsat)" class="badge badge-primary" (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
+              <div *ngIf="modification.fsat.fanMotor.optimize" class="badge badge-secondary ml-auto">Optimized</div>
             </div>
           </div>
         </div>
