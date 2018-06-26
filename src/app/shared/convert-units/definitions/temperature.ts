@@ -4,7 +4,7 @@ export const temperature = {
             name: {
                 singular: 'Degree Celsius'
                 , plural: 'Degrees Celsius' ,
-                 display:  '(C)'
+                 display:  '(&#x2103;)'
             }
             , to_anchor: 1
             , anchor_shift: 0
@@ -24,7 +24,7 @@ export const temperature = {
             name: {
                 singular: 'Degree Fahrenheit'
                 , plural: 'Degrees Fahrenheit' ,
-                 display:  '(F)'
+                 display:  '(&#x2109;)'
             }
             , to_anchor: 1
         }
