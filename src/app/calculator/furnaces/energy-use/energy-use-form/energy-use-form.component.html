@@ -18,7 +18,7 @@
         <div class="form-group">
           <label class="small" for="orificeDiameter">Orifice Diameter</label>
           <div class="input-group">
-            <input autofocus name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
+            <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
               id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
@@ -72,7 +72,7 @@
           <div class="input-group">
             <input name="gasPressure" [(ngModel)]="flowCalculations.gasPressure" type="number" step="any" class="form-control" id="gasPressure"
               (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasPressure')">
-            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">Psig</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
           </div>
         </div>
