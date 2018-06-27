@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemCurveComponent } from './system-curve.component';
 import { SystemCurveFormComponent } from './system-curve-form/system-curve-form.component';
 import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-graph.component';
+import { SystemCurveService } from './system-curve.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,9 @@ import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-gra
   ],
    exports: [
      SystemCurveComponent
+   ],
+   providers: [
+     SystemCurveService
    ]
 })
 export class SystemCurveModule { }

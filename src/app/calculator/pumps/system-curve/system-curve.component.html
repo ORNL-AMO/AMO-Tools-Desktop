@@ -12,7 +12,7 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-12">
-            <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+            <app-system-curve-form [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
               (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
           </div>
           <div class="col-md-auto btn-col">
