@@ -20,13 +20,13 @@
   <div class="form-group">
     <label for="pressureMeasurement">Pressure Measurement</label>
     <select class="form-control" formControlName="pressureMeasurement" id="pressureMeasurement" (change)="setCustom()">
-        <option *ngFor="let measurement of pressureMeasurements" [ngValue]="measurement.unit">{{measurement.display}} <span [innerHTML]="getUnitDisplay(measurement.unit)"></span></option>
+        <option *ngFor="let measurement of pressureMeasurements" [ngValue]="measurement.unit">{{measurement.display}} <span [innerHTML]="getUnitDisplay(measurement.unit)"></span> </option>
     </select>
   </div>
   <div class="form-group">
     <label for="temperatureMeasurement">Temperature Measurement</label>
     <select class="form-control" formControlName="temperatureMeasurement" id="temperatureMeasurement" (change)="setCustom()">
-        <option *ngFor="let measurement of temperatureMeasurements" [ngValue]="measurement.unit">{{measurement.display}} <span [innerHTML]="getUnitDisplay(measurement.unit)"></span></option>
+        <option *ngFor="let measurement of temperatureMeasurements" [ngValue]="measurement.unit">{{measurement.display}} <span [innerHTML]="getUnitDisplay(measurement.unit)"></span> </option>
     </select>
   </div>
     <!--<div class="form-group">
