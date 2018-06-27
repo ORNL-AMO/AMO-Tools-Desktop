@@ -31,7 +31,15 @@
   }
     
 
-
+  .fsat .summary-card-header{
+    border-bottom: #566573 groove 2px;
+    border-image: linear-gradient(to right,#F0F3F4, #FFE400) 50 / 2;
+  
+  }
+  .fsat .fa-pie-chart{
+      font-size: large;
+      color: #FFE400;
+    }
 
 
 
@@ -66,4 +74,47 @@
   padding-top: 15px;
   padding-right: 10px;
   padding-left: 10px;
+}
+
+.dropdown-menu.shown{
+  display: grid;
+  padding: 0px;
+}
+
+.dropdown-item{
+  padding: .25rem;
+  font-size: small;
+}
+
+.dropdown-toggle::after{
+margin-left: 0;
+}
+
+.dropdown-toggle{
+padding: 3px;
+}
+
+.psat .dropdown-toggle,
+.psat .btn-primary{
+background-color: #2980b9;
+}
+
+
+.phast .dropdown-toggle,
+.phast .btn-primary{
+background-color: #BF3D00;
+}
+
+.dropdown-menu.shown{
+left: -160px;
+background-color: #ececec;
+}
+
+.dropdown-item:hover{
+cursor: pointer;
+}
+
+
+.modal-footer .btn{
+  padding: 6px
 }

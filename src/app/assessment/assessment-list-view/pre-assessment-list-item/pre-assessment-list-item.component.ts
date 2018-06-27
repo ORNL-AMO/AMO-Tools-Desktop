@@ -4,10 +4,11 @@ import { Directory } from '../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-pre-assessment-list-item',
   templateUrl: './pre-assessment-list-item.component.html',
@@ -30,14 +31,24 @@ export class PreAssessmentListItemComponent implements OnInit {
   index: number;
 
   @ViewChild('editModal') public editModal: ModalDirective;
+  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  @ViewChild('copyModal') public copyModal: ModalDirective;
+
+
   directories: Array<Directory>;
   isFirstChange: boolean = true;
   preAssessmentExists: boolean;
   editForm: FormGroup;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private calculatorDbService: CalculatorDbService) { }
+  copyForm: FormGroup;
+  dropdownOpen: boolean = false;
+
+  calculatorCopy: Calculator;
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
     this.checkPreAssessment();
+    this.calculatorCopy = JSON.parse(JSON.stringify(this.calculator));
+    delete this.calculatorCopy.id;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -107,6 +118,56 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.calculatorDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideEditModal();
+      })
+    })
+  }
+
+  showDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  showDeleteModal() {
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModal.hide();
+  }
+
+  showCopyModal() {
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.copyForm = this.formBuilder.group({
+        'name': [this.calculator.name + ' (copy)', Validators.required],
+        'directoryId': [this.calculator.directoryId, Validators.required]
+      })
+      this.copyModal.show();
+    })
+  }
+
+  hideCopyModal() {
+    this.copyModal.hide();
+  }
+
+  createCopy() {
+    this.calculatorCopy.name = this.copyForm.controls.name.value;
+    this.calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
+    // this.calculatorCopy.createdDate = new Date();
+    // this.calculatorCopy.modifiedDate = new Date();
+
+    this.indexedDbService.addCalculator(this.calculatorCopy).then(newAssessmentId => {
+      this.calculatorDbService.setAll().then(() => {
+        this.updateDirectory.emit(true);
+        this.hideCopyModal();
+      })
+    })
+  }
+
+  deletePreAssessment() {
+    this.indexedDbService.deleteCalculator(this.calculator.id).then(() => {
+      this.calculatorDbService.setAll().then(() => {
+        this.hideDeleteModal();
+        this.updateDirectory.emit(true);
       })
     })
   }
