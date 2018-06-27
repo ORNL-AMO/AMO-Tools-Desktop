@@ -56,6 +56,7 @@ export class SystemCurveGraphComponent implements OnInit {
   displayGridLinesTooltip: boolean = false;
   
   isFirstChange: boolean = true;
+  expanded: boolean = false;
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -718,6 +719,18 @@ export class SystemCurveGraphComponent implements OnInit {
       this.exportName = "system-curve-graph";
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
+  }
+
+  expandChart() {
+    this.expanded = true;
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 400);
+    // this.resizeGraph();
+  }
+
+  contractChart() {
+    this.expanded = false;
   }
 
 }

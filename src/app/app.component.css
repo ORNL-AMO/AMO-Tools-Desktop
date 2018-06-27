@@ -1798,10 +1798,46 @@ Toasty Overrides ================================= */
   vertical-align: middle;
 }
 
+.panel-chart-container {
+  transition: ease-in-out 0.2s all;
+}
+
+.expanded-chart {
+  position: fixed;
+  top: 80px;
+  bottom: 80px;
+  left: 20px;
+  right: 20px;
+  width: auto;
+  height: auto;
+  background-color: rgba(236, 236, 236, 0.9);
+  z-index: 10000;
+  box-shadow: 0px 0px 20px #000;
+}
+
 
 /* chart download icon */
-
 .fa-download {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.fa-expand {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.fa-compress {
   position: absolute;
   opacity: 0.6;
   padding: 5px;
@@ -1840,7 +1876,29 @@ Toasty Overrides ================================= */
   left: 55px;
 }
 
+#gridToggle .fa-expand {
+  left: 94px;
+  top: 0px;
+}
+
+#gridToggle .fa-compress {
+  left: 94px;
+  top: 0px;
+}
+
 .fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+.fa-expand:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+.fa-compress:hover {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;
