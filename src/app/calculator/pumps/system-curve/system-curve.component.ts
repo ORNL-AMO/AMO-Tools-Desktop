@@ -24,6 +24,8 @@ export class SystemCurveComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
+
+  
   curveConstants: any;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
