@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row psat" *ngIf="settings && showForm">
+<div class="modify-conditions panel-container row psat" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && showForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -70,7 +70,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11" id="systemCurveGraph">
-              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+              <app-system-curve-graph [isFan]="isFan" [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
                 [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
 
             </div>

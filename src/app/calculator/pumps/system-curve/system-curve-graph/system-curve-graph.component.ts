@@ -24,6 +24,8 @@ export class SystemCurveGraphComponent implements OnInit {
   lossCoefficient: number;
   @Input()
   settings: Settings;
+  @Input()
+  isFan: boolean;
 
   @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
@@ -180,15 +182,25 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
+
+    let yAxisLabel, xAxisLabel: string;
+    if(this.isFan){
+      yAxisLabel = "Pressure (" + this.settings.fanPressureMeasurement + ")"
+      xAxisLabel = "Flow Rate (" + this.settings.fanFlowRate + ")"
+    }else{
+      yAxisLabel = "Head (" + this.settings.distanceMeasurement + ")";
+      xAxisLabel = "Flow Rate (" + this.settings.flowMeasurement + ")"
+    }
+
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head (" + this.settings.distanceMeasurement + ")");
+      .text(yAxisLabel);
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow Rate (" + this.settings.flowMeasurement + ")");
+      .text(xAxisLabel);
 
 
 

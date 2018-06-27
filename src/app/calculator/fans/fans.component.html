@@ -15,7 +15,17 @@
             </p>
           </div>
         </div>
-
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/system-curve-tran.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
+            <p>
+              Use system curve to graph your pumps flow.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -23,5 +33,9 @@
 
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fsat-203'">
-    <app-fsat-203></app-fsat-203>
+  <app-fsat-203></app-fsat-203>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">
+  <app-system-curve [isFan]="true"></app-system-curve>
 </div>
