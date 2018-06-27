@@ -8,11 +8,14 @@ import { FieldDataSummaryComponent } from './input-summary/field-data-summary/fi
 import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-motor-summary.component';
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [FsatReportComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent],
   exports: [FsatReportComponent]

@@ -114,7 +114,7 @@ export class FsatService {
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
         efficiencyClass: fsat.fanMotor.efficiencyClass,
-        fanEfficiency: fsat.fanSetup.fanEfficiency,
+        fanEfficiency: fsat.fanSetup.fanEfficiency | 0,
         //motor
         specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
         motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,

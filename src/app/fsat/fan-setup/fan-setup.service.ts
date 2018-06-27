@@ -13,7 +13,8 @@ export class FanSetupService {
       fanType: [obj.fanType, Validators.required],
       fanSpecified: [obj.fanSpecified],
       fanSpeed: [obj.fanSpeed, Validators.required],
-      drive: [obj.drive, Validators.required]
+      drive: [obj.drive, Validators.required],
+      fanEfficiency: [obj.fanEfficiency]
     })
     return form;
   }
@@ -23,7 +24,8 @@ export class FanSetupService {
       fanType: form.controls.fanType.value,
       fanSpecified: form.controls.fanSpecified.value,
       fanSpeed: form.controls.fanSpeed.value,
-      drive: form.controls.drive.value
+      drive: form.controls.drive.value,
+      fanEfficiency: form.controls.fanEfficiency.value
     }
     return obj;
   }
