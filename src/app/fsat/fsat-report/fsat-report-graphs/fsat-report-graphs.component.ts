@@ -72,8 +72,6 @@ export class FsatReportGraphsComponent implements OnInit {
     this.prepFsatOptions();
     this.setBarLabels();
     this.allChartData = this.getAllChartData();
-    console.log('allChartData = ');
-    console.log(this.allChartData);
     this.selectNewFsat(1);
     if (this.modExists) {
       this.selectNewFsat(2);
@@ -82,8 +80,6 @@ export class FsatReportGraphsComponent implements OnInit {
 
 
   prepFsatOptions(): void {
-    console.log('prepFsatOptions(), this.fsat = ');
-    console.log(this.fsat);
     this.fsatOptions.push({ name: 'Baseline', fsat: this.fsat, index: 0 });
     this.selectedFsat1 = this.fsatOptions[0];
 
@@ -143,13 +139,9 @@ export class FsatReportGraphsComponent implements OnInit {
       else {
         resultType = 'modified';
       }
-      console.log('resultType = ' + resultType);
       let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType, this.settings);
-      console.log('tmpOutput = ');
-      console.log(tmpOutput);
 
       if (this.settings.powerMeasurement === 'hp') {
-        console.log('hp');
         motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
         fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
 
@@ -160,7 +152,6 @@ export class FsatReportGraphsComponent implements OnInit {
         usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
       }
       else {
-        console.log('not hp');
         motorShaftPower = tmpOutput.motorShaftPower;
         fanShaftPower = tmpOutput.fanShaftPower;
 
@@ -170,15 +161,6 @@ export class FsatReportGraphsComponent implements OnInit {
         fanLoss = tmpOutput.fanShaftPower * (1 - (tmpOutput.fanEfficiency / 100));
         usefulOutput = tmpOutput.fanShaftPower * (tmpOutput.fanEfficiency / 100);
       }
-
-      console.log('tmpOutput.fanEfficiency = ' + tmpOutput.fanEfficiency);
-      console.log('fsat.fanSetup.fanEfficiency = ' + this.fsatOptions[i].fsat.fanSetup.fanEfficiency);
-      
-      console.log('energyInput = ' + energyInput);
-      console.log('motorLoss = ' + motorLoss);
-      console.log('driveLoss = ' + driveLoss);
-      console.log('fanLoss = ' + fanLoss);
-      console.log('usefulOutput = ' + usefulOutput);
 
       if (motorLoss > 0) {
         tmpPieLabels.push('Motor Loss: ' + (100 * motorLoss / energyInput).toFixed(2).toString() + "%");
@@ -203,13 +185,6 @@ export class FsatReportGraphsComponent implements OnInit {
       tmpBarValues.push(fanLoss);
       tmpBarValues.push(usefulOutput);      
 
-      // tmpPieLabels = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'];
-
-
-
-
-
-      // this.getFsatData(tmpFsat, tmpPieLabels, tmpPieValues, tmpBarValues);
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);
       allBarValues.push(tmpBarValues);
@@ -223,24 +198,6 @@ export class FsatReportGraphsComponent implements OnInit {
     }
     return allPieData;
   }
-
-  // sets loss data and percentages for selected psats
-  // getFsatData(fsat: FSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): void {
-
-  //   if (fsat.)
-
-  // }
-
-  // getFsatData(fsat: FSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
-  //   let data = new Array<number>();
-
-  //   let motorPower = fsat.fieldData.motorPower;
-  //   let motorLosses = fsat.fieldData.motorPower - fsat.
-
-  //   data = [fsat.fieldData.motorPower, ]
-
-  //   return data;
-  // }
 
   getPieWidth(): number {
     if (this.pieChartContainer) {
