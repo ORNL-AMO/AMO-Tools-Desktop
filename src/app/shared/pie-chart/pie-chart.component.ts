@@ -84,7 +84,7 @@ export class PieChartComponent implements OnInit {
     }
     setTimeout(() => {
       this.checkHover(btnType);
-    }, 1000);
+    }, 700);
   }
 
   hideTooltip(btnType: string) {

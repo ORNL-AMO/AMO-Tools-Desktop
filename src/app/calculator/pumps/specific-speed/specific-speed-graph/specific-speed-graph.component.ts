@@ -42,6 +42,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
   doc: any;
   window: any;
 
+  //booleans for tooltip
+  hoverBtnExport: boolean = false;
+  displayExportTooltip: boolean = false;
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+
   @Input()
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
@@ -81,6 +87,53 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
+  // ========== export/gridline tooltip functions ==========
+  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
+  // for example, check motor-performance-graph.module.ts
+  initTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = true;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 700);
+  }
+
+  hideTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = false;
+      this.displayExportTooltip = false;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  checkHover(btnType: string) {
+    if (btnType == 'btnExportChart') {
+      if (this.hoverBtnExport) {
+        this.displayExportTooltip = true;
+      }
+      else {
+        this.displayExportTooltip = false;
+      }
+    }
+    else if (btnType == 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+  }
+  // ========== end tooltip functions ==========
 
   resizeGraph() {
     let curveGraph = this.doc.getElementById('specificSpeedGraph');
