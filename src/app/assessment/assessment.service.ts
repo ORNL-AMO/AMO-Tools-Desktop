@@ -52,6 +52,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
     } else if (assessment.type == 'FSAT') {
+      if (assessment.fsat.setupDone && !str) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/fsat/' + assessment.id);
     }
   }
