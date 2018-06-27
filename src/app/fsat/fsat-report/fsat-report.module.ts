@@ -12,12 +12,13 @@ import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
 import { FsatBarChartComponent } from './fsat-report-graphs/fsat-bar-chart/fsat-bar-chart.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     FormsModule,
-    ReactiveFormsModule,
-    SharedModule
+    ReactiveFormsModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, FsatBarChartComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent],
   exports: [FsatReportComponent]
