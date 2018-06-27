@@ -16,6 +16,17 @@ export class PhastSettingsComponent implements OnInit {
   @Input()
   disable: boolean;
 
+  energyOptions: Array<string> = [
+    'MMBtu',
+    'Btu',
+    'GJ',
+    'kJ',
+    'kcal',
+    'kgce',
+    'kgoe',
+    'kWh'
+  ]
+
   fuelFiredOptions: Array<string> = [
     'Ladle Heater',
     'Reheat Furnace',
@@ -33,7 +44,9 @@ export class PhastSettingsComponent implements OnInit {
   ]
 
   // electricOptions: Array<string>;
-  constructor() { }
+  energyResultOptions: Array<any>;
+
+  constructor(private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
     if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value == '') {
       this.setOptions();
@@ -43,6 +56,15 @@ export class PhastSettingsComponent implements OnInit {
       this.settingsForm.controls.energySourceType.disable();
       this.settingsForm.controls.customFurnaceName.disable();
     }
+    this.energyResultOptions = new Array<any>();
+    this.energyOptions.forEach(val => {
+      let tmpPossibility = {
+        unit: val,
+        display: this.getUnitName(val),
+        displayUnit: this.getUnitDisplay(val)
+      }
+      this.energyResultOptions.push(tmpPossibility);
+    })
   }
 
   setOptions() {
@@ -67,5 +89,14 @@ export class PhastSettingsComponent implements OnInit {
   startPolling() {
     this.startSavePolling.emit(true);
   }
-
+  getUnitName(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.plural;
+    }
+  }
+  getUnitDisplay(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
 }
