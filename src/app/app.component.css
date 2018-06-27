@@ -130,6 +130,10 @@ Buttons
 /*
 Badges
 =============================================== */
+.badge:empty{
+  display: inline-block;
+}
+
 .badge {
   display: inline-block;
   font-size: 12px;
