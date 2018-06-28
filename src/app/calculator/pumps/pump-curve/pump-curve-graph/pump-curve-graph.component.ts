@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-pump-curve-graph',
@@ -24,6 +25,8 @@ export class PumpCurveGraphComponent implements OnInit {
   selectedFormView: string;
   @Input()
   settings: Settings;
+  @Input()
+  isFan: boolean;
 
   @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
@@ -58,7 +61,7 @@ export class PumpCurveGraphComponent implements OnInit {
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.isGridToggled = false;
@@ -92,6 +95,15 @@ export class PumpCurveGraphComponent implements OnInit {
       }
     } else {
       this.firstChange = false;
+    }
+  }
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
     }
   }
 
@@ -325,15 +337,30 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
       this.makeModifiedCurve(modifiedData);
     }
+
+    let flowMeasurement: string;
+    let distanceMeasurement: string;
+    let headOrPressure: string;
+
+    if (this.isFan) {
+      headOrPressure = "Pressure";
+      distanceMeasurement = this.settings.fanPressureMeasurement;
+      flowMeasurement = this.settings.fanFlowRate;
+    } else {
+      headOrPressure = "Head";
+      distanceMeasurement = this.settings.distanceMeasurement;
+      flowMeasurement = this.settings.flowMeasurement;
+    }
+
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head (" + this.settings.distanceMeasurement + ")");
+      .html(headOrPressure + " (" + this.getDisplayUnit(distanceMeasurement) + ")");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow (" + this.settings.flowMeasurement + ")");
+      .html("Flow (" + this.getDisplayUnit(flowMeasurement) + ")");
 
     this.calcPoint = this.svg.append("g")
       .attr("class", "focus")
@@ -481,9 +508,6 @@ export class PumpCurveGraphComponent implements OnInit {
             let modD1 = modifiedData[i];
             if (modD0 && modD1) {
 
-              //debug
-              console.log("modD0 && modD1");
-
               let modD = x0 - modD0.x > modD1.x - x0 ? modD1 : modD0;
               xVal = this.x(modD.x);
               if (isNaN(xVal) == false) {
@@ -493,21 +517,16 @@ export class PumpCurveGraphComponent implements OnInit {
                 this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
 
                 if (minMod.y < minBaseline.y) {
-                  // this.pointer
-                  //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(modD.y) + 27) + ')')
-                  //   .style("fill", "#ffffff");
-                  // .style("filter", "url(#drop-shadow)");
-
                   this.detailBox
                     .style("padding-right", "10px")
                     .style("padding-left", "10px")
                     .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                      "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.getDisplayUnit(flowMeasurement) + "</div>" +
 
-                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                      "<strong><div>Basleline" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + this.getDisplayUnit(distanceMeasurement) + "</div></p>" +
+                      "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.getDisplayUnit(flowMeasurement) + "</div>" +
 
-                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                      "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + this.getDisplayUnit(distanceMeasurement) + "</div></p>")
 
                     // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -551,12 +570,12 @@ export class PumpCurveGraphComponent implements OnInit {
                   .style("padding-right", "10px")
                   .style("padding-left", "10px")
                   .html(
-                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.getDisplayUnit(flowMeasurement) + "</div>" +
 
-                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
-                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                    "<strong><div>Basleline " + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + this.getDisplayUnit(distanceMeasurement) + "/div></p>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.getDisplayUnit(flowMeasurement) + "</div>" +
 
-                  "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                    "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + this.getDisplayUnit(distanceMeasurement) + "</div></p>")
 
                   // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -598,34 +617,20 @@ export class PumpCurveGraphComponent implements OnInit {
             }
           }
           else {
-
-            //debug
-            console.log("NOT modD0 && modD1");
-
             this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-
-            // this.pointer.transition()
-            //   .style("opacity", 1);
-
             this.detailBox.transition()
               .style("opacity", 1);
 
             this.tooltipPointer.transition()
               .style("opacity", 1);
 
-            // this.pointer
-            //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-            //   .style("fill", "#ffffff");
-            // .style("filter", "url(#drop-shadow)");
-
-
             this.detailBox
               .style("padding-right", "10px")
               .style("padding-left", "10px")
               .html(
-              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.settings.flowMeasurement + "</div>" +
+                "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.getDisplayUnit(flowMeasurement) + "</div>" +
 
-              "<strong><div>Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + this.getDisplayUnit(distanceMeasurement) + "</div></p>")
 
               // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -660,12 +665,6 @@ export class PumpCurveGraphComponent implements OnInit {
         }
       })
       .on("mouseout", () => {
-        // this.pointer
-        //   .transition()
-        //   .delay(100)
-        //   .duration(600)
-        //   .style("opacity", 0);
-
         this.detailBox
           .transition()
           .delay(100)
@@ -741,7 +740,11 @@ export class PumpCurveGraphComponent implements OnInit {
 
   downloadChart() {
     if (!this.exportName) {
-      this.exportName = "pump-curve-graph";
+      if (this.isFan) {
+        this.exportName = "fan-curve-graph";
+      } else {
+        this.exportName = "pump-curve-graph";
+      }
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }

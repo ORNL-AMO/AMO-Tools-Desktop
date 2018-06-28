@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row psat" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && showForm">
+<div class="modify-conditions panel-container row" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && showForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -16,7 +16,7 @@
               (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
           </div>
           <div class="col-md-auto btn-col">
-            <button *ngIf="inAssessment" class="btn btn-primary reset-btn" (click)="initialiazeCalculator(true)">Reset Points to Match Assessment</button>
+            <button *ngIf="inAssessment" class="btn btn-primary reset-btn" (click)="initializeCalculator(true)">Reset Points to Match Assessment</button>
           </div>
         </div>
       </div>

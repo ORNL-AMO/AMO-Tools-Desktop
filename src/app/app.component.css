@@ -1086,11 +1086,19 @@ Calculators
 
 .ico-size {
   height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+  /* background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26)); */
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.psat .ico-size{
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+}
+
+.fsat .ico-size{
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
 }
 
 .ico-size2 {
