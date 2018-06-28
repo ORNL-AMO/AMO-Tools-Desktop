@@ -90,6 +90,12 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   pointB: any;
   plottedLine: any;
 
+  //booleans for tooltip
+  hoverBtnExport: boolean = false;
+  displayExportTooltip: boolean = false;
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+
   constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -97,6 +103,54 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     this.initCanvas();
     this.buildChart();
   }
+
+    // ========== export/gridline tooltip functions ==========
+  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
+  // for example, check motor-performance-graph.module.ts
+  initTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = true;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 700);
+  }
+
+  hideTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = false;
+      this.displayExportTooltip = false;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+  }
+
+  checkHover(btnType: string) {
+    if (btnType == 'btnExportChart') {
+      if (this.hoverBtnExport) {
+        this.displayExportTooltip = true;
+      }
+      else {
+        this.displayExportTooltip = false;
+      }
+    }
+    else if (btnType == 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+  }
+  // ========== end tooltip functions ==========
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.chartContainerWidth || changes.chartContainerHeight) {
@@ -125,7 +179,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   initData() {
     //hard coded values will always be the same, these are for metric
-    //temperature default is Celcius
+    //temperature default is Celsius
     this.tempArray = [0.01, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 373.95, 370, 360, 350, 340, 330, 320, 310, 300, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0.01];
     //entropy default is kJ/kg*C
     this.entropyArray = [0, 0.0763, 0.1511, 0.2245, 0.2965, 0.3672, 0.4368, 0.5051, 0.5724, 0.6386, 0.7038, 0.768, 0.8313, 0.8937, 0.9551, 1.0158, 1.0756, 1.1346, 1.1929, 1.2504, 1.3072, 1.4188, 1.5279, 1.6346, 1.7392, 1.8418, 1.9426, 2.0417, 2.1392, 2.2355, 2.3305, 2.4245, 2.5177, 2.6101, 2.702, 2.7935, 2.8849, 2.9765, 3.0685, 3.1612, 3.2552, 3.351, 3.4494, 3.5518, 3.6601, 3.7784, 3.9167, 4.1112, 4.407, 4.8012, 5.0536, 5.211, 5.3356, 5.4422, 5.5372, 5.6244, 5.7059, 5.7834, 5.8579, 5.9304, 6.0016, 6.0721, 6.1423, 6.2128, 6.284, 6.3563, 6.4302, 6.5059, 6.584, 6.665, 6.7491, 6.8371, 6.9293, 7.0264, 7.1291, 7.2381, 7.3541, 7.4151, 7.4781, 7.5434, 7.6111, 7.6812, 7.754, 7.8296, 7.9081, 7.9898, 8.0748, 8.1633, 8.2555, 8.3517, 8.452, 8.5566, 8.666, 8.7803, 8.8998, 9.0248, 9.1555];
