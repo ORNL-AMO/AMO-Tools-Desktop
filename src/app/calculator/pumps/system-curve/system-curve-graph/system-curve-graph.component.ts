@@ -5,6 +5,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import * as d3 from 'd3';
 import { PsatService } from '../../../../psat/psat.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SystemCurveService } from '../system-curve.service';
 
 @Component({
   selector: 'app-system-curve-graph',
@@ -52,7 +53,7 @@ export class SystemCurveGraphComponent implements OnInit {
   fontSize: string;
 
   isFirstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     if (!this.lossCoefficient) {
@@ -193,10 +194,10 @@ export class SystemCurveGraphComponent implements OnInit {
 
 
     let yAxisLabel, xAxisLabel: string;
-    if(this.isFan){
+    if (this.isFan) {
       yAxisLabel = "Pressure (" + this.getDisplayUnit(this.settings.fanPressureMeasurement) + ")"
       xAxisLabel = "Flow Rate (" + this.getDisplayUnit(this.settings.fanFlowRate) + ")"
-    }else{
+    } else {
       yAxisLabel = "Head (" + this.getDisplayUnit(this.settings.distanceMeasurement) + ")";
       xAxisLabel = "Flow Rate (" + this.getDisplayUnit(this.settings.flowMeasurement) + ")"
     }
@@ -415,12 +416,12 @@ export class SystemCurveGraphComponent implements OnInit {
         var distanceMeasurement: string;
         var powerMeasurement: string;
         var headOrPressure: string;
-        if(this.isFan){
+        if (this.isFan) {
           flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
           distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
           powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
           headOrPressure = 'Pressure';
-        }else{
+        } else {
           flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
           distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
           powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
@@ -432,11 +433,11 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-          "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + flowMeasurement + "</div><br>" +
+            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + flowMeasurement + "</div><br>" +
 
-          "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure +": </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + distanceMeasurement + "</div><br>" +
+            "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure + ": </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + distanceMeasurement + "</div><br>" +
 
-          "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")
+            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")
 
           .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
           .style("top", (this.margin.top + y(d.y) + 26) + "px")
@@ -486,10 +487,10 @@ export class SystemCurveGraphComponent implements OnInit {
 
     var staticLabel: string;
     var distanceMeasurement: string;
-    if(this.isFan){
+    if (this.isFan) {
       staticLabel = 'Calculated Static Pressure: ';
       distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
-    }else{
+    } else {
       staticLabel = 'Calculated Static Head: ';
       distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
     }
@@ -517,9 +518,9 @@ export class SystemCurveGraphComponent implements OnInit {
   findPointValues(x, y, increment) {
 
     var powerMeasurement: string;
-    if(this.isFan){
+    if (this.isFan) {
       powerMeasurement = this.settings.fanPowerMeasurement;
-    }else{
+    } else {
       powerMeasurement = this.settings.powerMeasurement;
     }
 
@@ -529,7 +530,12 @@ export class SystemCurveGraphComponent implements OnInit {
     var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.controls.specificGravity.value) / 3960;
+      let tmpFluidPower;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      }
       if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
@@ -555,7 +561,12 @@ export class SystemCurveGraphComponent implements OnInit {
       }
 
       if (head >= 0) {
-        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.controls.specificGravity.value) / 3960;
+        let tmpFluidPower: number;
+        if (this.isFan) {
+          tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);
+        } else {
+          tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);;
+        }
         if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
         }
@@ -577,7 +588,12 @@ export class SystemCurveGraphComponent implements OnInit {
     head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.controls.specificGravity.value) / 3960
+      let tmpFluidPower: number;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);;
+      }
       if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
