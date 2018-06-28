@@ -1810,7 +1810,7 @@ Toasty Overrides ================================= */
   right: 20px;
   width: auto;
   height: auto;
-  background-color: rgba(236, 236, 236, 0.9);
+  background-color: rgba(236, 236, 236, 1);
   z-index: 10000;
   box-shadow: 0px 0px 20px #000;
 }

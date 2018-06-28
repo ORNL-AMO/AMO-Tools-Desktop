@@ -60,7 +60,10 @@ export class SystemCurveGraphComponent implements OnInit {
   displayCollapseTooltip: boolean = false;
   
   isFirstChange: boolean = true;
+
+  //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
+
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -270,24 +273,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Flow Rate (" + this.settings.flowMeasurement + ")");
-
-
-
-    //debug - trying something
-    // console.log("fontSize number = " + (this.fontSize[0] + this.fontSize[1]));
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (parseInt(this.fontSize.replace('px', '')) * 2) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("testing title");
-
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (this.fontSize.replace('px', '')) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("test title 2");
 
 
     var x = d3.scaleLinear()
