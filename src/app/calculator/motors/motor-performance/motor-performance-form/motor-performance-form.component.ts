@@ -69,7 +69,7 @@ export class MotorPerformanceFormComponent implements OnInit {
   }
 
   modifyPowerArrays() {
-    if (this.tmpEfficiencyClass === 'Premium') {
+    if (this.tmpEfficiencyClass === 'Premium Efficient') {
       if (this.settings.powerMeasurement === 'hp') {
         if (Number(this.tmpHorsePower) > 500) {
           this.tmpHorsePower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
@@ -170,7 +170,7 @@ export class MotorPerformanceFormComponent implements OnInit {
         return false;
       }
     }
-    if (this.tmpEfficiencyClass == 'Premium') {
+    if (this.tmpEfficiencyClass == 'Premium Efficient') {
       if (this.tmpFrequency == '60 Hz' && this.tmpMotorRpm < 1080) {
         this.rpmError = 'Motor RPM too small for selected efficiency class';
         return false;
