@@ -81,7 +81,8 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
-    this.fsatService.test();
+    let test  = this.fsatService.optimalFanEfficiency();
+    console.log(test);
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];

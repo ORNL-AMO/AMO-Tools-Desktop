@@ -36,6 +36,15 @@
               and impeller diameter</p>
           </div>
         </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/pump-eff.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('fan-efficiency')">Achievable Efficiency</a>
+            <p>NEEDED</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -52,4 +61,8 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
   <app-pump-curve [isFan]="true"></app-pump-curve>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fan-efficiency'">
+  <app-fan-efficiency></app-fan-efficiency>
 </div>

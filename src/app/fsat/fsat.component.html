@@ -50,7 +50,7 @@
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
     <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone" [settings]="settings" [assessment]="assessment"></app-system-curve>
-    <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [settings]="settings"></app-achievable-efficiency>
+    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
     <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment"></app-pump-curve>

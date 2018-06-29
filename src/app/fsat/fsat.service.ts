@@ -208,6 +208,19 @@ export class FsatService {
     return (fluidForm.status == 'VALID');
   }
 
+
+  optimalFanEfficiency() {
+    let input = {
+      fanType: 6,
+      fanSpeed: 1180,
+      flowRate: 500000,
+      inletPressure: -6,
+      outletPressure: 1,
+      compressibility: 0.995
+    };
+    return fanAddon.optimalFanEfficiency(input);
+  }
+
   getEmptyResults(): FsatOutput {
     let emptyResults: FsatOutput = {
       fanEfficiency: 0,
