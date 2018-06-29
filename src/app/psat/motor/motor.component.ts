@@ -37,7 +37,7 @@ export class MotorComponent implements OnInit {
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
-    'Premium',
+    'Premium Efficient',
     'Specified'
   ];
 
@@ -115,7 +115,7 @@ export class MotorComponent implements OnInit {
   }
 
   modifyPowerArrays() {
-    if (this.psatForm.controls.efficiencyClass.value === 'Premium') {
+    if (this.psatForm.controls.efficiencyClass.value === 'Premium Efficient') {
       if (this.settings.powerMeasurement === 'hp') {
         if (this.psatForm.controls.horsePower.value > 500) {
           this.psatForm.patchValue({
