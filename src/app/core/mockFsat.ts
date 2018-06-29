@@ -349,7 +349,6 @@ export const MockFsatSettings: Settings = {
     fanBarometricPressure: "inHg",
     fanSpecificHeatGas: "btulbF",
     fanPowerMeasurement: "hp",
-    assessmentId: 2,
     directoryId: 2,
     facilityInfo: {
         companyName: 'ORNL',
