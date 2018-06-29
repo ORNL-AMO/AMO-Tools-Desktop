@@ -1838,11 +1838,13 @@ Toasty Overrides ================================= */
 }
 
 .fa-compress {
-  position: absolute;
-  opacity: 0.6;
+  /* position: absolute; */
+  color: rgba(255, 0, 0, 1);
+  background-color: rgba(255, 0, 0, 0.1);
+  /* opacity: 0.6; */
   padding: 5px;
   border-radius: 2px;
-  background-color: #dcdcdc;
+  /* background-color: #dcdcdc; */
   border: 1px solid transparent;
   transition: ease-in-out 0.2s all;
 }
@@ -1886,6 +1888,8 @@ Toasty Overrides ================================= */
   top: 0px;
 }
 
+
+
 .fa-download:hover {
   cursor: pointer;
   opacity: 1;
@@ -1900,8 +1904,10 @@ Toasty Overrides ================================= */
 
 .fa-compress:hover {
   cursor: pointer;
-  opacity: 1;
-  border-color: #212529;
+  /* opacity: 1; */
+  /* border-color: #212529; */
+  color: #fff;
+  background-color: rgba(255, 0, 0, 1);
 }
 
 /* .chart-container .fa-download:hover,
