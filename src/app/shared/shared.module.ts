@@ -16,6 +16,7 @@ import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkm
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
+import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-t
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent
+    ModifyConditionsTabsTooltipComponent,
+    SimpleTooltipComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -42,7 +44,8 @@ import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-t
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent
+    ModifyConditionsTabsTooltipComponent,
+    SimpleTooltipComponent
   ],
   providers: [
     ValidationService,

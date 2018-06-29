@@ -5,12 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemCurveComponent } from './system-curve.component';
 import { SystemCurveFormComponent } from './system-curve-form/system-curve-form.component';
 import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-graph.component';
+import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [
     SystemCurveComponent,
