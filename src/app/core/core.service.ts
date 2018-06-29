@@ -45,7 +45,7 @@ export class CoreService {
             MockPsatSettings.assessmentId = 2;
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-              //MockFsatSettings.assessmentId = 2;
+              MockFsatSettings.assessmentId = 3;
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
                 resolve(true);

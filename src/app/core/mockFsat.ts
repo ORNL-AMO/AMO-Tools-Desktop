@@ -306,8 +306,7 @@ export const MockFsat: Assessment = {
             },
         ],
     },
-    selected: true,
-    directoryId: 2
+    directoryId: 2,
 }
 
 export const MockFsatSettings: Settings = {
@@ -350,6 +349,7 @@ export const MockFsatSettings: Settings = {
     fanSpecificHeatGas: "btulbF",
     fanPowerMeasurement: "hp",
     directoryId: 2,
+    assessmentId: 3,
     facilityInfo: {
         companyName: 'ORNL',
         facilityName: 'ORNL Test Facility',
