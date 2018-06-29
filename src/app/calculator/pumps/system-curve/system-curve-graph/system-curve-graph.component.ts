@@ -196,7 +196,6 @@ export class SystemCurveGraphComponent implements OnInit {
       this.canvasHeight = curveGraph.clientHeight * 0.9;
     }
 
-
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
       this.margin = { top: 10, right: 35, bottom: 50, left: 50 };

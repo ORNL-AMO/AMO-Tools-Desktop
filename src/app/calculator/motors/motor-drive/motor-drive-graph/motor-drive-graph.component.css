@@ -1,18 +1,26 @@
-.btn{
+.btn {
     padding: 6px;
     background-color: gray;
 }
 
-
-.btn.btn-primary.active{
-    background-color: #145A32;  
+.btn.btn-primary.active {
+    background-color: #145A32;
 }
 
-
-.btn.btn-primary.active:focus{
-   box-shadow:  0 0 0 0.2rem limegreen;
+.btn.btn-primary.active:focus {
+    box-shadow: 0 0 0 0.2rem limegreen;
 }
 
 .legend span {
     padding-top: 25px;
+}
+
+#gridToggle {
+    position: absolute;
+    z-index: 9999;
+    left: 30px
+}
+
+.margin-top {
+    margin-top: 50px;
 }
