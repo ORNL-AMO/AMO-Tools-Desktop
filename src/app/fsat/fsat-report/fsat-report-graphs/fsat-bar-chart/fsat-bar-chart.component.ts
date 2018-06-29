@@ -1,32 +1,31 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 
 @Component({
-  selector: 'app-psat-bar-chart',
-  templateUrl: './psat-bar-chart.component.html',
-  styleUrls: ['./psat-bar-chart.component.css']
+  selector: 'app-fsat-bar-chart',
+  templateUrl: './fsat-bar-chart.component.html',
+  styleUrls: ['./fsat-bar-chart.component.css']
 })
-export class PsatBarChartComponent implements OnInit {
+export class FsatBarChartComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   printView: boolean;
   @Input()
-  graphColors: Array<string>;
-  @Input()
   labels: Array<string>;
   @Input()
-  psat1Name: string;
+  fsat1Name: string;
   @Input()
-  psat2Name: string;
+  fsat2Name: string;
   @Input()
-  psat1Values: Array<number>;
+  fsat1Values: Array<number>;
   @Input()
-  psat2Values: Array<number>;
+  fsat2Values: Array<number>;
   @Input()
   chartContainerWidth: number;
   chartContainerHeight: number;
@@ -45,15 +44,12 @@ export class PsatBarChartComponent implements OnInit {
   barData2: Array<any>;
   chartData: Array<any>;
 
-  //booleans for tooltip
-  hoverBtnExport: boolean = false;
-  displayExportTooltip: boolean = false;
-  hoverBtnGridLines: boolean = false;
-  displayGridLinesTooltip: boolean = false;
+  graphColors: Array<string>;
 
   constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
   }
 
   ngAfterViewInit() {
@@ -77,60 +73,12 @@ export class PsatBarChartComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.printView) {
-      if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
+      if (changes.fsat1Values || changes.fsat2Values || changes.fsat1Name || changes.fsat2Name) {
         this.prepBarData();
         this.updateChart();
       }
     }
   }
-
-  // ========== export/gridline tooltip functions ==========
-  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
-  // for example, check motor-performance-graph.module.ts
-  initTooltip(btnType: string) {
-
-    if (btnType == 'btnExportChart') {
-      this.hoverBtnExport = true;
-    }
-    else if (btnType == 'btnGridLines') {
-      this.hoverBtnGridLines = true;
-    }
-    setTimeout(() => {
-      this.checkHover(btnType);
-    }, 700);
-  }
-
-  hideTooltip(btnType: string) {
-
-    if (btnType == 'btnExportChart') {
-      this.hoverBtnExport = false;
-      this.displayExportTooltip = false;
-    }
-    else if (btnType == 'btnGridLines') {
-      this.hoverBtnGridLines = false;
-      this.displayGridLinesTooltip = false;
-    }
-  }
-
-  checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
-      if (this.hoverBtnExport) {
-        this.displayExportTooltip = true;
-      }
-      else {
-        this.displayExportTooltip = false;
-      }
-    }
-    else if (btnType == 'btnGridLines') {
-      if (this.hoverBtnGridLines) {
-        this.displayGridLinesTooltip = true;
-      }
-      else {
-        this.displayGridLinesTooltip = false;
-      }
-    }
-  }
-  // ========== end tooltip functions ==========
 
   setBarLabels() {
     this.labels = new Array<string>();
@@ -145,19 +93,18 @@ export class PsatBarChartComponent implements OnInit {
     this.barData1 = new Array<any>();
     this.barData2 = new Array<any>();
 
-    this.barData1.push(this.psat1Name);
-    this.barData2.push(this.psat2Name);
+    this.barData1.push(this.fsat1Name);
+    this.barData2.push(this.fsat2Name);
 
-    for (let i = 0; i < this.psat1Values.length; i++) {
-      this.barData1.push(this.psat1Values[i].toFixed(2));
+    for (let i = 0; i < this.fsat1Values.length; i++) {
+      this.barData1.push(this.fsat1Values[i].toFixed(2));
     }
-    for (let i = 0; i < this.psat2Values.length; i++) {
-      this.barData2.push(this.psat2Values[i].toFixed(2));
+    for (let i = 0; i < this.fsat2Values.length; i++) {
+      this.barData2.push(this.fsat2Values[i].toFixed(2));
     }
 
     this.chartData = [this.barData1, this.barData2];
   }
-
 
   initChart() {
     let unit = this.settings.powerMeasurement;
@@ -245,7 +192,6 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-      // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
       d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.9rem");
     }
     else {
@@ -267,8 +213,9 @@ export class PsatBarChartComponent implements OnInit {
 
   downloadChart() {
     if (!this.exportName) {
-      this.exportName = "psat-report-bar-graph";
+      this.exportName = "fsat-report-bar-graph";
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
 }
