@@ -1,14 +1,5 @@
 <form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="operatingHours">Operating Time</label>
-      <div class="input-group">
-        <input name="operatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.operatingTime" id="operatingHours"
-          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('operatingHours')">
-        <span class="input-group-addon units">hrs/yr</span>
-      </div>
-    </div>
-  </div>
+
   <div class="form-section">
     <div class="form-group">
       <label for="fillTime">Bag Fill Time</label>
@@ -45,18 +36,11 @@
   </div>
   <div class="form-section">
     <div class="form-group">
-      <label for="airBlows">Total Number of Units of Bag</label>
+      <label for="operatingHours">Operating Time</label>
       <div class="input-group">
-        <input name="airBlows" class="form-control" type="number" step="any" [(ngModel)]="inputs.numberOfUnits" id="airBlows" (input)="emitChange()"
-               onfocus="this.select();" (focus)="changeField('airBlows');">
-        <span class="input-group-addon units">Airblows</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="bold">Annual Compressed Air Consumption</label>
-      <div class="text-center small">
-        <strong>{{outputs.annualConsumption | number:'1.0-2'}} KSCF</strong>
+        <input name="operatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.operatingTime" id="operatingHours"
+               (input)="emitChange()" onfocus="this.select();" (focus)="changeField('operatingHours')">
+        <span class="input-group-addon units">hrs/yr</span>
       </div>
     </div>
   </div>

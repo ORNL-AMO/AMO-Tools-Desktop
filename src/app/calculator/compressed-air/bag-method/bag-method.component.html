@@ -19,8 +19,7 @@
           </div>
           <div class="card-header">Description</div>
           <div>
-            <p>Cover the orifice with a trash bag and calculate the number of seconds it takes to fill the bag. Once done, close
-              the bag and measure its dimensions.</p>
+            <p>Use the calculator to estimate the leakage rate of orifices in your compressed air system. Cover a suspected leak with a trash bag and calculate the number of seconds it takes to fill the bag. Once done, close the bag and measure its dimensions. Compressed air leaks should be tagged and fixed at first chance, this calculator just helps to quantify the savings.</p>
           </div>
 
           <div class="card" *ngIf="currentField == 'operatingHours'">
@@ -28,7 +27,7 @@
               Operating Time
             </div>
             <div class="card-block">
-              <p>NEEDED</p>
+              <p>The hours per year that the compressor system is in use.</p>
             </div>
           </div>
           <div class="card" *ngIf="currentField == 'fillTime'">
@@ -36,7 +35,7 @@
               Bag Fill Time
             </div>
             <div class="card-block">
-              <p>NEEDED</p>
+              <p>The number of seconds it takes to fill the bag.</p>
             </div>
           </div>
           <div class="card" *ngIf="currentField == 'height'">
@@ -44,7 +43,7 @@
               Height of Bag
             </div>
             <div class="card-block">
-              <p>NEEDED</p>
+              <p>The height of the bag after inflation in inches.</p>
             </div>
           </div>
           <div class="card" *ngIf="currentField == 'diameter'">
@@ -52,15 +51,7 @@
               Diameter of Bag
             </div>
             <div class="card-block">
-              <p>NEEDED</p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'airBlows'">
-            <div class="card-header">
-              Total Number of Units of Bag
-            </div>
-            <div class="card-block">
-              <p>NEEDED</p>
+              <p>The diameter of the bag after inflation in inches.</p>
             </div>
           </div>
         </div>
