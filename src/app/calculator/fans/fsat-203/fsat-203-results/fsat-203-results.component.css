@@ -1,0 +1,26 @@
+td{
+    font-size: small;
+}
+
+tr > td:first-of-type {
+    width: 75%;
+}
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+td > span {
+    font-weight: bold;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.group-label{
+    font-weight: bold;
+}

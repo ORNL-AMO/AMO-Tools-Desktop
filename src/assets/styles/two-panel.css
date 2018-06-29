@@ -80,6 +80,11 @@
     border-bottom: #145A32 solid 2px;
 }
 
+.fsat .panel-tab-item.active{
+    border: none;
+    border-bottom: #FFE400 groove 2px;
+}
+
 .steam .panel-tab-item.active{
     border: none;
     border-bottom: #2C3E50 solid 2px;
@@ -100,6 +105,9 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.fsat .header{
+    border-bottom: #FFE400 groove 2px;
+}
 .general .header{
     border-bottom: #145A32 solid 2px;
 }
@@ -131,7 +139,11 @@
     transition: all .5s ease-in-out;
 }
 
-
+.fsat .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #FFE400;
+    transition: all .5s ease-in-out;
+    color: black;
+}
 
 .panel-add a{
     padding-top: 5px;
@@ -200,6 +212,11 @@
     width: 100%;
 }
 
+.panel-container .group-label.group-label-2{
+    letter-spacing: 0;
+    padding-bottom: 0px;
+}
+
 .psat .group-label{
     border-bottom: #2980b9 groove 2px;
 }
@@ -208,6 +225,10 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+
+.fsat .group-label{
+    border-bottom: #FFE400 groove 2px;
+}
 .phast .explore-ops-form .group-label{
     border-bottom: #BF3D00 groove 1px;
     font-size: 16px;
@@ -369,4 +390,10 @@
   .phast .scroll-item::-webkit-scrollbar-thumb{
     background-color: #BF3D00;
     outline: 1px solid slategrey;
+    }
+
+
+    .fsat .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #FFE400;
+        outline: 1px solid slategrey;
     }

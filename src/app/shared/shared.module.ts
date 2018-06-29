@@ -15,6 +15,7 @@ import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
+import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
+    ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent
   ],
   exports: [
@@ -42,6 +44,7 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
+    ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent
   ],
   providers: [

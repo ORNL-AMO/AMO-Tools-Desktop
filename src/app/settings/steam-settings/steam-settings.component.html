@@ -2,9 +2,16 @@
   <div class="form-group">
     <label for="pressureMeasurement">Pressure Measurement</label>
     <select class="form-control" formControlName="steamPressureMeasurement" id="pressureMeasurement" (change)="save()">
+<<<<<<< HEAD
+      <!--<option value='mPa'>MPa</option>-->
+      <option value='kPa'>Kilopascals (kPa)</option>
+      <option value='psi'>Pounds per Square Inch (psi)</option>
+      <option value='bar'>Bar (bar)</option>
+=======
       <option *ngFor="let measurement of pressureMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
         <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
       </option>
+>>>>>>> develop
     </select>
   </div>
 

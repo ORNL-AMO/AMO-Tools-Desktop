@@ -1,0 +1,48 @@
+<div *ngIf="results">
+  <label class="group-label">Fan Efficiencies</label> 
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Fan Total Efficiency (&eta;<sub>T</sub>)</td>
+        <td>{{results.fanEfficiencyTotalPressure |sigFigs: '6'}} %</td>
+      </tr>
+      <tr>
+        <td>Fan Static Efficiency (&eta;<sub>S</sub>)</td>
+        <td>{{results.fanEfficiencyStaticPressure |sigFigs: '6'}} %</td>
+      </tr>
+      <tr>
+        <td>Fan Efficiency based on Static Pressure Rise (&eta;<sub>SPR</sub>)</td>
+        <td>{{results.fanEfficiencyStaticPressureRise |sigFigs: '6'}} %</td>
+      </tr>
+    </tbody>
+  </table>
+  <label class="group-label">Converted Results</label> 
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Converted Flow (Q<sub>c</sub>)</td>
+        <td>{{results.flowCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></td>
+      </tr>
+      <tr>
+        <td>Converted Total Pressure (P<sub>TC</sub>)</td>
+        <td>{{results.pressureTotalCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
+      </tr>
+      <tr>
+        <td>Converted Static Pressure (P<sub>SC</sub>)</td>
+        <td>{{results.pressureStaticCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
+      </tr>
+      <tr>
+        <td>Converted Static Pressure Rise (SPR<sub>c</sub>)</td>
+        <td>{{results.staticPressureRiseCorrected |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
+      </tr>
+      <tr>
+        <td>Converted Power (H<sub>C</sub>)</td>
+        <td>{{results.powerCorrected |sigFigs: '6'}}  <span [innerHTML]="getDisplayUnit(settings.fanPowerMeasurement)"></span></td>
+      </tr>
+      <tr>
+        <td>Converted Compressability Factor (K<sub>pc</sub>)</td>
+        <td>{{results.kpc |sigFigs: '6'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

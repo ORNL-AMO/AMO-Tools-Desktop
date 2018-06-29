@@ -48,12 +48,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   toggleOptimized() {
-    this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
       this.showSizeMargin = false;
     }
+    this.calculate();
   }
 
   checkOptimized() {

@@ -1,0 +1,64 @@
+<div class="panel-container d-flex w-100">
+  <div class="panel-column w-50 p-2">
+    <div class="header">
+      <h3>Calculate Outlet Pressure</h3>
+    </div>
+    <form *ngIf="outletPressureData">
+      <div class="form-section">
+        <div class="form-group">
+          <label for="outletSystemEffectLoss">Fan Outlet System Effect Equivalent Loss</label>
+          <div class="input-group">
+            <input name="outletSystemEffectLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletSystemEffectLoss"
+              id="outletSystemEffectLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('outletSystemEffectLoss')">
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="outletDamperLoss">Outlet Damper Loss</label>
+          <div class="input-group">
+            <input name="outletDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.outletDamperLoss"
+              id="outletDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('outletDamperLoss')">
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="airTreatmentLoss">Air Treatment Loss</label>
+          <div class="input-group">
+            <input name="airTreatmentLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.airTreatmentLoss"
+              id="airTreatmentLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('airTreatmentLoss')">
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="systemDamperLoss">System Damper Loss</label>
+          <div class="input-group">
+            <input name="systemDamperLoss" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.systemDamperLoss"
+              id="systemDamperLoss" (input)="calculate()" onfocus="this.select();" (focus)="changeField('systemDamperLoss')">
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="processRequirements">Process Requirements (Discharge Side)</label>
+          <div class="input-group">
+            <input name="processRequirements" class="form-control" type="number" step="any" [(ngModel)]="outletPressureData.processRequirements"
+              id="processRequirements" (input)="calculate()" onfocus="this.select();" (focus)="changeField('processRequirements')">
+            <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group pt-1">
+        <label class="bold" for="inletPressure">
+          Outlet Pressure
+        </label>
+        <div class="small text-center">{{outletPressureData.calculatedOutletPressure | number:'1.1-1'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></div>
+      </div>
+    </form>
+  </div>
+  <div class="w-50 p-2 help-panel">
+    <div class="header">
+      <h3>Help</h3>
+    </div>
+    <app-calculate-outlet-pressure-help [currentField]="currentField"></app-calculate-outlet-pressure-help>
+  </div>
+</div>

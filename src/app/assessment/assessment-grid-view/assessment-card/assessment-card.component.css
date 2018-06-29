@@ -12,6 +12,11 @@
     border-bottom: #2980b9 groove 2px;
     border-image: linear-gradient(to right,#F0F3F4, #2980b9) 50 / 2;
   }
+
+  .fsat .summary-card-header{
+    border-bottom: #FFE400 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #FFE400) 50 / 2;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;
@@ -58,6 +63,11 @@
   background-color: #BF3D00;
 }
 
+.fsat .dropdown-toggle,
+.fsat .btn-primary{
+  background-color: #FFE400;
+}
+
 .dropdown-menu.shown{
   left: -160px;
   background-color: #ececec;
@@ -69,4 +79,15 @@
 
 .modal-footer .btn{
   padding: 6px
+}
+
+
+i{
+  color:#FFE400
+}
+
+.fan-block{
+  display: inline-flex;
+  background-color: #7F8C8D;
+  padding: 2px;
 }
