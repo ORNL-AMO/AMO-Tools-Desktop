@@ -5,5 +5,6 @@ export interface AtmosphereLoss {
     outletTemperature?: number,
     flowRate?: number,
     correctionFactor?: number,
-    heatLoss?: number
+    heatLoss?: number,
+    name?: string
 }

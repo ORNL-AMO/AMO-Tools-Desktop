@@ -1,85 +1,81 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class AuxiliaryPowerCompareService {
 
   baselineAuxLosses: AuxiliaryPowerLoss[];
   modifiedAuxLosses: AuxiliaryPowerLoss[];
-
-  differentArray: Array<any>;
-
-  constructor() { }
-
-  initCompareObjects() {
-    this.differentArray = new Array();
-    if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      if (this.baselineAuxLosses.length == this.modifiedAuxLosses.length) {
-        let numLosses = this.baselineAuxLosses.length;
-        for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
+  inputError: BehaviorSubject<boolean>;
+  constructor() {
+    this.inputError = new BehaviorSubject<boolean>(false);
+  }
+  compareAllLosses(): boolean {
+    let index = 0;
+    let numLoss = this.baselineAuxLosses.length;
+    let isDiff: boolean = false;
+    if (this.modifiedAuxLosses) {
+      for (index; index < numLoss; index++) {
+        if (this.compareLoss(index) == true) {
+          isDiff = true;
         }
-        this.checkAuxLosses();
-      } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
       }
     }
+    return isDiff;
   }
 
-  addObject(num: number) {
-    this.differentArray.push({
-      lossIndex: num,
-      different: this.initDifferentObject()
-    })
+  compareLoss(index: number): boolean {
+    return (
+      this.compareMotorPhase(index) ||
+      this.compareSupplyVoltage(index) ||
+      this.compareAvgCurrent(index) ||
+      this.comparePowerFactor(index) ||
+      this.compareOperatingTime(index)
+    )
   }
 
-  initDifferentObject(): AuxiliaryPowerDifferent {
-    let tmpDifferent: AuxiliaryPowerDifferent = {
-      motorPhase: new BehaviorSubject<boolean>(null),
-      supplyVoltage: new BehaviorSubject<boolean>(null),
-      avgCurrent: new BehaviorSubject<boolean>(null),
-      powerFactor: new BehaviorSubject<boolean>(null),
-      operatingTime: new BehaviorSubject<boolean>(null),
-      // powerUsed: new BehaviorSubject<boolean>(null)
-    }
-    return tmpDifferent;
+  compareMotorPhase(index: number): boolean {
+    return this.compare(this.baselineAuxLosses[index].motorPhase, this.modifiedAuxLosses[index].motorPhase);
+  }
+  compareSupplyVoltage(index: number): boolean {
+    return this.compare(this.baselineAuxLosses[index].supplyVoltage, this.modifiedAuxLosses[index].supplyVoltage);
+  }
+  compareAvgCurrent(index: number): boolean {
+    return this.compare(this.baselineAuxLosses[index].avgCurrent, this.modifiedAuxLosses[index].avgCurrent);
+  }
+  comparePowerFactor(index: number): boolean {
+    return this.compare(this.baselineAuxLosses[index].powerFactor, this.modifiedAuxLosses[index].powerFactor);
+  }
+  compareOperatingTime(index: number): boolean {
+    return this.compare(this.baselineAuxLosses[index].operatingTime, this.modifiedAuxLosses[index].operatingTime);
   }
 
-  checkAuxLosses() {
-    if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      if (this.baselineAuxLosses.length != 0 && this.modifiedAuxLosses.length != 0 && this.baselineAuxLosses.length == this.modifiedAuxLosses.length) {
-        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-          //motorPhase
-          this.differentArray[lossIndex].different.motorPhase.next(this.compare(this.baselineAuxLosses[lossIndex].motorPhase, this.modifiedAuxLosses[lossIndex].motorPhase));
-          //supplyVoltage
-          this.differentArray[lossIndex].different.supplyVoltage.next(this.compare(this.baselineAuxLosses[lossIndex].supplyVoltage, this.modifiedAuxLosses[lossIndex].supplyVoltage));
-          //avgCurrent
-          this.differentArray[lossIndex].different.avgCurrent.next(this.compare(this.baselineAuxLosses[lossIndex].avgCurrent, this.modifiedAuxLosses[lossIndex].avgCurrent));
-          //powerFactor
-          this.differentArray[lossIndex].different.powerFactor.next(this.compare(this.baselineAuxLosses[lossIndex].powerFactor, this.modifiedAuxLosses[lossIndex].powerFactor));
-          //operatingTime
-          this.differentArray[lossIndex].different.operatingTime.next(this.compare(this.baselineAuxLosses[lossIndex].operatingTime, this.modifiedAuxLosses[lossIndex].operatingTime));
-        }
-      } else {
-        this.disableAll();
+  compareBaselineModification(baseline: PHAST, modification: PHAST) {
+    let isDiff = false;
+    if (baseline && modification) {
+      if (baseline.losses.auxiliaryPowerLosses) {
+        let index = 0;
+        baseline.losses.auxiliaryPowerLosses.forEach(loss => {
+          if (this.compareBaseModLoss(loss, modification.losses.auxiliaryPowerLosses[index]) == true) {
+            isDiff = true;
+          }
+          index++;
+        })
       }
-    } else {
-      this.disableAll();
     }
+    return isDiff;
   }
 
-  disableAll() {
-    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.motorPhase.next(false);
-      this.differentArray[lossIndex].different.supplyVoltage.next(false);
-      this.differentArray[lossIndex].different.avgCurrent.next(false);
-      this.differentArray[lossIndex].different.powerFactor.next(false);
-      this.differentArray[lossIndex].different.operatingTime.next(false);
-    }
+  compareBaseModLoss(baseline: AuxiliaryPowerLoss, modification: AuxiliaryPowerLoss): boolean {
+    return (
+      this.compare(baseline.motorPhase, modification.motorPhase) ||
+      this.compare(baseline.supplyVoltage, modification.supplyVoltage) ||
+      this.compare(baseline.avgCurrent, modification.avgCurrent) ||
+      this.compare(baseline.powerFactor, modification.powerFactor) ||
+      this.compare(baseline.operatingTime, modification.operatingTime)
+    )
   }
 
   compare(a: any, b: any) {
@@ -96,13 +92,4 @@ export class AuxiliaryPowerCompareService {
       return false;
     }
   }
-}
-
-export interface AuxiliaryPowerDifferent {
-  motorPhase: BehaviorSubject<boolean>,
-  supplyVoltage: BehaviorSubject<boolean>,
-  avgCurrent: BehaviorSubject<boolean>,
-  powerFactor: BehaviorSubject<boolean>,
-  operatingTime: BehaviorSubject<boolean>,
-  // powerUsed: BehaviorSubject<boolean>
 }

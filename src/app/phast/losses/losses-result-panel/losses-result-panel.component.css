@@ -1,0 +1,43 @@
+.tab-row{
+    width: 100%;
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+ .data-table{
+    padding-top: 12px;
+}
+
+/* .results-panel{
+    padding: 0px;
+} */
+
+.results-panel .tabs.primary{
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+
+.results-panel .tabs.primary .active a {
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
+}
+
+.no-padding-left{
+    padding-left: 0px;
+}
+
+/* .scroll-item{
+    margin-right: 0px;
+} */
+
+.notes-col{
+    padding-right: 0px;
+}
+
+.tab-col{
+    padding-left: 0px;
+    padding-right: 0px;
+}

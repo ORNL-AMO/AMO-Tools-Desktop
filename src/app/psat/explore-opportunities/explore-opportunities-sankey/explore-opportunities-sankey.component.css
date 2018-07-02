@@ -1,0 +1,9 @@
+.sankey-toggle-switch{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.sankey-toggle-switch .btn{
+    background-color: #2980b9;
+}

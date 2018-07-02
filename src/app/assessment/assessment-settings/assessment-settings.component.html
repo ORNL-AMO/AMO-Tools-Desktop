@@ -1,52 +1,87 @@
-<div class="content-container" *ngIf="settingsForm">
-  <div class="card-form">
-    <div *ngIf="directory.id != 1 && editName">
-      <span>
-    <input style="font-size: 30px; margin-bottom: 40px;" type="text" id="directoryName" [(ngModel)]="directory.name" onfocus="this.select();" required="required">
-    <span class="alert-danger" *ngIf="!directory.name">Directory Name Required</span>
-    <button *ngIf="directory.name" class="btn-primary btn-sm" (click)="doneEditingName()"><span class="fa fa-check"></span></button>
-      </span>
+<div class="row">
+  <div class="col-10  mx-auto">
+    <div class="tab-content content-container" *ngIf="settingsForm">
+      <div class="card-form">
+        <div *ngIf="directory.id != 1 && editName">
+          <span>
+            <input style="font-size: 30px; margin-bottom: 40px;" type="text" id="directoryName" [(ngModel)]="directory.name" onfocus="this.select();"
+              required="required">
+            <span class="alert-danger" *ngIf="!directory.name">Directory Name Required</span>
+            <button *ngIf="directory.name" class="btn-primary btn-sm" (click)="doneEditingName()">
+              <span class="fa fa-check"></span>
+            </button>
+          </span>
+        </div>
+
+        <h2 *ngIf="directory.id != 1 && !editName" (click)="editDirectoryName()">{{directory.name}}
+          <!--<button class="btn-secondary btn-sm" (click)="editDirectoryName()"><span class="fa fa-pencil"></span></button>-->
+        </h2>
+
+        <div class="form-section">
+          <!--add click event to call function that toggles section boolean-->
+          <label class="group-label general" (click)="toggleGeneralSettings()">General Settings
+            <!--add chevron for visual effect-->
+            <span *ngIf="!showGeneralSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showGeneralSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <!--add div that checks corresponding boolean-->
+          <div *ngIf="showGeneralSettings">
+            <p class="help-text">These will be default settings for any new assessments and folders.</p>
+            <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
+          </div>
+        </div>
+
+        <div class="form-section psat">
+          <label class="group-label" (click)="togglePsatSettings()">Pump Settings
+            <span *ngIf="!showPsatSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showPsatSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showPsatSettings">
+            <p class="help-text">These settings will be used as the default settings for any new pump assessments created.</p>
+            <app-psat-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-psat-settings>
+          </div>
+        </div>
+
+        <div class="form-section phast">
+          <label class="group-label" (click)="togglePhastSettings()">Process Heating Settings
+            <span *ngIf="!showPhastSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showPhastSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showPhastSettings">
+            <p class="help-text">These settings will be used as the default settings for any new process heating assessments created.</p>
+            <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-phast-settings>
+          </div>
+        </div>
+
+        <div class="form-section steam">
+          <label class="group-label" (click)="toggleSteamSettings()">Steam Settings
+            <span *ngIf="!showSteamSettings" class="fa fa-chevron-up pull-right"></span>
+            <span *ngIf="showSteamSettings" class="fa fa-chevron-down pull-right"></span>
+          </label>
+          <div *ngIf="showSteamSettings">
+            <p class="help-text">These settings will be used as the default settings for the steam calculators.</p>
+            <app-steam-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-steam-settings>
+          </div>
+        </div>
+
+        <div class="reset-data" *ngIf="directory.id == 1">
+          <h3>Delete Data</h3>
+          <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else.
+            <span class="red">This cannot be undone!</span>
+          </p>
+          <button class="btn btn-danger pull-right" (click)="resetData()">Delete Data</button>
+        </div>
+
+        <!--<div class="reset-data">
+      <button class="btn btn-secondary" (click)="checkForUpdates()">Check for updates</button>
+    </div>-->
+
+      </div>
     </div>
-
-    <h2 *ngIf="directory.id != 1 && !editName" (click)="editDirectoryName()">{{directory.name}}
-      <!--<button class="btn-secondary btn-sm" (click)="editDirectoryName()"><span class="fa fa-pencil"></span></button>-->
-    </h2>
-
-    <div class="form-section">
-      <h3>General Settings</h3>
-      <p>These will be default settings for assessments and folders inside this.</p>
-      <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
-    </div>
-
-    <div class="form-section">
-      <h3>PSAT Settings</h3>
-      <p>These settings will be used as the default settings for pump assessments inside this folder.</p>
-      <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
-    </div>
-
-    <div class="form-section">
-      <h3>PHAST Settings</h3>
-      <p>These settings will be used as the default settings for process heating assessments inside this folder.</p>
-      <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
-    </div>
-
-    <div class="actions">
-      <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
-    </div>
-
-
-    <div class="reset-data" *ngIf="directory.id == 1">
-      <h3>Delete Data</h3>
-      <p>Deleting data will reset your application data to it's initial state and delete everything else.</p>
-      <button class="btn btn-secondary" (click)="resetData()">Delete Data</button>
-    </div>
-
   </div>
 </div>
 
-<ng2-toasty></ng2-toasty>
-
-<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
+<!-- <div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -65,4 +100,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

@@ -1,0 +1,8 @@
+<a class="nav-link small">
+    Operations
+    <span (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()" class="badge gray-badge" [ngClass]="badgeClass">
+        <strong class="no-show">{{numLosses}}</strong>
+    </span>
+</a>
+
+<app-losses-tabs-tooltip [display]="badgeHover" [reveal]="displayTooltip" [numLosses]="numLosses" [badgeClass]="badgeClass"></app-losses-tabs-tooltip>

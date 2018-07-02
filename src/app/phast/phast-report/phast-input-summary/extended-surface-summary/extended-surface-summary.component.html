@@ -1,0 +1,82 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Extended Surface Losses ({{numLosses}})
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse || printView">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff[index] == true}">
+                Total Outside Surface Area
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff[index] == true}">
+                {{data.baseline.surfaceArea}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceArea, mod.surfaceArea, 'surfaceAreaDiff', index)}">
+                {{mod.surfaceArea}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff[index] == true}">
+                Average Surface Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff[index] == true}">
+                {{data.baseline.surfaceTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceTemperature, mod.surfaceTemperature, 'surfaceTemperatureDiff', index)}">
+                {{mod.surfaceTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
+                Ambient Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
+                {{data.baseline.ambientTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff', index)}">
+                {{mod.ambientTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff[index] == true}">
+                Surface Emissivity
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff[index] == true}">
+                {{data.baseline.surfaceEmissivity}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'surfaceEmissivityDiff', index)}">
+                {{mod.surfaceEmissivity}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

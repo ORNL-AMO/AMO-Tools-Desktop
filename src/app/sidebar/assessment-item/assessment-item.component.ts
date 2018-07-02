@@ -24,6 +24,9 @@ export class AssessmentItemComponent implements OnInit {
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
+      if(this.assessment.phast.setupDone){
+        this.assessmentService.tab = 'assessment';
+      }
       this.router.navigateByUrl('/phast/' + assessment.id);
     }
   }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 //declare var json2csv: any;
-import { MockDirectory } from '../mocks/mock-directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Assessment } from '../models/assessment';
 import { PsatService } from '../../psat/psat.service';
@@ -54,6 +53,8 @@ export class JsonToCsvService {
       PumpRatedSpeed: psat.inputs.pump_rated_speed,
       PumpRatedSpeedUnit: 'rpms',
       Drive: this.psatService.getDriveFromEnum(psat.inputs.drive),
+      FluidType: psat.inputs.fluidType,
+      FluidTemperature: psat.inputs.fluidTemperature,
       KinematicViscosity: psat.inputs.kinematic_viscosity,
       KinematicViscosityUnit: 'cST',
       SpecificGravity: psat.inputs.specific_gravity,
@@ -86,7 +87,7 @@ export class JsonToCsvService {
       MotorFieldVoltage: psat.inputs.motor_field_voltage ? psat.inputs.motor_field_voltage : null,
       MotorFieldVoltageUnit: psat.inputs.motor_field_voltage ? 'V' : null,
       CostKwHour: psat.inputs.cost_kw_hour,
-      CostKwHourUnit: '$/kwh',
+      CostKwHourUnit: '$/kWh',
       LoadFactor: 1,
       PumpEfficiency: tmpResults.pump_efficiency,
       PumpEfficiencyUnit: '%',
@@ -107,7 +108,7 @@ export class JsonToCsvService {
       AnnualCost: tmpResults.annual_cost,
       AnnualCostUnit: '$',
       Optimized: isOptimized
-    }
+    };
     return tmpPsatCsvData;
   }
 }
@@ -122,6 +123,8 @@ export interface PsatCsvData {
   PumpRatedSpeed: number,
   PumpRatedSpeedUnit: string,
   Drive: string,
+  FluidType: string,
+  FluidTemperature: number,
   KinematicViscosity: number,
   KinematicViscosityUnit: string,
   SpecificGravity: number,
@@ -186,6 +189,8 @@ export const PsatCsvDataFields = [
   "PumpRatedSpeed",
   "PumpRatedSpeedUnit",
   "Drive",
+  "FluidType",
+  "FluidTemperature",
   "KinematicViscosity",
   "KinematicViscosityUnit",
   "SpecificGravity",
@@ -234,4 +239,4 @@ export const PsatCsvDataFields = [
   "AnnualCost",
   "AnnualCostUnit",
   "Optimized"
-]
+];

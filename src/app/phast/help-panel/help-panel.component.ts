@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { StepTab } from '../tabs';
 
 @Component({
   selector: 'app-help-panel',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./help-panel.component.css']
 })
 export class HelpPanelComponent implements OnInit {
+  @Input()
+  settingsTab: StepTab;
 
   constructor() { }
 

@@ -1,0 +1,47 @@
+
+<div class="print-legend">
+  <table>
+    <tr>
+      <td class="legend-item-baseline">
+        Baseline
+      </td>
+      <td class="legend-item-pad"></td>
+      <td class="legend-item-modification">
+        Modification
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div *ngIf="!printView && assessmentType == 'phast'">
+  <div class="phast-rollup bar-chart-container chart-container">
+    <div #ngChart class="phast-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="printView && assessmentType == 'phast'">
+  <div class="phast-rollup bar-chart-container chart-container">
+    <div #ngChart class="print-phast-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="!printView && assessmentType == 'psat'">
+  <div class="psat-rollup bar-chart-container chart-container">
+    <div #ngChart class="psat-rollup-bar-chart">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="printView && assessmentType == 'psat'">
+  <div class="psat-rollup bar-chart-container chart-container">
+    <div #ngChart class="print-psat-rollup-bar-chart">
+
+    </div>
+  </div>
+</div>
+<span #btnDownload class="rollup-bar-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>

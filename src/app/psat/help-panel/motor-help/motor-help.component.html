@@ -1,9 +1,9 @@
 <div class="help-header">
 
   <h3>Enter measured data to calculate your system's annual savings potential.</h3>
-  <p class="text-muted">
+  <!-- <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering motor data.
-  </p>
+  </p> -->
 
 </div>
 
@@ -63,15 +63,22 @@
         Units: <strong>RPM</strong>
       </p>
       <p>
+      <strong>Standard Efficient and Energy Efficient</strong><br>
         (60 Hz) Minimum Value Allowed: <strong>540</strong><br>
-        (60 Hz) Maximum Value Allowed: <strong>3960</strong><br>
-      </p>
-      <p>
+        (60 Hz) Maximum Value Allowed: <strong>3600</strong><br>
         (50 Hz) Minimum Value Allowed: <strong>450</strong><br>
-        (50 Hz) Maximum Value Allowed: <strong>3300</strong><br>
+        (50 Hz) Maximum Value Allowed: <strong>3000</strong><br>
       </p>
       <p>
-        *Min/Max values determined by line frequency selection</p>
+        <strong>Premium Efficient</strong><br>
+        (60 Hz) Minimum Value Allowed: <strong>1080</strong><br>
+        (60 Hz) Maximum Value Allowed: <strong>3600</strong><br>
+        (50 Hz) Minimum Value Allowed: <strong>900</strong><br>
+        (50 Hz) Maximum Value Allowed: <strong>3000</strong><br>
+      </p>
+      <p>
+        *Min/Max values determined by line frequency and efficiency class selection.
+      </p>
     </div>
   </div>
 
@@ -89,12 +96,13 @@
       <label>
         Options: </label>
       <ul style="list-style: none;">
-<li> <strong>Standard Efficency</strong><br> </li>
-<li> <strong>Energy Efficient</strong><br> </li>
-<li> <strong>Specified</strong><br> </li>
-</ul>
-</div>
-</div>
+        <li> <strong>Standard Efficency</strong><br> </li>
+        <li> <strong>Energy Efficient</strong><br> </li>
+        <li> <strong>Premium Efficient</strong><br> </li>
+        <li> <strong>Specified</strong><br> </li>
+      </ul>
+    </div>
+  </div>
 
 <div class="card" *ngIf="currentField == 'efficiency'">
   <div class="card-header">

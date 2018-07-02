@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
 import { Settings } from '../../../shared/models/settings';
 
@@ -12,39 +12,39 @@ export class DesignedEnergyResultsComponent implements OnInit {
   results: DesignedEnergyResults;
   @Input()
   settings: Settings;
+  @Input()
+  title: string;
+  resultUnits: { energyPerMassUnit: string, energyPerTimeUnit: string, electricityUsedUnit: string } = {
+    energyPerMassUnit: '',
+    energyPerTimeUnit: '',
+    electricityUsedUnit: ''
+  };
 
-  resultUnits: any;
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Fuel') {
-      this.resultUnits = {
-        designedEnergyUsed: 'Btu/hr',
-        designedEnergyIntensity: 'Btu/lb',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
-        calculatedElectricityUsed: 'kW'
-      }
-    } else if (this.settings.energySourceType == 'Electricity') {
-      this.resultUnits = {
-        designedEnergyUsed: 'kW',
-        designedEnergyIntensity: 'kW',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'kW',
-        calculatedEnergyIntensity: 'kW',
-        calculatedElectricityUsed: 'kW'
-      }
-    } else if (this.settings.energySourceType == 'Steam') {
-      this.resultUnits = {
-        designedEnergyUsed: 'Btu/hr',
-        designedEnergyIntensity: 'Btu/lb',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
-        calculatedElectricityUsed: 'kW'
-      }
+    if (this.settings.energyResultUnit == 'kWh') {
+      this.resultUnits.energyPerTimeUnit = 'kW';
+    } else {
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
     }
+    this.resultUnits.electricityUsedUnit = 'kW';
+    this.setEnergyIntensity();
   }
 
+  setEnergyIntensity() {
+    let denominator: string = '/lb';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      denominator = '/kg';
+    }
+    if (this.settings.energyResultUnit == 'kWh') {
+      this.resultUnits.energyPerMassUnit = 'kW' + denominator;
+    } else if (this.settings.energyResultUnit == 'MMBtu') {
+      this.resultUnits.energyPerMassUnit = 'Btu' + denominator;
+    } else if (this.settings.energyResultUnit == 'GJ') {
+      this.resultUnits.energyPerMassUnit = 'kJ' + denominator;
+    } else {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + denominator;
+    }
+  }
 }

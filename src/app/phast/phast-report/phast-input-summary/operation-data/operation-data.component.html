@@ -1,0 +1,111 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Operation Data
+    <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+              Baseline
+            </th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+              {{mod.phast.name}}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              Energy Source Type
+            </td>
+            <td>
+              {{settings.energySourceType}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{settings.energySourceType}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Furnace Type
+            </td>
+            <td>
+              {{settings.furnaceType}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{settings.furnaceType}}
+            </td>
+          </tr>
+          <tr *ngIf="settings.customFurnaceName">
+            <td>
+              Furnace Name
+            </td>
+            <td>
+              {{settings.customFurnaceName}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{settings.customFurnaceName}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Operating Hours
+            </td>
+            <td>
+              {{phast.operatingHours.hoursPerYear}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingHours.hoursPerYear}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Fuel
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">($/MMBtu)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">($/GJ)</span>
+            </td>
+            <td>
+              {{phast.operatingCosts.fuelCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.fuelCost}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Steam
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">($/MMBtu)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">($/GJ)</span>
+            </td>
+            <td>
+              {{phast.operatingCosts.steamCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.steamCost}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Electricity
+              <span>($/kWh)</span>
+            </td>
+            <td>
+              {{phast.operatingCosts.electricityCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.electricityCost}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,74 +4,116 @@
 
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
-     [config]="{backdrop: 'static'}">
+  [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md create-assessment-modal">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h3 *ngIf="directory.id != 1">Create Assessment in {{directory.name}}</h3>
-        <h3 *ngIf="directory.id == 1">Create Assessment</h3>
+        <!-- <h3 *ngIf="directory.id != 1">Add Assessment in {{directory.name}}</h3> -->
+        <h3>Create New Assessment</h3>
         <button class="close" (click)="hideCreateModal(false)">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div><!-- End .modal-header -->
+      </div>
+      <!-- End .modal-header -->
 
-      <form [formGroup]="newAssessment" (keyup.enter)="createAssessment()">
-      
+      <form [formGroup]="newAssessmentForm" (ngSubmit)="createAssessment()" *ngIf="!showNewFolder">
+
         <div class="modal-body">
-        
-            <div class="form-group">
-              <label class="form-control-label" for="assessmentName">Assessment Name</label>
-              <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
-              <div class="help-text">
-                <p *ngIf="newAssessment.value.assessmentType == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
-                <p *ngIf="newAssessment.value.assessmentType == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
-              </div>
-            </div><!-- End .form-group -->
+          <div class="form-group">
+            <label>Assessment Type</label>
+            <select class="form-control type-select" formControlName="assessmentType">
+              <option [ngValue]="'Pump'">Pump</option>
+              <option [ngValue]="'Furnace'">Process Heating</option>
+            </select>
+          </div>
 
-            <div class="form-group">
-              <label>Equipment</label>
-              <select class="form-control type-select" formControlName="assessmentType">
-                <option>Pump</option>
-                <option>Furnace</option>
-              </select>
+          <div class="form-group">
+            <label class="form-control-label" for="assessmentName">Assessment Name</label>
+            <input class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
+            <div class="help-text">
+              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
+              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
+            </div>
+          </div>
 
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> Add New Equipment
-                </label>
-              </div>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')"> Select Equipment from Another Assessment
-                </label>
-              </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+            <div class="help-text">
+              <a class="click-link" (click)="addFolder()">Add a new folder for this assessment</a>
+            </div>
+          </div>
+        </div>
+        <!-- End .modal-body -->
 
-              <div class="equipment-select" *ngIf="selectedEquip == 'existing'">
-                <div class="dropdown">
-                  <button class="btn dropdown-toggle assessment-dropdown" type="button" (click)="toggleDropdown(showDropdown)">{{selectedAssessment}}
-                    <span class="caret pull-right"></span></button>
-                  <ul class="dropdown-menu pointer-item assessment-dropdown" [ngClass]="{'not-hidden': showDropdown}">
-                    <li class="assessment-dropdown-item">
-                      <input class="form-control item-search" type="text" placeholder="Search Assessments" #search (keyup)="onKey(search.value)">
-                    </li>
-                    <li class="dropdown-divider"></li>
-                    <li class="item-hover assessment-dropdown-item" *ngFor="let assessment of filteredAssessments" (click)="setAssessment(assessment.name)">{{assessment.name}}</li>
-                  </ul>
-                </div>
-              </div>
-
-            </div><!-- End .form-group -->
-          
-        </div><!-- End .modal-body -->
-
-        <div class="modal-footer">
-
-          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
-          <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
-        </div><!-- End .modal-footer -->
+        <div class="d-flex justify-content-between" [ngClass]="{'phast': newAssessmentForm.controls.assessmentType.value == 'Furnace','psat': newAssessmentForm.controls.assessmentType.value == 'Pump'}">
+          <div class="p-2">
+            <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
+          </div>
+          <div class="p-2">
+            <button class="btn btn-primary" type="submit" [disabled]="!newAssessmentForm.valid" (click)="createAssessment()">Add Assessment</button>
+          </div>
+        </div>
 
       </form>
+
+      <form [formGroup]="newFolderForm" *ngIf="showNewFolder">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-control-label" for="folderName">Folder Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="folderName" id="folderName" />
+            </div>
+            <!-- <div class="help-text">
+            <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+          </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="companyName">Company Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="companyName" id="companyName" />
+            </div>
+            <!-- <div class="help-text">
+              <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+            </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="facilityName">Facility Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="facilityName" id="facilityName" />
+            </div>
+            <!-- <div class="help-text">
+                <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+              </div> -->
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>New Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <button class="btn btn-secondary" type="button" (click)="cancelNewFolder()">Cancel</button>
+            </div>
+
+            <div class="p-2">
+              <button class="btn btn-secondary" type="button" [disabled]="!newFolderForm.valid" (click)="createFolder()">Create Folder</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
+
   </div>
 </div>

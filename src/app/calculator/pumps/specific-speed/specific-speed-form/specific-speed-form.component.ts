@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-specific-speed-form',
@@ -8,9 +9,11 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class SpecificSpeedFormComponent implements OnInit {
   @Input()
-  speedForm: any;
+  speedForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
 
@@ -36,10 +39,10 @@ export class SpecificSpeedFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.speedForm) {
-      this.tmpPumpType = this.speedForm.value.pumpType;
-      this.tmpPumpRpm = this.speedForm.value.pumpRPM;
-      this.tmpFlowRate = this.speedForm.value.flowRate;
-      this.tmpHead = this.speedForm.value.head;
+      this.tmpPumpType = this.speedForm.controls.pumpType.value;
+      this.tmpPumpRpm = this.speedForm.controls.pumpRPM.value;
+      this.tmpFlowRate = this.speedForm.controls.flowRate.value;
+      this.tmpHead = this.speedForm.controls.head.value;
     }
   }
 
@@ -54,5 +57,7 @@ export class SpecificSpeedFormComponent implements OnInit {
     })
     this.calculate.emit(true);
   }
-
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

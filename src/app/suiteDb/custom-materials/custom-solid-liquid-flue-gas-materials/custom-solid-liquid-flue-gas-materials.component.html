@@ -1,0 +1,89 @@
+<div class="d-flex flex-wrap w-100">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let solidLiquidFlueGasMaterial of solidLiquidFlueGasMaterials; let i = index">
+    <div class="card card-item">
+      <div class="card-header summary-card-header phast">
+        <input type="checkbox" [(ngModel)]="solidLiquidFlueGasMaterial.selected"> {{solidLiquidFlueGasMaterial.substance}}
+        <i (click)="editMaterial(solidLiquidFlueGasMaterial.id)" class="fa fa-edit pull-right"></i>
+      </div>
+      <div class="card-body scroll-item summary-card-body">
+
+        <table class="table">
+          <tr>
+            <td>
+              Carbon:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.carbon | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Hydrogen:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.hydrogen | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Inert Ash:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.inertAsh | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Moisture:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.moisture | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Nitrogen:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.nitrogen | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              O
+              <sub>2</sub>:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.o2 | sigFigs: '3'}} %
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Sulphur:
+            </td>
+            <td>
+              {{solidLiquidFlueGasMaterial.sulphur | sigFigs: '3'}} %
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+      <div class="card-footer summary-card-footer">
+        <div class="btn-delete-material pull-right" (click)="deleteMaterial(solidLiquidFlueGasMaterial.id)">Delete Material</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content tab-content">
+      <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-solid-liquid-flue-gas-material>
+    </div>
+  </div>
+</div>

@@ -1,14 +1,4 @@
 
-.modal-content{
-    height: 95%;
-    max-height: 95%;
-}
-
-.modal-dialog{
-    max-width: 95%;
-    top: 20vh;
-}
-
 .invalid{
     border-color: red;
 }
@@ -21,6 +11,34 @@
   border-color:darkorange;
 }
 
-.form-check-input{
-    width: auto !important;
+
+.modal-dialog{
+    top: 0;
+    max-width: none;
+    margin: 15px;
+}
+
+
+.modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #ececec;
+}
+
+.modal-header{
+    background-color: #2980b9;
+}
+
+.fa-square-o, .fa-check-square-o{
+    /* font-size: 22px; */
+}
+.fa-square-o:hover, .fa-check-square-o:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group.opt-group label{
+    width: 100%;
 }

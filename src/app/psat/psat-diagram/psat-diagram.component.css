@@ -1,0 +1,104 @@
+
+td, th{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.psat-column-name{
+        padding-left: 5px;
+    padding-right: 5px;
+    font-size: 14px;
+}
+
+.psat-diagram {
+    padding-top: 40px;
+}
+.psat-diagram .data, .psat-diagram .inputs {
+    padding-left: 0;
+}
+.psat-diagram .data {
+    counter-reset: diagram-counter;
+}
+.psat-diagram .data li {
+    position: relative;
+    padding-left: 30px;
+}
+.psat-diagram .data .num-label {
+    left: 0;
+    top: 0;
+    font: bold 14px/1 Sans-Serif;
+    background: #2980b9;
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 7px;
+    margin-right: 5px;
+}
+.psat-diagram li {
+    list-style: none;
+}
+.psat-diagram h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+.psat-diagram tbody {
+    margin-bottom: 10px;    
+}
+.psat-diagram .data-cell .data-cell-label {
+    line-height: 20px;
+    font-size: 14px;
+    width: 168px;
+    font-weight: bold;
+}
+
+.psat-diagram .data-header h3:nth-of-type(n+1) {
+    padding-top: 8px;
+}
+.psat-diagram .data-cell {
+    margin-bottom: 3px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-left: 170px;
+}
+
+.psat-diagram .data-cell-label{
+    padding-left: 35px;
+    font-weight: bold;
+}
+
+.psat-diagram .diagram {
+    background: url('../../../assets/images/psat-diagram.png') no-repeat center 20%;
+    background-size: 70%;
+    height: 100%;
+    position: relative;
+}
+    .diagram .motor, .diagram .rated-motor, .diagram .fluid, .diagram .pump {
+        font: bold 14px/1 Sans-Serif;
+        background: #2980b9;
+        color: #fff;
+        border-radius: 50%;
+        padding: 3px 7px;
+        position: absolute;
+    }
+    .diagram .motor {
+        top: 40%;
+        left: 69%;
+    }
+    .diagram .rated-motor {
+        top: 33%;
+        left: 7%;
+    }
+    .diagram .fluid {
+        top: 40%;
+        left: 20%;
+    }
+    .diagram .pump {
+        top: 30%;
+        left: 30%;
+    }
+
+
+

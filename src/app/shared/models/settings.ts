@@ -10,10 +10,54 @@ export interface Settings {
     powerMeasurement?: string,
     distanceMeasurement?: string,
     pressureMeasurement?: string,
+    steamPressureMeasurement?: string,
+    steamTemperatureMeasurement?: string,
+    steamSpecificEnthalpyMeasurement?: string,
+    steamSpecificEntropyMeasurement?: string,
+    steamSpecificVolumeMeasurement?: string,
+    steamMassFlowMeasurement?: string,
     currentMeasurement?: string,
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
+    temperatureMeasurement?: string,
     id?: number,
     energySourceType?: string,
-    furnaceType?: string
+    furnaceType?: string,
+    energyResultUnit?: string,
+    customFurnaceName?: string,
+    appVersion?: string,
+    phastRollupUnit?: string,
+    phastRollupFuelUnit?: string,
+    phastRollupSteamUnit?: string,
+    phastRollupElectricityUnit?: string,
+    facilityInfo?: FacilityInfo,
+    defaultPanelTab?: string,
+    electricityCost?: number,
+    fuelCost?: number,
+    steamCost?: number,
+    disableTutorial?: boolean
+}
+
+
+export interface FacilityInfo {
+    companyName?: string,
+    facilityName?: string,
+    address?: StreetAddress,
+    facilityContact?: Contact,
+    assessmentContact?: Contact,
+    date?: string
+}
+
+export interface StreetAddress {
+    street?: string,
+    city?: string,
+    state?: string,
+    country?: string,
+    zip?: string
+}
+
+export interface Contact {
+    contactName?: string,
+    phoneNumber?: number,
+    email?: string
 }

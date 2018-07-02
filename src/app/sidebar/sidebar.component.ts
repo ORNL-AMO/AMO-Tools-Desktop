@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
+import { ElectronService } from 'ngx-electron';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -27,31 +29,53 @@ export class SidebarComponent implements OnInit {
   emitShowTutorials = new EventEmitter<boolean>();
   @Output('emitShowAbout')
   emitShowAbout = new EventEmitter<boolean>();
+  @Output('emitShowAcknowledgments')
+  emitShowAcknowledgments = new EventEmitter<boolean>();
   @Input()
   dashboardView: string;
   @Output('emitGoToSettings')
   emitGoToSettings = new EventEmitter<boolean>();
+  @Output('emitGoToMaterials')
+  emitGoToMaterials = new EventEmitter<boolean>();
   @Output('emitGoToContact')
   emitGoToContact = new EventEmitter<boolean>();
-  
+  @Output('openModal')
+  openModal = new EventEmitter<boolean>();
+
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
   versionNum: any;
-  constructor(private assessmentService: AssessmentService) { }
+  isUpdateAvailable: boolean;
+  showModal: boolean;
+  showVersionModal: boolean;
+  updateSub: Subscription;
+  constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
-    
+    if (!this.workingDirectory.collapsed) {
+      this.toggleDirectoryCollapse(this.workingDirectory);
+    }
+    this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
+      this.isUpdateAvailable = val;
+    })
+  }
+
+  ngOnDestroy() {
+    this.updateSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory && !this.firstChange) {
       if (changes.workingDirectory.currentValue) {
         if (changes.workingDirectory.previousValue.id != changes.workingDirectory.currentValue.id) {
-          this.toggleSelected(changes.workingDirectory.currentValue);
+          this.toggleSelected(this.workingDirectory);
+          if (this.workingDirectory.collapsed) {
+            this.toggleDirectoryCollapse(this.workingDirectory);
+          }
         }
       }
     } else if (changes.selectedCalculator && !this.firstChange) {
@@ -90,8 +114,12 @@ export class SidebarComponent implements OnInit {
     return this.directory;
   }
 
-  goToSettings(){
+  goToSettings() {
     this.emitGoToSettings.emit(true);
+  }
+
+  goToMaterials() {
+    this.emitGoToMaterials.emit(true);
   }
 
   goHome() {
@@ -102,6 +130,10 @@ export class SidebarComponent implements OnInit {
     this.emitShowAbout.emit(true);
   }
 
+  showAcknowledgments() {
+    this.emitShowAcknowledgments.emit(true);
+  }
+
   showTutorials() {
     this.emitShowTutorials.emit(true);
   }
@@ -110,7 +142,27 @@ export class SidebarComponent implements OnInit {
     this.assessmentService.createAssessment.next(true);
   }
 
-  showContact(){
+  showContact() {
     this.emitGoToContact.emit(true);
+  }
+
+  closeUpdateModal() {
+    this.openModal.emit(false);
+    this.showModal = false;
+  }
+
+  openUpdateModal() {
+    this.openModal.emit(true);
+    this.showModal = true;
+  }
+
+  openVersionModal() {
+    this.openModal.emit(true);
+    this.showVersionModal = true;
+  }
+
+  closeVersionModal() {
+    this.openModal.emit(false);
+    this.showVersionModal = false;
   }
 }

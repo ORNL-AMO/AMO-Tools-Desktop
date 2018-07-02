@@ -1,0 +1,26 @@
+ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+.pill-row{
+    height: 100%;
+}
+
+.btn-dashboard{
+    height: 100%;
+}
+
+.back-col{
+    padding-right: 0px;
+}
+
+.title h1{
+    padding-top: 5px;
+}
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}

@@ -1,10 +1,10 @@
 <div class="help-header">
 
   <h3>Gas Leakage Losses Help</h3>
-  <p>Enter loss data</p>
+  <!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering gas leakage loss data.
-  </p>
+  </p> -->
 
 </div>
 
@@ -12,38 +12,50 @@
 <div class="help-content">
   <div class="card" *ngIf="currentField == 'draftPressure'">
     <div class="card-header">
-      Furnace Draft Pressure (Inch W.C.)
+      Furnace Draft Pressure
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>Furnace pressure measured at the level of the opening. It is measured by using an inclined tube manometer or a
         digital gage. Units of measurement is in terms of inch water column. Hot gases leak out when the pressure is
-        positive. Cold air leaks into the furnace when pressure is negative.
+        positive.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Inch W.C.</strong> or <strong>Pa</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'openingArea'">
     <div class="card-header">
-      Opening Area (ft<sup>2</sup>)
+      Opening Area
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
         This is value of open area from where hot gases are leaking out.
       </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>ft<sup>2</sup></strong> or <strong>m<sup>2</sup></strong><br> Minimum Value Allowed: <strong>0</strong>
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'leakageGasTemperature'">
     <div class="card-header">
-      Temperature of Gases Leaking (&#8457;)
+      Temperature of Gases Leaking
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
         Temperature of gases leaking out of the opening. In most cases it is safe and accurate enough to measure and
         use furnace (or zone) temperature for this value.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
       </p>
     </div>
   </div>
@@ -55,15 +67,18 @@
     <div class="card-block">
       <label>Description:</label>
       <p>
-        Specific density of gases at standard temperature - pressure (STP) measured relative to air using air specific
-        density as 1.0 which translates as 0.0763 lb./scf.
+        Specific density of gases at flue exit measured relative to air at standard temperature and pressure (0.0763 lb/scf).
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'ambientTemperature'">
     <div class="card-header">
-      Ambient Temperature (&#8457;)
+      Ambient Temperature
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -71,6 +86,25 @@
         Ambient temperature at the location where opening is present. Normally this is room temperature in the area
         where furnace is located.
       </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <!-- <label><u><strong>Description</strong></u></label> -->
+      <ul>
+        <li class="help-general">Eliminate or reduce size of the openings. Use appropriate cover or shield for the openings</li>
+        <li class="help-general">Control/maintain furnace pressure as close to zero as possible</li>
+        <li class="help-general">Avoid excessive positive pressure or presence of openings to reduce or eliminate hot gas leaks from the furnace</li>
+        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+      </ul>
     </div>
   </div>
 

@@ -49,6 +49,12 @@
 .feedback h2, .feedback p, .feedback a, .feedback a:not([href]):not([tabindex]) {
 	color: #fff;
 }
+
+.feedback a:not([href]):not([tabindex]):hover {
+  cursor: pointer;
+  font-weight: bolder;
+}
+
 .feedback h2 {
 	font-size: 14px;
     margin-bottom: 0;
@@ -64,4 +70,11 @@
 	float: right;
 	padding: 8px 10px;
     font-size: 14px;
+}
+
+.opening-tutorial{
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1800;
 }

@@ -1,55 +1,52 @@
 <div class="form-section">
   <div class="row">
-    <div *ngIf="inPhast" class="col-12">
+    <div class="col-12">
       <form>
         <div class="form-group">
           <label class="small" for="gasType">Select Gas</label>
           <div class="input-group">
             <select id="gasType" name="gasType" class="form-control" [(ngModel)]="flowCalculations.gasType" (focus)="focusField('gasType')"
-              (change)="calculate()">
-              <option *ngFor="let option of tmpGasTypeOptions" [ngValue]="option.value">{{option.name}}</option>
+              (change)="setHHVandSG()">
+              <option *ngFor="let option of gasType" [ngValue]="option.value">{{option.name}}</option>
             </select>
           </div>
         </div>
       </form>
     </div>
-    <div class="col-6">
+    <div class="col-12">
       <form>
         <div class="form-group">
           <label class="small" for="orificeDiameter">Orifice Diameter</label>
           <div class="input-group">
-            <input autofocus name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
+            <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
               id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
-            <span class="input-group-addon units">Inch</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="small" for="insidePipeDiameter">Inside Pipe Diameter</label>
+          <label class="small" for="insidePipeDiameter">Inner Diameter of Pipe</label>
           <div class="input-group">
             <input name="insidePipeDiameter" [(ngModel)]="flowCalculations.insidePipeDiameter" type="number" step="any" class="form-control"
               id="insidePipeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('insidePipeDiameter')">
-            <span class="input-group-addon units">Inch</span>
+              <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
           </div>
+          <span class="alert-danger pull-right small" *ngIf="insidePipeDiameterError !== null">{{insidePipeDiameterError}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="orificePressureDrop">Orifice Pressure Drop</label>
           <div class="input-group">
             <input name="orificePressureDrop" [(ngModel)]="flowCalculations.orificePressureDrop" type="number" step="any" class="form-control"
               id="orificePressureDrop" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificePressureDrop')">
-            <span class="input-group-addon units">Inch W.C.</span>
+              <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in W.C.</span>
+              <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm W.C.</span>
           </div>
         </div>
+
         <div class="form-group">
-          <label class="small" for="operatingTime">Operating Time</label>
-          <div class="input-group">
-            <input name="operatingTime" [(ngModel)]="flowCalculations.operatingTime" type="number" step="any" class="form-control" id="operatingTime"
-              (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingTime')">
-            <span class="input-group-addon units">Hrs</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="small" for="sectionType">Type of Section</label>
+          <label class="small" for="sectionType">Type of Orifice</label>
           <div class="input-group">
             <select id="sectionType" name="sectionType" class="form-control" [(ngModel)]="flowCalculations.sectionType" (focus)="focusField('sectionType')"
               (change)="setDischargeCoefficient()">
@@ -59,14 +56,15 @@
         </div>
       </form>
     </div>
-    <div class="col-6">
+    <div class="col-12">
       <form>
         <div class="form-group">
           <label class="small" for="gasTemperature">Temperature of Gas</label>
           <div class="input-group">
             <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
               id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')">
-            <span class="input-group-addon units">&#8457;</span>
+              <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
         </div>
         <div class="form-group">
@@ -74,22 +72,25 @@
           <div class="input-group">
             <input name="gasPressure" [(ngModel)]="flowCalculations.gasPressure" type="number" step="any" class="form-control" id="gasPressure"
               (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasPressure')">
-            <span class="input-group-addon units">Psig</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="dischargeCoefficient">Coefficient of Discharge</label>
           <div class="input-group">
-            <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step="any" class="form-control"
+            <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step=".1" class="form-control"
               id="dischargeCoefficient" (input)="calculate()" onfocus="this.select();" (focus)="focusField('dischargeCoefficient')">
           </div>
+          <span class="alert-danger pull-right small" *ngIf="dischargeCoefficientError !== null">{{dischargeCoefficientError}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="gasHeatingValue">Heating Value of Gas - HHV</label>
           <div class="input-group">
             <input name="gasHeatingValue" [(ngModel)]="flowCalculations.gasHeatingValue" type="number" step="any" class="form-control"
               id="gasHeatingValue" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasHeatingValue')">
-            <span class="input-group-addon units"><span>Btu/ft<sup>3</sup></span></span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'"><span>Btu/ft<sup>3</sup></span></span>
+            <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'"><span>kJ/Nm<sup>3</sup></span></span>
           </div>
         </div>
         <div class="form-group">
@@ -102,23 +103,17 @@
         </div>
       </form>
     </div>
+    <div class="col-12">
+      <form>
+        <div class="form-group">
+          <label class="small" for="operatingTime">Operating Time</label>
+          <div class="input-group">
+            <input name="operatingTime" [(ngModel)]="flowCalculations.operatingTime" type="number" step="any" class="form-control" id="operatingTime"
+                   (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingTime')">
+            <span class="input-group-addon units">hrs</span>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-<!--<div class="col-3 offset-md-1">
-      <div class="form-group text-center results-box">
-        <label class="small">Flow</label>
-        <div class="small">
-          {{flowCalculationResults.flow | number:'2.2-2'}} Scfh
-        </div>
-        <label class="small">Total Flow</label>
-        <div class="small">
-          {{flowCalculationResults.totalFlow | number:'2.2-2'}} Scf
-        </div>
-        <label class="small">Energy Use</label>
-        <div class="small">
-          {{flowCalculationResults.heatInput | number:'2.2-2'}} Million Btu
-        </div>
-      </div>
-    </div>-->
-<!--</div>
-</div>-->

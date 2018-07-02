@@ -1,38 +1,65 @@
 <!-- <a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addFolder.png"></a> -->
-<button (click)="showCreateModal()" type="button" class="btn btn-secondary create-btn">Add Folder</button>
+<button (click)="showCreateModal()" type="button" class="btn btn-secondary">Add Folder</button>
 
 
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
-     [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg">
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Create a Folder in {{directory.name}}</h3>
+        <h3>Create a New Folder</h3>
         <button class="close" aria-label="Close" (click)="hideCreateModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-group" [formGroup]="newFolder">
+        <form class="form-group" [formGroup]="newFolderForm" (ngSubmit)="createFolder()">
           <div class="row">
             <div class="col-12">
-                <label class="form-control-label" for="newFolderName">Folder Name</label>
-                <div class="input-group">
-                  <input class="form-control input-group" formControlName="newFolderName" id="newFolderName" placeholder="New Folder"/>
-                </div>
-                <app-control-messages [control]="newFolder.controls.newFolderName"></app-control-messages>
-                <div class="help-text">
-                  <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
-               </div>
+              <label class="form-control-label" for="newFolderName">Folder Name</label>
+              <div class="input-group">
+                <input class="form-control input-group" formControlName="newFolderName" id="newFolderName"/>
+              </div>
+              <!-- <app-control-messages [control]="newFolderForm.controls.newFolderName"></app-control-messages> -->
+              <div class="help-text">
+                <p class="mb-0">Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+              </div>
             </div>
           </div>
-          <div class="row justify-content-between">
-            <div class="col-2">
-              <button class="btn" (click)="hideCreateModal()">Close</button>
+          <div class="form-group">
+            <label class="form-control-label" for="companyName">Company Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="companyName" id="companyName" />
             </div>
-            <div class="col-2">
-              <button class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
+            <!-- <div class="help-text">
+                <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+              </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="facilityName">Facility Name</label>
+            <div class="input-group">
+              <input class="form-control input-group" formControlName="facilityName" id="facilityName" />
+            </div>
+            <!-- <div class="help-text">
+                  <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+                </div> -->
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>New Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <button type="button" class="btn" (click)="hideCreateModal()">Close</button>
+            </div>
+            <div class="p-2">
+              <button class="btn btn-primary" [disabled]="!newFolderForm.valid" (click)="createFolder()">Create</button>
             </div>
           </div>
         </form>

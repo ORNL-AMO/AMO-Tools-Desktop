@@ -1,8 +1,13 @@
-<div class="percent-chart-container">
-  <h1 class="value">
-    <div id="percent">{{value | number:'1.0-0'}} {{unit}}</div>
-  </h1>
-  <canvas id="baseChart" baseChart [data]="doughnutChartData" [datasets]="chartColorDataSet" [labels]="doughnutChartLabels"
-    [chartType]="doughnutChartType" [options]="chartOptions" [colors]="chartColors">
-  </canvas>
+<div class="percent-chart-container chart-container">
+	<div #ngChart>
+
+	</div>
+</div>
+
+
+<div>
+  <span #btnDownload class="percent-chart-btn fa fa-download hide-print" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')"
+        (mouseleave)="hideTooltip('btnExportChart')"></span>
+  <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustBottom]="-87" [adjustLeft]="-62" [adjustPercent]="false"></app-simple-tooltip>
+
 </div>

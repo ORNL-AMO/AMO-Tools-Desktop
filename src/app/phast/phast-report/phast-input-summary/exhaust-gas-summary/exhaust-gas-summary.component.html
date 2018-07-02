@@ -1,0 +1,105 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Exhaust Gas Losses ({{numLosses}})
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse || printView">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':offGasTempDiff[index] == true}">
+                Off (Exhaust) Gas Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':offGasTempDiff[index] == true}">
+                {{data.baseline.offGasTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.offGasTemp, mod.offGasTemp, 'offGasTempDiff', index)}">
+                {{mod.offGasTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':CODiff[index] == true}">
+                CO
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':CODiff[index] == true}">
+                {{data.baseline.CO}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.CO, mod.CO, 'CODiff', index)}">
+                {{mod.CO}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':H2Diff[index] == true}">
+                H
+                <sub>2</sub>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':H2Diff[index] == true}">
+                {{data.baseline.H2}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.H2, mod.H2, 'H2Diff', index)}">
+                {{mod.H2}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':combustibleGasesDiff[index] == true}">
+                Combustible Gas as CH4
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':combustibleGasesDiff[index] == true}">
+                {{data.baseline.combustibleGases}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.combustibleGases, mod.combustibleGases, 'combustibleGasesDiff', index)}">
+                {{mod.combustibleGases}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':vfrDiff[index] == true}">
+                Total Volumetric Flow Rate
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':vfrDiff[index] == true}">
+                {{data.baseline.vfr}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.vfr, mod.vfr, 'vfrDiff', index)}">
+                {{mod.vfr}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':dustLoadingDiff[index] == true}">
+                Dust Loading
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':dustLoadingDiff[index] == true}">
+                {{data.baseline.dustLoading}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.dustLoading, mod.dustLoading, 'dustLoadingDiff', index)}">
+                {{mod.dustLoading}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

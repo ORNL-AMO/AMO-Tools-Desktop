@@ -1,0 +1,64 @@
+<div class="panel-container row compressed-air">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="panel-column col-6 align-top">
+        <div class="header">
+          <h3>Pipe Sizing</h3>
+        </div>
+        <div class="row">
+          <div class="col-12 tab-content">
+            <app-pipe-sizing-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePipeSize($event)" (emitChangeField)="setField($event)"></app-pipe-sizing-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="header">
+            <h3>Help</h3>
+          </div>
+          <div class="tab-content">
+            <p>Find the pipe diameter, when we know the volumetric flow velocity, pressure and design velocity are known</p>
+            <div class="help-content">
+              <div class="card" *ngIf="currentField == 'airFlow'">
+                <div class="card-header">
+                  Air Flow
+                </div>
+                <div class="card-block">
+                  <p>
+                    Volumetric flow rate of air in the compressor system, referenced to the compressor inlet conditions.
+                  </p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'airlinePressure'">
+                <div class="card-header">
+                  Airline Pressure
+                </div>
+                <div class="card-block">
+                  <p>Pressure of air flowing through the pipe.</p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'designVelocity'">
+                <div class="card-header">
+                  Design Velocity
+                </div>
+                <div class="card-block">
+                  <p>The air flow velocity that is meant to flow through the pipe</p>
+                  <p>Constraints: 20 fps is recommended for a header, but it should never exceed 30 fps.</p>
+                </div>
+              </div>
+              <div class="card" *ngIf="currentField == 'atmosphericPressure'">
+                <div class="card-header">
+                  Atmospheric Pressure
+                </div>
+                <div class="card-block">
+                  <p>General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric
+                    pressure at that location can be given.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

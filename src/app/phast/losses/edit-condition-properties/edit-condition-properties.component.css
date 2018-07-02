@@ -1,0 +1,10 @@
+a:not([href]):not([tabindex]).delete-modification{
+    color: red;
+}
+
+a:not([href]):not([tabindex]).delete-modification:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    color: red;
+}

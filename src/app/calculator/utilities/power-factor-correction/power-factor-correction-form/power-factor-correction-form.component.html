@@ -1,0 +1,41 @@
+<form>
+  <div class="form-group">
+    <label for="currentDemand">Existing Demand</label>
+    <div class="input-group">
+      <input name="currentDemand" class="form-control" type="number" step="any" [(ngModel)]="data.existingDemand" id="currentDemand"
+             (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingDemand')">
+      <span class="input-group-addon units">kW</span>
+    </div>
+  </div>
+<!--
+  <div class="form-group">
+    <label for="lineFrequency">Line Frequency</label>
+    <select class="form-control" name="lineFrequency" id="lineFrequency" [(ngModel)]="data.lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')">
+      <option [ngValue]="50">50 Hz</option>
+      <option [ngValue]="60">60 Hz</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="ratedVoltage">Rated Voltage</label>
+    <div class="input-group">
+      <input name="ratedVoltage" class="form-control" type="number" step="any" [(ngModel)]="data.ratedVoltage" id="ratedVoltage"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedVoltage')">
+      <span class="input-group-addon units">V</span>
+    </div>
+  </div>
+-->
+  <div class="form-group">
+    <label for="currentPowerFactor">Existing Power Factor</label>
+    <input name="currentPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.currentPowerFactor" id="currentPowerFactor"
+      (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentPowerFactor')">
+  </div>
+
+  <div class="form-group">
+    <label for="proposedPowerFactor">Proposed Power Factor</label>
+    <input name="proposedPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.proposedPowerFactor" id="proposedPowerFactor"
+      (input)="calculate()" onfocus="this.select();" (focus)="focusField('proposedPowerFactor')">
+  </div>
+
+
+</form>

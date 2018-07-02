@@ -1,0 +1,14 @@
+.form-control{
+    width: 100%;
+}
+
+
+.group-label{
+    font-size: large;
+    font-weight: bold;
+}
+
+
+.form-section{
+    padding-top: 15px;
+}

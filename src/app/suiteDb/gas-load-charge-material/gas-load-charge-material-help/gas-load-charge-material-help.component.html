@@ -1,0 +1,42 @@
+<div class="row phast align-items-top">
+  <div class="col-12">
+    <div class="header card-header">
+      <h3>Help</h3>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center data-row align-items-center">
+  <div class="col-11">
+    <div class="card-help">
+      <div class="help-panel">
+        <div class="help-content">
+
+
+          <!-- copy this for help texts -->
+          <div class="card" *ngIf="currentField == 'selectedMaterial'">
+            <div class="card-header">
+              <p>
+                Material Name
+              </p>
+            </div>
+            <div class="card-content">
+              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'specificHeatVapor'">
+            <div class="card-header">
+              <p>
+                Specific heat of Vapor
+              </p>
+            </div>
+            <div class="card-content">
+              Specific heat of Vapor:  Heat needed to change the liquid at its boiling point into vapor at the same temperature.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

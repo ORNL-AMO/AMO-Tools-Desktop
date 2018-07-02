@@ -1,0 +1,55 @@
+<div class="modify-conditions panel-container row steam" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/steam-properties.png" class="ico-size4">
+          </div>
+          <div class="col">
+            <h3>Steam Properties Calculator</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-steam-properties-form (changeField)="setField($event)" [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings" [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 btn-container">
+            <button (click)="addRow()" class="btn-add-row">Create Row</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-steam-properties-table [data]="data" [settings]="settings"></app-steam-properties-table>
+          </div>
+        </div>
+      </div>
+      <div #lineChartContainer class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
+            </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+                <app-steam-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <app-steam-properties-help [currentField]="currentField"></app-steam-properties-help>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-directory-item',
@@ -24,13 +26,13 @@ export class DirectoryItemComponent implements OnInit {
   isFirstChange: boolean = true;
   childDirectories: Directory;
   validDirectory: boolean = false;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
-      this.populateDirectories(this.directory, false);
+      this.populateDirectories(this.directory);
     } else if (changes.newDirEventToggle && !this.isFirstChange) {
-      this.populateDirectories(this.directory, false);
+      this.populateDirectories(this.directory);
     }
     else {
       this.isFirstChange = false;
@@ -40,13 +42,9 @@ export class DirectoryItemComponent implements OnInit {
   ngOnInit() {
     if (this.directory.id != undefined) {
       this.validDirectory = true;
-      if (this.directory.id == 1) {
-        this.populateDirectories(this.directory, false);
-      } else if (this.directory.id == this.selectedDirectoryId) {
-        this.populateDirectories(this.directory, false);
-      }
-      else {
-        this.populateDirectories(this.directory, true);
+      this.populateDirectories(this.directory);
+      if (this.directory.id == this.selectedDirectoryId) {
+        this.toggleSelected(this.directory);
       }
     }
   }
@@ -59,18 +57,9 @@ export class DirectoryItemComponent implements OnInit {
     this.collapseSignal.emit(directory);
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef, collapse?: boolean) {
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
-      results => {
-        this.directory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
-      results => {
-        this.directory.subDirectory = results;
-        this.directory.collapsed = collapse;
-      }
-    )
+  populateDirectories(directoryRef: DirectoryDbRef) {
+    this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
+    this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
+    this.directory.collapsed = false;
   }
 }

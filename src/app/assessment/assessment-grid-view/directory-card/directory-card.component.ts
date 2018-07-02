@@ -1,11 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-
+import { Assessment } from '../../../shared/models/assessment';
+import { AssessmentService } from '../../assessment.service';
+import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
+import * as _ from 'lodash';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 @Component({
   selector: 'app-directory-card',
   templateUrl: './directory-card.component.html',
-  styleUrls: ['./directory-card.component.css']
+  styleUrls: ['./directory-card.component.css', '../assessment-grid-view.component.css']
 })
 export class DirectoryCardComponent implements OnInit {
   @Input()
@@ -14,18 +21,21 @@ export class DirectoryCardComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Input()
   isChecked: boolean;
+  @Output('updateDirectory')
+  updateDirectory = new EventEmitter();
 
   isFirstChange: boolean = true;
-  constructor(private indexedDbService: IndexedDbService) { }
+  editForm: FormGroup;
+  directories: Array<Directory>;
+  @ViewChild('editModal') public editModal: ModalDirective;
+  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    let tmpDirectory = this.populateDirectories(this.directory);
-    this.directory.assessments = tmpDirectory.assessments;
-    this.directory.subDirectory = tmpDirectory.subDirectory;
-    this.directory.collapsed = tmpDirectory.collapsed;
-    if (this.isChecked) {
-      this.directory.selected = this.isChecked;
-    }
+    this.populateDirectories(this.directory);
+    // this.directory.assessments = tmpDirectory.assessments;
+    // this.directory.subDirectory = tmpDirectory.subDirectory;
+    // this.directory.collapsed = tmpDirectory.collapsed;
+    this.directory.selected = false;
   }
 
 
@@ -42,31 +52,69 @@ export class DirectoryCardComponent implements OnInit {
     this.directoryChange.emit(dir)
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef): Directory {
-    let tmpDirectory: Directory = {
-      name: directoryRef.name,
-      createdDate: directoryRef.createdDate,
-      modifiedDate: directoryRef.modifiedDate,
-      id: directoryRef.id,
-      collapsed: false,
-      parentDirectoryId: directoryRef.id
+  populateDirectories(directory: Directory) {
+    directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
+    directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
+  }
+
+  // setDelete() {
+  //   this.directory.selected = this.isChecked;
+  // }
+
+  goToAssessment(assessment: Assessment) {
+    this.assessmentService.tab = 'system-setup';
+    if (assessment.type == 'PSAT') {
+      if (assessment.psat.setupDone) {
+        this.assessmentService.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/psat/' + assessment.id);
+    } else if (assessment.type == 'PHAST') {
+      if (assessment.phast.setupDone) {
+        this.assessmentService.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/phast/' + assessment.id);
     }
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
-      results => {
-        tmpDirectory.assessments = results;
-      }
-    );
-
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
-      results => {
-        tmpDirectory.subDirectory = results;
-      }
-    )
-    return tmpDirectory;
   }
 
-  setDelete() {
-    this.directory.selected = this.isChecked;
+  showEditModal() {
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
+      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+      this.editForm = this.formBuilder.group({
+        'name': [this.directory.name],
+        'directoryId': [this.directory.parentDirectoryId]
+      })
+      this.editModal.show();
+    })
   }
 
+  hideEditModal() {
+    this.editModal.hide();
+  }
+
+  getParentDirStr(id: number) {
+    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    if (parentDir) {
+      let str = parentDir.name + '/';
+      while (parentDir.parentDirectoryId) {
+        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        str = parentDir.name + '/' + str;
+      }
+      return str;
+    } else {
+      return '';
+    }
+  }
+
+  save() {
+    this.directory.name = this.editForm.controls.name.value;
+    this.directory.parentDirectoryId = this.editForm.controls.directoryId.value;
+    this.indexedDbService.putDirectory(this.directory).then(val => {
+      this.directoryDbService.setAll().then(() => {
+        this.updateDirectory.emit(true);
+        this.hideEditModal();
+      })
+    })
+  }
 }

@@ -1,17 +1,17 @@
-<div class="form-section calculator-form">
+<form>
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitChange()" autofocus>
+    <select name="pumpType" class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitChange()" autofocus>
       <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
     </select>
   </div>
   <div class="form-group">
-    <label for="flowRate">Flow Rate</label><br>
-    <div class="input-group calc-addon-group">
-      <input class="form-control addon-input" type="number" min="0" max="5000" step="any" [(ngModel)]="tmpFlowRate" id="flowRate"
+    <label for="flowRate">Flow Rate</label>
+    <div class="input-group">
+      <input name="flowRate" class="form-control" type="number" min="0" max="5000" step="any" [(ngModel)]="tmpFlowRate" id="flowRate"
         [ngClass]="{'invalid': checkFlowRate() == false}" (input)="emitChange()" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
     <span class="alert-danger small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
   </div>
-</div>
+</form>

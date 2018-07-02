@@ -1,0 +1,129 @@
+<div class="report-summary">
+    <div class="row">
+        <div class="col-12">
+
+            <ul>
+                <li *ngIf="numPsats != 0" [hidden]="showSummary == 'closed'" class="pump-summary" (click)="showPumpModal()" [ngClass]="{'disabled': numPsats == 0}">
+                    <app-psat-summary [numPsats]="numPsats"></app-psat-summary>
+                </li>
+                <li *ngIf="numPsats == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
+                    <div class="summary-header fans">
+                        <h3>Pumps</h3>
+                        <span>
+                            <span>--</span>
+                        </span>
+                    </div>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Cost Savings</dt>
+                        <dd>$----</dd>
+                        <dt>Annual Cost</dt>
+                        <dd>$----</dd>
+                    </dl>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Energy Savings</dt>
+                        <dd>---- MWh</dd>
+                        <dt>Annual Energy</dt>
+                        <dd>---- MWh</dd>
+                    </dl>
+                </li>
+                <li *ngIf="numPhasts != 0" [hidden]="showSummary == 'closed'" class="furnace-summary" (click)="showFurnaceRollup()">
+                    <app-phast-summary [settings]="settings" [numPhasts]="numPhasts"></app-phast-summary>
+                </li>
+                <li *ngIf="numPhasts == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
+                    <div class="summary-header fans">
+                        <h3>Furnaces</h3>
+                        <span>
+                            <span>--</span>
+                        </span>
+                    </div>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Cost Savings</dt>
+                        <dd>$----</dd>
+                        <dt>Annual Cost</dt>
+                        <dd>$----</dd>
+                    </dl>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Energy Savings</dt>
+                        <dd>---- MWh</dd>
+                        <dt>Annual Energy</dt>
+                        <dd>---- MWh</dd>
+                    </dl>
+                </li>
+                <li [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
+                    <div class="summary-header fans">
+                        <h3>Fans</h3>
+                        <span>
+                            <span>--</span>
+                        </span>
+                    </div>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Cost Savings</dt>
+                        <dd>$----</dd>
+                        <dt>Annual Cost</dt>
+                        <dd>$----</dd>
+                    </dl>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Energy Savings</dt>
+                        <dd>---- MWh</dd>
+                        <dt>Annual Energy</dt>
+                        <dd>---- MWh</dd>
+                    </dl>
+                </li>
+                <li [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
+                    <div class="summary-header motors">
+                        <h3>Motors</h3>
+                        <span>
+                            <span>--</span>
+                        </span>
+                    </div>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Cost Savings</dt>
+                        <dd>$----</dd>
+                        <dt>Annual Cost</dt>
+                        <dd>$----</dd>
+                    </dl>
+                    <dl class="summary-list">
+                        <dt>Maximum Annual
+                            <br/>Energy Savings</dt>
+                        <dd>---- MWh</dd>
+                        <dt>Annual Energy</dt>
+                        <dd>---- MWh</dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <a *ngIf="showSummary == 'open'" class="click-link pull-right" (click)="collapseSummary('closed')">-Collapse Summaries</a>
+            <a *ngIf="showSummary == 'closed'" class="click-link pull-right" (click)="collapseSummary('open')">+Show Summaries</a>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <div bsModal #rollupModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rollupModal"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div> -->

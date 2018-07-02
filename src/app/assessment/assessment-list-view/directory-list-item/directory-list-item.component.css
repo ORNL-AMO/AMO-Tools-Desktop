@@ -5,3 +5,32 @@
   border-width: 1px ;
   border-color: slategray;
 }
+
+
+a:not([href]):not([tabindex]):hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:not([href]):not([tabindex]){
+  color: black;
+}
+
+
+.fa-edit:hover{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fa-edit{
+  padding-top: 4px;
+  font-size: larger;
+}
+
+
+.list-row.folder{
+  border-bottom: #B3B6B7 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #B3B6B7) 80 / 2;
+}

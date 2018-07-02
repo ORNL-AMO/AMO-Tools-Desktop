@@ -3,6 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { HelpPanelService } from '../help-panel.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-motor-help',
   templateUrl: './motor-help.component.html',
@@ -18,14 +19,18 @@ export class MotorHelpComponent implements OnInit {
   flaExpectedMin: number = 0;
   flaExpectedMax: number = 0;
 
-
+  currentFieldSub: Subscription;
 
   constructor(private helpPanelService: HelpPanelService, private psatService: PsatService) { }
 
   ngOnInit() {
-    this.helpPanelService.currentField.subscribe((val) => {
+    this.currentFieldSub = this.helpPanelService.currentField.subscribe((val) => {
       this.currentField = val;
     })
+  }
+
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
   }
 
 

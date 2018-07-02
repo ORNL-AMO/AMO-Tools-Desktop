@@ -1,29 +1,40 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Other Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Other Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_otherLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_otherLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Other Losses</h3>
   <h4>Add some now.</h4>
+</div>
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_otherLosses.length == 0 && lossesLocked) || (_otherLosses.length == 0 && !inSetup)">
+  <h3>You have no Other Losses</h3>
+  <h4>To add Other Losses you will need to delete your current modifications and return to system setup.</h4>
 </div>
 
 <div class="card-form" *ngFor="let loss of _otherLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <label class="group-label loss-label">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
+        {{loss.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+      </label>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
-      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [lossIndex]="lossIndex"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-other-losses-form>
+      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" [lossIndex]="lossIndex" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [settings]="settings" [inSetup]="inSetup"></app-other-losses-form>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="total">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Other Total
+      </div>
+      <div class="text-center w-50 bold">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
     </div>
   </div>
 </div>

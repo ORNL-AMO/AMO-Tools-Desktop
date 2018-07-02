@@ -1,45 +1,75 @@
-<div class="no-data no-data-phast" *ngIf="_energyInputs.length == 0" (click)="addLoss()">
-  <h3>You have no Wall Losses</h3>
+<div class="no-data no-data-phast" *ngIf="_energyInputs.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
+  <h3>You have no Energy Input</h3>
   <h4>Add some now.</h4>
 </div>
-
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_energyInputs.length == 0 && lossesLocked) || (_energyInputs.length == 0 && !inSetup)">
+  <h3>You have no Energy Input</h3>
+  <h4>To add Energy Input you will need to delete your current modifications and return to system setup.</h4>
+</div>
 
 <div class="card-form" *ngFor="let loss of _energyInputs; let lossIndex = index">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <form class="name-input-form" [formGroup]="loss.form">
+        <div class="input-group">
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-energy-input-form (changeField)="changeField($event)" [(energyInputForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-energy-input-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup"></app-energy-input-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row loss-total">
     <div class="col-12">
+      <!-- <div class="form-group">
+        <label class="bold">Fuel Heat Delivered</label>
+        <div *ngIf="loss.results.heatDelivered" class="text-center bold">
+          {{loss.results.heatDelivered | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.results.heatDelivered" class="text-center bold">
+          &mdash; &mdash;
+        </div>
+      </div> -->
       <div class="form-group">
-        <label class="small">Heat Delivered</label>
-        <div class="text-center small">
-          {{loss.results.heatDelivered | number:'2.2-2'}}
+        <label class="bold">Chemical Heat Delivered</label>
+        <div *ngIf="loss.results.totalChemicalEnergyInput" class="text-center bold">
+          {{loss.results.totalChemicalEnergyInput | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.results.totalChemicalEnergyInput" class="text-center bold">
+          &mdash; &mdash;
         </div>
       </div>
       <div class="form-group">
-        <label class="small">Kwh Cycle</label>
-        <div class="text-center small">
-          {{loss.results.kwhCycle | number:'2.2-2'}}
+        <label class="bold">Electrical Heat Delivered</label>
+        <div *ngIf="electricalHeatDelivered" class="text-center bold">
+          {{electricalHeatDelivered | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!electricalHeatDelivered" class="text-center bold">
+          &mdash; &mdash;
         </div>
       </div>
       <div class="form-group">
-        <label class="small">Total Kwh Cycle</label>
-        <div class="text-center small">
-          {{loss.results.totalKwhCycle | number:'2.2-2'}}
+        <label class="bold">Energy Input Total</label>
+        <div *ngIf="energyInputTotal" class="text-center bold">
+          {{energyInputTotal | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!energyInputTotal" class="text-center bold">
+          &mdash; &mdash;
         </div>
       </div>
     </div>

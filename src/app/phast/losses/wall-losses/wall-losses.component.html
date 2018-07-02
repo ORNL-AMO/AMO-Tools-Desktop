@@ -1,39 +1,63 @@
 <!--no wall losses data currently added to this assessment-->
-<div class="no-data no-data-phast" *ngIf="_wallLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_wallLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Wall Losses</h3>
   <h4>Add some now.</h4>
 </div>
-
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_wallLosses.length == 0 && lossesLocked) || (_wallLosses.length == 0 && !inSetup)">
+  <h3>You have no Wall Losses</h3>
+  <h4>To add Wall Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
 <!--Itterate through component data -->
 <div class="card-form" *ngFor="let loss of _wallLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <!--<input *ngIf="isBaseline" type="text" id="{{'wallLossName_'+lossIndex}}" [disabled]="!baselineSelected" class="form-control" [(ngModel)]="loss.name" />-->
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <!--delete from baseline only-->
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <form class="name-input-form" [formGroup]="loss.form">
+        <div class="input-group">
+          <!--indicator for toggling collapse-->
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <!--wall losses form with data injected-->
-      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-wall-losses-form>
+      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-wall-losses-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small">Heat Loss</label>
-        <div class="text-center small">
-          <!--results from calculation--> 
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+          <!--results from calculation-->
+          {{loss.heatLoss | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
         </div>
+        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="total">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Wall Loss Total
+      </div>
+      <div class="text-center w-50 bold">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
       </div>
     </div>
   </div>

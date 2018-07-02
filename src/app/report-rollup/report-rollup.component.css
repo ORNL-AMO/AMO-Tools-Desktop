@@ -1,0 +1,202 @@
+.report-header {
+    background: #fff;
+    border-bottom: #bbb solid 1px;
+    width: 100%;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+
+.report-container {
+    display: flex;
+    background-color: #ececec;
+
+}
+
+.sidebar {
+    background: #fff;
+    border-right: #d0d0d0 solid 1px;
+    overflow-y: auto;
+    position: sticky;
+}
+    .sidebar ul {
+        margin: 0;
+        padding: 0;
+    }
+    .sidebar ul li {
+            list-style: none;
+            padding: 0;
+        }
+    .sidebar ul li.active {
+            background-color: #f5f5f5;
+        }
+    .sidebar ul li:hover {
+            cursor: pointer;
+            background-color: lightgrey;
+        }
+    .sidebar ul li a {
+                font-size: 15px;
+            }
+    .sidebar ul li.active a {
+                color: #000;
+                font-weight: bold;
+            }
+
+.report-container .content {
+    /* flex: 1;
+    overflow-y: auto; */
+    background: #f5f5f5;
+}
+
+.report-column{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.calculator-card{
+    border: none; 
+    margin-top: 2.5%; 
+    margin-bottom: 2.5%;
+    background: inherit;
+}
+
+.disclaimer{
+  font-weight: bold !important;
+  opacity: 1 !important;
+}
+
+
+.print-notification {
+    top: 0;
+    position: fixed;
+    z-index: 1020;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ececec;
+}
+
+
+@media print {
+
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+
+    .print-width {
+        width: 100%;
+    }
+
+    .print-container {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    
+    .print-break-after {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+
+    .hide-print{
+        display: none !important;
+    }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
+    .report-container{
+        margin-top: 0;
+    }
+
+    .report-container, .sidebar {
+        width: 0px !important;
+    }
+
+    .report-container .content {
+        padding-top: 0px;
+        padding: 0;
+        margin-left: 0;
+    }
+
+    .assessment-item{
+        page-break-before: always;
+        padding-top: 0px !important;
+    }
+    .print-div{
+        display: none;
+    }
+
+    .print-height{
+        height: 100% !important;
+    }
+}
+
+.phast-modal .modal-dialog,
+.psat-modal .modal-dialog{
+    top: 0px;
+    max-width: none;
+    margin: 10px;
+}
+
+.phast-modal .modal-header{
+    background-color: #BF3D00;
+    color: #fff;
+}
+
+.psat-modal .modal-header{
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.phast-modal .modal-body,
+.psat-modal .modal-body{
+    height: 85vh;
+}
+
+
+.assessment-reports{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 25px;
+}
+
+.assessment-item{
+    margin-bottom: 2rem;
+}
+
+
+.icon-image{
+    height: 18px;
+  }
+
+  .sb-item{
+      width: 100%;
+  }
+
+.print-div{
+z-index: 100;
+height: 100%;
+width: 100%;
+position: fixed;
+background-color:#CCD1D1;
+/* background-color: red; */
+}
+
+.print-col{
+text-align: center;
+}
+
+/* .print-col h4{
+padding-top: 15%;
+} */
+
+.fa-print{
+font-size: 150px;
+}
+
+.assessment-padding{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+}

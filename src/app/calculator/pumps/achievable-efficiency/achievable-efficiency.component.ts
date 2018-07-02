@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
-import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
@@ -18,13 +18,21 @@ export class AchievableEfficiencyComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
-  efficiencyForm: any;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
+  efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
-
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
     if (!this.psat) {
       this.efficiencyForm = this.psatService.initForm();
@@ -40,19 +48,28 @@ export class AchievableEfficiencyComponent implements OnInit {
 
     //if stand alone calculator use system settings
     if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results.length != 0) {
-            if (results[0].flowMeasurement != 'gpm') {
-              let tmpVal = this.convertUnitsService.value(this.efficiencyForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
-              this.efficiencyForm.patchValue({
-                flowRate: this.psatService.roundVal(tmpVal, 2)
-              })
-            }
-            this.settings = results[0];
-          }
-        }
-      )
+      this.settings = this.settingsDbService.globalSettings;
+      if (this.settings.flowMeasurement != 'gpm') {
+        let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
+        this.efficiencyForm.patchValue({
+          flowRate: this.psatService.roundVal(tmpVal, 2)
+        })
+      }
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
@@ -60,7 +77,7 @@ export class AchievableEfficiencyComponent implements OnInit {
     this.toggleCalculate = !this.toggleCalculate;
   }
 
-  setTab(str: string){
+  setTab(str: string) {
     this.tabSelect = str;
   }
 }

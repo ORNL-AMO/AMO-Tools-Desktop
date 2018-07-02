@@ -1,0 +1,72 @@
+<div class="row phast align-items-top">
+  <div class="col-12">
+    <div class="header card-header">
+      <h3>Help</h3>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center data-row align-items-center">
+  <div class="col-11">
+    <div class="card-help">
+      <div class="help-panel">
+        <div class="help-content">
+
+          <div class="card" *ngIf="currentField == 'selectedMaterial'">
+            <div class="card-header">
+              <p>
+                Material Name
+              </p>
+            </div>
+            <div class="card-content">
+              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'latentHeat'">
+            <div class="card-header">
+              <p>
+                Latent heat of fusion
+              </p>
+            </div>
+            <div class="card-content">
+              The amount of thermal energy required to convert a unit mass of the solid material into liquid without change in temperature.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'meltingPoint'">
+            <div class="card-header">
+              <p>
+                Melting Point
+              </p>
+            </div>
+            <div class="card-content">
+              The temperature at which a given solid will melt.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'specificHeatLiquid'">
+            <div class="card-header">
+              <p>
+                Specific heat of liquid from molten material
+              </p>
+            </div>
+            <div class="card-content">
+              Energy required to change a unit mass of the material by unit temperature.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'specificHeatSolid'">
+            <div class="card-header">
+              <p>
+                Average specific heat of the solid material
+              </p>
+            </div>
+            <div class="card-content">
+              Required average heat when material per unit mass is raised by unit temperature.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

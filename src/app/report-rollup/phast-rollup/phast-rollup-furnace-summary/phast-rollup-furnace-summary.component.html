@@ -1,0 +1,49 @@
+<!-- app version -->
+<div *ngIf="!printView">
+  <div class="row justify-content-center">
+    <div class="col-3">
+      <div class="form-group align-self-center">
+        <select (change)="ngOnChanges()" class="form-control graph-select" name="graphOption" [(ngModel)]="graphOption" id="graphOption">
+          <option *ngFor="let option of graphOptions" [ngValue]="option">{{option}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div #barChartContainer class="col-lg-12 col-md-12 col-sm-12">
+      <!-- c3 graph container -->
+      <app-rollup-bar-chart [settings]="settings" [chartContainerWidth]="getWidth()" [chartLabels]="chartLabels" [axisLabel]="axisLabel"
+        [unit]="unit" [graphColors]="graphColors" [showTitle]="showTitle" [printView]="printView" [title]="title" [showLegend]="showLegend"
+        [isUpdate]="isUpdate" [allDataColumns]="allDataColumns" [assessmentType]="'phast'"></app-rollup-bar-chart>
+    </div>
+  </div>
+  <div class="row justify-content-center table-row pad-top">
+    <div class="col-lg-12 col-md-12 col-sm-12 output-summary">
+      <app-phast-rollup-furnace-summary-table [settings]="settings" [resultData]="resultData"></app-phast-rollup-furnace-summary-table>
+    </div>
+  </div>
+</div>
+
+<!-- print view -->
+<div *ngIf="printView">
+  <div *ngFor="let printChart of printChartData; let i = index" class="print-rollup-bar-chart-container">
+    <div class="row justify-content-center">
+      {{titles[i]}}
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- c3 graph container -->
+        <app-rollup-bar-chart [settings]="settings" [chartContainerWidth]="chartContainerWidth" [chartLabels]="chartLabels" [axisLabel]="axisLabel"
+          [unit]="units[i]" [graphColors]="graphColors" [showTitle]="showTitle" [printView]="printView" [title]="titles[i]"
+          [showLegend]="showLegend" [isUpdate]="isUpdate" [allDataColumns]="printChart" [chartIndex]="i" [assessmentType]="'phast'"></app-rollup-bar-chart>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center table-row pad-top">
+    <div class="col-lg-12 col-md-12 col-sm-12 output-summary">
+      <app-phast-rollup-furnace-summary-table [settings]="settings" [resultData]="resultData"></app-phast-rollup-furnace-summary-table>
+    </div>
+  </div>
+
+</div>

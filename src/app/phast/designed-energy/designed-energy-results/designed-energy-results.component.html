@@ -1,34 +1,34 @@
-<div class="report-data">
-  <div class="results">
-    <div class="card">
-      <div class="card-block">
-        <table class="table">
-          <thead>
-            <tr>
-              <th></th>
-              <th style="text-align: center">Metered Energy Use</th>
-              <th style="text-align: center">Calculated By Phast</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Fuel Energy Used</td>
-              <td>{{results.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.designedEnergyUsed}}</td>
-              <td>{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.calculatedFuelEnergyUsed}}</td>
-            </tr>
-            <tr>
-              <td>Energy Intensity for Charge Materials</td>
-              <td>{{results.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.designedEnergyIntensity}}</td>
-              <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.calculatedEnergyIntensity}}</td>
-            </tr>
-            <tr>
-              <td>Electricity Used (Auxiliary)</td>
-              <td>{{results.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.designedElectricityUsed}}</td>
-              <td>{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.calculatedElectricityUsed}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+<div class="output-summary" *ngIf="results">
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>{{title}}</th>
+        <th>Design Energy Use</th>
+        <th>Calculated By Phast</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fuel Energy Used</td>
+        <td *ngIf="results.designedEnergyUsed">{{results.designedEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td *ngIf="!results.designedEnergyUsed">&mdash;</td>
+        <td *ngIf="results.calculatedFuelEnergyUsed">{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td *ngIf="!results.calculatedFuelEnergyUsed">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Energy Intensity for Charge Materials</td>
+        <td *ngIf="results.designedEnergyIntensity">{{results.designedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="!results.designedEnergyIntensity">&mdash;</td>
+        <td *ngIf="results.calculatedFuelEnergyUsed">{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td *ngIf="!results.calculatedFuelEnergyUsed">&mdash;</td>
+      </tr>
+      <tr>
+        <td>Electricity Used (Auxiliary)</td>
+        <td *ngIf="results.designedElectricityUsed">{{results.designedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td *ngIf="!results.designedElectricityUsed">&mdash;</td>
+        <td *ngIf="results.calculatedElectricityUsed">{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td *ngIf="!results.calculatedElectricityUsed">&mdash;</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

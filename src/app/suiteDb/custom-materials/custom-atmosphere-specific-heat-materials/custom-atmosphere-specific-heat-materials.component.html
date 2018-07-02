@@ -1,0 +1,41 @@
+<div class="d-flex flex-wrap w-100">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let atmosphereSpecificHeatMaterial of atmosphereSpecificHeatMaterials; let i = index">
+    <div class="card card-item">
+      <div class="card-header summary-card-header phast">
+        <input type="checkbox" [(ngModel)]="atmosphereSpecificHeatMaterial.selected"> {{atmosphereSpecificHeatMaterial.substance}}
+        <i (click)="editMaterial(atmosphereSpecificHeatMaterial.id)" class="fa fa-edit pull-right"></i>
+      </div>
+      <div class="card-body scroll-item summary-card-body">
+
+        <table class="table">
+          <tr>
+            <td>
+              Specific Heat:
+            </td>
+            <td>
+              {{atmosphereSpecificHeatMaterial.specificHeat | sigFigs:'6'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/(SCF-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/(kg-&#8451;)</span>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="card-footer summary-card-footer">
+        <div class="btn-delete-material pull-right" (click)="deleteMaterial(atmosphereSpecificHeatMaterial.id)">Delete Material</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content tab-content">
+      <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-atmosphere-specific-heat-material>
+    </div>
+  </div>
+</div>

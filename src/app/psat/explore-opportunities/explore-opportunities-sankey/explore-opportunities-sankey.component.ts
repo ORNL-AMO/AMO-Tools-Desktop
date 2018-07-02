@@ -6,6 +6,12 @@ import { Settings } from '../../../shared/models/settings';
 import * as d3 from 'd3';
 var svg;
 
+const labelFontSize = 8,
+  labelPadding = 10,
+  topLabelPositionY = 40,
+  bottomLabelPositionY = 1250,
+  topReportPositionY = 125,
+  bottomReportPositionY = 1250;
 @Component({
   selector: 'app-explore-opportunities-sankey',
   templateUrl: './explore-opportunities-sankey.component.html',
@@ -29,35 +35,37 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   firstChange: boolean = true;
 
   //Max width of Sankey
+
   baseSize: number = 50;
 
 
   selectedView: string = 'Baseline';
 
+
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
-    this.createSankey();
+    this.createSankey('Baseline');
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineResults) {
       if (this.selectedView == 'Baseline') {
-        this.createSankey();
+        this.createSankey('Baseline');
       }
     }
     if (changes.modificationResults) {
       if (this.selectedView == 'Modified') {
-        this.createSankey();
+        this.createSankey('Modified');
       }
     }
   }
-  createSankey() {
+  createSankey(str: string) {
+    this.selectedView = str;
     if (this.selectedView == 'Baseline') {
       this.sankey("app-explore-opportunities-sankey", this.baselineResults);
     } else if (this.selectedView == 'Modified') {
-      console.log('create modified 2');
       this.sankey("app-explore-opportunities-sankey", this.modificationResults);
     }
   }
@@ -75,7 +83,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
     d3.select(location).selectAll('svg').remove();
 
     this.width = 400;
-    this.height = 400;
+    this.height = 300;
 
     svg = d3.select(location).append('svg')
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
@@ -84,10 +92,11 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
 
     this.calcLosses(results);
 
+
     var nodes = [];
     nodes.push(
       /*0*/{
-        name: "Input",
+        name: "Energy Input",
         value: results.motor_power,
         displaySize: this.baseSize,
         width: 300,
@@ -111,7 +120,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*2*/{
-        name: "Motor",
+        name: "Motor Losses",
         value: this.motor,
         displaySize: 0,
         width: 0,
@@ -138,7 +147,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
         /*4*/{
-          name: "Drive",
+          name: "Drive Losses",
           value: this.drive,
           displaySize: 0,
           width: 0,
@@ -165,7 +174,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
       /*6*/{
-        name: "Pump",
+        name: "Pump Losses",
         value: this.pump,
         displaySize: 0,
         width: 0,
@@ -177,7 +186,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*7*/{
-        name: "Output",
+        name: "Useful Output",
         value: 0,
         displaySize: 0,
         width: 0,
@@ -286,23 +295,34 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return d.y + (d.displaySize / 2) - 9;
+          return d.y + (d.displaySize);
         }
         else {
           if (d.top) {
-            return d.y - 50;
+            return topLabelPositionY;
           }
           else {
-            return d.y + 60;
+            return topLabelPositionY;
           }
         }
+        // if (d.input || d.output) {
+        //   return d.y + (d.displaySize / 2) - 9;
+        // }
+        // else {
+        //   if (d.top) {
+        //     return d.y - 50;
+        //   }
+        //   else {
+        //     return d.y + 60;
+        //   }
+        // }
       })
       .text(function (d) {
         if (!d.inter) {
           return d.name;
         }
       })
-      .style("font-size", "12px");
+      .style("font-size", labelFontSize + "px");
 
     var twoDecimalFormat = d3.format(".3");
 
@@ -324,57 +344,66 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       })
       .attr("dy", function (d) {
         if (d.input || d.output) {
-          return (d.y + (d.displaySize / 2)) + 6;
+          return d.y + (d.displaySize) + labelPadding;
         }
         else if (d.top) {
-          return d.y - 35;
+          return topLabelPositionY + labelPadding;
         }
         else {
-          return d.y + 110;
+          return topLabelPositionY + labelPadding;
         }
+        // if (d.input || d.output) {
+        //   return (d.y + (d.displaySize / 2)) + 6;
+        // }
+        // else if (d.top) {
+        //   return d.y - 35;
+        // }
+        // else {
+        //   return d.y + 110;
+        // }
       })
       .text(function (d) {
         if (!d.inter) {
-          return twoDecimalFormat(d.value);
+          return twoDecimalFormat(d.value) + " kW";
         }
       })
-      .style("font-size", "12px");
+      .style("font-size", labelFontSize + "px");
 
-    var nodes_units = svg.selectAll(".nodetext")
-      .data(nodes)
-      .enter()
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("dx", function (d) {
-        if (d.input) {
-          return d.x - 30;
-        }
-        else if (d.output) {
-          return d.x + (d.displaySize * .7) + 24;
-        }
-        else {
-          return d.x;
-        }
-      })
-      .attr("dy", function (d) {
-        if (d.input || d.output) {
-          return d.y + (d.displaySize / 2) + 21;
-        }
-        else {
-          if (d.top) {
-            return d.y - 20;
-          }
-          else {
-            return d.y + 160;
-          }
-        }
-      })
-      .text(function (d) {
-        if (!d.inter) {
-          return "kW";
-        }
-      })
-      .style("font-size", "12px");
+    // var nodes_units = svg.selectAll(".nodetext")
+    //   .data(nodes)
+    //   .enter()
+    //   .append("text")
+    //   .attr("text-anchor", "middle")
+    //   .attr("dx", function (d) {
+    //     if (d.input) {
+    //       return d.x - 30;
+    //     }
+    //     else if (d.output) {
+    //       return d.x + (d.displaySize * .7) + 24;
+    //     }
+    //     else {
+    //       return d.x;
+    //     }
+    //   })
+    //   .attr("dy", function (d) {
+    //     if (d.input || d.output) {
+    //       return d.y + (d.displaySize / 2) + 21;
+    //     }
+    //     else {
+    //       if (d.top) {
+    //         return d.y - 20;
+    //       }
+    //       else {
+    //         return d.y + 160;
+    //       }
+    //     }
+    //   })
+    //   .text(function (d) {
+    //     if (!d.inter) {
+    //       return "kW";
+    //     }
+    //   })
+    //   .style("font-size", labelFontSize + "px");
   }
 
   calcSankey(nodes) {
@@ -713,6 +742,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       });
     () => this.changePlaceHolders(nodes);
   }
+
 
   calcLosses(results) {
     var motorShaftPower;

@@ -1,0 +1,105 @@
+<div class="output-summary">
+  <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+        <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bold-row">
+        <td>Percent Savings (%)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>
+          <span *ngIf="!mod.percentSavings">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Energy Intensity
+          <span> ({{energyUnit}})</span>
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.energyPerMass | sigFigs:'5'}}</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.energyPerMass">{{mod.energyPerMass | sigFigs:'5'}}</span>
+          <span *ngIf="!mod.energyPerMass">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Annual Energy Used
+          <span> ({{timeUnit}})</span>
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualEnergyUsed | sigFigs:'5'}}</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.annualEnergyUsed">{{mod.annualEnergyUsed | sigFigs:'5'}}</span>
+          <span *ngIf="!mod.annualEnergyUsed">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr class="bold-row">
+        <td>Annual Energy Savings
+          <span> ({{timeUnit}})</span>
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.annualEnergySavings">{{mod.annualEnergySavings | sigFigs:'5'}}</span>
+          <span *ngIf="!mod.annualEnergySavings">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Annual Cost</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseline.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.annualCost">{{mod.annualCost | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="!mod.annualCost">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr class="bold-row">
+        <td>Annual Cost Savings</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.annualCostSavings">{{mod.annualCostSavings | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="!mod.annualCostSavings">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Implementation Costs</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.implementationCosts">{{mod.implementationCosts | currency:'USD':'symbol':'1.0-0'}}</span>
+          <span *ngIf="!mod.implementationCosts">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr class="bold-row">
+        <td>Simple Payback Period (months)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | sigFigs:'5'}}</span>
+          <span *ngIf="!mod.paybackPeriod">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr class="hide-print" *ngIf="!inPhast">
+        <td>Use for Summary</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1" [(ngModel)]="selectedModificationIndex">
+        </td>
+        <td *ngFor="let modification of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index" [(ngModel)]="selectedModificationIndex">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row" *ngIf="notes.length != 0">
+    <div class="col">
+      <h5>Modification Notes</h5>
+      <p>
+        <small>
+          <span class="print-notes" *ngFor="let note of notes">
+            <b>{{note.modificationName}} &mdash; {{note.lossName}}:</b> {{note.note}}
+            <br>
+          </span>
+        </small>
+      </p>
+    </div>
+  </div>

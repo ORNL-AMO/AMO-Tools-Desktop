@@ -1,0 +1,41 @@
+
+
+
+
+.fa-download {
+    left: 50px;
+    position: initial;
+}
+
+
+@media print {
+    .fa-download {
+        display: none;
+    }
+}
+
+
+.pre-assessment-note{
+    margin-top: 15px;
+    background: lightcyan;
+    padding: 15px;
+}
+
+.no-column-data{
+    margin-top: 15px;
+    background: lightgray;
+    padding: 15px;
+}
+
+.btn{
+    padding: 6px !important;
+}
+
+.btn-group{
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
+.pad-top {
+    padding-top: 20px;
+}

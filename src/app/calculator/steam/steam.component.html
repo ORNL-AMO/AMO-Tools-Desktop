@@ -1,25 +1,43 @@
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <div class="card">
-    <div class="card-block">
-      <h4>
-        This portion of the application is still in active development.
-      </h4>
-      <h5>
-        Below is a description of what you will find here in the future.
-      </h5>
-      <blockquote class="blockquote">
-        <p>
-          The properties and equipment calculators in this tool allow the user to input the metrics of their system, generate a list
-          of detailed steam specific steam properties, and test a variety of adjustments on individual equipment.
-        </p>
-      </blockquote>
-      <blockquote class="blockquote">
-        <p>
-          The modeler allows the user to create up a 3-pressure-header basic model of the current steam system.
-        </p>
-      </blockquote>
+<div *ngIf="getSelectedTool() == 'none'">
+
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list card-item">
+        <h2>Steam Calculators</h2>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/steam-properties.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('steam-properties')">Steam Properties</a>
+            <p>
+              Calculates the properties of steam under various conditions.
+            </p>
+          </div>
+        </div>
+
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/saturated-properties.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('saturated-properties')">Saturated Properties</a>
+            <p>
+              Calculates the properties of saturated steam under various conditions.
+            </p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
+
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'steam-properties'">
+  <app-steam-properties></app-steam-properties>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'saturated-properties'">
+  <app-saturated-properties></app-saturated-properties>
 </div>

@@ -1,10 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
-import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
-import { EnergyInputCompareService } from './energy-input-compare.service';
+import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { PhastResultsService } from '../../phast-results.service';
+
 @Component({
   selector: 'app-energy-input',
   templateUrl: './energy-input.component.html',
@@ -13,8 +16,6 @@ import { EnergyInputCompareService } from './energy-input-compare.service';
 export class EnergyInputComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
@@ -25,18 +26,32 @@ export class EnergyInputComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  phast: PHAST;
 
-  _energyInputs: Array<any>;
+  _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
+  resultsUnit: string;
+  lossesLocked: boolean = false;
+  energyInputTotal: number = 0;
+  electricalHeatDelivered: number = 0;
+  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._energyInputs = new Array();
+        this.initForms();
       }
     }
     else {
@@ -45,121 +60,100 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
+
     if (!this._energyInputs) {
       this._energyInputs = new Array();
     }
-    if (this.losses.energyInput) {
-      this.setCompareVals();
-      this.energyInputCompareService.initCompareObjects();
-      this.losses.energyInput.forEach(loss => {
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+    }
+  }
+
+  initForms() {
+    if (this.losses.energyInputEAF) {
+      let lossIndex = 1;
+      this.losses.energyInputEAF.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
-          name: 'Input #' + (this._energyInputs.length + 1),
           results: {
             heatDelivered: 0,
-            kwhCycle: 0,
-            totalKwhCycle: 0
-          }
+            totalChemicalEnergyInput: 0
+          },
+          collapse: false
         };
+        if (!tmpLoss.form.controls.name.value) {
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._energyInputs.push(tmpLoss);
       })
     }
-    this.energyInputService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.energyInput) {
-          this._energyInputs.splice(lossIndex, 1);
-          if (this.energyInputCompareService.differentArray && !this.isBaseline) {
-            this.energyInputCompareService.differentArray.splice(lossIndex, 1);
-          }
-        }
-      }
-    })
-    if (this.isBaseline) {
-      this.energyInputService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._energyInputs.push({
-            form: this.energyInputService.initForm(),
-            name: 'Loss #' + (this._energyInputs.length + 1),
-            results: {
-              heatDelivered: 0,
-              kwhCycle: 0,
-              totalKwhCycle: 0
-            }
-          });
-        }
-      })
-    } else {
-      this.energyInputService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._energyInputs.push({
-            form: this.energyInputService.initForm(),
-            name: 'Loss #' + (this._energyInputs.length + 1),
-            results: {
-              heatDelivered: 0,
-              kwhCycle: 0,
-              totalKwhCycle: 0
-            }
-          })
-        }
-      })
-    }
-  }
-
-  ngOnDestroy() {
-    this.energyInputCompareService.baselineEnergyInput = null;
-    this.energyInputCompareService.modifiedEnergyInput = null;
-    this.energyInputService.deleteLossIndex.next(null);
-    this.energyInputService.addLossBaselineMonitor.next(false);
-    this.energyInputService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    this.energyInputService.addLoss(this.isBaseline);
-    if (this.energyInputCompareService.differentArray) {
-      this.energyInputCompareService.addObject(this.energyInputCompareService.differentArray.length - 1);
-    }
     this._energyInputs.push({
-      form: this.energyInputService.initForm(),
-      name: 'Loss #' + (this._energyInputs.length + 1),
+      form: this.energyInputService.initForm(this._energyInputs.length + 1),
       results: {
         heatDelivered: 0,
-        kwhCycle: 0,
-        totalKwhCycle: 0
-      }
+        totalChemicalEnergyInput: 0
+      },
+      collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
-    this.energyInputService.setDelete(lossIndex);
+    this._energyInputs.splice(lossIndex, 1);
+    this.saveLosses();
   }
 
-  renameLossess() {
-    let index = 1;
-    this._energyInputs.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
+  collapseLoss(loss: EnInputObj) {
+    loss.collapse = !loss.collapse;
   }
-
-  calculate(loss: any) {
-    let tmpLoss: EnergyInput = this.energyInputService.getLossFromForm(loss.form);
-    let calculation = this.phastService.energyInput(tmpLoss);
-    loss.results = {
-      heatDelivered: calculation.heatDelivered,
-      kwhCycle: calculation.kwhCycle,
-      totalKwhCycle: calculation.totalKwhCycle
+  calculate(loss: EnInputObj) {
+    if (loss.form.status == 'VALID') {
+      let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
+      let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
+      loss.results = {
+        heatDelivered: calculation.heatDelivered,
+        totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
+      }
+      let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      this.energyInputTotal = tmpResults.grossHeatInput;
+      this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
+    } else {
+      loss.results = {
+        heatDelivered: null,
+        totalChemicalEnergyInput: null
+      }
+      this.energyInputTotal = 0;
+      this.electricalHeatDelivered = 0;
     }
   }
 
   saveLosses() {
-    let tmpEnergyInputs = new Array<EnergyInput>();
+    let tmpEnergyInputs = new Array<EnergyInputEAF>();
+    let lossIndex = 1;
     this._energyInputs.forEach(loss => {
+      if (!loss.form.controls.name.value) {
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpEnergyInput = this.energyInputService.getLossFromForm(loss.form);
       tmpEnergyInputs.push(tmpEnergyInput);
     })
-    this.losses.energyInput = tmpEnergyInputs;
-    this.setCompareVals();
+    this.losses.energyInputEAF = tmpEnergyInputs;
     this.savedLoss.emit(true);
   }
 
@@ -167,16 +161,15 @@ export class EnergyInputComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.energyInputCompareService.baselineEnergyInput = this.losses.energyInput;
-    } else {
-      this.energyInputCompareService.modifiedEnergyInput = this.losses.energyInput;
-    }
-    if (this.energyInputCompareService.differentArray && !this.isBaseline) {
-      if (this.energyInputCompareService.differentArray.length != 0) {
-        this.energyInputCompareService.checkEnergyInputs();
-      }
-    }
-  }
+}
+
+export interface EnInputObj {
+  form: FormGroup,
+  results: EnInputResultsObj
+  collapse: boolean
+}
+
+export interface EnInputResultsObj {
+  heatDelivered: number,
+  totalChemicalEnergyInput: number
 }

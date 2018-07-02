@@ -1,70 +1,124 @@
-<div class="landing">
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="d-flex flex-column">
+			<div class="p-2">
+				<app-measur>
+				</app-measur>
+			</div>
+			<!-- <h1>MEASUR</h1> -->
+			<p class="p-2 lead text-center no-margin-bottom">
+				Welcome to the most efficient way to manage and optimize your plant's systems and equipment.
+			</p>
+		</div>
+		<hr class="my-2">
+		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
+			property and equipment calculators.
+			<br>Get started with one of the following options.</p>
+		<div class="row justify-content-center arrow-row">
+			<div class="col-4">
+				<img class="arrow-img" src="assets/images/arrow_left.png">
+			</div>
+			<div class="col-4">
+				<img class="arrow-img pull-right" src="assets/images/arrow_right.png">
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-sm-12 col-md-11 col-lg-9">
+				<div class="card">
+					<div class="card-header">
+						<div class="row">
+							<div class="col-6 text-center">
+								<a class="click-link" (click)="createAssessment()">Create Assessment</a>
+								<p class="text-help small">Model a system and explore multiple optimization scenarios.</p>
+							</div>
+							<div class="col-6 text-center">
+								<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a>
+								<p class="text-help small">Generate detailed properties and test a variety of adjustments.</p>
+							</div>
+						</div>
 
-	<h1>Welcome to the most efficient way to manage and optimize your plant's systems and equipment.</h1>
-	<!-- <h2>Start with one of the following options to get started.</h2> -->
-	<h2>Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many property and equipment calculators.</h2>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-6 border-right">
+								<div class="d-flex">
+									<div class="p-2">
+										<div class="psat-image-background d-flex flex-column">
+											<img class="psat-image p-0 align-self-center" src="assets/images/pump.png">
+										</div>
+									</div>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('Pump')" class="p-0 click-link">Create Pump Assessment</a>
+											<span class="former-name">formerly DOE Pumping System Assessment Tool (PSAT)</span>
+										</div>
+									</div>
+								</div>
+								<div class="d-flex">
+									<div class="p-2">
+										<div class="phast-image-background d-flex flex-column">
+											<img class="phast-image p-0 align-self-center" src="assets/images/ph.png">
+										</div>
+									</div>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('Furnace')" class="click-link p-0">Create Process Heating Assessment</a>
+											<span class="former-name">formerly DOE Process Heating Assessment and Survey Tool (PHAST)</span>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="d-flex flex-column">
+									<a (click)="hideScreen()" class="click-link align-self-center">
+										<span class="fa fa-folder-o"></span> View All Your Assessments</a>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('motors')">
+										<i class="fa fa-calculator"></i> Motors
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('pumps')">
+										<i class="fa fa-calculator"></i> Pumps</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
+										<i class="fa fa-calculator"></i> Process Heating
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('compressed-air')">
+										<i class="fa fa-calculator"></i> Compressed Air
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('utilities')">
+										<i class="fa fa-calculator"></i> General
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<!-- <ul>
-		<li>
-			<h3>Properties &amp; Equipment Calculators</h3>
-			<p>Generate detailed properties and test a variety of adjustments.</p>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Pumps
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Fans
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Furnaces
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Steam
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Motors
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Utilities
-			</span>
-			</div>
-		</li>
-		<li>
-			<h3>Create Assessment</h3>
-			<p>Model a system and explore endless optimization scenarios.</p>
-			<app-assessment-create [directory]="directory"></app-assessment-create>
-			<a (click)="hideScreen()">Go To Assessments Dashboard</a>
-		</li>
-	</ul> -->
+		<!-- </li>
+</ul> -->
 
-	<div class="help">
-		<h3>Need help getting started?</h3>
-		<p>Watch the following tutorial to see how to get started using the tool.</p>
-		<video controls style="max-width:100%;">
-	        <source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos
-	    </video>
+		<!-- <div class="help">
+			<h3 style="padding-bottom: 20px">Need help getting started?</h3>
+			<br>
+			<p>Watch the following tutorial to see how to get started using the tool.</p>
+			<video controls class="tutorial-video">
+				<source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos
+			</video>
+		</div> -->
+
 	</div>
-
 </div>
+<!-- </div> -->
+
+<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()" [type]="createAssessmentType"></app-assessment-create>

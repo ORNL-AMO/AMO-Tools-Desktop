@@ -8,21 +8,18 @@ import { CalculatorComponent } from './calculator.component';
 
 import { FansComponent } from './fans/fans.component';
 
-import { SteamComponent } from './steam/steam.component';
-import { MotorsComponent } from './motors/motors.component';
+import { MotorsModule } from './motors/motors.module';
 
+import { SteamModule } from './steam/steam.module';
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
-import { CompressedAirComponent } from './compressed-air/compressed-air.component';
-
+import { StandaloneService } from './standalone.service';
+import { CompressedAirModule } from './compressed-air/compressed-air.module';
 
 @NgModule({
   declarations: [
     CalculatorComponent,
-    FansComponent,
-    SteamComponent,
-    MotorsComponent,
-    CompressedAirComponent
+    FansComponent
   ],
   exports: [
     CalculatorComponent
@@ -34,10 +31,14 @@ import { CompressedAirComponent } from './compressed-air/compressed-air.componen
     ReactiveFormsModule,
     CommonModule,
     PumpsModule,
+    SteamModule,
     UtilitiesModule,
-    FurnacesModule
+    FurnacesModule,
+    MotorsModule,
+    CompressedAirModule,
   ],
   providers: [
+    StandaloneService
   ]
 })
 

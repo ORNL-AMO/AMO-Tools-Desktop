@@ -4,7 +4,8 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
-import { GasLeakageCompareService } from './gas-leakage-compare.service';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-gas-leakage-losses',
@@ -15,8 +16,6 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   losses: Losses;
   @Input()
-  saveClicked: boolean;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -26,19 +25,30 @@ export class GasLeakageLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
-  _leakageLosses: Array<any>;
+  _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
-
-  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
+  lossesLocked: boolean = false;
+  resultsUnit: string;
+  showError: boolean = false;
+  total: number;
+  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._leakageLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -46,119 +56,102 @@ export class GasLeakageLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
     if (!this._leakageLosses) {
       this._leakageLosses = new Array<any>();
     }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+    }
+  }
+  initForms() {
     if (this.losses.leakageLosses) {
-      this.setCompareVals();
-      this.gasLeakageCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
-          name: 'Loss #' + (this._leakageLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
+        if (!tmpLoss.form.controls.name.value) {
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
-
-    this.gasLeakageLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.leakageLosses) {
-          this._leakageLosses.splice(lossIndex, 1);
-          if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
-            this.gasLeakageCompareService.differentArray.splice(lossIndex, 1);
-          }
-        }
-      }
-    })
-    if (this.isBaseline) {
-      this.gasLeakageLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._leakageLosses.push({
-            form: this.gasLeakageLossesService.initForm(),
-            name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
-    } else {
-      this.gasLeakageLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._leakageLosses.push({
-            form: this.gasLeakageLossesService.initForm(),
-            name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
-    }
-  }
-
-  ngOnDestroy() {
-    this.gasLeakageCompareService.baselineLeakageLoss = null;
-    this.gasLeakageCompareService.modifiedLeakageLoss = null;
-    this.gasLeakageLossesService.deleteLossIndex.next(null);
-    this.gasLeakageLossesService.addLossBaselineMonitor.next(false);
-    this.gasLeakageLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    this.gasLeakageLossesService.addLoss(this.isBaseline);
-    if (this.gasLeakageCompareService.differentArray) {
-      this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
-    }
     this._leakageLosses.push({
-      form: this.gasLeakageLossesService.initForm(),
-      name: 'Loss #' + (this._leakageLosses.length + 1),
-      heatLoss: 0.0
+      form: this.gasLeakageLossesService.initForm(this._leakageLosses.length + 1),
+      heatLoss: 0.0,
+      collapse: false
     });
+    this.saveLosses();
   }
 
+  collapseLoss(loss: GasLeakageObj) {
+    loss.collapse = !loss.collapse;
+  }
+
+  setError(bool: boolean) {
+    this.showError = bool;
+  }
 
   removeLoss(lossIndex: number) {
-    this.gasLeakageLossesService.setDelete(lossIndex);
+    this._leakageLosses.splice(lossIndex, 1);
+    this.saveLosses();
+    this.total = this.getTotal();
   }
 
-  renameLossess() {
-    let index = 1;
-    this._leakageLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
-    let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss);
+  calculate(loss: GasLeakageObj) {
+    if (loss.form.status == 'VALID') {
+      let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
+    }
+    else {
+      loss.heatLoss = null;
+    }
+    this.total = this.getTotal();
   }
 
   saveLosses() {
     let tmpLeakageLosses = new Array<LeakageLoss>();
+    let lossIndex = 1;
     this._leakageLosses.forEach(loss => {
+      if (!loss.form.controls.name.value) {
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
     })
     this.losses.leakageLosses = tmpLeakageLosses;
-    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.gasLeakageCompareService.baselineLeakageLoss = this.losses.leakageLosses;
-    } else {
-      this.gasLeakageCompareService.modifiedLeakageLoss = this.losses.leakageLosses;
-    }
-    if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
-      if (this.gasLeakageCompareService.differentArray.length != 0) {
-        this.gasLeakageCompareService.checkLeakageLosses();
-      }
-    }
+  getTotal() {
+    return _.sumBy(this._leakageLosses, 'heatLoss');
   }
+}
+
+export interface GasLeakageObj {
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

@@ -1,0 +1,19 @@
+p {
+	font-size: small;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 0px;
+    padding-top: .25rem;
+}
+.panel-column{
+	padding-left: 15px;
+}
+
+.no-padding-left{
+    padding-left: 0px;
+}
+
+
+.toast{
+    font-size: 18px !important;
+}
