@@ -7,10 +7,15 @@
   <thead>
     <tr>
       <th class="table-col-0">Pressure<br>({{settings.steamPressureMeasurement}})</th>
-      <th class="table-col-1 parent-col">Temp.<br>({{getDisplayUnit(settings.steamTemperatureMeasurement)}})</th>
+      <th class="table-col-1 parent-col">Temp.<br>
+        (<span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>)
+      </th>
       <th class="table-col-2 parent-col" colspan="3" scope="colgroup">Specific Enthalpy <br>({{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}})</th>
-      <th class="table-col-3 parent-col" colspan="3" scope="colgroup">Specific Entropy <br>({{getDisplayUnit(settings.steamSpecificEntropyMeasurement)}})</th>
-      <th class="table-col-4 parent-col" colspan="3" scope="colgroup">Specific Volume <br>(<span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>)</th>
+      <th class="table-col-3 parent-col" colspan="3" scope="colgroup">Specific Entropy <br>
+        (<span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>)
+      </th>
+      <th class="table-col-4 parent-col" colspan="3" scope="colgroup">Specific Volume <br>
+        (<span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>)</th>
       <th></th>
     </tr>
     <tr>

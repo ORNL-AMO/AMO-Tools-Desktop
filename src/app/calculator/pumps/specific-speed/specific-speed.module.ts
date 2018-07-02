@@ -5,12 +5,14 @@ import { SpecificSpeedGraphComponent } from './specific-speed-graph/specific-spe
 import { SpecificSpeedFormComponent } from './specific-speed-form/specific-speed-form.component';
 import { SpecificSpeedComponent } from './specific-speed.component';
 import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed-help.component';
+import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [
     SpecificSpeedGraphComponent,
