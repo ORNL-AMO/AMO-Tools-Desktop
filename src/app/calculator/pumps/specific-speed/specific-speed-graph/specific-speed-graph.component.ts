@@ -47,6 +47,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
   displayExportTooltip: boolean = false;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
 
   @Input()
   toggleCalculate: boolean;
@@ -98,6 +105,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
     setTimeout(() => {
       this.checkHover(btnType);
     }, 700);
@@ -112,6 +125,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
     }
   }
 
@@ -132,14 +153,40 @@ export class SpecificSpeedGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
   }
   // ========== end tooltip functions ==========
 
   resizeGraph() {
-    let curveGraph = this.doc.getElementById('specificSpeedGraph');
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
     if (curveGraph) {
-      this.canvasWidth = curveGraph.clientWidth;
-      this.canvasHeight = this.canvasWidth * (3 / 5);
+      //conditional sizing if graph is expanded/compressed
+      if (!this.expanded) {
+        this.canvasWidth = curveGraph.clientWidth;
+        this.canvasHeight = this.canvasWidth * (3 / 5);
+      }
+      else {
+        this.canvasWidth = curveGraph.clientWidth;
+        this.canvasHeight = curveGraph.clientHeight * 0.9;
+      }
 
       if (this.canvasWidth < 400) {
         this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
@@ -457,9 +504,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .style("padding-right", "10px")
             .style("padding-left", "10px")
             .html(
-            "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
+              "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
 
-            "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
+              "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
 
             // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -501,16 +548,16 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .delay(100)
             .duration(600)
             .style("opacity", 0);
-            //debug
-            // .remove();
+          //debug
+          // .remove();
 
           this.tooltipPointer
             .transition()
             .delay(100)
             .duration(600)
             .style("opacity", 0);
-            //debug
-            // .remove();
+          //debug
+          // .remove();
 
           this.focus
             .transition()
@@ -606,5 +653,25 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 
 }

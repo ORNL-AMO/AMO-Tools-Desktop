@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-steam-properties-graph',
   templateUrl: './steam-properties-graph.component.html',
@@ -91,6 +92,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
   htmlElement: any;
   host: d3.Selection<any>;
   svg: d3.Selection<any>;
+  doc: any;
   width: number;
   height: number;
   margin: { top: number, right: number, bottom: number, left: number };
@@ -102,8 +104,15 @@ export class SteamPropertiesGraphComponent implements OnInit {
   displayExportTooltip: boolean = false;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
 
-  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
+
+  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.initData();
@@ -111,7 +120,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.buildChart();
   }
 
-    // ========== export/gridline tooltip functions ==========
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+  }
+
+  // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
@@ -121,6 +134,12 @@ export class SteamPropertiesGraphComponent implements OnInit {
     }
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = true;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
       this.checkHover(btnType);
@@ -136,6 +155,14 @@ export class SteamPropertiesGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
     }
   }
 
@@ -154,6 +181,22 @@ export class SteamPropertiesGraphComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
       }
     }
   }
@@ -329,14 +372,37 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
   buildChart() {
     this.host.html('');
-    this.margin = {
-      top: 10,
-      right: 20,
-      bottom: 50,
-      left: 70
+
+    let containerWidth: number, containerHeight: number;
+
+    if (!this.expanded) {
+      containerWidth = this.chartContainerWidth;
+      containerHeight = this.chartContainerHeight;
+      this.margin = {
+        top: 10,
+        right: 20,
+        bottom: 50,
+        left: 70
+      }
+      this.width = containerWidth - this.margin.left - this.margin.right;
+      this.height = containerHeight - this.margin.top - this.margin.bottom;
     }
-    this.width = this.chartContainerWidth - this.margin.left - this.margin.right;
-    this.height = this.chartContainerHeight - this.margin.top - this.margin.bottom;
+    else {
+
+      let graphContainer = this.doc.getElementById('panelChartContainer');
+      containerWidth = graphContainer.clientWidth;
+      containerHeight = graphContainer.clientHeight * .9;
+      this.margin = {
+        top: containerHeight * 0.05,
+        right: containerWidth * 0.05,
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.05
+      }
+
+      this.width = containerWidth - this.margin.left - this.margin.right;
+      this.height = containerHeight - this.margin.top - this.margin.bottom;
+    }
+
     let svgWidth = this.width;
     let svgHeight = this.height;
 
@@ -366,8 +432,8 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
     //define svg
     this.svg = this.host.append('svg')
-      .attr('width', this.chartContainerWidth)
-      .attr('height', this.chartContainerHeight)
+      .attr('width', containerWidth)
+      .attr('height', containerHeight)
       .append('g')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
@@ -656,7 +722,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
     }
   }
 
-
   downloadChart(): void {
     if (!this.exportName) {
       this.exportName = "steam-properties-calc-chart";
@@ -667,4 +732,24 @@ export class SteamPropertiesGraphComponent implements OnInit {
     this.exportName = this.exportName.replace(/ /g, '-').toLowerCase();
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.buildChart();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.buildChart();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 }
