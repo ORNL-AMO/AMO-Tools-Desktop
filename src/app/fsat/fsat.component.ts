@@ -107,6 +107,7 @@ export class FsatComponent implements OnInit {
           this.compareService.setCompareVals(this._fsat);
         }
         this.getSettings();
+        this.initSankeyList();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);

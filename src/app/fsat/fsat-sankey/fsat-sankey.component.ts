@@ -121,7 +121,7 @@ export class FsatSankeyComponent implements OnInit {
     else {
       resultType = 'modified';
     }
-    let tmpOutput = this.fsatService.getResults(this.fsat, resultType);
+    let tmpOutput = this.fsatService.getResults(this.fsat, resultType, this.settings);
 
     if (this.settings.powerMeasurement === 'hp') {
       motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
