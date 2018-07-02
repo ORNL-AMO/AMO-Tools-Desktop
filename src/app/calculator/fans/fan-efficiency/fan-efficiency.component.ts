@@ -27,10 +27,10 @@ export class FanEfficiencyComponent implements OnInit {
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event) {
-  //   this.resizeTabs();
-  // }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
 
   headerHeight: number;
 
@@ -45,6 +45,7 @@ export class FanEfficiencyComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.calculate();
   }
 
   ngAfterViewInit() {
@@ -62,7 +63,6 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   calculate() {
-    console.log(this.inputs);
     this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs);
     this.toggleCalculate = !this.toggleCalculate;
   }
@@ -71,7 +71,7 @@ export class FanEfficiencyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeField(){
+  changeField() {
 
   }
 }

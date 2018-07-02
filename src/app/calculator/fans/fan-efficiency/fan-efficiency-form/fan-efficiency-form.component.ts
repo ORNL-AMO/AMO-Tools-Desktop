@@ -29,6 +29,7 @@ export class FanEfficiencyFormComponent implements OnInit {
 
   ngOnInit() {
     this.fanTypes = FanTypes;
+    this.fanTypes.pop();
   }
 
 

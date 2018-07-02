@@ -30,12 +30,22 @@
 					</div>
 					<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
 						<div class="col-11" id="achievableEfficiencyGraph">
-							Optimal Fan Efficiency: {{fanEfficiency}}
+							<div class="row justify-content-center align-items-center">
+								<div class="col">
+									<h5 class="text-center">Optimal Fan Efficiency</h5>
+								</div>
+							</div>
+							<div class="row justify-content-center align-items-center">
+								<div class="col-8">
+									<app-percent-graph [value]="fanEfficiency" [valueDescription]="'Optimal Fan Efficiency'" [fontSize]="32" [unit]="'%'" [title]="'fan-efficiency'"></app-percent-graph>
+								</div>
+							</div>
+							<!-- Optimal Fan Efficiency: {{fanEfficiency}} -->
 							<!-- <app-fan-efficiency-graph *ngIf="tabSelect == 'results'" [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-fan-efficiency-graph> -->
 						</div>
 					</div>
 					<div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-            <app-fan-efficiency-help></app-fan-efficiency-help>
+						<app-fan-efficiency-help></app-fan-efficiency-help>
 					</div>
 				</div>
 			</div>
