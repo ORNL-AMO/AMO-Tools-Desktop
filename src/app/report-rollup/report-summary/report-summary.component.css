@@ -1,0 +1,238 @@
+
+.report-summary {
+    padding: 5px;
+    background: #f5f5f5;
+}
+
+.report-summary ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.report-summary ul li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-radius: 2px;
+    background: #fff;
+    -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+    width: 24.5%;
+}
+    .report-summary ul li.coming-soon {
+        background: transparent;
+        color: #afafaf;
+    }
+
+.furnace-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #BF3D00 !important;
+}
+
+.pump-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #2980b9 !important;
+}
+
+
+
+.coming-soon .summary-header {
+    border-bottom: #ddd solid 1px;
+    padding: 6px;
+}
+.coming-soon .summary-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+.coming-soon .summary-header  h3 {
+    font-size: 17px;
+    margin: 0;
+    padding-left: 23px;
+    float: left;
+}
+    .coming-soon .summary-header.fans h3,
+    .coming-soon .summary-header.motors h3 {
+        background-image: url('../../../assets/images/ico-comingSoon-diagram.png');
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 20px;
+        padding: 7px 0 3px 31px;
+        font-weight: bold;
+    }
+.coming-soon .summary-header > span {
+    float: right;
+    border-radius: 50%;
+    background: #dadada;
+}
+    .coming-soon .summary-header > span span {
+        font-size: 16px;
+        color: #dadada;
+        font-weight: bold;
+        padding: 2px 10px;
+    }
+
+.coming-soon dl.summary-list {
+    padding: 8px 8px 0;
+    float: left;
+    margin-right: 2px;
+    margin-bottom: 0;
+}
+.coming-soon .summary-list dt, .coming-soon  .summary-list dd {
+    padding: 0 8px;
+}
+.coming-soon .summary-list dt {
+    font-size: 12px;
+    font-weight: normal;
+    color: #7b7b7b;
+}
+.coming-soon .summary-list dd {
+    font-size: 14px;
+}
+
+dd{
+    margin-bottom: 0px;
+}
+
+.summary-header {
+    border-bottom: #ddd solid 1px;
+}
+.summary-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.summary-header h3 {
+    font-size: 17px;
+    margin: 0;
+    padding-left: 23px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 20px;
+    font-weight: bold;
+}
+.summary-header > span {
+    float: right;
+    border-radius: 50%;
+    -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+}
+
+.summary-header.furnaces > span {
+    background: #BF3D00;
+}
+
+.summary-header.pumps > span {
+    background: #2980b9;
+}
+    .summary-header > span span {
+        font-size: 16px;
+        color: #fff;
+        font-weight: bold;
+        padding: 2px 10px;
+    }
+
+dl.summary-list {
+    margin-bottom: 0px;    
+
+}
+.summary-list dt, .summary-list dd {
+}
+.summary-list dt {
+    font-size: 12px;
+    font-weight: normal;
+    color: #7b7b7b;
+}
+.summary-list dd {
+    font-size: 16px;
+}
+
+.summary-content:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+/* cards */
+.card-body{
+    padding: 6px;
+}
+
+.card-header{
+    padding: 6px;
+    background: #fff;
+}
+
+.card-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.card-header h3 {
+    font-size: 17px;
+    margin: 0;
+    padding: 7px 0 3px 31px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 20px;
+    font-weight: bold;
+}
+.card-header > span {
+    float: right;
+    border-radius: 50%;
+    -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+}
+
+.card.furnaces .card-header > span {
+    background: #BF3D00;
+}
+
+.card.pumps .card-header > span {
+    background: #2980b9;
+}
+
+.card-header > span span {
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    padding: 2px 10px;
+}
+
+.card-footer{
+    text-align: center;
+    padding: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+@media print {
+
+    .summary-header h3 {
+        padding: 0;
+        background: none;
+    }
+
+    /* dl.summary-list {
+        margin-bottom: 10px;
+    } */
+
+    .report-summary ul li {
+        float: left;
+    }
+}
+
+
+
+
+.click-link{
+    font-size: 14px;
+}

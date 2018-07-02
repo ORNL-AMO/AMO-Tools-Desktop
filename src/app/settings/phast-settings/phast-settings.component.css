@@ -1,13 +1,28 @@
-.enrgy-form{
-  width: 50%;
-  float: right;
-}
-.label-width{
- /* white-space: nowrap; */
-  /*width:22px;*/
+/* .label-width{
   margin-left: 22px;
   white-space: nowrap;
 }
  .label-nowrapp{
    white-space: nowrap;
  }
+label {
+  white-space: nowrap;
+} */
+input[type=radio]:checked + label {
+  display: inline-block;
+  color: #BF3D00;
+  font-weight: bold;
+  margin: 0px;
+  /*border: 0.5px solid #80bdff;*/
+  /*box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
+  /*width: 65%;*/
+ }
+
+
+label, .form-check{
+  font-size: small;
+}
+
+.form-check{
+  width: 50%;
+}

@@ -10,7 +10,6 @@ import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
-import { DetailedReportModule } from '../detailed-report/detailed-report.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { autoUpdater } from 'electron-updater';
 
@@ -21,7 +20,6 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
@@ -32,6 +30,23 @@ import { LandingScreenComponent } from '../landing-screen/landing-screen.compone
 import { AboutPageComponent } from '../about-page/about-page.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { ContactPageComponent } from '../contact-page/contact-page.component';
+import { ReportRollupModule } from '../report-rollup/report-rollup.module';
+
+import { VersionModalComponent } from '../version-modal/version-modal.component';
+import { UpdateModalComponent } from '../update-modal/update-modal.component';
+import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
+import { MeasurComponent } from '../landing-screen/measur/measur.component';
+import { OpeningTutorialComponent } from '../tutorials/opening-tutorial/opening-tutorial.component';
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { DeleteDataService } from '../indexedDb/delete-data.service';
+import { CoreService } from './core.service';
+
 @NgModule({
   declarations: [
     CoreComponent,
@@ -42,7 +57,12 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     LandingScreenComponent,
     AboutPageComponent,
     TutorialsComponent,
-    ContactPageComponent
+    ContactPageComponent,
+    AcknowledgmentsPageComponent,
+    UpdateModalComponent,
+    VersionModalComponent,
+    MeasurComponent,
+    OpeningTutorialComponent
   ],
   imports: [
     CommonModule,
@@ -51,20 +71,28 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     PsatModule,
     PhastModule,
     CalculatorModule,
-    DetailedReportModule,
     ModalModule,
     NgxElectronModule,
-    IndexedDbModule,
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
     ToastyModule.forRoot(),
     JsonToCsvModule,
     SuiteDbModule,
-    ImportExportModule
+    ImportExportModule,
+    ReportRollupModule,
+    PreAssessmentModule
   ],
   providers: [
-    AssessmentService
+    AssessmentService,
+    CoreService,
+    WindowRefService,
+    IndexedDbService,
+    AssessmentDbService,
+    DirectoryDbService,
+    SettingsDbService,
+    CalculatorDbService,
+    DeleteDataService
   ]
 })
 

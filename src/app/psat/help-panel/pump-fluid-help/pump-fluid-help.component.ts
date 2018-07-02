@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HelpPanelService } from '../help-panel.service';
+import { PSAT } from '../../../shared/models/psat';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-pump-fluid-help',
   templateUrl: './pump-fluid-help.component.html',
@@ -7,15 +10,18 @@ import { HelpPanelService } from '../help-panel.service';
 })
 export class PumpFluidHelpComponent implements OnInit {
 
-  //  @Input()
+  @Input()
+  psat: PSAT;
   currentField: string;
-
+  currentFieldSub: Subscription;
   constructor(private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
-    this.helpPanelService.currentField.subscribe((val) => {
+    this.currentFieldSub = this.helpPanelService.currentField.subscribe((val) => {
       this.currentField = val;
     })
   }
-
+  ngOnDestroy(){
+    this.currentFieldSub.unsubscribe();
+  }
 }

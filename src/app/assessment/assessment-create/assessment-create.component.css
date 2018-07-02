@@ -15,7 +15,6 @@
 
 .create-assessment-modal input[type=text] {
   width: 100%;
-  padding: 10px;
   margin-bottom: 2px;
 }
 
@@ -32,4 +31,20 @@
 }
 .create-assessment-modal .help-text p {
   margin-bottom: 0;
+}
+
+.btn {
+  padding: 6px;
+}
+
+
+.phast .btn-primary{
+  background-color: #BF3D00;
+  border-color: #BF3D00;
+  transition: all .5s ease-in-out;
+}
+
+.psat .btn-primary{
+  background-color: #2980b9;
+  transition: all .5s ease-in-out;
 }

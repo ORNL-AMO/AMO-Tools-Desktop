@@ -1,0 +1,57 @@
+<div class="help-header">
+
+  <h3>Modify Operation Conditions Help</h3>
+  <!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering opening loss data.
+  </p>-->
+
+</div>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'operatingHours'">
+    <div class="card-header">
+      Operating Hours
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Enter the typical operating schedule of the plant. If the annual operating hours is known enter that value directly in the last row.
+      </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'operatingCosts'">
+    <div class="card-header">
+      Operating Costs
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Enter the per unit cost associated with fuel, steam and electricity. This is usually specified by the utility provider.
+        For calculating the operating costs of self-generated fuel, enter the total cost associated with fuel production and divide by the gross fuel consumption.
+      </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'implementationCost'">
+    <div class="card-header">
+      Implementation Cost
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Cost associated with executing the modifications to the baseline system.
+      </p>
+    </div>
+  </div>
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <!-- <label><u><strong>Description</strong></u></label> -->
+      <ul>
+        <li class="help-general">Enter data about Operations Settings (operating hours and costs) and the cost of implementing a modification.</li>
+      </ul>
+    </div>
+  </div>
+</div>

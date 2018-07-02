@@ -1,18 +1,36 @@
-<div class="pump-head">
-  <div class="row">
-    <div class="col-md-5 col-sm-12  mx-auto">
-      <app-efficiency-improvement-form [(efficiencyImprovementInputs)]="efficiencyImprovementInputs" [efficiencyImprovementOutputs]="efficiencyImprovementOutputs"
-        (calculate)="calculate()" (changeField)="setCurrentField($event)">
-      </app-efficiency-improvement-form>
-    </div>
-    <div class="col-md-5 col-sm-12 mx-auto">
-      <ul class="tabs primary">
-        <li class="calc-tab active">
-          <a style="text-align: center;">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content">
-        <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+<div class="modify-conditions panel-container row phast" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/eff-impr.png" class="ico-size2">
+          </div>
+          <div class="col">
+            <h3>Efficiency Improvement Calculator</h3>
+          </div>
+        </div>
+        <div class="losses-container tab-content">
+          <div class="card-form">
+            <div class="row">
+              <div class="col-12">
+                <app-efficiency-improvement-form [(efficiencyImprovementInputs)]="efficiencyImprovementInputs" [efficiencyImprovementOutputs]="efficiencyImprovementOutputs"
+                  (calculate)="calculate()" (changeField)="setCurrentField($event)" [settings]="settings">
+                </app-efficiency-improvement-form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div [ngStyle]="{'height.px': headerHeight}" class="header">
+            <h3>Help</h3>
+          </div>
+          <div class="tab-content">
+            <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+          </div>
+        </div>
       </div>
     </div>
   </div>

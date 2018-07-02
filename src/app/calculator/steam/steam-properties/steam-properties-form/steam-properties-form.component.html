@@ -1,0 +1,71 @@
+<div class="form-section">
+  <form [formGroup]="steamPropertiesForm">
+
+    <div class="form-group">
+      <label for="pressure">Pressure</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (focus)="focusField('pressure')"
+          (input)="calculate()">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+        <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="thermodynamicQuantity">Quantity Type</label>
+      <div class="input-group calc-addon-group">
+        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
+          (change)="calculate()" autofocus>
+          <option [ngValue]=0>Temperature</option>
+          <option [ngValue]=1>Specific Enthalpy</option>
+          <option [ngValue]=2>Specific Entropy</option>
+          <option [ngValue]=3>Saturated Quality</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 0" for="quantityValue">Temperature</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 1" for="quantityValue">Specific Enthalpy</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 2" for="quantityValue">Specific Entropy</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">Quality</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();"
+          (input)="calculate()" (focus)="focusVariableField(steamPropertiesForm.controls.thermodynamicQuantity.value)" autofocus>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(quantityValueUnits)"></span>
+        <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null">{{quantityValueError}}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small bold">Pressure</label>
+      <div class="small text-center bold">{{steamPropertiesOutput.pressure | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small bold">Temperature</label>
+      <div class="small text-center bold">{{steamPropertiesOutput.temperature | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small bold">Specific Enthalpy</label>
+      <div class="small text-center bold">{{steamPropertiesOutput.specificEnthalpy | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small bold">Specific Entropy</label>
+      <div class="small text-center bold">{{steamPropertiesOutput.specificEntropy | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small bold">Specific Volume</label>
+      <div class="small text-center bold">{{steamPropertiesOutput.specificVolume | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,396 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Charge Materials ({{numLosses}})
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse || printView">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- type -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':materialTypeDiff[index] == true}">
+                Type of Material
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':materialTypeDiff[index] == true}">
+                {{data.baseline.materialType}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.materialType, mod.materialType, 'materialTypeDiff', index)}">
+                {{mod.materialType}}
+              </td>
+            </tr>
+            <!-- end type -->
+
+            <!-- material name -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':materialNameDiff[index] == true}">
+                Material Name
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':materialNameDiff[index] == true}">
+                {{data.baseline.materialName}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.materialName, mod.materialName, 'materialNameDiff', index)}">
+                {{mod.materialName}}
+              </td>
+            </tr>
+            <!-- end material name -->
+
+            <!-- specific heat gas -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Gas'">
+              <td>
+                Specific Heat Gas
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatGas(data.baseline)}">
+                {{data.baseline.specificHeatGas}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatGas(mod)}">
+                {{mod.specificHeatGas}}
+              </td>
+            </tr>
+            <!-- end specific heat gas -->
+
+
+            <!-- specific heat solid -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td>
+                Avg. Specific Heat Solid
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatSolid(data.baseline)}">
+                {{data.baseline.specificHeatSolid}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatSolid(mod)}">
+                {{mod.specificHeatSolid}}
+              </td>
+            </tr>
+            <!-- end specific heat solid -->
+
+            <!-- specific heat liquid -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Liquid'">
+              <td>
+                Specific Heat Liquid
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkSpecificHeatLiquid(data.baseline)}">
+                {{data.baseline.specificHeatLiquid}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatLiquid(mod)}">
+                {{mod.specificHeatLiquid}}
+              </td>
+            </tr>
+            <!-- end specific heat liquid -->
+
+            <!-- latent heat of fusion -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td>
+                Latent Heat of Fusion
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkLatentHeat(data.baseline)}">
+                {{data.baseline.latentHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkLatentHeat(mod)}">
+                {{mod.latentHeat}}
+              </td>
+            </tr>
+            <!-- end latent heat of fusion -->
+
+            <!-- vaporization temperature -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Liquid'">
+              <td>
+                Vaporizing Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkVaporizingTemp(data.baseline)}">
+                {{data.baseline.vaporizingTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkVaporizingTemp(mod)}">
+                {{mod.vaporizingTemperature}}
+              </td>
+            </tr>
+            <!-- end vaporization temperature -->
+
+            <!-- latent heat of vaporization -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Liquid'">
+              <td>
+                Latent Heat of Vaporization
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkLatentHeat(data.baseline)}">
+                {{data.baseline.latentHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkLatentHeat(mod)}">
+                {{mod.latentHeat}}
+              </td>
+            </tr>
+            <!-- end latent heat of vaporization -->
+
+            <!-- specific heat of vapor -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Liquid'">
+              <td>
+                Specific Heat of Vapor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkSpecificHeatVapor(data.baseline)}">
+                {{data.baseline.specificHeatVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatVapor(mod)}">
+                {{mod.specificHeatVapor}}
+              </td>
+            </tr>
+            <!-- end specific heat vapor -->
+
+
+            <!-- melting point -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td>
+                Melting Point
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db': checkMeltingPoint(data.baseline)}">
+                {{data.baseline.meltingPoint}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkMeltingPoint(mod)}">
+                {{mod.meltingPoint}}
+              </td>
+            </tr>
+            <!-- end melting point -->
+
+
+            <!-- feed rate -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':feedRateDiff[index] == true}">
+                Feed Rate
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':feedRateDiff[index] == true}">
+                {{data.baseline.feedRate}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.feedRate, mod.feedRate, 'feedRateDiff', index)}">
+                {{mod.feedRate}}
+              </td>
+            </tr>
+            <!-- end feed rate -->
+
+            <!-- initial temperature -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':initialTempDiff[index] == true}">
+                Initial Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':initialTempDiff[index] == true}">
+                {{data.baseline.initialTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.initialTemp, mod.initialTemp, 'initialTempDiff', index)}">
+                {{mod.initialTemp}}
+              </td>
+            </tr>
+            <!-- end initial temperature -->
+
+            <!-- discharge temperature -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':dischargeTempDiff[index] == true}">
+                Discharge Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':dischargeTempDiff[index] == true}">
+                {{data.baseline.dischargeTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.dischargeTemp, mod.dischargeTemp, 'dischargeTempDiff', index)}">
+                {{mod.dischargeTemp}}
+              </td>
+            </tr>
+            <!-- end discharge temperature -->
+
+
+            <!-- water content charged -->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td [ngClass]="{'indicate-report-field-different':waterContentChargedDiff[index] == true}">
+                Water Content Charged
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentChargedDiff[index] == true}">
+                {{data.baseline.waterContentCharged}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterContentCharged, mod.waterContentCharged, 'waterContentChargedDiff', index)}">
+                {{mod.waterContentCharged}}
+              </td>
+            </tr>
+            <!-- end water content charged -->
+
+            <!-- water content discharged -->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td [ngClass]="{'indicate-report-field-different':waterContentDischargedDiff[index] == true}">
+                Water Content Discharged
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentDischargedDiff[index] == true}">
+                {{data.baseline.waterContentDischarged}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterContentDischarged, mod.waterContentDischarged, 'waterContentDischargedDiff', index)}">
+                {{mod.waterContentDischarged}}
+              </td>
+            </tr>
+            <!-- end water content discharged -->
+
+            <!-- water vapor discharge temperature -->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td [ngClass]="{'indicate-report-field-different':waterVaporDischargeTempDiff[index] == true}">
+                Water Vapor Discharge Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':waterVaporDischargeTempDiff[index] == true}">
+                {{data.baseline.waterVaporDischargeTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterVaporDischargeTemp, mod.waterVaporDischargeTemp, 'waterVaporDischargeTempDiff', index)}">
+                {{mod.waterVaporDischargeTemp}}
+              </td>
+            </tr>
+            <!-- end water vapor discharge temperature -->
+
+            <!-- percent charge melted -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Solid'">
+              <td [ngClass]="{'indicate-report-field-different':chargeMeltedDiff[index] == true}">
+                Percent of Charge Melted
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':chargeMeltedDiff[index] == true}">
+                {{data.baseline.chargeMelted}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.chargeMelted, mod.chargeMelted, 'chargeMeltedDiff', index)}">
+                {{mod.chargeMelted}}
+              </td>
+            </tr>
+            <!-- end percent charge melted -->
+
+            <!-- percent vaporized -->
+            <!-- <tr *ngIf="data.baseline.materialType == 'Liquid'"> -->
+            <tr *ngIf="data.baseline.materialType == 'Liquid'">
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff[index] == true}">
+                Percent of Charge Vaporized
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff[index] == true}">
+                {{data.baseline.percentVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentVapor, mod.percentVapor, 'percentVaporDiff', index)}">
+                {{mod.percentVapor}}
+              </td>
+            </tr>
+            <!-- end percent vaporized -->
+
+
+
+            <!-- vapor in gas mixture -->
+            <tr *ngIf="data.baseline.materialType == 'Gas'">
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff[index] == true}">
+                Vapor in Gas Mixture
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff[index] == true}">
+                {{data.baseline.percentVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentVapor, mod.percentVapor, 'percentVaporDiff', index)}">
+                {{mod.percentVapor}}
+              </td>
+            </tr>
+            <!-- end vapor in gas mixture -->
+
+
+            <!-- specific heat of vapor -->
+            <!--DB-->
+            <tr *ngIf="data.baseline.materialType == 'Gas'">
+              <td>
+                Specific Heat of Vapor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different-db':checkSpecificHeatVapor(data.baseline)}">
+                {{data.baseline.specificHeatVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkSpecificHeatVapor(mod)}">
+                {{mod.specificHeatVapor}}
+              </td>
+            </tr>
+            <!-- end specific heat vapor -->
+
+
+            <!-- percent reacted -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':percentReactedDiff[index] == true}">
+                Percent Reacted
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':percentReactedDiff[index] == true}">
+                {{data.baseline.percentReacted}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentReacted, mod.percentReacted, 'percentReactedDiff', index)}">
+                {{mod.percentReacted}}
+              </td>
+            </tr>
+            <!-- end percent reacted -->
+
+
+            <!-- heat of reaction -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':reactionHeatDiff[index] == true}">
+                Heat of Reaction
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':reactionHeatDiff[index] == true}">
+                {{data.baseline.reactionHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.reactionHeat, mod.reactionHeat, 'reactionHeatDiff', index)}">
+                {{mod.reactionHeat}}
+              </td>
+            </tr>
+            <!-- end heat of reaction -->
+
+
+            <!-- reaction type -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':reactionTypeDiff[index] == true}">
+                Reaction Type
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':reactionTypeDiff[index] == true}">
+                {{data.baseline.reactionType}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.reactionType, mod.reactionType, 'reactionTypeDiff', index)}">
+                {{mod.reactionType}}
+              </td>
+            </tr>
+            <!-- end reaction type -->
+
+
+            <!-- heat required -->
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':heatRequiredDiff[index] == true}">
+                Additional Heat Required
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':heatRequiredDiff[index] == true}">
+                {{data.baseline.heatRequired}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heatRequired, mod.heatRequired, 'heatRequiredDiff', index)}">
+                {{mod.heatRequired}}
+              </td>
+            </tr>
+            <!-- end heat required -->
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

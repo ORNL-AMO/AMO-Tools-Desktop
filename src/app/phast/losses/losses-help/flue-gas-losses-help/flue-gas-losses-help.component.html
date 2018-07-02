@@ -3,30 +3,212 @@
 <div class="help-header">
 
   <h3>Flue Gas Losses Help</h3>
-  <p>Enter loss data</p>
+  <!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering flue gas loss data.
-  </p>
+  </p> -->
 
 </div>
 
 
 <div class="help-content">
 
-
-  <div class="card" *ngIf="currentField == 'gasTypeId'">
+<!--Both Gas & Solid-->
+  <div class="card" *ngIf="currentField == 'measurementType'">
     <div class="card-header">
-      Weight
+      Type of Fuel
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>DESCRITION HERE</p>
-      <label>Input:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Units: <strong>UNIT HERE</strong><br>
-        Minimum Value Allowed: <strong>MAX HERE</strong><br>
-        Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Gas or Solid/liquid fuel.
       </p>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'gasTypeId'">
+    <div class="card-header">
+      Fuel
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels are intended to represent
+        "typical" compositions of these fuels. This tool can be made more accurate by using more accurate fuel compositions for your process.
+        To add a new fuel , click “Add New Fuel”.
+        You can “start with existing fuel” and edit the composition or add a completely new material.
+        You cannot use the name of a fuel already in the database.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flueGasTemperature'">
+    <div class="card-header">
+      Gas temperature
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Measure flue gas temperature by using "proper" temperature probe. Type of temperature probe depends on flue gas
+        temperature and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'oxygenCalculationMethod'">
+    <div class="card-header">
+      O<sub>2</sub> in Flue Gas / Excess Air Dropdown
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher accuracy) if known.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        <strong>Excess Air</strong><br><strong>Oxygen in Flue Gas</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'excessAirPercentage'">
+    <div class="card-header">
+      Excess Air
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
+        gases form the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'o2InFlueGas'">
+    <div class="card-header">
+      O<sub>2</sub> in Flue Gas
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the same
+        location where flue gas temperature is measured to maintain accuracy of the calculations.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong><br>Maximum Value Allowed: <strong>21</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'combustionAirTemperature'">
+    <div class="card-header">
+      Combustion air temperature
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
+        asurement using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fuelTemperature'">
+  <div class="card-header">
+    Fuel temperature
+  </div>
+  <div class="card-block">
+    <label><u><strong>Description</strong></u></label>
+    <p>
+      Temperature of the incoming fuel.  In most cases fuel is supplied at near ambient temperature however in some
+      cases it can be at a higher temperature when it is preheated.
+    </p>
+    <label><u><strong>Input</strong></u></label>
+    <p>
+      Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+    </p>
+  </div>
+</div>
+
+  <!--Solid/Liquid-->
+  <div class="card" *ngIf="currentField == 'moistureInAirComposition'">
+    <div class="card-header">
+      Moisture in Air
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The moisture of the air (mass water / mass dry air). Can be determined with a psychometric chart.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ashDischargeTemperature'">
+    <div class="card-header">
+      Ash Discharge Temperature
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Temperature of the ash in the flue gas outlet.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'unburnedCarbonInAsh'">
+    <div class="card-header">
+      Unburned Carbon in Ash
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Percent of unburned carbon in Ash.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong><br>Maximum Value Allowed: <strong>100</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <!-- <label><u><strong>Description</strong></u></label> -->
+      <ul>
+        <li class="help-general">Maintain appropriate level of oxygen in flue gases by controlling air-fuel ratio for the burners</li>
+        <li class="help-general">Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide and hydrogen in flue gases</li>
+        <li class="help-general">Eliminate or reduce air leakage in the furnace. See "Opening Losses" section</li>
+        <li class="help-general">Consider use of heat recovery from flue gases.  Consider use of various methods of heat recovery to reduce flue gas temperature leaving the heating system</li>
+        <li class="help-general">Use preheated combustion air through use of recuperators or regenerators</li>
+        <li class="help-general">Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of flue gases</li>
+        <li class="help-general">Review process temperature settings and lower it where possible during part-load operations. This can reduce flue gas temperature leaving the heating system</li>
+        <li class="help-general">Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+      </ul>
+    </div>
+  </div>
+
 </div>

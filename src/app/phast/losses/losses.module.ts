@@ -17,10 +17,9 @@ import { AuxiliaryPowerLossesModule } from './auxiliary-power-losses/auxiliary-p
 import { AtmosphereLossesModule } from "./atmosphere-losses/atmosphere-losses.module";
 import { CoolingLossesModule } from "./cooling-losses/cooling-losses.module";
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
-
+import { PhastReportModule } from '../phast-report/phast-report.module';
 import { LossesComponent } from './losses.component';
-import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
-import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
+
 
 import { NotesComponent } from './notes/notes.component';
 import { LossesHelpComponent } from './losses-help/losses-help.component';
@@ -36,9 +35,7 @@ import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 
-import { HeatStorageComponent } from './heat-storage/heat-storage.component';
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
-import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-storage-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
@@ -47,6 +44,15 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
 
 import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
 import { LossesService } from './losses.service';
+import { EnergyInputExhaustGasLossesModule } from './energy-input-exhaust-gas-losses/energy-input-exhaust-gas-losses.module';
+import { EnergyInputExhaustGasLossesHelpComponent } from './losses-help/energy-input-exhaust-gas-losses-help/energy-input-exhaust-gas-losses-help.component';
+import { HeatSystemEfficiencyModule } from './heat-system-efficiency/heat-system-efficiency.module';
+import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-efficiency-help/heat-system-efficiency-help.component';
+import { OperationsModule } from './operations/operations.module';
+import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
+import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
+import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
+import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -68,12 +74,15 @@ import { LossesService } from './losses.service';
     AtmosphereLossesModule,
     CoolingLossesModule,
     ChargeMaterialModule,
-    ExhaustGasModule
+    ExhaustGasModule,
+    EnergyInputExhaustGasLossesModule,
+    OperationsModule,
+    HeatSystemEfficiencyModule,
+    PhastReportModule,
+    ToastyModule
   ],
   declarations: [
     LossesComponent,
-    LossesSidebarComponent,
-    LossesTabsComponent,
     NotesComponent,
     LossesHelpComponent,
     AtmosphereLossesHelpComponent,
@@ -86,19 +95,23 @@ import { LossesService } from './losses.service';
     OpeningLossesHelpComponent,
     OtherLossesHelpComponent,
     WallLossesHelpComponent,
-    HeatStorageComponent,
     AuxiliaryPowerLossesHelpComponent,
-    HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
     EditConditionPropertiesComponent,
     EnergyInputHelpComponent,
+    EnergyInputExhaustGasLossesHelpComponent,
+    HeatSystemEfficiencyHelpComponent,
+    OperationsHelpComponent,
+    LossesSplashPageComponent,
+    LossesResultPanelComponent
   ],
   providers: [
     LossesService
   ],
   exports: [
-    LossesComponent
+    LossesComponent,
+    LossesResultPanelComponent
   ]
 })
 export class LossesModule { }

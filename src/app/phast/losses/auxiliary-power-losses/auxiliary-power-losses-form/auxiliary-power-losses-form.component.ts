@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { AuxiliaryPowerCompareService } from "../auxiliary-power-compare.service";
+import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',
@@ -8,7 +9,7 @@ import { AuxiliaryPowerCompareService } from "../auxiliary-power-compare.service
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
-  auxLossesForm: any;
+  auxLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,13 +20,18 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   firstChange: boolean = true;
-  counter: any;
+  voltageError: string = null;
+
+  motorPhases: Array<number> = [
+    1,
+    3
+  ]
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -40,94 +46,90 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
-
-  ngAfterViewInit() {
+  ngOnInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    // this.auxLossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-
-  checkForm() {
-    if (this.auxLossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    // this.auxLossesForm.enable();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
+  focusOut() {
+    this.changeField.emit('default');
+  }
 
-  emitSave() {
-    this.saveEmit.emit(true);
+  checkVoltageError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.auxLossesForm.controls.supplyVoltage.value < 0 || this.auxLossesForm.controls.supplyVoltage.value > 480) {
+      this.voltageError = 'Supply Voltage must be between 0 and 480';
+    } else {
+      this.voltageError = null;
+    }
+
+    if (this.voltageError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
+    }
   }
 
   startSavePolling() {
-    this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
 
-  initDifferenceMonitor() {
-    if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses && this.auxiliaryPowerCompareService.differentArray.length != 0) {
-      if (this.auxiliaryPowerCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
+  canCompare() {
+    if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-        //motorPhase
-        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.motorPhase.subscribe((val) => {
-          let motorPhaseElements = doc.getElementsByName('motorPhase_' + this.lossIndex);
-          motorPhaseElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //supplyVoltage
-        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.supplyVoltage.subscribe((val) => {
-          let supplyVoltageElements = doc.getElementsByName('supplyVoltage_' + this.lossIndex);
-          supplyVoltageElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //avgCurrent
-        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.avgCurrent.subscribe((val) => {
-          let avgCurrentElements = doc.getElementsByName('avgCurrent_' + this.lossIndex);
-          avgCurrentElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //powerFactor
-        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.powerFactor.subscribe((val) => {
-          let powerFactorElements = doc.getElementsByName('powerFactor_' + this.lossIndex);
-          powerFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //operatingTime
-        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.operatingTime.subscribe((val) => {
-          let operatingTimeElements = doc.getElementsByName('operatingTime_' + this.lossIndex);
-          operatingTimeElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  compareMotorPhase(): boolean {
+    if (this.canCompare()) {
+      return this.auxiliaryPowerCompareService.compareMotorPhase(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareSupplyVoltage(): boolean {
+    if (this.canCompare()) {
+      return this.auxiliaryPowerCompareService.compareSupplyVoltage(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareAvgCurrent(): boolean {
+    if (this.canCompare()) {
+      return this.auxiliaryPowerCompareService.compareAvgCurrent(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  comparePowerFactor(): boolean {
+    if (this.canCompare()) {
+      return this.auxiliaryPowerCompareService.comparePowerFactor(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareOperatingTime(): boolean {
+    if (this.canCompare()) {
+      return this.auxiliaryPowerCompareService.compareOperatingTime(this.lossIndex);
+    } else {
+      return false;
     }
   }
 }

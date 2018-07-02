@@ -1,23 +1,32 @@
-<ul class="tabs subtabs">
+<ul class="tabs subtabs psat">
   <!--<li [ngClass]="{'active': modifyTab == 'system-basics'}" (click)="tabChange('system-basics')">
     <a class="nav-link small">
     System Basics
     </a>
   </li>-->
-  <li [ngClass]="{'active': modifyTab == 'pump-fluid'}" (click)="tabChange('pump-fluid')">
+  <li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'pump-fluid'}" (click)="tabChange('pump-fluid')">
     <a class="nav-link small">
     Pump Fluid
+      <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
+      </span>
     </a>
-  </li>
-  <li [ngClass]="{'active': modifyTab == 'motor'}" (click)="tabChange('motor')">
+    <app-modify-conditions-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'motor'}" (click)="tabChange('motor')">
     <a class="nav-link small">
     Motor
+      <span (mouseenter)="showTooltip('motor')" (mouseleave)="hideTooltip('motor')" class="badge gray-badge" [ngClass]="motorBadgeClass">
+      </span>
     </a>
-  </li>
-  <li [ngClass]="{'active': modifyTab == 'field-data'}" (click)="tabChange('field-data')">
+    <app-modify-conditions-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'field-data'}" (click)="tabChange('field-data')">
     <a class="nav-link small">
     Field Data
+      <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
+      </span>
     </a>
+    <app-modify-conditions-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-modify-conditions-tabs-tooltip>
   </li>
   <!-- <li [ngClass]="{'active': modifyTab == 'report'}" (click)="tabChange('report')">
     <a class="nav-link report-link small">

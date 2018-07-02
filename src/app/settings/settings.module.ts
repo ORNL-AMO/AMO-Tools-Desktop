@@ -4,14 +4,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ApplicationSettingsComponent } from './application-settings/application-settings.component';
 import { PsatSettingsComponent } from './psat-settings/psat-settings.component';
+import { SteamSettingsComponent } from './steam-settings/steam-settings.component';
 import { PhastSettingsComponent } from './phast-settings/phast-settings.component';
 import { SettingsService } from './settings.service';
+import { FacilityInfoComponent } from './facility-info/facility-info.component';
 
 @NgModule({
     declarations: [
         ApplicationSettingsComponent,
         PsatSettingsComponent,
-        PhastSettingsComponent
+        PhastSettingsComponent,
+        SteamSettingsComponent,
+        FacilityInfoComponent
     ],
     imports: [
         CommonModule,
@@ -24,7 +28,9 @@ import { SettingsService } from './settings.service';
     exports: [
         PsatSettingsComponent,
         ApplicationSettingsComponent,
-        PhastSettingsComponent
+        PhastSettingsComponent,
+        SteamSettingsComponent,
+        FacilityInfoComponent
     ]
 })
 

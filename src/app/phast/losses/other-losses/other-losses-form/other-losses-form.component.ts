@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-other-losses-form',
   templateUrl: './other-losses-form.component.html',
@@ -8,7 +11,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 })
 export class OtherLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,14 +22,13 @@ export class OtherLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
-  counter: any;
+  @Input()
+  settings: Settings;
+  @Input()
+  inSetup: boolean;
 
   firstChange: boolean = true;
+  resultsUnit: string;
   constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -42,73 +44,49 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
-
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
-
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
-
-  checkForm() {
-    if (this.lossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
-
   startSavePolling() {
-    this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss && this.otherLossesCompareService.differentArray.length != 0) {
-      if (this.otherLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //description
-        this.otherLossesCompareService.differentArray[this.lossIndex].different.description.subscribe((val) => {
-          let descriptionElements = doc.getElementsByName('description_' + this.lossIndex);
-          descriptionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heatLoss
-        this.otherLossesCompareService.differentArray[this.lossIndex].different.heatLoss.subscribe((val) => {
-          let heatLossElements = doc.getElementsByName('heatLoss_' + this.lossIndex);
-          heatLossElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  canCompare() {
+    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss && !this.inSetup) {
+      return true;
+    } else {
+      return false;
     }
   }
+  compareDescription(): boolean {
+    if (this.canCompare()) {
+      return this.otherLossesCompareService.compareDescription(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
+  compareHeatLoss(): boolean {
+    if (this.canCompare()) {
+      return this.otherLossesCompareService.compareHeatLoss(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+
 }

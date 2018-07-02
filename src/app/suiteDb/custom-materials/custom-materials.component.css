@@ -1,0 +1,93 @@
+.settings-container{
+    max-height: 100vh;
+    overflow-y: scroll;
+}
+
+.group-label{
+    width: 100%;
+    font-size: large;
+}
+
+.group-label.general{
+    border-bottom: groove 2px #808B96;
+    padding: 4px;
+}
+
+.btn-danger{
+    padding: 6px;
+}
+
+.red{
+    color: red;
+}
+
+.section-divider {
+    width: 100%;
+    border-bottom: 2px dashed #808B96;
+    padding-top: 36px;
+}
+
+.btn-expand {
+    width: 100%;
+    height: 20px;
+}
+
+.btn-expand:hover {
+    cursor: pointer;
+}
+
+.content-container{
+    padding: 1rem;
+    margin-bottom: 0px;
+    margin-top: 1rem;
+    box-shadow: 3px 0px 5px 2px grey;
+  }
+
+  p.help-text{
+      margin-bottom: 0px;
+  }
+
+
+  .group-label.general:hover{
+    background-color: #D5D8DC;
+    cursor: pointer;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+  }
+
+  .actions{
+    padding: .25rem;
+    border-radius: .25rem;
+    background: white;
+}
+
+
+.btn{
+    padding: 6px;
+}
+
+
+.modal-body h6{
+    border-bottom: solid;
+}
+
+.material-item{
+    font-style: italic;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.delete{
+    color: red;
+}
+
+.modal-body{
+    max-height: 70vh;
+    overflow: auto;
+}
+
+p.danger{
+    color: red;
+}

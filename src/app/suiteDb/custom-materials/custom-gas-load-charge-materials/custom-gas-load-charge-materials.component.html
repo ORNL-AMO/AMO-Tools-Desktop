@@ -1,0 +1,41 @@
+<div class="d-flex flex-wrap w-100">
+  <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let gasChargeMaterial of gasChargeMaterials; let i = index">
+    <div class="card card-item">
+      <div class="card-header summary-card-header phast">
+        <input type="checkbox" [(ngModel)]="gasChargeMaterial.selected"> {{gasChargeMaterial.substance}}
+        <i (click)="editMaterial(gasChargeMaterial.id)" class="fa fa-edit pull-right"></i>
+      </div>
+      <div class="card-body scroll-item summary-card-body">
+
+        <table class="table">
+          <tr>
+            <td>
+              Specific Heat Vapor:
+            </td>
+            <td>
+              {{gasChargeMaterial.specificHeatVapor | sigFigs:'6'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> Btu/(lb-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'"> kJ/(kg-&#8451;)</span>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="card-footer summary-card-footer">
+        <div class="pull-right btn-delete-material" (click)="deleteMaterial(gasChargeMaterial.id)">Delete Material</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content tab-content">
+      <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-gas-load-charge-material>
+    </div>
+  </div>
+</div>

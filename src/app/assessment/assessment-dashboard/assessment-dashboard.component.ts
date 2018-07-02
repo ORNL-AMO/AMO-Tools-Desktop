@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
-import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
+import { Calculator } from '../../shared/models/calculators';
+import { Settings } from '../../shared/models/settings';
+
 
 @Component({
   selector: 'app-assessment-dashboard',
@@ -27,6 +29,11 @@ export class AssessmentDashboardComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
+  @Output('emitPreAssessment')
+  emitPreAssessment = new EventEmitter<number>();
+  @Input()
+  directorySettings: Settings;
+
 
   isChecked: boolean = false;
   view: string;
@@ -36,13 +43,13 @@ export class AssessmentDashboardComponent implements OnInit {
 
   ngOnInit() {
     if (!this.view) {
-      this.view = 'list';
+      this.view = 'grid';
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
-      this.view == 'list';
+      this.view == 'grid';
     }
 
     if (this.isFirstChange) {
@@ -51,7 +58,7 @@ export class AssessmentDashboardComponent implements OnInit {
   }
   changeView($event) {
     if (this.view == $event && this.view == 'settings') {
-      this.view = 'list';
+      this.view = 'grid';
     } else {
       this.view = $event;
     }
@@ -59,7 +66,7 @@ export class AssessmentDashboardComponent implements OnInit {
 
   changeDirectory($event) {
     if (this.view == 'settings') {
-      this.view = 'list';
+      this.view = 'grid';
     }
     this.directoryChange.emit($event);
   }
@@ -96,4 +103,7 @@ export class AssessmentDashboardComponent implements OnInit {
     this.importEmit.emit(true);
   }
 
+  preAssessmentEmit(selectedIndex?: number) {
+    this.emitPreAssessment.emit(selectedIndex);
+  }
 }

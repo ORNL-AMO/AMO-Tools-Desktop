@@ -15,23 +15,18 @@
     }
 }
 
-.results-column{
-  padding: 0px;
-}
-.tab-row{
-  width: 40%;
+.psat-losses-container{
+  padding-top: 0px;
 }
 
-.tab-item{
-  width: 50%;
-  text-align: center;
-  font-size: large;
+.modify-conditions{
+    min-height: 100%;
 }
 
-.data-row{
-  margin-top: 5%;
+.help-panel{
+    padding-left: 0px;
 }
 
-.data-table{
-  background: white;
-}
+.row-min-height{
+    min-height: 100%;
+  }

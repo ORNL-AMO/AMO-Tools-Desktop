@@ -1,22 +1,40 @@
-<div class="row measure-row">
-  <div class="col-12">
-    <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
-        <option *ngFor="let option of options | sortBy : 'display' " [ngValue]="option.measure">{{option.display}}</option>
-      </select>
-  </div>
-</div>
-<div class="row value-row">
-  <div class="col-6">
-    <input type="number" step="any" class="form-control text-center" id="value1" [(ngModel)]="value1" (input)="getValue2()">
-    <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
-      <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}} <span [innerHTML]="possibility.displayUnit"></span></option>
-    </select>
-  </div>
+<div class="col-12 converter-col">
+  <div class="row general converter-col">
+    <div class="modification col-12">
+      <div class="col-md-12 converter-content">
+        <div class="header">
+          <h3>
+            Unit Converter
+          </h3>
+        </div>
+        <div class="row measure-row">
+          <div class="col-12">
+            <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
+              <option *ngFor="let option of options | sortBy : 'display' " [ngValue]="option.measure">{{option.display}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row value-row">
+          <div class="col-6">
+            <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1" (input)="getValue2()">
+            <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
+              <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
+                <span [innerHTML]="possibility.displayUnit"></span>
+              </option>
+            </select>
+          </div>
 
-  <div class="col-6">
-    <input type="number" step="any" class="form-control text-center" id="value2" [(ngModel)]="value2" (input)="getValue1()">
-    <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
-    <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}} <span [innerHTML]="possibility.displayUnit"></span></option>
-  </select>
+          <div class="col-6">
+            <input type="number" step="any" class="form-control text-center input-field" id="value2" [(ngModel)]="value2" (input)="getValue1()">
+            <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
+              <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
+                <span [innerHTML]="possibility.displayUnit"></span>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<!--</div>-->

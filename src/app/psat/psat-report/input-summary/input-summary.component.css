@@ -1,18 +1,18 @@
-
-@media print {
-    tr{
-        border-bottom: 2px solid black;
-    }
+.output-summary .table {
+    font-size: small;
 }
+
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+    padding: 0;
+}
+
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
 .section-header{
     font-size: 16px !important;
 }
-
-/*th{
-    text-align: center;
-}
-
-td{
-    text-align: center;
-    vertical-align: middle;
-}*/

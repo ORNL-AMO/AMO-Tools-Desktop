@@ -1,0 +1,38 @@
+td, a{
+    font-size: small;
+  }
+  
+  td{
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  
+.summary-rollup{
+    padding: 6px;
+  }
+
+  .group-label{
+    border-bottom: #566573 groove 2px;
+  }
+  
+  .modal-dialog{
+      max-width: 750px;
+  }
+
+.btn{
+  padding: 6px;
+}
+
+.help-text{
+  padding-top:4px;
+  text-align: center;
+}
+
+.card{
+  border: none;
+}
+
+.table{
+  margin-bottom: 0px;
+}

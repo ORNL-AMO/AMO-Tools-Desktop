@@ -1,0 +1,3 @@
+.zone:not(:first-of-type) {
+    padding-top: 1rem;
+}

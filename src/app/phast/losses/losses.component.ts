@@ -1,10 +1,16 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
+import { LossTab } from '../tabs';
+import { PhastCompareService } from '../phast-compare.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -19,127 +25,113 @@ export class LossesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  inSetup: boolean;
   lossAdded: boolean;
+  @Input()
+  containerHeight: number;
+  @Input()
+  modificationIndex: number;
 
-  _modifications: Modification[];
-  isDropdownOpen: boolean = false;
+  // _modifications: Modification[];
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
-  modificationIndex: number = 0;
-  lossesTab: string = 'charge-material';
+  selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
-  isFirstChange: boolean = true;
   showNotes: boolean = false;
-  editModification: Modification;
-  showEditModification: boolean = false;
-
-  showSetupDialog: boolean;
   isLossesSetup: boolean;
-
+  toggleCalculate: boolean = false;
+  modificationExists: boolean = false;
+  lossesTabs: Array<LossTab>;
+  lossTabSubscription: Subscription;
+  modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
-  constructor(private lossesService: LossesService) { }
+  constructor(private lossesService: LossesService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   ngOnInit() {
-    this._modifications = new Array<Modification>();
+    this.lossesTabs = this.lossesService.lossesTabs;
+    // this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
-      //show setup dialog div
-      this.showSetupDialog = true;
-    }
-    if (this.phast.modifications) {
-      this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
+    } else {
+      this.phast.disableSetupDialog = true;
     }
 
-    this.lossesService.lossesTab.subscribe(val => {
-      this.lossesTab = val;
+    this.lossTabSubscription = this.lossesService.lossesTab.subscribe(val => {
+      this.changeField('default');
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
     })
-    this.lossesService.modalOpen.subscribe(val => {
+
+    if (!this.inSetup) {
+      this.baselineSelected = false;
+      this.modificationSelected = true;
+    }
+
+    if (this.modificationExists && this.inSetup) {
+      let toastOptions: ToastOptions = {
+        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data, use the Assessment tab.',
+        showClose: true,
+        theme: 'default',
+        timeout: 10000000
+      }
+      this.toastyService.warning(toastOptions);
+    }
+    this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     })
+    this.lossesService.updateTabs.next(true);
+    this.saveModifications(true);
+  }
+
+
+  ngOnDestroy() {
+    this.toastyService.clearAll();
+    if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex) {
+      this.toggleCalculate = !this.toggleCalculate;
+    }
   }
 
   changeField($event) {
     this.currentField = $event;
   }
-  saveModifications() {
-    if (this._modifications) {
-      this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      this.saved.emit(true);
-      this.showEditModification = false;
-      this.editModification = null;
-    }
-  }
 
-  addModification() {
-    let tmpModification: Modification = {
-      phast: {
-        losses: {},
-        name: ''
-      },
-      notes: {
-        chargeNotes: '',
-        wallNotes: '',
-        atmosphereNotes: '',
-        fixtureNotes: '',
-        openingNotes: '',
-        coolingNotes: '',
-        flueGasNotes: '',
-        otherNotes: '',
-        leakageNotes: '',
-        extendedNotes: '',
-        slagNotes: '',
-        auxiliaryPowerNotes: '',
-        exhaustGasNotes: ''
+  saveModifications(bool?: boolean) {
+    if (this.phast.modifications[this.modificationIndex] && !bool) {
+      if (this.phast.modifications[this.modificationIndex].exploreOpportunities) {
+        this.phast.modifications[this.modificationIndex].exploreOpportunities = false;
       }
     }
-    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
-    tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
-    this._modifications.unshift(tmpModification);
-    this.modificationIndex = this._modifications.length - 1;
-    this.modificationSelected = true;
-    this.baselineSelected = false;
-  }
-
-  deleteModification() {
-    this.modificationIndex = 0;
-    _.remove(this._modifications, (mod) => {
-      return mod.phast.name == this.editModification.phast.name;
-    });
-    this.showEditModification = false;
-    this.editModification = null;
-    this.saveModifications();
-  }
-
-  toggleDropdown() {
-    this.showEditModification = false;
-    this.isDropdownOpen = !this.isDropdownOpen;
-    this.showNotes = false;
-  }
-
-  selectModification(modification: Modification) {
-    let tmpIndex = 0;
-    this._modifications.forEach(mod => {
-      if (mod == modification) {
-        this.modificationIndex = tmpIndex;
-        return;
-      } else {
-        tmpIndex++;
-      }
-    });
-    this.isDropdownOpen = false;
+    this.phastCompareService.setCompareVals(this.phast, this.modificationIndex, this.inSetup);
+    this.saved.emit(true);
+    this.toggleCalculate = !this.toggleCalculate;
+    if (this.phast.modifications.length != 0) {
+      this.modificationExists = true;
+    } else {
+      this.modificationExists = false;
+    }
   }
 
   addLoss() {
-    this.lossAdded = true;
-    this.addLossToggle = !this.addLossToggle;
+    this.phast.disableSetupDialog = true;
+    if (this.baselineSelected) {
+      this.lossAdded = true;
+      this.addLossToggle = !this.addLossToggle;
+    }
   }
 
   toggleNotes() {
     this.showNotes = !this.showNotes;
-    this.isDropdownOpen = false;
   }
 
   togglePanel(bool: boolean) {
@@ -153,26 +145,12 @@ export class LossesComponent implements OnInit {
     }
   }
 
-  dispEditModification(modification: Modification) {
-    this.editModification = modification;
-    this.showEditModification = true;
-  }
-
   hideSetupDialog() {
     this.saved.emit(true);
-    this.showSetupDialog = false;
+    this.phast.disableSetupDialog = true;
   }
 
-  lossesSetup() {
-    this.saved.emit(true);
-    this.isLossesSetup = true;
-  }
-
-  openModal(){
-    this.isModalOpen = true;
-  }
-
-  closeModal(){
-    this.isModalOpen = false;
+  newModification() {
+    this.lossesService.openNewModal.next(true);
   }
 }

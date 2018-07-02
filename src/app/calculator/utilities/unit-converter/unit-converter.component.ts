@@ -9,7 +9,7 @@ import { length } from '../../../shared/convert-units/definitions/length';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any = 'apparentPower';
+  measure: any = 'existingApparentPower';
   from: string;
   to: string;
   value1: number;
@@ -68,7 +68,7 @@ export class UnitConverterComponent implements OnInit {
       display: 'Voltage'
     },
     {
-      measure: 'apparentPower',
+      measure: 'existingApparentPower',
       display: 'Apparent Power'
     },
     {
@@ -82,6 +82,10 @@ export class UnitConverterComponent implements OnInit {
     {
       measure: 'volumeFlowRate',
       display: 'Volumetric Flow Rate'
+    },
+    {
+      measure: 'volumetricHeat',
+      display: 'Volumetric Specific Heat'
     },
     {
       measure: 'viscosity',
@@ -103,6 +107,29 @@ export class UnitConverterComponent implements OnInit {
       measure: 'mass',
       display: 'Mass'
     },
+    // {
+    //   measure: 'kineViscosity',
+    //   display: 'Kinematic Viscosity'
+    // },
+    {
+      measure: 'specificHeat',
+      display: 'Specific Heat'
+    },
+    {
+      measure: 'specificEnergy',
+      display: 'Specific Energy'
+    },
+    {
+      measure: 'density',
+      display: 'Density'
+    },
+    {
+      measure: 'volumetricEnergy',
+      display: 'Volumetric Energy'
+    }, {
+      measure: 'specificVolume',
+      display: 'Specific Volume'
+    }
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
@@ -134,7 +161,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue1() {
-    if (this.from && this.to && this.value2) {
+    if (this.from && this.to && (this.value2 || this.value2 == 0)) {
       this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
       this.value1 = 0;
@@ -142,7 +169,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue2() {
-    if (this.from && this.to && this.value1) {
+    if (this.from && this.to && (this.value1 || this.value1 == 0)) {
       this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
     } else {
       this.value2 = 0;

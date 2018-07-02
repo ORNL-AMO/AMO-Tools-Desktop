@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-phast-settings',
@@ -8,16 +10,28 @@ import { Settings } from '../../shared/models/settings';
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
+  @Input()
+  disable: boolean;
+
+  energyOptions: Array<string> = [
+    'MMBtu',
+    'Btu',
+    'GJ',
+    'kJ',
+    'kcal',
+    'kgce',
+    'kgoe',
+    'kWh'
+  ]
 
   fuelFiredOptions: Array<string> = [
-    'Ladle Heater 1',
-    'Ladle Heater 2',
+    'Ladle Heater',
     'Reheat Furnace',
-    'Tundish Heater 1',
-    'Tundish Heater 2'
+    'Tundish Heater',
+    'Custom Fuel Furnace'
   ]
 
   electrotechOptions: Array<string> = [
@@ -25,33 +39,64 @@ export class PhastSettingsComponent implements OnInit {
     'Induction Heating and Melting',
     'Electrical Resistance',
     'Vacuum Furnace',
-    'Electric Arc Furnace (EAF)'
+    'Electric Arc Furnace (EAF)',
+    'Custom Electrotechnology'
   ]
 
   // electricOptions: Array<string>;
+  energyResultOptions: Array<any>;
 
-  constructor() { }
-
+  constructor(private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
-    if (!this.settingsForm.furnaceType || this.settingsForm.furnaceType == '') {
+    if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value == '') {
       this.setOptions();
     }
+    if (this.disable) {
+      this.settingsForm.controls.furnaceType.disable();
+      this.settingsForm.controls.energySourceType.disable();
+      this.settingsForm.controls.customFurnaceName.disable();
+    }
+    this.energyResultOptions = new Array<any>();
+    this.energyOptions.forEach(val => {
+      let tmpPossibility = {
+        unit: val,
+        display: this.getUnitName(val),
+        displayUnit: this.getUnitDisplay(val)
+      }
+      this.energyResultOptions.push(tmpPossibility);
+    })
   }
 
   setOptions() {
-    if (this.settingsForm.value.energySourceType == 'Fuel') {
+    if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
+      // this.settingsForm.patchValue({
+      //   furnaceType: 'Ladle Heater'
+      // });
+    } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
       this.settingsForm.patchValue({
-        furnaceType: 'Ladle Heater 1'
-      })
-    } else if (this.settingsForm.value.energySourceType == 'Electricity') {
-      this.settingsForm.patchValue({
-        furnaceType: 'Electrical Infrared'
-      })
+        furnaceType: 'Electrical Infrared',
+        energyResultUnit: 'kWh'
+      });
+    } else if (this.settingsForm.controls.energySourceType.value === 'Steam') {
+      // this.settingsForm.patchValue({
+      //   furnaceType: 'Steam'
+      // });
     }
+    this.startPolling();
   }
+
 
   startPolling() {
     this.startSavePolling.emit(true);
   }
-
+  getUnitName(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.plural;
+    }
+  }
+  getUnitDisplay(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
 }

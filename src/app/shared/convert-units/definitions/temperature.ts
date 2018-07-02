@@ -2,29 +2,29 @@ export const temperature = {
     metric: {
         C: {
             name: {
-                singular: 'degree Celsius'
-                , plural: 'degrees Celsius' ,
-                 display:  '(C)'
+                singular: 'Degree Celsius'
+                , plural: 'Degrees Celsius' ,
+                 display:  '(&#x2103;)'
             }
             , to_anchor: 1
             , anchor_shift: 0
-        },
-        K: {
-            name: {
-                singular: 'degree Kelvin'
-                , plural: 'degrees Kelvin' ,
-                 display:  '(K)'
-            }
-            , to_anchor: 1
-            , anchor_shift: 273.15
         }
+        // K: {
+        //     name: {
+        //         singular: 'Degree Kelvin'
+        //         , plural: 'Degrees Kelvin' ,
+        //          display:  '(K)'
+        //     }
+        //     , to_anchor: 1
+        //     , anchor_shift: 273.15
+        // }
     },
     imperial: {
         F: {
             name: {
-                singular: 'degree Fahrenheit'
-                , plural: 'degrees Fahrenheit' ,
-                 display:  '(F)'
+                singular: 'Degree Fahrenheit'
+                , plural: 'Degrees Fahrenheit' ,
+                 display:  '(&#x2109;)'
             }
             , to_anchor: 1
         }

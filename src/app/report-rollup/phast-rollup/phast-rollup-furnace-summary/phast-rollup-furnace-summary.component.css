@@ -1,0 +1,12 @@
+.pad-top {
+    padding-top: 20px;
+}
+
+@media print {
+    .print-rollup-bar-chart-container {
+        padding-bottom: 30px;
+        page-break-inside: avoid;
+    }
+}
+
+

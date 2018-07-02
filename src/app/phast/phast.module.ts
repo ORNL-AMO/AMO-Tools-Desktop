@@ -10,30 +10,50 @@ import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
 import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
-import { SankeyComponent } from './sankey/sankey.component';
-import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
+
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 
 import { PhastService } from './phast.service';
-import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
+import { SankeyModule } from './sankey/sankey.module';
+import { PhastReportModule } from './phast-report/phast-report.module';
+import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
+import { PhastResultsService } from './phast-results.service';
+import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
+import { ConvertPhastService } from './convert-phast.service';
+import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
+import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
+import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
+import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.module';
+import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
+import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
+import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
+import { LossesTabsModule } from './losses/losses-tabs/losses-tabs.module';
+import { PhastCompareService } from './phast-compare.service';
+import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
+import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
+import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
     PhastComponent,
     PhastBannerComponent,
-    SankeyComponent,
     PhastTabsComponent,
     SystemBasicsComponent,
     OperatingHoursComponent,
     HelpPanelComponent,
-    SankeyDiagramComponent,
-    SystemSetupComponent
-
+    PhastDiagramComponent,
+    EnergyCostsComponent,
+    PhastCalculatorTabsComponent,
+    ModificationNavbarComponent,
+    ModificationListComponent,
+    AddModificationComponent,
+    PhastTabsTooltipComponent,
   ],
   exports: [
   ],
@@ -49,10 +69,22 @@ import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
     SettingsModule,
     AuxEquipmentModule,
     DesignedEnergyModule,
-    MeteredEnergyModule
+    MeteredEnergyModule,
+    SankeyModule,
+    PhastReportModule,
+    PreAssessmentModule,
+    O2EnrichmentModule,
+    EfficiencyImprovementModule,
+    EnergyEquivalencyModule,
+    EnergyUseModule,
+    ExplorePhastOpportunitiesModule,
+    LossesTabsModule
   ],
   providers: [
-    PhastService
+    PhastService,
+    PhastResultsService,
+    ConvertPhastService,
+    PhastCompareService
   ]
 })
 

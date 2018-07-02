@@ -3,12 +3,20 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { ChartsModule } from 'ng2-charts';
-import { PumpsModule } from '../calculator/pumps/pumps.module';
+// import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap';
-import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+
+import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
+import { HeadToolModule } from '../calculator/pumps//head-tool/head-tool.module';
+import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
+import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
+import { AchievableEfficiencyModule } from '../calculator/pumps/achievable-efficiency/achievable-efficiency.module';
+import { SpecificSpeedModule } from '../calculator/pumps/specific-speed/specific-speed.module';
+import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
+
+
 
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
@@ -18,7 +26,6 @@ import { PumpFluidComponent } from './pump-fluid/pump-fluid.component';
 import { MotorComponent } from './motor/motor.component';
 import { FieldDataComponent } from './field-data/field-data.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
-import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
 import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
@@ -29,14 +36,19 @@ import { ModifyConditionsTabsComponent } from './modify-conditions/modify-condit
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
-import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
-import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { CompareService } from './compare.service';
-import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
-import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
-import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explore-opportunities-help/explore-opportunities-help.component';
-
-import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/explore-opportunities-sankey/explore-opportunities-sankey.component';
+import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
+import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
+import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
+import { ModificationListComponent } from './modification-list/modification-list.component';
+import { AddModificationComponent } from './add-modification/add-modification.component';
+import { ModifyConditionsTabsTooltipComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
+import { PsatReportService } from './psat-report/psat-report.service';
+import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat-report-sankey.component';
+import { PsatReportGraphsComponent } from './psat-report/psat-report-graphs/psat-report-graphs.component';
+import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar-chart/psat-bar-chart.component';
+import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs/psat-report-graphs-print/psat-report-graphs-print.component';
+import { PsatTabsTooltipComponent } from './psat-tabs-tooltip/psat-tabs-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -48,18 +60,20 @@ import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/exp
     MotorComponent,
     FieldDataComponent,
     ModifyConditionsComponent,
-    SettingsPanelComponent,
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
-    ModifyConditionsNotesComponent,
-    EditConditionPropertiesComponent,
-    ExploreOpportunitiesComponent,
-    ExploreOpportunitiesFormComponent,
-    ExploreOpportunitiesResultsComponent,
-    ExploreOpportunitiesHelpComponent,
-    ExploreOpportunitiesSankeyComponent
+    PsatDiagramComponent,
+    PsatSankeyComponent,
+    ModificationListComponent,
+    AddModificationComponent,
+    ModifyConditionsTabsTooltipComponent,
+    PsatReportSankeyComponent,
+    PsatReportGraphsComponent,
+    PsatBarChartComponent,
+    PsatReportGraphsPrintComponent,
+    PsatTabsTooltipComponent
   ],
   exports: [
     PsatReportComponent
@@ -70,18 +84,25 @@ import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/exp
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ChartsModule,
-    PumpsModule,
+    // ChartsModule,
     ModalModule.forRoot(),
-    IndexedDbModule,
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SystemCurveModule,
+    SpecificSpeedModule,
+    NemaEnergyEfficiencyModule,
+    MotorPerformanceModule,
+    HeadToolModule,
+    AchievableEfficiencyModule, 
+    PumpCurveModule,
+    ExploreOpportunitiesModule
   ],
   providers: [
     PsatService,
-    CompareService
+    CompareService,
+    PsatReportService
   ]
 })
 

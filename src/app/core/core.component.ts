@@ -1,8 +1,19 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, HostListener, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { AssessmentService } from '../assessment/assessment.service';
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { Subscription } from 'rxjs';
+import { SuiteDbService } from '../suiteDb/suite-db.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { CalculatorDbService } from '../indexedDb/calculator-db.service';
+import { CoreService } from './core.service';
+import { ExportService } from '../shared/import-export/export.service';
 
 @Component({
   selector: 'app-core',
@@ -11,17 +22,23 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 })
 
 export class CoreComponent implements OnInit {
-  updateAvailable: boolean;
-  updateSelected: boolean;
-
-  @ViewChild('updateModal') public updateModal: ModalDirective;
+  showUpdateModal: boolean;
 
   gettingData: boolean = false;
-  showFeedback: boolean = true;
 
   showScreenshot: boolean = true;
+  showTutorial: boolean = false;
+  hideTutorial: boolean = true;
+  openingTutorialSub: Subscription;
+  idbStarted: boolean = false;
+  dirSub: Subscription;
+  calcSub: Subscription;
+  assessmentSub: Subscription;
+  settingsSub: Subscription;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private importExportService: ImportExportService) {
+    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
+    private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
@@ -29,68 +46,84 @@ export class CoreComponent implements OnInit {
   ngOnInit() {
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg == true) {
-        this.showUpdateModal();
-      }
-    })
-    this.electronService.ipcRenderer.send('ready', null);
-    this.importExportService.toggleDownload.subscribe((val) => {
-      if (val == true) {
-        this.downloadData();
+        this.showUpdateModal = true;
+        this.assessmentService.updateAvailable.next(true);
+        this.changeDetectorRef.detectChanges();
       }
     })
 
-    if(this.electronService.process.platform == 'win32'){
+    //send signal to main.js to check for update
+    this.electronService.ipcRenderer.send('ready', null);
+
+    if (this.electronService.process.platform == 'win32') {
       this.showScreenshot = false;
+    }
+
+    this.openingTutorialSub = this.assessmentService.openingTutorial.subscribe(val => {
+      if (val && !this.assessmentService.tutorialShown) {
+        this.showTutorial = true;
+        this.hideTutorial = false;
+      }
+    })
+
+    if (this.suiteDbService.hasStarted == false) {
+      this.suiteDbService.startup();
+    }
+    if (this.indexedDbService.db == undefined) {
+      this.initData();
     }
   }
 
-
-  takeScreenShot() {
-    this.importExportService.takeScreenShot();
+  ngOnDestroy() {
+    if (this.openingTutorialSub) this.openingTutorialSub.unsubscribe();
+    if (this.dirSub) this.dirSub.unsubscribe();
+    if (this.calcSub) this.calcSub.unsubscribe();
+    if (this.assessmentSub) this.assessmentSub.unsubscribe();
+    if (this.settingsSub) this.settingsSub.unsubscribe();
+    this.exportService.exportAllClick.next(false);
   }
 
-  hideFeedback() {
-    this.showFeedback = false;
+  initData() {
+    this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
+      this.indexedDbService.getAllDirectories().then(val => {
+        if (val.length == 0) {
+          this.coreService.createDirectory().then(() => {
+            this.coreService.createDirectorySettings().then(() => {
+              this.coreService.createExamples().then(() => {
+                this.setAllDbData();
+              });
+            });
+          });
+        } else {
+          this.setAllDbData();
+        }
+      })
+    })
   }
 
-  downloadData() {
-    this.gettingData = true;
-    this.importExportService.initAllDirectories().then((allDirs) => {
-      this.importExportService.selectedItems = new Array<any>();
-      this.importExportService.getSelected(allDirs);
-      setTimeout(() => {
-        this.importExportService.exportData = new Array();
-        this.importExportService.selectedItems.forEach(item => {
-          this.importExportService.getAssessmentSettings(item);
+  setAllDbData() {
+    this.directoryDbService.setAll().then(() => {
+      this.assessmentDbService.setAll().then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.idbStarted = true;
+            this.changeDetectorRef.detectChanges();
+          })
         })
-        setTimeout(() => {
-          this.gettingData = false;
-          this.importExportService.downloadData(this.importExportService.exportData);
-        }, 1000)
-      }, 500)
-    });
+      })
+    })
   }
 
-  mailTo() {
-    this.importExportService.openMailTo();
+
+
+  closeModal() {
+    this.showUpdateModal = false;
   }
 
-  showUpdateModal() {
-    this.updateModal.show();
-  }
 
-  hideUpdateModal() {
-    this.updateModal.hide();
-  }
-
-  updateClick() {
-    this.updateSelected = true;
-    this.updateAvailable = false;
-    this.electronService.ipcRenderer.send('update', null);
-  }
-
-  cancel() {
-    this.updateModal.hide();
-    this.electronService.ipcRenderer.send('later', null);
+  closeTutorial() {
+    this.assessmentService.tutorialShown = true;
+    this.showTutorial = false;
+    this.hideTutorial = true;
   }
 }

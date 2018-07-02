@@ -1,45 +1,203 @@
-<div class="assessment-report" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-psat': inPsat, 'report-in-rollup': !inPsat}">
+<div class="assessment-report report-in-psat psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
 
-  <div class="report-header">
-    <div class="row">
-      <div class="col-12" *ngIf="inPsat">
-        <div class="btn-group pull-left hide-print">
-          <button class="btn btn-secondary" (click)="print()">Print / Download</button>
-          <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+
+    <div *ngIf="inPsat" class="report-cover">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+
+        <div class="report-title">
+            <h4>Pump Efficiency Report:</h4>
+            <h4>{{assessment.name}}</h4>
+            <h5>{{createdDate| date:'medium'}}</h5>
+        </div>
+
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+
+    <div #reportHeader class="report-header" [ngClass]="{'hide-print': inPsat}">
+
+        <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
+            <button class="btn btn-secondary" (click)="showModal()">Print</button>
+            <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 assessment-name">
-        <h2 *ngIf="!assessment">Assessment Report
-        </h2>
-        <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}
-          <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-          <span class="pull-right small">Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
-        </h2>
-      </div>
-    </div>
-  </div>
-  <!-- End .report-header -->
 
-  <div class="report-data" *ngIf="psat.setupDone">
-    <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
-      <app-chart-summary [psat]="psat"></app-chart-summary>
-    </div>-->
-    <div class="results">
-      <h3>Assessment Result Data</h3>
-      <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)"></app-output-summary>
-    </div>
-    <div class="input-data results">
-      <h3>Assessment Input Data</h3>
-      <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
-    </div>
-  </div>
-  <!-- End .report-data -->
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-  <div *ngIf="!psat.setupDone">
-    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
-  </div>
+        <div *ngIf="assessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} /
+                    </span>
+                    {{assessment.name}}
 
+                </h2>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+                </h2>
+            </div>
+
+            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+            <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+
+        </div>
+    </div>
+    <!-- End .report-header -->
+
+    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+        <div class="col-12 print-col">
+            <h4>Building Print View</h4>
+            <h5>One Moment Please</h5>
+            <span class="fa fa-print"></span>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- real version -->
+    <!-- <div class="report-header" [ngClass]="{'hide-print': inPsat}">
+
+        <div *ngIf="inPsat && !quickReport" class="btn-group">
+            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+        </div> -->
+    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
+
+    <!-- <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+
+        <h2 *ngIf="assessment" class="assessment-name">
+            <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} /
+            </span>
+            {{assessment.name}} -->
+    <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+    <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+    <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+    <!-- </h2> -->
+
+    <!-- </div> -->
+    <!-- End .report-header -->
+
+
+    <div class="report-data" *ngIf="psat.setupDone">
+
+        <ul #reportBtns class="tabs primary hide-print">
+            <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+                <a>Result Data</a>
+            </li><!--
+            --><li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+                <a>Report Graphs</a>
+            </li><!--
+            --><li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+                <a>Sankey</a>
+            </li><!--
+            --><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                <a>Input Summary</a>
+            </li><!--
+            --><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Facility Info</a>
+            </li>
+        </ul>
+
+        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+        <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-input-summary [psat]="psat" [settings]="settings">
+            </app-input-summary>
+        </div>
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
+            </app-output-summary>
+        </div>
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-psat-report-graphs [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
+                [printGraphs]="printReportGraphs"></app-psat-report-graphs>
+        </div>
+        <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)" [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-psat-report-sankey [psat]="psat" [settings]="settings" [assessment]="assessment" [printView]="printReportSankey"></app-psat-report-sankey>
+        </div>
+
+    </div>
+    <!-- End .report-data -->
+
+    <div *ngIf="!psat.setupDone">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+    </div>
+
+
+</div>
+
+
+
+<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md hide-print">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Print Report</h3>
+                <button class="close" (click)="closeModal(true)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            Select all report items you would like to include in your printed report.
+                        </p>
+                    </div>
+                </div>
+                <div class="row toggle-btn" (click)="togglePrint('select-all')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="selectAll"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Select All
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printResults"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Results
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportGraphs"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Report Graphs
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Report Sankey
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8">
+                        Input Summary
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" (click)="print()" data-dismiss="modal">Print</button>
+                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal(true)" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>

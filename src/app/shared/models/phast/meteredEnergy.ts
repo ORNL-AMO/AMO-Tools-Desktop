@@ -2,16 +2,22 @@ export interface MeteredEnergy {
     meteredEnergyFuel?: MeteredEnergyFuel,
     meteredEnergyElectricity?: MeteredEnergyElectricity,
     meteredEnergySteam?: MeteredEnergySteam
+    fuel?: boolean,
+    steam?: boolean,
+    electricity?: boolean
 }
 
 
 export interface MeteredEnergyFuel {
+    fuelDescription?: string,
     fuelType: number,
     heatingValue: number,
     collectionTime: number,
+    fuelFlowRateInput?: number,
     electricityUsed: number,
     electricityCollectionTime: number,
-    flowRate: number
+    fuelEnergy: number,
+    userDefinedMeteredEnergy?: boolean
 }
 export interface MeteredEnergyResults {
     meteredEnergyUsed: number,

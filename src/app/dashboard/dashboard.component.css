@@ -1,3 +1,68 @@
 .export-modal{
-    top: 20vh;
+    top: .5rem;
+}
+
+
+.sidebar-bg{
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.dashboard-scroll{
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.dashboard-content::-webkit-scrollbar{
+    display: none;
+}
+
+.landing-screen::-webkit-scrollbar,
+.sidebar-bg::-webkit-scrollbar {
+    width: .5em;
+  }
+  .landing-screen::-webkit-scrollbar-track ,
+  .sidebar-bg::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+  .landing-screen::-webkit-scrollbar-thumb,
+  .sidebar-bg::-webkit-scrollbar-thumb {
+  background-color: #156739;
+  outline: 1px solid slategrey;
+  }
+
+
+  .pre-assessment-modal .modal-dialog{
+      top: 0px;
+      height: 80vh
+      }
+
+
+.pre-assessment-modal .modal-dialog{
+    top: 0px;
+    margin: 5px 5px 5px 5px;
+    /* width: 80vh; */
+    min-width: 99vw;
+}
+
+.pre-assessment-modal .modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    min-height: 85vh;
+    max-height: 85vh;
+}
+
+
+
+.pre-assessment-modal .modal-header,
+.pre-assessment-modal .modal-footer{
+    padding: 8px;
+}
+
+.btn{
+    padding: 6px;
+}
+
+.red{
+    color: red;
 }

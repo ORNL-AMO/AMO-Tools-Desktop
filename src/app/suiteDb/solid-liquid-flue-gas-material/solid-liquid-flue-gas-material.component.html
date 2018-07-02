@@ -1,73 +1,156 @@
 <div class="card">
-  <div class="card-body">
-    <form>
-      <div class="form-section">
-        <div class="form-group">
-          <label class="small" for="selectedMaterial">Start with existing material</label>
-          <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
-        <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
-                <option [ngValue]="null"></option>
-      </select>
+  <div class="card-body custom-card-body card-container col">
+    <div class="row">
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
+        <div class="row phast align-items-top">
+          <div class="col-12">
+            <div class="header card-header">
+              <h3 *ngIf="!editExistingMaterial">Create Fuel</h3>
+              <h3 *ngIf="editExistingMaterial">Edit Fuel</h3>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div class="form-section" *ngIf="!editExistingMaterial">
+            <div class="form-group">
+              <label class="small" for="selectedMaterial">Start with existing material</label>
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
+                (focus)="focusField('selectedMaterial')">
+                <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-group">
+              <label class="small" for="substance">Substance Name</label>
+              <div class="input-group" *ngIf="!editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
+              <div class="input-group" *ngIf="editExistingMaterial">
+                <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
+                  (focus)="focusField('substance')" />
+              </div>
+              <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
+            </div>
+            <div class="form-group">
+              <label class="small" for="carbon">Carbon</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon"
+                  (input)="setHHV()" (focus)="focusField('carbon')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="hydrogen">Hydrogen</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen"
+                  (input)="setHHV()" (focus)="focusField('hydrogen')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="inertAsh">Inert Ash</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh"
+                  (input)="setHHV()" (focus)="focusField('inertAsh')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="moisture">Moisture</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture"
+                  (input)="setHHV()" (focus)="focusField('moisture')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="nitrogen">Nitrogen</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen"
+                  (input)="setHHV()" (focus)="focusField('nitrogen')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="o2">O
+                <sub>2</sub>
+              </label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" (input)="setHHV()"
+                  (focus)="focusField('o2')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="small" for="sulphur">Sulphur</label>
+              <div class="input-group">
+                <input type="number" step="any" min="0" max="100" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur"
+                  (input)="setHHV()" (focus)="focusField('sulphur')" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="small" for="heatingValue">Heating Value
+              <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
+            </label>
+            <div class="text-center small">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/kg</span>
+            </div>
+          </div>
+          <div class="form-group" [ngClass]="{'difference-error': differenceError}">
+            <label class="small" for="difference">Difference</label>
+            <div class="text-center small">
+              {{difference | number:'1.0-3'}} %
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
+        <div class="tab-content">
+          <app-solid-liquid-flue-gas-material-help [currentField]="currentField"></app-solid-liquid-flue-gas-material-help>
         </div>
       </div>
-      <div class="form-group">
-        <label class="small" for="substance">Substance Name</label>
-        <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-        />
-        <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
-      </div>
-      <div class="form-group">
-        <label class="small" for="carbon">Carbon</label>
-        <div class="input-group">
-          <input type="number" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" />
-          <span class="input-group-addon units">%</span>
+
+      <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+        <div class="text-center">
+          <div class="row phast align-items-top">
+            <div class="col-12">
+              <div class="header card-header">
+                <h3>Confirm Delete</h3>
+              </div>
+            </div>
+          </div>
+          <div class="delete-warning-container">
+            <div class="row">
+              <div class="col-12">
+                Material Name: {{newMaterial.substance}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                Are you sure you want to
+                <strong>
+                  <u>permentantly delete</u>
+                </strong> this material?
+                <br>This cannot be undone.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="small" for="hydrogen">Hydrogen</label>
-        <div class="input-group">
-          <input type="number" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="inertAsh">Inert Ash</label>
-        <div class="input-group">
-          <input type="number" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="moisture">Moisture</label>
-        <div class="input-group">
-          <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="nitrogen">Nitrogen</label>
-        <div class="input-group">
-          <input type="number" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="moisture">O<sub>2</sub></label>
-        <div class="input-group">
-          <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="sulphur">Sulphur</label>
-        <div class="input-group">
-          <input type="number" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="card-body">
-    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+
+    </div>
+    <div class="modal-btn-container">
+      <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
+    </div>
   </div>
 </div>

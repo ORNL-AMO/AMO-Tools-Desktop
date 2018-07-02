@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -9,26 +8,48 @@ import { ModelService } from './model.service';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
+import { SigFigsPipe } from './sig-figs.pipe';
+import { UpdateDataService } from './update-data.service';
+import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
+import { SvgToPngService } from './svg-to-png/svg-to-png.service';
+import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { PhonePipe } from './pipes/phone.pipe';
+import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 
 @NgModule({
-    imports: [
-      CommonModule,
-      FormsModule,
-      ReactiveFormsModule,
-      ChartsModule
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    // ChartsModule
   ],
   declarations: [
     ControlMessagesComponent,
-    PercentGraphComponent
+    PercentGraphComponent,
+    SigFigsPipe,
+    FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent,
+    PieChartComponent,
+    PhonePipe,
+    SimpleTooltipComponent
   ],
   exports: [
     ControlMessagesComponent,
-    PercentGraphComponent
+    PercentGraphComponent,
+    SigFigsPipe,
+    FacilityInfoSummaryComponent,
+    AnimatedCheckmarkComponent,
+    PieChartComponent,
+    PhonePipe,
+    SimpleTooltipComponent
   ],
   providers: [
     ValidationService,
     ModelService,
-    ConvertUnitsService
+    ConvertUnitsService,
+    UpdateDataService,
+    SvgToPngService
   ]
 })
 

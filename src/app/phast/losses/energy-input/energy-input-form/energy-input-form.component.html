@@ -1,83 +1,72 @@
-<form #lossForm [formGroup]="energyInputForm">
+<form [formGroup]="energyInputForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="naturalGasHeatInput">Natural Gas Heat Input</label>
-      <div class="input-group">
-        <input name="{{'naturalGasHeatInput_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasHeatInput"
-          id="naturalGasHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasHeatInput')">
-        <span class="input-group-addon units">mm btu/cycle</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareNaturalGasHeatInput(), 'invalid': energyInputForm.controls.naturalGasHeatInput.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'naturalGasHeatInput_'+lossIndex}}" type="number" min="0" class="form-control" formControlName="naturalGasHeatInput" id="naturalGasHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasHeatInput')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
-
     <div class="form-group">
-      <label class="small" for="naturalGasFlow">Natural Gas Flow</label>
-      <div class="input-group">
-        <input name="{{'naturalGasFlow_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasFlow" id="naturalGasFlow"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasFlow')">
-        <span class="input-group-addon units">scfh</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="measuredOxygenFlow">Measured Oxygen Flow</label>
-      <div class="input-group">
-        <input name="{{'measuredOxygenFlow_'+lossIndex}}" type="number" class="form-control" formControlName="measuredOxygenFlow"
-          id="measuredOxygenFlow" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('measuredOxygenFlow')">
-        <span class="input-group-addon units">scfh</span>
+      <label class="small"><a class="form-text small click-link" (click)="showHideInputField()">Calculate using flow rate</a></label>
+      <div class="input-group" [ngClass]="{'indicate-different': compareFlowRateInput(), 'invalid': energyInputForm.controls.flowRateInput.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" *ngIf="flowInput" class="form-control" type="number" formControlName="flowRateInput" id="flowRateInput" onfocus="this.select();" (input)="setHeatInput()" (focus)="focusField('flowRateInput')">
+        <span *ngIf="flowInput" class="input-group-addon units">scf/hr</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="coalCarbonInjection">Coal Carbon Injection</label>
-      <div class="input-group">
-        <input name="{{'coalCarbonInjection_'+lossIndex}}" type="number" class="form-control" formControlName="coalCarbonInjection"
-          id="coalCarbonInjection" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalCarbonInjection')">
-        <span class="input-group-addon units">lbs/cycle</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareCoalCarbonInjection(), 'invalid': energyInputForm.controls.coalCarbonInjection.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'coalCarbonInjection_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="coalCarbonInjection" id="coalCarbonInjection" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalCarbonInjection')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lbs/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="coalHeatingValue">Coal Heating Value</label>
-      <div class="input-group">
-        <input name="{{'coalHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
-        <span class="input-group-addon units">btu/lb</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareCoalHeatingValue(), 'invalid': energyInputForm.controls.coalHeatingValue.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'coalHeatingValue_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
+
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="electrodeUse">Electrode Use</label>
-      <div class="input-group">
-        <input name="{{'electrodeUse_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeUse" id="electrodeUse"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeUse')">
-        <span class="input-group-addon units">lbs/cycle</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectrodeUse(), 'invalid': energyInputForm.controls.electrodeUse.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'electrodeUse_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electrodeUse" id="electrodeUse" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeUse')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lbs/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="electrodeHeatingValue">Electrode Heating Value</label>
-      <div class="input-group">
-        <input name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeHeatingValue"
-          id="electrodeHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
-        <span class="input-group-addon units">btu/lb</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectrodeHeatingValue(), 'invalid': energyInputForm.controls.electrodeHeatingValue.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electrodeHeatingValue" id="electrodeHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="otherFuels">Other Fuels</label>
-      <div class="input-group">
-        <input name="{{'otherFuels_'+lossIndex}}" type="number" class="form-control" formControlName="otherFuels" id="otherFuels"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherFuels')">
-        <span class="input-group-addon units">mm btu/cycle</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareOtherFuels(), 'invalid': energyInputForm.controls.otherFuels.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'otherFuels_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="otherFuels" id="otherFuels" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherFuels')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="electricityInput">Electricty Input</label>
-      <div class="input-group">
-        <input name="{{'electricityInput_'+lossIndex}}" type="number" class="form-control" formControlName="electricityInput" id="electricityInput"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
-        <span class="input-group-addon units">kwh/cycle</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectricityInput(), 'invalid': energyInputForm.controls.electricityInput.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'electricityInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
+        <span class="input-group-addon units">kW</span>
       </div>
     </div>
   </div>

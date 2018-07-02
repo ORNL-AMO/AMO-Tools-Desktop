@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-liquid-cooling-losses-form',
@@ -9,7 +10,7 @@ import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 })
 export class LiquidCoolingLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -20,14 +21,19 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
+  @Input()
+  settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
+  
+  specificHeatError: string = null;
   firstChange: boolean = true;
-  counter: any;
   temperatureError: string = null;
-  constructor(private windowRefService: WindowRefService, private coolingLossesCompareService: CoolingLossesCompareService) { }
+  densityLiquidError: string = null;
+  liquidFlowError: string = null;
+  constructor(private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -41,115 +47,126 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     }
   }
 
-
-  ngOnInit() { 
-    this.checkTemperature(true);
-  }
-
-  ngAfterViewInit() {
+  ngOnInit() {
+    this.checkInputError(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
-
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    // this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    // this.lossesForm.enable();
   }
 
-  checkForm() {
-    if (this.lossesForm.status == 'VALID') {
-      this.calculate.emit(true)
-    }
-  }
-
-  checkTemperature(bool?: boolean){
-    if(!bool){
+  checkInputError(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp){
-      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-    }else{
+    if (this.lossesForm.controls.avgSpecificHeat.value < 0) {
+      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
+    } else {
+      this.specificHeatError = null;
+    }
+    if (this.lossesForm.controls.density.value < 0) {
+      this.densityLiquidError = 'Density must be equal or greater than 0';
+    } else {
+      this.densityLiquidError = null;
+    }
+    if (this.lossesForm.controls.liquidFlow.value < 0) {
+      this.liquidFlowError = 'Liquid Flow must be equal or greater than 0';
+    } else {
+      this.liquidFlowError = null;
+    }
+
+    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
+      this.temperatureError = 'Inlet temperature is greater than outlet temperature';
+    } else {
       this.temperatureError = null;
+    }
+
+    if (this.specificHeatError || this.densityLiquidError || this.liquidFlowError || this.temperatureError) {
+      this.inputError.emit(true);
+      this.coolingLossesCompareService.inputError.next(true);
+    } else {
+      this.inputError.emit(false);
+      this.coolingLossesCompareService.inputError.next(false);
     }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
+  focusOut() {
+    this.changeField.emit('default');
+  }
   startSavePolling() {
-    this.checkForm();
-    if (this.counter) {
-      clearTimeout(this.counter);
+    this.saveEmit.emit(true);
+    this.calculate.emit(true)
+  }
+  canCompare() {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
+      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
+        return true
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+  }
+  compareCoolingMedium(): boolean {
+    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses) {
+      return this.coolingLossesCompareService.compareCoolingMedium(this.lossIndex);
+    } else {
+      return false;
+    }
   }
 
-  initDifferenceMonitor() {
-    if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && this.coolingLossesCompareService.differentArray.length != 0) {
-      if (this.coolingLossesCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-
-        //avgSpecificHeat
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.specificHeat.subscribe((val) => {
-          let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
-          avgSpecificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //density
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.density.subscribe((val) => {
-          let densityElements = doc.getElementsByName('density_' + this.lossIndex);
-          densityElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //liquidFlow
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.flowRate.subscribe((val) => {
-          let liquidFlowElements = doc.getElementsByName('liquidFlow_' + this.lossIndex);
-          liquidFlowElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //inletTemp
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.initialTemperature.subscribe((val) => {
-          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-          inletTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //outletTemp
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.outletTemperature.subscribe((val) => {
-          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-          outletTempElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //correctionFactor
-        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.correctionFactor.subscribe((val) => {
-          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-          correctionFactorElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-      }
+  compareLiquidFlowRate(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidFlowRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLiquidDensity(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidDensity(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLiquidInitialTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLiquidOutletTemperature(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidOutletTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLiquidSpecificHeat(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidSpecificHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  compareLiquidCorrectionFactor(): boolean {
+    if (this.canCompare()) {
+      return this.coolingLossesCompareService.compareLiquidCorrectionFactor(this.lossIndex);
+    } else {
+      return false;
     }
   }
 }

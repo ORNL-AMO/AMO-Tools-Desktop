@@ -1,0 +1,111 @@
+<div class="help-panel">
+  <div class="calc-help">
+    <!--<div class="help-header">-->
+     <!--<h3>Cash Flow Diagram Help</h3>-->
+    <!--</div>-->
+   <div class="help-content">
+     <div class="card" *ngIf="currentField == 'lifeYears'">
+       <div class="card-header">
+         Lifetime
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           Expected Lifetime of the equipment/modification (years)
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> yr </strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'energySavings'">
+       <div class="card-header">
+         Annual Energy Savings
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           Annual expected savings resulting from the new process modification equipment (if the modification includes
+           any savings beyond energy, could also include this here)
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $/yr </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'salvageInput'">
+       <div class="card-header">
+         Salvage
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           The estimated value that the owner is paid when the item is sold at the end of its useful life.
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $ </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'installationCost'">
+       <div class="card-header">
+         Installation Cost
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           The expected cost to purchase and install the new process modification or equipment.
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $ </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'operationCost'">
+       <div class="card-header">
+         Annual Operation Cost
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           Annual Operation costs (including maintenance and other yearly costs) for the equipment or increase in
+           operation costs with the new equipment (excluding fuel). (If there is an operation cost savings,
+           that should be include in “Annual Energy Savings”).
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $/yr </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'fuelCost'">
+       <div class="card-header">
+         Annual Fuel Cost
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           Annual Fuel costs for the equipment or increase in fuel costs with the new equipment.
+           (If there is a fuel savings, that should be include in “Annual Energy Savings”)
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $/yr </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+     <div class="card" *ngIf="currentField == 'junkCost'">
+       <div class="card-header">
+         Disposal
+       </div>
+       <div class="card-block">
+         <label><u><strong>Description</strong></u></label>
+         <p>
+           The estimated cost to dispose of the modification or equipment at the end of its useful life.
+         </p>
+         <label><u><strong>Input</strong></u></label>
+         <p>
+           Units: <strong> $ </strong><br> Minimum Value Allowed: <strong>0</strong>
+       </div>
+     </div>
+   </div>
+ </div>
+</div>

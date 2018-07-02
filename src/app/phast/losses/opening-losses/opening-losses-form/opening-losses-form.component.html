@@ -1,99 +1,119 @@
-<form #lossForm [formGroup]="openingLossesForm">
+<form [formGroup]="openingLossesForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="type">Select Type</label>
-      <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="openingType" (change)="startSavePolling()"
-        (focus)="focusField('openingType')">
-              <option>Round</option>
-              <option>Rectangular (Square)</option>
-              </select>
+      <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="openingType" (change)="getArea()"
+        (focus)="focusField('openingType')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareOpeningType(), 'invalid': openingLossesForm.controls.openingType.status == 'INVALID'}">
+        <option>Round</option>
+        <option>Rectangular (or Square)</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label class="small" for="numberOfOpenings" aria-describedby="numberOfOpeningsHelp">Number of Openings
-    <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
-    </label>
+        <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
+      </label>
 
-      <input name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="numberOfOpenings"
-        id="numberOfOpenings" onfocus="this.select();" (input)="getArea()" (focus)="focusField('numberOfOpenings')">
+      <input [readonly]="!baselineSelected" name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="numberOfOpenings"
+        id="numberOfOpenings" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('numberOfOpenings')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': compareNumberOfOpenings(), 'error': numOpeningsError !== null, 'invalid': openingLossesForm.controls.numberOfOpenings.status == 'INVALID'}">
+      <span class="alert-warning pull-right small" *ngIf="numOpeningsError !== null">{{numOpeningsError}}</span>
     </div>
-
 
     <div class="form-group">
       <label class="small" for="wallThickness">Furnace Wall Thickness</label>
-      <div class="input-group">
-        <input name="{{'wallThickness_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="wallThickness"
-          id="wallThickness" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('wallThickness')">
-        <span class="input-group-addon units">in</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareThickness(), 'error': thicknessError !== null, 'invalid': openingLossesForm.controls.wallThickness.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'wallThickness_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="wallThickness"
+          id="wallThickness" onfocus="this.select();" (input)="checkThickness(); updateViewFactor()" (focus)="focusField('wallThickness')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="thicknessError !== null">{{thicknessError}}</span>
     </div>
 
     <div class="form-group">
-      <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings (Inch)</label>
-      <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
-      <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="lengthOfOpening"
-        id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
+      <label *ngIf="openingLossesForm.controls.openingType.value != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
+      <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
+      <div class="input-group" [ngClass]="{'indicate-different': compareLengthOfOpening(), 'error': lengthError !== null, 'invalid': openingLossesForm.controls.lengthOfOpening.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="lengthOfOpening"
+          id="lengthOfOpening" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="lengthError !== null">{{lengthError}}</span>
     </div>
 
-    <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
+    <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
       <label class="small" for="heightOfOpening">Height of Openings</label>
-      <div class="input-group">
-        <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heightOfOpening"
-          id="heightOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('heightOfOpening')">
-        <span class="input-group-addon units">in</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareHeightOfOpening(), 'error': heightError !== null, 'invalid': openingLossesForm.controls.heightOfOpening.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heightOfOpening"
+          id="heightOfOpening" onfocus="this.select();" (input)="getArea(); updateViewFactor()" (focus)="focusField('heightOfOpening')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="heightError !== null">{{heightError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small">Total Opening Area</label>
       <div class="text-center small">
-        {{totalArea | number:'2.2-2'}} ft<sup>2</sup>
+        {{totalArea | number:'2.2-2'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
+          <sup>2</sup>
+        </span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
+          <sup>2</sup>
+        </span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
-    <small id="viewFactorHelp" class="form-text text-muted text-help">User defined if known or from chart</small>
-    </label>
+        <!-- <a id="{{'viewFactor_'+lossIndex}}" class="form-text small click-link" (click)="calculateViewFactor()">Calculate View Factor</a> -->
+      </label>
 
-      <input name="{{'viewFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="viewFactor" id="viewFactor"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('viewFactor')">
+      <input [readonly]="!baselineSelected" name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="viewFactor"
+        id="viewFactor" onfocus="this.select();" (input)="checkViewFactor()" (focus)="focusField('viewFactor')" [ngClass]="{'indicate-different': compareViewFactor(), 'invalid': openingLossesForm.controls.viewFactor.status == 'INVALID'}">
+      <span class="alert-warning pull-right small" *ngIf="viewFactorError !== null">{{viewFactorError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp.</label>
-      <div class="input-group">
-        <input name="{{'insideTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="insideTemp" id="insideTemp"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('insideTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareInsideTemperature(), 'error': temperatureError !== null, 'invalid': openingLossesForm.controls.insideTemp.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'insideTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="insideTemp" id="insideTemp"
+          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('insideTemp')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temp.</label>
-      <div class="input-group">
-        <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+      <div class="input-group" [ngClass]="{'indicate-different': compareAmbientTemperature(), 'error': temperatureError !== null, 'invalid': openingLossesForm.controls.ambientTemp.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'ambientTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="ambientTemp" id="ambientTemp"
+          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="emissivity" aria-describedby="emissivityHelp">Emissivity of the Source
-    <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
-    </label>
-      <input name="{{'emissivity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="emissivity" id="emissivity"
-        onfocus="this.select();" (input)="checkSurfaceEmissivity()" (focus)="focusField('emissivity')">
+        <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
+      </label>
+      <input [readonly]="!baselineSelected" name="{{'emissivity_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="emissivity"
+        id="emissivity" onfocus="this.select();" (input)="checkSurfaceEmissivity()" (focus)="focusField('emissivity')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': compareEmissivity(), 'error': emissivityError !== null, 'invalid': openingLossesForm.controls.emissivity.status == 'INVALID'}">
       <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="percentTimeOpen">% of Time Open</label>
-      <div class="input-group">
-        <input name="{{'percentTimeOpen_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="percentTimeOpen"
-          id="percentTimeOpen" onfocus="this.select();" (input)="checkTimeOpen()" (focus)="focusField('percentTimeOpen')">
+      <div class="input-group" [ngClass]="{'indicate-different': comparePercentTimeOpen(), 'error': timeOpenError !== null, 'invalid': openingLossesForm.controls.percentTimeOpen.status == 'INVALID'}">
+        <input [readonly]="!baselineSelected" name="{{'percentTimeOpen_'+lossIndex}}" type="number" step="1" min="0" max="100" class="form-control" formControlName="percentTimeOpen"
+          id="percentTimeOpen" onfocus="this.select();" (input)="checkTimeOpen()" (focus)="focusField('percentTimeOpen')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="timeOpenError !== null">{{timeOpenError}}</span>

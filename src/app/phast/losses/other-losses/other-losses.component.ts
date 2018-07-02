@@ -3,7 +3,9 @@ import * as _ from 'lodash';
 import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
-import { OtherLossesCompareService } from './other-losses-compare.service';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-other-losses',
   templateUrl: './other-losses.component.html',
@@ -12,8 +14,6 @@ import { OtherLossesCompareService } from './other-losses-compare.service';
 export class OtherLossesComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
@@ -24,18 +24,44 @@ export class OtherLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
-  _otherLosses: Array<any>;
-  firstChange: boolean = true;
-  constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
+  @Input()
+  settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+  @Input()
+  modificationIndex: number;
 
+  _otherLosses: Array<OtherLossObj>;
+  firstChange: boolean = true;
+  lossesLocked: boolean = false;
+  total: number;
+  resultsUnit: string;
+  constructor(private otherLossesService: OtherLossesService) { }
+
+  ngOnInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
+    if (!this._otherLosses) {
+      this._otherLosses = new Array();
+    }
+    this.initForms();
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
       if (changes.addLossToggle) {
         this.addLoss();
+      } else if (changes.modificationIndex) {
+        this._otherLosses = new Array();
+        this.initForms();
       }
     }
     else {
@@ -43,67 +69,37 @@ export class OtherLossesComponent implements OnInit {
     }
   }
 
-
-  ngOnInit() {
-    if (!this._otherLosses) {
-      this._otherLosses = new Array();
-    }
+  initForms() {
     if (this.losses.otherLosses) {
-      this.setCompareVals();
-      this.otherLossCompareService.initCompareObjects();
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
           form: this.otherLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._otherLosses.length + 1)
+          name: 'Loss #' + (this._otherLosses.length + 1),
+          collapse: false
         };
-        this.calculate(tmpLoss);
         this._otherLosses.push(tmpLoss);
       })
+      this.total = this.getTotal();
     }
-    this.otherLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.otherLosses) {
-          this._otherLosses.splice(lossIndex, 1);
-          if (this.otherLossCompareService.differentArray && !this.isBaseline) {
-            this.otherLossCompareService.differentArray.splice(lossIndex, 1);
-          }
-        }
-      }
-    })
-    if (this.isBaseline) {
-      this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    } else {
-      this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    }
+  }
+
+  collapseLoss(loss: OtherLossObj) {
+    loss.collapse = !loss.collapse;
   }
 
   addLoss() {
-    this.otherLossesService.addLoss(this.isBaseline);
-    if (this.otherLossCompareService.differentArray) {
-      this.otherLossCompareService.addObject(this.otherLossCompareService.differentArray.length - 1);
-    }
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
-      name: 'Loss #' + (this._otherLosses.length + 1)
+      name: 'Loss #' + (this._otherLosses.length + 1),
+      collapse: false
     });;
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
-    this.otherLossesService.setDelete(lossIndex);
+    this._otherLosses.splice(lossIndex, 1);
+    this.saveLosses();
+    this.total = this.getTotal();
   }
 
   renameLoss() {
@@ -114,11 +110,6 @@ export class OtherLossesComponent implements OnInit {
     })
   }
 
-  calculate(loss: any) {
-    loss.heatLoss = loss.form.value.heatLoss;
-  }
-
-
   saveLosses() {
     let tmpLosses = new Array<OtherLoss>();
     this._otherLosses.forEach(loss => {
@@ -126,7 +117,7 @@ export class OtherLossesComponent implements OnInit {
       tmpLosses.push(tmpLoss);
     })
     this.losses.otherLosses = tmpLosses;
-    this.setCompareVals();
+    this.total = this.getTotal();
     this.savedLoss.emit(true);
   }
 
@@ -134,16 +125,13 @@ export class OtherLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals() {
-    if (this.isBaseline) {
-      this.otherLossCompareService.baselineOtherLoss = this.losses.otherLosses;
-    } else {
-      this.otherLossCompareService.modifiedOtherLoss = this.losses.otherLosses;
-    }
-    if (this.otherLossCompareService.differentArray && !this.isBaseline) {
-      if (this.otherLossCompareService.differentArray.length != 0) {
-        this.otherLossCompareService.checkOtherLosses();
-      }
-    }
+  getTotal() {
+    return _.sumBy(this.losses.otherLosses, 'heatLoss');
   }
+}
+
+export interface OtherLossObj {
+  form: FormGroup,
+  name: string,
+  collapse: boolean
 }

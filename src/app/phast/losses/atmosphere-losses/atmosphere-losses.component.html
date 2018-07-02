@@ -3,35 +3,52 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Atmosphere Loss</button>
 </div>-->
 
-<div class="no-data no-data-phast" *ngIf="_atmosphereLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_atmosphereLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Atmosphere Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_atmosphereLosses.length == 0 && lossesLocked) || (_atmosphereLosses.length == 0 && !inSetup)">
+  <h3>You have no Atmosphere Losses</h3>
+  <h4>To add Atmosphere Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
+
+
+
+
 <div class="card-form" *ngFor="let loss of _atmosphereLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <form class="name-input-form" [formGroup]="loss.form">
+        <div class="input-group">
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (changeField)="changeField($event)" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-atmosphere-losses-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setInputError($event)" [inSetup]="inSetup"></app-atmosphere-losses-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row loss-total" [ngClass]="{'input-error': inputError}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small">Total Heat Loss</label>
-        <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        <label class="bold">Atmosphere Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center bold">
+          {{loss.heatLoss | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.heatLoss" class="text-center bold">
+          &mdash; &mdash;
         </div>
       </div>
     </div>

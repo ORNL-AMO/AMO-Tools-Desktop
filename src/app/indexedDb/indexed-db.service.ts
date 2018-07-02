@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials'
-import { SuiteDbService } from '../suiteDb/suite-db.service';
+import { UpdateDataService } from '../shared/update-data.service';
+import { Calculator } from '../shared/models/calculators';
+import { BehaviorSubject } from 'rxjs';
 
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 3,
+  version: 4,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -22,7 +23,8 @@ var myDb: any = {
     atmosphereSpecificHeat: 'atmosphereSpecificHeat',
     wallLossesSurface: 'wallLossesSurface',
     flueGasMaterial: 'flueGasMaterial',
-    solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial'
+    solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
+    calculator: 'calculator'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -47,8 +49,7 @@ export class IndexedDbService {
   private _window: Window;
 
   initCustomObjects: boolean = true;
-
-  constructor(private windowRef: WindowRefService, private suiteDbService: SuiteDbService) {
+  constructor(private windowRef: WindowRefService, private updateDataService: UpdateDataService) {
     this._window = windowRef.nativeWindow;
   }
 
@@ -150,6 +151,17 @@ export class IndexedDbService {
           })
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
+        //calculator
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.calculator)) {
+          console.log('creating calculator store...');
+          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+          calculatorObjStore.createIndex('id', 'id', { unique: false });
+          calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+          calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+        }
       }
       myDb.setDefaultErrorHandler(this.request, myDb);
 
@@ -216,7 +228,9 @@ export class IndexedDbService {
       let getRequest = store.get(id);
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
+        //e.target.result = Assessment
+        let assessment = this.updateDataService.checkAssessment(e.target.result);
+        resolve(assessment);
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
@@ -224,22 +238,27 @@ export class IndexedDbService {
     })
   }
 
-  getDirectoryAssessments(directoryId: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.assessments);
-      let index = store.index('directoryId');
-      let indexGetRequest = index.getAll(directoryId);
-      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  // getDirectoryAssessments(directoryId: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.assessments);
+  //     let index = store.index('directoryId');
+  //     let indexGetRequest = index.getAll(directoryId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
 
-      indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
-      }
-      indexGetRequest.onerror = (e) => {
-        reject(e);
-      }
-    })
-  }
+  //     indexGetRequest.onsuccess = (e) => {
+  //       //e.target.result = Array<Assessments>
+  //       let assessments: Array<Assessment> = e.target.result;
+  //       assessments.forEach(assessment => {
+  //         assessment = this.updateDataService.checkAssessment(assessment);
+  //       });
+  //       resolve(assessments)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
 
   putAssessment(assessment: Assessment): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -296,20 +315,20 @@ export class IndexedDbService {
     });
   }
 
-  getDirectory(id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let getRequest = store.get(id);
-      myDb.setDefaultErrorHandler(getRequest, myDb);
-      getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
-      }
-      getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
-  }
+  // getDirectory(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let getRequest = store.get(id);
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       resolve(e.target.result);
+  //     }
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result)
+  //     }
+  //   })
+  // }
 
   getAllDirectories(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -326,21 +345,21 @@ export class IndexedDbService {
     })
   }
 
-  getChildrenDirectories(parentDirectoryId): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.directories);
-      let index = store.index('parentDirectoryId');
-      let indexGetRequest = index.getAll(parentDirectoryId);
-      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
-      indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
-      }
-      indexGetRequest.onerror = (e) => {
-        reject(e);
-      }
-    })
-  }
+  // getChildrenDirectories(parentDirectoryId): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.directories);
+  //     let index = store.index('parentDirectoryId');
+  //     let indexGetRequest = index.getAll(parentDirectoryId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  //     indexGetRequest.onsuccess = (e) => {
+  //       resolve(e.target.result)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
 
   putDirectory(directoryRef: DirectoryDbRef): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -396,49 +415,78 @@ export class IndexedDbService {
     });
   }
 
-  getSettings(id: number): Promise<any> {
+  // getSettings(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.settings);
+  //     let getRequest = store.get(id);
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       let settingsArr: Array<Settings> = e.target.result;
+  //       settingsArr.forEach(setting => {
+  //         setting = this.updateDataService.checkSettings(setting);
+  //       })
+  //       resolve(settingsArr);
+  //     }
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result)
+  //     }
+  //   })
+  // }
+
+  // getDirectorySettings(directoryId): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.settings);
+  //     let index = store.index('directoryId');
+  //     let indexGetRequest = index.getAll(directoryId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  //     indexGetRequest.onsuccess = (e) => {
+  //       //e.target.result = Array<Settings>
+  //       let settingsArr: Array<Settings> = e.target.result;
+  //       settingsArr.forEach(setting => {
+  //         setting = this.updateDataService.checkSettings(setting);
+  //       })
+  //       resolve(settingsArr)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
+
+  // getAssessmentSettings(assessmentId): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.settings);
+  //     let index = store.index('assessmentId');
+  //     let indexGetRequest = index.getAll(assessmentId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  //     indexGetRequest.onsuccess = (e) => {
+  //       //e.target.result = Array<Settings>
+  //       let settingsArr: Array<Settings> = e.target.result;
+  //       settingsArr.forEach(setting => {
+  //         setting = this.updateDataService.checkSettings(setting);
+  //       })
+  //       resolve(settingsArr)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
+
+  getAllSettings(): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.settings);
-      let getRequest = store.get(id);
+      let getRequest = store.getAll();
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
-      }
-    })
-  }
-
-  getDirectorySettings(directoryId): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.settings);
-      let index = store.index('directoryId');
-      let indexGetRequest = index.getAll(directoryId);
-      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
-      indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
-      }
-      indexGetRequest.onerror = (e) => {
-        reject(e);
-      }
-    })
-  }
-
-  getAssessmentSettings(assessmentId): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
-      let store = transaction.objectStore(myDb.storeNames.settings);
-      let index = store.index('assessmentId');
-      let indexGetRequest = index.getAll(assessmentId);
-      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
-      indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
-      }
-      indexGetRequest.onerror = (e) => {
-        reject(e);
       }
     })
   }
@@ -496,7 +544,44 @@ export class IndexedDbService {
     });
   }
 
-  getGasLoadChargeMaterial(id: number): Promise<any> {
+  putGasLoadChargeMaterial(material: GasLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: GasLoadChargeMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  deleteGasLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+
+  getGasLoadChargeMaterial(id: number): Promise<GasLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
@@ -511,7 +596,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllGasLoadChargeMaterial(): Promise<any> {
+  getAllGasLoadChargeMaterial(): Promise<Array<GasLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
@@ -525,6 +610,7 @@ export class IndexedDbService {
       }
     })
   }
+  
   //liquidLoadChargeMaterial
   addLiquidLoadChargeMaterial(_material: LiquidLoadChargeMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -541,7 +627,43 @@ export class IndexedDbService {
     });
   }
 
-  getLiquidLoadChargeMaterial(id: number): Promise<any> {
+  putLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: LiquidLoadChargeMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  deleteLiquidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  getLiquidLoadChargeMaterial(id: number): Promise<LiquidLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
@@ -556,7 +678,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllLiquidLoadChargeMaterial(): Promise<any> {
+  getAllLiquidLoadChargeMaterial(): Promise<Array<LiquidLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
@@ -587,7 +709,43 @@ export class IndexedDbService {
     });
   }
 
-  getSolidLoadChargeMaterial(id: number): Promise<any> {
+  deleteSolidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  putSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: SolidLoadChargeMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  getSolidLoadChargeMaterial(id: number): Promise<SolidLoadChargeMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
@@ -602,7 +760,7 @@ export class IndexedDbService {
     })
   }
 
-  getAllSolidLoadChargeMaterial(): Promise<any> {
+  getAllSolidLoadChargeMaterial(): Promise<Array<SolidLoadChargeMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
@@ -633,7 +791,43 @@ export class IndexedDbService {
     });
   }
 
-  getAtmosphereSpecificHeatById(id: number): Promise<any> {
+  deleteAtmosphereSpecificHeat(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  putAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: AtmosphereSpecificHeat = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  getAtmosphereSpecificHeatById(id: number): Promise<AtmosphereSpecificHeat> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
@@ -648,7 +842,7 @@ export class IndexedDbService {
     })
   }
 
-  getAtmosphereSpecificHeat(): Promise<any> {
+  getAtmosphereSpecificHeat(): Promise<Array<AtmosphereSpecificHeat>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
@@ -679,7 +873,43 @@ export class IndexedDbService {
     });
   }
 
-  getWallLossesSurfaceById(id: number): Promise<any> {
+  deleteWallLossesSurface(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  putWallLossesSurface(material: WallLossesSurface): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: WallLossesSurface = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
+  getWallLossesSurfaceById(id: number): Promise<WallLossesSurface> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
@@ -694,7 +924,7 @@ export class IndexedDbService {
     })
   }
 
-  getWallLossesSurface(): Promise<any> {
+  getWallLossesSurface(): Promise<Array<WallLossesSurface>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
@@ -724,8 +954,44 @@ export class IndexedDbService {
       }
     });
   }
+  
+  putFlueGasMaterial(material: FlueGasMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: FlueGasMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
 
-  getFlueGasMaterialById(id: number): Promise<any> {
+  deleteFlueGasMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  getFlueGasMaterialById(id: number): Promise<FlueGasMaterial> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
@@ -740,7 +1006,7 @@ export class IndexedDbService {
     })
   }
 
-  getFlueGasMaterials(): Promise<any> {
+  getFlueGasMaterials(): Promise<Array<FlueGasMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
@@ -770,6 +1036,42 @@ export class IndexedDbService {
     });
   }
 
+  deleteSolidLiquidFlueGasMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  putSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let getRequest = store.get(material.id);
+      getRequest.onsuccess = (event) => {
+        let tmpMaterial: SolidLiquidFlueGasMaterial = event.target.result;
+        tmpMaterial = material;
+        let updateRequest = store.put(material);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    });
+  }
+
   getSolidLiquidFlueGasMaterialById(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readonly');
@@ -785,7 +1087,7 @@ export class IndexedDbService {
     })
   }
 
-  getSolidLiquidFlueGasMaterials(): Promise<any> {
+  getSolidLiquidFlueGasMaterials(): Promise<Array<SolidLiquidFlueGasMaterial>> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
@@ -799,4 +1101,120 @@ export class IndexedDbService {
       }
     })
   }
+
+
+  //calculator
+  addCalculator(_calculator: Calculator): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let addRequest = store.add(_calculator);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
+  // getDirectoryCalculator(directoryId: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.calculator);
+  //     let index = store.index('directoryId');
+  //     let indexGetRequest = index.getAll(directoryId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  //     indexGetRequest.onsuccess = (e) => {
+  //       let calculators: Array<Calculator> = e.target.result;
+  //       resolve(calculators)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
+  // getAssessmentCalculator(assessmentId: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+  //     let store = transaction.objectStore(myDb.storeNames.calculator);
+  //     let index = store.index('assessmentId');
+  //     let indexGetRequest = index.getAll(assessmentId);
+  //     myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+  //     indexGetRequest.onsuccess = (e) => {
+  //       let calculators: Array<Calculator> = e.target.result;
+  //       resolve(calculators)
+  //     }
+  //     indexGetRequest.onerror = (e) => {
+  //       reject(e);
+  //     }
+  //   })
+  // }
+
+  // getCalculator(id: number): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readonly');
+  //     let store = transaction.objectStore(myDb.storeNames.calculator);
+  //     let getRequest = store.get(id);
+  //     myDb.setDefaultErrorHandler(getRequest, myDb);
+  //     getRequest.onsuccess = (e) => {
+  //       resolve(e.target.result);
+  //     }
+  //     getRequest.onerror = (error) => {
+  //       reject(error.target.result)
+  //     }
+  //   })
+  // }
+
+  getAllCalculator(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  putCalculator(calculator: Calculator): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let getRequest = store.get(calculator.id);
+      getRequest.onsuccess = (event) => {
+        let tmpCalc: Calculator = event.target.result;
+        tmpCalc = calculator;
+        let updateRequest = store.put(tmpCalc);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    })
+  }
+
+  deleteCalculator(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
 }

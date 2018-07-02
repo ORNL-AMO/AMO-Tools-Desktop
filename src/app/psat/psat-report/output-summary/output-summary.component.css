@@ -1,7 +1,29 @@
+.output-summary .table {
+    font-size: small;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+}
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+.output-summary .table tr.callout td {
+    font-weight: bold;
+}
+
+.graph-col{
+    padding-left: 0px;
+}
+
 @media print {
-    tr{
-        border-bottom: 2px solid black;
-    }
     .show-print{
         display: inline !important;
     }
@@ -23,15 +45,6 @@
     font-size: 16px !important;
 }
 
-/*th{
-    text-align: center;
-}
-
-td{
-    text-align: center;
-    vertical-align: middle;
-}*/
-
 .positive-savings{
     color: #27AE60;
 }
@@ -40,16 +53,12 @@ td{
 	color: red;
 }
 
-.chart-row{
-    margin: 0;
-    padding: 15px;
-}
 
 .max-savings{
     border: solid 4px #27AE60;
 }
 
 .selected-modification{
-    box-shadow: 0px 0px 6px 0px #27AE60;
     z-index: 2;
+    background: #e5efe9;
 }

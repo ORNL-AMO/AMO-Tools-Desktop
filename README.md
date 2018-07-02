@@ -1,92 +1,28 @@
-# AMOToolsDesktop
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/ORNL-AMO/AMO-Tools-Desktop.svg?columns=all)](http://waffle.io/ORNL-AMO/AMO-Tools-Desktop)
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
+# AMO-Tools-Desktop
+### Downloads  ![Github Releases](https://img.shields.io/github/downloads/ORNL-AMO/AMO-Tools-Desktop/latest/total.svg?label=Current%20Release)  ![Github All Releases](https://img.shields.io/github/downloads/ORNL-AMO/AMO-Tools-Desktop/total.svg?label=All%20Time&colorB=afdffe)
+
+## Dependencies
+- Node.js (https://nodejs.org/en/)
+- Python 2.7 \(3.x.x is not supported by node-gyp\)
+- A C/C++ toolchain, such as [GCC](https://gcc.gnu.org/) on Linux, [Xcode](https://developer.apple.com/xcode/) on macOS, or [Visual Studio Build Tools](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017) on Windows
+- Make (https://www.gnu.org/software/make/)
+- See https://github.com/nodejs/node-gyp for a detailed guide on how to satisfy the node-gyp dependencies for your specific operating system.
 
 ## Build
+- To remove all project-related node modules: `npm run clean` from the root project directory
+- To install all required packages: `npm install`
+- To build the angular project: `npm run build` \(or `npm run build-prod` for a production build)
+- To start the electron app: `npm run electron`
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Package
+- To build a package:`npm install && npm run build` and then: `npm run OS` where `OS` is either `mac`, `linux` or `windows`
+- The packages will be placed in `../output`
+- Example: `npm install && npm run build-prod && npm run windows` will make a production-build installer for Windows
 
-## Electron
-
-After running `npm run build`, run `npm run electron` and an electron app will be served up.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
-
-## Deploying to GitHub Pages
-
-Run `ng github-pages:deploy` to deploy to GitHub Pages.
-
-## Further help
-
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## Building Packages
-
-*Due to issues from building the amo-tools-suite node modules, packages cannot be built cross platform.*
-For all builds, run `npm run clean` followed by `npm run build` before building for `mac`, `linux` or `windows`.
-
-## Building for Windows
-
-*electron-builder makes one installer that will install either x64 or ia32 as appropriate*  
-
-### Prerequisites:  
-  * electron-builder v13.9.0+  
-  * electron-packager v8.5.2  
-
-Run `npm run windows` to build the installer in x64 and ia32.   
-Installer will be in ../output  
-latest.yml will be in ../output  
-
-## Building for Linux
-
-### Prerequisites:  
-  * icnutils  
-  * graphicsmagick  
-  * xz-utils  
-  * rpm  
-  * apt  
-  * electron-builder v13.9.0+  
-  * electron-packager v8.5.2  
-
-Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64
-Packages will be in ../output  
-
-*Cannot build cross platform on Linux due to building the amo-tools-suite node module. To build for ia32 on 32bit Linux, run `./node_modules/.bin/build -l --ia32`
-
-## Building for Mac
-*Can only be done on Mac due to signing issues*  
-
-### Prerequisites:  
-  * electron-builder v13.9.0+  
-  * electron-packager v8.5.2  
-  * An Apple Developer account and correct code signing certificate  
-
-Run `npm run mac` to build a .zip and .dmg in x64 and ia32.  
-Packages will be in ../output/mac  
-latest-mac.json will be in ../output/github  
-
-*The code will be signed with a certificate from your keychain automatically as long as it is appropriate and valid*  
-
-## Auto Update
-
-*electron-builder and electron autoUpdate does not support auto updating on Linux*
-
-### Prerequisites:  
-  * electron-updater v1.8.2  
-  * electron-log v1.3.0  
-  * electron-builder v13.9.0+  
-  * electron-packager v8.5.2  
-
-Build the application as directed above. electron-builder will create the installer/executable AND a file named latest.yml or latest-mac.json (when building Mac packages).
-
-Go to the AMO-Tools-Desktop releases page in GitHub.  
-
-Draft a new release. For the tag version, make sure to include a `v` before the version number (example: v0.0.1).  
-
-Upload BOTH the installer/executable AND the latest.yml and latest-mac.json. (the autoUpdater looks for the latest.yml and latest-mac.json in the release. If they are not present, it will not work.)  
-
-Publish the release.  
-
-Once the older version of the application is started, it will check for an update, download it, and install it automatically.  
+## For Developers
+- To generate a new angular module: `npm run ng g module path/to/module`
+- To generate a new angular component: `npm run ng g component path/to/component`
+- For more information, see [the angular docs](https://docs.angularjs.org/guide/component)
+- For making small, frequent changes try using `npm run build-watch`. This type of build will watch for changes made to source files and only recompile what is necessary

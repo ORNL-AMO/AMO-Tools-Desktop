@@ -4,6 +4,10 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -12,7 +16,7 @@ import { LossesService } from '../../losses.service';
 })
 export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,17 +27,32 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
-  counter: any;
+
+  initialTempError: string = null;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService,private lossesService: LossesService) { }
+  specificHeatLiquidError: string = null;
+  specificHeatVaporError: string = null;
+  feedLiquidRateError: string = null;
+  chargeVaporError: string = null;
+  chargeReactedError: string = null;
+  heatOfReactionError: string = null;
+  materialLatentHeatError: string = null;
+  inletOverVaporizingError: string = null;
+  outletOverVaporizingError: string = null;
+  showModal: boolean = false;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -50,20 +69,16 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        if (this.chargeMaterialForm.value.materialLatentHeat == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
+        if (this.chargeMaterialForm.controls.materialLatentHeat.value == '') {
           this.setProperties();
         }
       }
     }
-    this.checkDischargeTemp();
-  }
-
-  ngAfterViewInit() {
+    this.checkInputError(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.initDifferenceMonitor();
   }
 
   ngOnDestroy() {
@@ -71,175 +86,271 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.chargeMaterialForm.controls.materialId.disable();
+    this.chargeMaterialForm.controls.endothermicOrExothermic.disable();
+
+    // this.chargeMaterialForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-
-
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.chargeMaterialForm.controls.materialId.enable();
+    this.chargeMaterialForm.controls.endothermicOrExothermic.enable();
+    // this.chargeMaterialForm.enable();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
-  checkDischargeTemp() {
-    if ((this.chargeMaterialForm.value.dischargeTemperature > this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized == 0) {
-      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
-    } else if ((this.chargeMaterialForm.value.dischargeTemperature < this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized > 0) {
-      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
-    }else{
-      this.dischargeTempError = null;
-    }
+  focusOut() {
+    this.changeField.emit('default');
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+    let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    }
     this.chargeMaterialForm.patchValue({
-      materialLatentHeat: selectedMaterial.latentHeat,
-      materialSpecificHeatLiquid: selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatVapor: selectedMaterial.specificHeatVapor,
-      materialVaporizingTemperature: selectedMaterial.vaporizationTemperature
+      materialLatentHeat: this.roundVal(selectedMaterial.latentHeat, 4),
+      materialSpecificHeatLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+      materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
+      materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
     })
-    this.checkForm();
+    this.startSavePolling();
   }
-  emitSave() {
-    this.saveEmit.emit(true);
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value < 0) {
+      this.specificHeatLiquidError = 'Specific Heat of Liquid must be equal or greater than 0';
+    } else {
+      this.specificHeatLiquidError = null;
+    }
+    if (this.chargeMaterialForm.controls.materialSpecificHeatVapor.value < 0) {
+      this.specificHeatVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
+    } else {
+      this.specificHeatVaporError = null;
+    }
+    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
+      this.feedLiquidRateError = 'Charge Feed Rate must be greater than 0';
+    } else {
+      this.feedLiquidRateError = null;
+    }
+    if (this.chargeMaterialForm.controls.liquidVaporized.value < 0 || this.chargeMaterialForm.controls.liquidVaporized.value > 100) {
+      this.chargeVaporError = 'Charge Liquid Vaporized must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeVaporError = null;
+    }
+    if (this.chargeMaterialForm.controls.liquidReacted.value < 0 || this.chargeMaterialForm.controls.liquidReacted.value > 100) {
+      this.chargeReactedError = 'Charge Liquid Reacted must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeReactedError = null;
+    }
+    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
+      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+    } else {
+      this.heatOfReactionError = null;
+    }
+    if (this.chargeMaterialForm.controls.materialLatentHeat.value < 0) {
+      this.materialLatentHeatError = 'Latent Heat of Vaporization must be equal or greater than 0';
+    } else {
+      this.materialLatentHeatError = null;
+    }
+
+    if ((this.chargeMaterialForm.controls.dischargeTemperature > this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+    } else if ((this.chargeMaterialForm.controls.dischargeTemperature < this.chargeMaterialForm.controls.materialVaporizingTemperature.value) && this.chargeMaterialForm.controls.liquidVaporized.value > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+    } else {
+      this.dischargeTempError = null;
+    }
+
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.dischargeTemperature.value) {
+      this.initialTempError = "Initial Temperature cannot be greater than Outlet Temperature";
+    }
+    else {
+      this.initialTempError = null;
+    }
+
+    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.materialVaporizingTemperature.value && this.chargeMaterialForm.controls.liquidVaporized.value <= 0) {
+      this.inletOverVaporizingError = "The initial temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    }
+    else {
+      this.inletOverVaporizingError = null;
+    }
+    if (this.chargeMaterialForm.controls.dischargeTemperature.value > this.chargeMaterialForm.controls.materialVaporizingTemperature.value && this.chargeMaterialForm.controls.liquidVaporized.value <= 0) {
+      this.outletOverVaporizingError = "The discharge temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.";
+    }
+    else {
+      this.outletOverVaporizingError = null;
+    }
+
+    if (this.initialTempError || this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {
+      this.inputError.emit(true);
+      this.chargeMaterialCompareService.inputError.next(true);
+    } else {
+      this.inputError.emit(false);
+      this.chargeMaterialCompareService.inputError.next(false);
+    }
   }
 
   startSavePolling() {
-    this.checkForm();
-    this.checkDischargeTemp();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.saveEmit.emit(true);
+    this.calculate.emit(true);
   }
-
-  initDifferenceMonitor() {
-    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && this.chargeMaterialCompareService.differentArray.length != 0) {
-      if (this.chargeMaterialCompareService.differentArray[this.lossIndex]) {
-        let doc = this.windowRefService.getDoc();
-        //materialName
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.materialId.subscribe((val) => {
-          let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
-          materialNameElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //materialSpecificHeatLiquid
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.subscribe((val) => {
-          let materialSpecificHeatLiquidElements = doc.getElementsByName('materialSpecificHeatLiquid_' + this.lossIndex);
-          materialSpecificHeatLiquidElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //materialVaporizingTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.subscribe((val) => {
-          let materialVaporizingTemperatureElements = doc.getElementsByName('materialVaporizingTemperature_' + this.lossIndex);
-          materialVaporizingTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //materialLatentHeat
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.latentHeat.subscribe((val) => {
-          let materialLatentHeatElements = doc.getElementsByName('materialLatentHeat_' + this.lossIndex);
-          materialLatentHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //materialSpecificHeatVapor
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.subscribe((val) => {
-          let materialSpecificHeatVaporElements = doc.getElementsByName('materialSpecificHeatVapor_' + this.lossIndex);
-          materialSpecificHeatVaporElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //feedRate
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.subscribe((val) => {
-          let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
-          feedRateElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //initialTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.subscribe((val) => {
-          let initialTemperatureElements = doc.getElementsByName('initialTemperature_' + this.lossIndex);
-          initialTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //dischargeTemperature
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.subscribe((val) => {
-          let dischargeTemperatureElements = doc.getElementsByName('dischargeTemperature_' + this.lossIndex);
-          dischargeTemperatureElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //liquidVaporized
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.subscribe((val) => {
-          let liquidVaporizedElements = doc.getElementsByName('liquidVaporized_' + this.lossIndex);
-          liquidVaporizedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //liquidReacted
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.percentReacted.subscribe((val) => {
-          let liquidReactedElements = doc.getElementsByName('liquidReacted_' + this.lossIndex);
-          liquidReactedElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //heatOfReaction
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.subscribe((val) => {
-          let heatOfReactionElements = doc.getElementsByName('heatOfReaction_' + this.lossIndex);
-          heatOfReactionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //endothermicOrExothermic
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.subscribe((val) => {
-          let endothermicOrExothermicElements = doc.getElementsByName('endothermicOrExothermic_' + this.lossIndex);
-          endothermicOrExothermicElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
-        //additionalHeatRequired
-        this.chargeMaterialCompareService.differentArray[this.lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.subscribe((val) => {
-          let additionalHeatRequiredElements = doc.getElementsByName('additionalHeatRequired_' + this.lossIndex);
-          additionalHeatRequiredElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+  checkSpecificHeatDiffLiquid() {
+    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+        material.specificHeatLiquid = this.roundVal(val, 4);
+      }
+      if (material.specificHeatLiquid != this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value) {
+        return true;
+      } else {
+        return false;
       }
     }
   }
 
+  checkVaporizingTempDiff() {
+    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
+        material.vaporizationTemperature = this.roundVal(val, 4);
+      }
+      if (material.vaporizationTemperature != this.chargeMaterialForm.controls.materialVaporizingTemperature.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  checkLatentHeatDiff() {
+    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
+        material.latentHeat = this.roundVal(val, 4);
+      }
+      if (material.latentHeat != this.chargeMaterialForm.controls.materialLatentHeat.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  checkSpecificHeatVaporDiff() {
+    let material: LiquidLoadChargeMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
+        material.specificHeatVapor = this.roundVal(val, 4);
+      }
+      if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeatVapor.value) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  checkFeedRateDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidChargeFeedRate(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  canCompare() {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
+      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  checkInitialTempDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidInitialTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkDischargeTempDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidDischargeTemperature(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkChargeReactedDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidPercentReacted(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkReactionHeatDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidReactionHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkExothermicDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidThermicReaction(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkAdditionalHeatDiff() {
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidAdditionalHeat(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkLiquidVaporizedDiff(){
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidPercentVaporized(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
+  checkMaterialDiff(){
+    if (this.canCompare()) {
+      return this.chargeMaterialCompareService.compareLiquidMaterialId(this.lossIndex);
+    } else {
+      return false;
+    }
+  }
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
-
-
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
-      if(newMaterial.length != 0){
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
         })
@@ -247,6 +358,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       }
     }
     this.materialModal.hide();
+    this.showModal = false;
     this.lossesService.modalOpen.next(false);
   }
 }

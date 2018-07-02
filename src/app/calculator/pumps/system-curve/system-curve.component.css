@@ -1,13 +1,18 @@
-.efficiency-results{
-    padding: 0px !important;
+a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-.calc-help{
-    padding: 8px !important;
+
+.reset-link{
+    padding: 10px;
 }
 
+.reset-btn{
+    padding: 6px;
+}
 
-
-.tab-content{
-    min-height: none;
+.btn-col{
+    padding-top: 20px;
 }

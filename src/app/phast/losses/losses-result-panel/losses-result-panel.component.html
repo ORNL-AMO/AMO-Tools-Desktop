@@ -1,0 +1,36 @@
+<div class="results-panel help-panel col-12">
+  <div class="row" #resultTabs>
+    <div class="col-12 tab-col">
+    <ul class="tabs primary tab-row">
+      <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
+      </li><!--
+      --><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help', 'tab-3': !inSetup, 'tab-2': inSetup}">
+        <a (click)="setTab('help')">Help</a>
+      </li><!--
+      --><li *ngIf="!inSetup" class="calc-tab tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}">
+        <a (click)="setTab('notes')">Notes</a>
+      </li>
+    </ul>
+    </div>
+  </div>
+  <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'help'" [ngStyle]="{'height.px': helpHeight}">
+    <div class="col-12">
+      <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"></app-losses-help>
+    </div>
+  </div>
+  <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
+    <div class="col-12 data-table">
+      <app-results-data [phast]="phast" [inPhast]="true" [settings]="settings" [inSetup]="inSetup" [toggleCalculate]="toggleCalculate"
+        [modification]="modification" [inReport]="false"></app-results-data>
+    </div>
+  </div>
+  <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">
+    <div *ngIf="modification" class="col-12 notes-col">
+      <app-notes [(notes)]="modification.notes" [currentTab]="lossesTab" (emitSave)="save()"></app-notes>
+      </div>
+      <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
+        You must add a modification to take notes on it.
+      </div>
+  </div>
+</div>

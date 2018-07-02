@@ -1,0 +1,12 @@
+a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus {
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:not([href]):not([tabindex]) {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}

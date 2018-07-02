@@ -1,39 +1,60 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Extended Surface Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Surface Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Extended Surface Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
+<div class="no-data no-data-phast no-data-no-add" *ngIf="(_surfaceLosses.length == 0 && lossesLocked) || (_surfaceLosses.length == 0 && !inSetup)">
+  <h3>You have no Extended Surface Losses</h3>
+  <h4>To add Extended Surface Losses you will need to delete your current modifications and return to system setup.</h4>
+</div>
 
 <div class="card-form" *ngFor="let loss of _surfaceLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <form class="name-input-form" [formGroup]="loss.form">
+        <div class="input-group">
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-extended-surface-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-extended-surface-losses-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-extended-surface-losses-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
-        <label class="small">Heat Loss</label>
-        <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
+        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+          {{loss.heatLoss | sigFigs:'6'}}
+          <span>{{resultsUnit}}</span>
         </div>
+        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="total">
+  <div class="col-12 loss-total">
+    <div class="d-flex">
+      <div class="w-50 bold">
+        Extended Surface Total
+      </div>
+      <div class="text-center w-50 bold">
+        {{total | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
       </div>
     </div>
   </div>

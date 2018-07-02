@@ -1,140 +1,126 @@
-<form #formRef [formGroup]="psatForm" *ngIf="psatForm">
-  <div class="row">
+<form [formGroup]="psatForm" *ngIf="psatForm">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
-      <h5>Field Data</h5>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="operatingFraction">Operating Fraction</label>
-    <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-      id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
-      [ngClass]="{'invalid': checkOpFraction() == false}">
-    <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="costKwHr">Cost</label>
-    <div class="input-group">
-      <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
-        (input)="checkCost()" (focus)="focusField('costKwHr')" onfocus="this.select();">
-      <span class="input-group-addon units">$/kWh</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="flowRate">Flow Rate</label>
-    <div class="input-group">
-      <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkFlowRate()"
-        (focus)="focusField('flowRate')" onfocus="this.select();">
-      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
-  </div>
-
-  <div class="form-group">
-
-    <label for="head">
-        Head
-        <a [ngClass]="{'disabled-link': !selected}" class="form-text text-help small" (click)="showHeadToolModal()">Calculate Head</a>
-      </label>
-    <div class="input-group">
-      <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="checkHead()"
-        (focus)="focusField('head')" onfocus="this.select();">
-      <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="headError !== null">{{headError}}</span>
-  </div>
-
-  <div class="form-group" *ngIf="baseline">
-    <label for="loadEstimatedMethod">Load Estimation Method</label>
-    <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="startSavePolling()"
-      (focus)="focusField('loadEstimatedMethod')">
-        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
-    </select>
-  </div>
-
-  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power' && baseline">
-    <label for="motorKW">Motor Power</label>
-    <div class="input-group">
-      <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkRatedPower()"
-        (focus)="focusField('motorPower')" onfocus="this.select();">
-      <span class="input-group units">kW</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
-  </div>
-
-  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current' && baseline">
-    <label for="motorAmps">Motor Power</label>
-    <div class="input-group">
-      <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
-        (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();">
-      <span class="input-group-addon units">A</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
-  </div>
-
-  <div class="form-group" *ngIf="baseline">
-    <label for="measuredVoltage">Measured Voltage</label>
-    <div class="input-group">
-      <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
-        (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
-      <span class="units">V</span>
-    </div>
-    <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
-  </div>
-</form>
-<form #formRef2 [formGroup]="psatForm" *ngIf="psatForm">
-  <div *ngIf="!baseline" class="form-group">
-    <label class="form-check-label" style="width: 100%; padding-top: 5px;">
-        <input
-        name="optimizeCalculation"
-        id="optimizeCalculation"
-          class="form-control form-check-input"
-          type="checkbox"
-          formControlName="optimizeCalculation"
-          value="true"
-          (change)="focusField('optimizeCalculation')" >Optimize Pump and Motor combination, automatically</label>
-  </div>
-  <div *ngIf="psatForm.value.optimizeCalculation == true">
-    <div class="form-group">
-      <label for="viscosity">Kinematic Viscosity</label>
-      <div name="viscosity" class="incrementor form-control input-group">
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractViscosity()"><i class="fa fa-minus"></i></button>
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="addViscosity()"><i class="fa fa-plus"></i></button>
-        <input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-          (input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
-        <span class="input-group-addon units">cST</span>
+      <div class="header">
+        <h3>Field Data</h3>
       </div>
+    </div>
+  </div>
+  <div class="setup-form-group">
+    <div class="form-group">
+      <label for="operatingFraction">Operating Fraction</label>
+      <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
+        id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
+        [ngClass]="{'indicate-different': isOperatingFractionDifferent()}">
+      <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="costKwHr">Cost</label>
+      <div class="input-group" [ngClass]="{'indicate-different': isCostKwhrDifferent()}">
+        <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
+          (input)="checkCost()" (focus)="focusField('costKwHr')" onfocus="this.select();">
+        <span class="input-group-addon units">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="flowRate">Flow Rate</label>
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkFlowRate()"
+          (focus)="focusField('flowRate')" onfocus="this.select();">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
+    </div>
+
+    <div class="form-group">
+
+      <label for="head">
+        Head
+        <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" (click)="showHeadToolModal()">Calculate Head</a>
+      </label>
+      <div class="input-group" [ngClass]="{'indicate-different': isHeadDifferent()}">
+        <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="checkHead()"
+          (focus)="focusField('head')" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="headError !== null">{{headError}}</span>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
+      <label for="loadEstimatedMethod">Load Estimation Method</label>
+      <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="startSavePolling()"
+        (focus)="focusField('loadEstimatedMethod')">
+        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Power' && baseline">
+      <label for="motorKW">Motor Power</label>
+      <div class="input-group">
+        <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkRatedPower()"
+          (focus)="focusField('motorPower')" onfocus="this.select();">
+        <span class="input-group units">kW</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
+    </div>
+
+    <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Current' && baseline">
+      <label for="motorAmps">Motor Current</label>
+      <div class="input-group">
+        <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
+          (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();">
+        <span class="input-group-addon units">A</span>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
+      <label for="measuredVoltage">Measured Voltage</label>
+      <div class="input-group">
+        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
+          (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
+        <span class="units">V</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+    </div>
+  </div>
+  <div class="setup-form-group" *ngIf="!baseline">
+    <div class="form-group opt-group">
+      <label>
+        <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
+        <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
+        Optimize Pump and Motor combination for a Fixed Specific Speed</label>
     </div>
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">
         <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
-          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+          (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
     </div>
+    <!--<div class="form-group">-->
+      <!--<label>Fixed specific speed?</label>-->
+      <!--<div name="fixedSpeed" class="form-check">-->
+        <!--<label class="form-check-label">-->
+          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="Yes" (change)="focusField('fixedSpecificSpeed')">Yes-->
+        <!--</label>-->
+        <!--<label class="form-check-label">-->
+          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="No" (change)="focusField('fixedSpecificSpeed')">No-->
+        <!--</label>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="form-group">
-      <label>Fixed specific speed?</label>
-      <div name="fixedSpeed" class="form-check">
-        <label class="form-check-label">
-        <input
-          class="form-check-input"
-          type="radio"
-          formControlName="fixedSpeed"
-          value="Yes"
-          (change)="focusField('fixedSpecificSpeed')">Yes
-        </label>
-        <label class="form-check-label">
-        <input
-          class="form-check-input"
-          type="radio"
-          formControlName="fixedSpeed"
-          value="No"
-          (change)="focusField('fixedSpecificSpeed')">No
-      </label>
+      <label for="implementationCosts">Implementation Costs</label>
+      <div class="input-group">
+        <input name="implementationCosts" type="number" min="0" step="any" class="form-control" formControlName="implementationCosts"
+          id="implementationCosts" (input)="startSavePolling()" (focus)="focusField('implementationCosts')" onfocus="this.select();">
+        <span class="units">$</span>
       </div>
     </div>
   </div>
@@ -146,13 +132,13 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="h3">Pump Head Calculator</div>
         <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true"></app-head-tool>
+        <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true"
+          [assessment]="assessment"></app-head-tool>
       </div>
     </div>
   </div>

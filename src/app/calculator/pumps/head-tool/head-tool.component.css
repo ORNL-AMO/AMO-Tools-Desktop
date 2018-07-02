@@ -1,18 +1,20 @@
-.select-label{
-    width: auto !important;
-    padding-right: 15px;
-    font-size: large;
+.head-tool-toggle-switch{
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
-.select-type{
-    margin-bottom: 15px;
-}
-
-.calc-help{
-    padding: 8px !important;
+.head-tool-toggle-switch .btn{
+    background-color: #2980b9;
 }
 
 
-.tab-content{
-    max-height: 78vh;
+.button-row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #2980b9;
+}
+
+.save-button{
+    background: white;
+    color: black;
 }

@@ -9,9 +9,14 @@
         research institutions, and universities through competitive, merit reviewed funding opportunities designed to investigate novel manufacturing technologies.<br>
         AMO’s tools were designed to help manufacturers increase industrial energy efficiency at the plant-level and for specific systems.
         Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.<br>
+        <br>
         This tool suite can help manufacturers improve the efficiency of specific systems and pieces of equipment within a plant.
         There are also several calculators that can be used independently for system parameter estimations
-        and graphical analysis (e.g., estimate pump head, examine the pump-system curve, converting energy requirements for different heat sources).
+        and graphical analysis (e.g., estimate pump head, examine the pump-system curve, converting energy requirements for different heat sources).<br>
+        <br>
+        This tool was sponsored by an agency of the United States Government. Neither the United States Government nor any agency thereof, nor any of their employees,
+        makes any warranty, express or implied, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information,
+        apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.
       </p>
       <div class="card">
         <div class="card-header" (click)="toggleShowSystemRequirements()">
@@ -21,7 +26,7 @@
             <span class="pull-right" *ngIf="showSystemRequirements"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div *ngIf="showSystemRequirements" class="card-block">
+        <div *ngIf="showSystemRequirements" class="card-body">
           <p>AMO Tools Desktop will operate on the following computers:</p>
           <ul>
             <li>
@@ -45,7 +50,7 @@
           <span class="pull-right" *ngIf="showUser"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-          <div *ngIf="showUser" class="card-block">
+          <div *ngIf="showUser" class="card-body">
             <p>
               The tool is designed for industrial energy coordinators, plant managers, engineers,
               and personnel who are interested in improving system efficiency and measuring potential savings
@@ -63,7 +68,7 @@
            <span class="pull-right" *ngIf="showPSAT"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div *ngIf="showPSAT" class="card-block">
+        <div *ngIf="showPSAT" class="card-body">
             <p>
               The Pumping System Assessment Tool (PSAT), originally developed by Don Casada of Diagnostic Solutions, LLC,
               is a free desktop software tool to evaluate the potential energy savings opportunities of pumping systems
@@ -91,7 +96,7 @@
             </ul>
 
             <h4>Outputs</h4>
-            <p>Base on inputs, PSAT will provide the following:</p>
+            <p>Based on inputs, PSAT will provide the following:</p>
             <ul>
               <li>Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line commercially available
                 equipment of "optimal" equipment</li>
@@ -113,18 +118,16 @@
               <span class="pull-right" *ngIf="showPHAST"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div *ngIf="showPHAST" class="card-block">
-            <p>The Process Heating Assessment and Survey Tool (PHAST), originally developed by E3M, Inc.,
-              Oak Ridge National Laboratory and the Industrial Heating Equipment Association (IHEA),
-              introduces methods to improve thermal efficiency of heating equipment.<br>
-              This tool helps industrial users survey process heating equipment consuming fuel or electricity,
-              and identifies the most energy-intensive equipment.<br>
-              The tool can be used to perform a heat balance that identifies major areas of energy use under
-              various operating conditions and test "what-if" scenarios for various options to reduce energy use.
+        <div *ngIf="showPHAST" class="card-body">
+            <p>The Process Heating Assessment and Survey Tool (PHAST), originally developed by Dr. Arvind Thekdi of E3M, Inc.,
+              Oak Ridge National Laboratory and the Industrial Heating Equipment Association (IHEA), introduces methods to
+              improve thermal efficiency of heating equipment.<br>This tool helps industrial users survey process heating
+              equipment consuming fuel or electricity, and identifies the most energy-intensive equipment.<br>The tool can be
+              used to perform a heat balance that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for various options to reduce energy use.
             </p>
 
             <h4>Inputs</h4>
-            <p>Users will need to inputs the following:</p>
+            <p>Users will need to input the following:</p>
             <ul>
               <li>General manufacturing plant information</li>
               <li>Available energy sources for the plant and the fuel heating value and cost</li>
@@ -152,7 +155,7 @@
             <span class="pull-right" *ngIf="showFAST"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div *ngIf="showFAST" class="card-block">
+        <div *ngIf="showFAST" class="card-body">
           <p>
             The Fan System Assessment Tool (FSAT) is a free online software tool that helps industrial users
             quantify energy use and savings opportunities in industrial fan systems.

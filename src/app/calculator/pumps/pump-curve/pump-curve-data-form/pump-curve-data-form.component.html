@@ -1,0 +1,43 @@
+<label class="group-label">
+    Pump Data</label>
+<div class="row">
+  <div class="col-12">
+    <label>Order</label>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-6">
+    <select id="dataOrder" name="dataOrder" class="form-control" [(ngModel)]="pumpCurveForm.dataOrder" (focus)="focusField('dataOrder')"
+      (change)="emitCalculateChanges()">
+      <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+    </select>
+  </div>
+  <div class="col-6">
+    <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
+  </div>
+</div>
+<div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">
+  <div class="row align-items-end">
+    <div class="form-group col-5">
+      <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+      <div class="input-group">
+        <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
+          (focus)="focusField('flow')" (input)="emitCalculateChanges()">
+        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+      </div>
+    </div>
+    <div class="form-group col-5">
+      <label class="section-label" *ngIf="index == 0" for="head">Head</label>
+      <div class="input-group">
+        <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
+          (focus)="focusField('head')" (input)="emitCalculateChanges()">
+        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+      </div>
+    </div>
+    <div class="col-2" style="height: 100%;">
+      <span class="float-right" *ngIf="pumpCurveForm.dataRows.length != 1">
+        <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
+      </span>
+    </div>
+  </div>
+</div>

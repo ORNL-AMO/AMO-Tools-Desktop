@@ -1,12 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../shared/models/phast/energyEquivalency';
 import { PhastService } from '../../../phast/phast.service';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+
 @Component({
   selector: 'app-energy-equivalency',
   templateUrl: './energy-equivalency.component.html',
   styleUrls: ['./energy-equivalency.component.css']
 })
 export class EnergyEquivalencyComponent implements OnInit {
+  @Input()
+  settings: Settings;
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   energyEquivalencyElectric: EnergyEquivalencyElectric = {
     fuelFiredEfficiency: 60,
@@ -22,21 +37,61 @@ export class EnergyEquivalencyComponent implements OnInit {
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
 
-  currentField: string = 'fuelFiredEfficiency';
+  currentField: string = 'default';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.calculateElectric();
-    this.calculateFuel();
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+      this.initDefaultValues(this.settings);
+      this.calculateElectric();
+      this.calculateFuel();
+    } else {
+      this.initDefaultValues(this.settings);
+      this.calculateElectric();
+      this.calculateFuel();
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
+  initDefaultValues(settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      this.energyEquivalencyElectric = {
+        fuelFiredEfficiency: 60,
+        electricallyHeatedEfficiency: 90,
+        fuelFiredHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2)
+      };
+    }
+    else {
+      this.energyEquivalencyElectric = {
+        fuelFiredEfficiency: 60,
+        electricallyHeatedEfficiency: 90,
+        fuelFiredHeatInput: 10
+      };
+    }
   }
 
   calculateFuel() {
-    this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel);
+    this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel, this.settings);
   }
 
   calculateElectric() {
-    this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric);
+    this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric, this.settings);
   }
 
   setCurrentField(str: string) {

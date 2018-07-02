@@ -1,0 +1,53 @@
+
+
+.output-summary .table {
+    font-size: small;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+}
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+
+.output-summary .table tr.callout td {
+    font-weight: bold;
+}
+
+.graph-col{
+    padding-left: 0px;
+}
+
+@media print {
+
+    .print-section-header {
+        font-size: 30px;
+    }
+
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+
+    .chart-row{
+        padding: 0px !important;
+    }
+
+    .output-summary .table th,
+    .output-summary .table td {
+        font-size: 20px;
+    }
+
+    .output-summary .col {
+        font-size: 25px;
+    }
+}
+
+.show-print{
+    display: none;
+}

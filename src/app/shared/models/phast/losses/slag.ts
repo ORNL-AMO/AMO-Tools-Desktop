@@ -4,5 +4,6 @@ export interface Slag {
     outletTemperature?: number,
     specificHeat?: number, 
     correctionFactor?: number,
-    heatLoss?: number
+    heatLoss?: number,
+    name?: string
 }

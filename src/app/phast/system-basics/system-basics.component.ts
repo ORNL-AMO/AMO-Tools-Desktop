@@ -1,11 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
-
+import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { ConvertPhastService } from '../convert-phast.service';
+import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -15,87 +17,117 @@ export class SystemBasicsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  saveClicked: boolean;
-  @Input()
   isAssessmentSettings: boolean;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
   @Input()
   assessment: Assessment;
+  @Input()
+  phast: PHAST;
+  @Output('save')
+  save = new EventEmitter<boolean>();
 
-  settingsForm: any;
-  unitChange: boolean = false;
-
-  isFirstChange: boolean = true;
-  counter: any;
-  newSettings: Settings;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  settingsForm: FormGroup;
+  oldSettings: Settings;
+  lossesExist: boolean;
+  showUpdateData: boolean = false;
+  dataUpdated: boolean = false;
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    //get settings form (used as input into shared settings components)
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    //phast need energyResultUnit
+    if (this.settingsForm.controls.energyResultUnit.value == '' || !this.settingsForm.controls.energyResultUnit.value) {
+      this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
+      this.saveChanges(true);
+    }
+    //oldSettings used for comparing if units update needed
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    //disables portion of form if exists
+    this.lossesExist = this.lossExists(this.phast);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveClicked && !this.isFirstChange) {
-      this.saveChanges();
+  lossExists(phast: PHAST) {
+    if (phast.losses) {
+      return true;
     } else {
-      this.isFirstChange = false;
+      return false;
     }
   }
-
-  saveChanges() {
-    this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    //TODO: Check data when we have dependent units
-    // if (
-    //   this.settings.currency != this.newSettings.currency ||
-    //   this.settings.distanceMeasurement != this.newSettings.distanceMeasurement ||
-    //   this.settings.flowMeasurement != this.newSettings.flowMeasurement ||
-    //   this.settings.language != this.newSettings.language ||
-    //   this.settings.powerMeasurement != this.newSettings.powerMeasurement ||
-    //   this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
-    //   this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
-    // ) {
-    //   if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
-    //     this.showSettingsModal();
-    //   } else {
-    //     this.updateData(false);
-    //   }
-    // }
-    this.updateData();
-  }
-
-  updateData() {
-    this.newSettings.assessmentId = this.assessment.id;
-    //assessment has existing settings
+  //save changes to settings
+  saveChanges(bool?: boolean) {
+    //save id, doesn't persist form
+    let id = this.settings.id;
+    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.settings.id = id;
+    this.settings.assessmentId = this.assessment.id;
+    //compare to check if data update needed
+    if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
+      if (this.phast.losses) {
+        this.showUpdateData = true;
+      }
+    }
+    //used to inform user data updated
+    if (this.showUpdateData == false && this.phast.losses && !bool) {
+      this.dataUpdated = true;
+    }
+    //if assessment already has settings, update them
     if (this.isAssessmentSettings) {
-      this.newSettings.id = this.settings.id;
-      this.indexedDbService.putSettings(this.newSettings).then(
+      this.indexedDbService.putSettings(this.settings).then(
         results => {
-          //get updated settings
-          this.updateSettings.emit(true);
+          this.settingsDbService.setAll().then(() => {
+            //get updated settings
+            this.updateSettings.emit(true);
+          })
         }
       )
     }
-    //create settings for assessment
+    //else if assessement does not have own settings create settings for assessment
+    //base on setup in phast.component this should probably not occur but keeping for now
     else {
-      this.newSettings.createdDate = new Date();
-      this.newSettings.modifiedDate = new Date();
-      this.indexedDbService.addSettings(this.newSettings).then(
+      this.settings.createdDate = new Date();
+      this.settings.modifiedDate = new Date();
+      this.indexedDbService.addSettings(this.settings).then(
         results => {
-          this.isAssessmentSettings = true;
-          //get updated settings
-          this.updateSettings.emit(true);
+          this.settingsDbService.setAll().then(() => {
+            this.isAssessmentSettings = true;
+            //get updated settings
+            this.updateSettings.emit(true);
+          })
         }
       )
     }
   }
-
-  startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
+  //update/convert assessment data for new units
+  updateData(bool?: boolean) {
+    if (this.phast.losses) {
+      this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
+      if (this.phast.meteredEnergy) {
+        this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.oldSettings, this.settings);
+      }
+      if (this.phast.designedEnergy) {
+        this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.oldSettings, this.settings);
+      }
+      if (this.phast.modifications) {
+        this.phast.modifications.forEach(mod => {
+          if (mod.phast.losses) {
+            mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.oldSettings, this.settings);
+          }
+          if (mod.phast.meteredEnergy) {
+            mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.oldSettings, this.settings);
+          }
+          if (mod.phast.designedEnergy) {
+            mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
+          }
+        })
+      }
+      //tell parent to save new data
+      this.save.emit(true);
+      //update oldSettings with currentSettings
+      this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+      this.showUpdateData = false;
+      this.dataUpdated = true;
     }
-    this.counter = setTimeout(() => {
-      this.saveChanges()
-    }, 3500)
   }
 }

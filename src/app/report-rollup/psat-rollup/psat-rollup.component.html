@@ -1,0 +1,40 @@
+<div class="row justify-content-center" *ngIf="settings">
+  <div class="col-lg-11 col-md-11 col-sm-12">
+    <div class="card" *ngFor="let calculator of calculators; let i = index">
+      <div *ngIf="calculator.preAssessments">
+        <div class="header">
+          <h3>Pre Assessment Summary</h3>
+        </div>
+        <div class="card-body">
+          <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+              <app-pre-assessment-graph [printView]="false" [settings]="settings" [preAssessments]="calculator.preAssessments" [directoryId]="calculator.directoryId"
+                [inRollup]="true"></app-pre-assessment-graph>
+            </div>
+            <div class="col-lg-7 col-md-11">
+                <app-pre-assessment-table [printView]="false" [settings]="settings" [calculator]="calculator"></app-pre-assessment-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <h3>Energy Use Graph</h3>
+      </div>
+      <div class="card-body">
+        <app-psat-rollup-graphs [printView]="false" [settings]="settings"></app-psat-rollup-graphs>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <h3>Pumps Summary</h3>
+      </div>
+      <div class="card-body">
+        <app-psat-rollup-pump-summary [printView]="false" [settings]="settings"></app-psat-rollup-pump-summary>
+      </div>
+    </div>
+  </div>
+</div>

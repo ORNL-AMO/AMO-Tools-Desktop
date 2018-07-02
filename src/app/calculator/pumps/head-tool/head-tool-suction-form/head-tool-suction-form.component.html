@@ -1,135 +1,123 @@
-<div class="form">
-  <div [ngClass]="{'wrapper': !inAssessment}">
-    <div class="row">
-      <div class="col-lg-6 col-md-12 col-sm-12">
-        <div class="form-section">
-          <form [formGroup]="headToolSuctionForm">
-            <div class="form-group">
-              <label class="small" for="specificGravity">Fluid Specific Gravity</label>
-              <input type="number" min="0" class="form-control" [ngClass]="{'calc-addon-group': !inAssessment, 'no-unit-input': inAssessment}"
-                formControlName="specificGravity" id="specificGravity" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('specificGravity')">
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="col-lg-6 col-md-12 col-sm-12">
-        <div class="form-section">
-          <form [formGroup]="headToolSuctionForm">
-            <div class="form-group">
-              <label class="small" for="flowRate">Flow Rate</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="calc()" onfocus="this.select();"
-                  (focus)="focusField('flowRate')">
-                <span class="input-group-addon units">
-                  {{settings.flowMeasurement}}
-              </span>
-              </div>
-            </div>
-          </form>
+<form [formGroup]="headToolSuctionForm">
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+          <input type="number" min="0" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="calc()"
+            onfocus="this.select();" (focus)="focusField('specificGravity')">
         </div>
       </div>
     </div>
 
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12 col-sm-12">
-        <div class="form-section">
-          <form [formGroup]="headToolSuctionForm">
-            <label class="group-label">Suction</label>
-            <div class="form-group">
-              <label class="small" for="suctionPipeDiameter">Pipe diameter (ID)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0.1" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()"
-                  onfocus="this.select();" (focus)="focusField('suctionPipeDiameter')">
-                <span class="input-group-addon units">{{smallUnit}}</span>
-              </div>
-              <span class="alert-danger pull-right small" *ngIf="diameterSuctionError !== null">{{diameterSuctionError}}</span>
-            </div>
-
-            <div class="form-group">
-              <label class="small" for="suctionTankGasOverPressure">Tank gas overpressure (Pg)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure"
-                  (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankGasOverPressure')">
-                <span class="input-group-addon units">
-                  {{settings.pressureMeasurement}}
-              </span>
-              </div>
-              <span class="alert-warning pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
-            </div>
-
-
-            <div class="form-group">
-              <label class="small" for="suctionTankFluidSurfaceElevation">Tank fluid surface elevation (Zs)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
-                  (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankFluidSurfaceElevation')">
-                <span class="input-group-addon units">
-                  {{settings.distanceMeasurement}}
-              </span>
-              </div>
-            </div>
-
-
-            <div class="form-group">
-              <label class="small" for="suctionLineLossCoefficients">Line loss coefficients (Ks)</label>
-              <input type="number" min="0" class="form-control" [ngClass]="{'calc-addon-group': !inAssessment, 'no-unit-input': inAssessment}"
-                formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients" (keyup)="calc()" onfocus="this.select();"
-                (focus)="focusField('suctionLineLossCoefficients')">
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="col-lg-6 col-md-12 col-sm-12">
-        <div class="form-section">
-          <form [formGroup]="headToolSuctionForm">
-            <label class="group-label">Discharge</label>
-            <div class="form-group">
-              <label class="small" for="dischargePipeDiameter">Pipe diameter (ID)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0.1" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()"
-                  onfocus="this.select();" (focus)="focusField('dischargePipeDiameter')">
-                <span class="input-group-addon units">
-                  {{smallUnit}}
-                </span>
-              </div>
-              <span class="alert-danger pull-right small" *ngIf="diameterSuctionErrorOut !== null">{{diameterSuctionErrorOut}}</span>
-            </div>
-
-            <div class="form-group">
-              <label class="small" for="dischargeGaugePressure">Gauge pressure (Pd)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()"
-                  onfocus="this.select();" (focus)="focusField('dischargeGaugePressure')">
-                <span class="input-group-addon units">
-                    {{settings.pressureMeasurement}}
-                </span>
-              </div>
-              <span class="alert-warning pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
-            </div>
-
-            <div class="form-group">
-              <label class="small" for="dischargeGaugeElevation">Gauge elevation (Zd)</label>
-              <div class="input-group calc-addon-group">
-                <input type="number" min="0" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation"
-                  (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeGaugeElevation')">
-                <span class="input-group-addon units">
-                    {{settings.distanceMeasurement}}
-              </span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="small" for="dischargeLineLossCoefficients">Line loss coefficients (Kd)</label>
-              <input type="number" min="0" class="form-control" [ngClass]="{'calc-addon-group': !inAssessment, 'no-unit-input': inAssessment}"
-                formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients" (keyup)="calc()" onfocus="this.select();"
-                (focus)="focusField('dischargeLineLossCoefficients')">
-            </div>
-          </form>
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="flowRate">Flow Rate</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="calc()" onfocus="this.select();"
+              (focus)="focusField('flowRate')">
+            <span class="input-group-addon units">
+              {{settings.flowMeasurement}}
+            </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="form-section">
+        <label class="group-label">Suction</label>
+        <div class="form-group">
+          <label class="small" for="suctionPipeDiameter">Pipe diameter (ID)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0.1" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()"
+              onfocus="this.select();" (focus)="focusField('suctionPipeDiameter')">
+            <span class="input-group-addon units">{{smallUnit}}</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="diameterSuctionError !== null">{{diameterSuctionError}}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="suctionTankGasOverPressure">Tank gas overpressure (Pg)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure"
+              (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankGasOverPressure')">
+            <span class="input-group-addon units">
+              {{settings.pressureMeasurement}}
+            </span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
+        </div>
+
+
+        <div class="form-group">
+          <label class="small" for="suctionTankFluidSurfaceElevation">Tank fluid surface elevation (Zs)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
+              (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankFluidSurfaceElevation')">
+            <span class="input-group-addon units">
+              {{settings.distanceMeasurement}}
+            </span>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label class="small" for="suctionLineLossCoefficients">Line loss coefficients (Ks)</label>
+          <input type="number" min="0" class="form-control" formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients"
+            (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionLineLossCoefficients')">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="form-section">
+        <label class="group-label">Discharge</label>
+        <div class="form-group">
+          <label class="small" for="dischargePipeDiameter">Pipe diameter (ID)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0.1" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()"
+              onfocus="this.select();" (focus)="focusField('dischargePipeDiameter')">
+            <span class="input-group-addon units">
+              {{smallUnit}}
+            </span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="diameterSuctionErrorOut !== null">{{diameterSuctionErrorOut}}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="dischargeGaugePressure">Gauge pressure (Pd)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()"
+              onfocus="this.select();" (focus)="focusField('dischargeGaugePressure')">
+            <span class="input-group-addon units">
+              {{settings.pressureMeasurement}}
+            </span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="dischargeGaugeElevation">Gauge elevation (Zd)</label>
+          <div class="input-group calc-addon-group">
+            <input type="number" min="0" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation"
+              (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeGaugeElevation')">
+            <span class="input-group-addon units">
+              {{settings.distanceMeasurement}}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="dischargeLineLossCoefficients">Line loss coefficients (Kd)</label>
+          <input type="number" min="0" class="form-control" formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients"
+            (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeLineLossCoefficients')">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

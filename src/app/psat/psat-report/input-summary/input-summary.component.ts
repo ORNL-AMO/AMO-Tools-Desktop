@@ -17,7 +17,9 @@ export class InputSummaryComponent implements OnInit {
   pumpDiff: boolean = false;
   pumpRpmDiff: boolean = false;
   driveDiff: boolean = false;
- // viscosityDiff: boolean = false;
+  fluidTypeDiff: boolean = false;
+  fluidTemperatureDiff: boolean = false;
+  viscosityDiff: boolean = false;
   gravityDiff: boolean = false;
   stagesDiff: boolean = false;
  // fixedDiff: boolean = false;
@@ -50,6 +52,7 @@ export class InputSummaryComponent implements OnInit {
   getDrive(num: number) {
     return this.psatService.getDriveFromEnum(num);
   }
+
 
   getLineFreq(num: number) {
     return this.psatService.getLineFreqFromEnum(num);
@@ -84,9 +87,15 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.drive != this.psat.inputs.drive) {
           this.driveDiff = true;
         }
-        // if (mod.psat.inputs.kinematic_viscosity != this.psat.inputs.kinematic_viscosity) {
-        //   this.viscosityDiff = true;
-        // }
+        if (mod.psat.inputs.fluidType !== this.psat.inputs.fluidType) {
+          this.fluidTypeDiff = true;
+        }
+        if (mod.psat.inputs.fluidTemperature !== this.psat.inputs.fluidTemperature) {
+          this.fluidTemperatureDiff = true;
+        }
+        if (mod.psat.inputs.kinematic_viscosity !== this.psat.inputs.kinematic_viscosity) {
+          this.viscosityDiff = true;
+        }
         if (mod.psat.inputs.specific_gravity != this.psat.inputs.specific_gravity) {
           this.gravityDiff = true;
         }
