@@ -17,12 +17,12 @@ export class FanEfficiencyComponent implements OnInit {
   settings: Settings;
 
   inputs: FanEfficiencyInputs = {
-    fanType: 1,
-    fanSpeed: 1,
-    flowRate: 1,
-    inletPressure: 1,
-    outletPressure: 1,
-    compressibility: 1
+    fanType: undefined,
+    fanSpeed: undefined,
+    flowRate: undefined,
+    inletPressure: undefined,
+    outletPressure: undefined,
+    compressibility: undefined
   };
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -39,6 +39,14 @@ export class FanEfficiencyComponent implements OnInit {
   fanEfficiency: number = 0;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
+    if (this.fsat && this.fsat.fanSetup.fanType != 12) {
+      this.inputs.fanType = this.fsat.fanSetup.fanType;
+      this.inputs.fanSpeed = this.fsat.fanSetup.fanSpeed;
+      this.inputs.flowRate = this.fsat.fieldData.flowRate;
+      this.inputs.inletPressure = this.fsat.fieldData.inletPressure;
+      this.inputs.outletPressure = this.fsat.fieldData.outletPressure;
+      this.inputs.compressibility = this.fsat.fieldData.compressibilityFactor;
+    }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -63,7 +71,12 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   calculate() {
-    this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs);
+    if (this.checkInputs() == 'VALID') {
+      this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs);
+    } else {
+      this.fanEfficiency = 0;
+    }
+
     this.toggleCalculate = !this.toggleCalculate;
   }
 
@@ -73,6 +86,20 @@ export class FanEfficiencyComponent implements OnInit {
 
   changeField() {
 
+  }
+
+  checkInputs() {
+    if (this.inputs.fanType != undefined &&
+      this.inputs.fanSpeed != undefined &&
+      this.inputs.flowRate != undefined &&
+      this.inputs.inletPressure != undefined &&
+      this.inputs.outletPressure != undefined &&
+      this.inputs.compressibility != undefined
+    ) {
+      return 'VALID';
+    } else {
+      return 'INVALID';
+    }
   }
 }
 
