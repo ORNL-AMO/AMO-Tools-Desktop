@@ -9,6 +9,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.component';
 
 
 declare var fanAddon: any;
@@ -209,16 +210,8 @@ export class FsatService {
   }
 
 
-  optimalFanEfficiency() {
-    let input = {
-      fanType: 6,
-      fanSpeed: 1180,
-      flowRate: 500000,
-      inletPressure: -6,
-      outletPressure: 1,
-      compressibility: 0.995
-    };
-    return fanAddon.optimalFanEfficiency(input);
+  optimalFanEfficiency(inputs: FanEfficiencyInputs): number {
+    return fanAddon.optimalFanEfficiency(inputs);
   }
 
   getEmptyResults(): FsatOutput {

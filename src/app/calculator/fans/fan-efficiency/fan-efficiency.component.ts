@@ -36,7 +36,7 @@ export class FanEfficiencyComponent implements OnInit {
 
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-
+  fanEfficiency: number = 0;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
     if (!this.settings) {
@@ -62,6 +62,8 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   calculate() {
+    console.log(this.inputs);
+    this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs);
     this.toggleCalculate = !this.toggleCalculate;
   }
 
