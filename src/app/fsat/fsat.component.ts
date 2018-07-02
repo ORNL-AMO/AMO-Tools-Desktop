@@ -64,6 +64,13 @@ export class FsatComponent implements OnInit {
   isModalOpen: boolean;
   openModSub: Subscription;
   modalOpenSubscription: Subscription;
+
+
+  fsatOptions: Array<any>;
+  fsatOptionsLength: number;
+  fsat1: FSAT;
+  fsat2: FSAT;
+
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -100,6 +107,7 @@ export class FsatComponent implements OnInit {
           this.compareService.setCompareVals(this._fsat);
         }
         this.getSettings();
+        this.initSankeyList();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
@@ -165,6 +173,21 @@ export class FsatComponent implements OnInit {
       this.getContainerHeight();
     }, 100);
   }
+
+
+  initSankeyList() {
+    this.fsatOptions = new Array<any>();
+    this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
+    this.fsat1 = this.fsatOptions[0];
+    if (this._fsat.modifications) {
+      this._fsat.modifications.forEach(mod => {
+        this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
+      });
+      this.fsat2 = this.fsatOptions[1];
+      this.fsatOptionsLength = this.fsatOptions.length;
+    }
+  }
+
 
   getContainerHeight() {
     if (this.content) {

@@ -43,6 +43,9 @@ import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow
 import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+import { FsatSankeyComponent } from './fsat-sankey/fsat-sankey.component';
+import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
+
 import { ConvertFsatService } from './convert-fsat.service';
 @NgModule({
   imports: [
@@ -84,7 +87,9 @@ import { ConvertFsatService } from './convert-fsat.service';
     CalculateOutletPressureComponent,
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
-    FanBasicsComponent
+    FanBasicsComponent,
+    FsatSankeyComponent,
+    FsatReportSankeyComponent
   ],
   providers: [
     FsatService,
