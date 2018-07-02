@@ -264,7 +264,7 @@ export class AssessmentService {
       fanMotor: {
         lineFrequency: 60,
         motorRatedPower: null,
-        motorRpm: null,
+        motorRpm: 1785,
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,

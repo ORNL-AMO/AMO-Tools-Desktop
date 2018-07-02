@@ -29,7 +29,7 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
-    'Premium',
+    'Premium Efficient',
     'Specified'
   ];
   efficiencyError: string = null;
@@ -78,7 +78,7 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   }
 
   modifyPowerArrays() {
-    if (this.nemaForm.controls.efficiencyClass.value === 'Premium') {
+    if (this.nemaForm.controls.efficiencyClass.value === 'Premium Efficient') {
         if (this.settings.powerMeasurement === 'hp') {
           if (this.nemaForm.controls.horsePower.value > 500) {
             this.nemaForm.patchValue({

@@ -40,7 +40,7 @@ export class RatedMotorFormComponent implements OnInit {
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
-    'Premium',
+    'Premium Efficient',
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
@@ -76,7 +76,7 @@ export class RatedMotorFormComponent implements OnInit {
 
   modifyPowerArrays(isBaseline: boolean) {
     if (isBaseline) {
-      if (this.psat.inputs.efficiency_class === this.psatService.getEfficienyClassEnum('Premium')) {
+      if (this.psat.inputs.efficiency_class === this.psatService.getEfficienyClassEnum('Premium Efficient')) {
         if (this.settings.powerMeasurement === 'hp') {
           if (this.psat.inputs.motor_rated_power > 500) {
             this.psat.inputs.motor_rated_power = this.horsePowersPremium[this.horsePowersPremium.length - 1];
