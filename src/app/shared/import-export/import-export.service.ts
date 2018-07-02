@@ -34,7 +34,7 @@ export class ImportExportService {
     }
   }
 
-  downloadData(data: any) {
+  downloadData(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
@@ -43,7 +43,8 @@ export class ImportExportService {
     dlLink.setAttribute("href", dataStr);
     const date = new Date();
     const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    dlLink.setAttribute('download', 'ExportedData_' + dateStr + '.json');
+    let dlName = 'ExportedData_' + dateStr;
+    dlLink.setAttribute('download', dlName + '.json');
     dlLink.click();
   }
 

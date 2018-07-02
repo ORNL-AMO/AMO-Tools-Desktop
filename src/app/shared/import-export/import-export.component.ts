@@ -36,6 +36,7 @@ export class ImportExportComponent implements OnInit {
   showCalcs: boolean = false;
   showDirs: boolean = false;
   canExport: boolean = false;
+  name: string = "";
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -72,7 +73,7 @@ export class ImportExportComponent implements OnInit {
   }
 
   buildExportJSON() {
-    this.importExportService.downloadData(this.exportData);
+    this.importExportService.downloadData(this.exportData, this.name);
     this.closeExportModal.emit(true);
   }
 
