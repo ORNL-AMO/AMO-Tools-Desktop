@@ -17,6 +17,8 @@ export class UpdateDataService {
                 return this.updatePsat(assessment);
             } else if (assessment.type == 'PHAST') {
                 return this.updatePhast(assessment);
+            }else{
+                return assessment
             }
         }
     }
