@@ -29,14 +29,14 @@ export class FsatBannerComponent implements OnInit {
       this.fsatService.mainTab.next(str);
     }
   }
-  
-  goHome(){
+
+  goHome() {
     this.assessmentService.workingDirectoryId.next(undefined);
     this.assessmentService.dashboardView.next('landing-screen');
     this.router.navigateByUrl('/dashboard');
   }
 
-  goToFolder(){
+  goToFolder() {
     this.assessmentService.workingDirectoryId.next(this.assessment.directoryId);
     this.assessmentService.dashboardView.next('assessment-dashboard');
     this.router.navigateByUrl('/dashboard');
