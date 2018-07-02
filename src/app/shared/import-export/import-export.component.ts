@@ -36,7 +36,7 @@ export class ImportExportComponent implements OnInit {
   showCalcs: boolean = false;
   showDirs: boolean = false;
   canExport: boolean = false;
-  name: string = "";
+  name: string = null;
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {

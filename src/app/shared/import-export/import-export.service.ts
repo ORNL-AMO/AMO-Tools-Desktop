@@ -41,10 +41,12 @@ export class ImportExportService {
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
     dlLink.setAttribute("href", dataStr);
-    const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    let dlName = 'ExportedData_' + dateStr;
-    dlLink.setAttribute('download', dlName + '.json');
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExportedData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.json');
     dlLink.click();
   }
 
