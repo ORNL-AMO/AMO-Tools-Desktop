@@ -5,6 +5,7 @@ import { Settings } from '../shared/models/settings';
 declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
+import { MockFsat, MockFsatSettings} from './mockFsat';
 
 @Injectable()
 export class CoreService {
@@ -19,7 +20,10 @@ export class CoreService {
         this.indexedDbService.addAssessment(MockPsat).then(() => {
           MockPsatCalculator.assessmentId = 2;
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-            resolve(true);
+            MockFsat.directoryId = 2;
+            this.indexedDbService.addAssessment(MockFsat).then(() => {
+              resolve(true);
+            });
           });
         });
       });
@@ -41,7 +45,11 @@ export class CoreService {
             MockPsatSettings.assessmentId = 2;
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-              resolve(true);
+              MockFsatSettings.assessmentId = 3;
+              MockFsatSettings.facilityInfo.date = new Date().toDateString();
+              this.indexedDbService.addSettings(MockFsatSettings).then(() => {
+                resolve(true);
+              });
             });
           });
         });
