@@ -217,7 +217,7 @@ export class Fsat203Service {
         includesEvase: 'Yes',
         upDownStream: 'Upstream',
         traversePlanes: 2,
-        globalBarometricPressure: 26.57,
+        globalBarometricPressure: 29.92,
       },
       PlaneData: {
         plane5upstreamOfPlane2: true,
@@ -226,7 +226,7 @@ export class Fsat203Service {
         inletSEF: 0,
         outletSEF: 0,
         //  variationInBarometricPressure: true,
-        // globalBarometricPressure: 26.57,
+        // globalBarometricPressure: 29.92,
         estimate2and5TempFrom1: false,
         FanInletFlange: {
           planeType: 'Rectangular',
@@ -234,7 +234,7 @@ export class Fsat203Service {
           length: 32.63,
           area: 69.0923,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
+          barometricPressure: 29.92,
           numInletBoxes: 2
         },
         FanEvaseOrOutletFlange: {
@@ -243,7 +243,7 @@ export class Fsat203Service {
           length: 78,
           area: 37.9167,
           dryBulbTemp: 132.7,
-          barometricPressure: 26.57,
+          barometricPressure: 29.92,
           numInletBoxes: 0
         },
         FlowTraverse: {
@@ -252,7 +252,7 @@ export class Fsat203Service {
           length: 32.63,
           area: 32.5462,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
+          barometricPressure: 29.92,
           numInletBoxes: 0,
           staticPressure: -18.1,
           pitotTubeCoefficient: 0.87292611371180784,
@@ -272,7 +272,7 @@ export class Fsat203Service {
             length: 32.63,
             area: 32.5462,
             dryBulbTemp: 123,
-            barometricPressure: 26.57,
+            barometricPressure: 29.92,
             numInletBoxes: 0,
             staticPressure: -17.0,
             pitotTubeCoefficient: 0.87292611371180784,
@@ -292,7 +292,7 @@ export class Fsat203Service {
           width: 143.63,
           length: 32.63,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
+          barometricPressure: 29.92,
           staticPressure: -17.55,
           numInletBoxes: 2
         },
@@ -302,14 +302,14 @@ export class Fsat203Service {
           width: 55.42,
           length: 60.49,
           dryBulbTemp: 132.7,
-          barometricPressure: 26.57,
+          barometricPressure: 29.92,
           staticPressure: 1.8
         }
       },
       BaseGasDensity: {
         dryBulbTemp: 123,
         staticPressure: -17.6,
-        barometricPressure: 26.57,
+        barometricPressure: 29.92,
         gasDensity: 0.0547,
         gasType: 'AIR',
         //Mark Additions

@@ -32,4 +32,13 @@ export class FanMotorService {
     }
     return obj;
   }
+
+  isFanMotorValid(obj: FanMotor): boolean {
+    let form: FormGroup = this.getFormFromObj(obj);
+    if (form.status == 'VALID') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

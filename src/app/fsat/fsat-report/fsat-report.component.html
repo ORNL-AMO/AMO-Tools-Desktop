@@ -59,7 +59,7 @@
       </div>
   </div>
 
-  <div class="report-data">
+  <div class="report-data" *ngIf="fsat.setupDone">
 
       <ul #reportBtns class="tabs primary hide-print">
           <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
@@ -90,7 +90,7 @@
           </app-results-summary>
       </div>
       <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))" [ngStyle]="{'height.px':reportContainerHeight}">
-        TODO: REPORT GRAPHS
+        <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment"></app-fsat-report-graphs>
       </div>
       <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)" [ngStyle]="{'height.px':reportContainerHeight}">
         <!-- <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint"></app-fsat-report-sankey> -->
@@ -99,9 +99,9 @@
   </div>
   <!-- End .report-data -->
 
-  <!-- <div *ngIf="!fsat.setupDone">
-      <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
-  </div> -->
+    <div *ngIf="!fsat.setupDone">
+    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+  </div>
 
 
 </div>

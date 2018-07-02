@@ -47,7 +47,7 @@ export class FsatReportComponent implements OnInit {
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.initPrintLogic();

@@ -16,9 +16,9 @@
     <span class="fa fa-chevron-left"></span> Return to Setup</a>
   <br>
   <app-fan-basics *ngIf="formSelect == 'fsat-basics'" [fanRatedInfo]="fsat.fieldData.fanRatedInfo" (emitSave)="saveBasics($event)"
-    [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)"></app-fan-basics>
+    [basicsDone]="basicsDone" (updateBarometricPressure)="updateBarometricPressure($event)" [settings]="settings"></app-fan-basics>
   <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="fsat.fieldData.planeData" [fanRatedInfo]="fsat.fieldData.fanRatedInfo"
     (emitSave)="savePlane($event)" (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
     [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone" [plane4Done]="plane4Done"
-    [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)" [inModal]="true"></app-fan-data>
+    [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)" [inModal]="true" [settings]="settings"></app-fan-data>
 </div>

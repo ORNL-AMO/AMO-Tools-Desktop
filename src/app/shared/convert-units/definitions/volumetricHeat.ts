@@ -22,7 +22,7 @@ export const volumetricHeat = {
       name: {
         singular: 'Kilocalorie per Cubic Meter Celsius'
         , plural: 'Kilocalorie per Cubic Meter Celsius',
-        display: '(kcal/m&#x00B3;-C)'
+        display: '(kcal/m&#x00B3;-&#x2103;)'
       }
       , to_anchor: 0.238845897
     },
@@ -30,7 +30,7 @@ export const volumetricHeat = {
       name: {
         singular: 'Btu per Standard Cubic Foot Fahrenheit'
         , plural: 'Btu per Standard Cubic Feet Fahrenheit',
-        display: '(Btu/SCF - F)'
+        display: '(Btu/SCF - &#x2109;)'
       }
       , to_anchor: 1/14.921
     }

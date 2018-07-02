@@ -70,7 +70,6 @@ export class PsatBarChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // if (!changes.psat1Values.firstChange || !changes.psat2Values.firstChange || !changes.psat1Name.firstChange || !changes.psat2Name.firstChange) {
     if (!this.printView) {
       if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
         this.prepBarData();
@@ -121,7 +120,6 @@ export class PsatBarChartComponent implements OnInit {
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
-        // columns: [this.barData1, this.barData2],
         columns: this.chartData,
         type: 'bar',
       },
@@ -210,7 +208,6 @@ export class PsatBarChartComponent implements OnInit {
         unload: true,
         columns: [this.barData1, this.barData2]
       });
-      
     }
   }
 

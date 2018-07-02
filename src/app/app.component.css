@@ -130,6 +130,10 @@ Buttons
 /*
 Badges
 =============================================== */
+.badge:empty{
+  display: inline-block;
+}
+
 .badge {
   display: inline-block;
   font-size: 12px;
@@ -348,6 +352,12 @@ select.form-control:not([size]):not([multiple]) {
 .phast .indicate-report-row-different{
     border: #BF3D00 solid !important;
 }
+
+.fsat .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
+
 
 .input-error{
   color: red;

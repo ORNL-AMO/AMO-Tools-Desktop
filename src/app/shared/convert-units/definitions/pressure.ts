@@ -87,6 +87,14 @@ export const pressure = {
         display: '(ft H&#x2082;O)'
       }
       , to_anchor: 2.98898
+    },
+    inHg: {
+      name: {
+        singular: 'Inch of Mercury',
+        plural: 'Inches of Mercury',
+        display: '(in Hg)'
+      },
+      to_anchor: 3.38639
     }
   }
   , imperial: {

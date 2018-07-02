@@ -55,8 +55,8 @@ export class Fsat203Component implements OnInit {
 
   calculate() {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
-      this.planeResults = this.fsatService.getPlaneResults(this.inputs);
-      this.results = this.fsatService.fan203(this.inputs);
+      this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
+      this.results = this.fsatService.fan203(this.inputs, this.settings);
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,
@@ -265,7 +265,7 @@ export class Fsat203Component implements OnInit {
       length: 32.63,
       area: 390.5539,
       dryBulbTemp: 123,
-      barometricPressure: 26.57,
+      barometricPressure: 29.92,
       numInletBoxes: 0,
       staticPressure: -17.0,
       pitotTubeCoefficient: 0.87292611371180784,

@@ -46,6 +46,7 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
 import { FsatSankeyComponent } from './fsat-sankey/fsat-sankey.component';
 import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
 
+import { ConvertFsatService } from './convert-fsat.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -98,7 +99,8 @@ import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat
     PsatService,
     FanFieldDataService,
     ModifyConditionsService,
-    CompareService
+    CompareService,
+    ConvertFsatService
   ],
   exports: [FsatComponent]
 })
