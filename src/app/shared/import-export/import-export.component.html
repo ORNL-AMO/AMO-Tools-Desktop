@@ -40,7 +40,7 @@
       <p class="text-center small danger">Too much data to export, please choose less data to export.</p>
     </div>
     <div class="col-12">
-      <label> Name your export <input type="text" [(ngModel)]="name">  </label>
+      <label id=name-export> Name your file: <input type="text" [(ngModel)]="name">  </label>
       <button class="btn btn-primary pull-right" [disabled]="!canExport" (click)="buildExportJSON()">Export as .json</button>
       <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>
     </div>
