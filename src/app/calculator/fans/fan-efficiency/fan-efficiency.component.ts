@@ -35,7 +35,7 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   headerHeight: number;
-
+  currentField: string;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
@@ -86,8 +86,8 @@ export class FanEfficiencyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeField() {
-
+  changeField(str: string) {
+    this.currentField = str;
   }
 
   checkInputs() {

@@ -7,7 +7,7 @@
 						<img src="assets/images/pump-eff.png" class="ico-size">
 					</div>
 					<div class="col">
-						<h3>Achievable Efficiency Calculator</h3>
+						<h3>Optimal Fan Efficiency Calculator</h3>
 					</div>
 				</div>
 				<div class="row">
@@ -45,7 +45,11 @@
 						</div>
 					</div>
 					<div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-						<app-fan-efficiency-help></app-fan-efficiency-help>
+						<div class="col-11">
+							<div class="calc-help">
+								<app-fan-efficiency-help [currentField]="currentField"></app-fan-efficiency-help>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
