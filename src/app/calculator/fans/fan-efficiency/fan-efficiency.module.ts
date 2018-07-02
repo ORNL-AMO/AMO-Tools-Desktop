@@ -4,10 +4,15 @@ import { FanEfficiencyComponent } from './fan-efficiency.component';
 import { FanEfficiencyFormComponent } from './fan-efficiency-form/fan-efficiency-form.component';
 import { FanEfficiencyGraphComponent } from './fan-efficiency-graph/fan-efficiency-graph.component';
 import { FanEfficiencyHelpComponent } from './fan-efficiency-help/fan-efficiency-help.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [FanEfficiencyComponent, FanEfficiencyFormComponent, FanEfficiencyGraphComponent, FanEfficiencyHelpComponent],
   exports: [FanEfficiencyComponent]

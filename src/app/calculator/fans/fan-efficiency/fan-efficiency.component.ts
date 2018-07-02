@@ -16,14 +16,21 @@ export class FanEfficiencyComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  inputs: FanEfficiencyInputs;
+  inputs: FanEfficiencyInputs = {
+    fanType: 1,
+    fanSpeed: 1,
+    flowRate: 1,
+    inletPressure: 1,
+    outletPressure: 1,
+    compressibility: 1
+  };
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.resizeTabs();
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event) {
+  //   this.resizeTabs();
+  // }
 
   headerHeight: number;
 
@@ -32,7 +39,7 @@ export class FanEfficiencyComponent implements OnInit {
 
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
-    if(!this.settings){
+    if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -47,8 +54,10 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    if (this.leftPanelHeader) {
+      if (this.leftPanelHeader.nativeElement.clientHeight) {
+        this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      }
     }
   }
 
@@ -58,6 +67,10 @@ export class FanEfficiencyComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  changeField(){
+
   }
 }
 
