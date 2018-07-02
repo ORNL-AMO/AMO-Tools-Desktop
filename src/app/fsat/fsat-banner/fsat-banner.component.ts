@@ -23,20 +23,20 @@ export class FsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'assessment' || str == 'system-setup' || str == 'calculators' || str == 'report' || str == 'sankey') {
+    if (str == 'system-setup' || str == 'calculators') {
       this.fsatService.mainTab.next(str);
     } else if (this.assessment.fsat.setupDone) {
       this.fsatService.mainTab.next(str);
     }
   }
-  
-  goHome(){
+
+  goHome() {
     this.assessmentService.workingDirectoryId.next(undefined);
     this.assessmentService.dashboardView.next('landing-screen');
     this.router.navigateByUrl('/dashboard');
   }
 
-  goToFolder(){
+  goToFolder() {
     this.assessmentService.workingDirectoryId.next(this.assessment.directoryId);
     this.assessmentService.dashboardView.next('assessment-dashboard');
     this.router.navigateByUrl('/dashboard');
