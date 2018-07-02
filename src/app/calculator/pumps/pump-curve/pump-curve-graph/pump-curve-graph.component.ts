@@ -58,6 +58,13 @@ export class PumpCurveGraphComponent implements OnInit {
   displayExportTooltip: boolean = false;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
 
   @Input()
   toggleCalculate: boolean;
@@ -74,7 +81,7 @@ export class PumpCurveGraphComponent implements OnInit {
       });
   }
 
-    // ========== export/gridline tooltip functions ==========
+  // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
@@ -84,6 +91,12 @@ export class PumpCurveGraphComponent implements OnInit {
     }
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = true;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
       this.checkHover(btnType);
@@ -99,6 +112,14 @@ export class PumpCurveGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
     }
   }
 
@@ -117,6 +138,22 @@ export class PumpCurveGraphComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
       }
     }
   }
@@ -150,9 +187,21 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   resizeGraph() {
-    let curveGraph = this.doc.getElementById('pumpCurveGraph');
-    this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3 / 5);
+
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
+    //conditional sizing if graph is expanded/compressed
+    if (!this.expanded) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+    }
+    else {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = curveGraph.clientHeight * 0.9;
+    }
+
     if (this.canvasWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
@@ -556,12 +605,12 @@ export class PumpCurveGraphComponent implements OnInit {
                     .style("padding-right", "10px")
                     .style("padding-left", "10px")
                     .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                      "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                      "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>" +
+                      "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                      "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
                     // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -605,12 +654,12 @@ export class PumpCurveGraphComponent implements OnInit {
                   .style("padding-right", "10px")
                   .style("padding-left", "10px")
                   .html(
-                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
-                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
+                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                  "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
                   // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -677,9 +726,9 @@ export class PumpCurveGraphComponent implements OnInit {
               .style("padding-right", "10px")
               .style("padding-left", "10px")
               .html(
-              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.settings.flowMeasurement + "</div>" +
+                "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.settings.flowMeasurement + "</div>" +
 
-              "<strong><div>Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>")
+                "<strong><div>Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
               // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -800,4 +849,23 @@ export class PumpCurveGraphComponent implements OnInit {
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
+    //========= chart resize functions ==========
+    expandChart() {
+      this.expanded = true;
+      this.hideTooltip('btnExpandChart');
+      this.hideTooltip('btnCollapseChart');
+      setTimeout(() => {
+        this.resizeGraph();
+      }, 200);
+    }
+  
+    contractChart() {
+      this.expanded = false;
+      this.hideTooltip('btnExpandChart');
+      this.hideTooltip('btnCollapseChart');
+      setTimeout(() => {
+        this.resizeGraph();
+      }, 200);
+    }
+    //========== end chart resize functions ==========
 }

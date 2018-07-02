@@ -54,8 +54,16 @@ export class SystemCurveGraphComponent implements OnInit {
   displayExportTooltip: boolean = false;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
   
   isFirstChange: boolean = true;
+
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
+
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -85,6 +93,12 @@ export class SystemCurveGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
     setTimeout(() => {
       this.checkHover(btnType);
     }, 700);
@@ -99,6 +113,14 @@ export class SystemCurveGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
     }
   }
 
@@ -117,6 +139,22 @@ export class SystemCurveGraphComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
       }
     }
   }
@@ -143,37 +181,31 @@ export class SystemCurveGraphComponent implements OnInit {
   }
 
   resizeGraph() {
-    let curveGraph = this.doc.getElementById('systemCurveGraph');
 
-    this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3 / 5);
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
+    //conditional sizing if graph is expanded/compressed
+    if (!this.expanded) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+    }
+    else {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = curveGraph.clientHeight * 0.9;
+    }
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-
-      //debug
       this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
-
-      //real version
-      // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-
-      //debug
       this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
-
-      //real version
-      // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
-    //real version
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    //debug
-    // this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    // this.height = this.canvasHeight - this.margin.top - this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5);
-
     d3.select("app-system-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     this.makeGraph();
   }
 
@@ -185,9 +217,6 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      //debug
-      // .attr("width", this.width + this.margin.left + this.margin.right)
-      // .attr("height", this.height + this.margin.top + this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5))
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -243,24 +272,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Flow Rate (" + this.settings.flowMeasurement + ")");
-
-
-
-    //debug - trying something
-    // console.log("fontSize number = " + (this.fontSize[0] + this.fontSize[1]));
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (parseInt(this.fontSize.replace('px', '')) * 2) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("testing title");
-
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (this.fontSize.replace('px', '')) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("test title 2");
 
 
     var x = d3.scaleLinear()
@@ -719,5 +730,26 @@ export class SystemCurveGraphComponent implements OnInit {
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 
 }
