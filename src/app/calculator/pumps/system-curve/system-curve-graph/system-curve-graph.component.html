@@ -1,7 +1,26 @@
 <div #ngChart></div>
+
+<!-- this is original graph button container -->
+<!-- <div id="gridToggle" class="col-md-2"> -->
+<!-- be sure to change "col-md-2" to "col-md-12" to fit the tooltip -->
+<div id="gridToggle" class="col-md-12">
+  <div>
+    <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
+    <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+  </div>
+  <div>
+    <button id="gridToggleBtn" class="btn" type="button">
+      <span class="fa fa-bar-chart" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
+    </button>
+    <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip" [adjustLeft]="15" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+  </div>
+</div>
+
+<!-- <div #ngChart></div>
 <div id="gridToggle" class="col-md-2">
   <span class="fa fa-download" (click)="downloadChart()"></span>
   <button id="gridToggleBtn" class="btn" type="button">
     <span class="fa fa-bar-chart"></span>
   </button>
 </div>
+-->

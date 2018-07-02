@@ -15,7 +15,7 @@
       <label for="saturatedPressure">Saturated Pressure</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="calculate()">
-        <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+        <span class= "input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
         <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <label for="saturatedTemperature">Saturated Temperature</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="saturatedTemperature" id="saturatedTemperature" onfocus="this.select();" (input)="calculate()">
-        <span class="input-group-addon units">{{settings.steamTemperatureMeasurement}}</span>
+        <span class= "input-group-addon units"  [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
         <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
       </div>
     </div>
@@ -34,71 +34,79 @@
 <div class="form-section">
   <div class="form-group">
     <label class="small"><strong>Pressure</strong></label>
-    <div class="small text-center"><strong>{{output.saturatedPressure | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamPressureMeasurement)}}</strong></span>
+    <div class="small text-center"><strong>{{output.saturatedPressure | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamPressureMeasurement)"></span>
+    </strong>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Temperature</strong></label>
-    <div class="small text-center"><strong>{{output.saturatedTemperature | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamTemperatureMeasurement)}}</strong></span>
+    <div class="small text-center"><strong>{{output.saturatedTemperature | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+    </strong>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Liquid Specific Enthalpy</strong></label>
     <div class="small text-center"><strong>{{output.liquidEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Liquid Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.liquidEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
+    <div class="small text-center"><strong>{{output.liquidEntropy | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+    </strong>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Liquid Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.liquidVolume | number:'1.1-4'}}</strong>
+    <div class="small text-center"><strong>{{output.liquidVolume | number:'1.1-4'}}
       <!-- <span><strong>m3/kg</strong></span> -->
-      <span class="bold" [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+    </strong>
     </div>
   </div>
 
   <div class="form-group">
     <label class="small"><strong>Gas Specific Enthalpy</strong></label>
     <div class="small text-center"><strong>{{output.gasEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Gas Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
+    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+    </strong>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Gas Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.gasVolume | number:'1.1-4'}}</strong>
-      <span class="bold" [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+    <div class="small text-center"><strong>{{output.gasVolume | number:'1.1-4'}}
+      <span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+    </strong>
     </div>
   </div>
 
   <div class="form-group">
     <label class="small"><strong>Evaporation Specific Enthalpy</strong></label>
     <div class="small text-center"><strong>{{output.evaporationEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Evaporation Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}</strong>
-      <span><strong>{{getDisplayUnit(settings.steamSpecificEntropyMeasurement)}}</strong></span>
+    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+    </strong>
     </div>
   </div>
   <div class="form-group">
     <label class="small"><strong>Evaporation Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationVolume | number:'1.1-4'}}</strong>
-      <span class="bold" [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+    <div class="small text-center"><strong>{{output.evaporationVolume | number:'1.1-4'}}
+      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+    </strong>
     </div>
   </div>
 </div>
