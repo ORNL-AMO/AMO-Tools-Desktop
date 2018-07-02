@@ -13,11 +13,18 @@ export class BagMethodFormComponent implements OnInit {
   outputs: BagMethodOutput;
   @Output('calculate')
   calculate = new EventEmitter<BagMethodInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {}
 
   emitChange() {
     this.calculate.emit(this.inputs);
+  }
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 }

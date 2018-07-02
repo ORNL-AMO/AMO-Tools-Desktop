@@ -17,7 +17,10 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>Find the pipe diameter, when we know the volumetric flow velocity, pressure and design velocity are known</p>
+            <div class="card-header">
+              Description
+            </div>
+            <p>This calculator helps in finding the pipe diameter, when the volumetric flow velocity, pressure, and design velocity are known.</p>
             <div class="help-content">
               <div class="card" *ngIf="currentField == 'airFlow'">
                 <div class="card-header">
@@ -43,7 +46,8 @@
                 </div>
                 <div class="card-block">
                   <p>The air flow velocity that is meant to flow through the pipe</p>
-                  <p>Constraints: 20 fps is recommended for a header, but it should never exceed 30 fps.</p>
+                  <label><u><strong>Constraints</strong></u></label>
+                  <ul><p>20 fps is recommended for a header.<br> The value should never exceed 30 fps.</p></ul>
                 </div>
               </div>
               <div class="card" *ngIf="currentField == 'atmosphericPressure'">

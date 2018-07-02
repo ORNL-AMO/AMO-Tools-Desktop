@@ -15,7 +15,7 @@
       <div class="input-group">
         <input name="cylinderDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderDiameter" id="cylinderDiameter"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('cylinderDiameter')">
-        <span class="input-group-addon units">inch</span>
+        <span class="input-group-addon units">in</span>
       </div>
     </div>
     <div class="form-group">
@@ -23,7 +23,7 @@
       <div class="input-group">
         <input name="cylinderStroke" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderStroke" id="cylinderStroke"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('cylinderStroke')">
-        <span class="input-group-addon units">inch</span>
+        <span class="input-group-addon units">in</span>
       </div>
     </div>
     <div class="form-group" *ngIf="inputs.pistonType == 1">
@@ -31,7 +31,7 @@
       <div class="input-group">
         <input name="pistonRodDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.pistonRodDiameter" id="pistonRodDiameter"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pistonRodDiameter')">
-        <span class="input-group-addon units">inch</span>
+        <span class="input-group-addon units">in</span>
       </div>
     </div>
     <div class="form-group">
@@ -43,10 +43,11 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="cyclesPerMinute">Cycles per Minute Stroke</label>
+      <label for="cyclesPerMinute">Cycles per Minute</label>
       <div class="input-group">
         <input name="cyclesPerMinute" class="form-control" type="number" step="any" [(ngModel)]="inputs.cyclesPerMinute" id="cyclesPerMinute"
                (input)="emitChange()" onfocus="this.select();" (focus)="changeField('cyclesPerMinute')">
+        <span class="input-group-addon units">stroke</span>
       </div>
     </div>
   </div>

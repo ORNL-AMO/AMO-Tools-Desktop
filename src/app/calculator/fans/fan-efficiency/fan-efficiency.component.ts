@@ -15,6 +15,8 @@ export class FanEfficiencyComponent implements OnInit {
   fsat: FSAT;
   @Input()
   settings: Settings;
+  @Input()
+  inAssessment: boolean;
 
   inputs: FanEfficiencyInputs = {
     fanType: undefined,
@@ -37,9 +39,9 @@ export class FanEfficiencyComponent implements OnInit {
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
-  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService) { }
   ngOnInit() {
-    if (this.fsat && this.fsat.fanSetup.fanType != 12) {
+    if (this.inAssessment && this.fsat && this.fsat.fanSetup.fanType != 12) {
       this.inputs.fanType = this.fsat.fanSetup.fanType;
       this.inputs.fanSpeed = this.fsat.fanSetup.fanSpeed;
       this.inputs.flowRate = this.fsat.fieldData.flowRate;
@@ -72,7 +74,7 @@ export class FanEfficiencyComponent implements OnInit {
 
   calculate() {
     if (this.checkInputs() == 'VALID') {
-      this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs);
+      this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs, this.settings);
     } else {
       this.fanEfficiency = 0;
     }

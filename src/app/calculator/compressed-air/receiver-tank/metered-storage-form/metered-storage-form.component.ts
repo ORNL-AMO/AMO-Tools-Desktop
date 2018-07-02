@@ -8,7 +8,9 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./metered-storage-form.component.css']
 })
 export class MeteredStorageFormComponent implements OnInit {
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+  
   inputs: ReceiverTankMeteredStorage = {
     method: 2,
     lengthOfDemand: 0,
@@ -28,5 +30,9 @@ export class MeteredStorageFormComponent implements OnInit {
 
   getTotalReceiverVolume() {
     this.totalReceiverVolume = StandaloneService.receiverTankSizeMeteredStorage(this.inputs);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
   }
 }

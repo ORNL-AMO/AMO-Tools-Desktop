@@ -210,7 +210,16 @@ export class FsatService {
   }
 
 
-  optimalFanEfficiency(inputs: FanEfficiencyInputs): number {
+  optimalFanEfficiency(inputs: FanEfficiencyInputs, settings: Settings): number {
+    if(settings.fanFlowRate != 'ft3/min' ){
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m2').to('ft2');
+
+    }
+
+    if(settings.fanPressureMeasurement != 'inH2o'){
+      inputs.inletPressure = this.convertUnitsService.value(inputs.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+      inputs.outletPressure = this.convertUnitsService.value(inputs.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
     return fanAddon.optimalFanEfficiency(inputs);
   }
 

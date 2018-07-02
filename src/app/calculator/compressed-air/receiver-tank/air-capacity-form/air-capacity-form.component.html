@@ -3,7 +3,7 @@
     <label for="tankSize">Receiver Tank Size</label>
     <div class="input-group">
       <input name="tankSize" class="form-control" type="number" step="any" [(ngModel)]="inputs.tankSize" id="tankSize" (input)="getAirCapacity()"
-        onfocus="this.select();">
+        onfocus="this.select();" (focus)="changeField('tankSize')">
       <span class="input-group-addon units">gal</span>
     </div>
   </div>
@@ -11,7 +11,7 @@
     <label for="airPressureIn">Air Pressure In</label>
     <div class="input-group">
       <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
-        (input)="getAirCapacity()" onfocus="this.select();">
+        (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
       <span class="input-group-addon units">psi</span>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <label for="airPressureOut">Air Pressure Out</label>
     <div class="input-group">
       <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
-        (input)="getAirCapacity()" onfocus="this.select();">
+        (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
       <span class="input-group-addon units">psi</span>
     </div>
   </div>

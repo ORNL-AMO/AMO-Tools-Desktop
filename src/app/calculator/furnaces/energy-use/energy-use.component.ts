@@ -48,7 +48,7 @@ export class EnergyUseComponent implements OnInit {
 
   headerHeight: number;
 
-  currentField: string = 'orificeDiameter';
+  currentField: string = 'default';
   tabSelect: string = 'results';
 
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }

@@ -90,7 +90,7 @@
           </app-results-summary>
       </div>
       <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))" [ngStyle]="{'height.px':reportContainerHeight}">
-        TODO: REPORT GRAPHS
+        <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment"></app-fsat-report-graphs>
       </div>
       <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)" [ngStyle]="{'height.px':reportContainerHeight}">
         TODO: REPORT SANKEY
