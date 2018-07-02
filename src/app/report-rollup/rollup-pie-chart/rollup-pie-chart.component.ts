@@ -32,10 +32,6 @@ export class RollupPieChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('rollup-pie-chart');
-    console.log('assessmentType = ' + this.assessmentType);
-    console.log('results = ');
-    console.log(this.results);
     this.graphColors = graphColors;
     this.getLabels();
     this.getValues();
@@ -46,7 +42,6 @@ export class RollupPieChartComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('rollup-pie-chart-changes');
     if (this.results !== undefined && changes.results !== undefined) {
       if (!changes.results.firstChange) {
         this.getLabels();
