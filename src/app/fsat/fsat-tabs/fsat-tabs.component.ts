@@ -7,6 +7,7 @@ import { FsatFluidService } from '../fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from '../fan-motor/fan-motor.service';
 import { FanFieldDataService } from '../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../fan-setup/fan-setup.service';
+import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -34,11 +35,15 @@ export class FsatTabsComponent implements OnInit {
   fanValid: boolean;
   motorValid: boolean;
   fieldDataValid: boolean;
+
+  modifyConditionsTabSub: Subscription;
+  modifyConditionsTab: string;
   constructor(private fsatService: FsatService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private fsatFluidService: FsatFluidService,
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
-    private fanSetupService: FanSetupService) { }
+    private fanSetupService: FanSetupService,
+    private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -61,6 +66,10 @@ export class FsatTabsComponent implements OnInit {
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.checkValid();
     })
+
+    this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
+      this.modifyConditionsTab = val;
+    })
   }
 
   ngOnDestroy() {
@@ -69,6 +78,7 @@ export class FsatTabsComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.modSubscription.unsubscribe();
     this.updateDataSub.unsubscribe();
+    this.modifyConditionsTabSub.unsubscribe();
   }
 
   changeStepTab(str: string) {
@@ -97,7 +107,7 @@ export class FsatTabsComponent implements OnInit {
     this.fsatService.openModificationModal.next(true);
   }
 
-  checkValid(){
+  checkValid() {
     let baseline: FSAT = this.compareService.baselineFSAT;
     this.checkFluidValid(baseline);
     this.checkFanValid(baseline);
@@ -115,19 +125,19 @@ export class FsatTabsComponent implements OnInit {
     }
   }
 
-  checkFluidValid(fsat: FSAT){
+  checkFluidValid(fsat: FSAT) {
     this.fluidValid = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity);
   }
 
-  checkFanValid(fsat: FSAT){
+  checkFanValid(fsat: FSAT) {
     this.fanValid = this.fanSetupService.isFanSetupValid(fsat.fanSetup);
   }
 
-  checkMotorValid(fsat: FSAT){
+  checkMotorValid(fsat: FSAT) {
     this.motorValid = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
   }
 
-  checkFieldDataValid(fsat: FSAT){
+  checkFieldDataValid(fsat: FSAT) {
     this.fieldDataValid = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
   }
 }
