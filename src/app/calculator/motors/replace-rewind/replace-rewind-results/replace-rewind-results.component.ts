@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ReplaceRewindResults } from '../replace-Rewind.component';
 
 @Component({
   selector: 'app-replace-rewind-results',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./replace-rewind-results.component.css']
 })
 export class ReplaceRewindResultsComponent implements OnInit {
+  @Input()
+  results: ReplaceRewindResults;
 
   constructor() { }
 
