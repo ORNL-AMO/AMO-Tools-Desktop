@@ -9,7 +9,7 @@ import { FsatService } from '../fsat.service';
 var svg;
 
 // use these values to alter label font position and size
-const width = 2650,
+var width = 2650,
   height = 1400,
   labelFontSize = 28,
   labelPadding = 4,
@@ -62,7 +62,7 @@ export class FsatSankeyComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService, private fsatService: FsatService) { }
 
   ngOnInit() {
-    if (this.location != "sankey-diagram") {
+    if (this.location != "sankey-diagram" && this.location != "explore-opportunities-sankey") {
       // this.location = this.location + this.modIndex.toString();
       if (this.location == 'baseline') {
         this.location = this.assessmentName + '-baseline';
@@ -78,6 +78,7 @@ export class FsatSankeyComponent implements OnInit {
       this.location = this.location.replace(/[\])}[{(]/g, '');
       this.location = this.location.replace(/#/g, "");
     }
+
   }
 
   ngAfterViewInit() {
@@ -164,15 +165,44 @@ export class FsatSankeyComponent implements OnInit {
 
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
-    this.width = width;
-    this.height = height;
-
-    svg = d3.select(this.ngChart.nativeElement).append('svg')
-      .attr("width", "100%")
-      .attr("height", "80%")
-      .attr("viewBox", "0 0 " + width + " " + height)
-      .attr("preserveAspectRatio", "xMinYMin")
-      .append("g");
+    if (this.location === 'explore-opportunities-sankey') {
+\      labelFontSize = 8,
+        labelPadding = 10,
+        topLabelPositionY = 40,
+        bottomLabelPositionY = 1250,
+        topReportPositionY = 125,
+        bottomReportPositionY = 1250,
+        width = 400,
+        height = 300;
+      this.width = 400;
+      this.height = 300;
+      this.baseSize = 50;
+      svg = d3.select(this.ngChart.nativeElement).append('svg')
+        .attr("viewBox", "0 0 400 300")
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
+    else {
+      width = 2650,
+        height = 1400,
+        labelFontSize = 28,
+        labelPadding = 4,
+        reportFontSize = 34,
+        reportPadding = 4,
+        topLabelPositionY = 150,
+        bottomLabelPositionY = 1250,
+        topReportPositionY = 125,
+        bottomReportPositionY = 1250;
+      this.width = width;
+      this.height = height;
+      this.baseSize = 300;
+      svg = d3.select(this.ngChart.nativeElement).append('svg')
+        .attr("width", "100%")
+        .attr("height", "80%")
+        .attr("viewBox", "0 0 " + this.width + " " + this.height)
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
 
     var nodes = [];
     nodes.push(
@@ -359,107 +389,183 @@ export class FsatSankeyComponent implements OnInit {
       .append("polygon")
       .attr('class', 'node');
 
-    var nodes_text = svg.selectAll(".nodetext")
-      .data(nodes)
-      .enter()
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("dx", function (d) {
-        if (d.input) {
-          return d.x - 150;
-        }
-        else if (d.output) {
-          return d.x + 200;
-        }
-        else {
-          return d.x;
-        }
-      })
-      .attr("dy", function (d) {
-        if (d.input || d.output) {
-          if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + labelFontSize + labelPadding - 170;
+
+    if (this.location === 'explore-opportunities-sankey') {
+      var nodes_text = svg.selectAll(".nodetext")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          if (d.input) {
+            return d.x - 30;
+          }
+          else if (d.output) {
+            return d.x + (d.displaySize * .7) + 24;
           }
           else {
-            return d.y + (d.displaySize) + reportFontSize + reportPadding - 170;
+            return d.x;
           }
-        }
-        else {
-          if (d.top) {
-            if (this.location === 'sankey-diagram') {
+        })
+        .attr("dy", function (d) {
+          if (d.input || d.output) {
+            return d.y + (d.displaySize);
+          }
+          else {
+            if (d.top) {
               return topLabelPositionY;
             }
             else {
-              return topReportPositionY;
+              return topLabelPositionY;
+            }
+          }
+        })
+        .text(function (d) {
+          if (!d.inter) {
+            return d.name;
+          }
+        })
+        .style("font-size", labelFontSize + "px");
+
+      var twoDecimalFormat = d3.format(".3");
+
+      var nodes_value = svg.selectAll(".nodetext")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          if (d.input) {
+            return d.x - 30;
+          }
+          else if (d.output) {
+            return d.x + (d.displaySize * .7) + 24;
+          }
+          else {
+            return d.x;
+          }
+        })
+        .attr("dy", function (d) {
+          if (d.input || d.output) {
+            return d.y + (d.displaySize) + labelPadding;
+          }
+          else if (d.top) {
+            return topLabelPositionY + labelPadding;
+          }
+          else {
+            return topLabelPositionY + labelPadding;
+          }
+        })
+        .text(function (d) {
+          if (!d.inter) {
+            return twoDecimalFormat(d.value) + " kW";
+          }
+        })
+        .style("font-size", labelFontSize + "px");
+    }
+    else {
+      var nodes_text = svg.selectAll(".nodetext")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          if (d.input) {
+            return d.x - 150;
+          }
+          else if (d.output) {
+            return d.x + 200;
+          }
+          else {
+            return d.x;
+          }
+        })
+        .attr("dy", function (d) {
+          if (d.input || d.output) {
+            if (this.location === 'sankey-diagram') {
+              return d.y + (d.displaySize) + labelFontSize + labelPadding - 170;
+            }
+            else {
+              return d.y + (d.displaySize) + reportFontSize + reportPadding - 170;
+            }
+          }
+          else {
+            if (d.top) {
+              if (this.location === 'sankey-diagram') {
+                return topLabelPositionY;
+              }
+              else {
+                return topReportPositionY;
+              }
+            }
+            else {
+              if (this.location === 'sankey-diagram') {
+                return bottomLabelPositionY;
+              }
+              else {
+                return bottomReportPositionY;
+              }
+            }
+          }
+        })
+        .text(function (d) {
+          if (!d.inter) {
+            return d.name;
+          }
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
+
+      var twoDecimalFormat = d3.format(".3");
+
+      var nodes_value = svg.selectAll(".nodetext")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dx", function (d) {
+          if (d.input) {
+            return d.x - 150;
+          }
+          else if (d.output) {
+            return d.x + 200;
+          }
+          else {
+            return d.x;
+          }
+        })
+        .attr("dy", function (d) {
+          if (d.input || d.output) {
+            if (this.location === 'sankey-diagram') {
+              return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 170;
+            }
+            else {
+              return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 170;
+            }
+          }
+          else if (d.top) {
+            if (this.location === 'sankey-diagram') {
+              return topLabelPositionY + labelFontSize + labelPadding;
+            }
+            else {
+              return topReportPositionY + reportFontSize + reportPadding;
             }
           }
           else {
             if (this.location === 'sankey-diagram') {
-              return bottomLabelPositionY;
+              return bottomLabelPositionY + labelFontSize + labelPadding;
             }
             else {
-              return bottomReportPositionY;
+              return bottomReportPositionY + reportFontSize + reportPadding;
             }
           }
-        }
-      })
-      .text(function (d) {
-        if (!d.inter) {
-          return d.name;
-        }
-      })
-      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
-
-    var twoDecimalFormat = d3.format(".3");
-
-    var nodes_value = svg.selectAll(".nodetext")
-      .data(nodes)
-      .enter()
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("dx", function (d) {
-        if (d.input) {
-          return d.x - 150;
-        }
-        else if (d.output) {
-          return d.x + 200;
-        }
-        else {
-          return d.x;
-        }
-      })
-      .attr("dy", function (d) {
-        if (d.input || d.output) {
-          if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 170;
+        })
+        .text(function (d) {
+          if (!d.inter) {
+            return twoDecimalFormat(d.value) + " kW";
           }
-          else {
-            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2) - 170;
-          }
-        }
-        else if (d.top) {
-          if (this.location === 'sankey-diagram') {
-            return topLabelPositionY + labelFontSize + labelPadding;
-          }
-          else {
-            return topReportPositionY + reportFontSize + reportPadding;
-          }
-        }
-        else {
-          if (this.location === 'sankey-diagram') {
-            return bottomLabelPositionY + labelFontSize + labelPadding;
-          }
-          else {
-            return bottomReportPositionY + reportFontSize + reportPadding;
-          }
-        }
-      })
-      .text(function (d) {
-        if (!d.inter) {
-          return twoDecimalFormat(d.value) + " kW";
-        }
-      })
-      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
+        })
+        .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
+    }
   }
 
 

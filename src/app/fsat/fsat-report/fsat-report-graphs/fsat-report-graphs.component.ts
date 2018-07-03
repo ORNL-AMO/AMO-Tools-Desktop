@@ -82,7 +82,6 @@ export class FsatReportGraphsComponent implements OnInit {
   prepFsatOptions(): void {
     this.fsatOptions.push({ name: 'Baseline', fsat: this.fsat, index: 0 });
     this.selectedFsat1 = this.fsatOptions[0];
-
     if (this.fsat.modifications !== undefined && this.fsat.modifications !== null) {
       this.modExists = true;
       let i = 1;
