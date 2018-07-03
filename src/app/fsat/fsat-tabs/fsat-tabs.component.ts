@@ -23,6 +23,8 @@ export class FsatTabsComponent implements OnInit {
   assessmentTabSub: Subscription;
   modSubscription: Subscription;
   selectedModification: FSAT;
+  calcTab: string;
+  calcTabSub: Subscription;
 
   fanDisabled: boolean;
   motorDisabled: boolean;
@@ -61,6 +63,10 @@ export class FsatTabsComponent implements OnInit {
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.checkValid();
     })
+
+    this.calcTabSub = this.fsatService.calculatorTab.subscribe(val => {
+      this.calcTab = val;
+    })
   }
 
   ngOnDestroy() {
@@ -69,6 +75,7 @@ export class FsatTabsComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.modSubscription.unsubscribe();
     this.updateDataSub.unsubscribe();
+    this.calcTabSub.unsubscribe();
   }
 
   changeStepTab(str: string) {
@@ -129,5 +136,9 @@ export class FsatTabsComponent implements OnInit {
 
   checkFieldDataValid(fsat: FSAT){
     this.fieldDataValid = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
+  }
+
+  changeCalcTab(str: string){
+    this.fsatService.calculatorTab.next(str);
   }
 }

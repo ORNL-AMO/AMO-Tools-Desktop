@@ -6,7 +6,8 @@
   <div class="input-group">
     <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
       id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')">
-    <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
   </div>
 </div>
 

@@ -1,0 +1,160 @@
+<div class="card">
+  <div class="card-header">
+    Optimal Fan Efficiency Help
+  </div>
+  <div class="card-block small">
+    <p>
+      Use this calculator to calculate the optimal fan effiency that is achievable by your fan setup.
+    </p>
+  </div>
+</div>
+
+
+<div class="card" *ngIf="currentField == 'fanType'">
+  <div class="card-header">
+    Fan Type
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      Fan Type represents what style of fan is being used based off the listings in the AMCA 201 Standard. This value will be used
+      to estimate achievable fan efficiencies based on fan style and operating conditions when automatically optimizing.
+      The Specified Efficiency option allows the user to input a fan efficiency to use when optimizing, this does not affect
+      the efficiency calculated for the baseline. </p>
+    <label>
+      <u>
+        <strong>Input</strong>
+      </u>
+    </label>
+    <br>
+    <label>
+      Options: </label>
+    <ul style="list-style: none;">
+      <li>
+        <strong>Airfoil (SISW)</strong>
+        <br> </li>
+      <li>
+        <strong>Backward Curved (SISW)</strong>
+        <br> </li>
+      <li>
+        <strong>Radial (SISW)</strong>
+        <br> </li>
+      <li>
+        <strong>Radial Tip (SISW)</strong>
+        <br> </li>
+      <li>
+        <strong>Backward Inclined (SISW)</strong>
+        <br> </li>
+      <li>
+        <strong>Airfoil (DIDW)</strong>
+        <br> </li>
+      <li>
+        <strong>Backward Inclined (DIDW)</strong>
+        <br> </li>
+      <li>
+        <strong>ICF Air handling</strong>
+        <br> </li>
+      <li>
+        <strong>ICF Material handling</strong>
+        <br> </li>
+      <li>
+        <strong>ICF Long shavings</strong>
+        <br> </li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'fanSpeed'">
+  <div class="card-header">
+    Fan Speed
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The operating or nameplate speed at which the fan is running at. Used along with the measure/required flow rate,
+      head, and number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency
+      penalty associated with the fan application, when using the optimization capability.
+    </p>
+  </div>
+</div>
+
+
+<div class="card" *ngIf="currentField == 'inletPressure'">
+  <div class="card-header">
+    Inlet Pressure
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The Static or Total Pressure at the inlet of the Fan, this must be negative.
+    </p>
+    <p>
+      Most fans are rated in terms of static pressure; however, some fans are rated in terms of total pressure. Be certain which
+      was used for the fan's selection.
+    </p>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'outletPressure'">
+  <div class="card-header">
+    Outlet Pressure
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The Static or Total Pressure at the outlet of the Fan.
+    </p>
+    <p>
+      Most fans are rated in terms of static pressure; however, some fans are rated in terms of total pressure. Be certain which
+      was used for the fan's selection.
+    </p>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'flowRate'">
+  <div class="card-header">
+    Flow Rate
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The volumetric flow rate of air at the outlet of the fan.
+    </p>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'compressibilityFactor'">
+  <div class="card-header">
+    Compressibility Factor
+  </div>
+  <div class="card-block small">
+    <label>
+      <u>
+        <strong>Description</strong>
+      </u>
+    </label>
+    <p>
+      The compressibility factor is the measure of how non-ideal the gas is.
+    </p>
+  </div>
+</div>
