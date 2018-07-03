@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { FormGroup, FormBuilder, FormControl, Validators, NgModel, FormsModule } from '@angular/forms';
 import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-pump-curve-equation-form',
@@ -19,13 +20,15 @@ export class PumpCurveEquationFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  
+  @Input()
+  isFan: boolean;
+
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
   ]
 
   // maxFlow
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.emitCalculateChanges();
@@ -53,5 +56,13 @@ export class PumpCurveEquationFormComponent implements OnInit {
       this.pumpCurveForm.headFlow6 = 0;
     }
     this.emitCalculateChanges();
+  }
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-pump-curve-data-form',
   templateUrl: './pump-curve-data-form.component.html',
@@ -19,6 +20,8 @@ export class PumpCurveDataFormComponent implements OnInit {
   inPsat: boolean;
   @Output('emitAddRow')
   emitAddRow = new EventEmitter<boolean>();
+  @Input()
+  isFan: boolean;
 
   dataForm: any;
   orderOptions: Array<number> = [
@@ -26,7 +29,7 @@ export class PumpCurveDataFormComponent implements OnInit {
   ]
   //regEquation: string = null;
   //rSq: string = null;
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() { }
 
@@ -45,5 +48,15 @@ export class PumpCurveDataFormComponent implements OnInit {
 
   addRow(){
     this.emitAddRow.emit(true);
+  }
+
+  
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

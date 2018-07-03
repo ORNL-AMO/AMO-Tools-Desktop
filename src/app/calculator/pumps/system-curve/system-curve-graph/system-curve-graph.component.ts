@@ -5,6 +5,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import * as d3 from 'd3';
 import { PsatService } from '../../../../psat/psat.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SystemCurveService } from '../system-curve.service';
 
 @Component({
   selector: 'app-system-curve-graph',
@@ -24,6 +25,8 @@ export class SystemCurveGraphComponent implements OnInit {
   lossCoefficient: number;
   @Input()
   settings: Settings;
+  @Input()
+  isFan: boolean;
 
   @ViewChild("ngChart") ngChart: ElementRef;
   exportName: string;
@@ -54,9 +57,14 @@ export class SystemCurveGraphComponent implements OnInit {
   displayExportTooltip: boolean = false;
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
   
   isFirstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
+  expanded: boolean = false;
+  constructor(private systemCurveService: SystemCurveService, private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     if (!this.lossCoefficient) {
@@ -85,6 +93,12 @@ export class SystemCurveGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
     setTimeout(() => {
       this.checkHover(btnType);
     }, 700);
@@ -99,6 +113,14 @@ export class SystemCurveGraphComponent implements OnInit {
     else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
     }
   }
 
@@ -117,6 +139,22 @@ export class SystemCurveGraphComponent implements OnInit {
       }
       else {
         this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
       }
     }
   }
@@ -142,38 +180,41 @@ export class SystemCurveGraphComponent implements OnInit {
     }
   }
 
-  resizeGraph() {
-    let curveGraph = this.doc.getElementById('systemCurveGraph');
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
 
-    this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3 / 5);
+  resizeGraph() {
+
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
+    //conditional sizing if graph is expanded/compressed
+    if (!this.expanded) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+    }
+    else {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = curveGraph.clientHeight * 0.9;
+    }
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-
-      //debug
       this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
-
-      //real version
-      // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-
-      //debug
       this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
-
-      //real version
-      // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
-    //real version
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    //debug
-    // this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    // this.height = this.canvasHeight - this.margin.top - this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5);
-
     d3.select("app-system-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     this.makeGraph();
   }
 
@@ -185,9 +226,6 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      //debug
-      // .attr("width", this.width + this.margin.left + this.margin.right)
-      // .attr("height", this.height + this.margin.top + this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5))
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -234,34 +272,25 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
+
+    let yAxisLabel, xAxisLabel: string;
+    if (this.isFan) {
+      yAxisLabel = "Pressure (" + this.getDisplayUnit(this.settings.fanPressureMeasurement) + ")"
+      xAxisLabel = "Flow Rate (" + this.getDisplayUnit(this.settings.fanFlowRate) + ")"
+    } else {
+      yAxisLabel = "Head (" + this.getDisplayUnit(this.settings.distanceMeasurement) + ")";
+      xAxisLabel = "Flow Rate (" + this.getDisplayUnit(this.settings.flowMeasurement) + ")"
+    }
+
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head (" + this.settings.distanceMeasurement + ")");
+      .html(yAxisLabel);
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow Rate (" + this.settings.flowMeasurement + ")");
-
-
-
-    //debug - trying something
-    // console.log("fontSize number = " + (this.fontSize[0] + this.fontSize[1]));
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (parseInt(this.fontSize.replace('px', '')) * 2) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("testing title");
-
-    // this.svg.append("text")
-    //   .attr("text-anchor", "left")
-    //   .attr("transform", "translate(20, " + "-" + (this.fontSize.replace('px', '')) + ")")
-    //   .attr("font-size", this.fontSize)
-    //   .attr("font-weight", "bold")
-    //   .text("test title 2");
-
+      .html(xAxisLabel);
 
     var x = d3.scaleLinear()
       .range([0, this.width]);
@@ -386,21 +415,11 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
-    //debug
     this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
       .attr("id", "tooltipPointer")
       .attr("class", "tooltip-pointer")
       .style("opacity", 1)
       .style('pointer-events', 'none');
-
-    const detailBoxWidth = 160;
-    const detailBoxHeight = 80;
-
-    // this.pointer = this.svg.append("polygon")
-    //   .attr("id", "pointer")
-    //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-    //   .style("opacity", 0)
-    //   .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -434,15 +453,11 @@ export class SystemCurveGraphComponent implements OnInit {
         this.focus
           .style("display", null)
           .style("opacity", 1)
-          .style('pointer-events', 'none');
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
+          .style('pointer-events', 'none');;
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
 
-        //debug
         this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -454,14 +469,10 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("display", null)
           .style("opacity", 1)
           .style('pointer-events', 'none');
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
 
-        //debug
         this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -473,38 +484,40 @@ export class SystemCurveGraphComponent implements OnInit {
           d = x0 - d0.x > d1.x - x0 ? d1 : d0;
         this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
 
-        // this.pointer.transition()
-        //   .style("opacity", 1);
-
         this.detailBox.transition()
           .style("opacity", 1);
 
-        //debug
         this.tooltipPointer.transition()
           .style("opacity", 1);
 
-        var detailBoxWidth = 160;
+        var detailBoxWidth = 200;
         var detailBoxHeight = 80;
-        var tooltipPointerWidth = detailBoxWidth * 0.05;
-        var tooltipPointerHeight = detailBoxHeight * 0.05;
-
-        // this.pointer
-        //   .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
-        //   .style("fill", "#ffffff")
-        //   .style("filter", "url(#drop-shadow)");
-
-        //debug
+        var flowMeasurement: string;
+        var distanceMeasurement: string;
+        var powerMeasurement: string;
+        var headOrPressure: string;
+        if (this.isFan) {
+          flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
+          distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+          powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
+          headOrPressure = 'Pressure';
+        } else {
+          flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
+          distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
+          powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
+          headOrPressure = 'Head'
+        }
         this.detailBox
           .style("padding-top", "10px")
           .style("padding-right", "10px")
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-          "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + flowMeasurement + "</div><br>" +
 
-          "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+            "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure + ": </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + distanceMeasurement + "</div><br>" +
 
-          "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")
 
           .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
           .style("top", (this.margin.top + y(d.y) + 26) + "px")
@@ -531,37 +544,8 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("border-bottom", "10px solid white")
           .style('pointer-events', 'none');
 
-        //real version
-        // this.detailBox
-        //   .style("padding-top", "10px")
-        //   .style("padding-right", "10px")
-        //   .style("padding-bottom", "10px")
-        //   .style("padding-left", "10px")
-        //   .html(
-        //   "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
-
-        //   "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
-
-        //   "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
-
-        //   .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-        //   .style("top", (this.margin.top + y(d.y) + 26) + "px")
-        //   .style("position", "absolute")
-        //   .style("width", detailBoxWidth + "px")
-        //   .style("height", detailBoxHeight + "px")
-        //   .style("padding", "10px")
-        //   .style("font", "12px sans-serif")
-        //   .style("background", "#ffffff")
-        //   .style("border", "0px")
-        //   .style("pointer-events", "none");
       })
       .on("mouseout", () => {
-        // this.pointer
-        //   .transition()
-        //   .delay(100)
-        //   .duration(600)
-        //   .style("opacity", 0);
-
         this.detailBox
           .transition()
           .delay(100)
@@ -581,14 +565,21 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("opacity", 0);
       });
 
+    var staticLabel: string;
+    var distanceMeasurement: string;
+    if (this.isFan) {
+      staticLabel = 'Calculated Static Pressure: ';
+      distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+    } else {
+      staticLabel = 'Calculated Static Head: ';
+      distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
+    }
+
     this.svg.append("text")
       .attr("id", "staticHeadText")
       .attr("x", 20)
       .attr("y", "20")
-      // debug
-      // .attr("x", 20)
-      // .attr("y", "20")
-      .text("Calculated Static Head: " + this.staticHead + ' ' + this.settings.distanceMeasurement)
+      .html(staticLabel + this.staticHead + ' ' + distanceMeasurement)
       .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
@@ -606,15 +597,27 @@ export class SystemCurveGraphComponent implements OnInit {
 
   findPointValues(x, y, increment) {
 
+    var powerMeasurement: string;
+    if (this.isFan) {
+      powerMeasurement = this.settings.fanPowerMeasurement;
+    } else {
+      powerMeasurement = this.settings.powerMeasurement;
+    }
+
     //Load data here
     var data = [];
 
     var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.controls.specificGravity.value) / 3960;
-      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
-        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      let tmpFluidPower;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      }
+      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({
         x: 0,
@@ -638,9 +641,14 @@ export class SystemCurveGraphComponent implements OnInit {
       }
 
       if (head >= 0) {
-        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.controls.specificGravity.value) / 3960;
-        if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
-          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+        let tmpFluidPower: number;
+        if (this.isFan) {
+          tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);
+        } else {
+          tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);;
+        }
+        if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
         }
         data.push({
           x: i,
@@ -660,9 +668,14 @@ export class SystemCurveGraphComponent implements OnInit {
     head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.controls.specificGravity.value) / 3960
-      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
-        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      let tmpFluidPower: number;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);;
+      }
+      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({
         x: x.domain()[1],
@@ -719,5 +732,26 @@ export class SystemCurveGraphComponent implements OnInit {
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 
 }

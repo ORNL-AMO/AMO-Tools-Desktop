@@ -9,6 +9,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.component';
 
 
 declare var fanAddon: any;
@@ -24,6 +25,7 @@ export class FsatService {
   openModificationModal: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
   updateData: BehaviorSubject<boolean>;
+  calculatorTab: BehaviorSubject<string>;
   constructor(private convertFsatService: ConvertFsatService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService) {
     this.initData();
   }
@@ -33,6 +35,7 @@ export class FsatService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
+    this.calculatorTab = new BehaviorSubject<string>('system-curve');
     this.openNewModal = new BehaviorSubject<boolean>(false);
     this.openModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -204,6 +207,20 @@ export class FsatService {
   checkFsatFluidValid(fsat: FSAT): boolean {
     let fluidForm: FormGroup = this.fsatFluidService.getGasDensityFormFromObj(fsat.baseGasDensity);
     return (fluidForm.status == 'VALID');
+  }
+
+
+  optimalFanEfficiency(inputs: FanEfficiencyInputs, settings: Settings): number {
+    if(settings.fanFlowRate != 'ft3/min' ){
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m2').to('ft2');
+
+    }
+
+    if(settings.fanPressureMeasurement != 'inH2o'){
+      inputs.inletPressure = this.convertUnitsService.value(inputs.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+      inputs.outletPressure = this.convertUnitsService.value(inputs.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    return fanAddon.optimalFanEfficiency(inputs);
   }
 
   getEmptyResults(): FsatOutput {

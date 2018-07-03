@@ -1,30 +1,37 @@
-<div class="tab-content">
-  <p>General method is used when the user needs to order a receiver tank to meet the compressed air requirements.
-  </p>
-  <div class="help-content">
-    <div class="card">
-      <div class="card-header">
-        Air Demand
+<div class="card">
+  <div class="card-header">
+    General
+  </div>
+  <div class="card-block small d-flex flex-column">
+    <p>General method is used when the user needs to order a receiver tank to meet the compressed air requirements.</p>
+
+    <div class="help-content">
+      <div class="card" *ngIf="currentField == 'airDemand'">
+        <div class="card-header">
+          Air Demand
+        </div>
+        <div class="card-block">
+          <p>Amount of air needed, which comes out of the receiver tank.</p>
+        </div>
       </div>
-      <div class="card-block">
-        <p>Amount of air needed, which comes out of the receiver tank.</p>
+
+      <div class="card" *ngIf="currentField == 'allowablePressureDrop'">
+        <div class="card-header">
+          Allowable Pressure Drop
+        </div>
+        <div class="card-block">
+          <p>The pressure drop inside the receiver tank within the tolerable limits.</p>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        Allowable Pressure Drop
-      </div>
-      <div class="card-block">
-        <p>The pressure drop inside the receiver tank within the tolerable limits.</p>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        Atmospheric Pressire
-      </div>
-      <div class="card-block">
-        <p>General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
-          at that location can be given. </p>
+      <div class="card" *ngIf="currentField == 'atmosphericPressure'">
+        <div class="card-header">
+          Atmospheric Pressire
+        </div>
+        <div class="card-block">
+          <p>General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric
+            pressure at that location can be given. </p>
+        </div>
       </div>
     </div>
   </div>
+</div>

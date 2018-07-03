@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-12 tab-content">
             <app-flow-factor-form [inputs]="inputs" (setUser)="setUserFlowRate($event)" (calculate)="getValveFlowFactor()" [(userFlowRate)]="userFlowRate"
-              [valveFlowFactor]="valveFlowFactor"></app-flow-factor-form>
+              [valveFlowFactor]="valveFlowFactor" (emitChangeField)="changeField($event)"></app-flow-factor-form>
           </div>
         </div>
       </div>
@@ -18,8 +18,13 @@
             <h3>Help</h3>
           </div>
           <div class="tab-content">
-            <p>There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient C<sub>v</sub>=1. The second one is used for calculating C<sub>v</sub> when the flow rate is known.</p>
-            <div class="card">
+            <div class="card-header">Description</div>
+            <p>
+              There are two calculators in this section. The first one can be used for finding flow rate for a pipe
+              with flow coefficient C<sub>v</sub> equal to 1. The second one is used for calculating C<sub>v</sub>
+              when the flow rate is known.
+            </p>
+            <div class="card" *ngIf="currentField == 'inletPressure'">
               <div class="card-header">
                 Inlet Pressure
               </div>
@@ -27,7 +32,7 @@
                 <p>Pressure entering the pneumatic valve.</p>
               </div>
             </div>
-            <div class="card">
+            <div class="card" *ngIf="currentField == 'outletPressure'">
               <div class="card-header">
                 Outlet Pressure
               </div>
@@ -35,7 +40,7 @@
                 <p>Pressure leaving the pneumatic valve.</p>
               </div>
             </div>
-            <div class="card">
+            <div class="card" *ngIf="currentField == 'flowRate'">
               <div class="card-header">
                 Flow Rate
               </div>

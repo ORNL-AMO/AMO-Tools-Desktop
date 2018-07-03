@@ -1,17 +1,64 @@
-<div class="d-flex w-100 justify-content-center">
-  <div class="btn-group">
-    <button class="btn btn-primary" [ngClass]="{'active':selectedGraphType == 'energyUse'}" (click)="setType('energyUse')">Energy Use</button>
-    <button class="btn btn-primary" [ngClass]="{'active':selectedGraphType == 'energyCost'}" (click)="setType('energyCost')">Energy Cost</button>
+<div class="row">
+  <div class="col-12">
+    <div class="panel-chart-container" id="panelChartContainer" [ngClass]="{'expanded-chart': expanded}" [ngStyle]="{'padding': expanded ? '10px' : '0px'}">
+
+      <div *ngIf="expanded" class="row">
+        <div class="col-12" id="compress-chart">
+          <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+          <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+            [adjustLeft]="15" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex w-100 justify-content-center">
+            <div class="btn-group">
+              <button class="btn btn-primary" [ngClass]="{'active':selectedGraphType == 'energyUse'}" (click)="setType('energyUse')">Energy Use</button>
+              <button class="btn btn-primary" [ngClass]="{'active':selectedGraphType == 'energyCost'}" (click)="setType('energyCost')">Energy Cost</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div #ngChart></div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- this is original graph button container -->
+        <!-- <div id="gridToggle" class="col-md-2"> -->
+        <!-- be sure to change "col-md-2" to "col-md-12" to fit the tooltip -->
+        <div id="gridToggle" class="col-md-12">
+          <div>
+            <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
+            <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
+              [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+          <div>
+            <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+            <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
+              [adjustLeft]="94" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div #ngChart>
 
-</div>
-<div>
-  <h5>
-    <u>
-      <strong>Note</strong>
-    </u>
-  </h5>
-  <p>Synchronous belts are the most efficient choice. However, notched belts may be a better choice when vibration damping is needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque changes that could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer before deciding to replace any belt.</p>
+
+<div class="row margin-top">
+  <div class="col-12">
+    <h5>
+      <u>
+        <strong>Note</strong>
+      </u>
+    </h5>
+    <p>Synchronous belts are the most efficient choice. However, notched belts may be a better choice when vibration damping
+      is needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque changes that could
+      shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer before deciding to replace
+      any belt.
+    </p>
+  </div>
 </div>
