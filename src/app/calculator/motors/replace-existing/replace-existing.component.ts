@@ -32,6 +32,7 @@ export class ReplaceExistingComponent implements OnInit {
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
