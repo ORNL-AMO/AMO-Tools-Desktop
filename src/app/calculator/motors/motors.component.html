@@ -44,15 +44,28 @@
           <div class="col-11">
             <a (click)="showTool('motor-drive')"> Motor Drive</a>
             <p>
-              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched V-Belt drive, and Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application should be considered.
+              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched V-Belt drive, and
+              Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application should
+              be considered.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/driver.png" class="ico-size4">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('replace-existing')"> Replace Existing Motor - Efficiency Upgrade</a>
+            <p>
+              TODO: HELP
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
+
 
 
 
@@ -74,6 +87,10 @@
   <app-motor-drive></app-motor-drive>
 </div>
 
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'replace-existing'">
+  <app-replace-existing></app-replace-existing>
+</div>
 
 <!-- Original Version -->
 <!--

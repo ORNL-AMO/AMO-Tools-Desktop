@@ -12,6 +12,7 @@ import { MotorPerformanceModule } from './motor-performance/motor-performance.mo
 import { MotorsComponent } from './motors.component';
 import { PercentLoadEstimationModule } from "./percent-load-estimation/percent-load-estimation.module";
 import { MotorDriveModule } from './motor-drive/motor-drive.module';
+import { ReplaceExistingModule } from './replace-existing/replace-existing.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MotorDriveModule } from './motor-drive/motor-drive.module';
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     PercentLoadEstimationModule,
-    MotorDriveModule
+    MotorDriveModule,
+    ReplaceExistingModule
   ],
   providers: [
 

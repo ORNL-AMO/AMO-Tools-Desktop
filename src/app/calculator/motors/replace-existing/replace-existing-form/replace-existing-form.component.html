@@ -1,0 +1,12 @@
+<form>
+  <div class="form-group">
+    <label for="efficiency">Operating Hours</label>
+    <div class="input-group calc-addon-group">
+      <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours" [(ngModel)]="inputs.operatingHours"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')">
+      <span class="units">hrs/yr</span>
+    </div>
+  </div>
+
+  <!--ADD REMAINING FIELDS-->
+</form>
