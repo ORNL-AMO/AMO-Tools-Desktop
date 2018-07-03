@@ -19,8 +19,7 @@ export class ReplaceExistingService {
 
 
   getEnergySavings(inputs: ReplaceExistingData): number {
-    //TODO: logic for energy calculation, see word doc in issue
-    return 0;
+    return 0.746 * inputs.motorSize * (inputs.load / 100) * inputs.operatingHours * (100 / inputs.existingEfficiency - 100 / inputs.newEfficiency);
   }
 
   getCostSavings(enerygSavings: number, cost: number): number{
