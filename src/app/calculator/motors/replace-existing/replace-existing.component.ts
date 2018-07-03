@@ -21,12 +21,12 @@ export class ReplaceExistingComponent implements OnInit {
   settings: Settings;
   results: { annualEnergySavings: number, costSavings: number } = { annualEnergySavings: 0, costSavings: 0 };
   inputs: ReplaceExistingData = {
-    operatingHours: 0,
-    motorSize: 0,
-    existingEfficiency: 0,
-    load: 0,
-    electricityCost: 0,
-    newEfficiency: 0
+    operatingHours: 5200,
+    motorSize: 150,
+    existingEfficiency: 93,
+    load: 75,
+    electricityCost: 0.07,
+    newEfficiency: 95.8
   };
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
