@@ -37,7 +37,7 @@
         <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('report')">
           <span>Report</span>
         </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('sankey')">
+        <li [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('sankey')">
           <span>Sankey</span>
         </li>
         <li class="disabled" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('calculators')">

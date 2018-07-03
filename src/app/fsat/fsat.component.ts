@@ -64,6 +64,15 @@ export class FsatComponent implements OnInit {
   isModalOpen: boolean;
   openModSub: Subscription;
   modalOpenSubscription: Subscription;
+  calcTab: string;
+  calcTabSubscription: Subscription;
+
+
+  fsatOptions: Array<any>;
+  fsatOptionsLength: number;
+  fsat1: FSAT;
+  fsat2: FSAT;
+
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -79,6 +88,7 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
+
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -100,6 +110,7 @@ export class FsatComponent implements OnInit {
           this.compareService.setCompareVals(this._fsat);
         }
         this.getSettings();
+        this.initSankeyList();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
@@ -145,6 +156,10 @@ export class FsatComponent implements OnInit {
       this.isModalOpen = isOpen;
     })
 
+    this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val =>{ 
+      this.calcTab = val;
+    })
+
   }
 
   ngOnDestroy() {
@@ -159,12 +174,28 @@ export class FsatComponent implements OnInit {
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
     this.modalOpenSubscription.unsubscribe();
+    this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
   }
+
+
+  initSankeyList() {
+    this.fsatOptions = new Array<any>();
+    this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
+    this.fsat1 = this.fsatOptions[0];
+    if (this._fsat.modifications) {
+      this._fsat.modifications.forEach(mod => {
+        this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
+      });
+      this.fsat2 = this.fsatOptions[1];
+      this.fsatOptionsLength = this.fsatOptions.length;
+    }
+  }
+
 
   getContainerHeight() {
     if (this.content) {

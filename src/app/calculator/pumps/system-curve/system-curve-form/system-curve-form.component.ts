@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
+import { FSAT } from '../../../../shared/models/fans';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-system-curve-form',
@@ -32,10 +34,14 @@ export class SystemCurveFormComponent implements OnInit {
   setVals = new EventEmitter<boolean>();
   @Output('save')
   save = new EventEmitter<boolean>();
+  @Input()
+  fsat: FSAT;
+  @Input()
+  isFan: boolean;
 
   exponentInputError: string = null;
   pumpForm: any;
-  options: Array<PSAT>;
+  options: Array<PSAT | FSAT>;
 
   p1FlowRate: number;
   p1Head: number;
@@ -46,10 +52,10 @@ export class SystemCurveFormComponent implements OnInit {
   tmpSpecificGravity: number;
   tmpSystemLossExponent: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.options = new Array<PSAT>();
+    this.options = new Array<PSAT | FSAT>();
     if (this.psat) {
       this.options.push(this.psat);
       if (this.psat.modifications) {
@@ -57,84 +63,27 @@ export class SystemCurveFormComponent implements OnInit {
           this.options.push(mod.psat);
         })
       }
-    } else {
-
+    }else if(this.fsat){
+      this.options.push(this.fsat);
+      if(this.fsat.modifications) {
+        this.fsat.modifications.forEach(mod => {
+          this.options.push(mod.fsat);
+        })
+      }
+    }else {
       this.p1Option = 'Point 1';
       this.p2Option = 'Point 2';
     }
-
-    // if (this.pointOne) {
-    //   this.p1Head = this.pointOne.form.controls.head.value;
-    //   this.p1FlowRate = this.pointOne.form.controls.flowRate.value;
-    //   this.p1Option = this.pointOne.form.controls.pointAdjustment.value;
-    // }
-
-    // if (this.pointTwo) {
-    //   this.p2Head = this.pointTwo.form.controls.head.value;
-    //   this.p2FlowRate = this.pointTwo.form.controls.flowRate.value;
-    //   this.p2Option = this.pointTwo.form.controls.pointAdjustment.value;
-    // }
-
-    // if (this.curveConstants) {
-    //   this.tmpSpecificGravity = this.curveConstants.form.controls.specificGravity.value;
-    //   this.tmpSystemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
-    // }
-    // this.checkInputs();
   }
 
   saveChanges(){
     this.save.emit(true)
   }
 
-  // checkInputs() {
-  //   let p1 = this.checkForm(this.pointOne);
-  //   let p2 = this.checkForm(this.pointTwo);
-  //   let cc = this.checkForm(this.curveConstants);
-
-  //   if (p1) {
-  //     this.calculateP1.emit(true);
-  //   }
-  //   if (p2) {
-  //     this.calculateP2.emit(true);
-  //   }
-  //   if (p1 && p2 && cc) {
-  //     this.calculate.emit(true);
-  //   }
-  // }
-
-  // checkForm(point: any) {
-  //   if (point.form.status == "VALID") {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
-
   setFormValues() {
     if(this.inAssessment){
       this.setVals.emit(true);
     }
-    // if (!this.inAssessment) {
-    //   this.pointOne.form.patchValue({
-    //     flowRate: this.p1FlowRate,
-    //     head: this.p1Head,
-    //     pointAdjustment: this.p1Option
-    //   });
-
-    //   this.pointTwo.form.patchValue({
-    //     flowRate: this.p2FlowRate,
-    //     head: this.p2Head,
-    //     pointAdjustment: this.p2Option
-    //   });
-    //   this.curveConstants.form.patchValue({
-    //     specificGravity: this.tmpSpecificGravity,
-    //     systemLossExponent: this.tmpSystemLossExponent
-    //   });
-    // }else{
-    //   this.setVals.emit(true);
-    // }
-
   }
 
   checkLossExponent() {
@@ -149,6 +98,15 @@ export class SystemCurveFormComponent implements OnInit {
     else {
       this.exponentInputError = null;
       return true;
+    }
+  }
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
     }
   }
 

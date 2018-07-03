@@ -1,3 +1,54 @@
-<p>
-  fsat-rollup-graphs works!
-</p>
+<div *ngIf="!printView">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-6">
+      <div class="row justify-content-center btn-toggle">
+        <div class="btn-group btn-group-sm align-self-center">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')" [ngClass]="{'active': dataOption == 'cost'}">Energy Cost</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')" [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
+        </div>
+      </div>
+
+      <!-- c3 chart container -->
+      <div class="row justify-content-center align-content-center pad-top" *ngIf="pieChartData">
+        <div #pieChartContainer class="col-12">
+          <app-rollup-pie-chart [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="results" [assessmentType]="'fsat'"
+            [printView]="printView"></app-rollup-pie-chart>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-lg-7 col-md-11 output-summary">
+      <app-fsat-rollup-energy-table [settings]="settings" [resultData]="resultData" [totalEnergyUse]="totalEnergyUse" [totalCost]="totalCost"
+        [graphColors]="graphColors"></app-fsat-rollup-energy-table>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="printView">
+  <div *ngFor="let result of allResults; let i = index">
+    <div class="row justify-content-center">
+      <div *ngIf="i == 0" class="col-12 text-center">
+        Energy Cost
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div *ngIf="i == 1" class="col-12 text-center">
+        Energy Use
+      </div>
+    </div>
+    <div class="row justify-content-center print-rollup-pie-container">
+      <div class="col-12">
+        <app-rollup-pie-chart [printView]="printView" [settings]="settings" [chartContainerWidth]="getPieWidth()" [results]="result"
+          [assessmentType]="'fsat'"></app-rollup-pie-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 output-summary">
+      <app-fsat-rollup-energy-table [settings]="settings" [resultData]="resultData" [totalEnergyUse]="totalEnergyUse" [totalCost]="totalCost"
+        [graphColors]="graphColors"></app-fsat-rollup-energy-table>
+    </div>
+  </div>
+</div>
