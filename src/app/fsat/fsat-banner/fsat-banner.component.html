@@ -2,23 +2,15 @@
   <div class="col-3">
     <div class="row" *ngIf="assessment">
       <div class="img-col col-sm-auto col-md-auto col-lg-auto">
-        <img class="img-icon p-0" src="assets/images/fanIcon-4.png">
+        <img class="img-icon" src="assets/images/fanIcon-4.png">
       </div>
       <div class="col">
         <h2 class="h2-name">
           {{assessment.name}}
+          <br>
+          <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small>
         </h2>
-        <!-- <h3 class="furnace-name" *ngIf="settings.furnaceType != 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">
-              {{settings.furnaceType}}
-            </h3>
-            <h3 class="furnace-name" *ngIf="settings.energySourceType != 'Electricity'">
-              <span *ngIf="settings.energySourceType == 'Fuel'">{{settings.energySourceType}}-fired</span>
-              <span *ngIf="settings.energySourceType == 'Steam'">{{settings.energySourceType}}-based</span>
-            </h3>
-            <h3 class="furnace-name" *ngIf="settings.furnaceType == 'Custom Electrotechnology' && settings.energySourceType == 'Electricity'">{{settings.furnaceType}}:
-              <br>{{settings.customFurnaceName}}</h3> -->
       </div>
-      <!-- <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small> -->
     </div>
   </div>
 
