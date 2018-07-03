@@ -24,6 +24,8 @@ export class FsatTabsComponent implements OnInit {
   assessmentTabSub: Subscription;
   modSubscription: Subscription;
   selectedModification: FSAT;
+  calcTab: string;
+  calcTabSub: Subscription;
 
   fanDisabled: boolean;
   motorDisabled: boolean;
@@ -69,6 +71,9 @@ export class FsatTabsComponent implements OnInit {
 
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
+    });
+    this.calcTabSub = this.fsatService.calculatorTab.subscribe(val => {
+      this.calcTab = val;
     })
   }
 
@@ -79,6 +84,7 @@ export class FsatTabsComponent implements OnInit {
     this.modSubscription.unsubscribe();
     this.updateDataSub.unsubscribe();
     this.modifyConditionsTabSub.unsubscribe();
+    this.calcTabSub.unsubscribe();
   }
 
   changeStepTab(str: string) {
@@ -139,5 +145,9 @@ export class FsatTabsComponent implements OnInit {
 
   checkFieldDataValid(fsat: FSAT) {
     this.fieldDataValid = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
+  }
+
+  changeCalcTab(str: string){
+    this.fsatService.calculatorTab.next(str);
   }
 }

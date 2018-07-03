@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row psat" *ngIf="settings && showForm">
+<div class="modify-conditions panel-container row" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && showForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -12,11 +12,11 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-12">
-            <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+            <app-system-curve-form [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
               (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
           </div>
           <div class="col-md-auto btn-col">
-            <button *ngIf="inAssessment" class="btn btn-primary reset-btn" (click)="initialiazeCalculator(true)">Reset Points to Match Assessment</button>
+            <button *ngIf="inAssessment" class="btn btn-primary reset-btn" (click)="initializeCalculator(true)">Reset Points to Match Assessment</button>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11" id="systemCurveGraph">
-              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+              <app-system-curve-graph [isFan]="isFan" [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
                 [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
 
             </div>

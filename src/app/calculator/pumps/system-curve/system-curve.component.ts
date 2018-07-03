@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms'
+import { FormBuilder, Validators, FormGroup } from '@angular/forms'
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -10,6 +10,8 @@ import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calcu
 import * as _ from 'lodash';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { FSAT } from '../../../shared/models/fans';
+import { SystemCurveService } from './system-curve.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -24,7 +26,12 @@ export class SystemCurveComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
-  curveConstants: any;
+  @Input()
+  isFan: boolean;
+  @Input()
+  fsat: FSAT;
+
+  curveConstants: { form: FormGroup };
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -35,8 +42,8 @@ export class SystemCurveComponent implements OnInit {
 
   headerHeight: number;
 
-  pointOne: any;
-  pointTwo: any;
+  pointOne: { form: FormGroup, fluidPower: number };
+  pointTwo: { form: FormGroup, fluidPower: number };;
 
   staticHead: number;
   lossCoefficient: number;
@@ -45,12 +52,16 @@ export class SystemCurveComponent implements OnInit {
   calcExists: boolean = false;
   showForm: boolean = false;
   saving: boolean = false;
-  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private systemCurveService: SystemCurveService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     //in assesssment
     if (this.inAssessment) {
-      this.psat.name = 'Baseline';
+      if (this.isFan) {
+        this.fsat.name = 'Baseline';
+      } else {
+        this.psat.name = 'Baseline';
+      }
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
       if (this.calculator) {
         this.calcExists = true;
@@ -89,7 +100,11 @@ export class SystemCurveComponent implements OnInit {
       //get system settings if using stand alone calculator
       if (!this.settings) {
         this.settings = this.settingsDbService.globalSettings;
-        this.convertDefaults(this.settings);
+        if (!this.isFan) {
+          this.convertPumpDefaults(this.settings);
+        } else {
+          this.convertFanDefaults(this.settings);
+        }
         this.showForm = true;
       } else {
         this.showForm = true;
@@ -146,16 +161,12 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
-  convertDefaults(settings: Settings) {
+  convertPumpDefaults(settings: Settings) {
     if (settings.flowMeasurement != 'gpm') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
-      //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
       this.pointOne.form.patchValue({
         flowRate: this.psatService.roundVal(tmpVal, 2)
       })
-      // this.pointTwo.form.patchValue({
-      //   flowRate: this.psatService.roundVal(tmpVal2, 2)
-      // })
     }
     if (settings.distanceMeasurement != 'ft') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft').to(settings.distanceMeasurement);
@@ -169,16 +180,35 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
+  convertFanDefaults(settings: Settings) {
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('inH2o').to(settings.fanPressureMeasurement);
+      this.pointOne.form.patchValue({
+        flowRate: this.psatService.roundVal(tmpVal, 2)
+      })
+    }
+    if (settings.fanFlowRate != 'ft3/min') {
+      let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft3/min').to(settings.fanFlowRate);
+      let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft3/min').to(settings.fanFlowRate);
+      this.pointOne.form.patchValue({
+        head: this.psatService.roundVal(tmpVal, 2)
+      })
+      this.pointTwo.form.patchValue({
+        head: this.psatService.roundVal(tmpVal2, 2)
+      })
+    }
+  }
+
   initInPsat() {
     this.curveConstants = {
-      form: this.initCurveConstants(this.psat)
+      form: this.systemCurveService.initPumpCurveConstants(this.psat)
     };
     this.pointOne = {
-      form: this.initPointForm(this.psat),
+      form: this.systemCurveService.initPumpPointForm(this.psat),
       fluidPower: 0
     };
     this.pointTwo = {
-      form: this.initPointForm(),
+      form: this.systemCurveService.initPumpPointForm(),
       fluidPower: 0
     };
     this.pointTwo.form.patchValue({
@@ -187,59 +217,81 @@ export class SystemCurveComponent implements OnInit {
     })
   }
 
-  initDefault() {
+  initInFsat() {
     this.curveConstants = {
-      form: this.initCurveConstants()
+      form: this.systemCurveService.initFanCurveConstants(this.fsat)
     };
     this.pointOne = {
-      form: this.initPointForm(),
+      form: this.systemCurveService.initFanPointForm(this.fsat),
       fluidPower: 0
     };
     this.pointTwo = {
-      form: this.initPointForm(),
+      form: this.systemCurveService.initFanPointForm(),
       fluidPower: 0
     };
+    this.pointTwo.form.patchValue({
+      flowRate: '',
+      head: ''
+    })
+  }
+
+
+  initDefault() {
+    if (!this.isFan) {
+      this.curveConstants = {
+        form: this.systemCurveService.initPumpCurveConstants()
+      };
+      this.pointOne = {
+        form: this.systemCurveService.initPumpPointForm(),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.systemCurveService.initPumpPointForm(),
+        fluidPower: 0
+      };
+    } else {
+      this.curveConstants = {
+        form: this.systemCurveService.initFanCurveConstants()
+      };
+      this.pointOne = {
+        form: this.systemCurveService.initFanPointForm(),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.systemCurveService.initFanPointForm(),
+        fluidPower: 0
+      };
+    }
+
     this.pointTwo.form.patchValue({
       flowRate: 0,
       head: 200
     })
   }
 
-  initPointForm(psat?: PSAT) {
-    if (psat) {
-      return this.formBuilder.group({
-        'flowRate': [psat.inputs.flow_rate, Validators.required],
-        'head': [psat.inputs.head, Validators.required],
-        'pointAdjustment': [psat.name]
-      })
-    } else {
-      return this.formBuilder.group({
-        'flowRate': [2000, Validators.required],
-        'head': [276.8, Validators.required],
-        'pointAdjustment': ['']
-      })
-    }
-  }
-
-  initCurveConstants(psat?: PSAT) {
-    if (psat) {
-      return this.formBuilder.group({
-        'specificGravity': [psat.inputs.specific_gravity, Validators.required],
-        'systemLossExponent': [1.9, Validators.required]
-      })
-    } else {
-      return this.formBuilder.group({
-        'specificGravity': [1.0, Validators.required],
-        'systemLossExponent': [1.9, Validators.required]
-      })
-    }
-  }
 
   initializeCalculator(reset?: boolean) {
-    let id
-    if (this.calculator) {
-      id = this.calculator.id;
+    let systemCurve: SystemCurve;
+    if (!this.isFan) {
+      systemCurve = this.initializePsatCalculator();
+    } else {
+      systemCurve = this.initializeFsatCalculator();
     }
+    if (this.calculator) {
+      this.calculator.systemCurve = systemCurve;
+    } else {
+      this.calculator = {
+        assessmentId: this.assessment.id,
+        systemCurve: systemCurve
+      }
+    }
+    if (reset) {
+      this.setPointValuesFromCalc(true)
+      this.saveCalculator();
+    }
+  }
+
+  initializePsatCalculator() {
     let dataPoints = new Array<CurveData>();
     let baselinePoint: CurveData = {
       modName: this.psat.name,
@@ -264,18 +316,35 @@ export class SystemCurveComponent implements OnInit {
       selectedP1Name: dataPoints[0].modName,
       selectedP2Name: dataPoints[1].modName
     }
-    if (this.calculator) {
-      this.calculator.systemCurve = systemCurve;
-    } else {
-      this.calculator = {
-        assessmentId: this.assessment.id,
-        systemCurve: systemCurve
-      }
+    return systemCurve;
+  }
+
+  initializeFsatCalculator() {
+    let dataPoints = new Array<CurveData>();
+    let baselinePoint: CurveData = {
+      modName: this.fsat.name,
+      flowRate: this.fsat.fieldData.flowRate,
+      head: this.fsat.fieldData.outletPressure - this.fsat.fieldData.inletPressure
     }
-    if (reset) {
-      this.setPointValuesFromCalc(true)
-      this.saveCalculator();
+    dataPoints.push(baselinePoint)
+    if (this.fsat.modifications) {
+      this.fsat.modifications.forEach(mod => {
+        let modPoint: CurveData = {
+          modName: mod.fsat.name,
+          flowRate: mod.fsat.fieldData.flowRate,
+          head: mod.fsat.fieldData.outletPressure - mod.fsat.fieldData.inletPressure
+        }
+        dataPoints.push(modPoint);
+      })
     }
+    let systemCurve: SystemCurve = {
+      specificGravity: this.fsat.fieldData.compressibilityFactor,
+      systemLossExponent: 1.9,
+      dataPoints: dataPoints,
+      selectedP1Name: dataPoints[0].modName,
+      selectedP2Name: dataPoints[1].modName
+    }
+    return systemCurve;
   }
 
   saveCalculator() {
@@ -313,27 +382,35 @@ export class SystemCurveComponent implements OnInit {
   //calculations
   calculateP1Flow() {
     if (this.pointOne.form.status == 'VALID') {
-      this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      if (!this.isFan) {
+        this.pointOne.fluidPower = this.systemCurveService.getPumpFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        this.pointOne.fluidPower = this.systemCurveService.getFanFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      }
     }
   }
 
   calculateP2Flow() {
     if (this.pointTwo.form.status == 'VALID') {
-      this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      if (!this.isFan) {
+        this.pointTwo.fluidPower = this.systemCurveService.getPumpFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        this.pointTwo.fluidPower = this.systemCurveService.getFanFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+      }
     }
   }
 
 
   calculateValues() {
     if (this.pointOne.form.status == 'VALID' && this.pointTwo.form.status == 'VALID' && this.curveConstants.form.status == 'VALID') {
-      this.lossCoefficient = this.getLossCoefficient(
+      this.lossCoefficient = this.systemCurveService.getLossCoefficient(
         this.pointOne.form.controls.flowRate.value,
         this.pointOne.form.controls.head.value,
         this.pointTwo.form.controls.flowRate.value,
         this.pointTwo.form.controls.head.value,
         this.curveConstants.form.controls.systemLossExponent.value
       );
-      this.staticHead = this.getStaticHead(
+      this.staticHead = this.systemCurveService.getStaticHead(
         this.pointOne.form.controls.flowRate.value,
         this.pointOne.form.controls.head.value,
         this.pointTwo.form.controls.flowRate.value,
@@ -343,22 +420,6 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
-  getFluidPower(head: number, flow: number, specificGravity: number): number {
-    //from Daryl -> fluidPower = (head * flow * specificGravity) / 3960
-    return (head * flow * specificGravity) / 3960;
-  }
-
-
-  getLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
-    //from PSAT/curve.html -> k = (h2-h1)/(Math.pow(f2,C)-Math.pow(f1,C))
-    return (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent));
-  }
-
-  getStaticHead(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
-    //from PSAT/curve.html -> hS = h1-(Math.pow(f1,1.9) * (h2-h1) / (Math.pow(f2,C) - Math.pow(f1,C)))
-    let tmpStaticHead = headOne - (Math.pow(flowRateOne, 1.9) * (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent)));
-    return this.psatService.roundVal(tmpStaticHead, 2);
-  }
   setTab(str: string) {
     this.tabSelect = str;
   }

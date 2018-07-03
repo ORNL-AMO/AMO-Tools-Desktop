@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FsatReportGraphsComponent } from './fsat-report-graphs.component';
+import { FanEfficiencyComponent } from './fan-efficiency.component';
 
-describe('FsatReportGraphsComponent', () => {
-  let component: FsatReportGraphsComponent;
-  let fixture: ComponentFixture<FsatReportGraphsComponent>;
+describe('FanEfficiencyComponent', () => {
+  let component: FanEfficiencyComponent;
+  let fixture: ComponentFixture<FanEfficiencyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FsatReportGraphsComponent ]
+      declarations: [ FanEfficiencyComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FsatReportGraphsComponent);
+    fixture = TestBed.createComponent(FanEfficiencyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
