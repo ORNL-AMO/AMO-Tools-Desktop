@@ -123,6 +123,11 @@ export class RollupBarChartComponent implements OnInit {
         this.ngChart.nativeElement.className = "printing-psat-rollup-bar-chart";
       }
     }
+    else if (this.assessmentType == "fsat") {
+      if (this.printView) {
+        this.ngChart.nativeElement.className = "printing-fsat-rollup-bar-chart";
+      }
+    }
 
     let rotateAmount: number;
     let paddingRight: number;
@@ -249,6 +254,9 @@ export class RollupBarChartComponent implements OnInit {
     if (!this.title) {
       if (this.assessmentType == "phast") {
         this.exportName = "phast-rollup-bar-graph";
+      }
+      else if (this.assessmentType == "fsat") {
+        this.exportName = "fsat-rollup-bar-graph";
       }
       else {
         this.exportName = "psat-rollup-bar-graph";

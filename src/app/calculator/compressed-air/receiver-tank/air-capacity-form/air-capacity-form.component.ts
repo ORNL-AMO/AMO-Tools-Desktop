@@ -33,4 +33,8 @@ export class AirCapacityFormComponent implements OnInit {
   getTankSize() {
     this.tankCubicFoot = this.inputs.tankSize / 7.48;
   }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
 }

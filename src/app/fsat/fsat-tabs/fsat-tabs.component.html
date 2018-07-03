@@ -66,3 +66,25 @@
     </div>
   </div>
 </div>
+
+
+<ul class="tabs subtabs fsat" *ngIf="mainTab == 'calculators'">
+  <li [ngClass]="{'active': calcTab == 'fsat-203'}">
+    <a (click)="changeCalcTab('fsat-203')">Operating Points</a>
+  </li><!--
+  --><li [ngClass]="{'active': calcTab == 'system-curve'}">
+    <a (click)="changeCalcTab('system-curve')">System Curve</a>
+  </li><!--
+  --><li [ngClass]="{'active': calcTab == 'fan-efficiency'}">
+  <a (click)="changeCalcTab('fan-efficiency')">Optimal Fan Efficiency</a>
+</li><!--
+--><li [ngClass]="{'active': calcTab == 'motor-performance'}">
+    <a (click)="changeCalcTab('motor-performance')">Motor Performance</a>
+  </li><!--
+  --><li [ngClass]="{'active': calcTab == 'nema-energy-efficiency'}">
+    <a (click)="changeCalcTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+  </li><!--
+  --><li [ngClass]="{'active': calcTab == 'pump-curve'}">
+    <a (click)="changeCalcTab('pump-curve')">Fan Curve</a>
+  </li>
+</ul>

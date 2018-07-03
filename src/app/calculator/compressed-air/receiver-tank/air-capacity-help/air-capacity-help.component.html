@@ -1,9 +1,14 @@
-<div class="tab-content">
-  <p>Usable Air Capacity computes the quantity of compressed air that is actually available for use. When air receivers are installed,
-    the system's pressure profile and lack of storage limit the effectiveness of compressed air energy storage.
-  </p>
+ <div class="card">
+    <div class="card-header">
+      Description
+    </div>
+    <div class="card-block small d-flex flex-column">
+      <p>This calculator computes the quantity of compressed air that is actually available for use. When air receivers
+        are installed, the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy
+        storage. Hence this calculator proves useful in such a context.</p>
+    </div>
   <div class="help-content">
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'tankSize'">
       <div class="card-header">
         Receiver Tank Size
       </div>
@@ -11,7 +16,7 @@
         <p>Quantity of air receiver tank could hold.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'airPressureIn'">
       <div class="card-header">
         Inlet Pressure
       </div>
@@ -19,7 +24,7 @@
         <p>Pressure of air entering the Tank in psi.</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="currentField == 'airPressureOut'">
       <div class="card-header">
         Outlet Pressure
       </div>

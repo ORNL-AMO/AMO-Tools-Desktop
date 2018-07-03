@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row psat calculator-panel" *ngIf="settings && pumpCurveForm">
+<div class="modify-conditions panel-container row calculator-panel" [ngClass]="{'psat': !isFan, 'fsat': isFan}"  *ngIf="settings && pumpCurveForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -7,7 +7,8 @@
             <img src="assets/images/pump-curve.png" class="ico-size">
           </div>
           <div class="col">
-            <h3>Pump Curve Calculator</h3>
+            <h3 *ngIf="!isFan">Pump Curve Calculator</h3>
+            <h3 *ngIf="isFan">Fan Curve Calculator</h3>
           </div>
         </div>
         <div class="row justify-content-center pump-curve-toggle-switch">
@@ -18,7 +19,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
+            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
               [selectedFormView]="selectedFormView"></app-pump-curve-form>
           </div>
         </div>
@@ -43,7 +44,7 @@
             </div>
             <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
               <div class="col-11" id="pumpCurveGraph">
-                <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
+                <app-pump-curve-graph [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
                 <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
               </div>
               <!-- <div class="col-11">

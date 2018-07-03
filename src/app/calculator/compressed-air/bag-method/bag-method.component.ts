@@ -11,6 +11,7 @@ export class BagMethodComponent implements OnInit {
 
   inputs: BagMethodInput;
   outputs: BagMethodOutput;
+  currentField: string = 'default';
   constructor() { }
 
   ngOnInit() {
@@ -31,4 +32,9 @@ export class BagMethodComponent implements OnInit {
   calculateAnnualConsumption(inputs: BagMethodInput) {
     this.outputs = StandaloneService.bagMethod(inputs);
   }
+
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
 }
