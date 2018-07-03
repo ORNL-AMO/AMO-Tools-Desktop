@@ -7,6 +7,45 @@
       <span class="units">hrs/yr</span>
     </div>
   </div>
-
+  <div class="form-group">
+    <label for="efficiency">Motor Size</label>
+    <div class="input-group calc-addon-group">
+      <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" [(ngModel)]="inputs.motorSize"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')">
+      <span class="units">hp</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Efficiency of Existing Motor</label>
+    <div class="input-group calc-addon-group">
+      <input name="existingEfficiency" type="number" min="0" step="1" class="form-control" id="existingEfficiency" [(ngModel)]="inputs.existingEfficiency"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingEfficiency')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Load</label>
+    <div class="input-group calc-addon-group">
+      <input name="load" type="number" min="0" step="1" class="form-control" id="load" [(ngModel)]="inputs.load"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('load')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Electricity Cost</label>
+    <div class="input-group calc-addon-group">
+      <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost" [(ngModel)]="inputs.electricityCost"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
+      <span class="units">$/kWh</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Efficiency of New Motor</label>
+    <div class="input-group calc-addon-group">
+      <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency" [(ngModel)]="inputs.newEfficiency"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('newEfficiency')">
+      <span class="units">%</span>
+    </div>
+  </div>
   <!--ADD REMAINING FIELDS-->
 </form>
