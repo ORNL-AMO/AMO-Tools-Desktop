@@ -15,8 +15,6 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
   @Input()
   resultData: Array<PsatResultsData>;
 
-
-  // constructor(private reportRollupService: ReportRollupService) { }
   constructor() { }
   ngOnInit() { }
 
