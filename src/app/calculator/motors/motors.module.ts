@@ -13,6 +13,7 @@ import { MotorsComponent } from './motors.component';
 import { PercentLoadEstimationModule } from "./percent-load-estimation/percent-load-estimation.module";
 import { MotorDriveModule } from './motor-drive/motor-drive.module';
 import { ReplaceExistingModule } from './replace-existing/replace-existing.module';
+import { ReplaceRewindModule } from './replace-rewind/replace-rewind.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ReplaceExistingModule } from './replace-existing/replace-existing.modul
     MotorPerformanceModule,
     PercentLoadEstimationModule,
     MotorDriveModule,
-    ReplaceExistingModule
+    ReplaceExistingModule,
+    ReplaceRewindModule
   ],
   providers: [
 

@@ -61,6 +61,17 @@
             </p>
           </div>
         </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/driver.png" class="ico-size4">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('replace-rewind')"> Replace vs Rewind</a>
+            <p>
+              TODO: HELP
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -90,6 +101,10 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'replace-existing'">
   <app-replace-existing></app-replace-existing>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'replace-rewind'">
+  <app-replace-rewind></app-replace-rewind>
 </div>
 
 <!-- Original Version -->
