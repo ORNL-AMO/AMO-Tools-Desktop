@@ -166,7 +166,7 @@ export class FsatSankeyComponent implements OnInit {
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
     if (this.location === 'explore-opportunities-sankey') {
-\      labelFontSize = 8,
+      labelFontSize = 8,
         labelPadding = 10,
         topLabelPositionY = 40,
         bottomLabelPositionY = 1250,
