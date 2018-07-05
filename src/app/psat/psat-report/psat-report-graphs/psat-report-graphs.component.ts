@@ -175,19 +175,35 @@ export class PsatReportGraphsComponent implements OnInit {
     if (motorLoss > 0) {
       selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(motorLoss);
+    }else {
+      selectedPieLabels.push('Motor Loss: ' + 0 + "%");
+      selectedPieValues.push(0);
     }
+
     if (driveLoss > 0) {
       selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(driveLoss);
+    }else {
+      selectedPieLabels.push('Drive Loss: ' + 0 + "%");
+      selectedPieValues.push(0);
     }
+
     if (pumpLoss > 0) {
       selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(pumpLoss);
+    }else {
+      selectedPieLabels.push('Pump Loss: ' + 0 + "%");
+      selectedPieValues.push(0);
     }
+
     if (usefulOutput > 0) {
       selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
       selectedPieValues.push(usefulOutput);
+    }else {
+      selectedPieLabels.push('Useful Output: ' + 0 + "%");
+      selectedPieValues.push(0);
     }
+
     selectedBarValues.push(energyInput);
     selectedBarValues.push(motorLoss);
     selectedBarValues.push(driveLoss);
