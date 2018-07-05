@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
@@ -38,6 +38,12 @@ export class FanFieldDataComponent implements OnInit {
   @ViewChild('modalBody') public modalBody: ElementRef;
   @ViewChild('amcaModal') public amcaModal: ModalDirective;
   @ViewChild('pressureModal') public pressureModal: ModalDirective;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getBodyHeight();
+  }
+
 
   bodyHeight: number;
   loadEstimateMethods: Array<{ value: number, display: string }> = [
@@ -293,6 +299,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   getBodyHeight() {
+    console.log('get height')
     if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
     } else {

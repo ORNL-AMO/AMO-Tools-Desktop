@@ -124,9 +124,9 @@
       </div>
       <div #modalBody class="modal-body p-0">
         <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="fieldData.inletPressureData"
-          (emitSave)="saveInletPressure($event)"></app-calculate-inlet-pressure>
+          (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-inlet-pressure>
         <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="fieldData.outletPressureData"
-          (emitSave)="saveOutletPressure($event)"></app-calculate-outlet-pressure>
+          (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow'" [settings]="settings" [fsat]="fsat" (saveFlowAndPressure)="saveFlowAndPressure($event)"
           [bodyHeight]="bodyHeight"></app-calculate-flow-pressures>
       </div>
