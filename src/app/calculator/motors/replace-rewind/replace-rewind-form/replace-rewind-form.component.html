@@ -31,7 +31,7 @@
       <span class="units">$/kWh</span>
     </div>
   </div>
-  <h3>Rewound Motor</h3>
+  <label class="group-label">Rewound Motor</label>
   <div class="form-group">
     <label for="efficiency">Current Efficiency</label>
     <div class="input-group calc-addon-group">
@@ -56,7 +56,7 @@
       <span class="units">$</span>
     </div>
   </div>
-  <h3>New Motor</h3> 
+  <label class="group-label">New Motor</label>
   <div class="form-group">
     <label for="efficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
@@ -70,6 +70,15 @@
     <div class="input-group calc-addon-group">
       <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost" [(ngModel)]="inputs.purchaseCost"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('purchaseCost')">
+      <span class="units">$</span>
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <label for="efficiency">Differential Cost</label>
+    <div class="input-group calc-addon-group">
+      <input name="differentialCost" type="number" min="0" step="1" class="form-control" id="differentialCost" [(ngModel)]="inputs.differentialCost"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('differentialCost')">
       <span class="units">$</span>
     </div>
   </div>

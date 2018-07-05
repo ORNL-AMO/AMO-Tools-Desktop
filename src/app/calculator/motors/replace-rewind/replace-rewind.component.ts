@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { ReplaceRewindService } from './replace-rewind.service'
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -28,10 +29,10 @@ export class ReplaceRewindComponent implements OnInit {
     rewindEfficiencyLoss: 0.5,
     costOfRewind: 8384,
     newEfficiency: 95.7,
-    purchaseCost: 33163
+    purchaseCost: 33163,
+    differentialCost: 24779,
   };
   results: ReplaceRewindResults = {
-    differentialCost: 0,
     rewoundEnergyUse: 0,
     rewoundEnergyCost: 0,
     newEnergyUse: 0,
@@ -86,11 +87,11 @@ export interface ReplaceRewindData {
   rewindEfficiencyLoss: number,
   costOfRewind: number,
   newEfficiency: number,
-  purchaseCost: number
+  purchaseCost: number,
+  differentialCost: number
 }
 
 export interface ReplaceRewindResults {
-  differentialCost: number,
   rewoundEnergyUse: number,
   rewoundEnergyCost: number,
   newEnergyUse: number,

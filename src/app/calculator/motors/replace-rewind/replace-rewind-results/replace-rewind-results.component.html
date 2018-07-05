@@ -1,4 +1,3 @@
-<!--should be good. may want to add percent savings and percent graph -->
 <table class="table table-hover table-striped">
   <tbody>
     <tr>
@@ -7,26 +6,26 @@
       <th>New Motor</th>
     </tr>
     <tr>
-      <td>Energy Use</td>
-      <td>{{results.rewoundEnergyUse | number : 2}} kWh/yr</td>
-      <td>{{results.newEnergyUse | number : 2}} kWh/yr</td>
+      <td><span>Energy Use</span></td>
+      <td>{{results.rewoundEnergyUse | number : '1.0-2'}} kWh/yr</td>
+      <td>{{results.newEnergyUse | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
-      <td>Energy Cost</td>
+      <td><span>Energy Cost</span></td>
       <td>{{results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
       <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td>Annual Energy Savings</td>
-      <td>{{results.annualEnergySavings | number : 2}} kWh/yr</td>
+      <td><span>Annual Energy Savings</span></td>
+      <td>{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
-      <td>Cost Savings</td>
-      <td>{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+      <td><span>Cost Savings</span></td>
+      <td colspan="2">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td>Simple Payback</td>
-      <td>{{results.simplePayback | number : 2}} yrs</td>
+      <td><span>Simple Payback</span></td>
+      <td colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
     </tr>
   </tbody>
 </table>
