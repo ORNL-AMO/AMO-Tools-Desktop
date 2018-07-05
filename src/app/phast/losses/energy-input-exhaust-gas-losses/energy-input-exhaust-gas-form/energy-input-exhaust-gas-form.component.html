@@ -14,8 +14,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': compareElectricalPowerInput(), 'invalid': exhaustGasForm.controls.electricalPowerInput.status == 'INVALID'}">
         <input [readonly]="!baselineSelected" name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricalPowerInput"
           id="electricalPowerInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('electricalPowerInput')">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+        <span class="input-group-addon units">hp</span>
       </div>
     </div>
   </div>
