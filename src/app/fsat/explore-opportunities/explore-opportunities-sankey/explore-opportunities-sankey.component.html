@@ -1,0 +1,12 @@
+<div class="row justify-content-center sankey-toggle-switch">
+  <div class="btn-group align-self-center">
+    <button type="button" class="btn btn-secondary" (click)="switchSankey('Baseline')" [ngClass]="{'active': selectedView == 'Baseline'}">Baseline</button>
+    <button type="button" class="btn btn-secondary" (click)="switchSankey('Modified')" [ngClass]="{'active': selectedView == 'Modified'}">Modification</button>
+  </div>
+</div>
+
+<app-fsat-sankey *ngIf="selectedView == 'Baseline'" [fsat]="baselineSankey" [settings]="settings" [location]="'explore-opportunities-sankey'"
+  [printView]="false" [isBaseline]="true" [assessmentName]="assessmentName"></app-fsat-sankey>
+
+<app-fsat-sankey *ngIf="selectedView == 'Modified'" [fsat]="modificationSankey" [settings]="settings" [location]="'explore-opportunities-sankey'"
+  [printView]="false" [isBaseline]="false" [assessmentName]="assessmentName"></app-fsat-sankey>

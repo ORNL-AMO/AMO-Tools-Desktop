@@ -197,8 +197,8 @@ export class FsatComponent implements OnInit {
         this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
       });
       this.fsat2 = this.fsatOptions[1];
-      this.fsatOptionsLength = this.fsatOptions.length;
     }
+    this.fsatOptionsLength = this.fsatOptions.length;
   }
 
 
