@@ -279,10 +279,8 @@ export class FsatComponent implements OnInit {
   saveNewMod(mod: Modification) {
     this._fsat.modifications.push(mod);
     this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
+    this.save();
     this.closeAddNewModal();
-    this.addNewModal.onHidden.subscribe(() => {
-      this.save();
-    })
   }
   saveGasDensity(newDensity: BaseGasDensity) {
     this._fsat.baseGasDensity = newDensity;
