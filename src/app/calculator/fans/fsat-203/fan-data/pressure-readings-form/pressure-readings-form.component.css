@@ -1,0 +1,49 @@
+.input-group-text{
+    font-size: small;
+    padding: 6px;
+}
+
+.data-labels{
+    font-size: small;
+}
+
+
+.vert-text{
+    writing-mode: vertical-rl;
+    text-align: center;
+    transform: rotate(180deg);
+}
+
+.vert-text-col{
+    padding-right: 0px;
+}
+
+.point-label{
+    text-transform: uppercase;
+    font-size: small;
+}
+
+.disabled-input{
+    text-align: center;
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;
+}
+
+label{
+    font-size: small;
+}
+
+.form-control{
+    font-size: small;
+}
+
+.hide-text{
+    opacity: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.form-padding{
+    padding-top: 15px;
+}

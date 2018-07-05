@@ -1,0 +1,284 @@
+<div class="help-header pb-1">
+
+  <h3>Enter measured data to calculate your system's annual savings potential.</h3>
+  <!-- <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on gathering motor data.
+      </p> -->
+</div>
+<div class="help-content pt-0">
+  <div class="card" *ngIf="currentField == 'barometricPressure'">
+    <div class="card-header">
+      Barometric Pressure
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The total atmospheric air pressure. Standard Atmosphere is 101325 Pa, 1.01325 bar, 760 mmHg (torr), 29.92 in Hg and 14.696
+        psi.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'gasType'">
+    <div class="card-header">
+      Gas Type
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        NEEDED
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'inputType'">
+    <div class="card-header">
+      Method to Establish Gas Density
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Method to Establish Gas Density has 4 options for the determination of gas density: using relative humidity, wet bulb temperature,
+        dew point temperature or already knowing the gas density. Choose which option is appropriate for what is known.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'dryBulbTemp'">
+    <div class="card-header">
+      Dry Bulb Temperature
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The true thermodynamic temperature, measured shielded from radiation and moisture. This indicates the amount of heat in the
+        air without including the amount of moisture. Taken with a standard thermometer.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'staticPressure'">
+    <div class="card-header">
+      Static Pressure
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The portion of the air pressure due to compression of the gas, at the inlet of the fan.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'wetBulbTemp'">
+    <div class="card-header">
+      Wet Bulb Temperature
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The lowest temperature that is achieved by using evaporative cooling on a water-soaked surface. Read using a thermometer
+        covered in a water-soaked cloth over which air is passed, such as a sling psychrometer. When obtaining Wet Bulb temperature,
+        care should be taken to assure an air velocity of 700 – 2000 ft/min (3.6-10.2 m/s) over the wet bulb and that evaporative
+        equilibrium has been attained.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificGravity'">
+    <div class="card-header">
+      Specific Gravity
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Ratio of the density of the gas at the inlet of the Fan to the density of air at normal/standard temperature and pressure
+        (68 &#8457;, 1 atm). The Specific Gravity for Air is 1. Specific Gravity for flue gases ranges between approximately
+        0.2 and 1.1, depending on temperature and specific composition.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificHeatGas'">
+    <div class="card-header">
+      Specific Heat Gas (Cp)
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The amount of heat required to raise the temperature of the gas one degree for each unit of mass. For air this is 0.24 Btu/lb
+        &#8457;, for flue gases, this ranges between 0.248 and 0.320 Btu/lb &#8457;, depending on temperature and composition.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'relativeHumidity'">
+    <div class="card-header">
+      Relative Humidity
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The relative humidity is the ratio of the partial pressure of water vapor in the air to the equilibrium vapor pressure of
+        water. Can be measured with a hygrometer or found via a weather report.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+</div>
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'dewPoint'">
+    <div class="card-header">
+      Dew Point
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The temperature that air is cooled enough to become saturated with water vapor. Can be found via weather reports.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+</div>
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'gasDensity'">
+    <div class="card-header">
+      Gas Density
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        The total density of the gas at the inlet of the Fan.
+      </p>
+      <!-- <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        TODO
+      </p> -->
+    </div>
+  </div>
+</div>

@@ -11,16 +11,21 @@ import { PhastResultsData } from '../report-rollup.service';
 export class ReportSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Output('showModal')
-  showModal = new EventEmitter<boolean>();
+  @Output('showPhastModal')
+  showPhastModal = new EventEmitter<boolean>();
   @Output('showPsatModal')
   showPsatModal = new EventEmitter<boolean>();
+  @Output('showFsatModal')
+  showFsatModal = new EventEmitter<boolean>();
   @Input()
   phastResults: Array<PhastResultsData>;
   @Input()
   numPhasts: number;
   @Input()
   numPsats: number;
+  @Input()
+  numFsats: number;
+
 
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
@@ -33,7 +38,7 @@ export class ReportSummaryComponent implements OnInit {
 
 
   showFurnaceRollup() {
-    this.showModal.emit(true);
+    this.showPhastModal.emit(true);
   }
   // showModal() {
   //     this.rollupModal.show();
@@ -45,6 +50,10 @@ export class ReportSummaryComponent implements OnInit {
 
   showPumpModal() {
     this.showPsatModal.emit(true);
+  }
+
+  showFanModal(){
+    this.showFsatModal.emit(true);
   }
 
   collapseSummary(str: string) {

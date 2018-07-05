@@ -1,5 +1,5 @@
 <label class="group-label">
-    Pump Data</label>
+  Pump Data</label>
 <div class="row">
   <div class="col-12">
     <label>Order</label>
@@ -23,15 +23,18 @@
       <div class="input-group">
         <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
           (focus)="focusField('flow')" (input)="emitCalculateChanges()">
-        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
       </div>
     </div>
     <div class="form-group col-5">
-      <label class="section-label" *ngIf="index == 0" for="head">Head</label>
+      <label class="section-label" *ngIf="index == 0 && !isFan" for="head">Head</label>
+      <label class="section-label" *ngIf="index == 0 && isFan" for="head">Pressure</label>
       <div class="input-group">
         <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
           (focus)="focusField('head')" (input)="emitCalculateChanges()">
-        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
     </div>
     <div class="col-2" style="height: 100%;">

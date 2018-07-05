@@ -28,6 +28,10 @@ export class PumpCurveFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
+  @Input()
+  isFan: boolean;
+
+
   curveForm: any;
   options: Array<string> = [
     'Diameter',
@@ -35,7 +39,7 @@ export class PumpCurveFormComponent implements OnInit {
   ]
 
 
-  constructor(private pumpCurveService: PumpCurveService, private psatService: PsatService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() { }
 
@@ -102,4 +106,15 @@ export class PumpCurveFormComponent implements OnInit {
     }
     return tmpArr;
   }
+
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
+
 }

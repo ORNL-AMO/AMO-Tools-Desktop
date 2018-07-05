@@ -8,12 +8,14 @@ import { SteamSettingsComponent } from './steam-settings/steam-settings.componen
 import { PhastSettingsComponent } from './phast-settings/phast-settings.component';
 import { SettingsService } from './settings.service';
 import { FacilityInfoComponent } from './facility-info/facility-info.component';
+import { FsatSettingsComponent } from './fsat-settings/fsat-settings.component';
 
 @NgModule({
     declarations: [
         ApplicationSettingsComponent,
         PsatSettingsComponent,
         PhastSettingsComponent,
+        FsatSettingsComponent,
         SteamSettingsComponent,
         FacilityInfoComponent
     ],
@@ -29,8 +31,9 @@ import { FacilityInfoComponent } from './facility-info/facility-info.component';
         PsatSettingsComponent,
         ApplicationSettingsComponent,
         PhastSettingsComponent,
-        SteamSettingsComponent,
-        FacilityInfoComponent
+        FacilityInfoComponent,
+        FsatSettingsComponent,
+        SteamSettingsComponent
     ]
 })
 

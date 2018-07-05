@@ -370,7 +370,7 @@ export class SankeyService {
   getExothermicHeatSpacing(): number {
     return this.exothermicHeatSpacing;
   }
-
+  
   setChemicalEnergy(phastResults: PhastResults) {
     this.chemicalEnergy = phastResults.energyInputTotalChemEnergy;
   }

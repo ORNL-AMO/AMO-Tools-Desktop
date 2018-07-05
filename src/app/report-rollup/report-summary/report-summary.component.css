@@ -37,6 +37,11 @@
     box-shadow: 0px 0px 6px 0px #2980b9 !important;
 }
 
+.fan-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #FFE400 !important;
+}
+
 
 
 .coming-soon .summary-header {
@@ -138,6 +143,9 @@ dd{
         padding: 2px 10px;
     }
 
+
+
+
 dl.summary-list {
     margin-bottom: 0px;    
 
@@ -198,6 +206,14 @@ dl.summary-list {
 
 .card.pumps .card-header > span {
     background: #2980b9;
+}
+
+.card.fans .card-header > span {
+    background: #FFE400;
+}
+
+.card.fans .card-header > span span {
+    color: black !important;
 }
 
 .card-header > span span {

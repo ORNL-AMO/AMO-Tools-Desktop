@@ -7,7 +7,7 @@
                     <app-psat-summary [numPsats]="numPsats"></app-psat-summary>
                 </li>
                 <li *ngIf="numPsats == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header fans">
+                    <div class="summary-header">
                         <h3>Pumps</h3>
                         <span>
                             <span>--</span>
@@ -32,7 +32,7 @@
                     <app-phast-summary [settings]="settings" [numPhasts]="numPhasts"></app-phast-summary>
                 </li>
                 <li *ngIf="numPhasts == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
-                    <div class="summary-header fans">
+                    <div class="summary-header">
                         <h3>Furnaces</h3>
                         <span>
                             <span>--</span>
@@ -53,7 +53,10 @@
                         <dd>---- MWh</dd>
                     </dl>
                 </li>
-                <li [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
+                <li *ngIf="numFsats != 0" [hidden]="showSummary == 'closed'" class="fan-summary" (click)="showFanModal()" [ngClass]="{'disabled': numFsats == 0}">
+                    <app-fsat-summary [numFsats]="numFsats"></app-fsat-summary>
+                </li>
+                <li *ngIf="numFsats == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
                     <div class="summary-header fans">
                         <h3>Fans</h3>
                         <span>

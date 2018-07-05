@@ -14,7 +14,7 @@ export const specificHeat = {
         name: {
           singular: 'Kilojoule per Kilogram Kelvin'
           , plural: 'Kilojoules per Kilogram Kelvin',
-          display: '(kJ/kg-K)'
+          display: '(kJ/kg-&#x212a;)'
         }
         , to_anchor: 1
       }
