@@ -398,4 +398,26 @@ export class FsatComponent implements OnInit {
   goToReport(){
     this.fsatService.mainTab.next('report')
   }
+
+  addNewMod() {
+    debugger
+    let modName: string = 'Scenario ' + (this._fsat.modifications.length + 1);
+    let tmpModification: Modification = {
+      fsat: {
+        name: modName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      }
+    }
+    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this._fsat)));
+    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
+    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
+    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
+    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    this.saveNewMod(tmpModification)
+  }
 }
