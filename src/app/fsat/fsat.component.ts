@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -35,6 +35,11 @@ export class FsatComponent implements OnInit {
 
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
 
   stepTabs: Array<string> = [
     'system-basics',

@@ -22,7 +22,9 @@ export class ModifyConditionsComponent implements OnInit {
   modificationExists: boolean;
   @Output('emitSaveAssessment')
   emitSaveAssessment = new EventEmitter<FSAT>();
-
+  @Input()
+  containerHeight: number;
+  
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
   baselineSelected: boolean = false;

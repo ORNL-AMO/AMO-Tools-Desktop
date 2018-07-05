@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from './help-panel.service';
 import { Subscription } from 'rxjs';
@@ -21,13 +21,16 @@ export class HelpPanelComponent implements OnInit {
   fsat: FSAT;
   @Input()
   modificationIndex: number;
-
+  @Input()
+  containerHeight: number;
+  @ViewChild('resultTabs') resultTabs: ElementRef;
 
   currentField: string;
   tabSelect: string = 'help';
   currentFieldSub: Subscription;
   stepTab: string;
   stepTabSub: Subscription;
+  helpHeight: number;
   constructor(private helpPanelService: HelpPanelService, private settingsDbService: SettingsDbService, private fsatService: FsatService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
@@ -49,11 +52,30 @@ export class HelpPanelComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.containerHeight){
+      this.getContainerHeight();
+    }
+  }
+
   ngOnDestroy() {
     this.stepTabSub.unsubscribe();
     this.currentFieldSub.unsubscribe();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight && this.resultTabs) {
+      console.log('get height');
+      let tabHeight = this.resultTabs.nativeElement.clientHeight;
+      this.helpHeight = this.containerHeight - tabHeight;
+    }
+  }
 
   setTab(str: string) {
     this.tabSelect = str;

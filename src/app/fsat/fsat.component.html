@@ -31,7 +31,7 @@
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment" [settings]="settings"
       (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
-      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)"></app-modify-conditions>
+      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
   </div>
 
   <!--report-->
@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <div #footer id="fsatFooter" class="footer hide-print">
+  <div #footer id="fsatFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
     <div class="pull-left" *ngIf="stepTab != 'system-basics'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>

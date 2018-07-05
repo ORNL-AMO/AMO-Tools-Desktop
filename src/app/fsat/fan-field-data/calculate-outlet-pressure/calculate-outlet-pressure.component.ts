@@ -15,7 +15,8 @@ export class CalculateOutletPressureComponent implements OnInit {
   emitSave = new EventEmitter<OutletPressureData>();
   @Input()
   settings: Settings;
-
+  @Input()
+  bodyHeight: number;
   currentField: string = 'inletLoss';
   constructor(private convertUnitsService: ConvertUnitsService) { }
 

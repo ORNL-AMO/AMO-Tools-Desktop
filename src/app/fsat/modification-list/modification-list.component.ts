@@ -30,13 +30,6 @@ export class ModificationListComponent implements OnInit {
 
   ngOnInit() {
     this.initDropdown();
-    // this.assessmentTabSubscription = this.fsatService.secondaryTab.subscribe(val => {
-    //   this.asssessmentTab = val;
-    // })
-  }
-
-  ngOnDestroy() {
-    //this.assessmentTabSubscription.unsubscribe();
   }
 
   initDropdown() {
@@ -46,7 +39,6 @@ export class ModificationListComponent implements OnInit {
   }
   selectModification(index: number, close?: boolean) {
     this.compareService.setCompareVals(this.fsat, index);
-    //this.fsatService.getResults.next(true);
     this.initDropdown()
     if (close) {
       this.close.emit(true);
@@ -54,11 +46,6 @@ export class ModificationListComponent implements OnInit {
   }
 
   goToModification(index: number, componentStr: string) {
-    // let tabs = this.lossesService.lossesTabs;
-    // let selectedTab = _.find(tabs, (tab) => {
-    //   return tab.componentStr == componentStr;
-    // })
-    // this.lossesService.lossesTab.next(selectedTab.step);
     this.modifyConditionsService.modifyConditionsTab.next(componentStr);
     this.selectModification(index, true);
   }
@@ -67,7 +54,7 @@ export class ModificationListComponent implements OnInit {
     if (testBadges.length == 1) {
       this.goToModification(index, testBadges[0].componentStr);
     } else {
-      this.goToModification(index, 'field-data')
+      this.goToModification(index, 'fan-field-data')
     }
   }
   getBadges(modification: FSAT) {
