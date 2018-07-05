@@ -43,10 +43,10 @@ import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow
 import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-import { FsatSankeyComponent } from './fsat-sankey/fsat-sankey.component';
 import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
 
 import { ConvertFsatService } from './convert-fsat.service';
+import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
 import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
 import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
@@ -67,6 +67,7 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     FsatResultsModule,
     FsatReportModule,
     HelpPanelModule,
+    FsatSankeyModule,
     SystemCurveModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
@@ -98,7 +99,6 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
     FanBasicsComponent,
-    FsatSankeyComponent,
     FsatReportSankeyComponent
   ],
   providers: [
@@ -112,6 +112,8 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     CompareService,
     ConvertFsatService
   ],
-  exports: [FsatComponent]
+  exports: [
+    FsatComponent
+  ]
 })
 export class FsatModule { }

@@ -17,7 +17,7 @@
 			<p>Data will be copied from your current baseline condition.</p>
 		  </div>
 		<div class="col-md-6 help-panel">
-			<div class="row">
+			<div class="row" #resultTabs>
 				<ul class="tabs primary tab-row">
 					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
 						<a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -34,11 +34,10 @@
 				<app-explore-opportunities-help [settings]="settings">
 				</app-explore-opportunities-help>
 			</div>
-			
 
-			<!-- <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-			 *ngIf="tabSelect == 'sankey' && modificationExists">
-			</app-explore-opportunities-sankey> -->
+			<div *ngIf="tabSelect == 'sankey' && modificationExists" class="scroll-item" [ngStyle]="{'height.px': helpHeight}">
+				<app-explore-opportunities-sankey [assessmentName]="assessment.name" [baselineSankey]="baselineSankey" [modificationSankey]="modificationSankey" [settings]="settings"></app-explore-opportunities-sankey>
+			</div>
 
 			<div class="panel-results" *ngIf="modificationExists && tabSelect == 'results'">
 				<!-- <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
