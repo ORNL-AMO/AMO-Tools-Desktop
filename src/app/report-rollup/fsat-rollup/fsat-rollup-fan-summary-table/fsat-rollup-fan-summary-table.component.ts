@@ -19,5 +19,22 @@ export class FsatRollupFanSummaryTableComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
+    if (implementationCost) {
+      let val = (implementationCost / (baselineCost - modCost)) * 12;
+      if (isNaN(val) == false) {
+        return val;
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  getSavings(modCost: number, baselineCost: number) {
+    return baselineCost - modCost;
+  }
 
 }
