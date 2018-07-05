@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from './help-panel.service';
 import { Subscription } from 'rxjs';
@@ -52,6 +52,12 @@ export class HelpPanelComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.containerHeight){
+      this.getContainerHeight();
+    }
+  }
+
   ngOnDestroy() {
     this.stepTabSub.unsubscribe();
     this.currentFieldSub.unsubscribe();
@@ -65,6 +71,7 @@ export class HelpPanelComponent implements OnInit {
 
   getContainerHeight() {
     if (this.containerHeight && this.resultTabs) {
+      console.log('get height');
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
     }
