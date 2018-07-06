@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReplaceRewindResults } from '../replace-Rewind.component';
+import { ReplaceRewindResults } from '../replace-rewind.component';
 
 @Component({
   selector: 'app-replace-rewind-results',

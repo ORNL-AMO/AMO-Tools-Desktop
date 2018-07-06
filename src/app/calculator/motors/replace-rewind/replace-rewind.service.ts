@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplaceRewindData, ReplaceRewindResults } from './replace-Rewind.component';
+import { ReplaceRewindData, ReplaceRewindResults } from './replace-rewind.component';
 
 @Injectable()
 export class ReplaceRewindService {
