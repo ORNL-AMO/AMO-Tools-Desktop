@@ -21,6 +21,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
+
 
   showSizeMargin: boolean;
   counter: any;
@@ -62,6 +65,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
         this.showSizeMargin = true;
       }
     }
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 
 }

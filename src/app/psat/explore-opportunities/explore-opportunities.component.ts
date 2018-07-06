@@ -26,6 +26,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
+
+
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
   annualSavings: number = 0;
@@ -80,43 +84,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.helpHeight = this.containerHeight - tabHeight;
     }
   }
-  // checkForExploreMod() {
-  //   let i = 0;
-  //   this.psat.modifications.forEach(mod => {
-  //     if (mod.exploreOpportunities) {
-  //       this.exploreModIndex = i;
-  //       this.exploreModExists = true;
-  //     } else {
-  //       i++;
-  //     }
-  //   })
-  //   if(!this.exploreModExists){
-  //     this.tabSelect = 'help';
-  //   }
-  // }
-
-  // addExploreOpp() {
-  //   if (!this.psat.modifications) {
-  //     this.psat.modifications = new Array();
-  //   }
-  //   let psatCpy: PSAT = JSON.parse(JSON.stringify(this.assessment.psat.inputs));
-  //   psatCpy.name = 'Opportunities Modification';
-  //   this.psat.modifications.push({
-  //     notes: {
-  //       systemBasicsNotes: '',
-  //       pumpFluidNotes: '',
-  //       motorNotes: '',
-  //       fieldDataNotes: ''
-  //     },
-  //     psat: {
-  //       inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-  //     },
-  //     exploreOpportunities: true
-  //   });
-  //   this.save();
-  //   this.checkForExploreMod();
-  //   this.getResults();
-  // }
 
   addExploreOpp(){
     this.compareService.openNewModal.next(true);
@@ -166,8 +133,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.currentField = $event;
   }
 
-  optimize() {
-    let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let baseLineResults = this.psatService.resultsExisting(tmpInputs, this.settings);
+  addNewMod() {
+    this.emitAddNewMod.emit(true);
   }
 }

@@ -1,18 +1,26 @@
 <div class="explore-ops-form">
   <ul>
-
-
     <li>
-      <app-system-data-form (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-system-data-form>
+      <div class="w-100 justify-content-center p-2 d-flex">
+        <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
+      </div>
     </li>
     <li>
-      <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-rated-motor-form>
+      <div class="form-group group-name">
+        <label for="modificatonName">Modification Name</label>
+        <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name"
+          (input)="calculate()" />
+      </div>
+    </li>
+
+    <li>
+      <app-system-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-system-data-form>
     </li>
     <li>
-      <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-fan-data-form>
+      <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-rated-motor-form>
+    </li>
+    <li>
+      <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-fan-data-form>
 
     </li>
     <li>
@@ -26,8 +34,8 @@
         <li>
           <div class="checkbox">
             <label for="showSizeMargin">
-              <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')"
-                [(ngModel)]="showSizeMargin" /> Size Margin
+              <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"
+              /> Size Margin
             </label>
           </div>
           <form *ngIf="showSizeMargin">
