@@ -1,4 +1,11 @@
-
+table {
+    table-layout: fixed;
+}
+th {
+    white-space: nowrap;
+    text-align: center;
+    font-size: medium;
+}
 td{
     font-size: small;
     text-align: center;
