@@ -1,6 +1,6 @@
 <div class="container-fluid fsat">
 	<div class="row modify-conditions panel-container">
-		<div *ngIf="modificationExists" class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+		<div *ngIf="modificationExists" class="col-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<div class="header">
 				<h3>Select Potential Adjustment Projects</h3>
 			</div>
@@ -16,7 +16,7 @@
 			<button type="button" class="btn btn-primary" (click)="addExploreOpp()">Explore Opportunities</button>
 			<p>Data will be copied from your current baseline condition.</p>
 		  </div>
-		<div class="col-md-6 help-panel">
+		<div class="col-6 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
 			<div class="row" #resultTabs>
 				<ul class="tabs primary tab-row">
 					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
@@ -40,9 +40,6 @@
 			</div>
 
 			<div class="panel-results" *ngIf="modificationExists && tabSelect == 'results'">
-				<!-- <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
-				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[modificationIndex].psat.name" *ngIf="tabSelect == 'results'">
-				</app-explore-opportunities-results> -->
 				<app-fsat-results-panel [fsat]="assessment.fsat" [settings]="settings" [modificationIndex]="modificationIndex"></app-fsat-results-panel>
 			</div>
 			<div  *ngIf="!modificationExists && tabSelect != 'help'">
