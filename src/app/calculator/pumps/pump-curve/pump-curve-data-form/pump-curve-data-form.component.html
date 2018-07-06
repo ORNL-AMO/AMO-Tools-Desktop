@@ -22,6 +22,15 @@
       <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
       <div class="input-group">
         <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
+               (focus)="focusField('flow')" (input)="emitCalculateChanges()">
+        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+      </div>
+    </div>
+    <div class="form-group col-5">
+      <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+      <div class="input-group">
+        <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
           (focus)="focusField('flow')" (input)="emitCalculateChanges()">
         <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
         <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
