@@ -1,7 +1,7 @@
 <div class="help-panel">
   <div class="calc-help">
     <div class="help-header">
-      <!-- <h3>Energy Use Calculater Help</h3> -->
+      <h3>Flow and Energy Used</h3>
       <p>
         Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
         the gas is a fuel (i.e. natural gas, propane).
@@ -35,7 +35,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong>inch</strong><br> Minimum Value Allowed: <strong>0</strong><br>
+            Units: <strong>in</strong><br> Minimum Value Allowed: <strong>0</strong><br>
           </p>
         </div>
       </div>
@@ -50,7 +50,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong>inch</strong><br> Minimum Value Allowed: <strong>0</strong><br>
+            Units: <strong>in</strong><br> Minimum Value Allowed: <strong>0</strong><br>
           </p>
         </div>
       </div>
@@ -141,6 +141,10 @@
           <p>
             Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
           </p>
+          <figure>
+            <img class="w-100 mx-auto p-2" src="assets/images/furnace-energy-used-calc-discharge.png">
+            <figcaption><font size="1"> Source: Eclipse Combustion Engineering Guide, 1986, Chapter 1, Page 6</font></figcaption>
+          </figure>
         </div>
       </div>
       <div class="card" *ngIf="currentField == 'gasHeatingValue'">

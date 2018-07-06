@@ -43,6 +43,15 @@ import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow
 import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
+
+import { ConvertFsatService } from './convert-fsat.service';
+import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
+import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
+import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
+import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
+import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
+import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -57,7 +66,13 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     ExploreOpportunitiesModule,
     FsatResultsModule,
     FsatReportModule,
-    HelpPanelModule
+    HelpPanelModule,
+    FsatSankeyModule,
+    SystemCurveModule,
+    NemaEnergyEfficiencyModule,
+    MotorPerformanceModule,
+    PumpCurveModule,
+    FanEfficiencyModule
   ],
   declarations: [
     FsatComponent,
@@ -83,7 +98,8 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     CalculateOutletPressureComponent,
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
-    FanBasicsComponent
+    FanBasicsComponent,
+    FsatReportSankeyComponent
   ],
   providers: [
     FsatService,
@@ -93,8 +109,11 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     PsatService,
     FanFieldDataService,
     ModifyConditionsService,
-    CompareService
+    CompareService,
+    ConvertFsatService
   ],
-  exports: [FsatComponent]
+  exports: [
+    FsatComponent
+  ]
 })
 export class FsatModule { }

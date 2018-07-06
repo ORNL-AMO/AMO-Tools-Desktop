@@ -8,8 +8,11 @@
 }
 
 p {
-	font-size: 16px;
-    padding: 4px;
+	font-size: small;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 0px;
+    padding-top: .25rem;
 }
 
 .panel-column{

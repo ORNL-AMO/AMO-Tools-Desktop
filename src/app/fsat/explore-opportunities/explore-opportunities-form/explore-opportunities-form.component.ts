@@ -20,6 +20,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
 
   showSizeMargin: boolean;
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
@@ -58,5 +60,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   focusField(str: string){
     this.helpPanelService.currentField.next(str);
     this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 }

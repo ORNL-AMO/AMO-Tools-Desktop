@@ -18,7 +18,8 @@ export class FsatSettingsComponent implements OnInit {
   powerMeasurements: Array<any> = [];
   densityMeasurements: Array<any> = [];
   temperatureMeasurements: Array<any> = [];
-
+  barometricPressureMeasurements: Array<any> = [];
+  specificHeatMeasurements: Array<any> = [];
   flowOptions: Array<string> = [
     'ft3/min',
     'm3/s'
@@ -28,8 +29,9 @@ export class FsatSettingsComponent implements OnInit {
     'Pa',
     'torr',
     'mmHg',
-    'inH2o',
-    'mmH2o'
+    'inHg',
+    'mmH2o',
+    'inH2o'
   ];
   powerOptions: Array<string> = [
     'kW',
@@ -45,6 +47,17 @@ export class FsatSettingsComponent implements OnInit {
     'kgNm3',
     'lbscf'
   ]
+
+  barometricPressureOptions: Array<string> = [
+    'kPa',
+    'inHg'
+  ]
+
+  specificHeatGasOptions: Array<string> = [
+    'btulbF',
+    'kJkgC'
+  ]
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -67,7 +80,7 @@ export class FsatSettingsComponent implements OnInit {
         unit: unit,
         display: this.getUnitName(unit)
       }
-      this.pressureMeasurements.push(tmpPossibility);
+      this.powerMeasurements.push(tmpPossibility);
     })
     this.tempOptions.forEach(unit => {
       let tmpPossibility = {
@@ -83,12 +96,21 @@ export class FsatSettingsComponent implements OnInit {
       }
       this.densityMeasurements.push(tmpPossibility);
     })
-    this.powerOptions.forEach(unit => {
+
+    this.barometricPressureOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
       }
-      this.powerMeasurements.push(tmpPossibility);
+      this.barometricPressureMeasurements.push(tmpPossibility);
+    })
+
+    this.specificHeatGasOptions.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.specificHeatMeasurements.push(tmpPossibility);
     })
 
   }
@@ -110,8 +132,8 @@ export class FsatSettingsComponent implements OnInit {
     this.save.emit(true);
   }
 
-  getUnitDisplay(unit: any){
-    if(unit){
+  getUnitDisplay(unit: any) {
+    if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }

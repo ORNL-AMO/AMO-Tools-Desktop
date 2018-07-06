@@ -33,6 +33,7 @@ export class ReportRollupComponent implements OnInit {
   //debug
   selectedPhastCalcs: Array<Calculator>;
   selectedPsatCalcs: Array<Calculator>;
+  selectedFsatCalcs: Array<Calculator>;
   directoryIds: Array<number>;
   bannerHeight: number;
   assessmentsGathered: boolean = false;
@@ -66,6 +67,7 @@ export class ReportRollupComponent implements OnInit {
     this._fsatAssessments = new Array<ReportItem>();
     this.selectedPhastCalcs = new Array<Calculator>();
     this.selectedPsatCalcs = new Array<Calculator>();
+    this.selectedFsatCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
 
     setTimeout(() => {
@@ -134,6 +136,8 @@ export class ReportRollupComponent implements OnInit {
               this.selectedPhastCalcs.push(item);
             } else if (item.type == 'pump') {
               this.selectedPsatCalcs.push(item);
+            }else if(item.type == 'fan'){
+              this.selectedFsatCalcs.push(item);
             }
           })
         }

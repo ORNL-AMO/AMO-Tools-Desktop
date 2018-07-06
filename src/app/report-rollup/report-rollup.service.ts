@@ -129,9 +129,9 @@ export class ReportRollupService {
       for (let i = 0; i < calcs.length; i++) {
         if (calcs[i].preAssessments) {
           this.calcsArray.push(calcs[i]);
-          this.selectedCalcs.next(this.calcsArray);
         }
       }
+      this.selectedCalcs.next(this.calcsArray);
     }
     let subDirResults = this.directoryDbService.getSubDirectoriesById(subDir.id);
     if (subDirResults) {
@@ -349,8 +349,7 @@ export class ReportRollupService {
   initFsatResultsArr(fsatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllFsatResultsData>();
     fsatArr.forEach(val => {
-      //check setupDone when added
-      if (val.assessment.fsat.modifications.length != 0) {
+      if (val.assessment.fsat.setupDone && val.assessment.fsat.modifications.length != 0) {
         let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.assessment.fsat)), 'existing', val.settings);
         if (val.assessment.fsat.modifications) {
           if (val.assessment.fsat.modifications.length != 0) {

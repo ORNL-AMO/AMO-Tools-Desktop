@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 
 @Component({
@@ -34,5 +34,7 @@ export class ReceiverTankComponent implements OnInit {
   ngOnInit() {
 
   }
-
+  changeField(str: string) {
+    this.currentField = str;
+  }
 }

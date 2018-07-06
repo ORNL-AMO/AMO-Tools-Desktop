@@ -19,12 +19,16 @@ export class AssessmentService {
   updateAvailable: BehaviorSubject<boolean>;
   openingTutorial: BehaviorSubject<boolean>;
   tutorialShown: boolean = false;
+  dashboardView: BehaviorSubject<string>;
+  workingDirectoryId: BehaviorSubject<number>;
 
   constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.openingTutorial = new BehaviorSubject<boolean>(null);
+    this.dashboardView = new BehaviorSubject<string>('landing-screen');
+    this.workingDirectoryId = new BehaviorSubject<number>(null);
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
@@ -48,6 +52,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
     } else if (assessment.type == 'FSAT') {
+      if (assessment.fsat.setupDone && !str) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/fsat/' + assessment.id);
     }
   }
@@ -257,7 +264,7 @@ export class AssessmentService {
       fanMotor: {
         lineFrequency: 60,
         motorRatedPower: null,
-        motorRpm: null,
+        motorRpm: 1785,
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,

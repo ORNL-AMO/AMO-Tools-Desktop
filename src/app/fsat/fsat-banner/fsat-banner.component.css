@@ -21,7 +21,7 @@ ul{
 
 .img-icon{
     width: 50px;
-    padding-top: 20%;
+    padding-top: 6px;
 }
 
 .banner-name{
@@ -52,4 +52,15 @@ ul{
 
 .pills-nav .disabled span {
     color: #ABB2B9;
+}
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}
+
+.home-nav-item{
+    color: black;
+    border-color: black !important;
 }

@@ -24,8 +24,8 @@
 					<span>Report</span>
 				</li>
 				<li [ngClass]="{'active': mainTab == 'sankey','disabled': !assessment.psat.setupDone}" (click)="changeTab('sankey')">
-						<span>Sankey</span>
-					</li>
+					<span>Sankey</span>
+				</li>
 				<li [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">
 					<span>Calculators</span>
 				</li>
@@ -33,9 +33,17 @@
 		</div>
 	</div>
 
-	<div class="col-3 back-col">
-		<a routerLink="/dashboard" class="btn-dashboard pull-right">
-			<span>&times;</span> Back To Home</a>
+	<div class="col-3">
+		<div class="d-flex h-100 justify-content-end align-items-center">
+			<div class="pl-2 pr-2 border-right border-left home-nav-item" (click)="goToFolder()">
+				<span class="fa fa-folder-open"></span>
+			</div>
+			<div class="pl-2 pr-2 border-right home-nav-item" (click)="goHome()">
+				<span class="fa fa-home"></span>
+			</div>
+		</div>
+		<!-- <a routerLink="/dashboard" class="btn-dashboard pull-right">
+			<span>&times;</span> Back To Home</a> -->
 	</div>
 
 </div>

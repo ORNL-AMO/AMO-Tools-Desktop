@@ -69,6 +69,19 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   doc: any;
   window: any;
 
+  //booleans for tooltip
+  hoverBtnExport: boolean = false;
+  displayExportTooltip: boolean = false;
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
+
   @Input()
   toggleCalculate: boolean;
   constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
@@ -124,11 +137,98 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
   }
 
-  resizeGraph() {
-    const curveGraph = this.doc.getElementById('o2EnrichmentGraph');
+  // ========== export/gridline tooltip functions ==========
+  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
+  // for example, check motor-performance-graph.module.ts
+  initTooltip(btnType: string) {
 
-    this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3 / 5);
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = true;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 700);
+  }
+
+  hideTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = false;
+      this.displayExportTooltip = false;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
+    }
+  }
+
+  checkHover(btnType: string) {
+    if (btnType == 'btnExportChart') {
+      if (this.hoverBtnExport) {
+        this.displayExportTooltip = true;
+      }
+      else {
+        this.displayExportTooltip = false;
+      }
+    }
+    else if (btnType == 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
+  }
+  // ========== end tooltip functions ==========
+
+  resizeGraph() {
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
+    //conditional sizing if graph is expanded/compressed
+    if (!this.expanded) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+    }
+    else {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = curveGraph.clientHeight * 0.9;
+    }
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
@@ -231,7 +331,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, Math.floor((this.maxFuelSavings + 10.0) / 10) * 10 ]);
+      .domain([0, Math.floor((this.maxFuelSavings + 10.0) / 10) * 10]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -784,4 +884,24 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 }

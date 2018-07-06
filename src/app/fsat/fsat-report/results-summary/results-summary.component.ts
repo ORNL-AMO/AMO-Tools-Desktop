@@ -3,6 +3,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT, FsatOutput } from '../../../shared/models/fans';
 import { FsatService } from '../../fsat.service';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-results-summary',
@@ -23,11 +24,23 @@ export class ResultsSummaryComponent implements OnInit {
 
   baselineResults: FsatOutput;
   modificationResults: Array<FsatOutput>;
-  constructor(private fsatService: FsatService) { }
+  selectedModificationIndex: number;
+  constructor(private fsatService: FsatService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.modificationResults = new Array<FsatOutput>();
     this.getResults();
+    if (this.inRollup) {
+      this.reportRollupService.selectedFsats.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      })
+    }
   }
 
   getResults() {
@@ -45,7 +58,12 @@ export class ResultsSummaryComponent implements OnInit {
         modResult.annualSavings = this.baselineResults.annualCost - modResult.annualCost;
         this.modificationResults.push(modResult);
       })
-    }
+    }  
   }
+
+  useModification() {
+    this.reportRollupService.updateSelectedFsats({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+  }
+
 
 }

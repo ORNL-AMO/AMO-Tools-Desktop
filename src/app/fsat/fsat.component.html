@@ -6,7 +6,8 @@
 
   <div *ngIf="mainTab == 'system-setup'" class="row tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"></app-system-basics>
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"
+        (emitSaveFsat)="saveFsat($event)"></app-system-basics>
       <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
       <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
@@ -27,10 +28,10 @@
   </div>
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
-      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"></app-explore-opportunities>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment" [settings]="settings"
+      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
-      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)"></app-modify-conditions>
+      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
   </div>
 
   <!--report-->
@@ -45,12 +46,39 @@
     </div>
   </div>
 
-  <div #footer id="fsatFooter" class="footer hide-print row m-0">
-    <div class="col-12">
-      <div class="pull-right">
-        <button class="btn btn-secondary">Save</button>
-        <button class="btn btn-primary">Continue</button>
+
+  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone" [settings]="settings"
+      [assessment]="assessment"></app-system-curve>
+    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="_fsat.setupDone" [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
+    <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings"></app-motor-performance>
+    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment"></app-pump-curve>
+  </div>
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="p-1 mx-auto">
+      <div class="form-group" *ngIf="fsatOptionsLength > 1">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat1">
+          <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
+        </select>
       </div>
+    </div>
+    <div class="sankey-padding">
+      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [assessmentName]="assessment.name" [printView]="false" [location]="'sankey-diagram'"
+        [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
+    </div>
+  </div>
+
+  <div #footer id="fsatFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
+      <button class="btn btn-default" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'assessment'">
+      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
     </div>
   </div>
 </div>

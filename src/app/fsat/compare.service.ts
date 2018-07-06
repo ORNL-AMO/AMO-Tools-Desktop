@@ -12,7 +12,7 @@ export class CompareService {
   }
 
 
-  setCompareVals(fsat: FSAT, selectedModIndex: number) {
+  setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
     if (fsat.modifications) {
       if (fsat.modifications.length != 0) {
@@ -674,6 +674,23 @@ export class CompareService {
     }
   }
 
-
+  getBadges(baseline: FSAT, modification: FSAT): Array<{ badge: string, componentStr: string }> {
+    let badges: Array<{ badge: string, componentStr: string }> = [];
+    if (baseline && modification) {
+      if (this.checkFluidDifferent(baseline, modification)) {
+        badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' })
+      }      
+      if (this.checkFanSetupDifferent(baseline, modification)) {
+        badges.push({ badge: 'Fan', componentStr: 'fan-setup' })
+      }
+      if (this.checkFanMotorDifferent(baseline, modification)) {
+        badges.push({ badge: 'Motor', componentStr: 'fan-motor' })
+      }
+      if (this.checkFanFieldDataDifferent(baseline, modification)) {
+        badges.push({ badge: 'Field Data', componentStr: 'fan-field-data' })
+      }
+    }
+    return badges;
+  }
 
 }

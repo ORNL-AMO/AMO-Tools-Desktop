@@ -3,4 +3,11 @@
 
   </div>
 </div>
-<span #btnDownload class="pie-chart-btn fa fa-download hide-print" (click)="downloadChart()"></span>
+
+<!-- add button to blank div and add tooltip under the button -->
+<div>
+  <span #btnDownload class="pie-chart-btn fa fa-download hide-print" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')"
+    (mouseleave)="hideTooltip('btnExportChart')"></span>
+  <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustBottom]="-45" [adjustLeft]="30" [adjustPercent]="false"></app-simple-tooltip>
+
+</div>

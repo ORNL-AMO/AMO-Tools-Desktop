@@ -1,4 +1,4 @@
-<div *ngIf="getSelectedTool() == 'none'">
+<div class="fsat" *ngIf="getSelectedTool() == 'none'">
 
   <div class="row">
     <div class="col-10  mx-auto">
@@ -15,7 +15,36 @@
             </p>
           </div>
         </div>
-
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/system-curve-tran.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
+            <p>
+              Use system curve to graph your pumps flow.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/pump-curve.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('pump-curve')">Fan Curve</a>
+            <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow, pump speed
+              and impeller diameter</p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/pump-eff.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('fan-efficiency')">Achievable Efficiency</a>
+            <p>NEEDED</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -23,5 +52,17 @@
 
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fsat-203'">
-    <app-fsat-203></app-fsat-203>
+  <app-fsat-203></app-fsat-203>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">
+  <app-system-curve [isFan]="true"></app-system-curve>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
+  <app-pump-curve [isFan]="true"></app-pump-curve>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fan-efficiency'">
+  <app-fan-efficiency></app-fan-efficiency>
 </div>

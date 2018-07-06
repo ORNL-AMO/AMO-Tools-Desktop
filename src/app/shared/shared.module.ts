@@ -15,6 +15,8 @@ import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
+import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
+import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,9 @@ import { PhonePipe } from './pipes/phone.pipe';
     FacilityInfoSummaryComponent,
     AnimatedCheckmarkComponent,
     PieChartComponent,
-    PhonePipe
+    PhonePipe,
+    ModifyConditionsTabsTooltipComponent,
+    SimpleTooltipComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -39,7 +43,9 @@ import { PhonePipe } from './pipes/phone.pipe';
     FacilityInfoSummaryComponent,
     AnimatedCheckmarkComponent,
     PieChartComponent,
-    PhonePipe
+    PhonePipe,
+    ModifyConditionsTabsTooltipComponent,
+    SimpleTooltipComponent
   ],
   providers: [
     ValidationService,

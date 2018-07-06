@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { FsatService } from '../fsat.service';
 import * as _ from 'lodash';
+import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 @Component({
   selector: 'app-modification-list',
   templateUrl: './modification-list.component.html',
@@ -25,17 +26,10 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
-  constructor(private compareService: CompareService, private fsatService: FsatService) { }
+  constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.initDropdown();
-    // this.assessmentTabSubscription = this.fsatService.secondaryTab.subscribe(val => {
-    //   this.asssessmentTab = val;
-    // })
-  }
-
-  ngOnDestroy() {
-    //this.assessmentTabSubscription.unsubscribe();
   }
 
   initDropdown() {
@@ -45,38 +39,31 @@ export class ModificationListComponent implements OnInit {
   }
   selectModification(index: number, close?: boolean) {
     this.compareService.setCompareVals(this.fsat, index);
-    //this.fsatService.getResults.next(true);
     this.initDropdown()
     if (close) {
       this.close.emit(true);
     }
   }
-  
+
   goToModification(index: number, componentStr: string) {
-    // let tabs = this.lossesService.lossesTabs;
-    // let selectedTab = _.find(tabs, (tab) => {
-    //   return tab.componentStr == componentStr;
-    // })
-    // this.lossesService.lossesTab.next(selectedTab.step);
-    //this.fsatService.modifyConditionsTab.next(componentStr);
+    this.modifyConditionsService.modifyConditionsTab.next(componentStr);
     this.selectModification(index, true);
   }
-   selectModificationBadge(modifiction: FSAT, index: number) {
-  //   let testBadges = this.getBadges(modifiction);
-    // if (testBadges.length == 1) {
-    //   this.goToModification(index, testBadges[0].componentStr);
-     //} else {
-       //this.goToModification(index, 'field-data')
-     //}
-     this.goToModification(index, 'field-data')     
-   }
-  // getBadges(modification: FSAT) {
-  //   if (modification) {
-  //     return this.compareService.getBadges(this.fsat, modification);
-  //   } else {
-  //     return []
-  //   }
-  // }
+  selectModificationBadge(modifiction: FSAT, index: number) {
+    let testBadges = this.getBadges(modifiction);
+    if (testBadges.length == 1) {
+      this.goToModification(index, testBadges[0].componentStr);
+    } else {
+      this.goToModification(index, 'fan-field-data')
+    }
+  }
+  getBadges(modification: FSAT) {
+    if (modification) {
+      return this.compareService.getBadges(this.fsat, modification);
+    } else {
+      return []
+    }
+  }
 
   showDropdown(index: number) {
     if (!this.dropdown[index]) {

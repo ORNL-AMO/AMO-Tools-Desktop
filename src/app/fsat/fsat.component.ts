@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -15,6 +15,10 @@ import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } fro
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../assessment/assessment.service';
+import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
+import { FanMotorService } from './fan-motor/fan-motor.service';
+import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
+import { FanSetupService } from './fan-setup/fan-setup.service';
 
 @Component({
   selector: 'app-fsat',
@@ -32,11 +36,24 @@ export class FsatComponent implements OnInit {
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
   containerHeight: number;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
+
+  stepTabs: Array<string> = [
+    'system-basics',
+    'fsat-fluid',
+    'fan-setup',
+    'fan-motor',
+    'fan-field-data'
+  ];
 
   _fsat: FSAT;
   assessment: Assessment;
   mainTab: string;
   stepTab: string;
+  stepTabIndex: number;
   settings: Settings;
   isAssessmentSettings: boolean;
   assessmentTab: string;
@@ -52,6 +69,15 @@ export class FsatComponent implements OnInit {
   isModalOpen: boolean;
   openModSub: Subscription;
   modalOpenSubscription: Subscription;
+  calcTab: string;
+  calcTabSubscription: Subscription;
+
+
+  fsatOptions: Array<any>;
+  fsatOptionsLength: number;
+  fsat1: FSAT;
+  fsat2: FSAT;
+
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -60,9 +86,14 @@ export class FsatComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private assessmentService: AssessmentService) { }
+    private assessmentService: AssessmentService,
+    private fsatFluidService: FsatFluidService,
+    private fanMotorService: FanMotorService,
+    private fanFieldDataService: FanFieldDataService,
+    private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
+
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -76,12 +107,15 @@ export class FsatComponent implements OnInit {
             this.compareService.setCompareVals(this._fsat, 0);
           } else {
             this.modificationExists = false;
+            this.compareService.setCompareVals(this._fsat);
           }
         } else {
           this._fsat.modifications = new Array<Modification>();
           this.modificationExists = false;
+          this.compareService.setCompareVals(this._fsat);
         }
         this.getSettings();
+        this.initSankeyList();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
@@ -90,12 +124,16 @@ export class FsatComponent implements OnInit {
     })
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.getContainerHeight();
     })
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
+      this.getContainerHeight();
     })
 
     this.addNewSub = this.fsatService.openNewModal.subscribe(val => {
@@ -123,6 +161,10 @@ export class FsatComponent implements OnInit {
       this.isModalOpen = isOpen;
     })
 
+    this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val =>{ 
+      this.calcTab = val;
+    })
+
   }
 
   ngOnDestroy() {
@@ -137,12 +179,28 @@ export class FsatComponent implements OnInit {
     this.addNewSub.unsubscribe();
     this.fsatService.initData();
     this.modalOpenSubscription.unsubscribe();
+    this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
   }
+
+
+  initSankeyList() {
+    this.fsatOptions = new Array<any>();
+    this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
+    this.fsat1 = this.fsatOptions[0];
+    if (this._fsat.modifications) {
+      this._fsat.modifications.forEach(mod => {
+        this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
+      });
+      this.fsat2 = this.fsatOptions[1];
+    }
+    this.fsatOptionsLength = this.fsatOptions.length;
+  }
+
 
   getContainerHeight() {
     if (this.content) {
@@ -170,7 +228,7 @@ export class FsatComponent implements OnInit {
   }
 
 
-  getSettings(update?: boolean) {
+  getSettings() {
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
       this.settings = tmpSettings;
@@ -226,10 +284,8 @@ export class FsatComponent implements OnInit {
   saveNewMod(mod: Modification) {
     this._fsat.modifications.push(mod);
     this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
+    this.save();
     this.closeAddNewModal();
-    this.addNewModal.onHidden.subscribe(() => {
-      this.save();
-    })
   }
   saveGasDensity(newDensity: BaseGasDensity) {
     this._fsat.baseGasDensity = newDensity;
@@ -267,12 +323,17 @@ export class FsatComponent implements OnInit {
       this.modificationExists = false;
     }
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
+    this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
-        // this.psatService.getResults.next(true);
+        this.fsatService.updateData.next(true);
       })
     })
+  }
+
+  checkSetupDone(fsat: FSAT): boolean {
+    return this.fsatService.checkValid(fsat);
   }
 
   selectModificationModal() {
@@ -283,5 +344,83 @@ export class FsatComponent implements OnInit {
     this.isModalOpen = false;
     this.fsatService.openModificationModal.next(false);
     this.changeModificationModal.hide();
+  }
+
+  getCanContinue() {
+    if (this.stepTab == 'system-basics') {
+      return true;
+    } else if (this.stepTab == 'fsat-fluid') {
+      let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-setup') {
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-motor') {
+      let isValid: boolean = this.fanMotorService.isFanMotorValid(this._fsat.fanMotor);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'fan-field-data') {
+      let isValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this._fsat.fieldData);
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  continue() {
+    if (this.stepTab == 'fan-field-data') {
+      this.fsatService.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.stepTabIndex + 1;
+      let nextTab: string = this.stepTabs[assessmentTabIndex];
+      this.fsatService.stepTab.next(nextTab);
+    }
+  }
+
+  back() {
+    if (this.stepTab != 'system-basics') {
+      let assessmentTabIndex: number = this.stepTabIndex - 1;
+      let nextTab: string = this.stepTabs[assessmentTabIndex];
+      this.fsatService.stepTab.next(nextTab);
+    }
+  }
+
+  goToReport(){
+    this.fsatService.mainTab.next('report')
+  }
+
+  addNewMod() {
+    debugger
+    let modName: string = 'Scenario ' + (this._fsat.modifications.length + 1);
+    let tmpModification: Modification = {
+      fsat: {
+        name: modName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      }
+    }
+    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this._fsat)));
+    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
+    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
+    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
+    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    this.saveNewMod(tmpModification)
   }
 }

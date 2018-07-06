@@ -4,10 +4,11 @@ import { Directory } from '../../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreAssessmentService } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-pre-assessment-card',
@@ -31,18 +32,30 @@ export class PreAssessmentCardComponent implements OnInit {
   index: number;
 
   @ViewChild('editModal') public editModal: ModalDirective;
+  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  @ViewChild('copyModal') public copyModal: ModalDirective;
+
   directories: Array<Directory>;
   editForm: FormGroup;
+  copyForm: FormGroup;
   numUnits: number = 0;
   energyUsed: number = 0;
   energyCost: number = 0;
   isFirstChange: boolean = true;
   preAssessmentExists: boolean;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService) { }
+  dropdownOpen: boolean = false;
+
+  calculatorCopy: Calculator;
+  settingsCopy: Settings;
+  constructor(private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder, private preAssessmentService: PreAssessmentService, private calculatorDbService: CalculatorDbService) { }
 
   ngOnInit() {
     //  this.populateDirArray();
     this.getData();
+    this.calculatorCopy = JSON.parse(JSON.stringify(this.calculator));
+    delete this.calculatorCopy.id;
+    this.settingsCopy = JSON.parse(JSON.stringify(this.settings));
+    delete this.settingsCopy.id;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -82,6 +95,15 @@ export class PreAssessmentCardComponent implements OnInit {
         this.preAssessmentExists = false;
       }
     }
+  }
+
+  deletePreAssessment() {
+    this.indexedDbService.deleteCalculator(this.calculator.id).then(() => {
+      this.calculatorDbService.setAll().then(() => {
+        this.hideDeleteModal();
+        this.updateDirectory.emit(true);
+      })
+    })
   }
 
   // populateDirArray() {
@@ -134,6 +156,52 @@ export class PreAssessmentCardComponent implements OnInit {
       this.calculatorDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideEditModal();
+      })
+    })
+  }
+
+  showDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  showDeleteModal() {
+    this.deleteModal.show();
+  }
+
+  hideDeleteModal() {
+    this.deleteModal.hide();
+  }
+
+  showCopyModal() {
+    this.indexedDbService.getAllDirectories().then(dirs => {
+      this.directories = dirs;
+      this.copyForm = this.formBuilder.group({
+        'name': [this.calculator.name + ' (copy)', Validators.required],
+        'directoryId': [this.calculator.directoryId, Validators.required]
+      })
+      this.copyModal.show();
+    })
+  }
+
+  hideCopyModal() {
+    this.copyModal.hide();
+  }
+
+  createCopy() {
+    this.calculatorCopy.name = this.copyForm.controls.name.value;
+    this.calculatorCopy.directoryId = this.copyForm.controls.directoryId.value;
+    // this.calculatorCopy.createdDate = new Date();
+    // this.calculatorCopy.modifiedDate = new Date();
+
+    this.indexedDbService.addCalculator(this.calculatorCopy).then(newAssessmentId => {
+      this.settingsCopy.assessmentId = newAssessmentId;
+      this.indexedDbService.addSettings(this.settingsCopy).then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.updateDirectory.emit(true);
+            this.hideCopyModal();
+          })
+        })
       })
     })
   }

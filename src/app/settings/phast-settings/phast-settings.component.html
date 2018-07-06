@@ -33,9 +33,50 @@
       <option *ngFor="let option of electrotechOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
-  <div class="form-group" *ngIf="settingsForm.controls.furnaceType.value == 'Custom Fuel Furnace' || settingsForm.controls.furnaceType.value == 'Custom Electrotechnology'">
+  <div class="form-group" *ngIf="(settingsForm.controls.furnaceType.value == 'Custom Fuel Furnace' || settingsForm.controls.furnaceType.value == 'Custom Electrotechnology') &&  settingsForm.controls.energySourceType.value == 'Electricity'">
     <label for="customFurnaceName">Custom Furnace Name</label>
     <input (input)="startPolling()" class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
+  </div>
+
+  <div class="form-group" >
+    <label for="phastRollupUnit">Common Result Unit</label>
+    <div class="input-group">
+      <select class="form-control" formControlName="phastRollupUnit" id="phastRollupUnit" (change)="startPolling()">
+        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+          <span [innerHTML]="option.displayUnit"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group" >
+    <label for="phastRollupFuelUnit">Common Fuel Unit</label>
+    <div class="input-group">
+      <select class="form-control" formControlName="phastRollupFuelUnit" id="phastRollupFuelUnit" (change)="startPolling()">
+        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+          <span [innerHTML]="option.displayUnit"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group" >
+    <label for="phastRollupElectricityUnit">Common Electricity Unit</label>
+    <div class="input-group">
+      <select class="form-control" formControlName="phastRollupElectricityUnit" id="phastRollupElectricityUnit" (change)="startPolling()">
+        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+          <span [innerHTML]="option.displayUnit"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group" >
+    <label for="phastRollupSteamUnit">Common Steam Unit</label>
+    <div class="input-group">
+      <select class="form-control" formControlName="phastRollupSteamUnit" id="phastRollupSteamUnit" (change)="startPolling()">
+        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+          <span [innerHTML]="option.displayUnit"></span>
+        </option>
+      </select>
+    </div>
   </div>
 </form>
 <!-- <div class="row" *ngIf="disable">

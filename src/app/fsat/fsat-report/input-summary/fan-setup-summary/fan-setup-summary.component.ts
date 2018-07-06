@@ -1,6 +1,8 @@
 import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import {FSAT, FanSetup, FieldData} from '../../../../shared/models/fans';
+import { FanTypes } from '../../../fanOptions';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-fan-setup-summary',
@@ -27,10 +29,11 @@ export class FanSetupSummaryComponent implements OnInit {
   driveDiff = new Array<boolean>();
   fanSpecifiedDiff = new Array<boolean>();
   fanEfficiencyDiff = new Array<boolean>();
-
+  fanTypes: Array<{ display: string, value: number }>;
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.fanTypes = FanTypes;
     this.fanTypeDiff = new Array<boolean>();
     this.fanSpeedDiff = new Array<boolean>();
     this.driveDiff = new Array<boolean>();
@@ -93,4 +96,9 @@ export class FanSetupSummaryComponent implements OnInit {
     this.collapse = !this.collapse;
   }
 
+
+  getFanType(fanTypeEnum: number): string{
+    let fanDisplay: string = _.find(this.fanTypes, (val)=> {return val.value == fanTypeEnum }).display;
+    return fanDisplay;
+  }
 }

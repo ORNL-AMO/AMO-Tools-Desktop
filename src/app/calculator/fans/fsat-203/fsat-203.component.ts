@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower, PlaneData, PlaneResults } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
@@ -13,6 +13,9 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
   styleUrls: ['./fsat-203.component.css']
 })
 export class Fsat203Component implements OnInit {
+  @Input()
+  settings: Settings;
+
   tabSelect: string = 'results';
   inputs: Fan203Inputs;
   basicsDone: boolean = false;
@@ -30,11 +33,12 @@ export class Fsat203Component implements OnInit {
 
   results: Fan203Results;
   planeResults: PlaneResults;
-  settings: Settings;
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.settings = this.settingsDbService.globalSettings;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
     this.checkBasics();
@@ -55,8 +59,8 @@ export class Fsat203Component implements OnInit {
 
   calculate() {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
-      this.planeResults = this.fsatService.getPlaneResults(this.inputs);
-      this.results = this.fsatService.fan203(this.inputs);
+      this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
+      this.results = this.fsatService.fan203(this.inputs, this.settings);
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,

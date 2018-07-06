@@ -45,9 +45,10 @@ export class EnergyUseComponent implements OnInit {
     totalFlow: 0
   };
 
+
   headerHeight: number;
 
-  currentField: string = 'orificeDiameter';
+  currentField: string = 'default';
   tabSelect: string = 'results';
 
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
@@ -61,6 +62,7 @@ export class EnergyUseComponent implements OnInit {
       this.initDefaultValues(this.settings);
       this.calculate();
     }
+
 
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

@@ -58,6 +58,19 @@ export class MotorPerformanceGraphComponent implements OnInit {
   doc: any;
   window: any;
 
+  //booleans for tooltip
+  hoverBtnExport: boolean = false;
+  displayExportTooltip: boolean = false;
+  hoverBtnGridLines: boolean = false;
+  displayGridLinesTooltip: boolean = false;
+  hoverBtnExpand: boolean = false;
+  displayExpandTooltip: boolean = false;
+  hoverBtnCollapse: boolean = false;
+  displayCollapseTooltip: boolean = false;
+
+  //add this boolean to keep track if graph has been expanded
+  expanded: boolean = false;
+
   constructor(private windowRefService: WindowRefService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -82,6 +95,84 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
   }
 
+  // ========== export/gridline tooltip functions ==========
+  // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
+  // for example, check motor-performance-graph.module.ts
+  initTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = true;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = true;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = true;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = true;
+    }
+    setTimeout(() => {
+      this.checkHover(btnType);
+    }, 700);
+  }
+
+  hideTooltip(btnType: string) {
+
+    if (btnType == 'btnExportChart') {
+      this.hoverBtnExport = false;
+      this.displayExportTooltip = false;
+    }
+    else if (btnType == 'btnGridLines') {
+      this.hoverBtnGridLines = false;
+      this.displayGridLinesTooltip = false;
+    }
+    else if (btnType == 'btnExpandChart') {
+      this.hoverBtnExpand = false;
+      this.displayExpandTooltip = false;
+    }
+    else if (btnType == 'btnCollapseChart') {
+      this.hoverBtnCollapse = false;
+      this.displayCollapseTooltip = false;
+    }
+  }
+
+  checkHover(btnType: string) {
+    if (btnType == 'btnExportChart') {
+      if (this.hoverBtnExport) {
+        this.displayExportTooltip = true;
+      }
+      else {
+        this.displayExportTooltip = false;
+      }
+    }
+    else if (btnType == 'btnGridLines') {
+      if (this.hoverBtnGridLines) {
+        this.displayGridLinesTooltip = true;
+      }
+      else {
+        this.displayGridLinesTooltip = false;
+      }
+    }
+    else if (btnType == 'btnExpandChart') {
+      if (this.hoverBtnExpand) {
+        this.displayExpandTooltip = true;
+      }
+      else {
+        this.displayExpandTooltip = false;
+      }
+    }
+    else if (btnType == 'btnCollapseChart') {
+      if (this.hoverBtnCollapse) {
+        this.displayCollapseTooltip = true;
+      }
+      else {
+        this.displayCollapseTooltip = false;
+      }
+    }
+  }
+  // ========== end tooltip functions ==========
+
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
@@ -91,10 +182,28 @@ export class MotorPerformanceGraphComponent implements OnInit {
   ngOnDestroy() {
     this.window.onresize = null;
   }
+
+
   resizeGraph() {
-    let motorGraph = this.doc.getElementById('motorPerformanceGraph');
-    this.canvasWidth = motorGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3 / 5);
+    // let motorGraph = this.doc.getElementById('motorPerformanceGraph');
+    //need to update curveGraph to grab a new containing element 'panelChartContainer'
+    //make sure to update html container in the graph component as well
+    let curveGraph = this.doc.getElementById('panelChartContainer');
+
+
+    // this.canvasWidth = motorGraph.clientWidth;
+    // this.canvasHeight = this.canvasWidth * (3 / 5);
+
+    //conditional sizing if graph is expanded/compressed
+    if (!this.expanded) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+    }
+    else {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = curveGraph.clientHeight * 0.9;
+    }
+
     if (this.canvasWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
@@ -257,7 +366,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .range([this.height, 0])
       .domain([0, 120]);
 
-    if(this.isGridToggled) {
+    if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
         .scale(this.xShow)
         .tickSizeInner(0)
@@ -274,7 +383,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         .tickSize(-this.width)
         .ticks(13);
     }
-    else{
+    else {
       this.xAxis = d3.axisBottom()
         .scale(this.xShow)
         .tickSizeInner(0)
@@ -649,12 +758,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
       });
   }
 
-  toggleGrid(){
-    if(this.isGridToggled){
+  toggleGrid() {
+    if (this.isGridToggled) {
       this.isGridToggled = false;
       this.makeGraph();
     }
-    else{
+    else {
       this.isGridToggled = true;
       this.makeGraph();
     }
@@ -666,4 +775,24 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
+
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 }
