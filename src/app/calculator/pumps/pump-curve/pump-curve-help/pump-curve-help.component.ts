@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PumpCurveHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  isFan: boolean;
 
   constructor() { }
 
