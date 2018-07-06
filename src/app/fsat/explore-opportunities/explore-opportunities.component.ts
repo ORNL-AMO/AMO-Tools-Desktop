@@ -25,6 +25,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FSAT>();
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
@@ -40,6 +42,17 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   ngOnInit() {
     this.getSankeyData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      if (!changes.containerHeight.firstChange) {
+        this.getContainerHeight();
+      }
+    }
+    if (changes.modificationIndex) {
+      this.getSankeyData();
+    }
   }
 
   ngAfterViewInit() {
@@ -64,17 +77,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.containerHeight) {
-      if (!changes.containerHeight.firstChange) {
-        this.getContainerHeight();
-      }
-    }
-    if (changes.modificationIndex) {
-      this.getSankeyData();
-    }
-  }
-
   save() {
     this.emitSave.emit(this.assessment.fsat);
   }
@@ -86,12 +88,14 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-
-
   getSankeyData() {
     this.baselineSankey = this.fsat;
     if (this.modificationExists) {
       this.modificationSankey = this.fsat.modifications[this.modificationIndex].fsat;
     }
+  }
+
+  addNewMod() {
+    this.emitAddNewMod.emit(true);
   }
 }

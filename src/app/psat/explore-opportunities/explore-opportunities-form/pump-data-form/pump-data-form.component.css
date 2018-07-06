@@ -9,3 +9,10 @@ li{
 ul{
     padding-left: 15px;
 }
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}

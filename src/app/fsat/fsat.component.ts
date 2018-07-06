@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -35,6 +35,11 @@ export class FsatComponent implements OnInit {
 
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getContainerHeight();
+  }
 
   stepTabs: Array<string> = [
     'system-basics',
@@ -279,10 +284,8 @@ export class FsatComponent implements OnInit {
   saveNewMod(mod: Modification) {
     this._fsat.modifications.push(mod);
     this.compareService.setCompareVals(this._fsat, this._fsat.modifications.length - 1);
+    this.save();
     this.closeAddNewModal();
-    this.addNewModal.onHidden.subscribe(() => {
-      this.save();
-    })
   }
   saveGasDensity(newDensity: BaseGasDensity) {
     this._fsat.baseGasDensity = newDensity;
@@ -397,5 +400,27 @@ export class FsatComponent implements OnInit {
 
   goToReport(){
     this.fsatService.mainTab.next('report')
+  }
+
+  addNewMod() {
+    debugger
+    let modName: string = 'Scenario ' + (this._fsat.modifications.length + 1);
+    let tmpModification: Modification = {
+      fsat: {
+        name: modName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      }
+    }
+    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this._fsat)));
+    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
+    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
+    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
+    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    this.saveNewMod(tmpModification)
   }
 }
