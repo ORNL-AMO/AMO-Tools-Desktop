@@ -520,6 +520,22 @@ export class PsatComponent implements OnInit {
     this.closeAddNewModal();
   }
 
+  addNewMod() {
+    let modName: string = 'Scenario ' + (this._psat.modifications.length + 1);
+    let tmpModification: Modification = {
+      psat: {
+        name: modName,
+      },
+      notes: {
+        fieldDataNotes: '',
+        motorNotes: '',
+        pumpFluidNotes: '',
+        systemBasicsNotes: ''
+      },
+    }
+    tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
+    this.saveNewMod(tmpModification)
+  }
 
   showTooltip(num: number) {
     if (num == 1) {

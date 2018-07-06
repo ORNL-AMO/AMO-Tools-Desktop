@@ -74,14 +74,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setBadgeClass(){
-    console.log('set badge classes');
     let baseline: FSAT = this.compareService.baselineFSAT;
     let modification: FSAT = this.compareService.modifiedFSAT;
     this.fluidBadgeClass = this.setFluidBadgeClass(baseline, modification);
     this.fanMotorBadgeClass = this.setFanMotorBadgeClass(baseline, modification);
     this.fieldDataBadgeClass = this.setFanFieldDataBadgeClass(baseline, modification);
     this.fanSetupBadgeClass = this.setFanSetupBadgeClass(baseline, modification);
-
   }
 
   setFanFieldDataBadgeClass(baseline: FSAT, modification?: FSAT){

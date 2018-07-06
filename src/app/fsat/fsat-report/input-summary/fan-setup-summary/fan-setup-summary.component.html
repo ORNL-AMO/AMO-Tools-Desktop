@@ -27,10 +27,10 @@
               Fan Type
             </td>
             <td [ngClass]="{'indicate-report-field-different':fanTypeDiff[0] == true}">
-              {{fanSetup.baseline.fanType}}
+              {{getFanType(fanSetup.baseline.fanType)}}
             </td>
             <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanType, mod.fanType, 'fanTypeDiff', 0)}">
-              {{mod.fanType}}
+              {{getFanType(mod.fanType)}}
             </td>
           </tr>
 
@@ -78,7 +78,7 @@
               {{fanSetup.baseline.fanEfficiency}}
             </td>
             <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanEfficiency, mod.fanEfficiency, 'fanEfficiencyDiff', 0)}">
-              {{mod.fanEfficiency}}
+              {{mod.fanEfficiency | number: '1.0-2'}}
             </td>
           </tr>
           </tbody>
