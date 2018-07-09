@@ -140,15 +140,16 @@ export class FsatReportGraphsComponent implements OnInit {
       }
       let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType, this.settings);
 
-      if (this.settings.powerMeasurement === 'hp') {
-        motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-        fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
+      if (this.settings.fanPowerMeasurement === 'hp') {
+      // console.log('first settings branch');
+      motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+      fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
 
-        energyInput = this.convertUnitsService.value(tmpOutput.motorPower).from('hp').to('kW');
-        motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-        driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
-        fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
-        usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
+      energyInput = this.convertUnitsService.value(tmpOutput.motorPower).from('hp').to('kW');
+      motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+      driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
+      fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
+      usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
       }
       else {
         motorShaftPower = tmpOutput.motorShaftPower;
@@ -182,7 +183,7 @@ export class FsatReportGraphsComponent implements OnInit {
       tmpBarValues.push(motorLoss);
       tmpBarValues.push(driveLoss);
       tmpBarValues.push(fanLoss);
-      tmpBarValues.push(usefulOutput);      
+      tmpBarValues.push(usefulOutput);
 
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);

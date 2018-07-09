@@ -1,3 +1,57 @@
-<p>
-  fsat-rollup-energy-table works!
-</p>
+<table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>
+          Fan Name
+        </th>
+        <th>
+          Energy Used
+          <br>(MWh)
+        </th>
+        <th>
+          Cost
+          <br>($/yr)
+        </th>
+        <th>
+          % of Total Cost
+        </th>
+        <th>
+          % of Total Energy Used
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of resultData; let i=index;">
+        <td class="name" [ngStyle]="{'border-left-color': graphColors[i]}">
+          {{data.name}}
+        </td>
+        <td>
+          {{data.baselineResults.annualEnergy}}
+        </td>
+        <td>
+          {{data.baselineResults.annualCost | currency}}
+        </td>
+        <td>
+          {{getTotalCostPercent(data.baselineResults.annualCost)}}
+        </td>
+        <td>
+          {{getTotalEnergyPercent(data.baselineResults.annualEnergy)}}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          Totals
+        </td>
+        <td>
+          {{totalEnergyUse}}
+        </td>
+        <td>
+          {{totalCost | currency}}
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>

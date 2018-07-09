@@ -27,7 +27,7 @@ export class AssessmentService {
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.openingTutorial = new BehaviorSubject<boolean>(null);
-    this.dashboardView = new BehaviorSubject<string>(null);
+    this.dashboardView = new BehaviorSubject<string>('landing-screen');
     this.workingDirectoryId = new BehaviorSubject<number>(null);
   }
 

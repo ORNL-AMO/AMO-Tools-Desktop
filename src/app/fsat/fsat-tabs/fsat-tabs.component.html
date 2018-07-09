@@ -28,7 +28,7 @@
 </div>
 
 
-<div class="navbar" *ngIf="mainTab == 'assessment'">
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="col-4 pl-0">
     <div class="d-flex tabs subtabs fsat">
       <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
@@ -45,6 +45,7 @@
       </div>
     </div>
   </div>
+
 
   <div class="col-8 pr-0">
     <div class="pull-right d-flex align-items-center tabs subtabs fsat" [ngClass]="{'br-color-white': selectedModification}">
@@ -66,6 +67,9 @@
     </div>
   </div>
 </div>
+<nav class="hide-print" *ngIf="assessmentTab == 'modify-conditions' && mainTab == 'assessment'">
+  <app-modify-conditions-tabs></app-modify-conditions-tabs>
+</nav>
 
 
 <ul class="tabs subtabs fsat" *ngIf="mainTab == 'calculators'">

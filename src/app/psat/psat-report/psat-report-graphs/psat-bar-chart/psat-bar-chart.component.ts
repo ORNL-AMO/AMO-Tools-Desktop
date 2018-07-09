@@ -160,7 +160,8 @@ export class PsatBarChartComponent implements OnInit {
 
 
   initChart() {
-    let unit = this.settings.powerMeasurement;
+    // let unit = this.settings.powerMeasurement;
+    let unit = 'kW';
     let yAxisLabel: string;
     if (this.printView) {
       yAxisLabel = "";
