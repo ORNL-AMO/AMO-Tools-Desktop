@@ -77,6 +77,7 @@ export class PumpCurveGraphComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    console.log('isFan = ' + this.isFan);
     this.isGridToggled = false;
     d3.select('app-pump-curve').selectAll('#gridToggleBtn')
       .on("click", () => {

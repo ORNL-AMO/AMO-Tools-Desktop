@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results } from '../shared/models/fans';
+import { Fan203Inputs, BaseGasDensity, PlaneData, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, CompressibilityFactor } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
@@ -211,12 +211,12 @@ export class FsatService {
 
 
   optimalFanEfficiency(inputs: FanEfficiencyInputs, settings: Settings): number {
-    if(settings.fanFlowRate != 'ft3/min' ){
+    if (settings.fanFlowRate != 'ft3/min') {
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m2').to('ft2');
 
     }
 
-    if(settings.fanPressureMeasurement != 'inH2o'){
+    if (settings.fanPressureMeasurement != 'inH2o') {
       inputs.inletPressure = this.convertUnitsService.value(inputs.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
       inputs.outletPressure = this.convertUnitsService.value(inputs.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     }
@@ -243,6 +243,25 @@ export class FsatService {
       annualSavings: 0
     }
     return emptyResults;
+  }
+
+  compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
+    let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
+    if (settings.fanFlowRate != 'ft3/min') {
+      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m2').to('ft2');
+
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    if (settings.fanBarometricPressure != 'inHg') {
+      inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    }
+    if (settings.fanPowerMeasurement != 'hp') {
+      inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from('hp').to(settings.fanPowerMeasurement);
+    }
+    return fanAddon.compressibilityFactor(inputCpy);
   }
 }
 

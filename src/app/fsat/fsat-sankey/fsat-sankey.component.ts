@@ -124,11 +124,11 @@ export class FsatSankeyComponent implements OnInit {
     }
     let tmpOutput = this.fsatService.getResults(this.fsat, resultType, this.settings);
 
-    if (this.settings.powerMeasurement === 'hp') {
+    if (this.settings.fanPowerMeasurement === 'hp') {
       motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
 
-      energyInput = this.convertUnitsService.value(tmpOutput.motorPower).from('hp').to('kW');
+      energyInput = tmpOutput.motorPower;
       motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
       fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));

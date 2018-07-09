@@ -6,7 +6,7 @@
         <h2 class="mb-1">Pump Calculators</h2>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/head-tool.png" class="ico-size">
+            <img src="assets/images/head-tool.png" class="ico-size" (click)="showTool('head-tool')">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('head-tool')">Head Tool</a>
@@ -17,7 +17,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/system-curve-tran.png" class="ico-size">
+            <img src="assets/images/system-curve-tran.png" class="ico-size" (click)="showTool('system-curve')">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
@@ -28,7 +28,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/speed-tran.png" class="ico-size">
+            <img src="assets/images/speed-tran.png" class="ico-size" (click)="showTool('specific-speed')">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('specific-speed')">Specific Speed</a>
@@ -44,7 +44,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/pump-eff.png" class="ico-size">
+            <img src="assets/images/pump-eff.png" class="ico-size" (click)="showTool('achievable-efficiency')">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
@@ -56,7 +56,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/pump-curve.png" class="ico-size">
+            <img src="assets/images/pump-curve.png" class="ico-size" (click)="showTool('pump-curve')">
           </div>
           <div class="col-11">
             <a class="click-item" (click)="showTool('pump-curve')">Pump Curve</a>

@@ -93,7 +93,6 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
-
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -304,7 +303,8 @@ export class FsatComponent implements OnInit {
 
   saveFieldData(newFieldData: FieldData) {
     this._fsat.fieldData = newFieldData;
-    this.save();
+    this.saveFsat(this._fsat);
+    // this.save();
   }
 
   saveFsat(newFsat: FSAT) {

@@ -141,15 +141,16 @@ export class FsatReportGraphsComponent implements OnInit {
       let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType, this.settings);
 
       if (this.settings.fanPowerMeasurement === 'hp') {
-      // console.log('first settings branch');
-      motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-      fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
 
-      energyInput = this.convertUnitsService.value(tmpOutput.motorPower).from('hp').to('kW');
-      motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-      driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
-      fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
-      usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
+        motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+        fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
+
+        energyInput = tmpOutput.motorPower;
+        motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+        driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
+        fanLoss = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (1 - (tmpOutput.fanEfficiency / 100));
+        usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
+        
       }
       else {
         motorShaftPower = tmpOutput.motorShaftPower;
@@ -162,22 +163,14 @@ export class FsatReportGraphsComponent implements OnInit {
         usefulOutput = tmpOutput.fanShaftPower * (tmpOutput.fanEfficiency / 100);
       }
 
-      if (motorLoss > 0) {
-        tmpPieLabels.push('Motor Loss: ' + (100 * motorLoss / energyInput).toFixed(2).toString() + "%");
-        tmpPieValues.push(motorLoss);
-      }
-      if (driveLoss > 0) {
-        tmpPieLabels.push('Drive Loss: ' + (100 * driveLoss / energyInput).toFixed(2).toString() + "%");
-        tmpPieValues.push(driveLoss);
-      }
-      if (fanLoss > 0) {
-        tmpPieLabels.push('Fan Loss: ' + (100 * fanLoss / energyInput).toFixed(2).toString() + "%");
-        tmpPieValues.push(fanLoss);
-      }
-      if (usefulOutput > 0) {
-        tmpPieLabels.push('Useful Output: ' + (100 * usefulOutput / energyInput).toFixed(2).toString() + "%");
-        tmpPieValues.push(usefulOutput);
-      }
+      tmpPieLabels.push('Motor Loss: ' + (100 * motorLoss / energyInput).toFixed(2).toString() + "%");
+      tmpPieValues.push(motorLoss);
+      tmpPieLabels.push('Drive Loss: ' + (100 * driveLoss / energyInput).toFixed(2).toString() + "%");
+      tmpPieValues.push(driveLoss);
+      tmpPieLabels.push('Fan Loss: ' + (100 * fanLoss / energyInput).toFixed(2).toString() + "%");
+      tmpPieValues.push(fanLoss);
+      tmpPieLabels.push('Useful Output: ' + (100 * usefulOutput / energyInput).toFixed(2).toString() + "%");
+      tmpPieValues.push(usefulOutput);
 
       tmpBarValues.push(energyInput);
       tmpBarValues.push(motorLoss);
