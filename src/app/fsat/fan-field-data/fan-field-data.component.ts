@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo } from '../../shared/models/fans';
+import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
 import { CompareService } from '../compare.service';
@@ -235,17 +235,21 @@ export class FanFieldDataComponent implements OnInit {
     this.save();
   }
 
-
-  estimateOutletPressure() {
+  calculateCompressibility() {
+    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, 'existing', this.settings);
     //todo
-  }
-
-  estimateInletPressure() {
-    //todo
-  }
-
-  calculatCompressibility() {
-    //todo
+    let inputs: CompressibilityFactor = {
+      moverShaftPower: tmpResults.motorShaftPower,
+      inletPressure: this.fieldDataForm.controls.inletPressure.value,
+      outletPressure: this.fieldDataForm.controls.outletPressure.value,
+      barometricPressure: this.fsat.baseGasDensity.barometricPressure,
+      flowRate: this.fieldDataForm.controls.flowRate.value,
+      specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
+    }
+    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings)
+    this.fieldDataForm.patchValue({
+      compressibilityFactor: Number(calcCompFactor.toFixed(3))
+    });
   }
 
   showInletPressureModal() {
@@ -299,7 +303,6 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   getBodyHeight() {
-    console.log('get height')
     if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
     } else {
