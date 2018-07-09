@@ -7,7 +7,6 @@
       <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
     </p>
     </div>-->
-
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'maxFlow'">
         <div class="card-header">
@@ -15,8 +14,11 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             The max flow rate in the pump curve graph
+          </p>
+          <p *ngIf="isFan">
+            The max flow rate in the fan curve graph
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
@@ -32,9 +34,13 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to,<br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
             3.
+          </p>
+          <p *ngIf="isFan">
+            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to,
+            Pressure = C0 + C1* Flow + C2*(Flow)2 + C3*(Flow)3 has an order of 3.
           </p>
         </div>
       </div>
@@ -45,9 +51,13 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to,<br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
             3.
+          </p>
+          <p *ngIf="isFan">
+            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to,
+            Pressure = C0 + C1* Flow + C2*(Flow)2 + C3*(Flow)3 has an order of 3.
           </p>
         </div>
       </div>
@@ -151,8 +161,11 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             The diameter/speed of the system in the original pump curve
+          </p>
+          <p *ngIf="isFan">
+            The diameter/speed of the system in the original fan curve
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
@@ -183,8 +196,11 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed
+          </p>
+          <p *ngIf="isFan">
+            Allows the user to make a new fan curve by simulating a change in pipe diameter or fan speed
           </p>
         </div>
       </div>
@@ -207,8 +223,11 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             The diameter/speed of the system in the modified pump curve
+          </p>
+          <p *ngIf="isFan">
+            The diameter/speed of the system in the modified fan curve
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
@@ -335,8 +354,11 @@
         </div>
         <div class="card-block">
           <label><u><strong>Description</strong></u></label>
-          <p>
+          <p *ngIf="!isFan">
             A data point on the pump curve graph associated with the flow in the adjacent field
+          </p>
+          <p *ngIf="isFan">
+            A data point on the fan curve graph associated with the press in the adjacent field
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
