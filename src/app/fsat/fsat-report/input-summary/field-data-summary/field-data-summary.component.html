@@ -1,0 +1,191 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Field Data
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
+                {{mod.fsat.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
+              Operating Fraction
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
+              {{fieldData.baseline.operatingFraction}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.operatingFraction, mod.operatingFraction, 'operatingFractionDiff', 0)}">
+              {{mod.operatingFraction}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+              Cost
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
+              {{fieldData.baseline.cost}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.cost, mod.cost, 'costDiff', 0)}">
+              {{mod.cost}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+              Flow Rate
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+              {{fieldData.baseline.flowRate}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.flowRate, mod.flowRate, 'flowRateDiff', 0)}">
+              {{mod.flowRate}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+              Inlet Pressure
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+              {{fieldData.baseline.inletPressure}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.inletPressure, mod.inletPressure, 'inletPressureDiff', 0)}">
+              {{mod.inletPressure}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+              Outlet Pressure
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+              {{fieldData.baseline.outletPressure}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.outletPressure, mod.outletPressure, 'outletPressureDiff', 0)}">
+              {{mod.outletPressure}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+              Load Estimated Method
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+              {{fieldData.baseline.loadEstimatedMethod}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
+              {{mod.loadEstimatedMethod}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+              Motor Power
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+              {{fieldData.baseline.motorPower}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
+              {{mod.motorPower}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+              Specific Heat Ratio
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':specificHeatRatioDiff[0] == true}">
+              {{fieldData.baseline.specificHeatRatio}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.specificHeatRatio, mod.specificHeatRatio, 'specificHeatRatioDiff', 0)}">
+              {{mod.specificHeatRatio}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+              Compressibility Factor
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+              {{fieldData.baseline.compressibilityFactor}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.compressibilityFactor, mod.compressibilityFactor, 'compressibilityFactorDiff', 0)}">
+              {{mod.compressibilityFactor}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+              Measured Voltage
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+              {{fieldData.baseline.measuredVoltage}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.measuredVoltage, mod.measuredVoltage, 'measuredVoltageDiff', 0)}">
+              {{mod.measuredVoltage}}
+            </td>
+          </tr>
+
+          <tr>
+            <td [ngClass]="{'indicate-report-field-different':pressureCalcResultTypeDiff[0] == true}">
+              Pressure Calc Result Type
+            </td>
+            <td [ngClass]="{'indicate-report-field-different':pressureCalcResultTypeDiff[0] == true}">
+              {{fieldData.baseline.pressureCalcResultType}}
+            </td>
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.pressureCalcResultType, mod.pressureCalcResultType, 'pressureCalcResultTypeDiff', 0)}">
+              {{mod.pressureCalcResultType}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Field Data
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div> -->

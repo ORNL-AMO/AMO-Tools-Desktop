@@ -24,6 +24,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   annualSavings: number;
   @Input()
   modificationName: string;
+  @Input()
+  inSetup: boolean;
   constructor() { }
 
   ngOnInit() {

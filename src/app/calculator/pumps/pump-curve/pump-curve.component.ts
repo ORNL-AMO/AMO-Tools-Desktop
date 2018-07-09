@@ -9,6 +9,7 @@ import { PumpCurveForm, PumpCurveDataRow, Calculator } from '../../../shared/mod
 import { Assessment } from '../../../shared/models/assessment';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { FSAT } from '../../../shared/models/fans';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -25,6 +26,12 @@ export class PumpCurveComponent implements OnInit {
   inAssessment: boolean;
   @Input()
   assessment: Assessment;
+  @Input()
+  isFan: boolean;
+  @Input()
+  fsat: FSAT;
+
+
   tabSelect: string = 'results';
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
@@ -94,6 +101,14 @@ export class PumpCurveComponent implements OnInit {
   }
 
   subscribe() {
+
+    let headOrPressure: string;
+    if (this.isFan) {
+      headOrPressure = 'Pressure';
+    } else {
+      headOrPressure = 'Head'
+    }
+
     this.pumpCurveService.calcMethod.subscribe(val => {
       this.selectedFormView = val;
     })
@@ -105,7 +120,7 @@ export class PumpCurveComponent implements OnInit {
           this.regEquation = this.regEquation.replace(/x/, '(flow)');
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }
-        this.regEquation = this.regEquation.replace('y', 'Head');
+        this.regEquation = this.regEquation.replace('y', headOrPressure);
         this.regEquation = this.regEquation.replace('^2', '&#x00B2;');
         this.regEquation = this.regEquation.replace('^3', '&#x00B3;');
         this.regEquation = this.regEquation.replace('^4', '&#x2074;');
@@ -125,7 +140,7 @@ export class PumpCurveComponent implements OnInit {
         if (this.pumpCurveForm.headOrder > 5 && this.pumpCurveForm.headFlow6) {
           tmpStr = this.pumpCurveForm.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
         }
-        this.regEquation = 'Head = ' + tmpStr;
+        this.regEquation = headOrPressure + ' = ' + tmpStr;
         for (let i = 0; i < this.pumpCurveForm.headOrder; i++) {
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }

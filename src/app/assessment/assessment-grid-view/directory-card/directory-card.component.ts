@@ -62,18 +62,7 @@ export class DirectoryCardComponent implements OnInit {
   // }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      if (assessment.psat.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      if (assessment.phast.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment);
   }
 
   showEditModal() {

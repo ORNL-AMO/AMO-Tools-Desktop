@@ -1,4 +1,4 @@
-<div class="list-row pre-assessment" *ngIf="preAssessmentExists" [ngClass]="{'pump': calculator.type =='pump', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
+<div class="list-row pre-assessment" *ngIf="preAssessmentExists" [ngClass]="{'pump': calculator.type =='pump', 'fan': calculator.type =='fan', 'furnace': calculator.type == 'furnace', 'general': calculator.type == 'general'}">
   <div class="assessment-name">
     <input type="checkbox" [(ngModel)]="calculator.selected" />
     <i class="fa fa-pie-chart" aria-hidden="true"></i>
