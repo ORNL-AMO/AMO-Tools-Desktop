@@ -32,10 +32,10 @@ export class ConvertFsatService {
       inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     }
     if (settings.fanPressureMeasurement != 'inH2o') {
-      inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanPressureMeasurement).to('inH2o');
+      inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.staticPressure).from(settings.fanPressureMeasurement).to('inH2o');
     }
     if (settings.fanSpecificHeatGas != 'btulbF') {
-      inputCpy.specificHeatGas = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanSpecificHeatGas).to('btulbF');
+      inputCpy.specificHeatGas = this.convertUnitsService.value(inputCpy.specificHeatGas).from(settings.fanSpecificHeatGas).to('btulbF');
     }
     return inputCpy;
   }

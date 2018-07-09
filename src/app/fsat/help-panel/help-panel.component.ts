@@ -71,7 +71,6 @@ export class HelpPanelComponent implements OnInit {
 
   getContainerHeight() {
     if (this.containerHeight && this.resultTabs) {
-      console.log('get height');
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
     }

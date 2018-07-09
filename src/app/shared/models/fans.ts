@@ -315,3 +315,13 @@ export interface OutletPressureData {
   processRequirements: number,
   calculatedOutletPressure: number
 }
+
+
+export interface CompressibilityFactor {
+  moverShaftPower: number,
+  inletPressure: number,
+  outletPressure: number,
+  barometricPressure: number,
+  flowRate: number,
+  specificHeatRatio: number
+};
