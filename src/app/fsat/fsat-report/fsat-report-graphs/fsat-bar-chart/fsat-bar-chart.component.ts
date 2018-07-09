@@ -5,6 +5,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fsat-bar-chart',
@@ -46,7 +47,7 @@ export class FsatBarChartComponent implements OnInit {
 
   graphColors: Array<string>;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -85,7 +86,7 @@ export class FsatBarChartComponent implements OnInit {
     this.labels.push('Energy Input');
     this.labels.push('Motor Losses');
     this.labels.push('Drive Losses');
-    this.labels.push('Pump Losses');
+    this.labels.push('Fan Losses');
     this.labels.push('Useful Output');
   }
 
@@ -97,9 +98,11 @@ export class FsatBarChartComponent implements OnInit {
     this.barData2.push(this.fsat2Name);
 
     for (let i = 0; i < this.fsat1Values.length; i++) {
+      // this.fsat1Values[i] = this.convertUnitsService.val(this.fsat1Values[i]).from('hp').to('kW');
       this.barData1.push(this.fsat1Values[i].toFixed(2));
     }
     for (let i = 0; i < this.fsat2Values.length; i++) {
+      // this.fsat1Values[i] = this.convertUnitsService.val(this.fsat1Values[i]).from('hp').to('kW');
       this.barData2.push(this.fsat2Values[i].toFixed(2));
     }
 
@@ -107,7 +110,8 @@ export class FsatBarChartComponent implements OnInit {
   }
 
   initChart() {
-    let unit = this.settings.powerMeasurement;
+    // let unit = this.settings.powerMeasurement;
+    let unit = 'kW';
     let yAxisLabel: string;
     if (this.printView) {
       yAxisLabel = "";

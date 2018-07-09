@@ -52,6 +52,21 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanDataOrder'">
+        <div class="card-header">
+          Head Order
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised
+            to,<br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*
+            (Flow)<sup>3</sup> has an order of
+            3.
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'headConstant'">
         <div class="card-header">
           Constant
@@ -146,6 +161,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanBaselineMeasurement'">
+        <div class="card-header">
+          Baseline condition
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The diameter/speed of the system in the original fan curve
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units:<br> Diameter: <strong>in</strong> or <strong>m</strong><br>Speed: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'measurementOption'">
         <div class="card-header">
           Diameter/Speed
@@ -158,6 +189,18 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanMeasurementOption'">
+        <div class="card-header">
+          Diameter/Speed
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Allows the user to make a new fan curve by simulating a change in pipe diameter or fan speed
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'modifiedMeasurement'">
         <div class="card-header">
           Modified Condition
@@ -166,6 +209,22 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             The diameter/speed of the system in the modified pump curve
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units:<br> Diameter: <strong>in</strong> or <strong>m</strong><br>Speed: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanModifiedMeasurement'">
+        <div class="card-header">
+          Modified Condition
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The diameter/speed of the system in the modified fan curve
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
@@ -190,6 +249,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanExploreFlow'">
+        <div class="card-header">
+          Explore Flow
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Enter a flow rate to determine the corresponding pressure.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'exploreHead'">
         <div class="card-header">
           Explore Head
@@ -198,6 +273,22 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Enter a head value to determine the corresponding flow rate.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>ft</strong> or <strong>m</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'explorePressure'">
+        <div class="card-header">
+          Explore Pressure
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Enter a pressure value to determine the corresponding flow rate.
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
@@ -222,6 +313,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressure'">
+        <div class="card-header">
+          Head
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            A data point on the fan curve graph associated with the pressure in the adjacent field
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>ft</strong> or <strong>m</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'flow'">
         <div class="card-header">
           Flow
@@ -230,6 +337,22 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             A data point on the pump curve graph associated with the flow in the adjacent field
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanFlow'">
+        <div class="card-header">
+          Flow
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            A data point on the fan curve graph associated with the flow in the adjacent field
           </p>
           <label><u><strong>Input</strong></u></label>
           <p>
