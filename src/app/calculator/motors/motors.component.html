@@ -6,7 +6,7 @@
         <h2 class="mb-1">Motors Calculators</h2>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/nema.png" class="ico-size4">
+            <img src="assets/images/nema.png" class="ico-size4" (click)="showTool('nema-energy-efficiency')">
           </div>
           <div class="col-11">
             <a (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
@@ -17,7 +17,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/performance.png" class="ico-size4">
+            <img src="assets/images/performance.png" class="ico-size4" (click)="showTool('motor-performance')">
           </div>
           <div class="col-11">
             <a (click)="showTool('motor-performance')">Motor Performance</a>
@@ -28,7 +28,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/load-est.png" class="ico-size4">
+            <img src="assets/images/load-est.png" class="ico-size4" (click)="showTool('percent-load-estimation')">
           </div>
           <div class="col-11">
             <a (click)="showTool('percent-load-estimation')"> Percent Load Estimation</a>
@@ -39,7 +39,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/drive.png" class="ico-size4">
+            <img src="assets/images/driver.png" class="ico-size4" (click)="showTool('motor-drive')">
           </div>
           <div class="col-11">
             <a (click)="showTool('motor-drive')"> Motor Drive</a>
