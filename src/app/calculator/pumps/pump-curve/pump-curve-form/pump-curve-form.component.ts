@@ -41,7 +41,9 @@ export class PumpCurveFormComponent implements OnInit {
 
   constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    console.log('isFan = ' + this.isFan);
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);
