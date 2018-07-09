@@ -143,6 +143,7 @@ export class FsatReportGraphsComponent implements OnInit {
       if (this.settings.fanPowerMeasurement === 'hp') {
         motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
         fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
+
         energyInput = tmpOutput.motorPower;
         motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
         driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');

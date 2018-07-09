@@ -164,15 +164,6 @@ export class PieChartComponent implements OnInit {
     let xBound;
     let fontSize;
 
-    console.log('BUILDCHART() ==========');
-    console.log('pieValues = ');
-    console.log(pieValues);
-    console.log('');
-    console.log('pieLabels = ');
-    console.log(pieLabels);
-    console.log('');
-
-
     if (printView) {
       if (this.sideBySide) {
         xBound = radius * (15 / 14);
@@ -389,14 +380,6 @@ export class PieChartComponent implements OnInit {
     let leftLabelIndexes = [];
     let xBound;
     let fontSize;
-
-    console.log('updateChart() ==========');
-    console.log('pieValues = ');
-    console.log(pieValues);
-    console.log('');
-    console.log('pieLabels = ');
-    console.log(pieLabels);
-    console.log('');
 
     for (let i = 0; i < this.graphColors.length; i++) {
       color(i);
