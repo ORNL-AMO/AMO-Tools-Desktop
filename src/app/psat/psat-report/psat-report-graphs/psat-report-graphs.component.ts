@@ -150,22 +150,16 @@ export class PsatReportGraphsComponent implements OnInit {
     driveLoss = motorShaftPower - pumpShaftPower;
     pumpLoss = (results.motor_power - motorLoss - driveLoss) * (1 - (results.pump_efficiency / 100));
     usefulOutput = results.motor_power - (motorLoss + driveLoss + pumpLoss);
-    if (motorLoss > 0) {
-      selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(motorLoss);
-    }
-    if (driveLoss > 0) {
-      selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(driveLoss);
-    }
-    if (pumpLoss > 0) {
-      selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(pumpLoss);
-    }
-    if (usefulOutput > 0) {
-      selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(usefulOutput);
-    }
+
+    selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(motorLoss);
+    selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(driveLoss);
+    selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(pumpLoss);
+    selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(usefulOutput);
+
     selectedBarValues.push(energyInput);
     selectedBarValues.push(motorLoss);
     selectedBarValues.push(driveLoss);
@@ -186,34 +180,6 @@ export class PsatReportGraphsComponent implements OnInit {
       this.selectedPsat2BarValues = this.allChartData.barValues[this.selectedPsat2.index];
       this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
     }
-
-    // if (dropDownIndex === 1) {
-    //   this.selectedPsat1PieLabels = this.allChartData.pieLabels[selectedIndex];
-    //   this.selectedPsat1PieValues = this.allChartData.pieValues[selectedIndex];
-    //   this.selectedPsat1BarValues = this.allChartData.barValues[selectedIndex];
-    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
-    // }
-    // else if (dropDownIndex === 2) {
-    //   this.selectedPsat2PieLabels = this.allChartData.pieLabels[selectedIndex];
-    //   this.selectedPsat2PieValues = this.allChartData.pieValues[selectedIndex];
-    //   this.selectedPsat2BarValues = this.allChartData.barValues[selectedIndex];
-    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
-    // }
-
-    // if (index === 1) {
-    //   this.selectedPsat1PieLabels = new Array<string>();
-    //   this.selectedPsat1PieValues = new Array<number>();
-    //   this.selectedPsat1BarValues = new Array<number>();
-    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
-    //   this.getPsatData(this.selectedPsat1.psat, this.selectedPsat1PieLabels, this.selectedPsat1PieValues, this.selectedPsat1BarValues);
-    // }
-    // else if (index === 2) {
-    //   this.selectedPsat2PieLabels = new Array<string>();
-    //   this.selectedPsat2PieValues = new Array<number>();
-    //   this.selectedPsat2BarValues = new Array<number>();
-    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
-    //   this.getPsatData(this.selectedPsat2.psat, this.selectedPsat2PieLabels, this.selectedPsat2PieValues, this.selectedPsat2BarValues);
-    // }
   }
 
   getPieWidth(): number {
