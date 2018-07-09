@@ -34,7 +34,7 @@
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">
-              <div class="calc-help">
+              <div class="calc-help" *ngIf="!isFan">
                 <h3>System Curve Help</h3>
                 <p>
                   A system-head curve is a graphical representation of the relationship between flow and hydraulic losses in a given piping
@@ -64,6 +64,37 @@
                 <p>
                   Note 3: The specific gravity does not affect the system head curve, but does affect the fluid power, which is directly proportional
                   to the specific gravity.
+                </p>
+              </div>
+
+              <div class="calc-help" *ngIf="isFan">
+                <h3>System Curve Help</h3>
+                <p>
+                  A system resistance curve is a graphical representation of the relationship between flow and pressure
+                  losses in a given fan system.  Some pressure losses are functions of rate of flow, size and length of
+                  duct, and size, number and type of fittings, each system has its own characteristic curve and specific
+                  values.
+                </p>
+                <p>
+                  <u>If so:</u>
+                  <br>P = P <sub>s</sub> + K'Q <sup>C</sup> 
+                  <br>P = total pressure
+                  <br>Ps = Static Pressure
+                  <br>K’ = Loss Coefficient
+                  <br>Q = Flow Rate
+                  <br>C = dynamic/friction loss exponent
+                </p>
+                <p>
+                  Note 1: K' here applies to the volumetric flow rate,
+                  <u>not</u> the velocity pressure.
+                </p>
+                <p>
+                  Note 2: This simple system method does not apply to complex distribution systems where flow is
+                  delivered to multiple elevation or pressure systems.
+                </p>
+                <p>
+                  Note 3: The compressibility factor does not affect the system resistance curve, but does affect the
+                  fluid power, which is directly proportional to the compressibility factor.
                 </p>
               </div>
             </div>

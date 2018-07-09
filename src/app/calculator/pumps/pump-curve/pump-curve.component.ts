@@ -82,6 +82,9 @@ export class PumpCurveComponent implements OnInit {
       this.initForm();
       this.subscribe();
     }
+    if (this.isFan) {
+      this.currentField = 'fanMaxFlow';
+    }
   }
 
   ngAfterViewInit() {

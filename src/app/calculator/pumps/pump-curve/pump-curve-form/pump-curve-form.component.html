@@ -14,7 +14,11 @@
       <label class="group-label">Baseline Condition</label>
       <div class="form-group">
         <select id="measurementOption" name="measurementOption" class="form-control" (change)="calculate()" [(ngModel)]="pumpCurveForm.measurementOption"
-          (focus)="focusField('measurementOption')">
+          (focus)="focusField('measurementOption')" *ngIf="!isFan">
+          <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+        </select>
+        <select id="measurementOption" name="measurementOption" class="form-control" (change)="calculate()" [(ngModel)]="pumpCurveForm.measurementOption"
+                (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
           <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
         </select>
       </div>
@@ -22,8 +26,8 @@
         <div class="input-group">
           <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
             id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')" (input)="calculate()" *ngIf="!isFan">
-          <input name="fanBaselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
-                 id="fanBaselineMeasurement" onfocus="this.select();" (focus)="focusField('fanBaselineMeasurement')" (input)="calculate()" *ngIf="isFan">
+          <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
+                 id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('fanBaselineMeasurement')" (input)="calculate()" *ngIf="isFan">
           <span *ngIf="pumpCurveForm.measurementOption == 'Diameter' && !isFan" class="input-group-addon units">{{settings.distanceMeasurement}}</span>
           <span *ngIf="pumpCurveForm.measurementOption == 'Diameter' && isFan" class="input-group-addon units">
             <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft</span>
@@ -40,7 +44,7 @@
           [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('measurementOption')" *ngIf="!isFan">
           <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
         </select>
-        <select id="fanMeasurementOption2" name="fanMeasurementOption2" class="form-control" disabled="disabled" (change)="calculate()"
+        <select id="measurementOption2" name="measurementOption2" class="form-control" disabled="disabled" (change)="calculate()"
                 [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
           <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
         </select>
@@ -49,8 +53,8 @@
         <div class="input-group">
           <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
                  id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')" (input)="calculate()" *ngIf="!isFan">
-          <input name="fanModifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
-                 id="fanModifiedMeasurement" onfocus="this.select();" (focus)="focusField('fanModifiedMeasurement')" (input)="calculate()" *ngIf="isFan">
+          <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
+                 id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('fanModifiedMeasurement')" (input)="calculate()" *ngIf="isFan">
           <span *ngIf="pumpCurveForm.measurementOption == 'Diameter' && !isFan" class="input-group-addon units">{{settings.distanceMeasurement}}</span>
           <span *ngIf="pumpCurveForm.measurementOption == 'Diameter' && isFan" class="input-group-addon units">
             <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft</span>
@@ -61,7 +65,7 @@
       </div>
     </div>
   </div>
-  <div class="row form-section" *ngIf="!isFan">
+  <div class="row form-section">
     <div class="col-12">
       <label class="group-label">Explore</label>
     </div>
@@ -71,7 +75,7 @@
         <div class="input-group">
           <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="exploreFlow"
             onfocus="this.select();" (focus)="focusField('exploreFlow')" (input)="calculate()" *ngIf="!isFan">
-          <input name="fanExploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="fanExploreFlow"
+          <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="exploreFlow"
                  onfocus="this.select();" (focus)="focusField('fanExploreFlow')" (input)="calculate()" *ngIf="isFan">
           <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
           <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
@@ -87,7 +91,7 @@
         <div class="input-group">
           <input name="exploreHead" [(ngModel)]="pumpCurveForm.exploreHead" type="number" step="any" class="form-control" id="exploreHead"
             onfocus="this.select();" (focus)="focusField('exploreHead')" (input)="calculate()" *ngIf="!isFan">
-          <input name="explorePressure" [(ngModel)]="pumpCurveForm.exploreHead" type="number" step="any" class="form-control" id="explorePressure"
+          <input name="exploreHead" [(ngModel)]="pumpCurveForm.exploreHead" type="number" step="any" class="form-control" id="exploreHead"
                  onfocus="this.select();" (focus)="focusField('explorePressure')" (input)="calculate()" *ngIf="isFan">
           <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
           <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
