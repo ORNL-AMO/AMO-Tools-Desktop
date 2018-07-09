@@ -1,4 +1,13 @@
 <div class="help-content p-1">
+  <div class="help-header">
+    <h3>Estimate Outlet Pressure</h3>
+    <p>
+      This calculator is to estimate outlet pressure when outlet pressure cannot be directly measured, by estimating potential
+      pressure losses. Losses can be estimated using information from fan/accessory manufacturers or by consulting references
+      such as AMCA Publication 201 – Fans and Systems.
+    </p>
+  </div>
+  <br>
   <div class="card" *ngIf="currentField == 'outletSystemEffectLoss'">
     <div class="card-header">
       Fan Outlet System Effect Equivalent loss
@@ -10,19 +19,9 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Loss in pressure due to system effects. Duct turns at the outlet of the fan result in adverse aerodynamics, referred to as
+        system effects (causing non-uniform loading of fan impeller, swirling flow, inability to develop a uniform flow profile
+        on discharge). To minimize system effect loss, minimize the number of curves in the outlet ductwork.
       </p>
     </div>
   </div>
@@ -38,19 +37,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to dampers at the outlet of the fan.
       </p>
     </div>
   </div>
@@ -66,19 +53,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure loss due to air treatment at the outlet, usually for air quality.
       </p>
     </div>
   </div>
@@ -94,19 +69,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to dampers in the system downstream of the fan, such as a backdraft damper.
       </p>
     </div>
   </div>
@@ -122,19 +85,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to system components downstream of the fan, such as hoods, louvers, diffusers.
       </p>
     </div>
   </div>
