@@ -6,25 +6,41 @@
       <th>New Motor</th>
     </tr>
     <tr>
-      <td><span>Energy Use</span></td>
+      <td>
+        <span>Energy Use</span>
+      </td>
       <td>{{results.rewoundEnergyUse | number : '1.0-2'}} kWh/yr</td>
       <td>{{results.newEnergyUse | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
-      <td><span>Energy Cost</span></td>
+      <td>
+        <span>Energy Cost</span>
+      </td>
       <td>{{results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
       <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td><span>Annual Energy Savings</span></td>
+      <td>
+        <span>Annual Energy Savings</span>
+      </td>
       <td colspan="2">{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
-      <td><span>Cost Savings</span></td>
+      <td>
+        <span>Cost Savings</span>
+      </td>
       <td colspan="2">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td><span>Simple Payback</span></td>
+      <td>
+        <span>Differential Cost</span>
+      </td>
+      <td colspan="2">{{results.differentialCost | currency:'USD':'1.0-0'}}</td>
+    </tr>
+    <tr>
+      <td>
+        <span>Simple Payback</span>
+      </td>
       <td colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
     </tr>
   </tbody>

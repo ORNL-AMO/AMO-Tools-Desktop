@@ -73,13 +73,11 @@
       <span class="units">$</span>
     </div>
   </div>
-  <br>
+  <!--<br>
   <div class="form-group">
     <label for="efficiency">Differential Cost</label>
-    <div class="input-group calc-addon-group">
-      <input name="differentialCost" type="number" min="0" step="1" class="form-control" id="differentialCost" [(ngModel)]="inputs.differentialCost"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('differentialCost')">
-      <span class="units">$</span>
+    <div class="text-center small">
+      <small><strong>{{inputs.differentialCost | currency:'USD':'1.0-0'}} </strong></small>
     </div>
-  </div>
+  </div>-->
 </form>

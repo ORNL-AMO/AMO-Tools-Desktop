@@ -47,4 +47,12 @@
       <span class="units">%</span>
     </div>
   </div>
+  <div class="form-group">
+    <label for="efficiency">Efficiency of New Motor</label>
+    <div class="input-group calc-addon-group">
+      <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency" [(ngModel)]="inputs.newEfficiency"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('newEfficiency')">
+      <span class="units">%</span>
+    </div>
+  </div>
 </form>

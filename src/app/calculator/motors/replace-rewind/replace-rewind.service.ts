@@ -8,6 +8,7 @@ export class ReplaceRewindService {
 
   getResults(inputs: ReplaceRewindData): ReplaceRewindResults {
     let results: ReplaceRewindResults = {
+      differentialCost: 0,
       rewoundEnergyUse: 0,
       rewoundEnergyCost: 0,
       newEnergyUse: 0,
@@ -16,17 +17,19 @@ export class ReplaceRewindService {
       costSavings: 0,
       simplePayback: 0
     }
-    
+    results.differentialCost = this.getDifferentialCost(inputs);
     results.rewoundEnergyUse = this.getRewoundEnergyUse(inputs);
     results.rewoundEnergyCost = this.getRewoundEnergyCost(inputs, results);
     results.newEnergyUse = this.getNewEnergyUse(inputs);
     results.newEnergyCost = this.getNewEnergyCost(inputs, results);
     results.annualEnergySavings = this.getAnnualEnergySavings(results);
     results.costSavings = this.getCostSavings(results);
-    results.simplePayback = this.getSimplePayback(inputs, results);   
+    results.simplePayback = this.getSimplePayback(results);   
     return results;
   }
-
+  getDifferentialCost(inputs: ReplaceRewindData): number {
+    return inputs.purchaseCost - inputs.costOfRewind;
+  }
   getRewoundEnergyUse(inputs: ReplaceRewindData): number {
     return 0.746 * inputs.motorSize * (inputs.load / 100) * inputs.operatingHours * (100 / (inputs.currentEfficiency - inputs.rewindEfficiencyLoss));
   }
@@ -45,8 +48,8 @@ export class ReplaceRewindService {
   getCostSavings(results: ReplaceRewindResults): number {
     return results.rewoundEnergyCost - results.newEnergyCost;
   }
-  getSimplePayback(inputs: ReplaceRewindData, results: ReplaceRewindResults): number {
-    return inputs.differentialCost / results.costSavings;
+  getSimplePayback(results: ReplaceRewindResults): number {
+    return results.differentialCost / results.costSavings;
   } 
 
   //may want to add percent savings as a result. talk to kristina first

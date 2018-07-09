@@ -30,9 +30,9 @@ export class ReplaceRewindComponent implements OnInit {
     costOfRewind: 8384,
     newEfficiency: 95.7,
     purchaseCost: 33163,
-    differentialCost: 24779,
   };
   results: ReplaceRewindResults = {
+    differentialCost: 0,
     rewoundEnergyUse: 0,
     rewoundEnergyCost: 0,
     newEnergyUse: 0,
@@ -88,10 +88,10 @@ export interface ReplaceRewindData {
   costOfRewind: number,
   newEfficiency: number,
   purchaseCost: number,
-  differentialCost: number
 }
 
 export interface ReplaceRewindResults {
+  differentialCost: number,
   rewoundEnergyUse: number,
   rewoundEnergyCost: number,
   newEnergyUse: number,
