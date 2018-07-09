@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ReplaceExistingResults } from '../replace-existing.component';
 
 @Component({
   selector: 'app-replace-existing-results',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ReplaceExistingResultsComponent implements OnInit {
   @Input()
-  results: {annualEnergySavings: number, costSavings: number};
+  results: ReplaceExistingResults;
   
   constructor() { }
 

@@ -41,7 +41,8 @@
       <td>
         <span>Simple Payback</span>
       </td>
-      <td colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+      <td *ngIf="results.differentialCost > 0" colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+      <td *ngIf="results.differentialCost <= 0" colspan="2">immediate</td>
     </tr>
   </tbody>
 </table>

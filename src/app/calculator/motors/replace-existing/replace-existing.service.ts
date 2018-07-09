@@ -1,29 +1,53 @@
 import { Injectable } from '@angular/core';
-import { ReplaceExistingData } from './replace-existing.component';
+import { ReplaceExistingData, ReplaceExistingResults } from './replace-existing.component';
 
 @Injectable()
 export class ReplaceExistingService {
 
   constructor() { }
 
-  getResults(inputs: ReplaceExistingData): { annualEnergySavings: number, costSavings: number } {
-    let results: { annualEnergySavings: number, costSavings: number } = {
+  getResults(inputs: ReplaceExistingData): ReplaceExistingResults {
+    let results: ReplaceExistingResults = {
+      existingEnergyUse: 0,
+      newEnergyUse: 0,
+      existingEnergyCost: 0,
+      newEnergyCost: 0,
       annualEnergySavings: 0,
-      costSavings: 0
-    }
+      costSavings: 0,
+      simplePayback: 0
+    };
   
-    results.annualEnergySavings = this.getEnergySavings(inputs);
-    results.costSavings = this.getCostSavings(results.annualEnergySavings, inputs.electricityCost);
+    results.existingEnergyUse = this.getExistingEnergyUse(inputs);
+    results.newEnergyUse = this.getNewEnergyUse(inputs);
+    results.existingEnergyCost = this.getExistingEnergyCost(inputs, results);
+    results.newEnergyCost = this.getNewEnergyCost(inputs, results);
+    results.annualEnergySavings = this.getAnnualEnergySavings(results);
+    results.costSavings = this.getCostSavings(inputs, results);
+    results.simplePayback = this.getSimplePayback(inputs, results);
+
     return results;
   }
 
-
-  getEnergySavings(inputs: ReplaceExistingData): number {
-    return 0.746 * inputs.motorSize * (inputs.load / 100) * inputs.operatingHours * (100 / inputs.existingEfficiency - 100 / inputs.newEfficiency);
+  getExistingEnergyUse(inputs: ReplaceExistingData): number {
+    return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.existingEfficiency);
   }
-
-  getCostSavings(enerygSavings: number, cost: number): number{
-    return enerygSavings * cost;
+  getNewEnergyUse(inputs: ReplaceExistingData): number {
+    return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.newEfficiency);
+  }
+  getExistingEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
+    return results.existingEnergyUse * inputs.electricityCost;
+  }
+  getNewEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
+    return results.newEnergyUse * inputs.electricityCost;
+  }
+  getAnnualEnergySavings(results: ReplaceExistingResults): number {
+    return results.existingEnergyUse - results.newEnergyUse;
+  }
+  getCostSavings(inputs: ReplaceExistingData, results: ReplaceExistingResults): number{
+    return inputs.electricityCost * results.annualEnergySavings;
+  }
+  getSimplePayback(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
+    return inputs.purchaseCost / results.costSavings;
   }
 
   //may want to add percent savings as a result. talk to kristina first

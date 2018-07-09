@@ -19,15 +19,25 @@ export class ReplaceExistingComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   settings: Settings;
-  results: { annualEnergySavings: number, costSavings: number } = { annualEnergySavings: 0, costSavings: 0 };
+  results: ReplaceExistingResults = {
+    existingEnergyUse: 0,
+    newEnergyUse: 0,
+    existingEnergyCost: 0,
+    newEnergyCost: 0,
+    annualEnergySavings: 0,
+    costSavings: 0,
+    simplePayback: 0
+  };
   inputs: ReplaceExistingData = {
     operatingHours: 5200,
     motorSize: 150,
-    existingEfficiency: 93,
+    existingEfficiency: 92,
     load: 75,
-    electricityCost: 0.07,
-    newEfficiency: 95.8
+    electricityCost: 0.12,
+    newEfficiency: 96,
+    purchaseCost: 13000
   };
+
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
@@ -71,5 +81,15 @@ export interface ReplaceExistingData {
   existingEfficiency: number,
   load: number,
   electricityCost: number,
-  newEfficiency: number
+  newEfficiency: number,
+  purchaseCost: number
+}
+export interface ReplaceExistingResults {
+  existingEnergyUse: number,
+  newEnergyUse: number,
+  existingEnergyCost: number,
+  newEnergyCost: number,
+  annualEnergySavings: number,
+  costSavings: number,
+  simplePayback: number
 }
