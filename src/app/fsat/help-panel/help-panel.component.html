@@ -1,13 +1,13 @@
 <div class="help-panel">
     <div class="row m-0" *ngIf="!inSetup || stepTab == 'fan-field-data'" #resultTabs>
         <ul class="tabs primary tab-row">
-            <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+            <li class="panel-tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
                 <a class="border-left-0" (click)="setTab('results')">Results</a>
             </li><!--
-            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
+            --><li class="panel-tab-item" [ngClass]="{'active': tabSelect == 'help', 'tab-3': !inSetup, 'tab-2': inSetup}">
                 <a (click)="setTab('help')">Help</a>
             </li><!--
-            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}">
+            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}" *ngIf="!inSetup">
                 <a (click)="setTab('notes')">Notes</a>
             </li>
         </ul>

@@ -56,8 +56,8 @@
         [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
         [assessment]="assessment"></app-field-data>
     </div>
-    <div class="col-6 help-panel">
-      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [containerHeight]="containerHeight"></app-help-panel>
+    <div class="col-6 help-panel" [ngClass]="{'pl-0': subTab == 'field-data'}">
+      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [containerHeight]="containerHeight" [showResults]="subTab == 'field-data'"></app-help-panel>
     </div>
   </div>
 

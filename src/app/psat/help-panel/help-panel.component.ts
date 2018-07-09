@@ -31,6 +31,8 @@ export class HelpPanelComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Input()
+  showResults: boolean;
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
 
@@ -59,7 +61,6 @@ export class HelpPanelComponent implements OnInit {
 
     this.psatService.modifyConditionsTab.subscribe(val => {
       this.currentTab = val;
-      console.log(this.currentTab);
     })
   }
 

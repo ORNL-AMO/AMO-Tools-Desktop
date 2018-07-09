@@ -27,23 +27,11 @@ export class FsatResultsPanelComponent implements OnInit {
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
-    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); console.log('get from subscribe') })
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.fsat && !changes.fsat.firstChange) {
-      console.log('get results fsat change')
-      this.getResults();
-    }
-
-    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
-      this.getResults();
-    }
+    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults();})
   }
 
   ngOnDestroy() {
     this.updateDataSub.unsubscribe();
-    console.log(this.updateDataSub);
   }
 
   getResults() {
