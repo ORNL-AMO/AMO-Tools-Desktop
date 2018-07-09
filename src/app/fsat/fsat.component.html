@@ -22,8 +22,8 @@
       <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
       <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points> -->
     </div>
-    <div class="col-6 help-panel">
-      <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
+    <div class="col-6 help-panel" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
+      <app-help-panel [settings]="settings" [inSetup]="true" [fsat]="_fsat" [inSetup]="true"></app-help-panel>
     </div>
   </div>
   <!--Assessment-->
@@ -35,10 +35,6 @@
   </div>
 
   <!--report-->
-  <!-- <div class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-fsat-report></app-fsat-report>
-  </div> -->
-
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
       <app-fsat-report [fsat]="_fsat" [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"

@@ -9,6 +9,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';
+import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-psat-report-graphs',
@@ -91,6 +92,7 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   prepPsatOptions(): void {
+    //push baseline first
     this.psatOptions.push({ name: 'Baseline', psat: this.psat, index: 0 });
     this.selectedPsat1 = this.psatOptions[0];
 
@@ -115,7 +117,7 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   // sets loss data and percentages for selected psats
-  getPsatData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
+  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>, baselinePumpEfficiency: number) {
     let selectedResults: PsatOutputs;
     let selectedInputs: PsatInputs;
     let tmpForm: FormGroup;
@@ -125,14 +127,34 @@ export class PsatReportGraphsComponent implements OnInit {
       if (selectedInputs.optimize_calculation) {
         selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
       } else {
-        selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
+        selectedResults = this.psatService.resultsModified(selectedInputs, this.settings, baselinePumpEfficiency);
       }
+      console.log(psat.name);
+      console.log(selectedResults);
+      console.log('====')
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
     else {
       selectedResults = this.psatService.emptyResults();
     }
   }
+
+  getPsatBaselineData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): PsatOutputs {
+    let selectedResults: PsatOutputs;
+    let selectedInputs: PsatInputs;
+    let tmpForm: FormGroup;
+    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
+    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
+    if (tmpForm.status == 'VALID') {
+      selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
+      this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
+    }
+    else {
+      selectedResults = this.psatService.emptyResults();
+    }
+    return selectedResults;
+  }
+
 
   setGraphData(results: PsatOutputs, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
     let energyInput, motorLoss, driveLoss, pumpLoss, usefulOutput;
@@ -209,12 +231,22 @@ export class PsatReportGraphsComponent implements OnInit {
     let allBarValues = new Array<Array<number>>();
     let allPieData;
 
-    for (let i = 0; i < this.psatOptions.length; i++) {
-      let tmpPieLabels = new Array<string>();
-      let tmpPieValues = new Array<number>();
-      let tmpBarValues = new Array<number>();
-      let tmpPsat = this.psatOptions[i].psat;
-      this.getPsatData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+    //baseline
+    let tmpPieLabels = new Array<string>();
+    let tmpPieValues = new Array<number>();
+    let tmpBarValues = new Array<number>();
+    let tmpPsat = this.psatOptions[0].psat;
+    let tmpBaselineResults: PsatOutputs = this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+    allPieLabels.push(tmpPieLabels);
+    allPieValues.push(tmpPieValues);
+    allBarValues.push(tmpBarValues);
+    //modifications
+    for (let i = 1; i < this.psatOptions.length; i++) {
+      tmpPieLabels = new Array<string>();
+      tmpPieValues = new Array<number>();
+      tmpBarValues = new Array<number>();
+      tmpPsat = this.psatOptions[i].psat;
+      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues, tmpBaselineResults.pump_efficiency);
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);
       allBarValues.push(tmpBarValues);

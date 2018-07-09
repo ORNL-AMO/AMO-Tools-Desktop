@@ -6,7 +6,7 @@
         <h2 class="mb-1">Process Heating Calculators</h2>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/o2.png" class="ico-size2">
+            <img src="assets/images/o2.png" class="ico-size2" (click)="showTool('o2-enrichment')">
           </div>
           <div class="col-11">
             <a (click)="showTool('o2-enrichment')">O<sub>2</sub> Enrichment</a>
@@ -17,7 +17,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/eff-impr.png" class="ico-size2">
+            <img src="assets/images/eff-impr.png" class="ico-size2" (click)="showTool('efficiency-improvement')">
           </div>
           <div class="col-11">
             <a (click)="showTool('efficiency-improvement')">Efficiency Improvement</a>
@@ -28,7 +28,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/energy-equ.png" class="ico-size2">
+            <img src="assets/images/energy-equ.png" class="ico-size2" (click)="showTool('energy-equivalency')">
           </div>
           <div class="col-11">
             <a (click)="showTool('energy-equivalency')">Energy Equivalency</a>
@@ -40,7 +40,7 @@
         </div>
         <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/flow.png" class="ico-size2">
+            <img src="assets/images/flow.png" class="ico-size2" (click)="showTool('energy-use')">
           </div>
           <div class="col-11">
             <a (click)="showTool('energy-use')">Flow and Energy Used</a>
@@ -53,7 +53,7 @@
         </div>
         <!-- <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/assessment.png" class="ico-size2">
+            <img src="assets/images/assessment.png" class="ico-size2" (click)="showTool('pre-assessment')">
           </div>
           <div class="col-11">
             <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
