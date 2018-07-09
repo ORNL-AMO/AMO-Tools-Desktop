@@ -71,7 +71,7 @@ export class PieChartComponent implements OnInit {
     }
   }
 
-  
+
 
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {
@@ -93,7 +93,7 @@ export class PieChartComponent implements OnInit {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') { 
+    else if (btnType == 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
@@ -164,7 +164,6 @@ export class PieChartComponent implements OnInit {
     let xBound;
     let fontSize;
 
-
     if (printView) {
       if (this.sideBySide) {
         xBound = radius * (15 / 14);
@@ -179,7 +178,7 @@ export class PieChartComponent implements OnInit {
       xBound = radius * (3 / 2);
       fontSize = "12px";
     }
-    
+
     let yBound = height * (5 / 6);
     let leftLabelSpace, rightLabelSpace;
     let arc = d3.arc().innerRadius(0).outerRadius(radius);
@@ -314,7 +313,7 @@ export class PieChartComponent implements OnInit {
       });
 
 
-      this.svg.append("defs").append("marker")
+    this.svg.append("defs").append("marker")
       .attr("id", "circ")
       .attr("markerWidth", 4)
       .attr("markerHeight", 4)
@@ -368,8 +367,10 @@ export class PieChartComponent implements OnInit {
     let sideBySide = this.sideBySide;
     let svgWidth = this.chartContainerWidth;
     let svgHeight = this.chartContainerHeight;
-    let colors = this.graphColors;
-    let color = d3.scaleOrdinal(colors);
+    // let colors = this.graphColors;
+    let color = d3.scaleOrdinal(this.graphColors);
+
+    // let color = d3.scaleOrdinal(colors);
     let pie = d3.pie().sort(null);
     let pieValues = this.values;
     let pieLabels = this.labels;
@@ -403,12 +404,15 @@ export class PieChartComponent implements OnInit {
     let arc = d3.arc().innerRadius(0).outerRadius(radius);
     let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
 
+
+    //real version
     let path = this.svg.selectAll("path.slice")
       .data(pieValuesData);
     path.enter()
       .append("path")
       .attr("class", "slice")
-      .attr("fill", function (d, i) { return color(i); })
+      .attr("fill", color)
+      // .attr("fill", function (d, i) { return color(i); })
     path.transition().duration(500)
       .attrTween("d", function (d) {
         this._current = this._current || d;
