@@ -100,7 +100,7 @@
 
     <div class="form-group">
       <label for="compressibilityFactor">Compressibility Factor
-        <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
+        <a class="form-text small click-link" *ngIf="baseline" (click)="calculateCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a>
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="compressibilityFactor" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"

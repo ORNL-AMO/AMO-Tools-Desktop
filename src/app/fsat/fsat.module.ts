@@ -99,7 +99,7 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
     FanBasicsComponent,
-    FsatReportSankeyComponent
+    FsatReportSankeyComponent  
   ],
   providers: [
     FsatService,
