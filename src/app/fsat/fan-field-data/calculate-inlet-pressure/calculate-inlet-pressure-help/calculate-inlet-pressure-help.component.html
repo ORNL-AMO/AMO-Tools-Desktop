@@ -1,4 +1,13 @@
 <div class="help-content p-1">
+  <div class="help-header">
+    <h3>Estimate Inlet Pressure</h3>
+    <p>
+      This calculator is to estimate inlet pressure when inlet pressure cannot be directly measured, by estimating potential pressure
+      losses. Losses can be estimated using information from fan/accessory manufacturers or by consulting references such
+      as AMCA Publication 201 – Fans and Systems.
+    </p>
+  </div>
+  <br>
   <div class="card" *ngIf="currentField == 'inletLoss'">
     <div class="card-header">
       Inlet Loss
@@ -10,19 +19,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure loss due to the geometry of the entrance pipe.
       </p>
     </div>
   </div>
@@ -38,19 +35,8 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to leaks in the ductwork or friction between the air stream and the ductwork, in cases with extremely
+        long duct runs.
       </p>
     </div>
   </div>
@@ -66,19 +52,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to dampers in the fan system upstream of the fan.
       </p>
     </div>
   </div>
@@ -94,19 +68,8 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure loss due to inlet air treatment, such as a mist eliminator (removes the rain from incoming fresh air before entering
+        the air handling unit). Poor treatment of incoming air leads to wet filters and an increase in pressure loss.
       </p>
     </div>
   </div>
@@ -122,19 +85,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to a measuring air flow. Common flow measurement techniques can disrupt inlet air flow and reduce pressure.
       </p>
     </div>
   </div>
@@ -150,19 +101,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to dampers at the inlet of the fan.
       </p>
     </div>
   </div>
@@ -178,19 +117,7 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Pressure losses due to system components upstream of the fan.
       </p>
     </div>
   </div>
@@ -207,19 +134,9 @@
         </u>
       </label>
       <p>
-        Description Here
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>1</strong>
-        <br>
+        Loss in pressure due to system effects. Duct turns at the inlet of the fan result in adverse aerodynamics, referred to as
+        system effects (causing non-uniform loading of fan impeller, swirling flow, inability to develop a uniform flow profile
+        on discharge). To minimize system effect loss, minimize the number of curves in the inlet ductwork.
       </p>
     </div>
   </div>
