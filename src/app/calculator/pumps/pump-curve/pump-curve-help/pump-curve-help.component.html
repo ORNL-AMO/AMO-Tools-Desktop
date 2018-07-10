@@ -7,7 +7,6 @@
       <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
     </p>
     </div>-->
-
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'maxFlow'">
         <div class="card-header">
@@ -25,6 +24,24 @@
         </div>
       </div>
 
+      <div class="help-content">
+        <div class="card" *ngIf="currentField == 'fanMaxFlow'">
+          <div class="card-header">
+            Max Flow
+          </div>
+          <div class="card-block">
+            <label><u><strong>Description</strong></u></label>
+            <p>
+              The max flow rate in the fan curve graph
+            </p>
+            <label><u><strong>Input</strong></u></label>
+            <p>
+              Units: <strong> ft<sup>3</sup>/min </strong> or <strong>m<sup>3</sup>/s</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
 
       <div class="card" *ngIf="currentField == 'headOrder'">
         <div class="card-header">
@@ -39,6 +56,20 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressureOrder'">
+        <div class="card-header">
+          Head Order
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to,<br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
+            3.
+          </p>
+        </div>
+      </div>
+
+
       <div class="card" *ngIf="currentField == 'dataOrder'">
         <div class="card-header">
           Head Order
@@ -47,6 +78,21 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to,<br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
+            3.
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanDataOrder'">
+        <div class="card-header">
+          Head Order
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised
+            to,<br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*
+            (Flow)<sup>3</sup> has an order of
             3.
           </p>
         </div>
@@ -63,6 +109,17 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressureConstant'">
+        <div class="card-header">
+          Constant
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient (constant) associated with flow to the zeroth power <br> Pressure = <u>C<sub>0</sub></u> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'headFlow'">
         <div class="card-header">
           Flow
@@ -71,6 +128,17 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Coefficient associated with flow to the first power <br> Head = C<sub>0</sub> + <u>C<sub>1</sub></u>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'pressureFlow'">
+        <div class="card-header">
+          Flow
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the first power <br> Pressure = C<sub>0</sub> + <u>C<sub>1</sub></u>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
         </div>
       </div>
 
@@ -85,6 +153,17 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressureFlow2'">
+        <div class="card-header">
+          Flow<sup>2</sup>
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the second power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + <u>C<sub>2</sub></u>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'headFlow3'">
         <div class="card-header">
           Flow<sup>3</sup>
@@ -93,6 +172,17 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Coefficient associated with flow to the third power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + <u>C<sub>3</sub></u>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'pressureFlow3'">
+        <div class="card-header">
+          Flow<sup>3</sup>
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the third power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + <u>C<sub>3</sub></u>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
         </div>
       </div>
 
@@ -107,6 +197,17 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressureFlow4'">
+        <div class="card-header">
+          Flow<sup>4</sup>
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the fourth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + <u>C<sub>4</sub></u>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'headFlow5'">
         <div class="card-header">
           Flow<sup>5</sup>
@@ -118,6 +219,17 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressureFlow5'">
+        <div class="card-header">
+          Flow<sup>5</sup>
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the fifth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + <u>C<sub>5</sub></u>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'headFlow6'">
         <div class="card-header">
           Flow<sup>6</sup>
@@ -126,6 +238,17 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Coefficient associated with flow to the sixth power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + <u>C<sub>6</sub></u>*(Flow)<sup>6</sup>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'pressureFlow6'">
+        <div class="card-header">
+          Flow<sup>6</sup>
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Coefficient associated with flow to the sixth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + <u>C<sub>6</sub></u>*(Flow)<sup>6</sup>
         </div>
       </div>
 
@@ -146,6 +269,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanBaselineMeasurement'">
+        <div class="card-header">
+          Baseline condition
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The diameter/speed of the system in the original fan curve
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units:<br> Diameter: <strong>ft</strong> or <strong>m</strong><br>Speed: <strong>rpm</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'measurementOption'">
         <div class="card-header">
           Diameter/Speed
@@ -154,6 +293,18 @@
           <label><u><strong>Description</strong></u></label>
           <p>
             Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanMeasurementOption'">
+        <div class="card-header">
+          Diameter/Speed
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Allows the user to make a new fan curve by simulating a change in pipe diameter or fan speed
           </p>
         </div>
       </div>
@@ -174,6 +325,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'fanModifiedMeasurement'">
+        <div class="card-header">
+          Modified Condition
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The diameter/speed of the system in the modified fan curve
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units:<br> Diameter: <strong>ft</strong> or <strong>m</strong><br>Speed: <strong>rpm</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'exploreFlow'">
         <div class="card-header">
           Explore Flow
@@ -186,6 +353,22 @@
           <label><u><strong>Input</strong></u></label>
           <p>
             Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanExploreFlow'">
+        <div class="card-header">
+          Explore Flow
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Enter a flow rate to determine the corresponding pressure.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>ft<sup>3</sup>/min</strong> or <strong>m<sup>3</sup>/s</strong><br> Minimum Value Allowed: <strong>0</strong>
           </p>
         </div>
       </div>
@@ -206,6 +389,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'explorePressure'">
+        <div class="card-header">
+          Explore Pressure
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Enter a pressure value to determine the corresponding flow rate.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>in H<sub>2</sub>O</strong> or <strong>Pa</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'head'">
         <div class="card-header">
           Head
@@ -222,6 +421,22 @@
         </div>
       </div>
 
+      <div class="card" *ngIf="currentField == 'pressure'">
+        <div class="card-header">
+          Pressure
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            A data point on the fan curve graph associated with the pressure in the adjacent field
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>in H<sub>2</sub>O</strong> or <strong>m<sup>3</sup>/s</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
       <div class="card" *ngIf="currentField == 'flow'">
         <div class="card-header">
           Flow
@@ -234,6 +449,22 @@
           <label><u><strong>Input</strong></u></label>
           <p>
             Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fanFlow'">
+        <div class="card-header">
+          Flow
+        </div>
+        <div class="card-block">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            A data point on the fan curve graph associated with the flow in the adjacent field
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Units: <strong>ft<sup>3</sup>/min</strong> or <strong>Pa</strong><br> Minimum Value Allowed: <strong>0</strong>
           </p>
         </div>
       </div>
