@@ -55,7 +55,8 @@
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
-              "src/assets/styles/forms.css"
+              "src/assets/styles/forms.css",
+              "src/assets/styles/help.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.bundle.min.js",

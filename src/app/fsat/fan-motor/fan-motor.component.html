@@ -1,12 +1,11 @@
 <form #formRef [formGroup]="fanMotorForm">
-  <div *ngIf="inSetup" class="row">
-    <div class="col-12">
-      <div class="header">
-        <h3>Motor</h3>
-      </div>
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Motor</h3>
     </div>
   </div>
-  <div class="setup-form-group">
+
+  <div [ngClass]="{'p-4': inSetup, 'p-1': !inSetup }">
     <div class="form-group">
       <label for="lineFrequency">Line Frequency</label>
       <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency" formControlName="lineFrequency" (change)="changeLineFreq()"
@@ -17,8 +16,8 @@
 
     <div class="form-group">
       <label for="motorRatedPower">Rated Motor Power</label>
-      <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower" (change)="checkRatedPower()"
-        (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent()}">
+      <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower"
+        (change)="checkRatedPower()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent()}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
       </select>
       <span class="alert-warning pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
@@ -55,8 +54,9 @@
     <div class="form-group">
       <label for="motorRatedVoltage">Rated Voltage</label>
       <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent()}">
-        <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorRatedVoltage" formControlName="motorRatedVoltage"
-          (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();" [readonly]="!selected">
+        <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorRatedVoltage"
+          formControlName="motorRatedVoltage" (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();"
+          [readonly]="!selected">
         <span class="input-group-addon units">V</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
