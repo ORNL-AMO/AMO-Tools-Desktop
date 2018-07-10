@@ -454,10 +454,10 @@ In-Assessment Calculators
   margin-top: 10px;
   padding-left: 20px;
 }
-  .calc-help h3 {
+  /* .calc-help h3 {
     font-size: 20px;
     font-weight: bold;
-  }
+  } */
 
 
 
@@ -1062,9 +1062,6 @@ Calculators
 .calculator .calculator-container .calc-graph {
   padding-top: 0;
 }
-  .calculator .calculator-container .calc-form .wrapper {
-    margin: 0;
-  }
 
 .calculator .calc-form .form-group label.section-label {
   font-size: 18px;
@@ -1368,12 +1365,6 @@ margin-bottom: 0px;
 /*.tab-content {
   min-height: 100%;
 }*/
-  .tab-content .wrapper {
-      max-width: 1024px;
-      width: 100%;
-      margin: 40px auto;
-      display: flex;
-  }
   .form, .help {
     padding: 20px;
   }
@@ -1414,8 +1405,6 @@ Modify Conditions
   -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   z-index: 2;
-  width: 35%;
-  padding-left: 25px;
 }
 .converter-col {
   height: 100%;
@@ -1423,43 +1412,6 @@ Modify Conditions
 .converter-content {
   padding-top: 4%;
 }
-  /* .modification .header {
-    display: block;
-    border-bottom: #ddd solid 1px;
-  } */
-    /* .modification .header:after {
-      display: table;
-      content: "";
-      clear: both;
-    } */
-    /* .modification .header h3 {
-      margin: 10px 0 0px 10px;
-      font-size: 15px;
-      text-transform: uppercase;
-      display: inline-block;
-      letter-spacing: 4px;
-      font-weight: bold;
-    } */
-
-    /* .disabled.modification .header h3{
-      font-weight: normal;
-    } */
-
-    /* .modification .header button {
-      background: #fff;
-      border: none;
-      border-left: #D5D8DC solid 1px;
-      margin: 0;
-      padding: 4px 16px;
-      float: right;
-      text-transform: uppercase;
-      font-size: 14px;
-      line-height: 2;
-    }
-      .modification .header button:hover {
-        cursor: pointer;
-        background: #D5D8DC;
-      } */
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     border-color: #ddd;
@@ -1606,9 +1558,7 @@ Help Panel Cards
   padding-top: 1rem;
   padding-bottom: 0px;
 }
-  .wrapper .help-header {
-    padding-top: 0;
-  }
+
 .help-header p:last-of-type {
   margin-bottom: 0;
 }
@@ -1648,17 +1598,6 @@ Help Panel Cards
   font-size: 16px;
   color: #222;
 }
-.wrapper .help-panel {
-  padding-left: 40px;
-  border-width:  0 0 0 1px;
-  border-style: solid;
-  -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#a7a7a7), to(rgba(255, 255, 255, 0))) 1 100%;
-  -webkit-border-image: -webkit-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
-  -moz-border-image: -moz-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
-  -o-border-image: -o-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
-  border-image: linear-gradient(to bottom, #a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
-}
-
 
 
 /*

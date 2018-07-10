@@ -1,15 +1,13 @@
-<div #content class="fsat-container fsat" *ngIf="assessment && settings">
-  <div #header class="hide-print sticky-top">
+<div #content class="fsat-container d-flex flex-column fsat" *ngIf="assessment && settings">
+  <div #header class="w-100 hide-print sticky-top">
     <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
     <app-fsat-tabs></app-fsat-tabs>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="row tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"
         (emitSaveFsat)="saveFsat($event)"></app-system-basics>
-      <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
-      <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
         (emitSave)="saveGasDensity($event)" [settings]="settings"></app-fsat-fluid>
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [settings]="settings" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup"
@@ -18,18 +16,16 @@
         (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"></app-fan-motor>
       <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"
         [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-fan-field-data>
-      <!-- <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
-      <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
-      <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points> -->
     </div>
-    <div class="col-6 help-panel" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
+    <div class="w-50 help-panel" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
       <app-help-panel [settings]="settings" [inSetup]="true" [fsat]="_fsat" [inSetup]="true"></app-help-panel>
     </div>
   </div>
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment" [settings]="settings"
-      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
+      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
+      (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
       [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
   </div>
