@@ -17,7 +17,7 @@
       <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"
         [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-fan-field-data>
     </div>
-    <div class="w-50 help-panel" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
+    <div class="w-50" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
       <app-help-panel [settings]="settings" [inSetup]="true" [fsat]="_fsat" [inSetup]="true"></app-help-panel>
     </div>
   </div>

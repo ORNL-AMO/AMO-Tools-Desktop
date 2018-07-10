@@ -24,44 +24,40 @@
 </nav>
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
-  <div class="col-4 pl-0">
-    <div class="d-flex tabs subtabs fsat">
-      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
-        <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-          <br>
-          <span class="help-text fsat-view">Novice View</span>
-        </a>
-      </div>
-      <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-        <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-          <br>
-          <span class="help-text psat-view">Expert View</span>
-        </a>
-      </div>
+  <div class="d-flex tabs subtabs fsat mr-auto">
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+      <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+        <br>
+        <span class="help-text fsat-view">Novice View</span>
+      </a>
+    </div>
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+        <br>
+        <span class="help-text fsat-view">Expert View</span>
+      </a>
     </div>
   </div>
 
-
-  <div class="col-8 pr-0">
-    <div class="pull-right d-flex align-items-center tabs subtabs fsat" [ngClass]="{'br-color-white': selectedModification}">
-      <div class="mod-name active border-right" *ngIf="selectedModification">
-        <a>{{selectedModification.name}}
-          <br>
-          <span class="help-text fsat-view">Selected Scenario</span>
-        </a>
-      </div>
-      <div class="mod-name border-right" *ngIf="!selectedModification">
-        <a>&mdash; &mdash;
-          <br>
-          <span class="help-text fsat-view">Selected Scenario</span>
-        </a>
-      </div>
-      <div class="pl-2 pr-2">
-        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
-      </div>
+  <div class="d-flex align-items-center tabs subtabs fsat ml-auto" [ngClass]="{'br-color-white': selectedModification}">
+    <div class="mod-name active border-right" *ngIf="selectedModification">
+      <a>{{selectedModification.name}}
+        <br>
+        <span class="help-text fsat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="mod-name border-right" *ngIf="!selectedModification">
+      <a>&mdash; &mdash;
+        <br>
+        <span class="help-text fsat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="pl-2 pr-2">
+      <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
     </div>
   </div>
 </div>
+
 <nav class="hide-print" *ngIf="assessmentTab == 'modify-conditions' && mainTab == 'assessment'">
   <app-modify-conditions-tabs></app-modify-conditions-tabs>
 </nav>
