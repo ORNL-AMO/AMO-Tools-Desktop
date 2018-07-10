@@ -1420,6 +1420,7 @@ Modify Conditions
     box-shadow: none;
     z-index: 1;
     background: none;
+    transition: ease-in-out 0.2s all;
   }
     .modification.disabled:hover {
       background: #fff;

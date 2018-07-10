@@ -1,116 +1,99 @@
-<div class="output-summary">
-
-
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Baseline</th>
-        <th *ngIf="showModification">{{modificationName}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Percent Savings (%)</td>
-        <td>
-          &mdash; &mdash;
-        </td>
-        <td *ngIf="showModification" class="percent-graph">
-          <div class="col-10 mx-auto gauge-chart-width" *ngIf="modificationResults.percentSavings">
-            <app-percent-graph [value]="modificationResults.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
-          </div>
-          <div *ngIf="!modificationResults.percentSavings" class="mx-auto">&mdash; &mdash;</div>
-        </td>
-      </tr>
-      <tr>
-        <td>Fan Energy Index</td>
-        <td>{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</td>
-        <td *ngIf="showModification">{{modificationResults.fanEnergyIndex | number:'2.0-1'}}</td>
-      </tr>
-      <tr>
-        <td>Fan efficiency (%)</td>
-        <td>{{baselineResults.fanEfficiency | number:'2.0-1'}}</td>
-        <td *ngIf="showModification">{{modificationResults.fanEfficiency | number:'2.0-1'}}</td>
-      </tr>
-      <tr>
-        <td>Motor rated power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.motorRatedPower | number:'2.0-0'}}</td>
-        <td *ngIf="showModification">{{modificationResults.motorRatedPower | number:'2.0-0'}}</td>
-      </tr>
-      <tr>
-        <td>Motor shaft power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.motorShaftPower | number:'2.0-1'}}</td>
-        <td *ngIf="showModification">{{modificationResults.motorShaftPower | number:'2.0-1'}}</td>
-      </tr>
-      <tr>
-        <td>Fan shaft power ({{settings.fanPowerMeasurement}})</td>
-        <td>{{baselineResults.fanShaftPower | number:'2.0-1'}}</td>
-        <td *ngIf="showModification">{{modificationResults.fanShaftPower | number:'2.0-1'}}</td>
-      </tr>
-      <tr>
-        <td>Motor efficiency (%)</td>
-        <td>{{baselineResults.motorEfficiency | number:'2.0-1'}}</td>
-        <td *ngIf="modificationResults.motorEfficiency && showModification">{{modificationResults.motorEfficiency | number:'2.0-1'}}</td>
-        <td *ngIf="!modificationResults.motorEfficiency && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <td>Motor power factor (%)</td>
-        <td>{{baselineResults.motorPowerFactor | number:'2.0-1'}}</td>
-        <td *ngIf="modificationResults.motorPowerFactor && showModification">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</td>
-        <td *ngIf="!modificationResults.motorPowerFactor && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <td>Motor current (amps)</td>
-        <td>{{baselineResults.motorCurrent | number:'2.0-1'}}</td>
-        <td *ngIf="modificationResults.motorCurrent && showModification">{{modificationResults.motorCurrent | number:'2.0-1'}}</td>
-        <td *ngIf="!modificationResults.motorCurrent && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <td>Motor power (kW)</td>
-        <td>{{baselineResults.motorPower | number:'2.0-1'}}</td>
-        <td *ngIf="modificationResults.motorPower && showModification">{{modificationResults.motorPower | number:'2.0-1'}}</td>
-        <td *ngIf="!modificationResults.motorPower && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <th>Annual Energy (MWh)</th>
-        <th>{{baselineResults.annualEnergy | number:'2.0-0'}}</th>
-        <th *ngIf="modificationResults.annualEnergy && showModification" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</th>
-        <td *ngIf="!modificationResults.annualEnergy && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <th>Annual Energy Savings (MWh)</th>
-        <th>&mdash;</th>
-        <th *ngIf="modificationResults.energySavings && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</th>
-        <th *ngIf="!modificationResults.energySavings && showModification">&mdash;</th>
-      </tr>
-      <tr>
-        <th>Annual Cost</th>
-        <th>{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
-        <th *ngIf="modificationResults.annualCost && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
-        <td *ngIf="!modificationResults.annualCost && showModification">&mdash;</td>
-      </tr>
-      <tr>
-        <th>Annual Savings</th>
-        <th>&mdash;</th>
-        <th *ngIf="modificationResults.annualCost && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
-          {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}
-        </th>
-        <td *ngIf="!modificationResults.annualSavings && showModification">&mdash;</td>
-      </tr>
-      <!-- <tr *ngIf="fsat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
-        <td></td>
-        <td></td>
-        <td>
-          <span class="text-muted">*Optimized</span>
-        </td>
-      </tr> -->
-    </tbody>
-  </table>
-
-</div>
-
-<!-- <div class="no-data" *ngIf="fsat.modifications.length == 0">
-  <h3>
-    Add a modification to compare results.
-  </h3>
-</div> -->
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th class="col-name">Baseline</th>
+      <th class="col-name" *ngIf="showModification">{{modificationName}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Percent Savings (%)</td>
+      <td>
+        &mdash; &mdash;
+      </td>
+      <td *ngIf="showModification" class="percent-graph">
+        <div class="w-100">
+          <app-percent-graph *ngIf="modificationResults.percentSavings" [value]="modificationResults.percentSavings" [valueDescription]="'Percent Savings'"
+            [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
+        </div>
+        <div *ngIf="!modificationResults.percentSavings" class="mx-auto">&mdash; &mdash;</div>
+      </td>
+    </tr>
+    <tr>
+      <td>Fan Energy Index</td>
+      <td>{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</td>
+      <td *ngIf="showModification">{{modificationResults.fanEnergyIndex | number:'2.0-1'}}</td>
+    </tr>
+    <tr>
+      <td>Fan efficiency (%)</td>
+      <td>{{baselineResults.fanEfficiency | number:'2.0-1'}}</td>
+      <td *ngIf="showModification">{{modificationResults.fanEfficiency | number:'2.0-1'}}</td>
+    </tr>
+    <tr>
+      <td>Motor rated power ({{settings.fanPowerMeasurement}})</td>
+      <td>{{baselineResults.motorRatedPower | number:'2.0-0'}}</td>
+      <td *ngIf="showModification">{{modificationResults.motorRatedPower | number:'2.0-0'}}</td>
+    </tr>
+    <tr>
+      <td>Motor shaft power ({{settings.fanPowerMeasurement}})</td>
+      <td>{{baselineResults.motorShaftPower | number:'2.0-1'}}</td>
+      <td *ngIf="showModification">{{modificationResults.motorShaftPower | number:'2.0-1'}}</td>
+    </tr>
+    <tr>
+      <td>Fan shaft power ({{settings.fanPowerMeasurement}})</td>
+      <td>{{baselineResults.fanShaftPower | number:'2.0-1'}}</td>
+      <td *ngIf="showModification">{{modificationResults.fanShaftPower | number:'2.0-1'}}</td>
+    </tr>
+    <tr>
+      <td>Motor efficiency (%)</td>
+      <td>{{baselineResults.motorEfficiency | number:'2.0-1'}}</td>
+      <td *ngIf="modificationResults.motorEfficiency && showModification">{{modificationResults.motorEfficiency | number:'2.0-1'}}</td>
+      <td *ngIf="!modificationResults.motorEfficiency && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <td>Motor power factor (%)</td>
+      <td>{{baselineResults.motorPowerFactor | number:'2.0-1'}}</td>
+      <td *ngIf="modificationResults.motorPowerFactor && showModification">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</td>
+      <td *ngIf="!modificationResults.motorPowerFactor && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <td>Motor current (amps)</td>
+      <td>{{baselineResults.motorCurrent | number:'2.0-1'}}</td>
+      <td *ngIf="modificationResults.motorCurrent && showModification">{{modificationResults.motorCurrent | number:'2.0-1'}}</td>
+      <td *ngIf="!modificationResults.motorCurrent && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <td>Motor power (kW)</td>
+      <td>{{baselineResults.motorPower | number:'2.0-1'}}</td>
+      <td *ngIf="modificationResults.motorPower && showModification">{{modificationResults.motorPower | number:'2.0-1'}}</td>
+      <td *ngIf="!modificationResults.motorPower && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <th>Annual Energy (MWh)</th>
+      <th>{{baselineResults.annualEnergy | number:'2.0-0'}}</th>
+      <th *ngIf="modificationResults.annualEnergy && showModification" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</th>
+      <td *ngIf="!modificationResults.annualEnergy && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <th>Annual Energy Savings (MWh)</th>
+      <th>&mdash;</th>
+      <th *ngIf="modificationResults.energySavings && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</th>
+      <th *ngIf="!modificationResults.energySavings && showModification">&mdash;</th>
+    </tr>
+    <tr>
+      <th>Annual Cost</th>
+      <th>{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
+      <th *ngIf="modificationResults.annualCost && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</th>
+      <td *ngIf="!modificationResults.annualCost && showModification">&mdash;</td>
+    </tr>
+    <tr>
+      <th>Annual Savings</th>
+      <th>&mdash;</th>
+      <th *ngIf="modificationResults.annualCost && showModification" [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
+        {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}
+      </th>
+      <td *ngIf="!modificationResults.annualSavings && showModification">&mdash;</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,4 +1,4 @@
-.output-summary .table {
+/* .output-summary .table {
     font-size: small;
 }
 .output-summary .table th {
@@ -11,7 +11,7 @@
     padding: 0px 8px;
     vertical-align: middle;
     text-align: center;
-}
+} */
 
 .positive-savings{
 	color: green;
@@ -24,4 +24,24 @@
 
 .no-data{
     width: 100%;
+}
+
+ td, th{
+    font-size: small;
+    padding: 3px;
+    text-align: center;
+}
+
+ /* td{
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+} */
+
+ /* tbody{
+    box-shadow: 0 4px 8px 0 grey
+} */
+
+
+.col-name{
+    font-size: medium;
 }

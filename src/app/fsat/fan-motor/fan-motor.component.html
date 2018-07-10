@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <div [ngClass]="{'p-4': inSetup, 'p-1': !inSetup }">
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
       <label for="lineFrequency">Line Frequency</label>
       <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency" formControlName="lineFrequency" (change)="changeLineFreq()"

@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="panel-results" *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && stepTab == 'fan-field-data'">
+    <div class="mt-3" *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && stepTab == 'fan-field-data'">
         <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel>
     </div>
 </div>
