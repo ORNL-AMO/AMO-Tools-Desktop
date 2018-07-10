@@ -45,3 +45,18 @@
 .col-name{
     font-size: medium;
 }
+
+.stripe{
+    border-top: groove 1px;
+    border-bottom: groove 1px;
+}
+
+.my-table-bg{
+    /* background-color: #FFE400; */
+    background-color: #D6DBDF;
+}
+
+.my-table{
+    border: solid 1px #AEB6BF;
+    box-shadow: 3px 3px 10px 0px #566573;
+}

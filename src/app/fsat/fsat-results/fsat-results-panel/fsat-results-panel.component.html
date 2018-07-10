@@ -1,4 +1,4 @@
-<table class="table table-hover table-striped">
+<!-- <table class="table table-hover table-striped">
   <thead>
     <tr>
       <th></th>
@@ -96,4 +96,200 @@
       <td *ngIf="!modificationResults.annualSavings && showModification">&mdash;</td>
     </tr>
   </tbody>
-</table>
+</table> -->
+
+<div class="d-flex flex-column my-table">
+  <div class="d-flex stripe my-table-bg">
+    <div [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+    </div>
+    <div class="text-center bold medium" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      Baseline
+    </div>
+    <div class="col-4 text-center bold medium" *ngIf="showModification">
+      {{modificationName}}
+
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Percent Savings (%)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small"> &mdash; &mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center" *ngIf="showModification">
+      <app-percent-graph *ngIf="modificationResults.percentSavings" [value]="modificationResults.percentSavings" [valueDescription]="'Percent Savings'"
+        [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
+    </div>
+  </div>
+  <div class="d-flex stripe">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Fan Energy Index</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.fanEnergyIndex | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small">{{modificationResults.fanEnergyIndex | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Fan efficiency (%)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.fanEfficiency | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small">{{modificationResults.fanEfficiency | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor rated power ({{settings.fanPowerMeasurement}})</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorRatedPower | number:'2.0-0'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small">{{modificationResults.motorRatedPower | number:'2.0-0'}}</span>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor shaft power ({{settings.fanPowerMeasurement}})</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorShaftPower | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small">{{modificationResults.motorShaftPower | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Fan shaft power ({{settings.fanPowerMeasurement}})</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.fanShaftPower | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small">{{modificationResults.fanShaftPower | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor efficiency (%)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorEfficiency | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small" *ngIf="modificationResults.motorEfficiency">{{modificationResults.motorEfficiency | number:'2.0-1'}}</span>
+      <span class="small" *ngIf="!modificationResults.motorEfficiency">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor power factor (%)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorPowerFactor | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small" *ngIf="modificationResults.motorPowerFactor">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</span>
+      <span class="small" *ngIf="!modificationResults.motorPowerFactor">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor current (amps)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorCurrent | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small" *ngIf="modificationResults.motorCurrent">{{modificationResults.motorCurrent | number:'2.0-1'}}</span>
+      <span class="small" *ngIf="!modificationResults.motorCurrent">&mdash;</span>
+    </div>
+  </div>
+
+
+  <div class="d-flex stripe">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">Motor power (kW)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="small">{{baselineResults.motorPower | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="small" *ngIf="modificationResults.motorPower">{{modificationResults.motorPower | number:'2.0-1'}}</span>
+      <span class="small" *ngIf="!modificationResults.motorPower">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex my-table-bg">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">Annual Energy (MWh)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">{{baselineResults.annualEnergy | number:'2.0-0'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="bold small" *ngIf="modificationResults.annualEnergy" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</span>
+      <span class="bold small" *ngIf="!modificationResults.annualEnergy">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-bg">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">Annual Energy Savings (MWh)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">&mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="bold small" *ngIf="modificationResults.energySavings" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
+      <span class="bold small" *ngIf="!modificationResults.energySavings">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex my-table-bg">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">Annual Cost</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">{{baselineResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="bold small" *ngIf="modificationResults.annualCost" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annualCost | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold small" *ngIf="!modificationResults.annualCost">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-bg">
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">Annual Savings</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+      <span class="bold small">&mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center" *ngIf="showModification">
+      <span class="bold small" *ngIf="modificationResults.annualSavings" [ngClass]="{'positive-savings': percentSavings > 10}">
+        {{modificationResults.annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold small" *ngIf="!modificationResults.annualSavings">&mdash;</span>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+</div>
