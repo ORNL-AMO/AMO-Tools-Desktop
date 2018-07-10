@@ -19,6 +19,8 @@ export class ImportExportComponent implements OnInit {
   exportData: ImportExportData;
   @Output('closeExportModal')
   closeExportModal = new EventEmitter<boolean>();
+  @Output('closeImportModal')
+  closeImportModal = new EventEmitter<boolean>();
   @Input()
   import: boolean;
   @Input()
@@ -37,6 +39,7 @@ export class ImportExportComponent implements OnInit {
   showDirs: boolean = false;
   canExport: boolean = false;
   name: string = null;
+  importJson: JSON = null;
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -50,8 +53,8 @@ export class ImportExportComponent implements OnInit {
           }
         }
       }
-      if(this.exportData.directories){
-        if(this.exportData.directories.length != 0){
+      if (this.exportData.directories) {
+        if (this.exportData.directories.length != 0) {
           this.showDirs = true;
         }
       }
@@ -59,7 +62,7 @@ export class ImportExportComponent implements OnInit {
     }
   }
 
-  test(){
+  test() {
     this.canExport = this.importExportService.test(this.exportData);
   }
 
@@ -78,7 +81,9 @@ export class ImportExportComponent implements OnInit {
   }
 
   cancel() {
+    this.importJson = null;
     this.closeExportModal.emit(true);
+    this.closeImportModal.emit(true);
   }
 
   setImportFile($event) {
@@ -89,18 +94,27 @@ export class ImportExportComponent implements OnInit {
           this.fileReference = $event;
           this.validFile = true;
         } else {
-          this.validFile = false;
+          let fr: FileReader = new FileReader();
+          fr.readAsText($event.target.files[0]);
+          fr.onloadend = (e) => {
+            try {
+              this.importJson = JSON.parse(fr.result);
+              this.validFile = true;
+            } catch (err) {
+              this.validFile = false;
+            }
+          }
         }
       }
     }
   }
 
-  importFile() {
-    let fr: FileReader = new FileReader();
-    fr.readAsText(this.fileReference.target.files[0]);
-    fr.onloadend = (e) => {
-      let importJson = JSON.parse(fr.result);
-      this.importData.emit(importJson);
-    }
-  }
+importFile() {
+  // let fr: FileReader = new FileReader();
+  // fr.readAsText(this.fileReference.target.files[0]);
+  // fr.onloadend = (e) => {
+    // let importJson = JSON.parse(fr.result);
+    this.importData.emit(this.importJson);
+  // }
+}
 }
