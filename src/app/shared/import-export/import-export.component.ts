@@ -110,11 +110,16 @@ export class ImportExportComponent implements OnInit {
   }
 
 importFile() {
-  // let fr: FileReader = new FileReader();
-  // fr.readAsText(this.fileReference.target.files[0]);
-  // fr.onloadend = (e) => {
-    // let importJson = JSON.parse(fr.result);
+  if (!this.importJson) {
+    let fr: FileReader = new FileReader();
+    fr.readAsText(this.fileReference.target.files[0]);
+    fr.onloadend = (e) => {
+      this.importJson = JSON.parse(fr.result);
+      this.importData.emit(this.importJson);
+    }
+  }
+  else {
     this.importData.emit(this.importJson);
-  // }
+  }
 }
 }
