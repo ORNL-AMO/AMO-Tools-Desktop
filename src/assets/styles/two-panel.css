@@ -14,17 +14,7 @@
 }
 
 .panel-container{
-	/* padding-bottom: 70px;
-	max-height: none !important;
-	min-height: 100vh;
-    height: auto !important;
-    height: 100%;*/
     min-height: 100%;
-}
-
-.tab-content{
-    /* height: 100%;
-    min-height: 100%; */
 }
 
 .form-card{
@@ -64,6 +54,10 @@
 	letter-spacing: 4px;
 }
 
+.panel-tab-item:hover{
+    cursor: pointer;
+}
+
 .psat .panel-tab-item.active{
     border: none;
     border-bottom: #2980b9 groove 2px;
@@ -81,7 +75,8 @@
 
 .fsat .panel-tab-item.active{
     border: none;
-    border-bottom: #FFE400 groove 2px;
+    border-bottom: #FFE400 solid 3px;
+    transition: all .1s ease-in-out;
 }
 
 .steam .panel-tab-item.active{

@@ -1,4 +1,4 @@
-<div class="explore-ops-form">
+<!-- <div class="explore-ops-form">
   <ul>
     <li>
       <div class="w-100 justify-content-center p-2 d-flex">
@@ -53,4 +53,43 @@
       </ul>
     </li>
   </ul>
+</div> -->
+
+<div class="d-flex flex-column">
+  <div class="w-100 justify-content-center p-2 d-flex">
+    <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
+  </div>
+  <div class="d-flex flex-column pr-2 pl-2">
+    <div class="form-group group-name">
+      <label for="modificatonName">Modification Name</label>
+      <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name"
+        (input)="calculate()" />
+    </div>
+    <app-system-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-system-data-form>
+    <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-rated-motor-form>
+    <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-fan-data-form>
+    <div class="checkbox">
+      <label class="group-label" for="modifyCalculationMethod">
+        <input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('sizeMargin')"
+          [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize" /> Optimize Fan and Motor Combination for a Fixed Specific Speed
+      </label>
+    </div>
+    <div *ngIf="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize" class="checkbox">
+      <label for="showSizeMargin">
+        <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"
+        /> Size Margin
+      </label>
+    </div>
+    <form *ngIf="showSizeMargin">
+      <div class="form-group">
+      </div>
+      <div class="form-group">
+        <div name="sizeMargin" class="input-group">
+          <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.sizeMargin"
+            (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
