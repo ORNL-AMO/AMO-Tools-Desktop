@@ -4,15 +4,16 @@
       <div class="modification panel-column col-6 align-top">
         <div #leftPanelHeader class="row header">
           <div class="col-md-auto ico-col">
-            <img src="assets/images/performance.png" class="ico-size4">
+            <!--need icon-->
+            <!-- <img src="assets/images/performance.png" class="ico-size4"> -->
           </div>
           <div class="col">
-            <h3>Motor Performance Calculator</h3>
+            <h3>Replace Rewind Motor</h3>
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()" (changeField)="changeField($event)"></app-motor-performance-form>
+            <app-replace-rewind-form [(inputs)]="inputs" [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-replace-rewind-form>
           </div>
         </div>
       </div>
@@ -21,7 +22,7 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
@@ -29,22 +30,14 @@
             </ul>
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11" id="motorPerformanceGraph">
-              <app-motor-performance-graph *ngIf="tabSelect == 'results'" [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
+            <div class="col-11">
+              <app-replace-rewind-results [results]="results"></app-replace-rewind-results>
             </div>
           </div>
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">
               <div class="calc-help">
-                <app-motor-performance-help [currentField]="currentField"></app-motor-performance-help>
-                <!--<h3>Motor Performance Help</h3>-->
-                <!--<p>-->
-                <!--Plots current, efficiency, power factor vs motor shaft load for a given motor description-->
-                <!--</p>-->
-                <!--<p>-->
-                <!--<u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.-->
-                <!--A higher power factor signifies that the motor consumes power effectively.-->
-                <!--</p>-->
+                <app-replace-rewind-help [currentField]="currentField"></app-replace-rewind-help>
               </div>
             </div>
           </div>

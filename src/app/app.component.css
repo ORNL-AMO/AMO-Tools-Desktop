@@ -1643,6 +1643,10 @@ Help Panel Cards
   font-size: 16px;
   color: #222;
 }
+.help-panel li {
+  font-size: 16px;
+  color: #222;
+}
 
 .help-general {
   font-size: 16px;
