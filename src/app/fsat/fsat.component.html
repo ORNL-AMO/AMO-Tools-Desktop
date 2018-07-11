@@ -48,7 +48,7 @@
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
     <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment"></app-pump-curve>
   </div>
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
     <div class="p-1 mx-auto">
       <div class="form-group" *ngIf="fsatOptionsLength > 1">
         <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat1">
@@ -56,7 +56,7 @@
         </select>
       </div>
     </div>
-    <div class="sankey-padding">
+    <div class="sankey-padding w-100">
       <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [assessmentName]="assessment.name" [printView]="false" [location]="'sankey-diagram'"
         [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
     </div>

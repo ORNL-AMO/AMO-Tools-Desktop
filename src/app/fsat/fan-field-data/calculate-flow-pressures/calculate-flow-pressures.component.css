@@ -30,3 +30,7 @@ tbody{
 .scroll-item{
     overflow-x: hidden;
 }
+
+.btn-padding{
+    padding: 6px !important;
+}

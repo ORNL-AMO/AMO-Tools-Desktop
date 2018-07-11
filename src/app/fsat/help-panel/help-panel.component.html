@@ -1,4 +1,4 @@
-<div class="d-flex flex-column w-100 fsat" *ngIf="!inSetup || stepTab == 'fan-field-data'" #resultTabs>
+<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup || stepTab == 'fan-field-data'" #resultTabs>
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
         <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
             <a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="mt-3" *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && stepTab == 'fan-field-data'">
+    <div *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && stepTab == 'fan-field-data'">
         <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel>
     </div>
 </div>

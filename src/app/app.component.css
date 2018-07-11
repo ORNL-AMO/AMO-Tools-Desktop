@@ -188,7 +188,7 @@ label {
     background: transparent;
   }
 .form-control {
-  border-radius: 0;
+   border-radius: 0;
   border-color: #9c9c9c;
   width: inherit;
   padding: 2px;
@@ -215,12 +215,17 @@ select.form-control:not([size]):not([multiple]) {
   .tab-content .form-group .form-check label {
     float: none;
   }
-  .tab-content .form-group label {
+   .tab-content .form-group label {
     width: 50%;
   }
+  
   .tab-content .form-group .form-control {
     width: 50%;
   }
+
+
+
+
 
 
 .form-check-input {

@@ -26,26 +26,6 @@
     width: 100%;
 }
 
- td, th{
-    font-size: small;
-    padding: 3px;
-    text-align: center;
-}
-
- /* td{
-    border-right: solid 1px darkgray;
-    border-left: solid 1px darkgray;
-} */
-
- /* tbody{
-    box-shadow: 0 4px 8px 0 grey
-} */
-
-
-.col-name{
-    font-size: medium;
-}
-
 .stripe{
     border-top: groove 1px;
     border-bottom: groove 1px;
@@ -56,7 +36,14 @@
     background-color: #D6DBDF;
 }
 
-.my-table{
-    border: solid 1px #AEB6BF;
+/* .my-table{
     box-shadow: 3px 3px 10px 0px #566573;
+} */
+
+.table-text{
+    font-size: 15px;
+}
+
+.my-table-item:hover{
+    background-color: white;
 }
