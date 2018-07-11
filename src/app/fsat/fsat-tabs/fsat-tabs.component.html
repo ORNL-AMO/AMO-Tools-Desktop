@@ -56,12 +56,11 @@
       <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
     </div>
   </div>
+
+  <nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions'">
+    <app-modify-conditions-tabs></app-modify-conditions-tabs>
+  </nav>
 </div>
-
-<nav class="hide-print" *ngIf="assessmentTab == 'modify-conditions' && mainTab == 'assessment'">
-  <app-modify-conditions-tabs></app-modify-conditions-tabs>
-</nav>
-
 
 <ul class="tabs subtabs fsat" *ngIf="mainTab == 'calculators'">
   <li [ngClass]="{'active': calcTab == 'fsat-203'}">

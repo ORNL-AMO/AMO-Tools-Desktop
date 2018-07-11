@@ -44,7 +44,7 @@ ul{
 }
 
 
-.pills-nav .disabled {
+.nav-link.disabled {
     color: #ABB2B9;
 }
 
@@ -65,11 +65,14 @@ ul{
     color: #000;
 }
 
-.nav-link:hover{
+.nav-link:not(.disabled):hover{
     cursor: pointer;
     background-color: #808B96;
 }
-
+.nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
 .nav-link.active{
     background: #fff;
     font-weight: bold;

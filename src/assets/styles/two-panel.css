@@ -58,12 +58,12 @@
     cursor: pointer;
 }
 
-.psat .panel-tab-item.active{
+/* .psat .panel-tab-item.active{
     border: none;
     border-bottom: #2980b9 groove 2px;
-}
+} */
 
-.phast .panel-tab-item.active{
+/* .phast .panel-tab-item.active{
     border: none;
     border-bottom: #BF3D00 groove 2px;
 }
@@ -77,12 +77,12 @@
     border: none;
     border-bottom: #FFE400 solid 3px;
     transition: all .1s ease-in-out;
-}
+} */
 
-.steam .panel-tab-item.active{
+/* .steam .panel-tab-item.active{
     border: none;
     border-bottom: #2C3E50 solid 2px;
-}
+} */
 
 .psat .header{
     border-bottom: #2980b9 groove 2px;

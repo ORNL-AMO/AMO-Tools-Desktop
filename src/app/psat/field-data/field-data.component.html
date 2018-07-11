@@ -1,12 +1,11 @@
 <form [formGroup]="psatForm" *ngIf="psatForm">
-  <div *ngIf="inSetup" class="row">
-    <div class="col-12">
-      <div class="header">
-        <h3>Field Data</h3>
-      </div>
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Field Data</h3>
     </div>
   </div>
-  <div class="setup-form-group">
+
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
@@ -107,15 +106,15 @@
       <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
     </div>
     <!--<div class="form-group">-->
-      <!--<label>Fixed specific speed?</label>-->
-      <!--<div name="fixedSpeed" class="form-check">-->
-        <!--<label class="form-check-label">-->
-          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="Yes" (change)="focusField('fixedSpecificSpeed')">Yes-->
-        <!--</label>-->
-        <!--<label class="form-check-label">-->
-          <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="No" (change)="focusField('fixedSpecificSpeed')">No-->
-        <!--</label>-->
-      <!--</div>-->
+    <!--<label>Fixed specific speed?</label>-->
+    <!--<div name="fixedSpeed" class="form-check">-->
+    <!--<label class="form-check-label">-->
+    <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="Yes" (change)="focusField('fixedSpecificSpeed')">Yes-->
+    <!--</label>-->
+    <!--<label class="form-check-label">-->
+    <!--<input class="form-check-input" type="radio" formControlName="fixedSpeed" value="No" (change)="focusField('fixedSpecificSpeed')">No-->
+    <!--</label>-->
+    <!--</div>-->
     <!--</div>-->
     <div class="form-group">
       <label for="implementationCosts">Implementation Costs</label>

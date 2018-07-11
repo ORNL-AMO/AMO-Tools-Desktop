@@ -1,57 +1,3 @@
-<!-- <div class="banner fsat navbar">
-  <div class="col-3">
-    <div class="row" *ngIf="assessment">
-      <div class="img-col col-sm-auto col-md-auto col-lg-auto">
-        <img class="img-icon" src="assets/images/fanIcon-4.png">
-      </div>
-      <div class="col">
-        <h2 class="h2-name">
-          {{assessment.name}}
-          <br>
-          <small>Last modified: {{assessment.modifiedDate | date:'mediumDate'}}</small>
-        </h2>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6">
-    <div class="row justify-content-center align-items-center pill-row">
-      <ul class="pills-nav">
-        <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
-          <span>System Setup</span>
-        </li>
-        <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('assessment')">
-          <span>Assessment</span>
-        </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('diagram')">
-          <span>Diagram</span>
-        </li>
-        <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('report')">
-          <span>Report</span>
-        </li>
-        <li [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('sankey')">
-          <span>Sankey</span>
-        </li>
-        <li class="disabled" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('calculators')">
-          <span>Calculators</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="col-3">
-    <div class="d-flex h-100 justify-content-end align-items-center">
-      <div class="pl-2 pr-2 border-right border-left home-nav-item" (click)="goToFolder()">
-        <span class="fa fa-folder-open"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right home-nav-item" (click)="goHome()">
-        <span class="fa fa-home"></span>
-      </div>
-    </div>
-  </div>
-
-
-</div> -->
 <nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap">
   <div class="d-flex align-items-center p-1">
     <div class="img-col col-sm-auto col-md-auto col-lg-auto">
@@ -85,7 +31,7 @@
       <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('sankey')">Sankey</a>
     </div>
     <div class="nav-item">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !assessment.fsat.setupDone}" (click)="changeTab('calculators')">Calculators</a>
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">Calculators</a>
     </div>
   </div>
   <div class="d-flex ml-auto pr-2 h-100">

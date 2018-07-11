@@ -1,4 +1,4 @@
-<div class="banner psat row">
+<!-- <div class="banner psat row">
 	<div class="col-3">
 		<div class="pull-left">
 			<div *ngIf="assessment" class="title">
@@ -42,8 +42,51 @@
 				<span class="fa fa-home"></span>
 			</div>
 		</div>
-		<!-- <a routerLink="/dashboard" class="btn-dashboard pull-right">
-			<span>&times;</span> Back To Home</a> -->
 	</div>
+</div> -->
 
-</div>
+<nav class="psat navbar banner d-flex mr-auto p-0 flex-nowrap">
+	<div class="d-flex align-items-center p-1">
+		<div class="img-col col-sm-auto col-md-auto col-lg-auto">
+			<img class="img-icon" src="assets/images/ico-psat-diagram.png">
+		</div>
+		<div class="d-flex flex-column pl-2">
+			<div class="h2-name">
+				{{assessment.name}}
+			</div>
+			<div class="h2-name">
+				<span class="small">
+					Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">System Setup</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('assessment')">Assessment</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('diagram')">Diagram</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('report')">Report</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('sankey')">Sankey</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">Calculators</a>
+		</div>
+	</div>
+	<div class="d-flex ml-auto pr-2 h-100">
+		<div class="pl-2 pr-2 border-right border-left home-nav-item" (click)="goToFolder()">
+			<span class="fa fa-folder-open"></span>
+		</div>
+		<div class="pl-2 pr-2 border-right home-nav-item" (click)="goHome()">
+			<span class="fa fa-home"></span>
+		</div>
+	</div>
+</nav>

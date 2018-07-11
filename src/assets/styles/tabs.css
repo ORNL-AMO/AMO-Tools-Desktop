@@ -44,6 +44,36 @@ Tabs
     transition: all .1s ease-in-out;
   }
   
+  .psat .tabs.primary .active a {
+    border: none;
+    border-bottom: #2980b9 solid 3px;
+  }
+
+  .general .tabs.primary .active a {
+    border: none;
+    border-bottom: #145A32 groove 3px;
+  }
+
+
+  .phast .tabs.primary .active a {
+    border: none;
+    border-bottom: #BF3D00 solid 3px;
+  }
+
+
+  .fsat .tabs.primary .active a {
+    border: none;
+    border-bottom: #FFE400 solid 3px;
+  }
+
+  .steam .tabs.primary .active a {
+    border: none;
+    border-bottom: #2C3E50 groove 3px;
+  }
+
+
+
+
   .fixed-tab-size{
     min-width: 200px;
   }
