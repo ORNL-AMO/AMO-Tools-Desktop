@@ -1,0 +1,44 @@
+<form [formGroup]="fanForm">
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Fan</h3>
+    </div>
+  </div>
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+    <div class="form-group">
+      <label for="fanType">Fan Type</label>
+      <select class="form-control" name="fanType" formControlName="fanType" id="fanType" (change)="save()" (focus)="focusField('fanType')"
+        [ngClass]="{'indicate-different': isFanTypeDifferent()}">
+        <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12">
+      <label for="fanSpecified">Specify Fan Efficiency</label>
+      <div class="input-group">
+        <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified" id="fanSpecified"
+          onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')" [readonly]="!selected">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="fanEfficiencyError !== null">{{fanEfficiencyError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="fanSpeed">Fan Speed</label>
+      <div class="input-group" [ngClass]="{'indicate-different': isFanSpeedDifferent()}">
+        <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed" id="fanSpeed" (input)="save()"
+          (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">rpm</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="fanSpeedError !== null">{{fanSpeedError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="drive">Drive</label>
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="save()" (focus)="focusField('drive')"
+        [ngClass]="{'indicate-different': isDriveDifferent()}">
+        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
+      </select>
+    </div>
+  </div>
+</form>

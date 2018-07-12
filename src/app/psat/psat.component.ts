@@ -68,7 +68,6 @@ export class PsatComponent implements OnInit {
   display4: boolean;
 
   psat: PSAT;
-  modification: PSAT;
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: PSAT;
@@ -76,8 +75,7 @@ export class PsatComponent implements OnInit {
 
   subTabIndex: number = 0;
 
-  adjustment: PSAT;
-  isValid;
+  isValid: boolean;
 
   _psat: PSAT;
   fieldDataReady: boolean = false;
@@ -369,11 +367,7 @@ export class PsatComponent implements OnInit {
     this.getContainerHeight();
   }
 
-  selectAdjustment($event) {
-    this.adjustment = $event;
-  }
-
-  continue(bool?: boolean) {
+  continue() {
     if (this.subTab == 'field-data') {
       this.psatService.mainTab.next('assessment');
     } else {
@@ -526,6 +520,22 @@ export class PsatComponent implements OnInit {
     this.closeAddNewModal();
   }
 
+  addNewMod() {
+    let modName: string = 'Scenario ' + (this._psat.modifications.length + 1);
+    let tmpModification: Modification = {
+      psat: {
+        name: modName,
+      },
+      notes: {
+        fieldDataNotes: '',
+        motorNotes: '',
+        pumpFluidNotes: '',
+        systemBasicsNotes: ''
+      },
+    }
+    tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
+    this.saveNewMod(tmpModification)
+  }
 
   showTooltip(num: number) {
     if (num == 1) {

@@ -1,0 +1,33 @@
+<div class="row show-print break-before">
+  <div class="col-12">
+    <h4 class="show-print print-section-header">Assessment Input Summary</h4>
+  </div>
+</div>
+
+<!-- Fan Setup -->
+<div class="row avoid-break">
+  <div class="col-12">
+    <app-fan-setup-summary [fsat]="fsat" [settings]="settings" [printView]="printView"></app-fan-setup-summary>
+  </div>
+</div>
+
+<!-- Base Gas Density -->
+<div class="row avoid-break">
+  <div class="col-12">
+    <app-base-gas-density-summary [fsat]="fsat" [settings]="settings" [printView]="printView"></app-base-gas-density-summary>
+  </div>
+</div>
+
+<!-- Fan Motor -->
+<div class="row avoid-break">
+  <div class="col-12">
+    <app-fan-motor-summary [fsat]="fsat" [settings]="settings" [printView]="printView"></app-fan-motor-summary>
+  </div>
+</div>
+
+<!-- Field Data -->
+<div class="row avoid-break">
+  <div class="col-12">
+    <app-field-data-summary [fsat]="fsat" [settings]="settings" [printView]="printView"></app-field-data-summary>
+  </div>
+</div>

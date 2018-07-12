@@ -46,6 +46,23 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     background-color: rgba(0, 0, 0, 0.12);
 }
 
+
+.fsat .btn-primary{
+    background-color: #FFE400;
+    border-color: #FFE400;
+    color: black;
+}
+
+.fan-block i{
+    color:#FFE400
+  }
+  
+  .fan-block{
+    display: inline-flex;
+    background-color: #7F8C8D;
+    padding: 2px;
+  }
+  
 .loss-results{
     margin-bottom: 20px;
 }
@@ -116,3 +133,22 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .card-item{
     box-shadow: 3px 0px 5px 2px gray;
   } 
+
+
+  /* Fan flow rate pressure modal colors */
+
+  .flow-rate{
+    color: #8E44AD;
+    font-weight: bold;
+  }
+
+
+  .inlet-pressure{
+    color: #3498DB;
+    font-weight: bold;
+  }
+
+  .outlet-pressure{
+   color: #DC7633;
+   font-weight: bold;
+  }

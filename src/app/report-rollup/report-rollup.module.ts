@@ -32,6 +32,14 @@ import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-p
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
+import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
+import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
+import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';
+import { FsatPrintComponent } from './fsat-rollup/fsat-print/fsat-print.component';
+import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy-table/fsat-rollup-energy-table.component';
+import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
+import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
+import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat-rollup-graphs.component';
 
 @NgModule({
   imports: [
@@ -42,7 +50,8 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    FsatReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -68,6 +77,13 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     PsatRollupPumpSummaryTableComponent,
     PhastRollupFurnaceSummaryTableComponent,
     PreAssessmentTableComponent,
+    FsatSummaryComponent,
+    FsatRollupComponent,
+    FsatPrintComponent,
+    FsatRollupEnergyTableComponent,
+    FsatRollupFanSummaryComponent,
+    FsatRollupFanSummaryTableComponent,
+    FsatRollupGraphsComponent
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]

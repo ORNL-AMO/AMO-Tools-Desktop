@@ -1,0 +1,68 @@
+<form [formGroup]="planeInfoForm" *ngIf="planeInfoForm">
+  <label class="group-label group-label-2">Plane Pressure Information</label>
+  <!-- <div class="form-group">
+    <label for="variationInBarometricPressure">Variation in Planar Barometric Pressure</label>
+    <select class="form-control" name="variationInBarometricPressure" formControlName="variationInBarometricPressure" id="variationInBarometricPressure" (change)="save()"
+      (focus)="focusField('variationInBarometricPressure')">
+      <option [ngValue]="true">Yes</option>
+      <option [ngValue]="'false'">No</option>
+    </select>
+  </div> -->
+
+  <!-- <div class="form-group">
+    <label for="globalBarometricPressure">Barometric Pressure (Pb)</label>
+    <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure" id="globalBarometricPressure"
+      (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
+  </div> -->
+  <!-- 
+  <div class="form-group">
+    <label for="estimate2and5TempFrom1">Estimate Plane 2,5 Temperature from Plane 1</label>
+    <select class="form-control" name="estimate2and5TempFrom1" formControlName="estimate2and5TempFrom1" id="estimate2and5TempFrom1" (change)="save()"
+      (focus)="focusField('estimate2and5TempFrom1')">
+      <option [ngValue]="true">Yes</option>
+      <option [ngValue]="false">No</option>
+    </select>
+  </div> -->
+
+  <div class="form-group">
+    <label for="totalPressureLossBtwnPlanes1and4">Total Pressure Loss Between Planes 1 and 4</label>
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes1and4" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes1and4"
+        id="totalPressureLossBtwnPlanes1and4" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="totalPressureLossBtwnPlanes2and5">Total Pressure Loss Between Planes 2 and 5</label>
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes2and5" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes2and5"
+        id="totalPressureLossBtwnPlanes2and5" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+  <label class="group-label group-label-2">System Effect Data</label>
+  <div class="form-group">
+    <label for="inletSEF">Inlet System Effect Factor</label>
+    <div class="input-group">
+      <input name="inletSEF" type="number" step="any" class="form-control" formControlName="inletSEF" id="inletSEF" (input)="save()"
+        (focus)="focusField('inletSEF')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="outletSEF">Outlet System Effect Factor</label>
+    <div class="input-group">
+      <input name="outletSEF" type="number" step="any" class="form-control" formControlName="outletSEF" id="outletSEF" (input)="save()"
+        (focus)="focusField('outletSEF')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="sumSEF">&Sigma; System Effect Factor</label>
+    <div class="sef-results">
+      {{sumSEF}}
+      <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+</form>

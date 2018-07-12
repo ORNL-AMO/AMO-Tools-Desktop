@@ -1,0 +1,94 @@
+<nav class="hide-print w-100" *ngIf="mainTab == 'system-setup'">
+  <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
+    <div class="fixed-tab-size success" [ngClass]="{'active': stepTab == 'system-basics'}">
+      <a (click)="changeStepTab('system-basics')">
+        <span class="step-number">1</span> Assessment Settings</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fsat-fluid', 'missing-data': !fluidValid, 'success': fluidValid}">
+      <a (click)="changeStepTab('fsat-fluid')">
+        <span class="step-number">2</span>Fluid</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-setup', 'disabled': fanDisabled, 'missing-data': !fanValid, 'success': fanValid}">
+      <a (click)="changeStepTab('fan-setup')">
+        <span class="step-number">3</span>Fan</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-motor', 'disabled': motorDisabled, 'missing-data': !motorValid, 'success': motorValid}">
+      <a (click)="changeStepTab('fan-motor')">
+        <span class="step-number">4</span>Motor</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-field-data', 'disabled': fieldDataDisabled, 'missing-data': !fieldDataValid, 'success': fieldDataValid}">
+      <a (click)="changeStepTab('fan-field-data')">
+        <span class="step-number">5</span>Field Data</a>
+    </div>
+  </div>
+</nav>
+
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
+  <div class="d-flex tabs subtabs fsat mr-auto">
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+      <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+        <br>
+        <span class="help-text fsat-view">Novice View</span>
+      </a>
+    </div>
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+        <br>
+        <span class="help-text fsat-view">Expert View</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center tabs subtabs fsat ml-auto" [ngClass]="{'br-color-white': selectedModification}">
+    <div class="mod-name active border-right" *ngIf="selectedModification">
+      <a>{{selectedModification.name}}
+        <br>
+        <span class="help-text fsat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="mod-name border-right" *ngIf="!selectedModification">
+      <a>&mdash; &mdash;
+        <br>
+        <span class="help-text fsat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="pl-2 pr-2">
+      <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
+    </div>
+  </div>
+
+  <nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions'">
+    <app-modify-conditions-tabs></app-modify-conditions-tabs>
+  </nav>
+</div>
+
+<ul class="tabs subtabs fsat" *ngIf="mainTab == 'calculators'">
+  <li [ngClass]="{'active': calcTab == 'fsat-203'}">
+    <a (click)="changeCalcTab('fsat-203')">Operating Points</a>
+  </li>
+  <!--
+  -->
+  <li [ngClass]="{'active': calcTab == 'system-curve'}">
+    <a (click)="changeCalcTab('system-curve')">System Curve</a>
+  </li>
+  <!--
+  -->
+  <li [ngClass]="{'active': calcTab == 'fan-efficiency'}">
+    <a (click)="changeCalcTab('fan-efficiency')">Optimal Fan Efficiency</a>
+  </li>
+  <!--
+-->
+  <li [ngClass]="{'active': calcTab == 'motor-performance'}">
+    <a (click)="changeCalcTab('motor-performance')">Motor Performance</a>
+  </li>
+  <!--
+  -->
+  <li [ngClass]="{'active': calcTab == 'nema-energy-efficiency'}">
+    <a (click)="changeCalcTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+  </li>
+  <!--
+  -->
+  <li [ngClass]="{'active': calcTab == 'pump-curve'}">
+    <a (click)="changeCalcTab('pump-curve')">Fan Curve</a>
+  </li>
+</ul>

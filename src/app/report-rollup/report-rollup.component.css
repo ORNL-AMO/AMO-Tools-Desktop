@@ -133,7 +133,8 @@
 }
 
 .phast-modal .modal-dialog,
-.psat-modal .modal-dialog{
+.psat-modal .modal-dialog,
+.fsat-modal .modal-dialog{
     top: 0px;
     max-width: none;
     margin: 10px;
@@ -149,8 +150,14 @@
     color: #fff;
 }
 
+.fsat-modal .modal-header{
+    background-color: #FFE400;
+    color: black;
+}
+
 .phast-modal .modal-body,
-.psat-modal .modal-body{
+.psat-modal .modal-body,
+.fsat-modal .modal-body{
     height: 85vh;
 }
 

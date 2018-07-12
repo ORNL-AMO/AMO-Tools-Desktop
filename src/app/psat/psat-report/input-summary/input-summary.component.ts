@@ -27,6 +27,8 @@ export class InputSummaryComponent implements OnInit {
   hpDiff: boolean = false;
   motorRpmDiff: boolean = false;
   effClassDiff: boolean = false;
+  effClassSpecified: boolean = false;
+  specEffDiff: boolean = false;
   motorVoltageDiff: boolean = false;
   flaDiff: boolean = false;
   //marginDiff: boolean = false;
@@ -76,6 +78,9 @@ export class InputSummaryComponent implements OnInit {
     return tmpUnit.unit.name.display;
   }
   checkInputs() {
+    if (this.getEfficiencyClass(this.psat.inputs.efficiency_class) === "Specified") {
+      this.effClassSpecified = true;
+    }
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
         if (mod.psat.inputs.pump_style != this.psat.inputs.pump_style) {
@@ -116,6 +121,12 @@ export class InputSummaryComponent implements OnInit {
         }
         if (mod.psat.inputs.efficiency_class != this.psat.inputs.efficiency_class) {
           this.effClassDiff = true;
+        }
+        if (this.getEfficiencyClass(mod.psat.inputs.efficiency_class) === "Specified") {
+          this.effClassSpecified = true;
+          if (mod.psat.inputs.efficiency != this.psat.inputs.efficiency) {
+            this.specEffDiff = true;
+          }
         }
         if (mod.psat.inputs.motor_rated_voltage != this.psat.inputs.motor_rated_voltage) {
           this.motorVoltageDiff = true;

@@ -3,6 +3,29 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "amo-tools-desktop-e2e": {
+      "root": "",
+      "sourceRoot": "e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "amo-tools-desktop:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
     "amo-tools-desktop": {
       "root": "",
       "sourceRoot": "src",
@@ -32,7 +55,8 @@
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
-              "src/assets/styles/forms.css"
+              "src/assets/styles/forms.css",
+              "src/assets/styles/help.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.bundle.min.js",
@@ -113,29 +137,6 @@
             "tsConfig": [
               "src/tsconfig.app.json",
               "src/tsconfig.spec.json"
-            ],
-            "exclude": []
-          }
-        }
-      }
-    },
-    "amo-tools-desktop-e2e": {
-      "root": "",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "amo-tools-desktop:serve"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
             ],
             "exclude": []
           }

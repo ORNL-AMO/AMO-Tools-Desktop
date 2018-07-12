@@ -160,7 +160,7 @@ export class PercentGraphComponent implements OnInit {
         height: this.chartHeight
       },
       gauge: {
-        width: 30,
+        width: 20,
         label: {
           show: false
         }
