@@ -106,6 +106,7 @@
     }
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.6.8",
     "@angular-devkit/core": "0.6.8",
     "@angular-devkit/schematics": "0.6.8",
     "@angular/cli": "6.0.8",
@@ -136,7 +137,6 @@
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
     "ts-node": "^3.3.0",
-    "tslint": "~4.4.2",
-    "@angular-devkit/build-angular": "~0.6.8"
+    "tslint": "~4.4.2"
   }
 }

@@ -6,6 +6,15 @@ import * as d3 from 'd3';
 import { PsatService } from '../../../../psat/psat.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { SystemCurveService } from '../system-curve.service';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+
+var flowMeasurement: string;
+var distanceMeasurement: string;
+var powerMeasurement: string;
+var headOrPressure: string;
+var flowVal: number;
+var distanceVal: number;
+var powerVal: number;
 
 @Component({
   selector: 'app-system-curve-graph',
@@ -43,8 +52,23 @@ export class SystemCurveGraphComponent implements OnInit {
   tooltipPointer: any;
   pointer: any;
   focus: any;
-
   isGridToggled: boolean;
+
+  //dynamic table variables
+  d: any;
+  focusD: Array<any>;
+  x: any;
+  y: any;
+  curveChanged: boolean = false;
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>;
+  tablePoints: Array<any>;
+
+  //dynamic table - specific to system curve graph
+  flowMeasurement: string;
+  distanceMeasurement: string;
+  powerMeasurement: string;
+
 
   canvasWidth: number;
   canvasHeight: number;
@@ -67,7 +91,11 @@ export class SystemCurveGraphComponent implements OnInit {
   constructor(private systemCurveService: SystemCurveService, private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    console.log('in system-curve-graph');
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
+    this.tablePoints = new Array<any>();
+    this.focusD = new Array<any>();
+    
     if (!this.lossCoefficient) {
       this.lossCoefficient = 0;
     }
@@ -175,10 +203,13 @@ export class SystemCurveGraphComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
+      this.curveChanged = true;   //dynamic table
       this.makeGraph();
-    } else {
+    }
+    else {
       this.isFirstChange = false;
     }
+
   }
 
   getDisplayUnit(unit: string) {
@@ -295,9 +326,11 @@ export class SystemCurveGraphComponent implements OnInit {
 
     var x = d3.scaleLinear()
       .range([0, this.width]);
+    this.x = x;
 
     var y = d3.scaleLinear()
       .range([this.height, 0]);
+    this.y = y;
 
     if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.flowRate.value) {
       if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value < 25000) {
@@ -456,7 +489,7 @@ export class SystemCurveGraphComponent implements OnInit {
         this.focus
           .style("display", null)
           .style("opacity", 1)
-          .style('pointer-events', 'none');;
+          .style('pointer-events', 'none');
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
@@ -483,9 +516,9 @@ export class SystemCurveGraphComponent implements OnInit {
         var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
           i = bisectDate(data, x0, 1),
           d0 = data[i - 1],
-          d1 = data[i],
-          d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+          d1 = data[i];
+        this.d = x0 - d0.x > d1.x - x0 ? d1 : d0;   //dynamic table
+        this.focus.attr("transform", "translate(" + x(this.d.x) + "," + y(this.d.y) + ")");   //dynaic table
 
         this.detailBox.transition()
           .style("opacity", 1);
@@ -495,10 +528,13 @@ export class SystemCurveGraphComponent implements OnInit {
 
         var detailBoxWidth = 200;
         var detailBoxHeight = 80;
-        var flowMeasurement: string;
-        var distanceMeasurement: string;
-        var powerMeasurement: string;
-        var headOrPressure: string;
+
+        //dynamic table
+        flowVal = format(this.d.x);
+        distanceVal = format(this.d.y);
+        powerVal = format(this.d.fluidPower);
+
+        //dynamic table
         if (this.isFan) {
           flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
           distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
@@ -510,20 +546,24 @@ export class SystemCurveGraphComponent implements OnInit {
           powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
           headOrPressure = 'Head'
         }
+        this.flowMeasurement = flowMeasurement;
+        this.distanceMeasurement = distanceMeasurement;
+        this.powerMeasurement = powerMeasurement;
+        
         this.detailBox
           .style("padding-top", "10px")
           .style("padding-right", "10px")
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + flowMeasurement + "</div><br>" +
+            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(this.d.x) + " " + flowMeasurement + "</div><br>" +             //dynamic table
 
-            "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure + ": </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + distanceMeasurement + "</div><br>" +
+            "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure + ": </div><div style='float: right; position: relative; top: -10px;'>" + format(this.d.y) + " " + distanceMeasurement + "</div><br>" +      //dynamic table
 
-            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")
+            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(this.d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")   //dynamic table
 
-          .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
-          .style("top", (this.margin.top + y(d.y) + 26) + "px")
+          .style("left", Math.min(((this.margin.left + x(this.d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")      //dynamic table
+          .style("top", (this.margin.top + y(this.d.y) + 26) + "px")      //dynamic table
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -537,8 +577,8 @@ export class SystemCurveGraphComponent implements OnInit {
         this.tooltipPointer
           .attr("class", "tooltip-pointer")
           .html("<div></div>")
-          .style("left", (this.margin.left + x(d.x)) + 5 + "px")
-          .style("top", (this.margin.top + y(d.y) + 16) + "px")
+          .style("left", (this.margin.left + x(this.d.x)) + 5 + "px") //dynamic table
+          .style("top", (this.margin.top + y(this.d.y) + 16) + "px")  //dynamic table
           .style("position", "absolute")
           .style("width", "0px")
           .style("height", "0px")
@@ -568,6 +608,15 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("opacity", 0);
       });
 
+    //dynamic table
+    if (!this.curveChanged) {
+      this.replaceFocusPoints();
+    }
+    else {
+      this.resetTableData();
+    }
+    this.curveChanged = false;
+
     var staticLabel: string;
     var distanceMeasurement: string;
     if (this.isFan) {
@@ -595,7 +644,72 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("font-weight", "bold");
 
     d3.selectAll("line").style("pointer-events", "none");
+  }
 
+  //dynamic table
+  buildTable() {
+    let i = this.tableData.length;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+    let tableFocus = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+
+    tableFocus.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePoints.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+
+    this.focusD.push(this.d);
+    tableFocus.attr("transform", "translate(" + this.x(this.d.x) + "," + this.y(this.d.y) + ")");
+
+    this.tablePoints.push(tableFocus);
+
+    let dataPiece = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length],
+      flowRate: flowVal.toString(),
+      headOrPressure: headOrPressure,
+      distance: distanceVal.toString(),
+      fluidPower: powerVal.toString()
+    }
+
+    this.tableData.push(dataPiece);
+  }
+
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
+    this.tablePoints = new Array<any>();
+    this.focusD = new Array<any>();
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    for (let i = 0; i < this.tablePoints.length; i++) {
+      let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+      let tableFocus = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+
+      tableFocus.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePoint-" + i)
+        .style("fill", this.graphColors[i % this.graphColors.length])
+        .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+
+      tableFocus.attr("transform", "translate(" + this.x(this.focusD[i].x) + "," + this.y(this.focusD[i].y) + ")");
+    }
   }
 
   findPointValues(x, y, increment) {
