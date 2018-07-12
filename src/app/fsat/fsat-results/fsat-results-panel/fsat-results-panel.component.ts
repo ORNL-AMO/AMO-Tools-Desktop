@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, HostListener } from '@angular/core';
 import { FSAT, FsatOutput } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';
@@ -19,15 +19,23 @@ export class FsatResultsPanelComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.hideResults();
+  }
+
+
   baselineResults: FsatOutput;
   modificationResults: FsatOutput;
   modificationName: string;
   showModification: boolean;
   updateDataSub: Subscription;
+  showResults: boolean = true;
+  timeOut: any;
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
-    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults();})
+    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); })
   }
 
   ngOnDestroy() {
@@ -51,5 +59,16 @@ export class FsatResultsPanelComponent implements OnInit {
     } else {
       this.modificationResults = this.fsatService.getEmptyResults();
     }
+  }
+
+
+  hideResults() {
+    this.showResults = false;
+    if (this.timeOut) {
+      clearTimeout(this.timeOut);
+    }
+    this.timeOut = setTimeout(() => {
+      this.showResults = true;
+    }, 100)
   }
 }

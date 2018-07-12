@@ -1,12 +1,11 @@
 <form #formRef [formGroup]="psatForm">
-  <div *ngIf="inSetup" class="row">
-    <div class="col-12">
-      <div class="header">
-        <h3>Motor</h3>
-      </div>
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Motor</h3>
     </div>
   </div>
-  <div class="setup-form-group">
+
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
       <label for="frequency">Line Frequency</label>
       <select name="frequency" class="form-control number-input-field" id="frequency" formControlName="frequency" (change)="changeLineFreq()"

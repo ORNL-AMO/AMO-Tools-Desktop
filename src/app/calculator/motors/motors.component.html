@@ -44,15 +44,39 @@
           <div class="col-11">
             <a (click)="showTool('motor-drive')"> Motor Drive</a>
             <p>
-              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched V-Belt drive, and Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application should be considered.
+              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched V-Belt drive, and
+              Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application should
+              be considered.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/driver.png" class="ico-size4">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('replace-existing')"> Replace Existing Motor</a>
+            <p>
+              Calculate the energy savings, cost savings, and payback period for replacing an existing motor with a higher efficiency motor.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/driver.png" class="ico-size4">
+          </div>
+          <div class="col-11">
+            <a (click)="showTool('replace-rewind')"> Replace vs Rewind</a>
+            <p>
+              Compare the cost and energy expenditure of rewinding a failed motor versus replacing it with a new energy-efficient model.
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
+
 
 
 
@@ -74,6 +98,14 @@
   <app-motor-drive></app-motor-drive>
 </div>
 
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'replace-existing'">
+  <app-replace-existing></app-replace-existing>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'replace-rewind'">
+  <app-replace-rewind></app-replace-rewind>
+</div>
 
 <!-- Original Version -->
 <!--

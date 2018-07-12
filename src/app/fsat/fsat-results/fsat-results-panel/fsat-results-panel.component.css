@@ -1,18 +1,3 @@
-.output-summary .table {
-    font-size: small;
-}
-.output-summary .table th {
-    border: none;
-    padding: 0px 10px;
-    text-align: center;
-    font-size: 12px;
-}
-.output-summary .table td {
-    padding: 0px 8px;
-    vertical-align: middle;
-    text-align: center;
-}
-
 .positive-savings{
 	color: green;
 }
@@ -24,4 +9,26 @@
 
 .no-data{
     width: 100%;
+}
+
+.stripe{
+    border-top: groove 1px;
+    border-bottom: groove 1px;
+}
+
+.my-table-bg{
+    /* background-color: #FFE400; */
+    background-color: #D6DBDF;
+}
+
+/* .my-table{
+    box-shadow: 3px 3px 10px 0px #566573;
+} */
+
+.table-text{
+    font-size: 15px;
+}
+
+.my-table-item:hover{
+    background-color: white;
 }

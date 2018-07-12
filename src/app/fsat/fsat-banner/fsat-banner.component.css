@@ -21,7 +21,6 @@ ul{
 
 .img-icon{
     width: 50px;
-    padding-top: 6px;
 }
 
 .banner-name{
@@ -40,17 +39,12 @@ ul{
 }
 
 .h2-name{
+    font-weight: 400;
     font-size: 20px;
-    padding-top: 6px;
-    font-weight: 300;
-    margin-bottom: 0px;
 }
 
-.navbar{
-    padding: 0px;
-}
 
-.pills-nav .disabled span {
+.nav-link.disabled {
     color: #ABB2B9;
 }
 
@@ -63,4 +57,32 @@ ul{
 .home-nav-item{
     color: black;
     border-color: black !important;
+}
+
+.nav-link{
+    padding: 6px;
+    font-size: medium;
+    color: #000;
+}
+
+.nav-link:not(.disabled):hover{
+    cursor: pointer;
+    background-color: #808B96;
+}
+.nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
+.nav-link.active{
+    background: #fff;
+    font-weight: bold;
+    color: black;
+  }
+
+  .banner{
+    color: black;
+  }
+
+.nav-item{
+    margin: .1rem;
 }
