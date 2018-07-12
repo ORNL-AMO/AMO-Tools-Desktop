@@ -78,13 +78,18 @@
     </div>
 
   </div>
-
   <div class="form-group">
-    <label for="motorShaftPower">Motor Input Power (H<sub>i</sub>)
+    <label for="powerFactorAtLoad">Power Factor at Load</label>
+    <input name="powerFactorAtLoad" type="number" step="any" class="form-control" formControlName="powerFactorAtLoad" id="powerFactorAtLoad"
+      (input)="calcMotorShaftPower()" (focus)="focusField('powerFactorAtLoad')" onfocus="this.select();">
+  </div>
+  <div class="form-group">
+    <label for="motorShaftPower">Motor Input Power (H
+      <sub>i</sub>)
     </label>
     <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
-      <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower" (input)="save()"
-        (focus)="focusField('motorShaftPower')" onfocus="this.select();">
+      <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower"
+        (input)="save()" (focus)="focusField('motorShaftPower')" onfocus="this.select();">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
     </div>
@@ -92,6 +97,57 @@
       {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
     </div>
   </div>
+  <div *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
+    <label class="group-label group-label-2">Motor Phase Data</label>
+
+    <div class="form-group">
+      <label class="hide-text">hidden text for formatting</label>
+      <div class="input-group">
+        <input type="text" class="form-control disabled-input" [disabled]="true" placeholder="Voltage (V)">
+        <input type="text" class="form-control disabled-input" [disabled]="true" placeholder="Current (A)">
+      </div>
+      <label for="phase1">Phase 1
+      </label>
+      <div class="input-group">
+        <input name="phase1Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase1Voltage"
+          id="phase1Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase1Voltage')" onfocus="this.select();">
+        <input name="phase1Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase1Amps" id="phase1Amps"
+          (input)="calcAverageAmps()" (focus)="focusField('phase1Amps')" onfocus="this.select();">
+        <!-- <input name="phase1PowerFactor" type="number" step="any" class="form-control" formControlName="phase1PowerFactor" id="powerFactor"
+            (input)="save()" (focus)="focusField('phase1PowerFactor')" onfocus="this.select();"> -->
+      </div>
+      <label for="phase2">Phase 2
+      </label>
+      <div class="input-group">
+        <input name="phase2Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase2Voltage"
+          id="phase2Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase2Voltage')" onfocus="this.select();">
+        <input name="phase2Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase2Amps" id="phase2Amps"
+          (input)="calcAverageAmps()" (focus)="focusField('phase2Amps')" onfocus="this.select();">
+      </div>
+      <label for="phase3">Phase 3
+      </label>
+      <div class="input-group">
+        <input name="phase3Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase3Voltage"
+          id="phase3Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase3Voltage')" onfocus="this.select();">
+        <input name="phase3Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase3Amps" id="phase3Amps"
+          (input)="calcAverageAmps()" (focus)="focusField('phase3Amps')" onfocus="this.select();">
+      </div>
+      <label>Calculated Averages</label>
+      <div class="input-group">
+        <div class="area-val mx-auto">
+          {{fanShaftPower.voltage | sigFigs: '6'}}
+        </div>
+        <div class="area-val mx-auto">
+          {{fanShaftPower.amps | sigFigs: '6'}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
   <label class="group-label group-label-2">Motor and Drive Effiicencies</label>
   <div class="form-group">
     <label for="efficiencyMotor">Motor Efficiency at Load</label>
@@ -126,56 +182,5 @@
       <span class="input-group-addon units">%</span>
     </div>
   </div>
-  <div class="form-group">
-    <label for="powerFactorAtLoad">Power Factor at Load</label>
-    <input name="powerFactorAtLoad" type="number" step="any" class="form-control" formControlName="powerFactorAtLoad" id="powerFactorAtLoad"
-      (input)="calcMotorShaftPower()" (focus)="focusField('powerFactorAtLoad')" onfocus="this.select();">
-  </div>
 
-  <div *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
-    <label class="group-label group-label-2">Motor Phase Data</label>
-
-    <div class="form-group">
-      <label class="hide-text">hidden text for formatting</label>
-      <div class="input-group">
-        <input type="text" class="form-control disabled-input" [disabled]="true" placeholder="Voltage (V)">
-        <input type="text" class="form-control disabled-input" [disabled]="true" placeholder="Current (A)">
-      </div>
-      <label for="phase1">Phase 1
-      </label>
-      <div class="input-group">
-        <input name="phase1Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase1Voltage"
-          id="phase1Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase1Voltage')" onfocus="this.select();">
-        <input name="phase1Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase1Amps" id="phase1Amps"
-          (input)="calcAverageAmps()" (focus)="focusField('phase1Amps')" onfocus="this.select();">
-        <!-- <input name="phase1PowerFactor" type="number" step="any" class="form-control" formControlName="phase1PowerFactor" id="powerFactor"
-          (input)="save()" (focus)="focusField('phase1PowerFactor')" onfocus="this.select();"> -->
-      </div>
-      <label for="phase2">Phase 2
-      </label>
-      <div class="input-group">
-        <input name="phase2Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase2Voltage"
-          id="phase2Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase2Voltage')" onfocus="this.select();">
-        <input name="phase2Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase2Amps" id="phase2Amps"
-          (input)="calcAverageAmps()" (focus)="focusField('phase2Amps')" onfocus="this.select();">
-      </div>
-      <label for="phase3">Phase 3
-      </label>
-      <div class="input-group">
-        <input name="phase3Voltage" type="number" step="any" class="form-control amp-volt-input" formControlName="phase3Voltage"
-          id="phase3Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase3Voltage')" onfocus="this.select();">
-        <input name="phase3Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase3Amps" id="phase3Amps"
-          (input)="calcAverageAmps()" (focus)="focusField('phase3Amps')" onfocus="this.select();">
-      </div>
-      <label>Calculated Averages</label>
-      <div class="input-group">
-        <div class="area-val mx-auto">
-          {{fanShaftPower.voltage | sigFigs: '6'}}
-        </div>
-        <div class="area-val mx-auto">
-          {{fanShaftPower.amps | sigFigs: '6'}}
-        </div>
-      </div>
-    </div>
-  </div>
 </form>
