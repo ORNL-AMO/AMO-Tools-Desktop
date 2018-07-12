@@ -1,0 +1,41 @@
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <th></th>
+      <th>Existing Motor</th>
+      <th>New Motor</th>
+    </tr>
+    <tr>
+      <td>
+        <span>Energy Use</span>
+      </td>
+      <td>{{results.existingEnergyUse | number : '1.0-2'}} kWh/yr</td>
+      <td>{{results.newEnergyUse | number : '1.0-2'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td>
+        <span>Energy Cost</span>
+      </td>
+      <td>{{results.existingEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
+      <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
+    </tr>
+    <tr>
+      <td>
+        <span>Annual Energy Savings</span>
+      </td>
+      <td colspan="2">{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td>
+        <span>Cost Savings</span>
+      </td>
+      <td colspan="2">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+    </tr>
+    <tr>
+      <td>
+        <span>Simple Payback</span>
+      </td>
+      <td colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,117 @@
+<div class="help-panel">
+  <div class="help-header">
+    <h3>Replace Existing Motor - Efficiency Upgrade</h3>
+    <p>
+      Improving the energy efficiency of an electric motor can save energy, reduce operating costs, and improve productivity. Usually,
+      the annual energy cost of running a motor is many times greater than its initial purchase price. For this reason, even
+      a small efficiency improvement in motors that are large or have high operating hours can make financial sense. Consider
+      buying an energy-efficient motor in the following circumstances:
+      <li> For all new installations</li>
+      <li> When purchasing equipment packages</li>
+      <li> When major modifications are made to the facility or process</li>
+      <li> To replace oversized and underloaded motors</li>
+      <li> As part of a preventive maintenance or energy conservation program </li>
+    </p>
+  </div>
+
+  <div class="help-content">
+    <div class="card" *ngIf="currentField == 'operatingHours'">
+      <div class="card-header">
+        Operating Hours
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Number of annual operating hours for the motor.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'motorSize'">
+      <div class="card-header">
+        Motor Size
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          The highest power input allowed to flow through the motor.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'existingEfficiency'">
+      <div class="card-header">
+        Efficiency of Existing Motor
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
+          to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
+          efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+          operating conditions. Enter this value as a percentage.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'load'">
+      <div class="card-header">
+        Load
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          The ratio of the average load the motor draws when it is in operation to full rated load. Maximum efficiency is usually around
+          75% with drastic decreases in efficiency below about 50%. If this is the case, consider replacing your motor with
+          a correctly sized motor.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'electricityCost'">
+      <div class="card-header">
+        Electricity Cost
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          The cost that must be paid to the utility per unit of energy.
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'newEfficiency'">
+      <div class="card-header">
+        Efficiency of New Motor
+      </div>
+      <div class="card-block small">
+        <label>
+          <u>
+            <strong>Description</strong>
+          </u>
+        </label>
+        <p>
+          Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
+          to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
+          efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+          operating conditions. Enter this value as a percentage.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
