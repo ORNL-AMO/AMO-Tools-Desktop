@@ -3,7 +3,7 @@
     <label for="airDemand">Air Demand</label>
     <div class="input-group">
       <input name="airDemand" class="form-control" type="number" step="any" [(ngModel)]="inputs.airDemand" id="airDemand" (input)="getStorage()"
-        onfocus="this.select();">
+        onfocus="this.select();" (focus)="changeField('airDemand')">
       <span class="input-group-addon units">ft
         <sup>2</sup>
       </span>
@@ -13,7 +13,7 @@
     <label for="allowablePressureDrop">Allowable Pressure Drop</label>
     <div class="input-group">
       <input name="allowablePressureDrop" class="form-control" type="number" step="any" [(ngModel)]="inputs.allowablePressureDrop"
-        id="allowablePressureDrop" (input)="getStorage()" onfocus="this.select();">
+        id="allowablePressureDrop" (input)="getStorage()" onfocus="this.select();" (focus)="changeField('allowablePressureDrop')">
       <span class="input-group-addon units">psi</span>
     </div>
   </div>
@@ -21,7 +21,7 @@
     <label for="atmosphericPressure">Atmospheric Pressure</label>
     <div class="input-group">
       <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
-        id="atmosphericPressure" (input)="getStorage()" onfocus="this.select();">
+        id="atmosphericPressure" (input)="getStorage()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
       <span class="input-group-addon units">psi</span>
     </div>
   </div>

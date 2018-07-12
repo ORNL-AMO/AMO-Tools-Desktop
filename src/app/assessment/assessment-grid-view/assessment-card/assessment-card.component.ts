@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory } from '../../../shared/models/directory';
@@ -38,7 +37,7 @@ export class AssessmentCardComponent implements OnInit {
   assessmentCopy: Assessment;
   settingsCopy: Settings;
   copyModifications: boolean = false;
-  constructor(private assessmentService: AssessmentService, private router: Router,
+  constructor(private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
 
@@ -64,18 +63,7 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      if (assessment.psat.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      if (assessment.phast.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment);
   }
 
   setDelete() {

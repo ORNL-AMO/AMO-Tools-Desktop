@@ -353,6 +353,12 @@ select.form-control:not([size]):not([multiple]) {
     border: #BF3D00 solid !important;
 }
 
+.fsat .indicate-report-field-different {
+  font-weight: bold;
+  color: #007bff  !important;
+}
+
+
 .input-error{
   color: red;
 }
@@ -508,7 +514,7 @@ Modals
   font-style: italic;
 }
 .modal h3 {
-  font-size: 22px;
+  /* font-size: 22px; */
   margin-bottom: 0;
   width: 100%;
 }
@@ -1080,11 +1086,19 @@ Calculators
 
 .ico-size {
   height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+  /* background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26)); */
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.psat .ico-size{
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+}
+
+.fsat .ico-size{
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
 }
 
 .ico-size2 {
@@ -1122,6 +1136,16 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
+
+.fan-icon {
+  width: 3.5rem;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
 
 .ico-col{
   padding-top: 5px;
@@ -1223,8 +1247,15 @@ Footer
     border-radius: 6px;
     font-size: 16px;
   }
+  .fsat .pills-nav span{
+    color: #000;
+  }
   .pills-nav .active span {
     background: rgba(0,0,0,0.5);
+  }
+  .fsat .pills-nav .active span{
+    background: #fff;
+    font-weight: bold;
   }
   .pills-nav span:hover {
     background: rgba(0,0,0,0.3);
@@ -1265,6 +1296,14 @@ Banner
   .banner.phast {
     background: #BF3D00;
   }
+  .banner.fsat{
+    background: #FFE400;
+  }
+
+  .banner.fsat .btn-dashboard, .banner.fsat .title, 
+  .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
+    color: #000;
+  }
 .banner:after {
   display: table;
   content: "";
@@ -1304,7 +1343,7 @@ Banner
 
 }
 .banner .pills-nav {
-
+margin-bottom: 0px;
 }
 .banner.psat .title {
   color: #fff;
@@ -1798,15 +1837,53 @@ Toasty Overrides ================================= */
   vertical-align: middle;
 }
 
+.panel-chart-container {
+  transition: ease-in-out 0.2s all;
+}
+
+.expanded-chart {
+  position: fixed;
+  top: 80px;
+  bottom: 80px;
+  left: 20px;
+  right: 20px;
+  width: auto;
+  height: auto;
+  background-color: rgba(236, 236, 236, 1);
+  z-index: 10000;
+  box-shadow: 0px 0px 20px #000;
+}
+
 
 /* chart download icon */
-
 .fa-download {
   position: absolute;
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
   background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.fa-expand {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.fa-compress {
+  /* position: absolute; */
+  color: rgba(255, 0, 0, 1);
+  background-color: rgba(255, 0, 0, 0.1);
+  /* opacity: 0.6; */
+  padding: 5px;
+  border-radius: 2px;
+  /* background-color: #dcdcdc; */
   border: 1px solid transparent;
   transition: ease-in-out 0.2s all;
 }
@@ -1840,10 +1917,36 @@ Toasty Overrides ================================= */
   left: 55px;
 }
 
+#gridToggle .fa-expand {
+  left: 94px;
+  top: 0px;
+}
+
+#gridToggle .fa-compress {
+  left: 94px;
+  top: 0px;
+}
+
+
+
 .fa-download:hover {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;
+}
+
+.fa-expand:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+.fa-compress:hover {
+  cursor: pointer;
+  /* opacity: 1; */
+  /* border-color: #212529; */
+  color: #fff;
+  background-color: rgba(255, 0, 0, 1);
 }
 
 /* .chart-container .fa-download:hover,

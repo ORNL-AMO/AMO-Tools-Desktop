@@ -959,20 +959,20 @@ export class PsatService {
       message: null
     };
     let range = this.getMotorRpmMinMax(lineFreqEnum, effClass);
-    if (motorRPM >= range.min && motorRPM <= range.max) {
-      response.valid = true;
-      return response
-    } else if (motorRPM < range.min) {
-      response.valid = false;
-      response.message = 'Motor RPM too small for selected efficiency class';
-      return response;
-    } else if (motorRPM > range.max) {
-      response.valid = false;
-      response.message = 'Motor RPM too large for selected efficiency class';
-      return response;
-    } else {
-      return response;
-    }
+      if (motorRPM >= range.min && motorRPM <= range.max) {
+        response.valid = true;
+        return response;
+      } else if (motorRPM < range.min) {
+        response.valid = false;
+        response.message = 'Motor RPM too small for selected efficiency class';
+        return response;
+      } else if (motorRPM > range.max) {
+        response.valid = false;
+        response.message = 'Motor RPM too large for selected efficiency class';
+        return response;
+      } else {
+        return response;
+      }
   }
 
   getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {

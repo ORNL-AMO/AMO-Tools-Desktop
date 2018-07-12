@@ -1,0 +1,137 @@
+<div #content class="fsat-container fsat" *ngIf="assessment && settings">
+  <div #header class="hide-print sticky-top">
+    <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
+    <app-fsat-tabs></app-fsat-tabs>
+  </div>
+
+  <div *ngIf="mainTab == 'system-setup'" class="row tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"
+        (emitSaveFsat)="saveFsat($event)"></app-system-basics>
+      <!-- <app-fsat-basics *ngIf="stepTab == 'fsat-basics'"></app-fsat-basics> -->
+      <!-- <app-fsat-info *ngIf="stepTab == 'fsat-info'" [inSetup]="true" [selected]="true"></app-fsat-info> -->
+      <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
+        (emitSave)="saveGasDensity($event)" [settings]="settings"></app-fsat-fluid>
+      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [settings]="settings" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup"
+        (emitSave)="saveFanSetup($event)"></app-fan-setup>
+      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor"
+        (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"></app-fan-motor>
+      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"
+        [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-fan-field-data>
+      <!-- <app-fan-curve-data [settings]="settings" *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data>
+      <app-operating-points [settings]="settings" (show203)="show203Modal()" *ngIf="stepTab == 'operating-points'"></app-operating-points>
+      <app-rated-operating-points [settings]="settings" *ngIf="stepTab == 'rated-operating-points'"></app-rated-operating-points> -->
+    </div>
+    <div class="col-6 help-panel" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
+      <app-help-panel [settings]="settings" [inSetup]="true" [fsat]="_fsat" [inSetup]="true"></app-help-panel>
+    </div>
+  </div>
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment" [settings]="settings"
+      (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
+      [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
+  </div>
+
+  <!--report-->
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-11 report-column">
+      <app-fsat-report [fsat]="_fsat" [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
+        (exportData)="exportData()" [containerHeight]="containerHeight"></app-fsat-report>
+    </div>
+  </div>
+
+
+  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone" [settings]="settings"
+      [assessment]="assessment"></app-system-curve>
+    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="_fsat.setupDone" [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
+    <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings"></app-motor-performance>
+    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment"></app-pump-curve>
+  </div>
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="p-1 mx-auto">
+      <div class="form-group" *ngIf="fsatOptionsLength > 1">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat1">
+          <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="sankey-padding">
+      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [assessmentName]="assessment.name" [printView]="false" [location]="'sankey-diagram'"
+        [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
+    </div>
+  </div>
+
+  <div #footer id="fsatFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
+      <button class="btn btn-default" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'assessment'">
+      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div bsModal #fsat203Modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fsat203Modal" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hide203Modal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col tab-content">
+            <app-fsat-203></app-fsat-203>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Scenario</h3>
+        <button class="close" (click)="closeAddNewModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-modification *ngIf="showAdd" [fsat]="_fsat" [modifications]="_fsat.modifications" (save)="saveNewMod($event)"></app-add-modification>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_fsat && _fsat.modifications">
+  <div class="modal-dialog modal-lg list-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Scenario</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+.fsat-container{
+    height: 100vh;
+}
+
+
+
+#fsatSelect {
+    margin-top: 25px;
+}
+
+
+/* .modal-dialog{
+    max-width: none;
+    margin: 5px;
+    top: 0px;
+}
+
+.modal-header{
+    padding: 6px;
+    background: #FFE400;
+}
+
+.modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+} */
+.modal-open {
+    z-index: initial !important;
+}
+
+.list-modal{
+    top: .5rem;
+    max-width: 95%;
+    height: 90%;
+}
+
+.list-modal .modal-content{
+    height: 100%;
+}
+
+.list-modal .modal-body{
+    max-height: 80vh;
+}

@@ -21,6 +21,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('emitAddNewMod')
+  emitAddNewMod = new EventEmitter<boolean>();
+
 
   showSizeMargin: boolean;
   counter: any;
@@ -48,12 +51,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   toggleOptimized() {
-    this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
       this.showSizeMargin = false;
     }
+    this.calculate();
   }
 
   checkOptimized() {
@@ -62,6 +65,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
         this.showSizeMargin = true;
       }
     }
+  }
+
+  addNewMod(){
+    this.emitAddNewMod.emit(true);
   }
 
 }

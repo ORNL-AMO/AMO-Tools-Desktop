@@ -1,0 +1,43 @@
+<div class="help-panel">
+    <div class="row m-0" *ngIf="!inSetup || stepTab == 'fan-field-data'" #resultTabs>
+        <ul class="tabs primary tab-row">
+            <li class="panel-tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
+                <a class="border-left-0" (click)="setTab('results')">Results</a>
+            </li><!--
+            --><li class="panel-tab-item" [ngClass]="{'active': tabSelect == 'help', 'tab-3': !inSetup, 'tab-2': inSetup}">
+                <a (click)="setTab('help')">Help</a>
+            </li><!--
+            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}" *ngIf="!inSetup">
+                <a (click)="setTab('notes')">Notes</a>
+            </li>
+        </ul>
+    </div>
+    <div class="scroll-item" [ngStyle]="{'height.px': helpHeight}">
+        <div *ngIf="inSetup && stepTab != 'fan-field-data'" class="header">
+            <h3>Help</h3>
+        </div>
+        <div class="pr-1 pl-2" *ngIf="tabSelect == 'help' || inSetup && stepTab != 'fan-field-data'">
+            <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+            <!-- <app-fan-curve-data-help *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data-help>
+      <app-operating-points-help *ngIf="stepTab == 'operating-points' || stepTab == 'rated-operating-points'"></app-operating-points-help> -->
+            <app-fan-field-data-help *ngIf="stepTab == 'fan-field-data'" [currentField]="currentField"></app-fan-field-data-help>
+            <app-fan-motor-help *ngIf="stepTab == 'fan-motor'" [currentField]="currentField"></app-fan-motor-help>
+            <app-fan-setup-help *ngIf="stepTab == 'fan-setup'" [currentField]="currentField"></app-fan-setup-help>
+            <app-fsat-fluid-help *ngIf="stepTab == 'fsat-fluid'" [currentField]="currentField"></app-fsat-fluid-help>
+            <!-- <app-fsat-basics-help *ngIf="stepTab == 'fsat-basics'" [currentField]="currentField"></app-fsat-basics-help> -->
+        </div>
+
+        <div *ngIf="tabSelect == 'notes' && !inSetup">
+            <div *ngIf="fsat" class="col-12 no-padding-left">
+                <app-modify-conditions-notes [(notes)]="fsat.notes" [currentTab]="stepTab" (emitSave)="save()"></app-modify-conditions-notes>
+            </div>
+            <div class="col-11 mx-auto pt-1" *ngIf="!fsat">
+                You must add a modification to take notes on it.
+            </div>
+        </div>
+
+        <div class="panel-results" *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && stepTab == 'fan-field-data'">
+            <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel>
+        </div>
+    </div>
+</div>

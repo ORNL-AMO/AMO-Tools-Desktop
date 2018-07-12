@@ -1,0 +1,92 @@
+<div class="help-content p-1">
+  <div class="help-header">
+    <h3>Estimate Outlet Pressure</h3>
+    <p>
+      This calculator is to estimate outlet pressure when outlet pressure cannot be directly measured, by estimating potential
+      pressure losses. Losses can be estimated using information from fan/accessory manufacturers or by consulting references
+      such as AMCA Publication 201 – Fans and Systems.
+    </p>
+  </div>
+  <br>
+  <div class="card" *ngIf="currentField == 'outletSystemEffectLoss'">
+    <div class="card-header">
+      Fan Outlet System Effect Equivalent loss
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Loss in pressure due to system effects. Duct turns at the outlet of the fan result in adverse aerodynamics, referred to as
+        system effects (causing non-uniform loading of fan impeller, swirling flow, inability to develop a uniform flow profile
+        on discharge). To minimize system effect loss, minimize the number of curves in the outlet ductwork.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletDamperLoss'">
+    <div class="card-header">
+      Outlet Damper Loss
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Pressure losses due to dampers at the outlet of the fan.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'airTreatmentLoss'">
+    <div class="card-header">
+      Air Treatment Loss
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Pressure loss due to air treatment at the outlet, usually for air quality.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'systemDamperLoss'">
+    <div class="card-header">
+      System Damper Loss
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Pressure losses due to dampers in the system downstream of the fan, such as a backdraft damper.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'processRequirements'">
+    <div class="card-header">
+      Process Requirements (Discharge Side)
+    </div>
+    <div class="card-block small">
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
+      <p>
+        Pressure losses due to system components downstream of the fan, such as hoods, louvers, diffusers.
+      </p>
+    </div>
+  </div>
+</div>

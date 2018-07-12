@@ -87,6 +87,16 @@
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.efficiency_class != psat.inputs.efficiency_class}">{{getEfficiencyClass(modification.psat.inputs.efficiency_class)}}</td>
       </tr>
 
+      <tr *ngIf="effClassSpecified">
+        <td [ngClass]="{'indicate-report-field-different': effClassDiff == true || specEffDiff == true}">Specified Efficiency</td>
+        <td [ngClass]="{'indicate-report-field-different': effClassDiff == true || specEffDiff == true}">
+          <span *ngIf="getEfficiencyClass(psat.inputs.efficiency_class) === 'Specified'">{{psat.inputs.efficiency}}</span>
+          <span *ngIf="getEfficiencyClass(psat.inputs.efficiency_class) !== 'Specified'">&mdash;</span></td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.efficiency != psat.inputs.efficiency}">
+          <span *ngIf="getEfficiencyClass(modification.psat.inputs.efficiency_class) === 'Specified'">{{modification.psat.inputs.efficiency}}</span>
+          <span *ngIf="getEfficiencyClass(modification.psat.inputs.efficiency_class) !== 'Specified'">&mdash;</span></td>
+      </tr>
+
       <tr>
         <td [ngClass]="{'indicate-report-field-different': motorVoltageDiff == true}">Voltage</td>
         <td [ngClass]="{'indicate-report-field-different': motorVoltageDiff == true}">{{psat.inputs.motor_rated_voltage}}</td>

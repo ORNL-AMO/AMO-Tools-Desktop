@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -37,6 +38,7 @@ export class ModifyConditionsComponent implements OnInit {
   isFirstChange: boolean = true;
   showNotes: boolean = false;
   isModalOpen: boolean = false;
+  modifyConditionsSub: Subscription;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -45,22 +47,18 @@ export class ModifyConditionsComponent implements OnInit {
       this.psatService.modifyConditionsTab.next(tmpTab);
     }
 
-    this.psatService.modifyConditionsTab.subscribe(val => {
+    this.modifyConditionsSub = this.psatService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
+  }
+
+  ngOnDestroy(){
+    this.modifyConditionsSub.unsubscribe();
   }
 
   save() {
     // this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
-  }
-
-
-  toggleDropdown() {
-    this.showNotes = false;
-  }
-  toggleNotes() {
-    this.showNotes = !this.showNotes;
   }
 
   togglePanel(bool: boolean) {
