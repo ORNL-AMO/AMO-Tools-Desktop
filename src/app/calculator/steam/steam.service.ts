@@ -36,6 +36,8 @@ export class SteamService {
         output.specificEntropy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
         output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
         output.specificEnthalpy = this.convertUnitsService.value(output.specificEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
+      }else{
+        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
       }
     }
   }
