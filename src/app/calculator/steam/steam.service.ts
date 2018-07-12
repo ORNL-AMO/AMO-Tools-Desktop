@@ -8,6 +8,9 @@ declare var steamAddon: any;
 @Injectable()
 export class SteamService {
 
+
+  constructor(private convertUnitsService: ConvertUnitsService) { }
+  
   convertSteamPropertiesQuantityValue(steamPropertiesInput: SteamPropertiesInput, settings: Settings, forInput: boolean, output?: SteamPropertiesOutput) {
     if (forInput === true) {
       if (steamPropertiesInput.thermodynamicQuantity === 0) { // convert temperature to kelvin
@@ -28,10 +31,10 @@ export class SteamService {
       } else if (steamPropertiesInput.thermodynamicQuantity === 1) { // convert specific Enthalpy
         output.specificEnthalpy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
         output.specificEntropy = this.convertUnitsService.value(output.specificEntropy).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
-        output.temperature = this.convertUnitsService.value(output.temperature).from('C').to(settings.steamTemperatureMeasurement);
+        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
       } else if (steamPropertiesInput.thermodynamicQuantity === 2) {
         output.specificEntropy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
-        output.temperature = this.convertUnitsService.value(output.temperature).from('C').to(settings.steamTemperatureMeasurement);
+        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
         output.specificEnthalpy = this.convertUnitsService.value(output.specificEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
       }
     }
@@ -82,7 +85,5 @@ export class SteamService {
       return dispUnit;
     }
   }
-
-  constructor(private convertUnitsService: ConvertUnitsService) { }
 
 }
