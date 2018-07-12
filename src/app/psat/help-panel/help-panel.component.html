@@ -37,7 +37,7 @@
     <div *ngIf="tabSelect == 'results' && !inSetup || tabSelect == 'results' && showResults">
         <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex"
             [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"
-            [inSetup]="inSetup">
+            [inSetup]="inSetup" [modificationName]="modificationName">
         </app-explore-opportunities-results>
     </div>
 </div>
