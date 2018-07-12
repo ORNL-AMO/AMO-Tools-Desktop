@@ -41,9 +41,39 @@ Tabs
   .tabs.primary .active a {
     background: #fff;
     font-weight: bold;
-    border-bottom: #fff solid 1px;
+    transition: all .1s ease-in-out;
   }
   
+  .psat .tabs.primary .active a {
+    border: none;
+    border-bottom: #2980b9 solid 3px;
+  }
+
+  .general .tabs.primary .active a {
+    border: none;
+    border-bottom: #145A32 groove 3px;
+  }
+
+
+  .phast .tabs.primary .active a {
+    border: none;
+    border-bottom: #BF3D00 solid 3px;
+  }
+
+
+  .fsat .tabs.primary .active a {
+    border: none;
+    border-bottom: #FFE400 solid 3px;
+  }
+
+  .steam .tabs.primary .active a {
+    border: none;
+    border-bottom: #2C3E50 groove 3px;
+  }
+
+
+
+
   .fixed-tab-size{
     min-width: 200px;
   }
@@ -75,9 +105,8 @@ Tabs
   }
   .tabs.subtabs .active a {
     font-weight: bold;
-    /* border-right: #BF3D00 solid 2px;
-    border-left: #BF3D00 solid 2px; */
     background: white;
+    transition: all .1s ease-in-out;
   }
   .tabs.subtabs.phast {
     border-bottom: #BF3D00 solid 3px;
@@ -88,7 +117,7 @@ Tabs
   }
 
   .tabs.subtabs.fsat {
-    border-bottom: #FFE400 solid 3px;
+   border-bottom: #FFE400 solid 3px; 
   }
   
     .tabs.subtabs.progress-tabs a {
@@ -102,6 +131,7 @@ Tabs
       }
     .tabs.subtabs.progress-tabs li.active a {
       color: #000;
+    transition: all .1s ease-in-out;
     }
     .tabs.subtabs.progress-tabs li.disabled a {
       color: #999;
@@ -153,6 +183,7 @@ Tabs
       .tabs.subtabs.fsat .active .step-number{
         background: #FFE400;
         color: black;
+    transition: all .1s ease-in-out;
       }
 
       .disabled .step-number {
@@ -181,54 +212,3 @@ Tabs
     .calculator-margin{
         margin-top: 10%;
     }
-
-
-
-  /* Vertical Tabs */
-  /* .tabs.vertical {
-    margin-right: -1px;
-  }
-  .tabs.vertical a {
-    display: block;
-    padding: 10px;
-    border-bottom: #eaeaea solid 1px;
-    border-left: #eaeaea solid 1px;
-    border-top: #fff solid 1px;
-    border-right: #ccc solid 1px;
-  }
-    .tabs.vertical li:first-of-type a {
-      border-top: #eaeaea solid 1px;
-    }
-  .tabs.vertical a:hover {
-    text-decoration: none;
-  }
-  .tabs.vertical .active a {
-    color: #333;
-    font-weight: bold;
-    background: #fff;
-    border-color: #bbb;
-    border-style: solid;
-    border-width: 1px 0 1px 1px;
-  }
-  
-  .tabs.horizontal a {
-    display: block;
-    padding-right: 10px;
-    padding-left: 10px;
-    border-bottom: #ccc solid 1px;
-    border-top: #fff solid 1px;
-    border-right: #ccc solid 1px;
-    border-left: #ccc solid 1px;
-  }
-  .tabs.horizontal a:hover {
-    text-decoration: none;
-  }
-  .tabs.horizontal .active a {
-    color: #333;
-    font-weight: bold;
-    background: #fff;
-    border-color: #bbb;
-    border-style: solid;
-    border-width: 0 1px;
-  }
-   */

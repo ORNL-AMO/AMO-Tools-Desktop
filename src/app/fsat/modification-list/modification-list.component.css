@@ -1,3 +1,12 @@
+
+.list-group-item.modification-item.active-item{
+    border-left: solid 8px #FFE400;
+    border-right: solid 8px #FFE400;
+    border-bottom: solid 2px #FFE400;
+    border-top: solid 2px #FFE400;
+    background-color: white;
+    font-weight: bold;
+}
 .list-group-item.modification-item{
     background-color: #EAECEE;
 }
@@ -80,7 +89,7 @@
 .dropdown-item:hover{
     cursor: pointer;
     background-color: #99A3A4;
-    border-color: #2980b9;
+    border-color: #FFE400;
 }
 
 .dropdown-menu{
