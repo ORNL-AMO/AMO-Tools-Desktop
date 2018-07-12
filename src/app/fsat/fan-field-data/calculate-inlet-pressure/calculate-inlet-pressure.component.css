@@ -1,0 +1,8 @@
+.form-section{
+    border-bottom: dashed 1px;
+    padding-bottom: .5rem;
+}
+
+.scroll-item{
+    overflow-x: hidden;
+}

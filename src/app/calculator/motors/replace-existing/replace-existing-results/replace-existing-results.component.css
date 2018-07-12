@@ -1,0 +1,29 @@
+table {
+    table-layout: fixed;
+}
+th {
+    white-space: nowrap;
+    text-align: center;
+    font-size: medium;
+}
+td{
+    font-size: small;
+    text-align: center;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    width: 50%;
+}
+
+td > span {
+    font-weight: bold;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+
+.group-label{
+    font-weight: bold;
+}

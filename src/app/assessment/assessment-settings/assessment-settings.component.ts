@@ -35,7 +35,7 @@ export class AssessmentSettingsComponent implements OnInit {
   showPsatSettings: boolean = false;
   showPhastSettings:boolean = false;
   showSteamSettings: boolean = false;
-
+  showFsatSettings: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -98,5 +98,9 @@ export class AssessmentSettingsComponent implements OnInit {
   }
   toggleSteamSettings(){
     this.showSteamSettings = !this.showSteamSettings;
+  }
+
+  toggleFsatSettings(){
+    this.showFsatSettings = !this.showFsatSettings;
   }
 }

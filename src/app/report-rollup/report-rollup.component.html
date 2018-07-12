@@ -1,3 +1,4 @@
+<!--PRINT-->
 <div class="report-cover" *ngIf="printView && assessmentsGathered && settings">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
@@ -9,17 +10,18 @@
 
     <p class="report-notes">{{reportNotes}}</p>
 </div>
+
 <div class="row sticky-top" id="reportHeader" *ngIf="printView && assessmentsGathered && settings">
     <div class="col-12">
         <div class="report-header hide-print">
             <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
-            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
-                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
+            <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" [numFsats]="numFsats" (showPhastModal)="showPhastModal()"
+                (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"></app-report-summary>
         </div>
     </div>
 </div>
-<!-- End .report-header -->
+<!--END PRINT-->
 
 <div *ngIf="assessmentsGathered && settings">
 
@@ -38,8 +40,8 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats" (showModal)="showModal()"
-                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numFsats]="numFsats" [numPsats]="numPsats" (showPhastModal)="showPhastModal()"
+                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"></app-report-summary>
             </div>
         </div>
     </div>
@@ -65,12 +67,20 @@
                         </span>
                     </a>
                 </li>
+                <li *ngFor="let item of _fsatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
+                    <a class="sb-item">
+                        <!-- <img class="icon-image" src="assets/images/ico-phast-diagram-small.png"> -->
+                        <span>
+                            {{item.assessment.name}}
+                        </span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- End .sidebar -->
 
 
-        <div class="assessment-padding d-flex flex-column scroll-item print-height" [ngStyle]="{'height.px': sidebarHeight}">
+        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100" [ngStyle]="{'height.px': sidebarHeight}">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
                 <div class="row print-break-before">
@@ -98,6 +108,18 @@
                         </app-phast-report>
                     </div>
                 </div>
+
+                <div class="row print-break-before">
+                    <div class="col-12">
+                        <!--fsat print-->
+                    </div>
+                </div>
+                <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
+                    <div class="col-12">
+                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment" [settings]="item.settings"
+                            [inRollup]="true"></app-fsat-report>
+                    </div>
+                </div>
             </div>
 
             <!-- app layout -->
@@ -112,6 +134,11 @@
                     <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment" [inRollup]="true"
                         [settings]="item.settings">
                     </app-phast-report>
+                </div>
+                <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+                    <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment" [inRollup]="true"
+                        [settings]="item.settings">
+                    </app-fsat-report>
                 </div>
             </div>
         </div>
@@ -169,13 +196,13 @@
 </div>
 
 <!--phast rollup modal-->
-<div bsModal #rollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog" aria-labelledby="rollupModal"
+<div bsModal #phastRollupModal="bs-modal" class="phast-modal modal fade phast" tabindex="-1" role="dialog" aria-labelledby="phastRollupModal"
     aria-hidden="true" [config]="{backdrop: 'fixed'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5>PHAST Rollup</h5>
-                <button class="close" aria-label="Close" (click)="hideModal()">
+                <button class="close" aria-label="Close" (click)="hidePhastModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -186,7 +213,23 @@
     </div>
 </div>
 
-
+<!--fsat rollup modal -->
+<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog" aria-labelledby="fsatRollupModal"
+    aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>FSAT Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hideFsatModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container fsat scroll-item">
+                <app-fsat-rollup [settings]="settings" [calculators]="selectedFsatCalcs"></app-fsat-rollup>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--units modal-->
 <div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal" aria-hidden="true"

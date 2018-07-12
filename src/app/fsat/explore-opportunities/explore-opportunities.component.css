@@ -1,0 +1,18 @@
+.explore-help-panel{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+p {
+	font-size: small;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 0px;
+    padding-top: .25rem;
+}
+
+
+.panel-column{
+	padding-left: 15px;
+}
+

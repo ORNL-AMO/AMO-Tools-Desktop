@@ -1,0 +1,66 @@
+ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+.pill-row{
+    height: 100%;
+}
+
+.btn-dashboard{
+    height: 100%;
+}
+
+.title h2{
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 14px;
+    margin-bottom: -14px;
+    color: rgba(255,255,255,.75);
+}
+
+.img-icon{
+    width: 50px;
+    padding-top: 6px;
+}
+
+.banner-name{
+    font-size: 20px;
+}
+
+
+.furnace-name{
+    font-weight: 400;
+    font-size: 16px;
+    color: rgba(255,255,255,.75);
+}
+
+.img-col{
+    padding-right: 0px;
+}
+
+.h2-name{
+    font-size: 20px;
+    padding-top: 6px;
+    font-weight: 300;
+    margin-bottom: 0px;
+}
+
+.navbar{
+    padding: 0px;
+}
+
+.pills-nav .disabled span {
+    color: #ABB2B9;
+}
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}
+
+.home-nav-item{
+    color: black;
+    border-color: black !important;
+}

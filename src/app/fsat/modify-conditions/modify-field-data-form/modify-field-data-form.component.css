@@ -1,0 +1,8 @@
+.fa-square-o:hover, .fa-check-square-o:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group.opt-group label{
+    width: 100%;
+}

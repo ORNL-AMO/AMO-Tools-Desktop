@@ -1,0 +1,115 @@
+<div class="row">
+  <div class="col-12">
+    <label class="group-label">
+      <span class="step-number" *ngIf="!inModal">3</span>
+      <span class="step-number" *ngIf="inModal">2</span>Input Plane Data
+
+      <span class="fa fa-exclamation-circle pull-right" *ngIf="!planeDataDone"></span>
+      <span class="fa fa-check pull-right" *ngIf="planeDataDone"></span>
+    </label>
+  </div>
+  <div class="col">
+    <img class="img-fluid mx-auto d-block" aria-describedby="fanDiagram" src="assets/images/fan-diagram-case-1.png">
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <nav class="hide-print text-center data-steps">
+      <ul class="tabs subtabs progress-tabs fsat">
+        <li [ngClass]="{'active': stepTab == 'plane-info'}">
+          <a (click)="changeStepTab('plane-info')">
+            <span class="step-number"><i class="fa fa-info"></i></span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == '1', 'step-error': !plane1Done}">
+          <a (click)="changeStepTab('1')">
+            <span class="step-number">1</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == '2', 'step-error': !plane2Done}">
+          <a (click)="changeStepTab('2')">
+            <span class="step-number">2</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == '3a', 'step-error': !plane3aDone}">
+          <a (click)="changeStepTab('3a')">
+            <span class="step-number">3a</span>
+          </a>
+        </li>
+        <li *ngIf="fanRatedInfo.traversePlanes > 1" [ngClass]="{'active': stepTab == '3b', 'step-error': !plane3bDone}">
+          <a (click)="changeStepTab('3b')">
+            <span class="step-number">3b</span>
+          </a>
+        </li>
+        <li *ngIf="fanRatedInfo.traversePlanes > 2" [ngClass]="{'active': stepTab == '3c', 'step-error': !plane3cDone}">
+          <a (click)="changeStepTab('3c')">
+            <span class="step-number">3c</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == '4', 'step-error': !plane4Done}">
+          <a (click)="changeStepTab('4')">
+            <span class="step-number">4</span>
+          </a>
+        </li>
+        <li [ngClass]="{'active': stepTab == '5', 'step-error': !plane5Done}">
+          <a (click)="changeStepTab('5')">
+            <span class="step-number">5</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div class="row">
+  <div class="col" *ngIf="!showReadings">
+    <!-- plane info -->
+    <app-plane-info *ngIf="stepTab == 'plane-info'" [planeData]="planeData" (emitSave)="savePlaneData($event)" [settings]="settings"></app-plane-info>
+    <!--1-->
+    <app-fan-data-form *ngIf="stepTab == '1'" [planeNum]="'1'" [planeDescription]="'Fan Inlet Flange'" [planeData]="planeData.FanInletFlange"
+      (emitSave)="savePlane($event, '1')" [settings]="settings"></app-fan-data-form>
+    <app-fan-data-form *ngIf="stepTab == '2'" [planeNum]="'2'" [planeDescription]="'Fan or Evase Outlet Flange'" [planeData]="planeData.FanEvaseOrOutletFlange"
+      (emitSave)="savePlane($event, '2')" [settings]="settings"></app-fan-data-form>
+    <!--3a-->
+    <app-fan-data-form *ngIf="stepTab == '3a'" [planeNum]="'3a'" [planeDescription]="'Additional Traverse Plane 1'" [planeData]="planeData.FlowTraverse"
+      (emitSave)="savePlane($event, '3a')" [velocityData]="velocityData" [settings]="settings"></app-fan-data-form>
+    <app-plane-3-form *ngIf="stepTab == '3a'" [planeData]="planeData.FlowTraverse" (emitSave)="savePlane($event, '3a')" (showReadingsForm)="toggleReadings()"></app-plane-3-form>
+    <!--3b-->
+    <app-fan-data-form *ngIf="stepTab == '3b'" [planeNum]="'3b'" [planeDescription]="'Additional Traverse Plane 2'" [planeData]="planeData.AddlTraversePlanes[0]"
+      (emitSave)="savePlane($event, '3b')" [velocityData]="velocityData" [settings]="settings"></app-fan-data-form>
+    <app-plane-3-form *ngIf="stepTab == '3b'" [planeData]="planeData.AddlTraversePlanes[0]" (emitSave)="saveTraversePlane($event, '3b')"
+      (showReadingsForm)="toggleReadings()"></app-plane-3-form>
+    <!--3c-->
+    <app-fan-data-form *ngIf="stepTab == '3c'" [planeNum]="'3c'" [planeDescription]="'Additional Traverse Plane 3'" [planeData]="planeData.AddlTraversePlanes[1]"
+      (emitSave)="saveTraversePlane($event, '3c')" [velocityData]="velocityData" [settings]="settings"></app-fan-data-form>
+    <app-plane-3-form *ngIf="stepTab == '3c'" [planeData]="planeData.AddlTraversePlanes[1]" (emitSave)="savePlane($event, '3b')"
+      (showReadingsForm)="toggleReadings()"></app-plane-3-form>
+    <!--3 velocity data-->
+    <!-- <div class="form-group" *ngIf="stepTab == '3a' || stepTab == '3b' || stepTab == '3c'">
+      <label for="pv3">Pv3</label>
+      <div class="area-val">
+        {{velocityData.pv3 | sigFigs: '6'}} in. wg
+      </div>
+    </div>
+    <div class="form-group" *ngIf="stepTab == '3a' || stepTab == '3b' || stepTab == '3c'">
+      <label for="percent75Rule">Area</label>
+      <div class="area-val">
+        {{velocityData.percent75Rule | sigFigs: '6'}} %
+      </div>
+    </div> -->
+
+    <!--4-->
+    <app-fan-data-form *ngIf="stepTab == '4'" [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'" [planeData]="planeData.InletMstPlane"
+      (emitSave)="savePlane($event, '4')" [settings]="settings"></app-fan-data-form>
+    <!--5-->
+    <app-fan-data-form *ngIf="stepTab == '5'" [planeNum]="'5'" [planeDescription]="'Outlet Measurement Plane'" [planeData]="planeData.OutletMstPlane"
+      (emitSave)="savePlane($event, '5')" [settings]="settings"></app-fan-data-form>
+  </div>
+  <div class="col" *ngIf="showReadings">
+    <app-pressure-readings-form *ngIf="stepTab == '3a'" [planeData]="planeData.FlowTraverse" (emitSave)="savePlane($event, '3a')"
+      (emitBack)="toggleReadings()"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3b'" [planeData]="planeData.AddlTraversePlanes[0]" (emitSave)="savePlane($event, '3b')"
+      (emitBack)="toggleReadings()"></app-pressure-readings-form>
+    <app-pressure-readings-form *ngIf="stepTab == '3c'" [planeData]="planeData.AddlTraversePlanes[1]" (emitSave)="savePlane($event, '3c')"
+      (emitBack)="toggleReadings()"></app-pressure-readings-form>
+  </div>
+</div>

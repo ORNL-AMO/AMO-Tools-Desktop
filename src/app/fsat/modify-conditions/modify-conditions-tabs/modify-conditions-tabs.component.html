@@ -1,0 +1,30 @@
+<ul class="tabs subtabs psat fsat">
+  <li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fsat-fluid'}">
+    <a class="nav-link small" (click)="changeModTab('fsat-fluid')">Fluid
+      <span (mouseenter)="showTooltip('fsatFluid')" (mouseleave)="hideTooltip('fsatFluid')" class="badge gray-badge" [ngClass]="fluidBadgeClass">
+      </span>
+    </a>
+    <app-modify-conditions-tabs-tooltip [display]="fluidBadgeHover" [reveal]="displayFluidTooltip" [badgeClass]="fluidBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-setup'}">
+    <a class="nav-link small" (click)="changeModTab('fan-setup')">Fan
+      <span (mouseenter)="showTooltip('fanSetup')" (mouseleave)="hideTooltip('fanSetup')" class="badge gray-badge" [ngClass]="fanSetupBadgeClass">
+      </span>
+    </a>
+    <app-modify-conditions-tabs-tooltip [display]="fanSetupBadgeHover" [reveal]="displayFanSetupTooltip" [badgeClass]="fanSetupBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-motor'}">
+    <a class="nav-link small" (click)="changeModTab('fan-motor')">Motor
+      <span (mouseenter)="showTooltip('fanMotor')" (mouseleave)="hideTooltip('fanMotor')" class="badge gray-badge" [ngClass]="fanMotorBadgeClass">
+      </span>
+    </a>
+    <app-modify-conditions-tabs-tooltip [display]="fanMotorBadgeHover" [reveal]="displayFanMotorTooltip" [badgeClass]="fanMotorBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyConditionsTab == 'fan-field-data'}">
+    <a class="nav-link small" (click)="changeModTab('fan-field-data')">Field Data
+      <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
+      </span>
+    </a>
+    <app-modify-conditions-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-modify-conditions-tabs-tooltip>
+  </li>
+</ul>

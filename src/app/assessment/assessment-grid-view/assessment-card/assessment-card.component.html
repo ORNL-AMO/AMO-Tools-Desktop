@@ -1,9 +1,12 @@
-<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <div class="d-flex align-items-center">
       <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram-small.png">
       <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram-small.png">
+      <span class="fan-block pl-1 pr-1" *ngIf="assessment.type == 'FSAT'">
+        <i class="fa fa-sun-o fa-spin"></i>
+      </span>
       <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
@@ -20,6 +23,7 @@
   <div class="card-body scroll-item summary-card-body">
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
     <app-phast-summary-card *ngIf="assessment.type == 'PHAST'" [assessment]="assessment"></app-phast-summary-card>
+    <app-fsat-summary-card *ngIf="assessment.type == 'FSAT'" [assessment]="assessment"></app-fsat-summary-card>
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>
@@ -89,7 +93,8 @@
             </select>
           </div>
           <div class="form-group">
-            <label><input type="checkbox" class="pr-2" formControlName="copyModifications">Include modifications?</label>
+            <label>
+              <input type="checkbox" class="pr-2" formControlName="copyModifications">Include modifications?</label>
           </div>
         </form>
       </div>
@@ -111,7 +116,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+        <p class="text-center small">Are you sure you want to delete this assessment? This
+          <span class="danger">cannot</span> be undone.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>
