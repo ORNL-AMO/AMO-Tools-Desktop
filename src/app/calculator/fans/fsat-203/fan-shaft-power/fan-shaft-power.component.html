@@ -7,8 +7,8 @@
   <div class="form-group">
     <label for="isMethodOne">Method for Establishing Fan Shaft Power</label>
     <select class="form-control" name="isMethodOne" formControlName="isMethodOne" id="isMethodOne" (change)="save()" (focus)="focusField('isMethodOne')">
-      <option [ngValue]="true">Know Motor Shaft Power</option>
-      <option [ngValue]="false">Calculate Motor Shaft Power</option>
+      <option [ngValue]="true">Know Motor Input Power</option>
+      <option [ngValue]="false">Calculate Motor Input Power</option>
     </select>
   </div>
   <!-- <div class="form-group">
@@ -80,7 +80,7 @@
   </div>
 
   <div class="form-group">
-    <label for="motorShaftPower">Motor Shaft Power (H<sub>i</sub>)
+    <label for="motorShaftPower">Motor Input Power (H<sub>i</sub>)
     </label>
     <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
       <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower" (input)="save()"
