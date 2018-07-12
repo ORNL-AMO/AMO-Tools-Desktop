@@ -34,16 +34,19 @@ export class ImportExportService {
     }
   }
 
-  downloadData(data: any) {
+  downloadData(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
     dlLink.setAttribute("href", dataStr);
-    const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    dlLink.setAttribute('download', 'ExportedData_' + dateStr + '.json');
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExportedData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.json');
     dlLink.click();
   }
 
