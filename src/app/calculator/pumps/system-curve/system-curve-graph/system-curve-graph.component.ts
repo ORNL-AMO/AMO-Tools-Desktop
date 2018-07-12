@@ -61,18 +61,12 @@ export class SystemCurveGraphComponent implements OnInit {
   displayExpandTooltip: boolean = false;
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
-<<<<<<< HEAD
-
-  isFirstChange: boolean = true;
-=======
->>>>>>> develop
 
   isFirstChange: boolean = true;
   expanded: boolean = false;
   constructor(private systemCurveService: SystemCurveService, private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    console.log('in system-curve-graph');
     if (!this.lossCoefficient) {
       this.lossCoefficient = 0;
     }
@@ -308,11 +302,7 @@ export class SystemCurveGraphComponent implements OnInit {
       if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value < 25000) {
         x.domain([0, this.pointOne.form.controls.flowRate.value * 1.2]);
       } else if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value > 25000) {
-<<<<<<< HEAD
         x.domain([0, this.pointOne.form.controls.flowRate.value * 1.2]);
-=======
-        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
->>>>>>> develop
       } else {
         x.domain([0, 50]);
       }
@@ -321,11 +311,7 @@ export class SystemCurveGraphComponent implements OnInit {
       if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value < 25000) {
         x.domain([0, this.pointTwo.form.controls.flowRate.value * 1.2]);
       } else if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value > 25000) {
-<<<<<<< HEAD
         x.domain([0, this.pointTwo.form.controls.flowRate.value * 1.2]);
-=======
-        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
->>>>>>> develop
       } else {
         x.domain([0, 50]);
       }
@@ -338,11 +324,7 @@ export class SystemCurveGraphComponent implements OnInit {
       if (domainVal > 50 && domainVal < 25000) {
         y.domain([0, domainVal * 1.2]);
       } else if (domainVal > 50 && domainVal > 25000) {
-<<<<<<< HEAD
         y.domain([0, domainVal * 1.2]);
-=======
-        y.domain([0, domainVal]);
->>>>>>> develop
       } else {
         y.domain([0, 50]);
       }
@@ -352,11 +334,7 @@ export class SystemCurveGraphComponent implements OnInit {
       if (domainVal > 50 && domainVal < 25000) {
         y.domain([0, domainVal * 1.2]);
       } else if (domainVal > 50 && domainVal > 25000) {
-<<<<<<< HEAD
         y.domain([0, domainVal * 1.2]);
-=======
-        y.domain([0, domainVal]);
->>>>>>> develop
       } else {
         y.domain([0, 50]);
       }
@@ -537,19 +515,11 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-<<<<<<< HEAD
-            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
-
-            "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
-
-            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
-=======
             "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + flowMeasurement + "</div><br>" +
 
             "<div style='float:left; position: relative; top: -10px;'>" + headOrPressure + ": </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + distanceMeasurement + "</div><br>" +
 
             "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")
->>>>>>> develop
 
           .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
           .style("top", (this.margin.top + y(d.y) + 26) + "px")
