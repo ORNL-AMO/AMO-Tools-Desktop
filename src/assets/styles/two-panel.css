@@ -3,7 +3,6 @@
 	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
 	background: #fff;
 	z-index: 2;
-	padding-left: 25px;
 }
 .panel-receiver {
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -15,17 +14,7 @@
 }
 
 .panel-container{
-	/* padding-bottom: 70px;
-	max-height: none !important;
-	min-height: 100vh;
-    height: auto !important;
-    height: 100%;*/
     min-height: 100%;
-}
-
-.tab-content{
-    /* height: 100%;
-    min-height: 100%; */
 }
 
 .form-card{
@@ -65,12 +54,16 @@
 	letter-spacing: 4px;
 }
 
-.psat .panel-tab-item.active{
-    border: none;
-    border-bottom: #2980b9 groove 2px;
+.panel-tab-item:hover{
+    cursor: pointer;
 }
 
-.phast .panel-tab-item.active{
+/* .psat .panel-tab-item.active{
+    border: none;
+    border-bottom: #2980b9 groove 2px;
+} */
+
+/* .phast .panel-tab-item.active{
     border: none;
     border-bottom: #BF3D00 groove 2px;
 }
@@ -82,20 +75,14 @@
 
 .fsat .panel-tab-item.active{
     border: none;
-    border-bottom: #FFE400 groove 2px;
-}
+    border-bottom: #FFE400 solid 3px;
+    transition: all .1s ease-in-out;
+} */
 
-.steam .panel-tab-item.active{
+/* .steam .panel-tab-item.active{
     border: none;
     border-bottom: #2C3E50 solid 2px;
-}
-
-
-
-.header h3{
-    margin-left: 5px;
-}
-
+} */
 
 .psat .header{
     border-bottom: #2980b9 groove 2px;

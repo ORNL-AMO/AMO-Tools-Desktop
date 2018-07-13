@@ -1,265 +1,186 @@
-<div class="help-header pb-1">
-
-  <h3>Enter measured data to calculate your system's annual savings potential.</h3>
-  <!-- <p class="text-muted">
-      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering motor data.
-    </p> -->
-
-</div>
-
-<div class="help-content pt-0">
-  <div class="card" *ngIf="currentField == 'lineFrequency'">
-    <div class="card-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Motor Help
+    <br>
+    <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'lineFrequency'">
+    <h6>
       Line Frequency
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
-        Line Frequency is the mains supply frequency. In North America, the standard frequency is 60 HZ. Elsewhere, 50 HZ is often
-        the standard.
-      </p>
-      <p>
-        The only use of this input is to determine the number of poles, based on the specified motor speed.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Options:
-        <strong>50 Hz</strong> or
-        <strong>60 Hz</strong>
-      </p>
-    </div>
+      <br>
+      <small class="text-muted">
+        Line Frequency is the mains supply frequency. In North America, the standard frequency is
+        <u>60 HZ</u>. Elsewhere,
+        <u>50 HZ</u> is often the standard.
+        <hr> The only use of this input is to determine the number of poles, based on the specified motor speed.
+      </small>
+    </h6>
   </div>
-
-  <div class="card" *ngIf="currentField == 'motorRatedPower'">
-    <div class="card-header">
-      Motor Power
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+  <div class="my-2" *ngIf="currentField == 'motorRatedPower'">
+    <h6>
+      Motor Rated Power
+      <br>
+      <small class="text-muted">
         Motor Power represents the rated power for the motor.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>hp, kW</strong>
-      </p>
-    </div>
+        <hr> Can be given in
+        <u>hp</u> or
+        <u>kW</u>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'motorRpm'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'motorRPM'">
+    <h6>
       Motor RPM
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Motor RPM is the nameplate speed of the motor.
-      </p>
-      <p>
-        This value is used with the line frequency to determine the number of motor poles. This, in turn, is used (along with motor
-        class and size) to estimate motor efficiency and output shaft power for the measured electrical power or current
-        conditions.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>RPM</strong>
-      </p>
-      <p>
-        <strong>Standard Efficient and Energy Efficient</strong>
-        <br> (60 Hz) Minimum Value Allowed:
-        <strong>540</strong>
-        <br> (60 Hz) Maximum Value Allowed:
-        <strong>3600</strong>
-        <br> (50 Hz) Minimum Value Allowed:
-        <strong>450</strong>
-        <br> (50 Hz) Maximum Value Allowed:
-        <strong>3000</strong>
-        <br>
-      </p>
-      <p>
-        <strong>Premium Efficient</strong>
-        <br> (60 Hz) Minimum Value Allowed:
-        <strong>1080</strong>
-        <br> (60 Hz) Maximum Value Allowed:
-        <strong>3600</strong>
-        <br> (50 Hz) Minimum Value Allowed:
-        <strong>900</strong>
-        <br> (50 Hz) Maximum Value Allowed:
-        <strong>3000</strong>
-        <br>
-      </p>
-      <p>
-        *Min/Max values determined by line frequency and efficiency class selection.
-      </p>
+        <hr>This value is used with the line frequency to determine the number of motor poles. This, in turn, is used (along
+        with motor class and size) to estimate motor efficiency and output shaft power for the measured electrical power
+        or current conditions.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <label class="group-label">Standard and Energy Efficienct Motors</label>
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Motor Size</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">60 Hz</td>
+            <td class="text-center">540</td>
+            <td class="text-center">3600</td>
+          </tr>
+          <tr>
+            <td class="text-center">50 Hz</td>
+            <td class="text-center">450</td>
+            <td class="text-center">3000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="w-100 justify-content-center">
+      <label class="group-label">Premium Efficient Motors</label>
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Motor Size</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">60 Hz</td>
+            <td class="text-center">1080</td>
+            <td class="text-center">3600</td>
+          </tr>
+          <tr>
+            <td class="text-center">50 Hz</td>
+            <td class="text-center">900</td>
+            <td class="text-center">3000</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-  <div class="card" *ngIf="currentField == 'efficiencyClass'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'efficiencyClass'">
+    <h6>
       Efficiency Class
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate or based on
         how the motor compares with the NEMA MG 1-2003.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <br>
-      <label>
-        Options: </label>
-      <ul style="list-style: none;">
-        <li>
-          <strong>Standard Efficency</strong>
-          <br> </li>
-        <li>
-          <strong>Energy Efficient</strong>
-          <br> </li>
-        <li>
-          <strong>Premium</strong>
-          <br> </li>
-        <li>
-          <strong>Specified</strong>
-          <br> </li>
-      </ul>
-    </div>
+        <hr> Options include
+        <u>Standard Efficiency</u>,
+        <u>Energy Efficient</u>,
+        <u>Premium</u>, and
+        <u>Specified</u>
+      </small>
+    </h6>
   </div>
-
-  <div class="card" *ngIf="currentField == 'specifiedEfficiency'">
-    <div class="card-header">
-      Efficency
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+  <div class="my-2" *ngIf="currentField == 'specifiedEfficiency'">
+    <h6>
+      Efficiency
+      <br>
+      <small class="text-muted">
         Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
         to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
         efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
         operating conditions. Enter this value as a percentage.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>1</strong>
-        <br> Maximum Value Allowed:
-        <strong>100</strong>
-        <br>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0</td>
+            <td class="w-50 text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-  <div class="card" *ngIf="currentField == 'motorRatedVoltage'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'motorVoltage'">
+    <h6>
       Rated Voltage
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         This voltage is the motor design (nameplate) voltage.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>Volts</strong>
-        <br> Minimum Value Allowed:
-        <strong>208</strong>
-        <br> Maximum Value Allowed:
-        <strong>15180</strong>
-        <br>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">208 V</td>
+            <td class="w-50 text-center">15180 V</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-  <div class="card" *ngIf="currentField == 'fullLoadAmps'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'fullLoadAmps'">
+    <h6>
       Full Load Amps
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Full Load Amps represent either the known or estimated amps. This value will be used as a normalizing value in the Field
         Data section if Current is the selected Load estimation method.
-      </p>
-      <p>
-        If the Full-Load Amps is not known, an estimate can be made by clicking the
-        <strong>"Estimate Full-Load Amps"
-        </strong> button. Note that the correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before
-        the button is pressed.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>amps</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>None</strong>
-        <br>
-      </p>
-      <!-- <p>
-        An expected range is determined by the provided motor rated power, speed, voltage and class.<br>
-        Expected Minimum Value: <strong>{{getFlaMin() | number:'2.2-2'}}</strong><br>
-        Expected Maximum Value: <strong>{{getFlaMax() | number:'2.2-2'}}</strong><br>
-      </p> -->
+        <hr> If the Full-Load Amps is not known, an estimate can be made by clicking the
+        <u>"Estimate Full-Load Amps"
+        </u> button. Note that the correct Rated Voltage, Rated Motor Power, and Motor RPM should be entered before the button
+        is pressed.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0</td>
+            <td class="w-50 text-center">&mdash; &mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
 </div>

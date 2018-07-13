@@ -1,0 +1,19 @@
+.help-info .hr-spacer{
+    border: groove 1px;
+    width: 100%;
+}
+
+
+.help-info td,.help-info th{
+    font-size: small;
+    padding: 3px;
+}
+
+.help-info td{
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+}
+
+.help-info tbody{
+    box-shadow: 0 4px 8px 0 grey
+}

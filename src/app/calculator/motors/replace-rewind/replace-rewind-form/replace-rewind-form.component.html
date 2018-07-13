@@ -1,0 +1,83 @@
+<form>
+  <div class="form-group">
+    <label for="efficiency">Operating Hours</label>
+    <div class="input-group calc-addon-group">
+      <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours" [(ngModel)]="inputs.operatingHours"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')">
+      <span class="units">hrs/yr</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Motor Size</label>
+    <div class="input-group calc-addon-group">
+      <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" [(ngModel)]="inputs.motorSize"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')">
+      <span class="units">hp</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Load</label>
+    <div class="input-group calc-addon-group">
+      <input name="load" type="number" min="0" step="1" class="form-control" id="load" [(ngModel)]="inputs.load"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('load')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Electricity Cost</label>
+    <div class="input-group calc-addon-group">
+      <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost" [(ngModel)]="inputs.electricityCost"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
+      <span class="units">$/kWh</span>
+    </div>
+  </div>
+  <label class="group-label">Rewound Motor</label>
+  <div class="form-group">
+    <label for="efficiency">Current Efficiency</label>
+    <div class="input-group calc-addon-group">
+      <input name="currentEfficiency" type="number" min="0" step="1" class="form-control" id="currentEfficiency" [(ngModel)]="inputs.currentEfficiency"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentEfficiency')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Rewind Efficiency Loss</label>
+    <div class="input-group calc-addon-group">
+      <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control" id="rewindEfficiencyLoss" [(ngModel)]="inputs.rewindEfficiencyLoss"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('rewindEfficiencyLoss')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Cost of Rewind</label>
+    <div class="input-group calc-addon-group">
+      <input name="costOfRewind" type="number" min="0" step="1" class="form-control" id="costOfRewind" [(ngModel)]="inputs.costOfRewind"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('costOfRewind')">
+      <span class="units">$</span>
+    </div>
+  </div>
+  <label class="group-label">New Motor</label>
+  <div class="form-group">
+    <label for="efficiency">Efficiency</label>
+    <div class="input-group calc-addon-group">
+      <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency" [(ngModel)]="inputs.newEfficiency"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('newEfficiency')">
+      <span class="units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="efficiency">Purchase Cost</label>
+    <div class="input-group calc-addon-group">
+      <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost" [(ngModel)]="inputs.purchaseCost"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('purchaseCost')">
+      <span class="units">$</span>
+    </div>
+  </div>
+  <!--<br>
+  <div class="form-group">
+    <label for="efficiency">Differential Cost</label>
+    <div class="text-center small">
+      <small><strong>{{inputs.differentialCost | currency:'USD':'1.0-0'}} </strong></small>
+    </div>
+  </div>-->
+</form>

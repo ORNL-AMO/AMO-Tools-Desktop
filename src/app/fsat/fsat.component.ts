@@ -344,6 +344,7 @@ export class FsatComponent implements OnInit {
     this.isModalOpen = false;
     this.fsatService.openModificationModal.next(false);
     this.changeModificationModal.hide();
+    this.fsatService.updateData.next(true);
   }
 
   getCanContinue() {
