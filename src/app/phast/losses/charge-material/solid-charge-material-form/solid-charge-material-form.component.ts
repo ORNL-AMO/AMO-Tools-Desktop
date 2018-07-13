@@ -152,7 +152,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       this.heatOfLiquidError = null;
     }
     if (this.chargeMaterialForm.controls.feedRate.value < 0) {
-      this.feedRateError = 'Charge Feed Rate must be grater than 0';
+      this.feedRateError = 'Charge Feed Rate must be greater than 0';
     } else {
       this.feedRateError = null;
     }

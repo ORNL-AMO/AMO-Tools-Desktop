@@ -38,18 +38,18 @@ export class SteamPropertiesFormComponent implements OnInit {
     },
     {
       'btuLb': {
-        min: 21.5, max: 1590.7, type: 'Specific Enthalpy', displayUnits: 'Btu/lb'
+        min: 21.5, max: 1590.7, type: 'Specific Enthalpy', displayUnits: 'btuLb'
       },
       'kJkg': {
-        min: 50, max: 3700, type: 'Specific Enthalpy', displayUnits: 'kJ/kg'
+        min: 50, max: 3700, type: 'Specific Enthalpy', displayUnits: 'kJkg'
       }
     },
     {
       'btulbF': {
-        min: 0, max: 1.557, type: 'Specific Entropy', displayUnits: 'Btu/lb-&#8457;'
+        min: 0, max: 1.557, type: 'Specific Entropy', displayUnits: 'btulbF'
       },
       'kJkgK': {
-        min: 0, max: 6.52, type: 'Specific Entropy', displayUnits: 'kJ/kg-K'
+        min: 0, max: 6.52, type: 'Specific Entropy', displayUnits: 'kJkgK'
       }
     },
     {
@@ -65,7 +65,7 @@ export class SteamPropertiesFormComponent implements OnInit {
       min: 1, max: 100000, displayUnits: 'kPa'
     },
     'bar': {
-      min: 0.01, max: 1000, displayUnits: 'Bar'
+      min: 0.01, max: 1000, displayUnits: 'bar'
     }
   };
 
@@ -77,10 +77,15 @@ export class SteamPropertiesFormComponent implements OnInit {
       pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
     };
     this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
+
   }
 
   getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
+    if (unit) {
+      return this.steamService.getDisplayUnit(unit);
+    } else {
+      return unit;
+    }
   }
 
   focusField(str: string) {
@@ -123,7 +128,6 @@ export class SteamPropertiesFormComponent implements OnInit {
       quantityObj = this.checkQuantity[input.thermodynamicQuantity];
     }
     this.quantityValueUnits = quantityObj.displayUnits;
-
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
       const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.steamPressureMeasurement;

@@ -35,13 +35,17 @@
       </li>
     </ul>
   </div>
-  <div class="row card-footer">
-    <div *ngIf="!canExport" class="col-12">
+  <div class="d-flex card-footer justify-content-between">
+    <div *ngIf="!canExport" class="w-100">
       <p class="text-center small danger">Too much data to export, please choose less data to export.</p>
     </div>
-    <div class="col-12">
-      <button class="btn btn-primary pull-right" [disabled]="!canExport" (click)="buildExportJSON()">Export as .json</button>
-      <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    <div class="d-flex">
+      <div class="form-group d-flex mr-2">
+        <label for="exportName"> Name your file:</label>
+        <input type="text" class="form-control" id="exportName" [(ngModel)]="name">
+      </div>
+      <button class="btn btn-primary ml-2" [disabled]="!canExport" (click)="buildExportJSON()">Export as .json</button>
     </div>
   </div>
 </div>
