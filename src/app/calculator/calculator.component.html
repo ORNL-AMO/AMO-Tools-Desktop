@@ -1,8 +1,8 @@
 <app-pumps [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'pumps'"></app-pumps>
 <app-furnaces [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
 <app-motors [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'motors'"></app-motors>
-<app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
-<app-steam *ngIf="selectedCalculator == 'steam'" [goCalcHome]="goCalcHome" [selectedTool]="selectedTool"></app-steam>
+<app-fans [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'fans'"></app-fans>
+<app-steam [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'steam'" ></app-steam>
 <app-compressed-air [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
 <app-utilities [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
@@ -259,7 +259,7 @@
       <h3>Steam</h3>
       <div class="row calc-item-row">
         <div class="col-1">
-          <img src="assets/images/steam-properties.png" class="ico-size3" (click)="showTool('steam','steam-properties'">
+          <img src="assets/images/steam-properties.png" class="ico-size3" (click)="showTool('steam','steam-properties')">
         </div>
         <div class="col-11">
           <a (click)="showTool('steam','steam-properties')">Steam Properties</a>
@@ -270,7 +270,7 @@
       </div>
       <div class="row calc-item-row">
         <div class="col-1">
-          <img src="assets/images/saturated-properties.png" class="ico-size3" (click)="showTool('steam','saturated-properties'">
+          <img src="assets/images/saturated-properties.png" class="ico-size3" (click)="showTool('steam','saturated-properties')">
         </div>
         <div class="col-11">
           <a (click)="showTool('steam','saturated-properties')">Saturated Properties</a>
