@@ -43,6 +43,8 @@ export class FanDataComponent implements OnInit {
   inModal: boolean;
   @Input()
   settings: Settings;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   stepTab: string = 'plane-info';
   showReadings: boolean = false;
@@ -102,5 +104,9 @@ export class FanDataComponent implements OnInit {
 
   savePlaneData(planeData: PlaneData) {
     this.emitSavePlaneData.emit(planeData);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
   }
 }

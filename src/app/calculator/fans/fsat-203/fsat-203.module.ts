@@ -14,6 +14,7 @@ import { Fsat203Service } from './fsat-203.service';
 import { Fsat203ResultsComponent } from './fsat-203-results/fsat-203-results.component';
 import { PlaneInfoComponent } from './fan-data/plane-info/plane-info.component';
 import { PlanarResultsComponent } from './planar-results/planar-results.component';
+import { OperatingPointsHelpComponent } from './operating-points-help/operating-points-help.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { PlanarResultsComponent } from './planar-results/planar-results.componen
     ReactiveFormsModule,
     SharedModule
   ],
-  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent],
+  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent, OperatingPointsHelpComponent],
   exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent],
   providers: [Fsat203Service]
 })

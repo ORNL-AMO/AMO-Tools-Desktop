@@ -14,6 +14,8 @@ export class Plane3FormComponent implements OnInit {
   showReadingsForm = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
@@ -46,7 +48,7 @@ export class Plane3FormComponent implements OnInit {
     this.save();
   }
 
-  focusField(){
-    
+  focusField(str: string){
+    this.emitChangeField.emit(str);
   }
 }

@@ -33,6 +33,7 @@ export class Fsat203Component implements OnInit {
 
   results: Fan203Results;
   planeResults: PlaneResults;
+  currentField: string;
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -59,7 +60,6 @@ export class Fsat203Component implements OnInit {
 
   calculate() {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
-      console.log('done calculate')
       this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
       this.results = this.fsatService.fan203(this.inputs, this.settings);
     } else {
@@ -263,24 +263,28 @@ export class Fsat203Component implements OnInit {
     this.formSelect = str;
   }
 
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
   getMockTraversePlane(): Plane {
     return {
       planeType: 'Rectangular',
-      width: 143.63,
-      length: 32.63,
-      area: 390.5539,
-      dryBulbTemp: 123,
+      width: undefined,
+      length: undefined,
+      area: undefined,
+      dryBulbTemp: undefined,
       barometricPressure: 29.92,
       numInletBoxes: 0,
-      staticPressure: -17.0,
-      pitotTubeCoefficient: 0.87292611371180784,
+      staticPressure: undefined,
+      pitotTubeCoefficient: 1,
       pitotTubeType: 'Standard',
       numTraverseHoles: 10,
       numInsertionPoints: 3,
       traverseData: [
-        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+        [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
+        [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
+        [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
       ]
     }
   }

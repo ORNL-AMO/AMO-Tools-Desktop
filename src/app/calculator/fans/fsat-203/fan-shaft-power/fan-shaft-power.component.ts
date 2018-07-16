@@ -20,6 +20,10 @@ export class FanShaftPowerComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<FanShaftPower>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
+
   shaftPowerForm: FormGroup;
 
 
@@ -94,8 +98,8 @@ export class FanShaftPowerComponent implements OnInit {
     this.emitSave.emit(this.fanShaftPower);
   }
 
-  focusField() {
-    //todo
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   estimateFla() {

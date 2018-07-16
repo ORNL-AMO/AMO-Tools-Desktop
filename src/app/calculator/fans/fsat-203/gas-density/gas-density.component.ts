@@ -20,7 +20,9 @@ export class GasDensityComponent implements OnInit {
   emitSave = new EventEmitter<BaseGasDensity>();
   @Input()
   settings: Settings;
-  
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
   gasDensityForm: FormGroup;
 
   methods: Array<{ display: string, value: string }> = [
@@ -44,8 +46,8 @@ export class GasDensityComponent implements OnInit {
     this.emitSave.emit(this.fanGasDensity);
   }
 
-  focusField() {
-
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   getDensity(){
