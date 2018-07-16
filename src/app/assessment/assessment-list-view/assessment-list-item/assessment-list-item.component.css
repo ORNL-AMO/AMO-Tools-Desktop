@@ -103,3 +103,13 @@ cursor: pointer;
 .modal-footer .btn{
 padding: 6px
 }
+
+
+.icon-image{
+  height: 18px;
+}
+
+
+.fsat .icon-image, .psat .icon-image{
+  height: 24px;
+}

@@ -675,7 +675,6 @@ Assessments: List View
     content: "";
   }
   .list-row .actions {
-    width: 50%;
     font-size: 14px;
     float: right;
     text-align: right;

@@ -1,22 +1,8 @@
-<!-- <span [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
-	<span *ngIf="assessment.type != 'FSAT'">
-		<img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
-		<img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png"> {{assessment.name}}
-	</span>
-	<span *ngIf="assessment.type == 'FSAT'">
-		<span class="fan-block">
-			<i class="fa fa-sun-o fa-spin"></i>
-		</span>
-		{{assessment.name}}</span>
-</span> -->
-
-<div class="d-flex" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
+<div class="d-flex" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT' }" (click)="goToAssessment(assessment)">
 	<span class="p-0 d-flex align-items-center">
 		<img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram.png">
 		<img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram.png">
-		<span class="fan-block" *ngIf="assessment.type == 'FSAT'">
-			<i class="fa fa-sun-o fa-spin"></i>
-		</span>
+		<img *ngIf="assessment.type == 'FSAT'" class="icon-image" src="assets/images/ico-fsat-diagram.png">
 	</span>
 	<span class="p-1">
 		<a class="click-link">{{assessment.name}}</a>
