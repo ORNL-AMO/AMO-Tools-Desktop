@@ -116,7 +116,7 @@ export class FsatSankeyComponent implements OnInit {
     let motorShaftPower: number, fanShaftPower: number;
     let resultType: string;
 
-    if (this.isBaseline || (this.fsat.name === undefined || this.fsat.name === null)) {
+    if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name == 'Baseline') {
       resultType = 'existing';
     }
     else {
