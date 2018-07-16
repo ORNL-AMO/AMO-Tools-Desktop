@@ -18,7 +18,13 @@ export class FlowPressuresFormComponent implements OnInit {
   emitCalculate = new EventEmitter<FSAT>();
   @Output('emitDataMissing')
   emitDataMissing = new EventEmitter<boolean>();
-
+  @Output('emitFormSelect')
+  emitFormSelect = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+  @Output('emitChangePlane')
+  emitChangePlane = new EventEmitter<string>();
+  
   formSelect: string = 'none';
   basicsDone: boolean;
   planeDataDone: boolean;
@@ -48,6 +54,15 @@ export class FlowPressuresFormComponent implements OnInit {
 
   goToForm(str: string) {
     this.formSelect = str;
+    this.emitFormSelect.emit(str);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
+
+  changePlane(str: string){
+    this.emitChangePlane.emit(str);
   }
 
   savePlaneData(data: PlaneData) {

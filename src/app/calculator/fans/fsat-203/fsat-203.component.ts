@@ -270,7 +270,6 @@ export class Fsat203Component implements OnInit {
 
   changePlane(str: string){
     this.currentPlane = str;
-    console.log(this.currentPlane);
   }
 
   getMockTraversePlane(): Plane {

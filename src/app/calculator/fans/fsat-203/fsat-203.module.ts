@@ -28,7 +28,7 @@ import { GasDensityHelpComponent } from './operating-points-help/gas-density-hel
     SharedModule
   ],
   declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent, OperatingPointsHelpComponent, FanDataHelpComponent, FanShaftPowerHelpComponent, FsatBasicsHelpComponent, GasDensityHelpComponent],
-  exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent],
+  exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent, OperatingPointsHelpComponent],
   providers: [Fsat203Service]
 })
 export class Fsat203Module { }

@@ -78,7 +78,6 @@ export class FanDataComponent implements OnInit {
     }
     this.stepTab = str;
     this.emitChangePlane.emit(str);
-    console.log('emit change : ' +  str);
   }
 
   toggleReadings() {
