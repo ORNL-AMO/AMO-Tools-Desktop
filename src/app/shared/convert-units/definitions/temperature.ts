@@ -30,8 +30,9 @@ export const temperature = {
         },
         R: {
           name: {
-            singular: 'degree Rankine'
-            , plural: 'degrees Rankine'
+            singular: 'Degree Rankine'
+            , plural: 'Degrees Rankine',
+            display:  '(&#176;R)'
           }
           , to_anchor: 1
           , anchor_shift: 459.67
