@@ -32,6 +32,11 @@ export class FlowPressuresFormComponent implements OnInit {
   constructor(private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
+    this.checkAll();
+    this.calculate();
+  }
+
+  checkAll() {
     this.checkPlane('1');
     this.checkPlane('2');
     this.checkPlane('3a');
@@ -77,6 +82,8 @@ export class FlowPressuresFormComponent implements OnInit {
     } else if (event.planeNumber == '5') {
       this.fsat.fieldData.planeData.OutletMstPlane = event.plane;
       this.checkPlane('5');
+    } else if (event.planeNumber == '3b' || event.planeNumber == '3c') {
+      this.saveAddlTraversePlane(event);
     }
     this.calculate();
   }
@@ -95,7 +102,7 @@ export class FlowPressuresFormComponent implements OnInit {
   calculate() {
     if (this.basicsDone && this.planeDataDone) {
       this.emitCalculate.emit(this.fsat);
-    }else{
+    } else {
       this.emitDataMissing.emit(true);
     }
   }

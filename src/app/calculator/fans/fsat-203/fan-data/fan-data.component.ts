@@ -4,6 +4,8 @@ import { FanRatedInfo, Fan203Inputs, PlaneData, Plane } from '../../../../shared
 import * as _ from 'lodash';
 import { FsatService } from '../../../../fsat/fsat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { Fsat203Service } from '../fsat-203.service';
+import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 
 @Component({
   selector: 'app-fan-data',
@@ -41,11 +43,11 @@ export class FanDataComponent implements OnInit {
   inModal: boolean;
   @Input()
   settings: Settings;
-  
+
   stepTab: string = 'plane-info';
   showReadings: boolean = false;
   velocityData: { pv3: number, percent75Rule: number };
-  constructor(private fsatService: FsatService) { }
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
     this.velocityData = {
@@ -85,7 +87,12 @@ export class FanDataComponent implements OnInit {
   }
 
   calcVelocityData(plane: Plane) {
-    this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
+    let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane);
+    if (formObj.status == 'VALID') {
+      this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
+    } else {
+      this.velocityData = { pv3: 0, percent75Rule: 0 }
+    }
   }
 
   saveTraversePlane(plane: Plane, str: string) {

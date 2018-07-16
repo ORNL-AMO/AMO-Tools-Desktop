@@ -9,7 +9,9 @@
     </label>
   </div>
   <div class="col">
-    <img class="img-fluid mx-auto d-block" aria-describedby="fanDiagram" src="assets/images/fan-diagram-case-1.png">
+    <img *ngIf="fanRatedInfo.includesEvase == 'No'" class="img-fluid mx-auto d-block" aria-describedby="fanDiagram" src="assets/images/fan-diagram-case-1.png">
+    <img *ngIf="fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Upstream'" class="img-fluid mx-auto d-block" aria-describedby="fanDiagram" src="assets/images/fan-diagram-case-2.png">
+    <img *ngIf="fanRatedInfo.includesEvase == 'Yes' && fanRatedInfo.upDownStream == 'Downstream'" class="img-fluid mx-auto d-block" aria-describedby="fanDiagram" src="assets/images/fan-diagram-case-3.png">
   </div>
 </div>
 <div class="row">

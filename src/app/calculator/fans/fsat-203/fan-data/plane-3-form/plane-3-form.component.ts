@@ -25,6 +25,7 @@ export class Plane3FormComponent implements OnInit {
 
   save() {
     this.planeData = this.fsat203Service.getTraversePlaneObjFromForm(this.pitotDataForm, this.planeData);
+    console.log('save from form')
     this.emitSave.emit(this.planeData);
   }
 

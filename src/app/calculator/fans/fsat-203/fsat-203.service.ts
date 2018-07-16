@@ -10,15 +10,15 @@ export class Fsat203Service {
 
   getBasicsFormFromObject(obj: FanRatedInfo): FormGroup {
     let form = this.formBuilder.group({
-      fanSpeed: [obj.fanSpeed, Validators.required],
-      motorSpeed: [obj.motorSpeed, Validators.required],
-      fanSpeedCorrected: [obj.fanSpeedCorrected, Validators.required],
+      fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0), Validators.max(5000)]],
+      motorSpeed: [obj.motorSpeed, [Validators.required, Validators.min(0), Validators.max(3600)]],
+      fanSpeedCorrected: [obj.fanSpeedCorrected, [Validators.min(0), Validators.max(5000)]],
       densityCorrected: [obj.densityCorrected, Validators.required],
-      pressureBarometricCorrected: [obj.pressureBarometricCorrected, Validators.required],
+      pressureBarometricCorrected: [obj.pressureBarometricCorrected, [Validators.required, Validators.min(10), Validators.max(60)]],
       includesEvase: [obj.includesEvase, Validators.required],
       upDownStream: [obj.upDownStream, Validators.required],
       traversePlanes: [obj.traversePlanes, Validators.required],
-      globalBarometricPressure: [obj.globalBarometricPressure, Validators.required]
+      globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
     })
     return form;
@@ -47,14 +47,14 @@ export class Fsat203Service {
       gasType: [obj.gasType, Validators.required],
       // humidityData: ['Yes', Validators.required],
       conditionLocation: [obj.conditionLocation, Validators.required],
-      dryBulbTemp: [obj.dryBulbTemp, Validators.required],
-      staticPressure: [obj.staticPressure, Validators.required],
-      barometricPressure: [obj.barometricPressure, Validators.required],
-      specificGravity: [obj.specificGravity, Validators.required],
-      wetBulbTemp: [obj.wetBulbTemp, Validators.required],
-      relativeHumidity: [obj.relativeHumidity, Validators.required],
-      dewPoint: [obj.dewPoint, Validators.required],
-      gasDensity: [obj.gasDensity, Validators.required],
+      dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(-100), Validators.max(1000)]],
+      staticPressure: [obj.staticPressure, [Validators.required, Validators.min(-400), Validators.max(400)]],
+      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]],
+      specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0), Validators.max(2)]],
+      wetBulbTemp: [obj.wetBulbTemp, [Validators.required, Validators.min(32), Validators.max(1000)]],
+      relativeHumidity: [obj.relativeHumidity, [Validators.required, Validators.min(0), Validators.max(100)]],
+      dewPoint: [obj.dewPoint, [Validators.required, Validators.min(-30), Validators.max(1000)]],
+      gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(.2)]],
       specificHeatGas: [obj.specificHeatGas]
     })
     return form;
@@ -82,7 +82,7 @@ export class Fsat203Service {
 
   getTraversePlaneFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      pitotTubeType: [obj.pitotTubeType, Validators.required],
+      pitotTubeType: [obj.pitotTubeType, [Validators.required, Validators.max(1)]],
       pitotTubeCoefficient: [obj.pitotTubeCoefficient, Validators.required],
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
@@ -101,12 +101,12 @@ export class Fsat203Service {
   getPlaneFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       planeType: [obj.planeType, Validators.required],
-      length: [obj.length, Validators.required],
-      width: [obj.width, Validators.required],
-      area: [obj.area, Validators.required],
-      staticPressure: [obj.staticPressure],
-      dryBulbTemp: [obj.dryBulbTemp],
-      barometricPressure: [obj.barometricPressure],
+      length: [obj.length, [Validators.required, Validators.min(0)]],
+      width: [obj.width, [Validators.required, Validators.min(0)]],
+      area: [obj.area, [Validators.required, Validators.min(0)]],
+      staticPressure: [obj.staticPressure, [Validators.min(-400), Validators.max(400)]],
+      dryBulbTemp: [obj.dryBulbTemp, [Validators.min(-100), Validators.max(1000)]],
+      barometricPressure: [obj.barometricPressure, [Validators.min(10), Validators.max(60)]],
       numInletBoxes: [obj.numInletBoxes]
     })
     return form;
@@ -130,18 +130,18 @@ export class Fsat203Service {
       mainsDataAvailable: [obj.mainsDataAvailable, Validators.required],
       ratedHP: [obj.ratedHP, Validators.required],
       synchronousSpeed: [obj.synchronousSpeed, Validators.required],
-      powerFactorAtLoad: [obj.powerFactorAtLoad, Validators.required],
-      npv: [obj.npv, Validators.required],
+      powerFactorAtLoad: [obj.powerFactorAtLoad, [Validators.required, Validators.min(0), Validators.max(1)]],
+      npv: [obj.npv, [Validators.required, Validators.min(0), Validators.max(20000)]],
       fla: [obj.fla, Validators.required],
       motorShaftPower: [obj.motorShaftPower, Validators.required],
-      phase1Voltage: [obj.phase1.voltage],
-      phase1Amps: [obj.phase1.amps],
-      phase2Voltage: [obj.phase2.voltage],
-      phase2Amps: [obj.phase2.amps],
-      phase3Voltage: [obj.phase3.voltage],
-      phase3Amps: [obj.phase3.amps],
+      phase1Voltage: [obj.phase1.voltage, Validators.min(0)],
+      phase1Amps: [obj.phase1.amps, Validators.min(0)],
+      phase2Voltage: [obj.phase2.voltage, Validators.min(0)],
+      phase2Amps: [obj.phase2.amps, Validators.min(0)],
+      phase3Voltage: [obj.phase3.voltage, Validators.min(0)],
+      phase3Amps: [obj.phase3.amps, Validators.min(0)],
       efficiencyMotor: [obj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100)]],
-      efficiencyVFD: [obj.efficiencyVFD, [Validators.required, Validators.min(0), Validators.max(100)]],
+      efficiencyVFD: [obj.efficiencyVFD, [Validators.min(0), Validators.max(100)]],
       efficiencyBelt: [obj.efficiencyBelt, [Validators.required, Validators.min(0), Validators.max(100)]],
       driveType: [obj.driveType],
       efficiencyClass: [obj.efficiencyClass],
@@ -187,8 +187,8 @@ export class Fsat203Service {
       // variationInBarometricPressure: [obj.variationInBarometricPressure, Validators.required],
       // globalBarometricPressure: [obj.globalBarometricPressure, Validators.required],
       // estimate2and5TempFrom1: [obj.estimate2and5TempFrom1, Validators.required],
-      totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, Validators.required],
-      totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, Validators.required],
+      totalPressureLossBtwnPlanes1and4: [obj.totalPressureLossBtwnPlanes1and4, [Validators.required, Validators.min(0)]],
+      totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, [Validators.required, Validators.min(0)]],
       inletSEF: [obj.inletSEF, Validators.required],
       outletSEF: [obj.outletSEF, Validators.required]
     })
@@ -252,7 +252,7 @@ export class Fsat203Service {
           length: undefined,
           area: undefined,
           dryBulbTemp: undefined,
-          barometricPressure: undefined,
+          barometricPressure: 29.92,
           numInletBoxes: 0,
           staticPressure: undefined,
           pitotTubeCoefficient: 1,
@@ -272,7 +272,7 @@ export class Fsat203Service {
             length: undefined,
             area: undefined,
             dryBulbTemp: undefined,
-            barometricPressure: undefined,
+            barometricPressure: 29.92,
             numInletBoxes: 0,
             staticPressure: undefined,
             pitotTubeCoefficient: 1,
@@ -309,7 +309,7 @@ export class Fsat203Service {
       BaseGasDensity: {
         dryBulbTemp: undefined,
         staticPressure: undefined,
-        barometricPressure: undefined,
+        barometricPressure: 29.92,
         gasDensity: undefined,
         gasType: 'AIR',
         //Mark Additions

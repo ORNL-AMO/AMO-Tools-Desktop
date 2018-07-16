@@ -41,7 +41,6 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.fsat.fieldData.fanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
     this.fsat.fieldData.fanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
     this.fsat.fieldData.fanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;
-    this.calculate(this.fsat);
   }
 
 
