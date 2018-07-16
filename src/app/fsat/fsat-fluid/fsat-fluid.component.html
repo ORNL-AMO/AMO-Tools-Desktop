@@ -39,6 +39,7 @@
           (focus)="focusField('dryBulbTemp')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.temperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.temperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.temperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
@@ -65,6 +66,7 @@
           (focus)="focusField('wetBulbTemp')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.temperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.temperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.temperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
       </div>
     </div>
     <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
@@ -93,6 +95,7 @@
           (focus)="focusField('dewPoint')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.temperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.temperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.temperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
       </div>
     </div>
     <div class="form-group">

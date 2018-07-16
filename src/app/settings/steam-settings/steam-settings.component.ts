@@ -48,8 +48,8 @@ export class SteamSettingsComponent implements OnInit {
     //temperatureMeasurements
     tmpList = [
       'C',
-      'F'
-      // 'K'
+      'F',
+      'K'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {

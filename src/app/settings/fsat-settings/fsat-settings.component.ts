@@ -39,8 +39,8 @@ export class FsatSettingsComponent implements OnInit {
   ];
   tempOptions: Array<string> = [
     'C',
-    'F'
-    // 'K'
+    'F',
+    'K'
   ];
 
   densityOptions: Array<string> = [
