@@ -8,6 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class OperatingPointsHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  formSelect: string;
+  @Input()
+  currentPlane: string;
   constructor() { }
 
   ngOnInit() {

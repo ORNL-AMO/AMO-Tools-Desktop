@@ -55,7 +55,8 @@
                         <app-fan-data *ngIf="formSelect == 'fan-data'" [planeData]="inputs.PlaneData" [fanRatedInfo]="inputs.FanRatedInfo" (emitSave)="savePlane($event)"
                             (emitSaveTraverse)="saveAddlTraversePlane($event)" [planeDataDone]="planeDataDone" [plane1Done]="plane1Done"
                             [plane2Done]="plane2Done" [plane3aDone]="plane3aDone" [plane3bDone]="plane3bDone" [plane3cDone]="plane3cDone"
-                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)" [settings]="settings"  (emitChangeField)="changeField($event)"></app-fan-data>
+                            [plane4Done]="plane4Done" [plane5Done]="plane5Done" (emitSavePlaneData)="savePlaneData($event)" [settings]="settings"  (emitChangeField)="changeField($event)"
+                            (emitChangePlane)="changePlane($event)"></app-fan-data>
                         <app-fan-shaft-power *ngIf="formSelect == 'fan-shaft-power' && settings" [fanShaftPower]="inputs.FanShaftPower" (emitSave)="saveShaftPower($event)"
                             [shaftPowerDone]="shaftPowerDone" [settings]="settings" (emitChangeField)="changeField($event)"></app-fan-shaft-power>
                     </div>
@@ -89,12 +90,8 @@
                             <app-fsat-203-results *ngIf="formSelect == 'fan-shaft-power'" [results]="results" [settings]="settings"></app-fsat-203-results>
                         </div>
                     </div>
-                    <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-                        <div class="col-11">
-                            <div class="calc-help">
-                                <app-operating-points-help [currentField]="currentField"></app-operating-points-help>
-                            </div>
-                        </div>
+                    <div class="d-flex h-100 w-100" *ngIf="tabSelect == 'help'">
+                        <app-operating-points-help [currentField]="currentField" [formSelect]="formSelect" [currentPlane]="currentPlane"></app-operating-points-help>
                     </div>
                 </div>
             </div>

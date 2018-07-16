@@ -45,6 +45,8 @@ export class FanDataComponent implements OnInit {
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Output('emitChangePlane')
+  emitChangePlane = new EventEmitter<string>();
 
   stepTab: string = 'plane-info';
   showReadings: boolean = false;
@@ -75,6 +77,8 @@ export class FanDataComponent implements OnInit {
       this.calcVelocityData(this.planeData.AddlTraversePlanes[1]);
     }
     this.stepTab = str;
+    this.emitChangePlane.emit(str);
+    console.log('emit change : ' +  str);
   }
 
   toggleReadings() {

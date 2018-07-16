@@ -34,6 +34,7 @@ export class Fsat203Component implements OnInit {
   results: Fan203Results;
   planeResults: PlaneResults;
   currentField: string;
+  currentPlane: string = 'plane-info';
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -265,6 +266,11 @@ export class Fsat203Component implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  changePlane(str: string){
+    this.currentPlane = str;
+    console.log(this.currentPlane);
   }
 
   getMockTraversePlane(): Plane {
