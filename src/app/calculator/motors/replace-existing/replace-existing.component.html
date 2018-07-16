@@ -1,0 +1,48 @@
+<div class="modify-conditions panel-container row general" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top  calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div #leftPanelHeader class="row header">
+          <div class="col-md-auto ico-col">
+            <!--need icon-->
+            <!-- <img src="assets/images/performance.png" class="ico-size4"> -->
+          </div>
+          <div class="col">
+            <h3>Replace Existing Motor - Efficiency Upgrade</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-replace-existing-form [(inputs)]="inputs" [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-replace-existing-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+              <app-replace-existing-results [results]="results"></app-replace-existing-results>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <div class="calc-help">
+                <app-replace-existing-help [currentField]="currentField"></app-replace-existing-help>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

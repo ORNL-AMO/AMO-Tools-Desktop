@@ -1,168 +1,103 @@
-<div class="help-header pb-1">
-
-  <h3>Enter measured data to calculate your system's annual savings potential.</h3>
-  <!-- <p class="text-muted">
-      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering pump/fluid data.
-    </p> -->
-
-</div>
-
-
-<div class="help-content pt-0">
-
-
-  <div class="card" *ngIf="currentField == 'fanType'">
-    <div class="card-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Fan Setup Help
+    <br>
+    <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'fanType'">
+    <h6>
       Fan Type
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Fan Type represents what style of fan is being used based off the listings in the AMCA 201 Standard. This value will be used
         to estimate achievable fan efficiencies based on fan style and operating conditions when automatically optimizing.
         The Specified Efficiency option allows the user to input a fan efficiency to use when optimizing, this does not affect
-        the efficiency calculated for the baseline. </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <br>
-      <label>
-        Options: </label>
-      <ul style="list-style: none;">
-        <li>
-          <strong>Airfoil (SISW)</strong>
-          <br> </li>
-        <li>
-          <strong>Backward Curved (SISW)</strong>
-          <br> </li>
-        <li>
-          <strong>Radial (SISW)</strong>
-          <br> </li>
-        <li>
-          <strong>Radial Tip (SISW)</strong>
-          <br> </li>
-        <li>
-          <strong>Backward Inclined (SISW)</strong>
-          <br> </li>
-        <li>
-          <strong>Airfoil (DIDW)</strong>
-          <br> </li>
-        <li>
-          <strong>Backward Inclined (DIDW)</strong>
-          <br> </li>
-        <li>
-          <strong>ICF Air handling</strong>
-          <br> </li>
-        <li>
-          <strong>ICF Material handling</strong>
-          <br> </li>
-        <li>
-          <strong>ICF Long shavings</strong>
-          <br> </li>
-      </ul>
+        the efficiency calculated for the baseline.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100">
+      <label class="group-label w-100">Fan Type Options</label>
+      <div class="d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">SISW</th>
+              <td class="text-center">Airfoil</td>
+              <td class="text-center">Backward Curved</td>
+              <td class="text-center">Radial</td>
+              <td class="text-center">Radial Tip</td>
+              <td class="text-center">Backward Inclined</td>
+            </tr>
+            <tr>
+              <th class="text-center">DIDW</th>
+              <td class="text-center">Airfoil</td>
+              <td class="text-center">Backward Inclined</td>
+              <td></td>
+              <td></td>
+              <td></td>
+
+            </tr>
+            <tr>
+              <th class="text-center">ICF</th>
+              <td class="text-center">Air Handling</td>
+              <td class="text-center">Material Handling</td>
+              <td class="text-center">Long Shavings</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-
-
-  <div class="card" *ngIf="currentField == 'fanSpeed'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'fanSpeed'">
+    <h6>
       Fan Speed
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Description: The operating or nameplate speed at which the fan is running at. Used along with the measure/required flow rate,
         head, and number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency
         penalty associated with the fan application, when using the optimization capability.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>RPM</strong>
-        <br> Minimum Value Allowed (Direct Drive):
-        <strong>540</strong>
-        <br> Maximum Value Allowed (Direct Drive):
-        <strong>3960</strong>
-        <br> Minimum Value Allowed (Belt Drives):
-        <strong>1</strong>
-        <br> Maximum Value Allowed (Belt Drives):
-        <strong>&mdash;</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Drive Type</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">Direct Drive</td>
+            <td class="text-center">540</td>
+            <td class="text-center">3960</td>
+          </tr>
+          <tr>
+            <td class="text-center">Belt Drives</td>
+            <td class="text-center">1</td>
+            <td class="text-center">&mdash; &mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'drive'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'drive'">
+    <h6>
       Drive
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven. There
         are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt drives
         are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient belts.
-      </p>
-      <p>
-        This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if adjustable
-        frequency drives are used.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Options:
-        <strong>Direct Drive, V-Belt Drive, Notched V-Belt</strong> or
-        <strong>Synchronous Drive</strong>
-      </p>
-    </div>
-  </div>
-
-
-  <!-- <div class="card" *ngIf="currentField == 'stages'">
-    <div class="card-header">
-      Stages
-    </div>
-    <div class="card-block small">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
-        The number of fans stages. This value is used to calculate fans specific speed.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-        <br> Maximum Value Allowed:
-        <strong>None</strong>
-        <br>
-      </p>
-    </div>
-  </div> -->
-</div>
+        <hr> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if
+        adjustable frequency drives are used.
+        <hr>
+        Options include: <u>Direct Drive</u>, <u>V-Belt Drive</u>, <u>Notched V-Belt</u>, or <u>Synchronous Drive</u>
+      </small>
+    </h6>

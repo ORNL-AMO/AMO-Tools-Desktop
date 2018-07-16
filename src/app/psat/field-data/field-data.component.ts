@@ -267,13 +267,8 @@ export class FieldDataComponent implements OnInit {
 
     if (this.psatForm.controls.horsePower.value && tmpVal) {
       let val, compare;
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psatForm.controls.horsePower.value).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = tmpVal;
-        compare = this.psatForm.controls.horsePower.value;
-      }
+      val = tmpVal;
+      compare = this.psatForm.controls.horsePower.value;
       compare = compare * 1.5;
       if (val > compare) {
         this.ratedPowerError = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';

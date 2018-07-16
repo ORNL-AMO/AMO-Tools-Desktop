@@ -334,18 +334,18 @@ export class SystemCurveGraphComponent implements OnInit {
 
     if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.flowRate.value) {
       if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value < 25000) {
-        x.domain([0, this.pointOne.form.controls.flowRate.value]);
+        x.domain([0, this.pointOne.form.controls.flowRate.value * 1.2]);
       } else if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value > 25000) {
-        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
+        x.domain([0, this.pointOne.form.controls.flowRate.value * 1.2]);
       } else {
         x.domain([0, 50]);
       }
     }
     else {
       if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value < 25000) {
-        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
+        x.domain([0, this.pointTwo.form.controls.flowRate.value * 1.2]);
       } else if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value > 25000) {
-        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
+        x.domain([0, this.pointTwo.form.controls.flowRate.value * 1.2]);
       } else {
         x.domain([0, 50]);
       }
@@ -356,9 +356,9 @@ export class SystemCurveGraphComponent implements OnInit {
     if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
       let domainVal = this.pointOne.form.controls.head.value + (this.pointOne.form.controls.head.value / 10);
       if (domainVal > 50 && domainVal < 25000) {
-        y.domain([0, domainVal]);
+        y.domain([0, domainVal * 1.2]);
       } else if (domainVal > 50 && domainVal > 25000) {
-        y.domain([0, domainVal]);
+        y.domain([0, domainVal * 1.2]);
       } else {
         y.domain([0, 50]);
       }
@@ -366,9 +366,9 @@ export class SystemCurveGraphComponent implements OnInit {
     else {
       let domainVal = this.pointTwo.form.controls.head.value + (this.pointTwo.form.controls.head.value / 10);
       if (domainVal > 50 && domainVal < 25000) {
-        y.domain([0, domainVal]);
+        y.domain([0, domainVal * 1.2]);
       } else if (domainVal > 50 && domainVal > 25000) {
-        y.domain([0, domainVal]);
+        y.domain([0, domainVal * 1.2]);
       } else {
         y.domain([0, 50]);
       }

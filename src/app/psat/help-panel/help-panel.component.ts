@@ -43,6 +43,7 @@ export class HelpPanelComponent implements OnInit {
   percentSavings: number;
   getResultsSub: Subscription;
   helpHeight: number;
+  modificationName: string;
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -106,6 +107,7 @@ export class HelpPanelComponent implements OnInit {
       this.baselineResults = this.psatService.emptyResults();
     }
     if (this.modification) {
+      this.modificationName = this.modification.psat.name;
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.modification.psat.inputs));
       tmpForm = this.psatService.getFormFromPsat(modInputs);
       if (tmpForm.status == 'VALID') {

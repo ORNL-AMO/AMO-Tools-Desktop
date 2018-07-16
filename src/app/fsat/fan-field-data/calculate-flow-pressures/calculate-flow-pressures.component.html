@@ -16,9 +16,9 @@
     </ul>
     <div class="d-flex flex-column justify-content-center data-row" *ngIf="tabSelect == 'results'">
       <div class="d-flex w-100 justify-content-center">
-        <div class="btn-group btn-group-sm">
-          <button type="button" class="btn btn-secondary btn-sm" (click)="setPressureCalcType('static')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'static'}">Use Static Pressure</button>
-          <button type="button" class="btn btn-secondary btn-sm" (click)="setPressureCalcType('total')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'total'}">Use Total Pressure</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'static'}">Use Static Pressure</button>
+          <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('total')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'total'}">Use Total Pressure</button>
         </div>
       </div>
       <div class="p-2">

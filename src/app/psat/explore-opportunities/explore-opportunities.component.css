@@ -1,11 +1,3 @@
-.explore-help-panel{
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
-.psat{
-	height: 100%;
-}
 
 p {
 	font-size: small;
@@ -13,9 +5,5 @@ p {
     font-style: italic;
     margin-bottom: 0px;
     padding-top: .25rem;
-}
-
-.panel-column{
-	padding-left: 15px;
 }
 

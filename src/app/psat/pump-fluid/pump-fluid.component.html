@@ -1,14 +1,11 @@
 <form [formGroup]="psatForm">
-  <div class="row">
-    <div *ngIf="inSetup" class="col-12">
-      <div class="header">
-        <h3>Pump &amp; Fluid</h3>
-      </div>
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Pump &amp; Fluid</h3>
     </div>
-
   </div>
 
-  <div class="setup-form-group">
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
       <label for="pumpType">Pump Type</label>
       <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="startSavePolling()" (focus)="focusField('pumpType')"
@@ -40,7 +37,7 @@
     <div class="form-group">
       <label for="drive">Drive</label>
       <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="startSavePolling()" (focus)="focusField('drive')"
-      [ngClass]="{'indicate-different': isDriveDifferent()}">
+        [ngClass]="{'indicate-different': isDriveDifferent()}">
         <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
       </select>
     </div>
