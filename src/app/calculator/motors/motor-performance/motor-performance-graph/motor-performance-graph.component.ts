@@ -5,6 +5,8 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+
 @Component({
   selector: 'app-motor-performance-graph',
   templateUrl: './motor-performance-graph.component.html',
@@ -46,6 +48,30 @@ export class MotorPerformanceGraphComponent implements OnInit {
   currentData: any;
   isGridToggled: boolean;
 
+  //dynamic table variables
+  dEfficiency: any;
+  dPower: any;
+  dCurrent: any;
+  focusDEfficiency: Array<any>;
+  focusDPower: Array<any>;
+  focusDCurrent: Array<any>;
+  curveChanged: boolean = false;
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>;
+  tablePointsEfficiency: Array<any>;
+  tablePointsPower: Array<any>;
+  tablePointsCurrent: Array<any>;
+  motorShaftLoad: number;
+  current: number;
+  powerFactor: number;
+  efficiency: number;
+  tempMotorPower: number;
+  tempRpm: number;
+  tempEfficiencyClass: string;
+  tempVoltage: number;
+  tempAmps: number;
+  tempLineFrequency: string;
+
   motorPerformanceResults: any = {
     efficiency: 0,
     motor_current: 0,
@@ -74,6 +100,20 @@ export class MotorPerformanceGraphComponent implements OnInit {
   constructor(private windowRefService: WindowRefService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>();
+    this.tablePointsEfficiency = new Array<any>();
+    this.tablePointsPower = new Array<any>();
+    this.tablePointsCurrent = new Array<any>();
+    this.focusDEfficiency = new Array<any>();
+    this.focusDPower = new Array<any>();
+    this.focusDCurrent = new Array<any>();
+    this.tempMotorPower = this.performanceForm.controls.horsePower.value;
+    this.tempEfficiencyClass = this.performanceForm.controls.efficiencyClass.value;
+    this.tempRpm = this.performanceForm.controls.motorRPM.value;
+    this.tempAmps = this.performanceForm.controls.fullLoadAmps.value;
+    this.tempVoltage = this.performanceForm.controls.motorVoltage.value;
+    this.tempLineFrequency = this.performanceForm.controls.frequency.value;
 
     this.isGridToggled = false;
 
@@ -304,6 +344,31 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   makeGraph() {
 
+    if (this.tempMotorPower != this.performanceForm.controls.horsePower.value) {
+      this.curveChanged = true;
+      this.tempMotorPower = this.performanceForm.controls.horsePower.value;
+    }
+    if (this.tempEfficiencyClass != this.performanceForm.controls.efficiencyClass.value) {
+      this.curveChanged = true;
+      this.tempEfficiencyClass = this.performanceForm.controls.efficiencyClass.value;
+    }
+    if (this.tempRpm != this.performanceForm.controls.motorRPM.value) {
+      this.curveChanged = true;
+      this.tempRpm = this.performanceForm.controls.motorRPM.value
+    }
+    if (this.tempAmps != this.performanceForm.controls.fullLoadAmps.value) {
+      this.curveChanged = true;
+      this.tempRpm = this.performanceForm.controls.fullLoadAmps.value;
+    }
+    if (this.tempVoltage != this.performanceForm.controls.motorVoltage.value) {
+      this.curveChanged = true;
+      this.tempVoltage = this.performanceForm.controls.motorVoltage.value;
+    }
+    if (this.tempLineFrequency != this.performanceForm.controls.frequency.value) {
+      this.curveChanged = true;
+      this.tempLineFrequency = this.performanceForm.controls.frequency.value;
+    }
+
     //Remove  all previous graphs
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
@@ -526,6 +591,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.drawPowerFactorLine(this.x, this.y, this.powerFactorData);
     this.drawEfficiencyLine(this.x, this.y, this.efficiencyData);
     this.initFocusCircles(this.powerFactorData, this.efficiencyData, this.currentData, this.x, this.y);
+    if (this.curveChanged) {
+      this.resetTableData();
+      this.curveChanged = false;
+    }
+    else {
+      this.replaceFocusPoints();
+    }
 
     d3.selectAll("line").style("pointer-events", "none");
 
@@ -663,15 +735,17 @@ export class MotorPerformanceGraphComponent implements OnInit {
         }
         let currentD0 = currentData[currentI - 1];
         let currentD1 = currentData[currentI];
-        let currentD = currentX0 - currentD0.x > currentD1.x - currentX0 ? currentD1 : currentD0;
-        this.focusCurrent.attr("transform", "translate(" + x(currentD.x) + "," + y(currentD.y) + ")");
+        this.dCurrent = currentX0 - currentD0.x > currentD1.x - currentX0 ? currentD1 : currentD0;
+        this.current = format(this.dCurrent.y);
+        this.focusCurrent.attr("transform", "translate(" + this.x(this.dCurrent.x) + "," + this.y(this.dCurrent.y) + ")");
 
         this.svg.select("#currentText").remove();
         this.svg.append("text")
           .attr("id", "currentText")
           .attr("x", 20)
           .attr("y", "20")
-          .text("Current: " + currentD.y + " % FLC")
+          .text("Current: " + this.dCurrent.y + " % FLC")
+          // .text("Current: " + currentD.y + " % FLC")
           .style("font-size", "13px")
           .style("font-weight", "bold")
           .style("fill", "#145A32");
@@ -686,6 +760,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
           let powerD0 = powerFactorData[powerI - 1];
           let powerD1 = powerFactorData[powerI];
           let powerD = powerX0 - powerD0.x > powerD1.x - powerX0 ? powerD1 : powerD0;
+          this.dPower = powerD;
+          this.powerFactor = format(this.dPower.y);
           this.focusPowerFactor.attr("transform", "translate(" + x(powerD.x) + "," + y(powerD.y) + ")");
 
           this.svg.select("#powerFactorText").remove();
@@ -711,6 +787,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
         let efficiencyD0 = efficiencyData[efficiencyI - 1];
         let efficiencyD1 = efficiencyData[efficiencyI];
         let efficiencyD = efficiencyX0 - efficiencyD0.x > efficiencyD1.x - efficiencyX0 ? efficiencyD1 : efficiencyD0;
+        this.dEfficiency = efficiencyD;
+        this.efficiency = format(this.dEfficiency.y);
         this.focusEfficiency.attr("transform", "translate(" + x(efficiencyD.x) + "," + y(efficiencyD.y) + ")");
 
         this.svg.select("#efficiencyText").remove();
@@ -725,6 +803,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("fill", "#A569BD");
 
         var percentFormat = d3.format(",.0%");
+        this.motorShaftLoad = percentFormat(efficiencyD.x);
 
         this.svg.append("text")
           .attr("id", "i")
@@ -756,7 +835,137 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("opacity", 0);
 
       });
+
   }
+
+
+  //dynamic table
+  buildTable() {
+    let i = this.tableData.length;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+    //current line
+    let tableFocusCurrent = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+    tableFocusCurrent.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePointCurrent-" + this.tablePointsCurrent.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+    this.focusDCurrent.push(this.dCurrent);
+    tableFocusCurrent.attr("transform", "translate(" + this.x(this.dCurrent.x) + "," + this.y(this.dCurrent.y) + ")");
+    this.tablePointsCurrent.push(tableFocusCurrent);
+
+    //Power Factor line
+    let tableFocusPower = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+    tableFocusPower.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePointsPower.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+    this.focusDPower.push(this.dPower);
+    tableFocusPower.attr("transform", "translate(" + this.x(this.dPower.x) + "," + this.y(this.dPower.y) + ")");
+    this.tablePointsPower.push(tableFocusPower);
+
+    //Efficiency line
+    let tableFocusEfficiency = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+    tableFocusEfficiency.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePointsEfficiency.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+    this.focusDEfficiency.push(this.dEfficiency);
+    tableFocusEfficiency.attr("transform", "translate(" + this.x(this.dEfficiency.x) + "," + this.y(this.dEfficiency.y) + ")");
+    this.tablePointsEfficiency.push(tableFocusEfficiency);
+
+    let dataPiece = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length],
+      motorShaftLoad: this.motorShaftLoad.toString(),
+      current: this.current.toString(),
+      powerFactor: this.powerFactor.toString(),
+      efficiency: this.efficiency.toString()
+    };
+    this.tableData.push(dataPiece);
+  }
+
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>();
+    this.tablePointsCurrent = new Array<any>();
+    this.tablePointsPower = new Array<any>();
+    this.tablePointsEfficiency = new Array<any>();
+    this.focusDCurrent = new Array<any>();
+    this.focusDPower = new Array<any>();
+    this.focusDEfficiency = new Array<any>();
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    for (let i = 0; i < this.tableData.length; i++) {
+
+      let tableFocusCurrent = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+      tableFocusCurrent.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePointCurrent-" + i)
+        .style("fill", this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+      tableFocusCurrent.attr("transform", "translate(" + this.x(this.focusDCurrent[i].x) + "," + this.y(this.focusDCurrent[i].y) + ")");
+
+      let tableFocusPower = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+      tableFocusPower.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePointPower-" + i)
+        .style("fill", this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+      tableFocusPower.attr("transform", "translate(" + this.x(this.focusDPower[i].x) + "," + this.y(this.focusDPower[i].y) + ")");
+
+      let tableFocusEfficiency = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+      tableFocusEfficiency.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePointEfficiency-" + i)
+        .style("fill", this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+      tableFocusEfficiency.attr("transform", "translate(" + this.x(this.focusDEfficiency[i].x) + "," + this.y(this.focusDEfficiency[i].y) + ")");
+    }
+  }
+
+
 
   toggleGrid() {
     if (this.isGridToggled) {

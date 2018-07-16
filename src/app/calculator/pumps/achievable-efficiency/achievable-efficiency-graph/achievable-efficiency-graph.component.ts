@@ -710,17 +710,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-
-    //dynamic table variables
-    // avgD: any;
-    // maxD: any;
-    // focusDMax: Array<any>;
-    // focusDAvg: Array<any>;
-    // tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>;
-    // tablePointsMax: Array<any>;
-    // tablePointsAvg: Array<any>;
-
-
     let i = this.tableData.length;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
