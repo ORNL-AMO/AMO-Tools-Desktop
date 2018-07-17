@@ -3,46 +3,44 @@
 
     <div class="col-3 hide-print savings-panel" *ngIf="!printView">
       <div class="form-group">
-        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat1">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" (change)="getFsat1Savings()" [(ngModel)]="fsat1">
           <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
         </select>
       </div>
-      <!-- <table class="table-savings">
+      <table class="table-savings">
         <tr>
           <td class="td-title">Cost Savings:</td>
           <td class="td-value" [ngClass]="{'negative-savings': fsat1CostSavings < 0, 'positive-savings': fsat1CostSavings > 0}">{{fsat1CostSavings | currency:'CAD':'symbol-narrow':'4.2-2'}}/yr</td>
         </tr>
-      </table> -->
+      </table>
     </div>
 
     <div class="col-9" [ngClass]="{'right-panel': !printView}">
       <app-fsat-sankey [fsat]="fsat1.fsat" [location]="'baseline'" [assessmentName]="assessmentName" [settings]="settings" [isBaseline]="true"></app-fsat-sankey>
-      <!-- <app-fsat-sankey [fsat]="fsat1.fsat" [location]="assessmentName + '-report-sankey'" [settings]="settings"></app-fsat-sankey> -->
     </div>
 
 
   </div>
 
-  <div class="row justify-content-center hide-print" *ngIf="modExists">
+  <div class="row justify-content-center hide-print" *ngIf="fsat.setupDone && modExists">
 
     <div class="col-3 hide-print savings-panel" *ngIf="!printView">
       <div class="form-group">
-        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" [(ngModel)]="fsat2">
+        <select name="fsatSelect" class="form-control mx-auto" id="fsatSelect" (change)="getFsat2Savings()" [(ngModel)]="fsat2">
           <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
         </select>
       </div>
-      <!-- <table class="table-savings">
+      <table class="table-savings">
         <tr>
           <td class="td-title">Cost Savings:</td>
           <td class="td-value" [ngClass]="{'negative-savings': fsat2CostSavings < 0, 'positive-savings': fsat2CostSavings > 0}">{{fsat2CostSavings | currency:'CAD':'symbol-narrow':'4.2-2'}}/yr</td>
         </tr>
-      </table> -->
+      </table>
     </div>
 
     <div class="col-9" [ngClass]="{'right-panel': !printView}">
       <app-fsat-sankey [fsat]="fsat2.fsat" [assessmentName]="assessmentName" [location]="'modification'" [settings]="settings"
         [isBaseline]="false"></app-fsat-sankey>
-      <!-- <app-fsat-sankey [fsat]="fsat2.fsat" [location]="assessmentName + '-modification-report-sankey'" [settings]="settings"></app-fsat-sankey> -->
     </div>
 
 

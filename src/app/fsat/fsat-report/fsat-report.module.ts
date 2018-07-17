@@ -11,6 +11,8 @@ import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
 import { FsatBarChartComponent } from './fsat-report-graphs/fsat-bar-chart/fsat-bar-chart.component';
+import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
+import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
 
 
 @NgModule({
@@ -18,9 +20,10 @@ import { FsatBarChartComponent } from './fsat-report-graphs/fsat-bar-chart/fsat-
     CommonModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FsatSankeyModule
   ],
-  declarations: [FsatReportComponent, FsatReportGraphsComponent, FsatBarChartComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent],
+  declarations: [FsatReportComponent, FsatReportGraphsComponent, FsatBarChartComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent],
   exports: [FsatReportComponent]
 })
 export class FsatReportModule { }
