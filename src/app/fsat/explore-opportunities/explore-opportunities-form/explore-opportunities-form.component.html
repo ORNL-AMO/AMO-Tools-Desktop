@@ -22,17 +22,17 @@
         <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"
         /> Size Margin
       </label>
-    </div>
-    <form *ngIf="showSizeMargin">
-      <div class="form-group">
-      </div>
-      <div class="form-group">
-        <div name="sizeMargin" class="input-group">
-          <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.sizeMargin"
-            (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-          <span class="input-group-addon units">%</span>
+      <form *ngIf="showSizeMargin">
+        <div class="form-group">
         </div>
-      </div>
-    </form>
+        <div class="form-group">
+          <div name="sizeMargin" class="input-group">
+            <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.sizeMargin"
+              (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

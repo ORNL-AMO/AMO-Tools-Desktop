@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { CompareService } from '../compare.service';
 import { FsatService } from '../fsat.service';
 import { FSAT } from '../../shared/models/fans';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -27,6 +27,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   emitSave = new EventEmitter<FSAT>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+  @Output('exploreOppsToast')
+  exploreOppsToast = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
@@ -38,7 +40,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   baselineSankey: FSAT;
   modificationSankey: FSAT;
 
-  constructor(private fsatService: FsatService) { }
+  constructor(private fsatService: FsatService,
+    private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+    this.toastyConfig.limit = 1;
+  }
 
   ngOnInit() {
     this.getSankeyData();
@@ -52,6 +60,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
     if (changes.modificationIndex) {
       this.getSankeyData();
+      this.checkToasty();
     }
   }
 
@@ -97,5 +106,24 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   addNewMod() {
     this.emitAddNewMod.emit(true);
+  }
+
+
+  checkToasty() {
+    if (this.modificationExists) {
+      if (!this.fsat.modifications[this.modificationIndex].exploreOpportunities) {
+        this.exploreOppsToast.emit(true);
+        let toastOptions: ToastOptions = {
+          title: 'Explore Opportunites',
+          msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
+          showClose: true,
+          timeout: 10000000,
+          theme: 'default'
+        }
+        this.toastyService.warning(toastOptions);
+      } else {
+        this.exploreOppsToast.emit(false);
+      }
+    }
   }
 }

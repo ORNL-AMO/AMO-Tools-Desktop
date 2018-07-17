@@ -52,6 +52,7 @@ import { MotorPerformanceModule } from '../calculator/motors/motor-performance/m
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
+import { ToastyModule } from '../../../node_modules/ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -72,7 +73,8 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     PumpCurveModule,
-    FanEfficiencyModule
+    FanEfficiencyModule,
+    ToastyModule
   ],
   declarations: [
     FsatComponent,
