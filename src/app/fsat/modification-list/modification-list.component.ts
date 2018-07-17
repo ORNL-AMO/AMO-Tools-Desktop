@@ -24,12 +24,20 @@ export class ModificationListComponent implements OnInit {
   dropdown: Array<boolean>;
   rename: Array<boolean>;
   deleteArr: Array<boolean>;
-  asssessmentTab: string;
+  assessmentTab: string;
   assessmentTabSubscription: Subscription;
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.initDropdown();
+    this.assessmentTabSubscription = this.fsatService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
+      console.log(this.assessmentTab);
+    })
+  }
+
+  ngOnDestroy(){
+    this.assessmentTabSubscription.unsubscribe();
   }
 
   initDropdown() {
@@ -131,11 +139,9 @@ export class ModificationListComponent implements OnInit {
           fanSetupNotes: '',
           fluidNotes: ''
         }
-      }
+      },
+      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
     }
-    // if (this.asssessmentTab == 'explore-opportunities') {
-    //   tmpModification.exploreOpportunities = true;
-    // }
     let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this.fsat)));
     tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
     tmpModification.fsat.fanMotor = fsatCopy.fanMotor;

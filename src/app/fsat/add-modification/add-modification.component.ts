@@ -38,6 +38,10 @@ export class AddModificationComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(){
+    this.assessmentTabSub.unsubscribe();
+  }
+
   addModification() {
     let tmpModification: Modification = {
       fsat: {
@@ -48,7 +52,8 @@ export class AddModificationComponent implements OnInit {
           fanSetupNotes: '',
           fluidNotes: ''
         }
-      }
+      },
+      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
     }
     let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this.fsat)));
     tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;

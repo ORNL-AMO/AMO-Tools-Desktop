@@ -25,7 +25,7 @@
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment" [settings]="settings"
       (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
-      (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
+      (emitAddNewMod)="addNewMod()" (exploreOppsToast)="setExploreOppsToast($event)"></app-explore-opportunities>
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment" [modificationIndex]="modificationIndex"
       [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
   </div>
@@ -131,3 +131,5 @@
     </div>
   </div>
 </div>
+
+<ng2-toasty class="disclaimer" [ngClass]="{'explore-opps':exploreOppsToast}"></ng2-toasty>
