@@ -63,6 +63,9 @@ export class FsatReportSankeyComponent implements OnInit {
     }
 
     let isMod;
+    let baseFsatResults: FsatOutput;
+    let fsat1Results: FsatOutput;
+    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
 
     if (this.fsat1.name == this.fsat.name) {
       isMod = false;
@@ -71,12 +74,14 @@ export class FsatReportSankeyComponent implements OnInit {
       isMod = true;
     }
 
-    let baseFsatResults: FsatOutput;
-    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
-    let fsat1Results: FsatOutput;
-
     if (isMod) {
-      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'modified', this.settings);
+      if (this.fsat1.fsat.fanMotor.optimize) {
+        console.log('fsat1 is optimal');
+        fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'optimal', this.settings);
+      }
+      else {
+        fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'modified', this.settings);
+      }
     }
     else {
       fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'existing', this.settings);
@@ -87,12 +92,15 @@ export class FsatReportSankeyComponent implements OnInit {
   }
 
   getFsat2Savings() {
-    
+
     if (!this.fsat2) {
       return;
     }
 
     let isMod;
+    let baseFsatResults: FsatOutput;
+    let fsat2Results: FsatOutput;
+    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
 
     if (this.fsat2.name == this.fsat.name) {
       isMod = false;
@@ -101,12 +109,14 @@ export class FsatReportSankeyComponent implements OnInit {
       isMod = true;
     }
 
-    let baseFsatResults: FsatOutput;
-    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
-    let fsat2Results: FsatOutput;
-
     if (isMod) {
-      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'modified', this.settings);
+      if (this.fsat2.fsat.fanMotor.optimize) {
+        console.log('fsat2 is optimal');
+        fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'optimal', this.settings);
+      }
+      else {
+        fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'modified', this.settings);
+      }
     }
     else {
       fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'existing', this.settings);
