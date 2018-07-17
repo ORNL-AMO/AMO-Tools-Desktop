@@ -63,7 +63,6 @@ export class FsatSankeyComponent implements OnInit {
 
   ngOnInit() {
     if (this.location != "sankey-diagram" && this.location != "explore-opportunities-sankey") {
-      // this.location = this.location + this.modIndex.toString();
       if (this.location == 'baseline') {
         this.location = this.assessmentName + '-baseline';
       }
@@ -74,6 +73,7 @@ export class FsatSankeyComponent implements OnInit {
       if (this.printView) {
         this.location = this.location + '-' + this.modIndex;
       }
+
       this.location = this.location.replace(/ /g, "");
       this.location = this.location.replace(/[\])}[{(]/g, '');
       this.location = this.location.replace(/#/g, "");
@@ -96,10 +96,12 @@ export class FsatSankeyComponent implements OnInit {
           else {
             this.location = this.assessmentName + '-modification';
           }
+
           this.location = this.location.replace(/ /g, "");
           this.location = this.location.replace(/[\])}[{(]/g, '');
           this.location = this.location.replace(/#/g, "");
         }
+
         this.getResults();
         this.sankey();
       }
@@ -116,18 +118,23 @@ export class FsatSankeyComponent implements OnInit {
     let motorShaftPower: number, fanShaftPower: number;
     let resultType: string;
 
-    if (this.isBaseline || (this.fsat.name === undefined || this.fsat.name === null)) {
+    if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name == 'Baseline') {
       resultType = 'existing';
     }
     else {
-      resultType = 'modified';
+      if (this.fsat.fanMotor.optimize) {
+        resultType = 'optimal';
+      }
+      else {
+        resultType = 'modified';
+      }
     }
+
     let tmpOutput = this.fsatService.getResults(this.fsat, resultType, this.settings);
 
     if (this.settings.fanPowerMeasurement === 'hp') {
       motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
-
       energyInput = tmpOutput.motorPower;
       motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
@@ -137,7 +144,6 @@ export class FsatSankeyComponent implements OnInit {
     else {
       motorShaftPower = tmpOutput.motorShaftPower;
       fanShaftPower = tmpOutput.fanShaftPower;
-
       energyInput = tmpOutput.motorPower;
       motorLoss = tmpOutput.motorPower - tmpOutput.motorShaftPower;
       driveLoss = tmpOutput.motorShaftPower - tmpOutput.fanShaftPower;

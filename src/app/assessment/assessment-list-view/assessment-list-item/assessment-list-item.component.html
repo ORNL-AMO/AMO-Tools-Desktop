@@ -1,40 +1,40 @@
-<div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
-  <!-- <div class="drag-handle">
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-  </div> -->
-  <div class="assessment-name">
-    <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
-    <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
-    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
-    <br>
-    <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
-    <!-- <div class="last-updated" *ngIf="!isSetup"><br>Asset not setup</div> -->
-
-  </div>
-  <div class="btn-group pull-right">
-    <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
-    </button>
-    <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-      <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
-      <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
-      <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+<div class="list-row d-flex w-100" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+  <div class="d-flex">
+    <div class="p-1">
+      <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
+    </div>
+    <div class="d-flex flex-column">
+      <div class="d-flex">
+        <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram.png">
+        <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
+        <img *ngIf="assessment.type == 'FSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
+        <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
+        <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
+      </div>
+      <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
     </div>
   </div>
-  <div class="actions pt-1" *ngIf="isSetup">
-    <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
-    <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
-    <a (click)="showReportModal()">Quick Report</a>
-    <a class="mr-0" (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
-
-  </div>
-  <div class="actions pt-1" *ngIf="!isSetup">
-    <div class="last-updated">Asset not setup</div>
+  <div class="d-flex flex-column flex-fill">
+    <div class="justify-content-end btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+      </button>
+      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+        <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+        <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+        <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+      </div>
+    </div>
+    <div class="actions pt-1 justify-content-end " *ngIf="isSetup">
+      <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
+      <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
+      <a (click)="showReportModal()">Quick Report</a>
+      <a class="mr-0" (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
+    </div>
+    <div class="actions pt-1 justify-content-end" *ngIf="!isSetup">
+      <div class="last-updated">Asset not setup</div>
+    </div>
   </div>
 </div>
-
-
 
 <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">

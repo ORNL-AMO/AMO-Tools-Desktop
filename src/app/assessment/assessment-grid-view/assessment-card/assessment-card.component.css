@@ -3,6 +3,10 @@
     height: 18px;
   }
 
+
+  .fsat .icon-image, .psat .icon-image{
+    height: 24px;
+  }
   .phast .summary-card-header{
     border-bottom: #BF3D00 groove 2px;
     border-image: linear-gradient(to right,#F0F3F4, #BF3D00) 50 / 2;

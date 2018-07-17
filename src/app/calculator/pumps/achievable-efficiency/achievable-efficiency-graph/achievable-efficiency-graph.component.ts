@@ -4,9 +4,15 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import * as d3 from 'd3';
+import { FormGroup } from '../../../../../../node_modules/@angular/forms';
+
+var tableFlowRate: number;
+var tableAverageEfficiency: number;
+var tableMaxEfficiency: number;
+
 @Component({
   selector: 'app-achievable-efficiency-graph',
   templateUrl: './achievable-efficiency-graph.component.html',
@@ -14,7 +20,7 @@ import * as d3 from 'd3';
 })
 export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
-  efficiencyForm: any;
+  efficiencyForm: FormGroup;
   @Input()
   toggleCalculate: boolean;
   @Input()
@@ -42,6 +48,24 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   pointer: any;
   focusAvg: any;
   focusMax: any;
+
+  //dynamic table variables
+  pumpType: any;
+  avgD: any;
+  maxD: any;
+  focusDMax: Array<any>;
+  focusDAvg: Array<any>;
+  curveChanged: boolean = false;
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>;
+  tablePointsMax: Array<any>;
+  tablePointsAvg: Array<any>;
+
+
+  tableFlowRate: string;
+  tableMaxEfficiency: string;
+  tableAverageEfficiency: string;
+
 
   avgPoint: any;
   maxPoint: any;
@@ -78,6 +102,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>();
+    this.tablePointsMax = new Array<any>();
+    this.tablePointsAvg = new Array<any>();
+    this.focusDMax = new Array<any>();
+    this.focusDAvg = new Array<any>();
+    this.pumpType = this.efficiencyForm.controls.pumpType.value;
+
     this.isGridToggled = false;
 
     d3.select('app-achievable-efficiency').selectAll('#gridToggleBtn')
@@ -99,7 +131,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
-// ========== export/gridline tooltip functions ==========
+  // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
@@ -202,20 +234,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       this.canvasWidth = curveGraph.clientWidth;
       this.canvasHeight = curveGraph.clientHeight * 0.9;
     }
-    
+
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
 
       //debug
       this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
-      
+
       //real version
       // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '11px';
 
       //debug
-      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };      
+      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
 
       //real version
       // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
@@ -266,6 +298,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   makeGraph() {
 
+    if (this.efficiencyForm.controls.pumpType.value != this.pumpType) {
+      this.curveChanged = true;
+      this.pumpType = this.efficiencyForm.controls.pumpType.value;
+    }
+
     //Remove  all previous graphs
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
     var curvePoints = [];
@@ -281,12 +318,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
-
-      //debug
       .attr("transform", "translate(" + (this.margin.left) + "," + this.margin.top + ")");
-      
-      //real version
-      // .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
     // filters go in defs element
     var defs = this.svg.append("defs");
@@ -378,10 +410,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
-      
-      //debug
-      .attr("class", "grid")    
-
+      .attr("class", "grid")
       .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
@@ -392,10 +421,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
-
-      //debug
       .attr("class", "grid")
-      
       .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", this.fontSize);
@@ -478,24 +504,17 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
-    //debug
     this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
       .attr("id", "tooltipPointer")
       .attr("class", "tooltip-pointer")
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
-    //debug
     const detailBoxWidth = 160;
     const detailBoxHeight = 120;
 
-    //real version
-    // const detailBoxWidth = 160;
-    // const detailBoxHeight = 120;
-
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
-      //.attr("points", "0,13, 14,13, 7,-2");
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0)
       .style('pointer-events', 'none');
@@ -544,7 +563,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
       .on("mouseover", () => {
-
         this.focusAvg
           .style("display", null)
           .style("opacity", 1)
@@ -559,15 +577,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
-
-        //debug
         this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
       })
       .on("mousemove", () => {
-
-        //debug
         this.focusAvg
           .style("display", null)
           .style("opacity", 1)
@@ -577,30 +591,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
-          // .style("display", null)
           .style('pointer-events', 'none');
         this.detailBox
-          // .style("display", null)
           .style('pointer-events', 'none');
         this.tooltipPointer
-          // .style("display", null)
           .style('pointer-events', 'none');
-
-        //real version
-        // this.focusAvg
-        //   .style("display", null)
-        //   .style("opacity", 1)
-        //   .style('pointer-events', 'none');
-        // this.focusMax
-        //   .style("display", null)
-        //   .style("opacity", 1)
-        //   .style('pointer-events', 'none');
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
-        // this.detailBox
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
 
         //maxpoint
         let maxX0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
@@ -610,8 +605,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         }
         let maxD0 = this.maxData[maxI - 1];
         let maxD1 = this.maxData[maxI];
-        let maxD = maxX0 - maxD0.x > maxD1.x - maxX0 ? maxD1 : maxD0;
-        this.focusMax.attr("transform", "translate(" + this.x(maxD.x) + "," + this.y(maxD.y) + ")");
+        this.maxD = maxX0 - maxD0.x > maxD1.x - maxX0 ? maxD1 : maxD0;
+        this.focusMax.attr("transform", "translate(" + this.x(this.maxD.x) + "," + this.y(this.maxD.y) + ")");
 
         //average point
         let avgX0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
@@ -621,12 +616,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         }
         let avgD0 = this.avgData[avgI - 1];
         let avgD1 = this.avgData[avgI];
-        let avgD = avgX0 - avgD0.x > avgD1.x - avgX0 ? avgD1 : avgD0;
-        this.focusAvg.attr("transform", "translate(" + this.x(avgD.x) + "," + this.y(avgD.y) + ")");
+        this.avgD = avgX0 - avgD0.x > avgD1.x - avgX0 ? avgD1 : avgD0;
+        this.focusAvg.attr("transform", "translate(" + this.x(this.avgD.x) + "," + this.y(this.avgD.y) + ")");
 
-        // this.pointer.transition()
-        //   .style("opacity", 1);
-        //debug
         this.tooltipPointer.transition()
           .style("opacity", 1);
 
@@ -638,25 +630,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         var tooltipPointerWidth = detailBoxWidth * 0.05;
         var tooltipPointerHeight = detailBoxHeight * 0.05;
 
-        //real version
-        // this.pointer
-        //   .attr("transform", 'translate(' + (this.x(avgD.x) - (detailBoxWidth / 2)) + ',' + (this.y(avgD.y) + 27) + ')')
-        //   .style("fill", "#ffffff")
-        //   .style("filter", "url(#drop-shadow)");
+        //dynamic table
+        tableFlowRate = format(this.maxD.flowRate);
+        tableMaxEfficiency = format(this.maxD.y);
+        tableAverageEfficiency = format(this.avgD.y);
 
-        //debug 
         this.detailBox
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-          "<div class='tooltip-pointer'></div><p><strong><div>Flow Rate: </div></strong><div>" + format(maxD.flowRate) + " " + this.settings.flowMeasurement + "</div>" +
-          "<strong><div>Maximum: </div></strong><div>" + format(maxD.y) + " %</div>" +
-          "<strong><div>Average: </div></strong><div>" + format(avgD.y) + " %</div></p>")
-
-          // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-          .style("left", Math.min(((this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
-          // .style("left", (this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-          .style("top", (this.margin.top + this.y(avgD.y) + 26) + "px")
+            "<div class='tooltip-pointer'></div><p><strong><div>Flow Rate: </div></strong><div>" + format(this.maxD.flowRate) + " " + this.settings.flowMeasurement + "</div>" +
+            "<strong><div>Maximum: </div></strong><div>" + format(this.maxD.y) + " %</div>" +
+            "<strong><div>Average: </div></strong><div>" + format(this.avgD.y) + " %</div></p>")
+          .style("left", Math.min(((this.margin.left + this.x(this.avgD.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
+          .style("top", (this.margin.top + this.y(this.avgD.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -671,8 +658,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.tooltipPointer
           .attr("class", "tooltip-pointer")
           .html("<div></div>")
-          .style("left", (this.margin.left + this.x(avgD.x)) + 5 + "px")
-          .style("top", (this.margin.top + this.y(avgD.y) + 16) + "px")
+          .style("left", (this.margin.left + this.x(this.avgD.x)) + 5 + "px")
+          .style("top", (this.margin.top + this.y(this.avgD.y) + 16) + "px")
           .style("position", "absolute")
           .style("width", "0px")
           .style("height", "0px")
@@ -708,7 +695,110 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("opacity", 0);
       });
 
+    //dynamic table
+    if (!this.curveChanged) {
+      this.replaceFocusPoints();
+    }
+    else {
+      this.resetTableData();
+    }
+    this.curveChanged = false;
+
     this.svg.selectAll("line").style("pointer-events", "none");
+  }
+
+
+  //dynamic table
+  buildTable() {
+    let i = this.tableData.length;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+    //max line
+    let tableFocusMax = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+    tableFocusMax.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePointsMax.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+    this.focusDMax.push(this.maxD);
+    tableFocusMax.attr("transform", "translate(" + this.x(this.maxD.x) + "," + this.y(this.maxD.y) + ")");
+    this.tablePointsMax.push(tableFocusMax);
+
+    //avg line
+    let tableFocusAvg = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+    tableFocusAvg.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePointsAvg.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+    this.focusDAvg.push(this.avgD);
+    tableFocusAvg.attr("transform", "translate(" + this.x(this.avgD.x) + "," + this.y(this.avgD.y) + ")");
+    this.tablePointsAvg.push(tableFocusAvg);
+
+    let dataPiece = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length],
+      flowRate: tableFlowRate.toString(),
+      averageEfficiency: tableAverageEfficiency.toString(),
+      maxEfficiency: tableMaxEfficiency.toString()
+    };
+    this.tableData.push(dataPiece);
+  }
+
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>();
+    this.tablePointsMax = new Array<any>();
+    this.tablePointsAvg = new Array<any>();
+    this.focusDMax = new Array<any>();
+    this.focusDAvg = new Array<any>();
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    for (let i = 0; i < this.tableData.length; i++) {
+
+      let tableFocusMax = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+      tableFocusMax.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePointMax-" + i)
+        .style("fill", this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+      tableFocusMax.attr("transform", "translate(" + this.x(this.focusDMax[i].x) + "," + this.y(this.focusDMax[i].y) + ")");
+
+
+      let tableFocusAvg = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+      tableFocusAvg.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePointAvg-" + i)
+        .style("fill", this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+      tableFocusAvg.attr("transform", "translate(" + this.x(this.focusDAvg[i].x) + "," + this.y(this.focusDAvg[i].y) + ")");
+    }
   }
 
   getAvgData() {
@@ -838,23 +928,23 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
-    //========= chart resize functions ==========
-    expandChart() {
-      this.expanded = true;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
-  
-    contractChart() {
-      this.expanded = false;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
-    }
-    //========== end chart resize functions ==========
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
 }

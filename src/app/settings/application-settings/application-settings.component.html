@@ -28,16 +28,19 @@
   <div class="form-group">
     <label>Units of Measure</label>
     <div class="input-group">
-      <div class="form-check">
-        <label class="form-check-label" style="display: block;">
-          <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial
-        </label>
-        <label class="form-check-label" style="display: block;">
-          <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric
-        </label>
-        <label class="form-check-label" *ngIf="inPsat" style="display: block;">
-          <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom
-        </label>
+      <div class="d-flex flex-column">
+        <div class="d-flex">
+          <label class="w-100" for="Imperial">
+            <input type="radio" name="unitsOfMeasure" id="Imperial" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial</label>
+        </div>
+        <div class="d-flex">
+          <label class="w-100" for="Imperial">
+            <input type="radio" name="unitsOfMeasure" id="Metric" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric</label>
+        </div>
+        <div class="d-flex" *ngIf="inPsat">
+          <label class="w-100" for="Imperial">
+            <input type="radio" name="unitsOfMeasure" id="Custom" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom</label>
+        </div>
       </div>
     </div>
   </div>
@@ -55,13 +58,15 @@
   <div class="form-group" *ngIf="generalSettings">
     <label>Default Panel Tab</label>
     <div class="input-group">
-      <div class="form-check">
-        <label class="form-check-label" style="display: block;">
-          <input class="form-check-input" type="radio" name="defaultPanelTab" formControlName="defaultPanelTab" value="results" (change)="save()">Results
-        </label>
-        <label class="form-check-label" style="display: block;">
-          <input class="form-check-input" type="radio" name="defaultPanelTab" formControlName="defaultPanelTab" value="help" (change)="save()">Help
-        </label>
+      <div class="d-flex flex-column">
+        <div class="d-flex">
+          <label class="w-100" for="Results">
+            <input type="radio" name="defaultPanelTab" id="Results" formControlName="defaultPanelTab" value="results" (change)="save()">Results</label>
+        </div>
+        <div class="d-flex">
+          <label class="w-100" for="Help">
+            <input type="radio" name="defaultPanelTab" id="Help" formControlName="defaultPanelTab" value="help" (change)="save()">Help</label>
+        </div>
       </div>
     </div>
   </div>
