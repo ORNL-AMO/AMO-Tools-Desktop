@@ -31,16 +31,15 @@
             <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
               <div class="col-11">
                 <div class="calc-help">
+
+                  <h3>Specific Speed Help</h3>
+                  <p>
+                  For each pump type there is an optimal specific speed based on size, flow rate, and specific speed.
+                  Operation at the optimal specific speed allows a pump to operate at maximum efficiency. Hydraulic
+                  Institute standards also include factors for wear and surface finish on wetted parts that are not
+                  considered in these calculations.
+                  </p>
                   <app-specific-speed-help [currentField]="currentField"></app-specific-speed-help>
-                  <!--<h3>Specific Speed Help</h3>-->
-                  <!--<p>-->
-                  <!--For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards-->
-                  <!--also include factors for wear and surface finish on wetted parts but these two factors are not considered-->
-                  <!--in the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum-->
-                  <!--efficiency. This calculator determines the specific speed for a pump at the given conditions and calculates-->
-                  <!--the amount of efficiency penalty to be deducted from the maximum value due to operation away from the-->
-                  <!--optimal specific speed.-->
-                  <!--</p>-->
                 </div>
               </div>
             </div>
