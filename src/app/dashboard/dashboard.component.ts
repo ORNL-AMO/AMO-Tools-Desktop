@@ -229,34 +229,6 @@ export class DashboardComponent implements OnInit {
     return this.workingDirectory;
   }
 
-  goHome() {
-    this.dashboardView = 'landing-screen';
-  }
-
-  showAbout() {
-    this.dashboardView = 'about-page';
-  }
-
-  showAcknowledgments() {
-    this.dashboardView = 'acknowledgments-page';
-  }
-
-  showTutorials() {
-    this.dashboardView = 'tutorials';
-  }
-
-  showSettings() {
-    this.dashboardView = 'settings';
-  }
-
-  showCustomMaterials() {
-    this.dashboardView = 'custom-materials';
-  }
-
-  showContact() {
-    this.dashboardView = 'contact';
-  }
-
   populateDirectories(directory: Directory): Directory {
     let tmpDirectory: Directory = {
       name: directory.name,
@@ -272,13 +244,13 @@ export class DashboardComponent implements OnInit {
   }
 
   changeWorkingDirectory(directory: Directory) {
-    this.dashboardView = 'assessment-dashboard';
+    this.assessmentService.dashboardView.next('assessment-dashboard');
     this.workingDirectory = this.populateDirectories(directory);
     this.getWorkingDirectoryData();
   }
 
   viewCalculator(str: string) {
-    this.dashboardView = 'calculator';
+    this.assessmentService.dashboardView.next('calculator');
   }
 
   newDir() {

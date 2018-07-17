@@ -20,24 +20,11 @@ export class SidebarComponent implements OnInit {
   directory: Directory;
   @Input()
   workingDirectory: Directory;
-  @Output('emitGoHome')
-  emitGoHome = new EventEmitter<boolean>();
   @Input()
   newDirEventToggle: boolean;
-  @Output('emitShowTutorials')
-  emitShowTutorials = new EventEmitter<boolean>();
-  @Output('emitShowAbout')
-  emitShowAbout = new EventEmitter<boolean>();
-  @Output('emitShowAcknowledgments')
-  emitShowAcknowledgments = new EventEmitter<boolean>();
   @Input()
   dashboardView: string;
-  @Output('emitGoToSettings')
-  emitGoToSettings = new EventEmitter<boolean>();
-  @Output('emitGoToMaterials')
-  emitGoToMaterials = new EventEmitter<boolean>();
-  @Output('emitGoToContact')
-  emitGoToContact = new EventEmitter<boolean>();
+
   @Output('openModal')
   openModal = new EventEmitter<boolean>();
 
@@ -51,7 +38,7 @@ export class SidebarComponent implements OnInit {
   updateSub: Subscription;
   selectedCalcSub: Subscription;
   selectedCalculator: string;
-  constructor(private assessmentService: AssessmentService, private electronService: ElectronService, private calculatorService: CalculatorService) { }
+  constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -115,36 +102,12 @@ export class SidebarComponent implements OnInit {
     return this.directory;
   }
 
-  goToSettings() {
-    this.emitGoToSettings.emit(true);
-  }
-
-  goToMaterials() {
-    this.emitGoToMaterials.emit(true);
-  }
-
-  goHome() {
-    this.emitGoHome.emit(true);
-  }
-
-  showAbout() {
-    this.emitShowAbout.emit(true);
-  }
-
-  showAcknowledgments() {
-    this.emitShowAcknowledgments.emit(true);
-  }
-
-  showTutorials() {
-    this.emitShowTutorials.emit(true);
+  changeDashboardView(str: string){
+    this.assessmentService.dashboardView.next(str);
   }
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);
-  }
-
-  showContact() {
-    this.emitGoToContact.emit(true);
   }
 
   closeUpdateModal() {
