@@ -17,12 +17,9 @@
 }
 
 .icon-image{
-  height: 18px;
-}
-.psat .icon-image{
-  height: 24px;
+  width: 26px;
 }
 
-.fsat .icon-image{
-  height: 24px;
+.icon{
+  width: 100%;
 }
