@@ -47,7 +47,7 @@ export class FsatService {
   }
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
-    //TODO: convert input
+    
     input.BaseGasDensity = this.convertFsatService.convertGasDensityForCalculations(input.BaseGasDensity, settings);
     input.FanRatedInfo = this.convertFsatService.convertFanRatedInfoForCalculations(input.FanRatedInfo, settings);
     if (input.PlaneData) {

@@ -1,0 +1,75 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Input Plane Data Help
+    <br>
+    <small class="text-muted">This section is where the user more specific data about the fan system (e.g., ductwork arrangement and dimensions, the
+      fan).
+    </small>
+    <br>
+    <span *ngIf="currentPlane == 'plane-info'">
+      <hr> Plane Information
+      <br>
+      <small class="text-muted">
+        This section is where the user more specific data about the fan system (e.g., ductwork arrangement and dimensions, the fan).
+        <hr> This requires the user to enter data about the overall system (any system effects to take into consideration) and
+        any pressure drops between the fan inlet/outlet and the points of measurement. If the user can measure the static
+        pressure of the fan inlet or outlet directly, this pressure loss is zero and values for static pressure should be
+        entered on planes 4 or 5.
+      </small>
+    </span>
+    <span *ngIf="currentPlane == '1'">
+      <hr> Plane 1
+      <br>
+      <small class="text-muted">
+        The first plane is the inlet of the fan.
+      </small>
+    </span>
+
+    <span *ngIf="currentPlane == '2'">
+      <hr> Plane 2
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </span>
+
+    <span *ngIf="currentPlane == '3a'||currentPlane == '3b'||currentPlane == '3c'">
+      <hr> Plane 3
+      <br>
+      <small class="text-muted">
+        Plane 3 is the plane used for the Pitot-static traverse for purpose of determining flow rate.
+      </small>
+    </span>
+
+    <span *ngIf="currentPlane == '4'">
+      <hr> Plane 4
+      <br>
+      <small class="text-muted">
+        Plane 4 is a plane upstream of fan used to establish fan inlet Plane Static Pressure
+      </small>
+    </span>
+
+    <span *ngIf="currentPlane == '5'">
+      <hr> Plane 5
+      <br>
+      <small class="text-muted">
+        Plane 5 is a plane downstream of fan used to establish fan outlet Plane 2 Static Pressure
+      </small>
+    </span>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'totalPressureLossBtwnPlanes1and4'">
+    <h6>
+      Total Pressure Loss Between Planes 1 and 4
+      <br>
+      <small class="text-muted">
+        Input a positive value for the pressure loss between planes 1 and 4. This loss may be established from the frictional/dynamic
+        losses as per ASHRAE Fundamentals ‘Duct Design’, or by some other means.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <!--TODO rest of fields-->
+  <!--fields from fan-data-form, plane-3-form, plane-info-->
+
+</div>
