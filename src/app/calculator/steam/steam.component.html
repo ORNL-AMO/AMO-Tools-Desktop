@@ -1,14 +1,16 @@
-<div *ngIf="getSelectedTool() == 'none'">
+<div *ngIf="selectedTool == 'none'">
 
-  <div class="row">
-    <div class="col-10  mx-auto">
-      <div class="content-container calculator-list card-item">
-        <h2>Steam Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/steam-properties.png" class="ico-size" (click)="showTool('steam-properties')">
+  <div class="d-flex steam">
+    <div class="col-10 mx-auto">
+      <div class="content-container calculator-list">
+        <h2 class="mb-1">Steam Calculators</h2>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/steam-properties.png" class="calc-img" (click)="showTool('steam-properties')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('steam-properties')">Steam Properties</a>
             <p>
               Calculates the properties of steam under various conditions.
@@ -16,11 +18,13 @@
           </div>
         </div>
 
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/saturated-properties.png" class="ico-size" (click)="showTool('saturated-properties')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('saturated-properties')">Saturated Properties</a>
             <p>
               Calculates the properties of saturated steam under various conditions.
@@ -34,10 +38,10 @@
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'steam-properties'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'steam-properties'">
   <app-steam-properties></app-steam-properties>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'saturated-properties'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'saturated-properties'">
   <app-saturated-properties></app-saturated-properties>
 </div>

@@ -15,6 +15,7 @@ import { UtilitiesModule } from './utilities/utilities.module';
 import { StandaloneService } from './standalone.service';
 import { CompressedAirModule } from './compressed-air/compressed-air.module';
 import { FansModule } from './fans/fans.module';
+import { CalculatorService } from './calculator.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { FansModule } from './fans/fans.module';
     FansModule
   ],
   providers: [
-    StandaloneService
+    StandaloneService,
+    CalculatorService
   ]
 })
 

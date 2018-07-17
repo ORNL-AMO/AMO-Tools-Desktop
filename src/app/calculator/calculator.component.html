@@ -1,13 +1,13 @@
-<app-pumps [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'pumps'"></app-pumps>
-<app-furnaces [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
-<app-motors [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'motors'"></app-motors>
-<app-fans [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'fans'"></app-fans>
-<app-steam [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'steam'" ></app-steam>
-<app-compressed-air [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
-<app-utilities [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
+<app-pumps [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'pumps' || selectedCalculator == 'all'"></app-pumps>
+<app-furnaces [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'furnaces' || selectedCalculator == 'all'"></app-furnaces>
+<app-motors [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'motors' || selectedCalculator == 'all'"></app-motors>
+<app-fans [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'fans' || selectedCalculator == 'all'"></app-fans>
+<app-steam [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'steam' || selectedCalculator == 'all'"></app-steam>
+<app-compressed-air [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'compressed-air' || selectedCalculator == 'all'"></app-compressed-air>
+<app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities' || selectedCalculator == 'all'"></app-utilities>
 
 
-
+<!-- 
 <div class="row" *ngIf="selectedCalculator == 'all'">
   <div class="col-10  mx-auto">
 
@@ -148,12 +148,12 @@
       <h3>Fans</h3>
       <div class="row calc-item-row">
         <div class="col-1">
-          <!-- <img src="assets/images/unit-converter.png" class="ico-size3"> -->
+          <!-- <img src="assets/images/unit-converter.png" class="ico-size3"> 
         </div>
         <div class="col-11">
           <a (click)="showTool('fans','fsat-203')">Operating Points Calculator</a>
           <p>
-            <!-- Description. -->
+            <!-- Description. 
           </p>
         </div>
       </div>
@@ -431,6 +431,6 @@
         </div>
       </div>
     </div>
-    <!-- End .content-container -->
+    <!-- End .content-container -
   </div>
-</div>
+</div> -->

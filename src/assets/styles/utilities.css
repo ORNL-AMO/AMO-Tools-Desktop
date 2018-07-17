@@ -152,3 +152,41 @@ a:not([href]):not([tabindex]).disabled-link:hover{
    color: #DC7633;
    font-weight: bold;
   }
+
+
+  /*Calculator menu icons */
+.calc-icon-div{
+    height: 90px;
+    width: 90px;
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.motors .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
+}
+
+.psat .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34),#2980b9);
+}
+
+.fsat .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+}
+
+.phast .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
+}
+
+.utilities .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
+}
+
+.compressed-air .calc-icon-div{
+    background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
+}
+
+.calc-img{
+    width: 90%;
+}

@@ -1,52 +1,60 @@
-<div class="psat" *ngIf="getSelectedTool() == 'none'">
+<div class="psat" *ngIf="selectedTool == 'none'">
 
-  <div class="row">
-    <div class="col-10  mx-auto">
+  <div class="d-flex psat">
+    <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Pump Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/head-tool.png" class="ico-size" (click)="showTool('head-tool')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/head-tool.png" (click)="showTool('head-tool')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('head-tool')">Head Tool</a>
             <p>
               Use head tool calculator to calculate pump head.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/system-curve-tran.png" class="ico-size" (click)="showTool('system-curve')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/system-curve-tran.png" (click)="showTool('system-curve')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
             <p>
               Use system curve to graph your pumps flow.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/speed-tran.png" class="ico-size" (click)="showTool('specific-speed')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/speed-tran.png" (click)="showTool('specific-speed')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('specific-speed')">Specific Speed</a>
             <p>
               For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
-              also include factors for wear and surface finish on wetted parts but these two factors are not
-              considered in the PSAT calculations. Operation at the optimal specific speed allows a pump to
-              operate at maximum efficiency. This calculator determines the specific speed for a pump at the
-              given conditions and calculates the amount of efficiency penalty to be deducted from the maximum
-              value due to operation away from the optimal specific speed.
+              also include factors for wear and surface finish on wetted parts but these two factors are not considered in
+              the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum efficiency.
+              This calculator determines the specific speed for a pump at the given conditions and calculates the amount
+              of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific
+              speed.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/pump-eff.png" class="ico-size" (click)="showTool('achievable-efficiency')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/pump-eff.png" (click)="showTool('achievable-efficiency')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
             <p>
               Determine the achievable pump efficiency for various pump styles which are based on the Hydraulic Institute (HI) standard
@@ -54,14 +62,16 @@
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/pump-curve.png" class="ico-size" (click)="showTool('pump-curve')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/pump-curve.png" (click)="showTool('pump-curve')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pump-curve')">Pump Curve</a>
-            <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow,
-              pump speed and impeller diameter</p>
+            <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow, pump speed
+              and impeller diameter</p>
           </div>
         </div>
       </div>
@@ -70,22 +80,22 @@
 </div>
 
 
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'head-tool'">
-    <app-head-tool></app-head-tool>
+<div class="stand-alone-calc" *ngIf="selectedTool == 'head-tool'">
+  <app-head-tool></app-head-tool>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'system-curve'">
   <app-system-curve></app-system-curve>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'specific-speed'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'specific-speed'">
   <app-specific-speed></app-specific-speed>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'achievable-efficiency'">
-    <app-achievable-efficiency></app-achievable-efficiency>
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'achievable-efficiency'">
+  <app-achievable-efficiency></app-achievable-efficiency>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pump-curve'">
   <app-pump-curve></app-pump-curve>
 </div>

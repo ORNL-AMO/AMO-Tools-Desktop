@@ -33,7 +33,6 @@ import { ImportService } from '../shared/import-export/import.service';
 export class DashboardComponent implements OnInit {
   allDirectories: Directory;
   workingDirectory: Directory;
-  selectedCalculator: string;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
   view: string;
@@ -231,37 +230,30 @@ export class DashboardComponent implements OnInit {
   }
 
   goHome() {
-    this.selectedCalculator = '';
     this.dashboardView = 'landing-screen';
   }
 
   showAbout() {
-    this.selectedCalculator = '';
     this.dashboardView = 'about-page';
   }
 
   showAcknowledgments() {
-    this.selectedCalculator = '';
     this.dashboardView = 'acknowledgments-page';
   }
 
   showTutorials() {
-    this.selectedCalculator = '';
     this.dashboardView = 'tutorials';
   }
 
   showSettings() {
-    this.selectedCalculator = '';
     this.dashboardView = 'settings';
   }
 
   showCustomMaterials() {
-    this.selectedCalculator = '';
     this.dashboardView = 'custom-materials';
   }
 
   showContact() {
-    this.selectedCalculator = '';
     this.dashboardView = 'contact';
   }
 
@@ -286,9 +278,7 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
-    this.goCalcHome = !this.goCalcHome;
     this.dashboardView = 'calculator';
-    this.selectedCalculator = str;
   }
 
   newDir() {

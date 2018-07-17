@@ -5,6 +5,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
+import { CalculatorService } from '../calculator/calculator.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -19,8 +20,6 @@ export class SidebarComponent implements OnInit {
   directory: Directory;
   @Input()
   workingDirectory: Directory;
-  @Input()
-  selectedCalculator: string;
   @Output('emitGoHome')
   emitGoHome = new EventEmitter<boolean>();
   @Input()
@@ -50,7 +49,9 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
-  constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
+  selectedCalcSub: Subscription;
+  selectedCalculator: string;
+  constructor(private assessmentService: AssessmentService, private electronService: ElectronService, private calculatorService: CalculatorService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -62,10 +63,15 @@ export class SidebarComponent implements OnInit {
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
     })
+
+    this.selectedCalcSub = this.calculatorService.selectedToolType.subscribe(calcType => {
+      this.selectedCalculator = calcType;
+    })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,12 +84,7 @@ export class SidebarComponent implements OnInit {
           }
         }
       }
-    } else if (changes.selectedCalculator && !this.firstChange) {
-      if (this.selectedCalculator != '') {
-        this.selectedDirectoryId = null;
-      }
-    }
-
+    } 
     if (this.firstChange) {
       this.firstChange = false;
     }
@@ -98,16 +99,16 @@ export class SidebarComponent implements OnInit {
       if (dir.collapsed == true) {
         dir.collapsed = false;
       }
-      this.selectedCalculator = '';
       this.selectedDirectoryId = dir.id;
       this.directoryChange.emit(dir);
     } else {
-      this.selectedCalculator = '';
       this.selectedDirectoryId = null;
     }
   }
   chooseCalculator(str: string) {
-    this.selectCalculator.emit(str);
+    this.selectCalculator.emit();
+    this.calculatorService.selectedToolType.next(str);
+    this.calculatorService.selectedTool.next('none');
   }
 
   getDirectory() {

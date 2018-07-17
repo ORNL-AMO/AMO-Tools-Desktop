@@ -1,46 +1,54 @@
-<div class="fsat" *ngIf="getSelectedTool() == 'none'">
+<div class="fsat" *ngIf="selectedTool == 'none'">
 
-  <div class="row">
-    <div class="col-10  mx-auto">
+  <div class="d-flex fsat">
+    <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
-        <h2>Fan Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+        <h2 class="mb-1">Fan Calculators</h2>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/head-tool.png" class="calc-img"> -->
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('fsat-203')"> Operating Points Calculator</a>
             <p>
               <!-- Use head tool calculator to calculate pump head. -->
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/system-curve-tran.png" class="ico-size">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/system-curve-tran.png" class="calc-img">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
             <p>
               Use system curve to graph your pumps flow.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/pump-curve.png" class="ico-size">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/pump-curve.png" class="calc-img">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pump-curve')">Fan Curve</a>
-            <p>Use fan curve calculator to develop a fan curve and explore the effects of changes in head, flow, fan speed
-              and impeller diameter</p>
+            <p>Use fan curve calculator to develop a fan curve and explore the effects of changes in head, flow, fan speed and
+              impeller diameter</p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/pump-eff.png" class="ico-size">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/pump-eff.png" class="calc-img">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('fan-efficiency')">Achievable Efficiency</a>
             <p>Use this calculator to calculate the optimal fan efficiency that is achievable by your fan setup.</p>
           </div>
@@ -51,18 +59,18 @@
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fsat-203'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
   <app-fsat-203></app-fsat-203>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'system-curve'">
   <app-system-curve [isFan]="true"></app-system-curve>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pump-curve'">
   <app-pump-curve [isFan]="true"></app-pump-curve>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'fan-efficiency'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-efficiency'">
   <app-fan-efficiency></app-fan-efficiency>
 </div>
