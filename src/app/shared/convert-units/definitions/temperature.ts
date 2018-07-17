@@ -25,7 +25,7 @@ export const temperature = {
                 singular: 'Degree Fahrenheit'
                 , plural: 'Degrees Fahrenheit' ,
                  display:  '(&#x2109;)'
-            }
+            }add --
             , to_anchor: 1
         }
     },
