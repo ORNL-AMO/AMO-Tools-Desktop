@@ -22,7 +22,9 @@ export class FsatBasicsComponent implements OnInit {
   updateBarometricPressure = new EventEmitter<FanRatedInfo>();
   @Input()
   settings: Settings;
-  
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
   ratedInfoForm: FormGroup;
 
   planes: Array<number> = [
@@ -36,10 +38,10 @@ export class FsatBasicsComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.helpPanelService.currentField.next(str);
+    this.emitChangeField.emit(str);
   }
 
-  updatePressure(){
+  updatePressure() {
     this.fanRatedInfo = this.fsat203Service.getBasicsObjectFromForm(this.ratedInfoForm);
     this.updateBarometricPressure.emit(this.fanRatedInfo);
   }

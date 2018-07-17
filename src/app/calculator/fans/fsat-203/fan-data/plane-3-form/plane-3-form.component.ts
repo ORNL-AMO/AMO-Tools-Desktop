@@ -14,6 +14,8 @@ export class Plane3FormComponent implements OnInit {
   showReadingsForm = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
@@ -25,6 +27,7 @@ export class Plane3FormComponent implements OnInit {
 
   save() {
     this.planeData = this.fsat203Service.getTraversePlaneObjFromForm(this.pitotDataForm, this.planeData);
+    console.log('save from form')
     this.emitSave.emit(this.planeData);
   }
 
@@ -45,7 +48,7 @@ export class Plane3FormComponent implements OnInit {
     this.save();
   }
 
-  focusField(){
-    
+  focusField(str: string){
+    this.emitChangeField.emit(str);
   }
 }

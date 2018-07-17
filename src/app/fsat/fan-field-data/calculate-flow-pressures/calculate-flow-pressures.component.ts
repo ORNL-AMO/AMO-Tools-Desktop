@@ -19,11 +19,14 @@ export class CalculateFlowPressuresComponent implements OnInit {
   saveFlowAndPressure = new EventEmitter<FSAT>();
   @Input()
   bodyHeight: number;
-  
+
   planeResults: PlaneResults;
   mockInputs: Fan203Inputs;
   tabSelect: string = 'results';
   isDataMissing: boolean = false;
+  formSelect: string;
+  currentField: string;
+  currentPlane: string;
   constructor(private fsat203Service: Fsat203Service, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -41,7 +44,6 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.fsat.fieldData.fanRatedInfo.fanSpeed = this.fsat.fanSetup.fanSpeed;
     this.fsat.fieldData.fanRatedInfo.motorSpeed = this.fsat.fanMotor.motorRpm;
     this.fsat.fieldData.fanRatedInfo.globalBarometricPressure = this.fsat.baseGasDensity.barometricPressure;
-    this.calculate(this.fsat);
   }
 
 
@@ -91,5 +93,17 @@ export class CalculateFlowPressuresComponent implements OnInit {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  changePlane(str: string) {
+    this.currentPlane = str;
+  }
+
+  changeField(str: string){
+    this.currentField = str;
+  }
+
+  setFormSelect(str: string){
+    this.formSelect = str;
   }
 }
