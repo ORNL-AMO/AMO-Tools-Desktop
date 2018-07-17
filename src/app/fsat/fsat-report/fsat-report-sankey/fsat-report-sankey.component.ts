@@ -76,7 +76,6 @@ export class FsatReportSankeyComponent implements OnInit {
 
     if (isMod) {
       if (this.fsat1.fsat.fanMotor.optimize) {
-        console.log('fsat1 is optimal');
         fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'optimal', this.settings);
       }
       else {
@@ -111,7 +110,6 @@ export class FsatReportSankeyComponent implements OnInit {
 
     if (isMod) {
       if (this.fsat2.fsat.fanMotor.optimize) {
-        console.log('fsat2 is optimal');
         fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'optimal', this.settings);
       }
       else {
