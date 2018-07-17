@@ -10,14 +10,6 @@
 	max-width: 350px;
 }
 
-.psat-image{
-	width: 4rem;
-}
-
-.phast-image{
-	width: 4rem;
-}
-
 .fa-folder-o{
 	color: #343434;
 }
@@ -89,4 +81,21 @@
 	font-style: italic;
 	font-size: smaller;
 	padding-left: 15px;
+}
+
+
+.fan-image{
+	width: 50%;
+}
+
+.fan-icon{
+	width: 70px;
+}
+
+.psat-image{
+	width: 75px;
+}
+
+.phast-image{
+	width: 75px;
 }

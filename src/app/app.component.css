@@ -675,7 +675,6 @@ Assessments: List View
     content: "";
   }
   .list-row .actions {
-    width: 50%;
     font-size: 14px;
     float: right;
     text-align: right;
@@ -1140,7 +1139,6 @@ Calculators
 }
 
 .fan-icon {
-  width: 3.5rem;
   background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
