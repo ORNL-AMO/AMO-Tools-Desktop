@@ -22,6 +22,7 @@ export interface Settings {
     fanPowerMeasurement?: string,
     fanBarometricPressure?: string,
     fanSpecificHeatGas?: string,
+    fanTemperatureMeasurement?: string,
     currentMeasurement?: string,
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
