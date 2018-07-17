@@ -23,7 +23,7 @@ export class MotorsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       this.selectedTool = 'none';
-    }else{
+    } else {
       this.firstChange = false;
     }
   }
