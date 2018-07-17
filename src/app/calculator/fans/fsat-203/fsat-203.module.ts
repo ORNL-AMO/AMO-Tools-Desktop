@@ -14,6 +14,11 @@ import { Fsat203Service } from './fsat-203.service';
 import { Fsat203ResultsComponent } from './fsat-203-results/fsat-203-results.component';
 import { PlaneInfoComponent } from './fan-data/plane-info/plane-info.component';
 import { PlanarResultsComponent } from './planar-results/planar-results.component';
+import { OperatingPointsHelpComponent } from './operating-points-help/operating-points-help.component';
+import { FanDataHelpComponent } from './operating-points-help/fan-data-help/fan-data-help.component';
+import { FanShaftPowerHelpComponent } from './operating-points-help/fan-shaft-power-help/fan-shaft-power-help.component';
+import { FsatBasicsHelpComponent } from './operating-points-help/fsat-basics-help/fsat-basics-help.component';
+import { GasDensityHelpComponent } from './operating-points-help/gas-density-help/gas-density-help.component';
 
 @NgModule({
   imports: [
@@ -22,8 +27,8 @@ import { PlanarResultsComponent } from './planar-results/planar-results.componen
     ReactiveFormsModule,
     SharedModule
   ],
-  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent],
-  exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent],
+  declarations: [Fsat203Component, FsatBasicsComponent, FanDataComponent, GasDensityComponent, FanDataFormComponent, Plane3FormComponent, PressureReadingsFormComponent, FanShaftPowerComponent, Fsat203ResultsComponent, PlaneInfoComponent, PlanarResultsComponent, OperatingPointsHelpComponent, FanDataHelpComponent, FanShaftPowerHelpComponent, FsatBasicsHelpComponent, GasDensityHelpComponent],
+  exports: [Fsat203Component, FanDataComponent, PlanarResultsComponent, OperatingPointsHelpComponent],
   providers: [Fsat203Service]
 })
 export class Fsat203Module { }

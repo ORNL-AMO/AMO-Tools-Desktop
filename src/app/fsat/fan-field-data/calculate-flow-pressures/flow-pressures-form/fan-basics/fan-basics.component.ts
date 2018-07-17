@@ -17,7 +17,8 @@ export class FanBasicsComponent implements OnInit {
   emitSave = new EventEmitter<FanRatedInfo>();
   @Input()
   settings: Settings;
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   planes: Array<number> = [
     1, 2, 3
@@ -27,8 +28,8 @@ export class FanBasicsComponent implements OnInit {
   ngOnInit() {
   }
 
-  focusField() {
-
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   save() {

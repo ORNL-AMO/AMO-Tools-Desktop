@@ -17,7 +17,8 @@ export class PlaneInfoComponent implements OnInit {
   emitSave = new EventEmitter<PlaneData>();
   @Input()
   settings: Settings;
-
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
 
   planeInfoForm: FormGroup;
@@ -29,8 +30,8 @@ export class PlaneInfoComponent implements OnInit {
     this.planeInfoForm = this.fsat203Service.getPlaneInfoFormFromObj(this.planeData);
   }
 
-  focusField() {
-
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   getSum(planeData: PlaneData){

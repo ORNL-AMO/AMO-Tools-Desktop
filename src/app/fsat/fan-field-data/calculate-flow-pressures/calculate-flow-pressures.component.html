@@ -1,21 +1,27 @@
 <div class="panel-container d-flex w-100 fsat">
   <div class="panel-column w-50 p-2 scroll-item" [ngStyle]="{'height.px': bodyHeight}">
-    <div class="header">
-      <h3>Calculate Flow and Pressures</h3>
+    <div class="d-flex flex-column">
+      <div class="header mr-2 ml-2">
+        <h3>Calculate Flow and Pressures</h3>
+      </div>
     </div>
-    <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)" (emitDataMissing)="setDataMissing()"></app-flow-pressures-form>
+    <div class="mr-2 ml-2">
+      <app-flow-pressures-form [fsat]="fsat" [settings]="settings" (emitCalculate)="calculate($event)" (emitDataMissing)="setDataMissing()"
+        (emitFormSelect)="setFormSelect($event)" (emitChangeField)="changeField($event)" (emitChangePlane)="changePlane($event)"></app-flow-pressures-form>
+    </div>
   </div>
-  <div class="w-50 help-panel">
-    <ul class="tabs primary tab-row">
-      <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-        <a (click)="setTab('results')">Results</a>
-      </li><!--
-      --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+  <div class="w-50 op-points-panel">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
+      </div>
+
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
         <a (click)="setTab('help')">Help</a>
-      </li>
-    </ul>
-    <div class="d-flex flex-column justify-content-center data-row" *ngIf="tabSelect == 'results'">
-      <div class="d-flex w-100 justify-content-center">
+      </div>
+    </div>
+    <div class="d-flex flex-column justify-content-center mr-2 ml-2" *ngIf="tabSelect == 'results'">
+      <div class="d-flex w-100 justify-content-center pt-2 pb-2">
         <div class="btn-group">
           <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'static'}">Use Static Pressure</button>
           <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('total')" [ngClass]="{'active': fsat.fieldData.pressureCalcResultType == 'total'}">Use Total Pressure</button>
@@ -27,32 +33,36 @@
           <tbody>
             <tr>
               <td>Inlet Pressure</td>
-              <td class="inlet-pressure">{{fsat.fieldData.inletPressure | sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
+              <td class="inlet-pressure">{{fsat.fieldData.inletPressure | sigFigs: '6'}}
+                <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+              </td>
             </tr>
             <tr>
               <td>Outlet Pressure</td>
-              <td class="outlet-pressure">{{fsat.fieldData.outletPressure | sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></td>
+              <td class="outlet-pressure">{{fsat.fieldData.outletPressure | sigFigs: '6'}}
+                <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+              </td>
             </tr>
             <tr>
               <td>Flow Rate</td>
-              <td class="flow-rate">{{fsat.fieldData.flowRate | sigFigs: '6'}}  <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></td>
+              <td class="flow-rate">{{fsat.fieldData.flowRate | sigFigs: '6'}}
+                <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+              </td>
             </tr>
           </tbody>
         </table>
         <!--results-->
         <label class="group-label">Full Planar Results</label>
-        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [settings]="settings" [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
+        <app-planar-results [planeResults]="planeResults" [showFull]="false" [inputs]="mockInputs" [inModal]="true" [settings]="settings"
+          [pressureCalcType]="fsat.fieldData.pressureCalcResultType"></app-planar-results>
         <p *ngIf="isDataMissing" class="alert-danger">
           Data missing, complete form to calculate results.
         </p>
       </div>
     </div>
-    <div class="d-flex justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-      <div class="p-2">
-        <div class="calc-help">
-          <app-flow-pressures-help [currentField]="currentField"></app-flow-pressures-help>
-        </div>
-      </div>
+    <div class="d-flex justify-content-center mr-2 ml-2 align-items-center" *ngIf="tabSelect == 'help'">
+      <!-- <app-flow-pressures-help [currentField]="currentField"></app-flow-pressures-help> -->
+      <app-operating-points-help [currentField]="currentField" [formSelect]="formSelect" [currentPlane]="currentPlane"></app-operating-points-help>
     </div>
   </div>
 </div>

@@ -23,6 +23,9 @@ export class FanDataFormComponent implements OnInit {
   velocityData: { pv3: number, percent75Rule: number };
   @Input()
   settings: Settings;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
 
   dataForm: FormGroup;
   constructor(private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
@@ -69,8 +72,8 @@ export class FanDataFormComponent implements OnInit {
     this.emitSave.emit(this.planeData);
   }
 
-  focusField() {
-    //todo
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   getDisplayUnit(unit: any) {
