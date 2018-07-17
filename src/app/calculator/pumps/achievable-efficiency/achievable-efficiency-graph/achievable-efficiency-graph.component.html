@@ -57,12 +57,12 @@
         <tbody>
           <tr *ngFor="let data of tableData; let i=index;">
             <td>
-              <div class="key-color" [ngStyle]="{'border': '3px solid ' + tableData[i].borderColor, 'background-color': tableData[i].fillColor}"></div>
+              <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
             </td>
             <td>{{i + 1}}</td>
-            <td>{{tableData[i].flowRate}}</td>
-            <td>{{tableData[i].maxEfficiency}}</td>
-            <td>{{tableData[i].averageEfficiency}}</td>
+            <td>{{data.flowRate}}</td>
+            <td>{{data.maxEfficiency}}</td>
+            <td>{{data.averageEfficiency}}</td>
           </tr>
         </tbody>
       </table>

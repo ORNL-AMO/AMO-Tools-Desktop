@@ -62,11 +62,11 @@
         <tbody>
           <tr *ngFor="let data of tableData; let i=index;">
             <td>
-              <div class="key-color" [ngStyle]="{'border': '3px solid ' + tableData[i].borderColor, 'background-color': tableData[i].fillColor}"></div>
+              <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
             </td>
             <td>{{i + 1}}</td>
-            <td>{{tableData[i].specificSpeed}}</td>
-            <td>{{tableData[i].efficiencyCorrection}}</td>
+            <td>{{data.specificSpeed}}</td>
+            <td>{{data.efficiencyCorrection}}</td>
           </tr>
         </tbody>
       </table>

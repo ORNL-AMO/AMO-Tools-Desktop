@@ -744,7 +744,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .attr("id", "currentText")
           .attr("x", 20)
           .attr("y", "20")
-          .text("Current: " + this.dCurrent.y + " % FLC")
+          .text("Current: " + this.dCurrent.y + "% FLC")
           // .text("Current: " + currentD.y + " % FLC")
           .style("font-size", "13px")
           .style("font-weight", "bold")
@@ -769,7 +769,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
             .attr("id", "powerFactorText")
             .attr("x", 180)
             .attr("y", "20")
-            .text("Power Factor: " + powerD.y + " %")
+            .text("Power Factor: " + powerD.y + "%")
             .style("font-size", "13px")
             .style("font-weight", "bold")
             .style("fill", "#3498DB");
@@ -797,13 +797,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .attr("id", "efficiencyText")
           .attr("x", 350)
           .attr("y", "20")
-          .text("Efficiency: " + efficiencyD.y + " %")
+          .text("Efficiency: " + efficiencyD.y + "%")
           .style("font-size", "13px")
           .style("font-weight", "bold")
           .style("fill", "#A569BD");
 
         var percentFormat = d3.format(",.0%");
-        this.motorShaftLoad = percentFormat(efficiencyD.x);
+        this.motorShaftLoad = Math.floor(this.dEfficiency.x * 100);
 
         this.svg.append("text")
           .attr("id", "i")

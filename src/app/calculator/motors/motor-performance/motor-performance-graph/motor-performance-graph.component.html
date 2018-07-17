@@ -62,13 +62,13 @@
         <tbody>
           <tr *ngFor="let data of tableData; let i=index;">
             <td>
-              <div class="key-color" [ngStyle]="{'border': '3px solid ' + tableData[i].borderColor, 'background-color': tableData[i].fillColor}"></div>
+              <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
             </td>
             <td>{{i + 1}}</td>
-            <td>{{tableData[i].motorShaftPower}}</td>
-            <td>{{tableData[i].current}}</td>
-            <td>{{tableData[i].powerFactor}}</td>
-            <td>{{tableData[i].efficiency}}</td>
+            <td>{{data.motorShaftLoad}}</td>
+            <td>{{data.current}}</td>
+            <td>{{data.powerFactor}}</td>
+            <td>{{data.efficiency}}</td>
           </tr>
         </tbody>
       </table>
