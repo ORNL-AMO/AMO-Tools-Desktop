@@ -69,6 +69,143 @@
       </small>
     </h6>
   </div>
+  <div class="my-2" *ngIf="currentField == 'totalPressureLossBtwnPlanes2and5'">
+    <h6>
+      Total Pressure Loss Between Planes 2 and 5
+      <br>
+      <small class="text-muted">
+        Input a positive value for the pressure loss between planes 2 and 5. This loss may be established from the frictional/dynamic
+        losses as per ASHRAE Fundamentals ‘Duct Design’, or by some other means.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'inletSEF'">
+    <h6>
+      Inlet System Effect Factor
+      <br>
+      <small class="text-muted">
+        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which has different
+        operating conditions from when it was tested in the laboratory. The system effect at the inlet can be determined
+        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control Association
+        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National Association
+        (SMACNA).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'outletSEF'">
+    <h6>
+      Outlet System Effect Factor
+      <br>
+      <small class="text-muted">
+        System effect is the negative impact on fan performance resulting from connecting a duct system to the fan which has different
+        operating conditions from when it was tested in the laboratory. The system effect at the outlet can be determined
+        based on the use of charts and graphs, such as from Fans and Systems published by the Air Movement and Control Association
+        (AMCA) or HVAC Systems Duct Design published by the Sheet Metal and Air Conditioning Contractors' National Association
+        (SMACNA).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf=" currentField == 'length'">
+    <h6>
+      Length/Diameter
+      <br>
+      <small class="text-muted">
+        The length/diameter of the planar area.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'width'">
+    <h6>
+      Width
+      <br>
+      <small class="text-muted">
+        The width of the planar area.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numInletBoxes'">
+    <h6>
+      Number of Inlet Boxes
+      <br>
+      <small class="text-muted">
+        Choose either 1 or 2 depending on the number of inlet boxes. This will affect the calculation for Plane 1 planar area.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+    <h6>
+      Dry Bulb Temp
+      <br>
+      <small class="text-muted">
+        Dry bulb temperature measured near the plane.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'barometricPressure'">
+    <h6>
+      Barometric Pressure
+      <br>
+      <small class="text-muted">
+        The pressure exerted by the weight of air in the atmosphere. This defaults to the barometric pressure entered earlier in
+        the calculator, but if there are major hight changes, this can be estimated with information on the planar area elevation
+        above sea level.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'staticPressure'">
+    <h6>
+      Static Pressure
+      <br>
+      <small class="text-muted">
+        Reference static pressure (relative to barometric pressure).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pitotTubeCoefficient'">
+    <h6>
+      Pitot Tube Coefficient
+      <br>
+      <small class="text-muted">
+        If “Standard” was selected in the Pitot Tube Type Combo Box, this box will default to 1.00 as a Standard Pitot tube does
+        not require calibration and is considered a primary instrument. If “S-Type’” was selected in the Pitot Tube Type
+        Combo Box, the Pitot Tube Coefficient (Cp) box will default to 0.86. Typical Cp values for S-Type pitot tubes are
+        typically in the range of 0.84 to 0.88, but the actual value depends on the specific Pitot tube being used as well
+        as the general range of measurement the S-Type Pitot tube is being used for. Cp calibration charts for the specific
+        Pitot tube being used should always be consulted first before inputting a value into this cell.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numTraverseHoles'">
+    <h6>
+      Number of Traverse Holes
+      <br>
+      <small class="text-muted">
+        The number of traverse points for the traverse or the number of readings per hole. This is determined from the AMCA 203 Standard,
+        based on the size of the ductwork. The readings should be taken in the center of rectangles or concentric circles
+        of constant area. </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numInsertionPoints'">
+    <h6>
+      Number of Insertion Points
+      <br>
+      <small class="text-muted">
+        The number of insertion points used for the analysis. This is determined from the AMCA 203 Standard, based on the size of
+        the ductwork. The readings should be taken in the center of rectangles or concentric circles of constant area.
+      </small>
+    </h6>
+  </div>
+
   <!--TODO rest of fields-->
   <!--fields from fan-data-form, plane-3-form, plane-info-->
 
