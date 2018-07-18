@@ -82,8 +82,8 @@ export class Fsat203Service {
 
   getTraversePlaneFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      pitotTubeType: [obj.pitotTubeType, [Validators.required, Validators.max(1)]],
-      pitotTubeCoefficient: [obj.pitotTubeCoefficient, Validators.required],
+      pitotTubeType: [obj.pitotTubeType, Validators.required],
+      pitotTubeCoefficient: [obj.pitotTubeCoefficient, [Validators.required, Validators.max(1)]],
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
     })
