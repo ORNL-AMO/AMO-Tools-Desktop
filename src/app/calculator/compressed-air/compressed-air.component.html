@@ -1,100 +1,115 @@
-<div *ngIf="getSelectedTool() == 'none'">
+<div *ngIf="selectedTool == 'none'">
 
-  <div class="row">
-    <div class="col-10  mx-auto">
+  <div class="d-flex compressed-air">
+    <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Compressed Air Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/leakage-loss-estimator.png" class="ico-size5" (click)="showTool('bag-method')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/leakage-loss-estimator.png" class="calc-img" (click)="showTool('bag-method')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('bag-method')">Leak Loss Estimator - Bag Method</a>
             <p>
               Estimate the leakage losses in a compressed air system using the bag method.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/pneumatic-valve-flow-factor.png" class="ico-size5" (click)="showTool('flow-factor')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/pneumatic-valve-flow-factor.png" class="calc-img" (click)="showTool('flow-factor')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('flow-factor')">Pneumatic Valve Flow Factor</a>
             <p>
               There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient
-              C
-              <sub>v</sub> equal to 1. The second one is used for calculating C
-              <sub>v</sub> when the flow rate is known.
+              C<sub>v</sub> equal to 1. The second one is used for calculating C<sub>v</sub> when the flow rate is known.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/pneumatic-air-requirement.png" class="ico-size5" (click)="showTool('pneumatic-air')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/pneumatic-air-requirement.png" class="calc-img" (click)="showTool('pneumatic-air')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pneumatic-air')">Pneumatic Air Requirement</a>
             <p>
-              This calculator helps in computing the quantity of air required by a specific single acting or a double
-              acting piston cylinder compressor. The design specs of the compressor are entered in the calculator and
-              the quantity of air needed is generated.
+              This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder
+              compressor. The design specs of the compressor are entered in the calculator and the quantity of air needed
+              is generated.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/receiver-tank-calculation.png" class="ico-size5" (click)="showTool('receiver-tank')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/receiver-tank-calculation.png" class="calc-img" (click)="showTool('receiver-tank')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Calculations</a>
             <p>
-              The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive
-              line pulsations or frequent loading and unloading of the compressor. There are four methods to calculate
-              the required size of the receiver tank.
+              The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line pulsations
+              or frequent loading and unloading of the compressor. There are four methods to calculate the required size
+              of the receiver tank.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/pipe-sizing.png" class="ico-size5" (click)="showTool('pipe-sizing')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/pipe-sizing.png" class="calc-img" (click)="showTool('pipe-sizing')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pipe-sizing')">Pipe Sizing</a>
             <p>
-              This calculator helps in finding the pipe diameter, when the volumetric flow velocity, pressure, and design velocity are known.
+              This calculator helps in finding the pipe diameter, when the volumetric flow velocity, pressure, and design velocity are
+              known.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/velocity-in-piping.png" class="ico-size5" (click)="showTool('air-velocity')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/velocity-in-piping.png" class="calc-img" (click)="showTool('air-velocity')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('air-velocity')">Velocity in the Piping</a>
             <p>
               This calculator helps in finding the velocity of compressed air through all the different piping involved in the system.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/air-system-capacity.png" class="ico-size5" (click)="showTool('system-capacity')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/air-system-capacity.png" class="calc-img" (click)="showTool('system-capacity')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('system-capacity')">System - Capacity</a>
             <p>
-              This is used to find the total air quantity that the compressed air system can contain at any instant of
-              time, including the air in the pipes and receivers. The total capacity of the compressed air system can
-              be obtained by adding the volumes of pipes and receivers.
+              This is used to find the total air quantity that the compressed air system can contain at any instant of time, including
+              the air in the pipes and receivers. The total capacity of the compressed air system can be obtained by adding
+              the volumes of pipes and receivers.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/operation-cost.png" class="ico-size5" (click)="showTool('operation-cost')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/operation-cost.png" class="calc-img" (click)="showTool('operation-cost')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('operation-cost')">Operation Cost Calculations</a>
             <p>
               This calculator helps in finding the cost of operation of the compressor in both fully and partially load instances.
@@ -107,27 +122,27 @@
 </div>
 
 
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'bag-method'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'bag-method'">
   <app-bag-method></app-bag-method>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'flow-factor'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'flow-factor'">
   <app-flow-factor></app-flow-factor>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'pneumatic-air'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'pneumatic-air'">
   <app-pneumatic-air></app-pneumatic-air>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'receiver-tank'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'receiver-tank'">
   <app-receiver-tank></app-receiver-tank>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'pipe-sizing'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'pipe-sizing'">
   <app-pipe-sizing></app-pipe-sizing>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'air-velocity'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'air-velocity'">
   <app-air-velocity></app-air-velocity>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'system-capacity'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'system-capacity'">
   <app-system-capacity></app-system-capacity>
 </div>
-<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'operation-cost'">
+<div class="stand-alone-calc" *ngIf="selectedTool == 'operation-cost'">
   <app-operating-cost></app-operating-cost>
 </div>

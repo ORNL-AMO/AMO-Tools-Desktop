@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { CalculatorService } from '../calculator.service';
 
 
 @Component({
@@ -9,32 +10,16 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 export class UtilitiesComponent implements OnInit {
   @Input()
   selectedTool: string;
-  @Input()
-  goCalcHome: boolean;
 
-  firstChange: boolean = true;
-  constructor() { }
+  constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
-    if (!this.selectedTool) {
-      this.selectedTool = 'none';
-    }
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      this.selectedTool = 'none';
-    } else {
-      this.firstChange = false;
-    }
   }
 
   showTool(str: string) {
-    this.selectedTool = str;
-  }
-
-  hideTool() {
-    this.selectedTool = 'none'
+    this.calculatorService.selectedTool.next(str);
+    this.calculatorService.selectedToolType.next('utilities');
   }
 
 }
