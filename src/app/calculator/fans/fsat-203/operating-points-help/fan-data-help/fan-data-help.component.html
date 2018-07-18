@@ -205,8 +205,17 @@
       </small>
     </h6>
   </div>
+  <div class="my-2" *ngIf="currentField == 'differentialReadings'">
+    <h6>
+      Add Differential Readings
+      <br>
+      <small class="text-muted">
+        This is where the user enters the data from the pitot tube readings. More information on how to conduct this test can be
+        found in the AMCA 203 standard. The rows of the table each represent all of the insertion points and the columns
+        represent each reading along the traverse.
+      </small>
+    </h6>
+  </div>
 
-  <!--TODO rest of fields-->
-  <!--fields from fan-data-form, plane-3-form, plane-info-->
 
 </div>

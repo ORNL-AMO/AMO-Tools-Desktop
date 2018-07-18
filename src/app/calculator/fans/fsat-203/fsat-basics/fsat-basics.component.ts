@@ -35,6 +35,7 @@ export class FsatBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo);
+    
   }
 
   focusField(str: string) {

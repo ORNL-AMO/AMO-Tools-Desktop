@@ -16,7 +16,7 @@ export class Fsat203Service {
       densityCorrected: [obj.densityCorrected, Validators.required],
       pressureBarometricCorrected: [obj.pressureBarometricCorrected, [Validators.required, Validators.min(10), Validators.max(60)]],
       includesEvase: [obj.includesEvase, Validators.required],
-      upDownStream: [obj.upDownStream, Validators.required],
+      upDownStream: [obj.upDownStream],
       traversePlanes: [obj.traversePlanes, Validators.required],
       globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
@@ -47,13 +47,13 @@ export class Fsat203Service {
       gasType: [obj.gasType, Validators.required],
       // humidityData: ['Yes', Validators.required],
       conditionLocation: [obj.conditionLocation, Validators.required],
-      dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(-100), Validators.max(1000)]],
-      staticPressure: [obj.staticPressure, [Validators.required, Validators.min(-400), Validators.max(400)]],
-      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]],
-      specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0), Validators.max(2)]],
-      wetBulbTemp: [obj.wetBulbTemp, [Validators.required, Validators.min(32), Validators.max(1000)]],
-      relativeHumidity: [obj.relativeHumidity, [Validators.required, Validators.min(0), Validators.max(100)]],
-      dewPoint: [obj.dewPoint, [Validators.required, Validators.min(-30), Validators.max(1000)]],
+      dryBulbTemp: [obj.dryBulbTemp, [Validators.min(-100), Validators.max(1000)]],
+      staticPressure: [obj.staticPressure, [Validators.min(-400), Validators.max(400)]],
+      barometricPressure: [obj.barometricPressure, [Validators.min(10), Validators.max(60)]],
+      specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
+      wetBulbTemp: [obj.wetBulbTemp, [Validators.min(32), Validators.max(1000)]],
+      relativeHumidity: [obj.relativeHumidity, [Validators.min(0), Validators.max(100)]],
+      dewPoint: [obj.dewPoint, [Validators.min(-30), Validators.max(1000)]],
       gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(.2)]],
       specificHeatGas: [obj.specificHeatGas]
     })
@@ -310,7 +310,7 @@ export class Fsat203Service {
         dryBulbTemp: undefined,
         staticPressure: undefined,
         barometricPressure: 29.92,
-        gasDensity: undefined,
+        gasDensity: .0765,
         gasType: 'AIR',
         //Mark Additions
         inputType: 'custom',

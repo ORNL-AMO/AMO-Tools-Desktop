@@ -90,7 +90,6 @@ export class GasDensityComponent implements OnInit {
   }
 
   getDisplayUnit(unit: any) {
-    console.log(unit);
     if (unit) {
       let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
       dispUnit = dispUnit.replace('(', '');
