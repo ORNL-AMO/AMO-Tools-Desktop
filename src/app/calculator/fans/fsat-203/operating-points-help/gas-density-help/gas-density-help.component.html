@@ -58,5 +58,101 @@
       </table>
     </div>
   </div>
+  <div class="my-2" *ngIf="currentField == 'dryBulbTemp'">
+    <h6>
+      Dry Bulb Temp
+      <br>
+      <small class="text-muted">
+        Reference dry bulb temperature calculated as the temperature of a dry surface in a vapor-gas environment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'staticPressure'">
+    <h6>
+      Static Pressure
+      <br>
+      <small class="text-muted">
+        Reference static pressure (relative to barometric pressure).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'barometricPressure'">
+    <h6>
+      Barometric Pressure
+      <br>
+      <small class="text-muted">
+        Reference barometric pressure.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'specificGravity'">
+    <h6>
+      Gas Specific Gravity
+      <br>
+      <small class="text-muted">
+        The ratio of molecular weight of the gas in question to that of air. For air, this is 1.0. For flue gases around 700 °C,
+        this is about 0.3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'relativeHumidity'">
+    <h6>
+      Relative Humidity
+      <br>
+      <small class="text-muted">
+        Percent relative humidity, a measure of the amount of water vapor present in the gas. This is usually provided in weather
+        reports.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'wetBulbTemp'">
+    <h6>
+      Wet Bulb Temp
+      <br>
+      <small class="text-muted">
+        The adiabatic saturation temperature sometimes calculated as the temperature read by a thermometer covered in water-soaked
+        cloth over which the gas is passed.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'specificHeatGas'">
+    <h6>
+      Specific Heat Gas
+      <br>
+      <small class="text-muted">
+        The amount of heat required to raise the temperature of the gas one degree for each unit of mass. For air this is 0.24 Btu/lb
+        °F, for flue gases, this ranges between 0.248 and 0.320 Btu/lb °F, depending on temperature and composition.
+
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'dewPoint'">
+    <h6>
+      Gas Dew Point
+      <br>
+      <small class="text-muted">
+        The temperature where air is cooled enough to become saturated with water vapor. For atmospheric air, this can be found via
+        weather reports. Otherwise, it’s a result of the gases composition and pressure.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'gasDensity'">
+    <h6>
+      Gas Density
+      <br>
+      <small class="text-muted">
+        If gas density is already known, it can be entered here.
+        <hr>
+      </small>
+    </h6>
+  </div>
   <!--TODO: rest of fields-->
 </div>
