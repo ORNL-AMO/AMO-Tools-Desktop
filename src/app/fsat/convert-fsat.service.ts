@@ -20,10 +20,10 @@ export class ConvertFsatService {
   convertGasDensityForCalculations(inputs: BaseGasDensity, settings: Settings): BaseGasDensity {
     let inputCpy: BaseGasDensity = JSON.parse(JSON.stringify(inputs));
     //TODO: Convert to imperial for calcs
-    if (settings.temperatureMeasurement != 'F') {
-      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.temperatureMeasurement).to('F');
-      inputCpy.wetBulbTemp = this.convertUnitsService.value(inputCpy.wetBulbTemp).from(settings.temperatureMeasurement).to('F');
-      inputCpy.dewPoint = this.convertUnitsService.value(inputCpy.dewPoint).from(settings.temperatureMeasurement).to('F');
+    if (settings.fanTemperatureMeasurement != 'F') {
+      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.fanTemperatureMeasurement).to('F');
+      inputCpy.wetBulbTemp = this.convertUnitsService.value(inputCpy.wetBulbTemp).from(settings.fanTemperatureMeasurement).to('F');
+      inputCpy.dewPoint = this.convertUnitsService.value(inputCpy.dewPoint).from(settings.fanTemperatureMeasurement).to('F');
     }
     if (settings.densityMeasurement != 'lbscf') {
       inputCpy.gasDensity = this.convertUnitsService.value(inputCpy.gasDensity).from(settings.densityMeasurement).to('lbscf');
@@ -49,8 +49,8 @@ export class ConvertFsatService {
     if (settings.fanFlowRate != 'ft3/min') {
       inputCpy.area = this.convertUnitsService.value(inputCpy.area).from('m2').to('ft2');
     }
-    if (settings.temperatureMeasurement != 'F') {
-      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.temperatureMeasurement).to('F');
+    if (settings.fanTemperatureMeasurement != 'F') {
+      inputCpy.dryBulbTemp = this.convertUnitsService.value(inputCpy.dryBulbTemp).from(settings.fanTemperatureMeasurement).to('F');
     }
     if (settings.fanPressureMeasurement != 'inH2o' && inputCpy.staticPressure) {
       inputCpy.staticPressure = this.convertUnitsService.value(inputCpy.staticPressure).from(settings.fanPressureMeasurement).to('inH2o');
@@ -123,10 +123,10 @@ export class ConvertFsatService {
 
   convertAllInputData(fsat: FSAT, oldSettings: Settings, newSettings: Settings): FSAT {
     let inputCpy: FSAT = JSON.parse(JSON.stringify(fsat));
-    if (oldSettings.temperatureMeasurement != newSettings.temperatureMeasurement) {
-      inputCpy.baseGasDensity.dryBulbTemp = this.convertNum(inputCpy.baseGasDensity.dryBulbTemp, oldSettings.temperatureMeasurement, newSettings.temperatureMeasurement);
-      inputCpy.baseGasDensity.wetBulbTemp = this.convertNum(inputCpy.baseGasDensity.wetBulbTemp, oldSettings.temperatureMeasurement, newSettings.temperatureMeasurement);
-      inputCpy.baseGasDensity.dewPoint = this.convertNum(inputCpy.baseGasDensity.dewPoint, oldSettings.temperatureMeasurement, newSettings.temperatureMeasurement);
+    if (oldSettings.fanTemperatureMeasurement != newSettings.fanTemperatureMeasurement) {
+      inputCpy.baseGasDensity.dryBulbTemp = this.convertNum(inputCpy.baseGasDensity.dryBulbTemp, oldSettings.fanTemperatureMeasurement, newSettings.fanTemperatureMeasurement);
+      inputCpy.baseGasDensity.wetBulbTemp = this.convertNum(inputCpy.baseGasDensity.wetBulbTemp, oldSettings.fanTemperatureMeasurement, newSettings.fanTemperatureMeasurement);
+      inputCpy.baseGasDensity.dewPoint = this.convertNum(inputCpy.baseGasDensity.dewPoint, oldSettings.fanTemperatureMeasurement, newSettings.fanTemperatureMeasurement);
     }
     if (oldSettings.densityMeasurement != newSettings.densityMeasurement) {
       inputCpy.baseGasDensity.gasDensity = this.convertNum(inputCpy.baseGasDensity.gasDensity, oldSettings.densityMeasurement, newSettings.densityMeasurement);
