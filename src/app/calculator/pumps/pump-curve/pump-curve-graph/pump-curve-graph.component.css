@@ -13,3 +13,7 @@
   .grid path {
     stroke-width: 0;
   }
+
+  .expanded-chart {
+    padding: 10px;
+  }

@@ -1,4 +1,4 @@
-<div class="panel-chart-container" id="panelChartContainer" [ngClass]="{'expanded-chart': expanded}" [ngStyle]="{'padding': expanded ? '10px' : '0px'}">
+<div #ngChartContainer class="panel-chart-container" id="panelChartContainer" [ngClass]="{'expanded-chart': expanded}">
   <div *ngIf="expanded" class="row">
     <div class="col-12" id="compress-chart">
       <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>

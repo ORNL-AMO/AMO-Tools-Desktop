@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
@@ -42,7 +41,7 @@ export class PieChartComponent implements OnInit {
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
+  constructor(private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -70,8 +69,6 @@ export class PieChartComponent implements OnInit {
       }
     }
   }
-
-
 
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {

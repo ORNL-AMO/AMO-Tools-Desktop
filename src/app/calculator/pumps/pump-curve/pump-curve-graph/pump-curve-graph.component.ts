@@ -1,7 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-
 import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 //declare const d3: any;
 import * as d3 from 'd3';
@@ -28,7 +26,12 @@ export class PumpCurveGraphComponent implements OnInit {
   @Input()
   isFan: boolean;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -53,8 +56,6 @@ export class PumpCurveGraphComponent implements OnInit {
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -74,10 +75,9 @@ export class PumpCurveGraphComponent implements OnInit {
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    console.log('isFan = ' + this.isFan);
     this.isGridToggled = false;
     d3.select('app-pump-curve').selectAll('#gridToggleBtn')
       .on("click", () => {
@@ -164,14 +164,7 @@ export class PumpCurveGraphComponent implements OnInit {
   // ========== end tooltip functions ==========
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
-  }
-
-  ngOnDestroy() {
-    this.window.onresize = null;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -203,7 +196,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
@@ -218,7 +211,13 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.canvasWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+      if (!this.expanded) {
+        this.margin = { top: 20, right: 50, bottom: 75, left: 120 };
+
+      }
+      else {
+        this.margin = { top: 20, right: 120, bottom: 75, left: 120 };
+      }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;

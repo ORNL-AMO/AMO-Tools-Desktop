@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-//declare const d3: any;
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
@@ -19,7 +17,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   speedForm: FormGroup;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -54,8 +57,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -74,7 +75,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
   // efficiencyCorrection: number = 0;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -92,15 +93,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
   }
 
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
@@ -195,7 +190,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     if (curveGraph) {
       //conditional sizing if graph is expanded/compressed
