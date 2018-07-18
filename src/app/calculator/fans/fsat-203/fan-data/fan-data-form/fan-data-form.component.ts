@@ -37,6 +37,7 @@ export class FanDataFormComponent implements OnInit {
 
   calcArea() {
     let tmpData = this.fsat203Service.getPlaneObjFromForm(this.dataForm, this.planeData);
+    this.fsat203Service.planeShape.next(tmpData.planeType);
     if (tmpData.planeType == 'Rectangular') {
       let tmpArea = tmpData.length * tmpData.width;
       if (tmpData.numInletBoxes) {

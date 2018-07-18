@@ -4,12 +4,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable()
 export class Fsat203Service {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  planeShape: BehaviorSubject<string>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.planeShape = new BehaviorSubject<string>(undefined);
+   }
 
   getBasicsFormFromObject(obj: FanRatedInfo, settings: Settings): FormGroup {
     let pressureMin: number = 10;
