@@ -64,6 +64,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.exploreOppsToast.emit(false);
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();

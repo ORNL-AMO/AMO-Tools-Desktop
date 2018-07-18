@@ -32,7 +32,6 @@ export class ModificationListComponent implements OnInit {
     this.initDropdown();
     this.assessmentTabSubscription = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-      console.log(this.assessmentTab);
     })
   }
 

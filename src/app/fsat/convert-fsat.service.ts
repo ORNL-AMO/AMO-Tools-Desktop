@@ -237,10 +237,10 @@ export class ConvertFsatService {
     inputs.PlaneData.OutletMstPlane = this.convertPlaneInput(inputs.PlaneData.OutletMstPlane, settings);
     //pressure
     if (settings.fanPressureMeasurement != 'inH2o') {
-      inputs.PlaneData.totalPressureLossBtwnPlanes1and4 = this.convertUnitsService.value(inputs.PlaneData.totalPressureLossBtwnPlanes1and4).from('inH2o').to(settings.fanPressureMeasurement);
-      inputs.PlaneData.totalPressureLossBtwnPlanes2and5 = this.convertUnitsService.value(inputs.PlaneData.totalPressureLossBtwnPlanes2and5).from('inH2o').to(settings.fanPressureMeasurement);
-      inputs.PlaneData.inletSEF = this.convertUnitsService.value(inputs.PlaneData.inletSEF).from('inH2o').to(settings.fanPressureMeasurement);
-      inputs.PlaneData.outletSEF = this.convertUnitsService.value(inputs.PlaneData.outletSEF).from('inH2o').to(settings.fanPressureMeasurement);
+      inputs.PlaneData.totalPressureLossBtwnPlanes1and4 = inputs.PlaneData.totalPressureLossBtwnPlanes1and4 ? this.convertUnitsService.value(inputs.PlaneData.totalPressureLossBtwnPlanes1and4).from('inH2o').to(settings.fanPressureMeasurement) : inputs.PlaneData.totalPressureLossBtwnPlanes1and4;
+      inputs.PlaneData.totalPressureLossBtwnPlanes2and5 = inputs.PlaneData.totalPressureLossBtwnPlanes2and5 ? this.convertUnitsService.value(inputs.PlaneData.totalPressureLossBtwnPlanes2and5).from('inH2o').to(settings.fanPressureMeasurement) : inputs.PlaneData.totalPressureLossBtwnPlanes2and5;
+      inputs.PlaneData.inletSEF = inputs.PlaneData.inletSEF ? this.convertUnitsService.value(inputs.PlaneData.inletSEF).from('inH2o').to(settings.fanPressureMeasurement) : inputs.PlaneData.inletSEF;
+      inputs.PlaneData.outletSEF = inputs.PlaneData.outletSEF ? this.convertUnitsService.value(inputs.PlaneData.outletSEF).from('inH2o').to(settings.fanPressureMeasurement) : inputs.PlaneData.outletSEF;
     }
     return inputs;
   }
@@ -248,44 +248,44 @@ export class ConvertFsatService {
 
   convertBaseGasDensityInput(input: BaseGasDensity, settings: Settings): BaseGasDensity {
     if (settings.fanTemperatureMeasurement != 'F') {
-      input.dryBulbTemp = this.convertUnitsService.value(input.dryBulbTemp).from('F').to(settings.fanTemperatureMeasurement);
-      input.wetBulbTemp = this.convertUnitsService.value(input.wetBulbTemp).from('F').to(settings.fanTemperatureMeasurement);
-      input.dewPoint = this.convertUnitsService.value(input.dewPoint).from('F').to(settings.fanTemperatureMeasurement);
+      input.dryBulbTemp = input.dryBulbTemp ? this.convertUnitsService.value(input.dryBulbTemp).from('F').to(settings.fanTemperatureMeasurement) : input.dryBulbTemp;
+      input.wetBulbTemp = input.wetBulbTemp ? this.convertUnitsService.value(input.wetBulbTemp).from('F').to(settings.fanTemperatureMeasurement) : input.wetBulbTemp;
+      input.dewPoint = input.dewPoint ? this.convertUnitsService.value(input.dewPoint).from('F').to(settings.fanTemperatureMeasurement) : input.dewPoint;
     }
-    if (settings.densityMeasurement != 'lbscf') {
+    if (settings.densityMeasurement != 'lbscf' && input.gasDensity) {
       input.gasDensity = this.convertUnitsService.value(input.gasDensity).from('lbscf').to(settings.densityMeasurement);
     }
-    if (settings.fanBarometricPressure != 'inHg') {
+    if (settings.fanBarometricPressure != 'inHg' && input.barometricPressure) {
       input.barometricPressure = this.convertUnitsService.value(input.barometricPressure).from('inHg').to(settings.fanBarometricPressure);
     }
-    if (settings.fanPressureMeasurement != 'inH2o') {
+    if (settings.fanPressureMeasurement != 'inH2o' && input.staticPressure) {
       input.staticPressure = this.convertUnitsService.value(input.staticPressure).from('inH2o').to(settings.fanPressureMeasurement);
     }
-    if (settings.fanSpecificHeatGas != 'btulbF') {
+    if (settings.fanSpecificHeatGas != 'btulbF' && input.specificHeatGas) {
       input.specificHeatGas = this.convertUnitsService.value(input.specificHeatGas).from('btulbF').to(settings.fanSpecificHeatGas);
     }
     return input;
   }
 
   convertFanRatedInfoInput(input: FanRatedInfo, settings: Settings): FanRatedInfo {
-    if (settings.densityMeasurement != 'lbscf') {
+    if (settings.densityMeasurement != 'lbscf' && input.densityCorrected) {
       input.densityCorrected = this.convertUnitsService.value(input.densityCorrected).from('lbscf').to(settings.densityMeasurement)
     }
     if (settings.fanBarometricPressure != 'inHg') {
-      input.pressureBarometricCorrected = this.convertUnitsService.value(input.pressureBarometricCorrected).from('inHg').to(settings.fanBarometricPressure);
-      input.globalBarometricPressure = this.convertUnitsService.value(input.globalBarometricPressure).from('inHg').to(settings.fanBarometricPressure);
+      input.pressureBarometricCorrected = input.pressureBarometricCorrected ? this.convertUnitsService.value(input.pressureBarometricCorrected).from('inHg').to(settings.fanBarometricPressure) : input.pressureBarometricCorrected;
+      input.globalBarometricPressure = input.globalBarometricPressure ? this.convertUnitsService.value(input.globalBarometricPressure).from('inHg').to(settings.fanBarometricPressure) : input.globalBarometricPressure;
     }
     return input;
   }
 
   convertPlaneInput(input: Plane, settings: Settings): Plane {
-    if (settings.fanBarometricPressure != 'inHg') {
+    if (settings.fanBarometricPressure != 'inHg' && input.barometricPressure) {
       input.barometricPressure = this.convertUnitsService.value(input.barometricPressure).from('inHg').to(settings.fanBarometricPressure);
     }
-    if (settings.fanFlowRate != 'ft3/min') {
+    if (settings.fanFlowRate != 'ft3/min' && input.area) {
       input.area = this.convertUnitsService.value(input.area).from('ft2').to('m2');
     }
-    if (settings.fanTemperatureMeasurement != 'F') {
+    if (settings.fanTemperatureMeasurement != 'F' && input.dryBulbTemp) {
       input.dryBulbTemp = this.convertUnitsService.value(input.dryBulbTemp).from('F').to(settings.fanTemperatureMeasurement);
     }
     if (settings.fanPressureMeasurement != 'inH2o' && input.staticPressure) {
