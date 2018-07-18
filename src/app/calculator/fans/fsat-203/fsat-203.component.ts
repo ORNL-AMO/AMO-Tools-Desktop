@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 
 @Component({
   selector: 'app-fsat-203',
@@ -35,7 +36,7 @@ export class Fsat203Component implements OnInit {
   planeResults: PlaneResults;
   currentField: string;
   currentPlane: string = 'plane-info';
-  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService, private convertFsatService: ConvertFsatService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -43,6 +44,7 @@ export class Fsat203Component implements OnInit {
     }
     // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
+    this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     this.checkBasics();
     this.checkGasDensity();
     this.checkPlane('1');
