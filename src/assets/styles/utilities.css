@@ -1,0 +1,192 @@
+a:not([href]):not([tabindex]).click-link{
+    color: #007bff;
+}
+
+a:not([href]):not([tabindex]).click-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    color: #0056b3;
+}
+
+a:not([href]):not([tabindex]).disabled-link{
+    color: gray;
+}
+
+a:not([href]):not([tabindex]).disabled-link:hover{
+    font-weight: normal;
+    cursor: default;
+    text-decoration: none;
+}
+
+
+.stand-alone-calc{
+    height: 100vh;
+}
+
+
+/**Input Data Report **/
+.summary-card .card-header h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.summary-card .card-header{
+    background-color: #ffffff;
+}
+
+/* .summary-card .card-header:hover{
+    background-color: #D5D8DC;
+    cursor: pointer;
+} */
+
+
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+
+.fsat .btn-primary{
+    background-color: #FFE400;
+    border-color: #FFE400;
+    color: black;
+}
+
+.fan-block i{
+    color:#FFE400
+  }
+  
+  .fan-block{
+    display: inline-flex;
+    background-color: #7F8C8D;
+    padding: 2px;
+  }
+  
+.loss-results{
+    margin-bottom: 20px;
+}
+
+.loss-total{
+    border-top: 2px groove #bf3d00;
+    padding-top: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+
+
+
+/*grid view*/
+.summary-card-header{
+    text-transform: uppercase;
+    display: inline-block;
+    font-size: 14px;
+}
+
+/*tab badge*/
+.gray-badge.input-error{
+    background-color: orange;
+}
+
+
+.gray-badge.missing-data{
+    background-color: red;
+}
+
+.gray-badge.success{
+    background-color: green;
+}
+
+.gray-badge.loss-different{
+    background-color: #007bff;
+    /* background-color: blue; */
+}
+
+
+.indicate-different {
+	border: #007bff solid 2px;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.indicate-different.form-control {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.indicate-different.incrementor {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
+}
+
+.invalid, .indicate-different.invalid, input.indicate-different.invalid{
+	border: red solid 2px !important;
+    box-shadow: 0px 0px 5px red !important;
+}
+
+.error, .indicate-different.error, input.indicate-different.error {
+    border: orange solid 2px;
+    box-shadow: 0px 0px 5px orange;
+}
+
+
+.card-item{
+    box-shadow: 3px 0px 5px 2px gray;
+  } 
+
+
+  /* Fan flow rate pressure modal colors */
+
+  .flow-rate{
+    color: #8E44AD;
+    font-weight: bold;
+  }
+
+
+  .inlet-pressure{
+    color: #3498DB;
+    font-weight: bold;
+  }
+
+  .outlet-pressure{
+   color: #DC7633;
+   font-weight: bold;
+  }
+
+
+  /*Calculator menu icons */
+.calc-icon-div{
+    height: 90px;
+    width: 90px;
+    border-radius: 15px;
+    border: 0.1px solid rgba(123, 120, 120, 0.25);
+    box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.motors .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
+}
+
+.psat .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34),#2980b9);
+}
+
+.fsat .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
+}
+
+.phast .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
+}
+
+.utilities .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
+}
+
+.compressed-air .calc-icon-div{
+    background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
+}
+
+.calc-img{
+    width: 90%;
+}
