@@ -331,6 +331,7 @@ export const MockFsatSettings: Settings = {
     energyResultUnit: "MMBtu",
     customFurnaceName: null,
     temperatureMeasurement: "F",
+    fanTemperatureMeasurement: "F",
     appVersion: "0.2.8-beta",
     fanCurveType: null,
     fanConvertedConditions: null,

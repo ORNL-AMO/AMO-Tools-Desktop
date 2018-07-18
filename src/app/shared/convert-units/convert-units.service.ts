@@ -141,40 +141,44 @@ export class ConvertUnitsService {
     }
 
     /**
-    * Convert from the source value to its anchor inside the system
-    */
+     * Convert from the source value to its anchor inside the system
+     */
     result = this.val * this.origin.unit.to_anchor;
 
     /**
-    * For some changes it's a simple shift (C to K)
-    * So we'll add it when convering into the unit
-    * and substract it when converting from the unit
-    */
-    if (this.destination.unit.anchor_shift) {
-      result += this.destination.unit.anchor_shift;
-    }
-
+     * For some changes it's a simple shift (C to K)
+     * So we'll add it when convering into the unit (later)
+     * and subtract it when converting from the unit
+     */
     if (this.origin.unit.anchor_shift) {
       result -= this.origin.unit.anchor_shift
     }
 
-
     /**
-    * Convert from one system to another through the anchor ratio. Some conversions
-    * aren't ratio based or require more than a simple shift. We can provide a custom
-    * transform here to provide the direct result
-    */
-    if (this.origin.system != this.destination.system) {
+     * Convert from one system to another through the anchor ratio. Some conversions
+     * aren't ratio based or require more than a simple shift. We can provide a custom
+     * transform here to provide the direct result
+     */
+    if(this.origin.system != this.destination.system) {
       transform = this._measures[this.origin.measure]._anchors[this.origin.system].transform;
       if (typeof transform === 'function') {
-        return result = transform(result)
+        result = transform(result)
       }
-      result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
+      else {
+        result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
+      }
     }
 
     /**
-    * Convert to another unit inside the destination system
-    */
+     * This shift has to be done after the system conversion business
+     */
+    if (this.destination.unit.anchor_shift) {
+      result += this.destination.unit.anchor_shift;
+    }
+
+    /**
+     * Convert to another unit inside the destination system
+     */
     return result / this.destination.unit.to_anchor;
   }
 

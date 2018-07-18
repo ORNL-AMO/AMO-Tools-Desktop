@@ -58,8 +58,10 @@
       <div class="input-group">
         <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="dryBulbTemp" (input)="save()"
           (focus)="focusField('dryBulbTemp')" onfocus="this.select();">
-        <span *ngIf="settings.temperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
-        <span *ngIf="settings.temperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'C'" class="input-group-addon units">&#8451;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'K'" class="input-group-addon units">&#8490;</span>
+        <span *ngIf="settings.fanTemperatureMeasurement == 'R'" class="input-group-addon units">&#176;R</span>
       </div>
     </div>
     <div class="form-group">

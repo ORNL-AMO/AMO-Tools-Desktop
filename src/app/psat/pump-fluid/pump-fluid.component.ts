@@ -120,10 +120,11 @@ export class PumpFluidComponent implements OnInit {
       this.tempUnit = '&#8451;';
     } else if (this.settings.temperatureMeasurement == 'F') {
       this.tempUnit = '&#8457;';
+    } else if (this.settings.temperatureMeasurement == 'K') {
+      this.tempUnit = '&#8490;';
+    } else if (this.settings.temperatureMeasurement == 'R') {
+      this.tempUnit = '&#176;R';
     }
-    // } else if (this.settings.temperatureMeasurement == 'K') {
-    //   this.tempUnit = '&#8490';
-    // }
     if (!this.selected) {
       this.disableForm();
     }
