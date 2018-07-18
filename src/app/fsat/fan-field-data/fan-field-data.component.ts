@@ -340,6 +340,7 @@ export class FanFieldDataComponent implements OnInit {
   getBodyHeight() {
     if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
+      console.log(this.bodyHeight);
     } else {
       this.bodyHeight = 0;
     }
