@@ -34,7 +34,7 @@ export class FsatBasicsComponent implements OnInit {
   constructor(private helpPanelService: HelpPanelService, private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo);
+    this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo, this.settings);
     
   }
 
