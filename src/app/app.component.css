@@ -625,6 +625,15 @@ Reports
     padding: 0px 0 0px 30px;
 }
 
+.assessment-report.report-in-fsat .assessment-name,
+.assessment-report.report-in-rollup.report-in-fsat .assessment-name {
+    background-image: url('../assets/images/ico-fsat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 0px 0 0px 30px;
+}
+
 
 .assessment-report .report-header:after {
     display: table;
