@@ -19,11 +19,6 @@ export class ReportRollupComponent implements OnInit {
 
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
-
-  @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
-    // this.checkVisibleSummary();
-    this.checkActiveAssessment();
-  }
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
   _reportAssessments: Array<ReportItem>;
   _phastAssessments: Array<ReportItem>;
@@ -44,7 +39,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
   @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
-
+  @ViewChild('reportHeader') reportHeader: ElementRef;  
 
   numPhasts: number = 0;
   numPsats: number = 0;
@@ -58,8 +53,7 @@ export class ReportRollupComponent implements OnInit {
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
-    private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();
@@ -86,7 +80,7 @@ export class ReportRollupComponent implements OnInit {
       if (items) {
         if (items.length != 0) {
           this._reportAssessments = items;
-          this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
+          // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
         }
       }
     });
@@ -105,6 +99,9 @@ export class ReportRollupComponent implements OnInit {
         if (items.length != 0) {
           this._psatAssessments = items;
           this.numPsats = this._psatAssessments.length;
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._psatAssessments[0].assessment;
+          }
         }
       }
     });
@@ -114,6 +111,9 @@ export class ReportRollupComponent implements OnInit {
           this.reportRollupService.initPhastResultsArr(items);
           this._phastAssessments = items;
           this.numPhasts = this._phastAssessments.length;
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._phastAssessments[0].assessment;
+          }
         }
       }
     });
@@ -124,6 +124,9 @@ export class ReportRollupComponent implements OnInit {
           this._fsatAssessments = items;
           this.numFsats = this._fsatAssessments.length;
           this.reportRollupService.initFsatResultsArr(items);
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._fsatAssessments[0].assessment;
+          }
         }
       }
     })
@@ -136,7 +139,7 @@ export class ReportRollupComponent implements OnInit {
               this.selectedPhastCalcs.push(item);
             } else if (item.type == 'pump') {
               this.selectedPsatCalcs.push(item);
-            }else if(item.type == 'fan'){
+            } else if (item.type == 'fan') {
               this.selectedFsatCalcs.push(item);
             }
           })
@@ -231,40 +234,29 @@ export class ReportRollupComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
+  setFocused(assessment: Assessment){
+    this.focusedAssessment = assessment;
+  }
+
   setSidebarHeight() {
-    let doc = this.windowRefService.getDoc();
     let window = this.windowRefService.nativeWindow;
     let wndHeight = window.innerHeight;
-    let header = doc.getElementById('reportHeader');
-    this.bannerHeight = header.clientHeight;
+    this.bannerHeight = this.reportHeader.nativeElement.clientHeight;
     this.sidebarHeight = wndHeight - this.bannerHeight;
   }
 
-  checkActiveAssessment() {
+  checkActiveAssessment($event) {
     let doc = this.windowRefService.getDoc();
-    let window = this.windowRefService.nativeWindow;
-    let container = doc.getElementById('reportHeader');
-    let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
-    if (container && scrollAmount) {
+    let scrollAmount = $event.target.scrollTop;
+    if (this.reportHeader && scrollAmount) {
       this._reportAssessments.forEach(item => {
         let element = doc.getElementById('assessment_' + item.assessment.id);
-        let diff = Math.abs(Math.abs(container.clientHeight - element.offsetTop) - scrollAmount);
+        let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight- element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {
           this.focusedAssessment = item.assessment;
         }
       })
     }
-  }
-
-  selectAssessment(item: ReportItem) {
-    let doc = this.windowRefService.getDoc();
-    let element = doc.getElementById('assessment_' + item.assessment.id);
-    let container = doc.getElementById('reportHeader');
-    this.focusedAssessment = item.assessment;
-    element.scrollIntoView({ behavior: 'smooth' });
-    let window = this.windowRefService.nativeWindow;
-    let scrlAmnt = 0 - (container.clientHeight + 25);
-    window.scrollBy(0, scrlAmnt)
   }
 
   showPhastModal() {
@@ -295,7 +287,7 @@ export class ReportRollupComponent implements OnInit {
     this.fsatRollupModal.show();
   }
 
-  hideFsatModal(){
+  hideFsatModal() {
     this.fsatRollupModal.hide();
   }
 }

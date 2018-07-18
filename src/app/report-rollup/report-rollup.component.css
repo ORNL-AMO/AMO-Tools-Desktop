@@ -74,6 +74,14 @@
     background-color: #ececec;
 }
 
+.icon-image{
+    width: 26px;
+  }
+  
+  .icon{
+    width: 100%;
+  }
+
 
 @media print {
 
