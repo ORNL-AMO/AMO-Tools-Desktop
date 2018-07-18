@@ -33,7 +33,6 @@ import { ImportService } from '../shared/import-export/import.service';
 export class DashboardComponent implements OnInit {
   allDirectories: Directory;
   workingDirectory: Directory;
-  selectedCalculator: string;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
   view: string;
@@ -230,41 +229,6 @@ export class DashboardComponent implements OnInit {
     return this.workingDirectory;
   }
 
-  goHome() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'landing-screen';
-  }
-
-  showAbout() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'about-page';
-  }
-
-  showAcknowledgments() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'acknowledgments-page';
-  }
-
-  showTutorials() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'tutorials';
-  }
-
-  showSettings() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'settings';
-  }
-
-  showCustomMaterials() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'custom-materials';
-  }
-
-  showContact() {
-    this.selectedCalculator = '';
-    this.dashboardView = 'contact';
-  }
-
   populateDirectories(directory: Directory): Directory {
     let tmpDirectory: Directory = {
       name: directory.name,
@@ -280,15 +244,13 @@ export class DashboardComponent implements OnInit {
   }
 
   changeWorkingDirectory(directory: Directory) {
-    this.dashboardView = 'assessment-dashboard';
+    this.assessmentService.dashboardView.next('assessment-dashboard');
     this.workingDirectory = this.populateDirectories(directory);
     this.getWorkingDirectoryData();
   }
 
   viewCalculator(str: string) {
-    this.goCalcHome = !this.goCalcHome;
-    this.dashboardView = 'calculator';
-    this.selectedCalculator = str;
+    this.assessmentService.dashboardView.next('calculator');
   }
 
   newDir() {

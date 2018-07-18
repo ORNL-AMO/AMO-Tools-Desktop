@@ -20,6 +20,10 @@ export class FanShaftPowerComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<FanShaftPower>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
+
   shaftPowerForm: FormGroup;
 
 
@@ -49,8 +53,8 @@ export class FanShaftPowerComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private fsat203Service: Fsat203Service, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if (!this.settings.powerMeasurement) {
-      this.settings.powerMeasurement = 'hp';
+    if (!this.settings.fanPowerMeasurement) {
+      this.settings.fanPowerMeasurement = 'hp';
     }
     this.shaftPowerForm = this.fsat203Service.getShaftPowerFormFromObj(this.fanShaftPower);
   }
@@ -72,7 +76,7 @@ export class FanShaftPowerComponent implements OnInit {
   calcMotorShaftPower() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
     let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * this.fanShaftPower.powerFactorAtLoad;
-    tmpVal = this.convertUnitsService.value(tmpVal).from('W').to('hp');
+    tmpVal = this.convertUnitsService.value(tmpVal).from('kW').to('hp');
     this.shaftPowerForm.patchValue({
       motorShaftPower: tmpVal
     })
@@ -94,8 +98,8 @@ export class FanShaftPowerComponent implements OnInit {
     this.emitSave.emit(this.fanShaftPower);
   }
 
-  focusField() {
-    //todo
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   estimateFla() {

@@ -13,7 +13,7 @@
 <div class="sidebar-group secondary">
   <ul>
     <li [ngClass]="{'selected': dashboardView == 'landing-screen'}">
-      <span (click)="goHome()">Home</span>
+      <span (click)="changeDashboardView('landing-screen')">Home</span>
     </li>
   </ul>
 </div>
@@ -43,7 +43,7 @@
       <span class="sidebar-item" (click)="chooseCalculator('pumps')">Pumps</span>
     </li>
     <li [ngClass]="{'selected': selectedCalculator == 'fans'}">
-      <span (click)="chooseCalculator('fans')">Fans</span>
+      <span class="sidebar-item" (click)="chooseCalculator('fans')">Fans</span>
     </li>
     <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}">
       <span class="sidebar-item" (click)="chooseCalculator('furnaces')">Process Heating</span>
@@ -64,22 +64,22 @@
 <div class="sidebar-group secondary">
   <ul>
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
-      <span class="sidebar-item" (click)="goToSettings()">Settings</span>
+      <span class="sidebar-item" (click)="changeDashboardView('settings')">Settings</span>
     </li>
-    <li [ngClass]="{'selected':dashboardView == 'materials'}">
-      <span class="sidebar-item" (click)="goToMaterials()">Custom Materials</span>
+    <li [ngClass]="{'selected':dashboardView == 'custom-materials'}">
+      <span class="sidebar-item" (click)="changeDashboardView('custom-materials')">Custom Materials</span>
     </li>
     <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
-      <span class="sidebar-item" (click)="showTutorials()">Tutorials</span>
+      <span class="sidebar-item" (click)="changeDashboardView('tutorials')">Tutorials</span>
     </li>
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
-      <span class="sidebar-item" (click)="showAbout()">About</span>
+      <span class="sidebar-item" (click)="changeDashboardView('about-page')">About</span>
     </li>
     <li [ngClass]="{'selected': dashboardView == 'contact'}">
-      <span class="sidebar-item" (click)="showContact()">Contact</span>
+      <span class="sidebar-item" (click)="changeDashboardView('contact')">Contact</span>
     </li>
     <li [ngClass]="{'selected': dashboardView == 'acknowledgments-page'}">
-      <span class="sidebar-item" (click)="showAcknowledgments()">Acknowledgments</span>
+      <span class="sidebar-item" (click)="changeDashboardView('acknowledgments-page')">Acknowledgments</span>
     </li>
     <!--<a href="mailto:accawigk@ornl.gov">Contact</a></li>-->
   </ul>

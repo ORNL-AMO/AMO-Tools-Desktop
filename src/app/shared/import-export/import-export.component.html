@@ -14,8 +14,16 @@
         <span class="bold">Assessments</span>
         <ul>
           <li *ngFor="let assessmentItem of noDirAssessmentItems">
-            <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-            <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> {{assessmentItem.assessment.name}}
+            <div class="d-flex align-items-center" [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT' }">
+              <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon" src="assets/images/ico-psat-diagram.png">
+                <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon" src="assets/images/ico-phast-diagram.png">
+                <img *ngIf="assessmentItem.assessment.type == 'FSAT'" class="icon" src="assets/images/ico-fsat-diagram.png">
+              </span>
+              <span class="p-1">
+                <a>{{assessmentItem.assessment.name}}</a>
+              </span>
+            </div>
           </li>
         </ul>
       </li>
@@ -26,8 +34,16 @@
             <span class="fa fa-folder p-1"></span>{{dirItem.directory.name}}
             <ul>
               <li *ngFor="let assessmentItem of getDirAssessments(dirItem.directory.id)">
-                <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-                <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png"> {{assessmentItem.assessment.name}}
+                <div class="d-flex align-items-center" [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT' }">
+                  <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                    <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon" src="assets/images/ico-psat-diagram.png">
+                    <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon" src="assets/images/ico-phast-diagram.png">
+                    <img *ngIf="assessmentItem.assessment.type == 'FSAT'" class="icon" src="assets/images/ico-fsat-diagram.png">
+                  </span>
+                  <span class="p-1">
+                    <a>{{assessmentItem.assessment.name}}</a>
+                  </span>
+                </div>
               </li>
             </ul>
           </li>

@@ -1,11 +1,15 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 //declare const d3: any;
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+
+var tableEfficiencyCorrection: number;
+var tableSpecificSpeed: number;
+
 @Component({
   selector: 'app-specific-speed-graph',
   templateUrl: './specific-speed-graph.component.html',
@@ -35,6 +39,17 @@ export class SpecificSpeedGraphComponent implements OnInit {
   focus: any;
   isGridToggled: boolean;
 
+  //dynamic table variables
+  d: any;
+  focusD: Array<any>;
+  // x: any;
+  // y: any;
+  curveChanged: boolean = false;
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, specificSpeed: string, efficiencyCorrection: string }>;
+  tablePoints: Array<any>;
+
+
   firstChange: boolean = true;
 
   canvasWidth: number;
@@ -62,6 +77,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, specificSpeed: string, efficiencyCorrection: string }>();
+    this.tablePoints = new Array<any>();
+    this.focusD = new Array<any>();
+    this.curveChanged = false;
 
     this.isGridToggled = false;
 
@@ -480,8 +500,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
           }
           let d0 = data[i - 1];
           let d1 = data[i];
-          let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-          this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
+
+          this.d = x0 - d0.x > d1.x - x0 ? d1 : d0;
+
+          this.focus.attr("transform", "translate(" + this.x(this.d.x) + "," + this.y(this.d.y) + ")");
 
           // this.pointer.transition()
           //   .style("opacity", 1);
@@ -500,18 +522,21 @@ export class SpecificSpeedGraphComponent implements OnInit {
           //   .style("fill", "#ffffff")
           //   .style("filter", "url(#drop-shadow)");
 
+          tableSpecificSpeed = format(this.d.x);
+          tableEfficiencyCorrection = format(this.d.y);
+
           this.detailBox
             .style("padding-right", "10px")
             .style("padding-left", "10px")
             .html(
-              "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
+              "<p><strong><div>Specific Speed: </div></strong><div>" + format(this.d.x) + " " + "</div>" +
 
-              "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
+              "<strong><div>Efficiency Correction: </div></strong><div>" + format(this.d.y) + " %</div></p>")
 
             // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-            .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-            .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
+            .style("left", (this.margin.left + this.x(this.d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+            .style("top", (this.margin.top + this.y(this.d.y) + 26) + "px")
             .style("position", "absolute")
             .style("width", detailBoxWidth + "px")
             .style("height", detailBoxHeight + "px")
@@ -526,8 +551,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
           this.tooltipPointer
             .attr("class", "tooltip-pointer")
             .html("<div></div>")
-            .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
-            .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+            .style("left", (this.margin.left + this.x(this.d.x)) + 5 + "px")
+            .style("top", (this.margin.top + this.y(this.d.y) + 16) + "px")
             .style("position", "absolute")
             .style("width", "0px")
             .style("height", "0px")
@@ -566,9 +591,81 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .style("opacity", 0);
         });
 
+      //dynamic table
+      if (!this.curveChanged) {
+        this.replaceFocusPoints();
+      }
+      else {
+        this.resetTableData();
+      }
+      this.curveChanged = false;
+
       this.drawPoint();
 
       d3.selectAll("line").style("pointer-events", "none");
+    }
+  }
+
+  //dynamic table
+  buildTable() {
+    let i = this.tableData.length;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+    let tableFocus = this.svg.append("g")
+      .attr("class", "tablePoint")
+      .style("display", null)
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+
+    tableFocus.append("circle")
+      .attr("r", 6)
+      .attr("id", "tablePoint-" + this.tablePoints.length)
+      .style("fill", this.graphColors[i % this.graphColors.length])
+      .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+      .style("stroke-width", "3px")
+      .style('pointer-events', 'none');
+
+    this.focusD.push(this.d);
+    tableFocus.attr("transform", "translate(" + this.x(this.d.x) + "," + this.y(this.d.y) + ")");
+
+    this.tablePoints.push(tableFocus);
+
+    let dataPiece = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length],
+      specificSpeed: tableSpecificSpeed.toString(),
+      efficiencyCorrection: tableEfficiencyCorrection.toString()
+    }
+    this.tableData.push(dataPiece);
+  }
+
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, specificSpeed: string, efficiencyCorrection: string }>();
+    this.tablePoints = new Array<any>();
+    this.focusD = new Array<any>();
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    for (let i = 0; i < this.tablePoints.length; i++) {
+      let borderColorIndex = Math.floor(i / this.graphColors.length);
+
+      let tableFocus = this.svg.append("g")
+        .attr("class", "tablePoint")
+        .style("display", null)
+        .style("opacity", 1)
+        .style('pointer-events', 'none');
+
+      tableFocus.append("circle")
+        .attr("r", 6)
+        .attr("id", "tablePoint-" + i)
+        .style("fill", this.graphColors[i % this.graphColors.length])
+        .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+        .style("stroke-width", "3px")
+        .style('pointer-events', 'none');
+
+      tableFocus.attr("transform", "translate(" + this.x(this.focusD[i].x) + "," + this.y(this.focusD[i].y) + ")");
     }
   }
 

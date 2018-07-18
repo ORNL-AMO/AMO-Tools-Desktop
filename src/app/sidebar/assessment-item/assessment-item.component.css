@@ -16,32 +16,10 @@
   background-color: #eee;
 }
 
-.phast .icon-image{
-  width: 1.5rem;
-}
-
-/*
-li{
-  list-style: none;
-  margin: 0;
-  color: white;
-  font-weight: bold;
-}
-*/
-
-i{
-  color:#FFE400
-}
-
-.fan-block{
-  display: inline-flex;
-  background-color: #7F8C8D;
-  padding: 2px;
-}
-
 .icon-image{
-  height: 18px;
+  width: 26px;
 }
-.psat .icon-image{
-  width: 1rem;
+
+.icon{
+  width: 100%;
 }

@@ -1,0 +1,97 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Basic Fan Info Help
+    <br>
+    <small class="text-muted">This calculator lets the user determine the power, flow rate, pressure and fan efficiency at set operating points. It
+      also helps the user perform a pitot tube analysis for the determination of flow rate and pressure.
+      <br> This section sets up the basic information about the fan.
+
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'fanSpeed'">
+    <h6>
+      Fan Speed
+      <br>
+      <small class="text-muted">
+        The operating or nameplate speed of the fan.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'motorSpeed'">
+    <h6>
+      Motor Speed
+      <br>
+      <small class="text-muted">
+        The nameplate speed of the motor.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'globalBarometricPressure'">
+    <h6>
+      Barometric Pressure
+      <br>
+      <small class="text-muted">
+        The pressure exerted by the weight of air in the atmosphere. Can be estimated with information on the fan elevation above
+        sea level.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fanSpeedCorrected'">
+    <h6>
+      Corrected Fan Speed
+      <br>
+      <small class="text-muted">
+        Fan speed that calculated values (power, flow, pressure) will be corrected to. Usually the rated fan speed or fan speed used
+        for manufacturer’s fan curve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'densityCorrected'">
+    <h6>
+      Corrected Density
+      <br>
+      <small class="text-muted">
+        Gas density that calculated values (power, flow, pressure) will be corrected to. Usually the gas density used for manufacturer’s
+        fan curve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureBarometricCorrected'">
+    <h6>
+      Corrected Barometric Pressure
+      <br>
+      <small class="text-muted">
+        Barometric Pressure that calculated values (power, flow, pressure) will be corrected to. Usually the barometric pressure
+        used for manufacturer’s fan curve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'includesEvase'">
+    <h6>
+      Rated Fan Performance Includes Evase
+      <br>
+      <small class="text-muted">
+        Specify if a discharge evase has been accounted for in the rated fan performance by selecting ‘Yes’ or ‘No.’
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'traversePlanes'">
+    <h6>
+      Number of Traverse Planes
+      <br>
+      <small class="text-muted">
+        1 is the default setting, but if more than one traverse plane is required to capture the total flow of the fan, then select 2 or 3 (more than 3 is rare and thus not included).        <hr>
+      </small>
+    </h6>
+  </div>
+  <!--TODO: rest of fields-->
+
+</div>

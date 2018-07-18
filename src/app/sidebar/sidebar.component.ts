@@ -5,6 +5,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
+import { CalculatorService } from '../calculator/calculator.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -20,25 +21,10 @@ export class SidebarComponent implements OnInit {
   @Input()
   workingDirectory: Directory;
   @Input()
-  selectedCalculator: string;
-  @Output('emitGoHome')
-  emitGoHome = new EventEmitter<boolean>();
-  @Input()
   newDirEventToggle: boolean;
-  @Output('emitShowTutorials')
-  emitShowTutorials = new EventEmitter<boolean>();
-  @Output('emitShowAbout')
-  emitShowAbout = new EventEmitter<boolean>();
-  @Output('emitShowAcknowledgments')
-  emitShowAcknowledgments = new EventEmitter<boolean>();
   @Input()
   dashboardView: string;
-  @Output('emitGoToSettings')
-  emitGoToSettings = new EventEmitter<boolean>();
-  @Output('emitGoToMaterials')
-  emitGoToMaterials = new EventEmitter<boolean>();
-  @Output('emitGoToContact')
-  emitGoToContact = new EventEmitter<boolean>();
+
   @Output('openModal')
   openModal = new EventEmitter<boolean>();
 
@@ -50,7 +36,9 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
-  constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
+  selectedCalcSub: Subscription;
+  selectedCalculator: string;
+  constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
@@ -62,10 +50,15 @@ export class SidebarComponent implements OnInit {
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
     })
+
+    this.selectedCalcSub = this.calculatorService.selectedToolType.subscribe(calcType => {
+      this.selectedCalculator = calcType;
+    })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,12 +71,7 @@ export class SidebarComponent implements OnInit {
           }
         }
       }
-    } else if (changes.selectedCalculator && !this.firstChange) {
-      if (this.selectedCalculator != '') {
-        this.selectedDirectoryId = null;
-      }
-    }
-
+    } 
     if (this.firstChange) {
       this.firstChange = false;
     }
@@ -98,52 +86,28 @@ export class SidebarComponent implements OnInit {
       if (dir.collapsed == true) {
         dir.collapsed = false;
       }
-      this.selectedCalculator = '';
       this.selectedDirectoryId = dir.id;
       this.directoryChange.emit(dir);
     } else {
-      this.selectedCalculator = '';
       this.selectedDirectoryId = null;
     }
   }
   chooseCalculator(str: string) {
-    this.selectCalculator.emit(str);
+    this.selectCalculator.emit();
+    this.calculatorService.selectedToolType.next(str);
+    this.calculatorService.selectedTool.next('none');
   }
 
   getDirectory() {
     return this.directory;
   }
 
-  goToSettings() {
-    this.emitGoToSettings.emit(true);
-  }
-
-  goToMaterials() {
-    this.emitGoToMaterials.emit(true);
-  }
-
-  goHome() {
-    this.emitGoHome.emit(true);
-  }
-
-  showAbout() {
-    this.emitShowAbout.emit(true);
-  }
-
-  showAcknowledgments() {
-    this.emitShowAcknowledgments.emit(true);
-  }
-
-  showTutorials() {
-    this.emitShowTutorials.emit(true);
+  changeDashboardView(str: string){
+    this.assessmentService.dashboardView.next(str);
   }
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);
-  }
-
-  showContact() {
-    this.emitGoToContact.emit(true);
   }
 
   closeUpdateModal() {

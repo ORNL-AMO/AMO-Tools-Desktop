@@ -1,36 +1,42 @@
-<div *ngIf="getSelectedTool() == 'none'">
+<div *ngIf="selectedTool == 'none'">
 
-  <div class="row">
+  <div class="d-flex phast">
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Process Heating Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/o2.png" class="ico-size2" (click)="showTool('o2-enrichment')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/o2.png" class="calc-img" (click)="showTool('o2-enrichment')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('o2-enrichment')">O<sub>2</sub> Enrichment</a>
-            <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion
-              and flue gases.
+            <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion and
+              flue gases.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/eff-impr.png" class="ico-size2" (click)="showTool('efficiency-improvement')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/eff-impr.png" class="calc-img" (click)="showTool('efficiency-improvement')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('efficiency-improvement')">Efficiency Improvement</a>
             <p>
               Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/energy-equ.png" class="ico-size2" (click)="showTool('energy-equivalency')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/energy-equ.png" class="calc-img" (click)="showTool('energy-equivalency')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('energy-equivalency')">Energy Equivalency</a>
             <p>
               Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
@@ -38,24 +44,26 @@
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/flow.png" class="ico-size2" (click)="showTool('energy-use')">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/flow.png" class="calc-img" (click)="showTool('energy-use')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('energy-use')">Flow and Energy Used</a>
             <p>
-              This calculator estimates the energy flow into the furnace by
-              calculating the gas flow from data obtained by an orifice meter. This can then be compared to the calculations
-              provided by the PHAST tool.
+              This calculator estimates the energy flow into the furnace by calculating the gas flow from data obtained by an orifice meter.
+              This can then be compared to the calculations provided by the PHAST tool.
             </p>
           </div>
         </div>
         <!-- <div class="row calc-item-row">
           <div class="col-1">
-            <img src="assets/images/assessment.png" class="ico-size2" (click)="showTool('pre-assessment')">
+            <img src="assets/images/assessment.png" class="calc-img" (click)="showTool('pre-assessment')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
             <p>
               This calculator allows the user to enter either energy use information gathered from meters or design specifications (for
@@ -70,20 +78,20 @@
   </div>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'o2-enrichment'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'o2-enrichment'">
   <app-o2-enrichment></app-o2-enrichment>
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'efficiency-improvement'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'efficiency-improvement'">
   <app-efficiency-improvement></app-efficiency-improvement>
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-equivalency'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'energy-equivalency'">
   <app-energy-equivalency></app-energy-equivalency>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-use'">
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'energy-use'">
   <app-energy-use></app-energy-use>
 </div>

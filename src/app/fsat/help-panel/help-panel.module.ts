@@ -5,7 +5,6 @@ import { HelpPanelService } from './help-panel.service';
 import { FsatBasicsHelpComponent } from './fsat-basics-help/fsat-basics-help.component';
 import { SystemBasicsHelpComponent } from './system-basics-help/system-basics-help.component';
 import { FanCurveDataHelpComponent } from './fan-curve-data-help/fan-curve-data-help.component';
-import { OperatingPointsHelpComponent } from './operating-points-help/operating-points-help.component';
 import { FanFieldDataHelpComponent } from './fan-field-data-help/fan-field-data-help.component';
 import { FanMotorHelpComponent } from './fan-motor-help/fan-motor-help.component';
 import { FanSetupHelpComponent } from './fan-setup-help/fan-setup-help.component';
@@ -29,7 +28,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     SystemBasicsHelpComponent,
     FsatBasicsHelpComponent,
     FanCurveDataHelpComponent,
-    OperatingPointsHelpComponent,
     FanFieldDataHelpComponent,
     FanMotorHelpComponent,
     FanSetupHelpComponent,
@@ -47,7 +45,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     SystemBasicsHelpComponent,
     FsatBasicsHelpComponent,
     FanCurveDataHelpComponent,
-    OperatingPointsHelpComponent,
     FanFieldDataHelpComponent,
     FanMotorHelpComponent,
     FanSetupHelpComponent,

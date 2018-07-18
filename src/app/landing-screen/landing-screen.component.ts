@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Directory } from '../shared/models/directory';
+import { CalculatorService } from '../calculator/calculator.service';
 
 @Component({
   selector: 'app-landing-screen',
@@ -17,7 +18,7 @@ export class LandingScreenComponent implements OnInit {
   displayVideo: boolean = false;
   showCreateAssessment: boolean = false;
   createAssessmentType: string;
-  constructor() { }
+  constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
   }
@@ -32,6 +33,7 @@ export class LandingScreenComponent implements OnInit {
 
   chooseCalculator(str: string) {
     this.selectCalculator.emit(str);
+    this.calculatorService.selectedToolType.next(str);
   }
 
   createAssessment(str?: string){

@@ -82,7 +82,8 @@ export class SettingsService {
       'fanPressureMeasurement': [settings.fanPressureMeasurement || 'inH2o'],
       'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg'],
       'fanSpecificHeatGas': [settings.fanSpecificHeatGas || 'btulbF'],
-      'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp']
+      'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp'],
+      'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F']
     });
   }
 
@@ -125,7 +126,8 @@ export class SettingsService {
       fanPressureMeasurement: form.controls.fanPressureMeasurement.value,
       fanBarometricPressure: form.controls.fanBarometricPressure.value,
       fanSpecificHeatGas: form.controls.fanSpecificHeatGas.value,
-      fanPowerMeasurement: form.controls.fanPowerMeasurement.value
+      fanPowerMeasurement: form.controls.fanPowerMeasurement.value,
+      fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value
     };
     return tmpSettings;
   }
@@ -167,7 +169,8 @@ export class SettingsService {
       fanPressureMeasurement: settings.fanPressureMeasurement || 'inH2o',
       fanBarometricPressure: settings.fanBarometricPressure || 'inHg',
       fanSpecificHeatGas: settings.fanSpecificHeatGas || 'btulbF',
-      fanPowerMeasurement: settings.fanPowerMeasurement || 'hp'
+      fanPowerMeasurement: settings.fanPowerMeasurement || 'hp',
+      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F'
     }
     return newSettings;
   }
@@ -195,7 +198,8 @@ export class SettingsService {
         fanFlowRate: 'ft3/min',
         fanPressureMeasurement: 'inH2o',
         fanBarometricPressure: 'inHg',
-        fanSpecificHeatGas: 'btulbF'
+        fanSpecificHeatGas: 'btulbF',
+        fanTemperatureMeasurement: 'F'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -223,7 +227,8 @@ export class SettingsService {
         fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
         fanBarometricPressure: 'kPa',
-        fanSpecificHeatGas: 'kJkgC'
+        fanSpecificHeatGas: 'kJkgC',
+        fanTemperatureMeasurement: 'F'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -339,6 +344,7 @@ export class SettingsService {
 
 
   setFanUnits(settings: Settings): Settings {
+    console.log('set fan units');
     if (settings.unitsOfMeasure == 'Metric' || settings.unitsOfMeasure == 'Other') {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'kgNm3';
@@ -354,6 +360,9 @@ export class SettingsService {
       }
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'kJkgC';
+      }
+      if(!settings.fanTemperatureMeasurement){
+        settings.fanTemperatureMeasurement = 'C';
       }
     } else {
       if (!settings.densityMeasurement) {
@@ -371,12 +380,15 @@ export class SettingsService {
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'btulbF';
       }
+      if(!settings.fanTemperatureMeasurement){
+        settings.fanTemperatureMeasurement = 'F';
+      }
     }
+    console.log(settings.fanTemperatureMeasurement);
 
     if (!settings.fanPowerMeasurement) {
       settings.fanPowerMeasurement = 'hp';
     }
-    console.log(settings.fanFlowRate)
     return settings;
   }
 }

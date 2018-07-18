@@ -18,7 +18,13 @@ export class FlowPressuresFormComponent implements OnInit {
   emitCalculate = new EventEmitter<FSAT>();
   @Output('emitDataMissing')
   emitDataMissing = new EventEmitter<boolean>();
-
+  @Output('emitFormSelect')
+  emitFormSelect = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+  @Output('emitChangePlane')
+  emitChangePlane = new EventEmitter<string>();
+  
   formSelect: string = 'none';
   basicsDone: boolean;
   planeDataDone: boolean;
@@ -32,6 +38,11 @@ export class FlowPressuresFormComponent implements OnInit {
   constructor(private fsat203Service: Fsat203Service) { }
 
   ngOnInit() {
+    this.checkAll();
+    this.calculate();
+  }
+
+  checkAll() {
     this.checkPlane('1');
     this.checkPlane('2');
     this.checkPlane('3a');
@@ -43,6 +54,15 @@ export class FlowPressuresFormComponent implements OnInit {
 
   goToForm(str: string) {
     this.formSelect = str;
+    this.emitFormSelect.emit(str);
+  }
+
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
+
+  changePlane(str: string){
+    this.emitChangePlane.emit(str);
   }
 
   savePlaneData(data: PlaneData) {
@@ -77,6 +97,8 @@ export class FlowPressuresFormComponent implements OnInit {
     } else if (event.planeNumber == '5') {
       this.fsat.fieldData.planeData.OutletMstPlane = event.plane;
       this.checkPlane('5');
+    } else if (event.planeNumber == '3b' || event.planeNumber == '3c') {
+      this.saveAddlTraversePlane(event);
     }
     this.calculate();
   }
@@ -95,7 +117,7 @@ export class FlowPressuresFormComponent implements OnInit {
   calculate() {
     if (this.basicsDone && this.planeDataDone) {
       this.emitCalculate.emit(this.fsat);
-    }else{
+    } else {
       this.emitDataMissing.emit(true);
     }
   }

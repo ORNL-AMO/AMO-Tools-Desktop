@@ -43,7 +43,7 @@ import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow
 import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
 import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
+// import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
 
 import { ConvertFsatService } from './convert-fsat.service';
 import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
@@ -52,6 +52,7 @@ import { MotorPerformanceModule } from '../calculator/motors/motor-performance/m
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
+import { ToastyModule } from '../../../node_modules/ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -72,7 +73,8 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     PumpCurveModule,
-    FanEfficiencyModule
+    FanEfficiencyModule,
+    ToastyModule
   ],
   declarations: [
     FsatComponent,
@@ -99,7 +101,7 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
     FanBasicsComponent,
-    FsatReportSankeyComponent  
+    // FsatReportSankeyComponent  
   ],
   providers: [
     FsatService,

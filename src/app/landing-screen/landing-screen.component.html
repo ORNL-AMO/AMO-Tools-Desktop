@@ -43,7 +43,7 @@
 							<div class="col-6 border-right">
 								<div class="d-flex">
 									<div class="p-2">
-										<div class="psat-image-background d-flex flex-column">
+										<div class="d-flex flex-column">
 											<img class="psat-image p-0 align-self-center" src="assets/images/pump.png">
 										</div>
 									</div>
@@ -56,7 +56,7 @@
 								</div>
 								<div class="d-flex">
 									<div class="p-2">
-										<div class="phast-image-background d-flex flex-column">
+										<div class="d-flex flex-column">
 											<img class="phast-image p-0 align-self-center" src="assets/images/ph.png">
 										</div>
 									</div>
@@ -69,9 +69,9 @@
 								</div>
 
 								<div class="d-flex">
-									<div class="p-2">
-										<div class="d-flex flex-column">
-											<img class="fan-icon align-self-center" src="assets/images/fanIcon-4.png">
+									<div class="p-2 align-items-center">
+										<div class="d-flex flex-column fan-icon align-items-center justify-content-center">
+											<img class="fan-image" src="assets/images/ico-fsat-diagram.png">
 										</div>
 									</div>
 									<div class="p-2 d-flex">
@@ -98,8 +98,17 @@
 										<i class="fa fa-calculator"></i> Pumps</a>
 								</div>
 								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('fans')">
+										<i class="fa fa-calculator"></i> Fans</a>
+								</div>
+								<div class="p-2">
 									<a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
 										<i class="fa fa-calculator"></i> Process Heating
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link furnace" (click)="chooseCalculator('steam')">
+										<i class="fa fa-calculator"></i> Steam
 									</a>
 								</div>
 								<div class="p-2">
