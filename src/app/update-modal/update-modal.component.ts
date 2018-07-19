@@ -16,6 +16,14 @@ export class UpdateModalComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
+    this.electronService.ipcRenderer.on('progress', (event, percent) =>{ 
+      console.log('recieved')
+      console.log(percent);
+    })
+    this.electronService.ipcRenderer.on('test', (event, test) =>{ 
+      console.log('recieved')
+      console.log(test);
+    })
   }
   ngAfterViewInit() {
     this.showUpdateModal();

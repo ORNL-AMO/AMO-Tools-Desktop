@@ -34,9 +34,8 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  if (isDev()) {
-    win.toggleDevTools();
-  };
+
+  win.toggleDevTools();
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -48,10 +47,14 @@ app.on('ready', function () {
       autoUpdater.checkForUpdates();
       log.info('checking for update..');
       autoUpdater.on('update-available', (event, info) => {
+        win.webContents.send('test', 'sent message test');
         coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
+      });
+      autoUpdater.on('download-progress', (progressObj) => {
+        win.webContents.send('progress', progressObj.percent)
       });
     }
   })
@@ -59,12 +62,12 @@ app.on('ready', function () {
   autoUpdater.on('error', (event, error) => {
   });
 
-  autoUpdater.on('download-progress', (event, progressObj) => {
-    log.info(progressObj);
-  });
+  // autoUpdater.on('download-progress', (progressObj) => {
+  //   log.info(progressObj);
+  // });
 
   autoUpdater.on('update-downloaded', (event, info) => {
-    autoUpdater.quitAndInstall();
+    //autoUpdater.quitAndInstall();
   });
 
   //Check for updates and install
