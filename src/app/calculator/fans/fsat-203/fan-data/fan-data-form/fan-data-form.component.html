@@ -86,6 +86,7 @@
         <span *ngIf="settings.fanTemperatureMeasurement == 'R'" class="input-group-addon units">&#176;R</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="dataForm.controls.dryBulbTemp.invalid && !dataForm.controls.dryBulbTemp.pristine">
+          <span *ngIf="dataForm.controls.dryBulbTemp.errors.required">Value Required</span>
         <span *ngIf="dataForm.controls.dryBulbTemp.errors.max">Value can't be greater than {{dataForm.controls.dryBulbTemp.errors.max.max}}.</span>
         <span *ngIf="dataForm.controls.dryBulbTemp.errors.min">Value can't be less than {{dataForm.controls.dryBulbTemp.errors.min.min}}.</span>
       </span>
@@ -99,6 +100,7 @@
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="dataForm.controls.barometricPressure.invalid && !dataForm.controls.barometricPressure.pristine">
+        <span *ngIf="dataForm.controls.barometricPressure.errors.required">Value Required</span>
         <span *ngIf="dataForm.controls.barometricPressure.errors.max">Value can't be greater than {{dataForm.controls.barometricPressure.errors.max.max}}.</span>
         <span *ngIf="dataForm.controls.barometricPressure.errors.min">Value can't be less than {{dataForm.controls.barometricPressure.errors.min.min}}.</span>
       </span>

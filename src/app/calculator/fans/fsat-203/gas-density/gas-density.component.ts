@@ -50,14 +50,14 @@ export class GasDensityComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  getDensity(){
-    if(this.gasDensityForm.controls.inputType.value == 'relativeHumidity'){
+  getDensity() {
+    if (this.gasDensityForm.controls.inputType.value == 'relativeHumidity') {
       this.calcDensityRelativeHumidity();
-    }else if(this.gasDensityForm.controls.inputType.value == 'wetBulb'){
+    } else if (this.gasDensityForm.controls.inputType.value == 'wetBulb') {
       this.calcDensityWetBulb();
-    }else if(this.gasDensityForm.controls.inputType.value == 'dewPoint'){
+    } else if (this.gasDensityForm.controls.inputType.value == 'dewPoint') {
       this.calcDensityDewPoint();
-    }else{
+    } else {
       this.save();
     }
   }
@@ -65,27 +65,45 @@ export class GasDensityComponent implements OnInit {
   calcDensityWetBulb() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
     let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    })
+    if (isNaN(newDensity) == false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: newDensity
+      })
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      })
+    }
     this.save();
   }
 
   calcDensityRelativeHumidity() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
     let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    })
+    if (isNaN(newDensity) == false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: newDensity
+      })
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      })
+    }
     this.save();
   }
 
   calcDensityDewPoint() {
     let tmpObj: BaseGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
     let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
-    this.gasDensityForm.patchValue({
-      gasDensity: newDensity
-    })
+    if (isNaN(newDensity) == false) {
+      this.gasDensityForm.patchValue({
+        gasDensity: newDensity
+      })
+    } else {
+      this.gasDensityForm.patchValue({
+        gasDensity: undefined
+      })
+    }
     this.save();
   }
 

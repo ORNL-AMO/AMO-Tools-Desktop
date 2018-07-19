@@ -110,4 +110,12 @@ export class FanShaftPowerComponent implements OnInit {
     })
     this.save();
   }
+
+
+  setIsVfd(){
+    this.shaftPowerForm.patchValue({
+      efficiencyVFD: 100
+    })
+    this.save();
+  }
 }
