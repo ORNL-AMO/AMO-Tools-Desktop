@@ -9,12 +9,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="bold-row">
-        <td>Percent Savings (%)</td>
+      <tr>
+        <td class="percent-savings">Percent Savings (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>
-          <span *ngIf="!mod.percentSavings">&mdash; &mdash;</span>
+
+          <div class="hide-print" *ngIf="mod.percentSavings">
+            <div class="col-10 mx-auto gauge-chart-width">
+              <app-percent-graph [value]="mod.percentSavings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'" [unit]="unit"
+                [title]="'phast-modification-savings'"></app-percent-graph>
+            </div>
+          </div>
+          <div class="show-print text-center" *ngIf="mod.percentSavings">
+            {{mod.percentSavings | number:'1.0'}} %
+          </div>
+          <div *ngIf="!mod.percentSavings">
+            &mdash; &mdash;
+          </div>
+
+
+          <!-- <span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>
+            <span *ngIf="!mod.percentSavings">&mdash; &mdash;</span> -->
         </td>
       </tr>
       <tr>

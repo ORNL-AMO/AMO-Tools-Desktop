@@ -1,7 +1,13 @@
 .output-summary .table th {
     width: 25%;
 }
-.selected-modification{
+
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+.selected-modification {
     z-index: 2;
     background: #e5efe9;
 }
@@ -10,9 +16,7 @@
     font-weight: bold;
 }
 
-
-tr > td:not(:first-child),
-tr > th:not(:first-child){
+tr>td:not(:first-child), tr>th:not(:first-child) {
     text-align: center;
 }
 
@@ -20,13 +24,44 @@ tr > th:not(:first-child){
     .print-section-header {
         font-size: 30px;
     }
-
-    .output-summary .table th,
-    .output-summary .table td {
+    .output-summary .table th, .output-summary .table td {
         font-size: 20px;
     }
-
     .print-notes {
         font-size: 18px;
     }
+    .show-print {
+        display: inline !important;
+    }
+    .hide-print {
+        display: none !important;
+    }
+    .chart-row {
+        padding: 0px !important;
+    }
+}
+
+.show-print {
+    display: none;
+}
+
+.section-header {
+    font-size: 16px !important;
+}
+
+.positive-savings {
+    color: #27AE60;
+}
+
+.negative-savings {
+    color: red;
+}
+
+.max-savings {
+    border: solid 4px #27AE60;
+}
+
+.selected-modification {
+    z-index: 2;
+    background: #e5efe9;
 }

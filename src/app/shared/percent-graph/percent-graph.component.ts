@@ -61,7 +61,7 @@ export class PercentGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.exportName = this.title + "-graph";
 
-    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings") {
+    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings') {
       this.inChart = true;
       this.chartHeight = 120;
       this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
