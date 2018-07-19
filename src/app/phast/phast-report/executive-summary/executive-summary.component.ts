@@ -31,9 +31,15 @@ export class ExecutiveSummaryComponent implements OnInit {
   timeUnit: string;
   energyUnit: string;
   numMods: number = 0;
+
+  //percent graph variables
+  unit: string;
+  titlePlacement: string;
   constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.unit = '%';
+    this.titlePlacement = 'top';
     this.notes = new Array();
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.modifications = new Array<ExecutiveSummary>();
