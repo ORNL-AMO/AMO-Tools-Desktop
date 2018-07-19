@@ -39,7 +39,7 @@ export class GasDensityComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService, private fsat203Service: Fsat203Service, private fsatService: FsatService) { }
 
   ngOnInit() {
-    this.gasDensityForm = this.fsat203Service.getGasDensityFormFromObj(this.fanGasDensity);
+    this.gasDensityForm = this.fsat203Service.getGasDensityFormFromObj(this.fanGasDensity, this.settings);
   }
   save() {
     this.fanGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);

@@ -31,12 +31,13 @@ export class FanDataFormComponent implements OnInit {
   constructor(private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData);
+    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings);
     this.calcArea();
   }
 
   calcArea() {
     let tmpData = this.fsat203Service.getPlaneObjFromForm(this.dataForm, this.planeData);
+    this.fsat203Service.planeShape.next(tmpData.planeType);
     if (tmpData.planeType == 'Rectangular') {
       let tmpArea = tmpData.length * tmpData.width;
       if (tmpData.numInletBoxes) {

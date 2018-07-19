@@ -7,10 +7,15 @@
   <div class="form-group">
     <label for="fanSpeed">Fan Speed</label>
     <div class="input-group">
-      <input name="fanSpeed" type="number" step="any" class="form-control" formControlName="fanSpeed" id="fanSpeed" (input)="save()"
+      <input name="fanSpeed" type="number" min="0" step="any" class="form-control" formControlName="fanSpeed" id="fanSpeed" (input)="save()"
         (focus)="focusField('fanSpeed')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.fanSpeed.invalid && !ratedInfoForm.controls.fanSpeed.pristine">
+      <span *ngIf="ratedInfoForm.controls.fanSpeed.errors.required">Value Required</span>
+      <span *ngIf="ratedInfoForm.controls.fanSpeed.errors.max">Value can't be greater than {{ratedInfoForm.controls.fanSpeed.errors.max.max}}.</span>
+      <span *ngIf="ratedInfoForm.controls.fanSpeed.errors.min">Value can't be less than {{ratedInfoForm.controls.fanSpeed.errors.min.min}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
@@ -20,40 +25,67 @@
         (focus)="focusField('motorSpeed')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.motorSpeed.invalid && !ratedInfoForm.controls.motorSpeed.pristine">
+      <span *ngIf="ratedInfoForm.controls.motorSpeed.errors.required">Value Required</span>
+      <span *ngIf="ratedInfoForm.controls.motorSpeed.errors.max">Value can't be greater than {{ratedInfoForm.controls.motorSpeed.errors.max.max}}.</span>
+      <span *ngIf="ratedInfoForm.controls.motorSpeed.errors.min">Value can't be less than {{ratedInfoForm.controls.motorSpeed.errors.min.min}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
-    <label for="globalBarometricPressure">Barometric Pressure (P<sub>b</sub>)</label>
+    <label for="globalBarometricPressure">Barometric Pressure (P
+      <sub>b</sub>)</label>
     <div class="input-group">
-    <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
-      id="globalBarometricPressure" (input)="updatePressure()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
+      <input name="globalBarometricPressure" type="number" step="any" class="form-control" formControlName="globalBarometricPressure"
+        id="globalBarometricPressure" (input)="updatePressure()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.globalBarometricPressure.invalid && !ratedInfoForm.controls.globalBarometricPressure.pristine">
+      <span *ngIf="ratedInfoForm.controls.globalBarometricPressure.errors.required">Value Required</span>
+      <span *ngIf="ratedInfoForm.controls.globalBarometricPressure.errors.max">Value can't be greater than {{ratedInfoForm.controls.globalBarometricPressure.errors.max.max}}.</span>
+      <span *ngIf="ratedInfoForm.controls.globalBarometricPressure.errors.min">Value can't be less than {{ratedInfoForm.controls.globalBarometricPressure.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
-    <label for="fanSpeedCorrected">Corrected Fan Speed (N<sub>c</sub>)</label>
+    <label for="fanSpeedCorrected">Corrected Fan Speed (N
+      <sub>c</sub>)</label>
     <div class="input-group">
       <input name="fanSpeedCorrected" type="number" step="any" class="form-control" formControlName="fanSpeedCorrected" id="fanSpeedCorrected"
         (input)="save()" (focus)="focusField('fanSpeedCorrected')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.fanSpeedCorrected.invalid && !ratedInfoForm.controls.fanSpeedCorrected.pristine">
+      <span *ngIf="ratedInfoForm.controls.fanSpeedCorrected.errors.required">Value Required</span>
+      <span *ngIf="ratedInfoForm.controls.fanSpeedCorrected.errors.max">Value can't be greater than {{ratedInfoForm.controls.fanSpeedCorrected.errors.max.max}}.</span>
+      <span *ngIf="ratedInfoForm.controls.fanSpeedCorrected.errors.min">Value can't be less than {{ratedInfoForm.controls.fanSpeedCorrected.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <!-- don't think "P" is correct, some symbol-->
-    <label for="densityCorrected">Corrected Density (P<sub>c</sub>)</label>
+    <label for="densityCorrected">Corrected Density (P
+      <sub>c</sub>)</label>
     <div class="input-group">
       <input name="densityCorrected" type="number" step="any" class="form-control" formControlName="densityCorrected" id="densityCorrected"
         (input)="save()" (focus)="focusField('densityCorrected')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.densityCorrected.invalid && !ratedInfoForm.controls.densityCorrected.pristine">
+      <span *ngIf="ratedInfoForm.controls.densityCorrected.errors.required">Value Required</span>
+    </span>
   </div>
   <div class="form-group">
-    <label for="pressureBarometricCorrected">Corrected Barometric Pressure (P<sub>bc</sub>)</label>
+    <label for="pressureBarometricCorrected">Corrected Barometric Pressure (P
+      <sub>bc</sub>)</label>
     <div class="input-group">
       <input name="pressureBarometricCorrected" type="number" step="any" class="form-control" formControlName="pressureBarometricCorrected"
         id="pressureBarometricCorrected" (input)="save()" (focus)="focusField('pressureBarometricCorrected')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.invalid && !ratedInfoForm.controls.pressureBarometricCorrected.pristine">
+      <span *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.errors.required">Value Required</span>
+      <span *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.errors.max">Value can't be greater than {{ratedInfoForm.controls.pressureBarometricCorrected.errors.max.max}}.</span>
+      <span *ngIf="ratedInfoForm.controls.pressureBarometricCorrected.errors.min">Value can't be less than {{ratedInfoForm.controls.pressureBarometricCorrected.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="includesEvase">Rated Fan Performance Includes Evase</label>
@@ -64,7 +96,7 @@
       </select>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="ratedInfoForm.controls.includesEvase.value == 'Yes'">
     <label for="upDownStream">Outlet fan Static Pressure Measurements (Plane 5) taken Upstream or Downstream of Fan Outlet (Plane 2)</label>
     <div class="input-group">
       <select class="form-control" name="upDownStream" formControlName="upDownStream" id="upDownStream" (change)="save()" (focus)="focusField('upDownStream')">

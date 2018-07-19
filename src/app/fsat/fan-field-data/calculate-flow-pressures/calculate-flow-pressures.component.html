@@ -10,7 +10,7 @@
         (emitFormSelect)="setFormSelect($event)" (emitChangeField)="changeField($event)" (emitChangePlane)="changePlane($event)"></app-flow-pressures-form>
     </div>
   </div>
-  <div class="w-50 op-points-panel">
+  <div class="w-50 op-points-panel scroll-item" [ngStyle]="{'height.px': bodyHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0" (click)="setTab('results')">Results</a>

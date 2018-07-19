@@ -60,7 +60,7 @@
           </label>
           <div *ngIf="showFsatSettings">
             <p class="help-text">These settings will be used as the default settings for any new fan assessments created.</p>
-            <app-fsat-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings(false)"></app-fsat-settings>
+            <app-fsat-settings [(settingsForm)]="settingsForm" (save)="updateSettings(false)"></app-fsat-settings>
           </div>
         </div>
         <div class="form-section steam">

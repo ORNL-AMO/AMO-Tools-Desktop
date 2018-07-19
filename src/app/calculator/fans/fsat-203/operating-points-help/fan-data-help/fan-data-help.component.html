@@ -110,10 +110,13 @@
   </div>
   <div class="my-2" *ngIf=" currentField == 'length'">
     <h6>
-      Length/Diameter
+      <span *ngIf="planeType == 'Rectangular'">Length</span>
+      <span *ngIf="planeType == 'Circular'">Diameter</span>
       <br>
       <small class="text-muted">
-        The length/diameter of the planar area.
+        The
+        <span *ngIf="planeType == 'Rectangular'">length</span>
+        <span *ngIf="planeType == 'Circular'">diameter</span> of the planar area.
         <hr>
       </small>
     </h6>
@@ -193,6 +196,7 @@
         The number of traverse points for the traverse or the number of readings per hole. This is determined from the AMCA 203 Standard,
         based on the size of the ductwork. The readings should be taken in the center of rectangles or concentric circles
         of constant area. </small>
+      <hr>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'numInsertionPoints'">
@@ -203,10 +207,24 @@
         The number of insertion points used for the analysis. This is determined from the AMCA 203 Standard, based on the size of
         the ductwork. The readings should be taken in the center of rectangles or concentric circles of constant area.
       </small>
+      <hr>
+    </h6>
+  </div>
+  <div class="my-2 d-flex w-100 justify-content-center align-items-center" *ngIf="currentField == 'numInsertionPoints' || currentField == 'numTraverseHoles'">
+    <img *ngIf="planeType == 'Circular'" src="assets/images/circular-insertion-duct.png">
+    <img class="w-100" *ngIf="planeType == 'Rectangular'" src="assets/images/rectangular-insertion-duct.png">
+  </div>
+  <div class="my-2" *ngIf="currentField == 'differentialReadings'">
+    <h6>
+      Add Differential Readings
+      <br>
+      <small class="text-muted">
+        This is where the user enters the data from the pitot tube readings. More information on how to conduct this test can be
+        found in the AMCA 203 standard. The rows of the table each represent all of the insertion points and the columns
+        represent each reading along the traverse.
+      </small>
     </h6>
   </div>
 
-  <!--TODO rest of fields-->
-  <!--fields from fan-data-form, plane-3-form, plane-info-->
 
 </div>

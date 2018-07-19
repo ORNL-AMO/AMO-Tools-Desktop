@@ -2,23 +2,38 @@ import { Injectable } from '@angular/core';
 import { Fan203Inputs, FanRatedInfo, Plane, FanShaftPower, PlaneData } from '../../../shared/models/fans';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../shared/models/fans';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable()
 export class Fsat203Service {
 
-  constructor(private formBuilder: FormBuilder) { }
+  planeShape: BehaviorSubject<string>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.planeShape = new BehaviorSubject<string>(undefined);
+   }
 
-  getBasicsFormFromObject(obj: FanRatedInfo): FormGroup {
+  getBasicsFormFromObject(obj: FanRatedInfo, settings: Settings): FormGroup {
+    let pressureMin: number = 10;
+    let pressureMax: number = 60;
+    if (settings.fanBarometricPressure != 'inHg') {
+      pressureMax = this.convertUnitsService.value(pressureMax).from('inHg').to(settings.fanBarometricPressure);
+      pressureMax = Number(pressureMax.toFixed(0))
+      pressureMin = this.convertUnitsService.value(pressureMin).from('inHg').to(settings.fanBarometricPressure);
+      pressureMin = Number(pressureMin.toFixed(0))
+    }
     let form = this.formBuilder.group({
       fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0), Validators.max(5000)]],
       motorSpeed: [obj.motorSpeed, [Validators.required, Validators.min(0), Validators.max(3600)]],
       fanSpeedCorrected: [obj.fanSpeedCorrected, [Validators.min(0), Validators.max(5000)]],
       densityCorrected: [obj.densityCorrected, Validators.required],
-      pressureBarometricCorrected: [obj.pressureBarometricCorrected, [Validators.required, Validators.min(10), Validators.max(60)]],
+      pressureBarometricCorrected: [obj.pressureBarometricCorrected, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
       includesEvase: [obj.includesEvase, Validators.required],
-      upDownStream: [obj.upDownStream, Validators.required],
+      upDownStream: [obj.upDownStream],
       traversePlanes: [obj.traversePlanes, Validators.required],
-      globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]]
+      globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
     })
     return form;
@@ -41,20 +56,61 @@ export class Fsat203Service {
     return obj;
   }
 
-  getGasDensityFormFromObj(obj: BaseGasDensity): FormGroup {
+  getGasDensityFormFromObj(obj: BaseGasDensity, settings: Settings): FormGroup {
+    let barPressureMin: number = 10;
+    let barPressureMax: number = 60;
+    let dryBulbTempMin: number = -100;
+    let dryBulbTempMax: number = 1000;
+    let staticPressureMin: number = -400;
+    let staticPressureMax: number = 400;
+    let wetBulbTempMin: number = 32;
+    let wetBulbTempMax: number = 1000;
+    let dewPointMin: number = -30;
+    let dewPointMax: number = 1000;
+    let gasDensityMax: number = .2;
+    if (settings.fanBarometricPressure != 'inHg') {
+      barPressureMax = this.convertUnitsService.value(barPressureMax).from('inHg').to(settings.fanBarometricPressure);
+      barPressureMax = Number(barPressureMax.toFixed(0))
+      barPressureMin = this.convertUnitsService.value(barPressureMin).from('inHg').to(settings.fanBarometricPressure);
+      barPressureMin = Number(barPressureMin.toFixed(0))
+    }
+    if (settings.fanTemperatureMeasurement != 'F') {
+      dryBulbTempMin = this.convertUnitsService.value(dryBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
+      dryBulbTempMin = Number(dryBulbTempMin.toFixed(0))
+      dryBulbTempMax = this.convertUnitsService.value(dryBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
+      dryBulbTempMax = Number(dryBulbTempMax.toFixed(0))
+      wetBulbTempMin = this.convertUnitsService.value(wetBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
+      wetBulbTempMin = Number(wetBulbTempMin.toFixed(0))
+      wetBulbTempMax = this.convertUnitsService.value(wetBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
+      wetBulbTempMax = Number(wetBulbTempMax.toFixed(0))
+      dewPointMin = this.convertUnitsService.value(dewPointMin).from('F').to(settings.fanTemperatureMeasurement);
+      dewPointMin = Number(dewPointMin.toFixed(0))
+      dewPointMax = this.convertUnitsService.value(dewPointMax).from('F').to(settings.fanTemperatureMeasurement);
+      dewPointMax = Number(dewPointMax.toFixed(0))
+    }
+    if (settings.densityMeasurement != 'lbscf') {
+      gasDensityMax = this.convertUnitsService.value(gasDensityMax).from('lbscf').to(settings.densityMeasurement);
+      gasDensityMax = Number(gasDensityMax.toFixed(0))
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      staticPressureMin = this.convertUnitsService.value(staticPressureMin).from('inH2o').to(settings.fanPressureMeasurement);
+      staticPressureMin = Number(staticPressureMin.toFixed(0))
+      staticPressureMax = this.convertUnitsService.value(staticPressureMax).from('inH2o').to(settings.fanPressureMeasurement);
+      staticPressureMax = Number(staticPressureMax.toFixed(0))
+    }
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
       // humidityData: ['Yes', Validators.required],
       conditionLocation: [obj.conditionLocation, Validators.required],
-      dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(-100), Validators.max(1000)]],
-      staticPressure: [obj.staticPressure, [Validators.required, Validators.min(-400), Validators.max(400)]],
-      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(10), Validators.max(60)]],
-      specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0), Validators.max(2)]],
-      wetBulbTemp: [obj.wetBulbTemp, [Validators.required, Validators.min(32), Validators.max(1000)]],
-      relativeHumidity: [obj.relativeHumidity, [Validators.required, Validators.min(0), Validators.max(100)]],
-      dewPoint: [obj.dewPoint, [Validators.required, Validators.min(-30), Validators.max(1000)]],
-      gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(.2)]],
+      dryBulbTemp: [obj.dryBulbTemp, [Validators.min(dryBulbTempMin), Validators.max(dryBulbTempMax)]],
+      staticPressure: [obj.staticPressure, [Validators.min(staticPressureMin), Validators.max(staticPressureMax)]],
+      barometricPressure: [obj.barometricPressure, [Validators.min(barPressureMin), Validators.max(barPressureMax)]],
+      specificGravity: [obj.specificGravity, [Validators.min(0), Validators.max(2)]],
+      wetBulbTemp: [obj.wetBulbTemp, [Validators.min(wetBulbTempMin), Validators.max(wetBulbTempMax)]],
+      relativeHumidity: [obj.relativeHumidity, [Validators.min(0), Validators.max(100)]],
+      dewPoint: [obj.dewPoint, [Validators.min(dewPointMin), Validators.max(dewPointMax)]],
+      gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(gasDensityMax)]],
       specificHeatGas: [obj.specificHeatGas]
     })
     return form;
@@ -82,8 +138,8 @@ export class Fsat203Service {
 
   getTraversePlaneFormFromObj(obj: Plane): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      pitotTubeType: [obj.pitotTubeType, [Validators.required, Validators.max(1)]],
-      pitotTubeCoefficient: [obj.pitotTubeCoefficient, Validators.required],
+      pitotTubeType: [obj.pitotTubeType, Validators.required],
+      pitotTubeCoefficient: [obj.pitotTubeCoefficient, [Validators.required, Validators.max(1)]],
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
     })
@@ -98,15 +154,39 @@ export class Fsat203Service {
     return planeData;
   }
 
-  getPlaneFormFromObj(obj: Plane): FormGroup {
+  getPlaneFormFromObj(obj: Plane, settings: Settings): FormGroup {
+    let staticPressureMin: number = -400;
+    let staticPressureMax: number = 400;
+    let barPressureMin: number = 10;
+    let barPressureMax: number = 60;
+    let dryBulbTempMin: number = -100;
+    let dryBulbTempMax: number = 1000;
+    if (settings.fanBarometricPressure != 'inHg') {
+      barPressureMax = this.convertUnitsService.value(barPressureMax).from('inHg').to(settings.fanBarometricPressure);
+      barPressureMax = Number(barPressureMax.toFixed(0))
+      barPressureMin = this.convertUnitsService.value(barPressureMin).from('inHg').to(settings.fanBarometricPressure);
+      barPressureMin = Number(barPressureMin.toFixed(0))
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      staticPressureMin = this.convertUnitsService.value(staticPressureMin).from('inH2o').to(settings.fanPressureMeasurement);
+      staticPressureMin = Number(staticPressureMin.toFixed(0))
+      staticPressureMax = this.convertUnitsService.value(staticPressureMax).from('inH2o').to(settings.fanPressureMeasurement);
+      staticPressureMax = Number(staticPressureMax.toFixed(0))
+    }
+    if (settings.fanTemperatureMeasurement != 'F') {
+      dryBulbTempMin = this.convertUnitsService.value(dryBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
+      dryBulbTempMin = Number(dryBulbTempMin.toFixed(0))
+      dryBulbTempMax = this.convertUnitsService.value(dryBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
+      dryBulbTempMax = Number(dryBulbTempMax.toFixed(0))
+    }
     let form: FormGroup = this.formBuilder.group({
       planeType: [obj.planeType, Validators.required],
       length: [obj.length, [Validators.required, Validators.min(0)]],
       width: [obj.width, [Validators.required, Validators.min(0)]],
       area: [obj.area, [Validators.required, Validators.min(0)]],
-      staticPressure: [obj.staticPressure, [Validators.min(-400), Validators.max(400)]],
-      dryBulbTemp: [obj.dryBulbTemp, [Validators.min(-100), Validators.max(1000)]],
-      barometricPressure: [obj.barometricPressure, [Validators.min(10), Validators.max(60)]],
+      staticPressure: [obj.staticPressure, [Validators.min(staticPressureMin), Validators.max(staticPressureMax)]],
+      dryBulbTemp: [obj.dryBulbTemp, [Validators.min(dryBulbTempMin), Validators.max(dryBulbTempMax)]],
+      barometricPressure: [obj.barometricPressure, [Validators.min(barPressureMin), Validators.max(barPressureMax)]],
       numInletBoxes: [obj.numInletBoxes]
     })
     return form;
@@ -310,7 +390,7 @@ export class Fsat203Service {
         dryBulbTemp: undefined,
         staticPressure: undefined,
         barometricPressure: 29.92,
-        gasDensity: undefined,
+        gasDensity: .0765,
         gasType: 'AIR',
         //Mark Additions
         inputType: 'custom',

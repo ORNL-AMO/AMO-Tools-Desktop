@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 
 @Component({
   selector: 'app-fsat-203',
@@ -35,7 +36,7 @@ export class Fsat203Component implements OnInit {
   planeResults: PlaneResults;
   currentField: string;
   currentPlane: string = 'plane-info';
-  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService) { }
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService, private convertFsatService: ConvertFsatService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -43,6 +44,7 @@ export class Fsat203Component implements OnInit {
     }
     // this.fsatService.test();
     this.inputs = this.fsat203Service.getMockData();
+    this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     this.checkBasics();
     this.checkGasDensity();
     this.checkPlane('1');
@@ -82,7 +84,7 @@ export class Fsat203Component implements OnInit {
   }
 
   checkBasics() {
-    let tmpForm: FormGroup = this.fsat203Service.getBasicsFormFromObject(this.inputs.FanRatedInfo);
+    let tmpForm: FormGroup = this.fsat203Service.getBasicsFormFromObject(this.inputs.FanRatedInfo, this.settings);
     if (tmpForm.status == 'VALID') {
       this.basicsDone = true;
     } else {
@@ -113,7 +115,7 @@ export class Fsat203Component implements OnInit {
   }
 
   checkGasDensity() {
-    let tmpForm: FormGroup = this.fsat203Service.getGasDensityFormFromObj(this.inputs.BaseGasDensity);
+    let tmpForm: FormGroup = this.fsat203Service.getGasDensityFormFromObj(this.inputs.BaseGasDensity, this.settings);
     if (tmpForm.status == 'VALID') {
       this.gasDone = true;
     } else {
@@ -145,21 +147,21 @@ export class Fsat203Component implements OnInit {
 
   checkPlane(planeNumber: string) {
     if (planeNumber == '1') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanInletFlange);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanInletFlange, this.settings);
       if (tmpForm.status == 'VALID') {
         this.plane1Done = true;
       } else {
         this.plane1Done = false;
       }
     } else if (planeNumber == '2') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanEvaseOrOutletFlange);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanEvaseOrOutletFlange, this.settings);
       if (tmpForm.status == 'VALID') {
         this.plane2Done = true;
       } else {
         this.plane2Done = false;
       }
     } else if (planeNumber == '3a') {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FlowTraverse);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FlowTraverse, this.settings);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.FlowTraverse);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -168,14 +170,14 @@ export class Fsat203Component implements OnInit {
         this.plane3aDone = false;
       }
     } else if (planeNumber == '4') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.InletMstPlane);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.InletMstPlane, this.settings);
       if (tmpForm.status == 'VALID') {
         this.plane4Done = true;
       } else {
         this.plane4Done = false;
       }
     } else if (planeNumber == '5') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.OutletMstPlane);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.OutletMstPlane, this.settings);
       if (tmpForm.status == 'VALID') {
         this.plane5Done = true;
       } else {
@@ -223,7 +225,7 @@ export class Fsat203Component implements OnInit {
 
   checkTraversePlanes() {
     if (this.inputs.PlaneData.AddlTraversePlanes.length > 0) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0]);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0], this.settings);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -235,7 +237,7 @@ export class Fsat203Component implements OnInit {
       this.plane3bDone = true;
     }
     if (this.inputs.PlaneData.AddlTraversePlanes.length > 1) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1]);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1], this.settings);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {

@@ -5,38 +5,19 @@
     <span class="fa fa-check pull-right" *ngIf="shaftPowerDone"></span>
   </label>
   <div class="form-group">
-    <label for="isMethodOne">Method for Establishing Fan Shaft Power</label>
+    <label for="isMethodOne">Method for Establishing Fan Input Power</label>
     <select class="form-control" name="isMethodOne" formControlName="isMethodOne" id="isMethodOne" (change)="save()" (focus)="focusField('isMethodOne')">
       <option [ngValue]="true">Know Motor Input Power</option>
       <option [ngValue]="false">Calculate Motor Input Power</option>
     </select>
   </div>
-  <!-- <div class="form-group">
-    <label for="mainsDataAvailable">Mains Voltage Data Available</label>
-    <div class="input-group">
-      <select class="form-control" name="mainsDataAvailable" formControlName="mainsDataAvailable" id="mainsDataAvailable" (change)="save()"
-        (focus)="focusField('mainsDataAvailable')">
-        <option [ngValue]="'Yes'">Yes</option>
-        <option [ngValue]="'No'">No</option>
-      </select>
-    </div>
-  </div> -->
   <label class="group-label group-label-2">Motor Nameplate Details</label>
-  <div class="form-group">
-    <label for="driveType">Drive Type</label>
-    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="setBeltEfficiency()" (focus)="focusField('driveType')">
-      <option *ngFor="let drive of driveTypes" [ngValue]="drive.name">{{drive.name}}</option>
-    </select>
-  </div>
-
   <div class="form-group">
     <label for="ratedHP">Rated Motor Power</label>
     <select name="ratedHP" class="form-control number-input-field" id="ratedHP" formControlName="ratedHP" (change)="save()" (focus)="focusField('ratedHP')">
       <option *ngFor="let option of horsePowers" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
     </select>
   </div>
-
-
   <div class="form-group">
     <label for="synchronousSpeed">Synchronous Speed</label>
     <div class="input-group">
@@ -44,6 +25,9 @@
         (input)="save()" (focus)="focusField('synchronousSpeed')" onfocus="this.select();">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.synchronousSpeed.invalid && !shaftPowerForm.controls.synchronousSpeed.pristine">
+      <span *ngIf="shaftPowerForm.controls.synchronousSpeed.errors.required">Value Required</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="frequency">Line Frequency</label>
@@ -66,6 +50,11 @@
         onfocus="this.select();">
       <span class="input-group-addon units">V</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.npv.invalid && !shaftPowerForm.controls.npv.pristine">
+      <span *ngIf="shaftPowerForm.controls.npv.errors.required">Value Required</span>
+      <span *ngIf="shaftPowerForm.controls.npv.errors.max">Value can't be greater than {{shaftPowerForm.controls.npv.errors.max.max}}.</span>
+      <span *ngIf="shaftPowerForm.controls.npv.errors.min">Value can't be less than {{shaftPowerForm.controls.npv.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="fla">Full Load Amps
@@ -76,27 +65,21 @@
         onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
-
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.fla.invalid && !shaftPowerForm.controls.fla.pristine">
+      <span *ngIf="shaftPowerForm.controls.fla.errors.required">Value Required</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="powerFactorAtLoad">Power Factor at Load</label>
     <input name="powerFactorAtLoad" type="number" step="any" class="form-control" formControlName="powerFactorAtLoad" id="powerFactorAtLoad"
       (input)="calcMotorShaftPower()" (focus)="focusField('powerFactorAtLoad')" onfocus="this.select();">
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.powerFactorAtLoad.invalid && !shaftPowerForm.controls.powerFactorAtLoad.pristine">
+      <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.required">Value Required</span>
+      <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.max">Value can't be greater than {{shaftPowerForm.controls.powerFactorAtLoad.errors.max.max}}.</span>
+      <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.min">Value can't be less than {{shaftPowerForm.controls.powerFactorAtLoad.errors.min.min}}.</span>
+    </span>
   </div>
-  <div class="form-group">
-    <label for="motorShaftPower">Motor Input Power (H
-      <sub>i</sub>)
-    </label>
-    <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
-      <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower"
-        (input)="save()" (focus)="focusField('motorShaftPower')" onfocus="this.select();">
-      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
-      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
-    </div>
-    <div class="area-val" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
-      {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
-    </div>
-  </div>
+
   <div *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
     <label class="group-label group-label-2">Motor Phase Data</label>
 
@@ -113,8 +96,6 @@
           id="phase1Voltage" (input)="calcAverageVoltage()" (focus)="focusField('phase1Voltage')" onfocus="this.select();">
         <input name="phase1Amps" type="number" step="any" class="form-control amp-volt-input" formControlName="phase1Amps" id="phase1Amps"
           (input)="calcAverageAmps()" (focus)="focusField('phase1Amps')" onfocus="this.select();">
-        <!-- <input name="phase1PowerFactor" type="number" step="any" class="form-control" formControlName="phase1PowerFactor" id="powerFactor"
-            (input)="save()" (focus)="focusField('phase1PowerFactor')" onfocus="this.select();"> -->
       </div>
       <label for="phase2">Phase 2
       </label>
@@ -141,12 +122,42 @@
           {{fanShaftPower.amps | sigFigs: '6'}}
         </div>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase1Voltage.invalid && !shaftPowerForm.controls.phase1Voltage.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase1Voltage.errors.min">Phase 1 voltage can't be less than {{shaftPowerForm.controls.phase1Voltage.errors.min.min}}.</span>
+      </span>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase1Amps.invalid && !shaftPowerForm.controls.phase1Amps.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase1Amps.errors.min">Phase 1 current can't be less than {{shaftPowerForm.controls.phase1Amps.errors.min.min}}.</span>
+      </span>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase2Voltage.invalid && !shaftPowerForm.controls.phase2Voltage.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase2Voltage.errors.min">Phase 2 voltage can't be less than {{shaftPowerForm.controls.phase2Voltage.errors.min.min}}.</span>
+      </span>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase2Amps.invalid && !shaftPowerForm.controls.phase2Amps.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase2Amps.errors.min">Phase 2 current can't be less than {{shaftPowerForm.controls.phase2Amps.errors.min.min}}.</span>
+      </span>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase3Voltage.invalid && !shaftPowerForm.controls.phase3Voltage.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase3Voltage.errors.min">Phase 3 voltage can't be less than {{shaftPowerForm.controls.phase3Voltage.errors.min.min}}.</span>
+      </span>
+      <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase3Amps.invalid && !shaftPowerForm.controls.phase3Amps.pristine">
+        <span *ngIf="shaftPowerForm.controls.phase3Amps.errors.min">Phase 3 current can't be less than {{shaftPowerForm.controls.phase3Amps.errors.min.min}}.</span>
+      </span>
     </div>
   </div>
-
-
-
-
+  <div class="form-group">
+    <label for="motorShaftPower">Motor Input Power (H
+      <sub>i</sub>)
+    </label>
+    <div class="input-group" *ngIf="shaftPowerForm.controls.isMethodOne.value == true">
+      <input name="motorShaftPower" type="number" step="any" class="form-control" formControlName="motorShaftPower" id="motorShaftPower"
+        (input)="save()" (focus)="focusField('motorShaftPower')" onfocus="this.select();">
+      <span class="input-group-addon units">hp</span>
+    </div>
+    <div class="area-val" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
+      {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.motorShaftPower.invalid && !shaftPowerForm.controls.motorShaftPower.pristine">
+      <span *ngIf="shaftPowerForm.controls.motorShaftPower.errors.required">Value Required</span>
+    </span>
+  </div>
 
   <label class="group-label group-label-2">Motor and Drive Effiicencies</label>
   <div class="form-group">
@@ -156,6 +167,11 @@
         (input)="save()" (focus)="focusField('efficiencyMotor')" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.efficiencyMotor.invalid && !shaftPowerForm.controls.efficiencyMotor.pristine">
+      <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.required">Value Required</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.max">Value can't be greater than {{shaftPowerForm.controls.efficiencyMotor.errors.max.max}}.</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.min">Value can't be less than {{shaftPowerForm.controls.efficiencyMotor.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="isVFD">Fan Equipped with a VFD</label>
@@ -173,6 +189,16 @@
         (input)="save()" (focus)="focusField('efficiencyVFD')" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.efficiencyVFD.invalid && !shaftPowerForm.controls.efficiencyVFD.pristine">
+      <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.max">Value can't be greater than {{shaftPowerForm.controls.efficiencyVFD.errors.max.max}}.</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.min">Value can't be less than {{shaftPowerForm.controls.efficiencyVFD.errors.min.min}}.</span>
+    </span>
+  </div>
+  <div class="form-group">
+    <label for="driveType">Drive Type</label>
+    <select class="form-control" name="driveType" formControlName="driveType" id="driveType" (change)="setBeltEfficiency()" (focus)="focusField('driveType')">
+      <option *ngFor="let drive of driveTypes" [ngValue]="drive.name">{{drive.name}}</option>
+    </select>
   </div>
   <div class="form-group">
     <label for="efficiencyBelt">Belt Efficiency</label>
@@ -181,6 +207,10 @@
         (input)="save()" (focus)="focusField('efficiencyBelt')" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.efficiencyBelt.invalid && !shaftPowerForm.controls.efficiencyBelt.pristine">
+      <span *ngIf="shaftPowerForm.controls.efficiencyBelt.errors.required">Value Required</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyBelt.errors.max">Value can't be greater than {{shaftPowerForm.controls.efficiencyBelt.errors.max.max}}.</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyBelt.errors.min">Value can't be less than {{shaftPowerForm.controls.efficiencyBelt.errors.min.min}}.</span>
+    </span>
   </div>
-
 </form>

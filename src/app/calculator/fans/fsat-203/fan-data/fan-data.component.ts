@@ -92,7 +92,7 @@ export class FanDataComponent implements OnInit {
   }
 
   calcVelocityData(plane: Plane) {
-    let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane);
+    let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane, this.settings);
     if (formObj.status == 'VALID') {
       this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
     } else {
