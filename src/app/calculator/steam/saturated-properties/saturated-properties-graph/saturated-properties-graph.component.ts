@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SteamPropertiesOutput, SaturatedPropertiesOutput } from '../../../../shared/models/steam';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-saturated-properties-graph',
@@ -28,6 +27,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   @Input()
   plotReady: boolean;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
 
@@ -93,7 +93,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   yAxisTicks: Array<number>;
   xAxisTicks: Array<number>;
 
-  doc: any;
   htmlElement: any;
   host: d3.Selection<any>;
   svg: d3.Selection<any>;
@@ -119,18 +118,13 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.initData();
     this.initCanvas();
     this.buildChart();
   }
-
-  ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-  }
-
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -421,7 +415,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     }
     else {
 
-      let graphContainer = this.doc.getElementById('panelChartContainer');
+      let graphContainer = this.ngChartContainer.nativeElement;
       containerWidth = graphContainer.clientWidth;
       containerHeight = graphContainer.clientHeight * .9;
       this.margin = {

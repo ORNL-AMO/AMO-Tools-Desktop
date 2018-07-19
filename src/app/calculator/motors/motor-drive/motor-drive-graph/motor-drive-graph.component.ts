@@ -3,7 +3,6 @@ import { MotorDriveOutputs } from '../motor-drive.component';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 
 @Component({
@@ -17,7 +16,6 @@ export class MotorDriveGraphComponent implements OnInit {
 
   @ViewChild("ngChart") ngChart: ElementRef;
 
-  doc: any;
   barChart: any;
   graphColors: Array<string>;
   selectedGraphType: string = 'energyCost';
@@ -36,7 +34,7 @@ export class MotorDriveGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;

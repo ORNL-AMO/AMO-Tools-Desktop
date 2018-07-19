@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PhastService } from '../../../../phast/phast.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 import { Settings } from '../../../../shared/models/settings';
@@ -23,7 +22,12 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   @Input()
   settings: Settings;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   o2EnrichmentPoint: O2Enrichment;
@@ -66,8 +70,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -84,7 +86,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   @Input()
   toggleCalculate: boolean;
-  constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
+  constructor(private phastService: PhastService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
     this.differ = differs.find({}).create();
   }
 
@@ -119,14 +121,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
-  }
-
-  ngOnDestroy() {
-    this.window.onresize = null;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -218,7 +213,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
@@ -235,7 +230,12 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+      if (!this.expanded) {
+        this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+      }
+      else {
+        this.margin = { top: 20, right: 100, bottom: 75, left: 100 };
+      }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;

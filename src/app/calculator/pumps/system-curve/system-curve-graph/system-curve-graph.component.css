@@ -34,9 +34,12 @@ tr > td {
 }
 
 .graph-table {
-  /* margin-top: 40px; */
   width: 100%;
   text-align: center;
+}
+
+.expanded-chart {
+  padding: 10px;
 }
 
 .graph-table td, .graph-table th {

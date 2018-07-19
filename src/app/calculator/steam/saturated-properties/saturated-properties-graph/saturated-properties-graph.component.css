@@ -7,3 +7,7 @@
   .area {
     fill: lightsteelblue;
   }
+
+  .expanded-chart {
+    padding: 10px;
+  }
