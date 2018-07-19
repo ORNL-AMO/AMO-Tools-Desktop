@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
@@ -20,7 +19,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -81,8 +86,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -97,7 +100,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
+  constructor(private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -121,6 +124,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .on("click", () => {
         this.toggleGrid();
       });
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -214,25 +218,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
   // ========== end tooltip functions ==========
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
   }
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
 
   resizeGraph() {
-    // let motorGraph = this.doc.getElementById('motorPerformanceGraph');
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
-
-
-    // this.canvasWidth = motorGraph.clientWidth;
-    // this.canvasHeight = this.canvasWidth * (3 / 5);
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
@@ -245,9 +237,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
 
     if (this.canvasWidth < 400) {
-      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+      this.margin = { top: 10, right: 10, bottom: 50, left: 150 };
     } else {
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+      this.margin = { top: 20, right: 50, bottom: 75, left: 50 };
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;

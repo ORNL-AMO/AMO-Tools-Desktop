@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-steam-properties-graph',
   templateUrl: './steam-properties-graph.component.html',
@@ -27,8 +26,13 @@ export class SteamPropertiesGraphComponent implements OnInit {
   @Input()
   plotReady: boolean;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event) {
+  //   this.resizeGraph();
+  // }
 
   xMaxDefault: number = 10;
   xMinDefault: number = 0;
@@ -126,7 +130,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
+  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.initData();
@@ -135,7 +139,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -434,7 +437,7 @@ export class SteamPropertiesGraphComponent implements OnInit {
     }
     else {
 
-      let graphContainer = this.doc.getElementById('panelChartContainer');
+      let graphContainer = this.ngChartContainer.nativeElement;
       containerWidth = graphContainer.clientWidth;
       containerHeight = graphContainer.clientHeight * .9;
       this.margin = {

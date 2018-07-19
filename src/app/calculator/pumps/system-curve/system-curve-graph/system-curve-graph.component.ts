@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as d3 from 'd3';
 import { PsatService } from '../../../../psat/psat.service';
@@ -37,7 +36,12 @@ export class SystemCurveGraphComponent implements OnInit {
   @Input()
   isFan: boolean;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -69,11 +73,8 @@ export class SystemCurveGraphComponent implements OnInit {
   distanceMeasurement: string;
   powerMeasurement: string;
 
-
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
   fontSize: string;
 
   //booleans for tooltip
@@ -88,7 +89,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
   isFirstChange: boolean = true;
   expanded: boolean = false;
-  constructor(private systemCurveService: SystemCurveService, private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -190,16 +191,8 @@ export class SystemCurveGraphComponent implements OnInit {
   // ========== end tooltip functions ==========
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
   }
-
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
@@ -225,7 +218,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {

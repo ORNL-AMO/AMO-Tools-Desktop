@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import * as d3 from 'd3';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 
@@ -26,7 +25,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -61,11 +65,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   tablePointsMax: Array<any>;
   tablePointsAvg: Array<any>;
 
-
   tableFlowRate: string;
   tableMaxEfficiency: string;
   tableAverageEfficiency: string;
-
 
   avgPoint: any;
   maxPoint: any;
@@ -80,8 +82,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
   fontSize: string;
 
   //booleans for tooltip
@@ -99,7 +99,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   avgData: any;
   maxData: any;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -210,20 +210,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   // ========== end tooltip functions ==========
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
-  }
-
-  ngOnDestroy() {
-    this.window.onresize = null;
   }
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
+    let curveGraph = this.ngChartContainer.nativeElement;
 
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
@@ -305,7 +298,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     //Remove  all previous graphs
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-    var curvePoints = [];
 
     this.avgData = this.getAvgData();
     this.maxData = this.getMaxData();

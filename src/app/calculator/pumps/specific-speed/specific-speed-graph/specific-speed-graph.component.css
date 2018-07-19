@@ -35,6 +35,10 @@ tr>td {
   text-align: center;
 }
 
+.expanded-chart {
+  padding: 10px;
+}
+
 .graph-table td, .graph-table th {
   font-size: 14px;
 }

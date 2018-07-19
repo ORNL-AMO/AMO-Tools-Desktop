@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild } from '@angular/core';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
@@ -40,9 +39,6 @@ export class PercentGraphComponent implements OnInit {
 
   potential: number = 0;
 
-  doc: any;
-  window: any;
-
   @ViewChild('ngChart') ngChart: ElementRef;
   @ViewChild('btnDownload') btnDownload: ElementRef;
 
@@ -52,7 +48,7 @@ export class PercentGraphComponent implements OnInit {
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
 
