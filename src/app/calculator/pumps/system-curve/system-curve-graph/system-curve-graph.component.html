@@ -58,9 +58,8 @@
             <th>Point</th>
             <th *ngIf="isFan">Flow Rate ({{settings.fanFlowRate}})</th>
             <th *ngIf="!isFan">Flow Rate ({{flowMeasurement}})</th>
-            <th>Head/Pressure</th>
-            <th *ngIf="isFan">Distance ({{this.settings.fanPressureMeasurement}})</th>
-            <th *ngIf="!isFan">Distance ({{distanceMeasurement}})</th>
+            <th *ngIf="isFan">Pressure ({{this.settings.fanPressureMeasurement}})</th>
+            <th *ngIf="!isFan">Head ({{distanceMeasurement}})</th>
             <th>Fluid Power ({{powerMeasurement}})</th>
           </tr>
         </thead>
@@ -71,7 +70,6 @@
             </td>
             <td>{{i + 1}}</td>
             <td>{{data.flowRate}}</td>
-            <td>{{data.headOrPressure}}</td>
             <td>{{data.distance}}</td>
             <td>{{data.fluidPower}}</td>
           </tr>
