@@ -409,7 +409,7 @@ export class Fsat203Service {
         powerFactorAtLoad: 0.99,
         efficiencyMotor: undefined,
         efficiencyVFD: undefined,
-        efficiencyBelt: undefined,
+        efficiencyBelt: 1,
         sumSEF: 0,
         mainsDataAvailable: 'Yes',
         isVFD: 'No',
