@@ -53,6 +53,7 @@ import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-eff
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
 import { ToastyModule } from '../../../node_modules/ng2-toasty';
+import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -101,6 +102,7 @@ import { ToastyModule } from '../../../node_modules/ng2-toasty';
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
     FanBasicsComponent,
+    FsatDiagramComponent,
     // FsatReportSankeyComponent  
   ],
   providers: [

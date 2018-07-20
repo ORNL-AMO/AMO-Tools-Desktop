@@ -38,6 +38,10 @@
     </div>
   </div>
 
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-fsat-diagram></app-fsat-diagram>
+  </div>
+
 
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
