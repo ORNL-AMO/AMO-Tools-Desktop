@@ -1018,58 +1018,44 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   highlightPoint(i: number) {
-    console.log('highlightPoint(' + i + ')');
-
-    // this.svg.select('#tablePointCurrent-' + i).style('filter', 'url("#drop-shadow")');
-    // this.svg.select('#tablePointPower-' + i).style('filter', 'url("#drop-shadow")');
-    // this.svg.select('#tablePointEfficiency-' + i).style('filter', 'url("#drop-shadow")');
-
-    // console.log('focusDEfficiency[' + i + '] = ');
-    // console.log(this.focusDEfficiency[i]);
-    // console.log('tablePointsEfficiency[' + i + '] = ');
-    // console.log(this.tablePointsEfficiency[i]);
-
-    // let tableFocusEfficiency = this.tablePointsEfficiency[i];
-    // let transform = this.svg.select(tableFocusEfficiency).attr('transform');
-    // console.log('transform = ' + transform);
-    let highlighted = this.svg.select('#tablePointEfficiency-' + i)
-      .transition()
-      .ease(d3.easePoly)
-      .duration(300)
-      .attr('r', 7);
     let x = this.x;
-    let xPos = x(this.focusDEfficiency[i].x);
     let y = this.y;
-    let yPos = y(this.focusDEfficiency[i].y);
+    var highlightedEfficiency = this.svg.select('#tablePointEfficiency-' + i)
+      .attr('r', 8);
+    var highlightedPower = this.svg.select('#tablePointPower-' + i)
+      .attr('r', 8);
+    var highlightedCurrent = this.svg.select('#tablePointCurrent-' + i)
+      .attr('r', 8);
+
     repeat();
 
     function repeat() {
-      let tempXPos = xPos + (Math.random() * (0.2 - (-0.2)) + (-0.2));
-      let tempYPos = yPos + (Math.random() * (0.2 - (-0.2)) + (-0.2));
+      let tempXPos = (Math.random() * (2 - (0)) + (0)) - 1;
+      let tempYPos = (Math.random() * (2 - (0)) + (0)) - 1;
 
-      highlighted.transition()
+      highlightedEfficiency.transition()
         .ease(d3.easeBounce)
-        .duration(100)
+        .duration(50)
         .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
-        // .transition()
-        // .ease(d3.easePoly)
-        // .duration(100)
-        // .attr('transform', 'translate(' + xPos + ',' + yPos + ')')
+        .on('end', repeat);
+      highlightedPower.transition()
+        .ease(d3.easeBounce)
+        .duration(50)
+        .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
+        .on('end', repeat);
+      highlightedCurrent.transition()
+        .ease(d3.easeBounce)
+        .duration(50)
+        .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
         .on('end', repeat);
     }
-
-    // let ePosY = this.svg.select('#tablePointEfficiency-' + i).attr('cy');
-    // console.log('ePosY = ' + ePosY);
-
-
   }
 
   unhighlightPoint(i: number) {
-    console.log('unhighlightPoint(' + i + ')');
-    this.svg.select('#tablePointCurrent-' + i).style('filter', 'none');
-    this.svg.select('#tablePointPower-' + i).style('filter', 'none');
-    this.svg.select('#tablePointEfficiency-' + i).style('filter', 'none');
-
+    this.svg.select('#tablePointEfficiency-' + i).interrupt().attr('r', 6);
+    this.svg.select('#tablePointPower-' + i).interrupt().attr('r', 6);
+    this.svg.select('#tablePointCurrent-' + i).interrupt().attr('r', 6);
+    this.replaceFocusPoints();
   }
 
 
