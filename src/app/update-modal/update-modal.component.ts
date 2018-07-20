@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
 @Component({
@@ -13,17 +13,10 @@ export class UpdateModalComponent implements OnInit {
   @ViewChild('updateModal') public updateModal: ModalDirective;
   updateAvailable: boolean;
   updateSelected: boolean = false;
-  constructor(private electronService: ElectronService) { }
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.electronService.ipcRenderer.on('progress', (event, percent) =>{ 
-      console.log('recieved')
-      console.log(percent);
-    })
-    this.electronService.ipcRenderer.on('test', (event, test) =>{ 
-      console.log('recieved')
-      console.log(test);
-    })
+
   }
   ngAfterViewInit() {
     this.showUpdateModal();
@@ -42,7 +35,10 @@ export class UpdateModalComponent implements OnInit {
   updateClick() {
     this.updateAvailable = false;
     this.updateSelected = true;
-    this.electronService.ipcRenderer.send('update', null);
+    this.cd.detectChanges();
+    setTimeout(() => {
+      this.electronService.ipcRenderer.send('update', null);
+    },500)
   }
 
   cancel() {

@@ -34,8 +34,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-
-  win.toggleDevTools();
+  if (!isDev()) {
+    win.toggleDevTools();
+  }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -67,7 +68,7 @@ app.on('ready', function () {
   // });
 
   autoUpdater.on('update-downloaded', (event, info) => {
-    //autoUpdater.quitAndInstall();
+    autoUpdater.quitAndInstall();
   });
 
   //Check for updates and install
