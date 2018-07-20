@@ -75,8 +75,7 @@ export class FanShaftPowerComponent implements OnInit {
 
   calcMotorShaftPower() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
-    let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * this.fanShaftPower.powerFactorAtLoad;
-    tmpVal = this.convertUnitsService.value(tmpVal).from('kW').to('hp');
+    let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * (this.fanShaftPower.powerFactorAtLoad/745);
     this.shaftPowerForm.patchValue({
       motorShaftPower: tmpVal
     })
@@ -108,6 +107,14 @@ export class FanShaftPowerComponent implements OnInit {
     let estFla = this.psatService.estFLA(tmpObj.ratedHP, tmpObj.synchronousSpeed, tmpObj.frequency, tmpObj.efficiencyClass, tmpEfficiency, tmpObj.npv, this.settings);
     this.shaftPowerForm.patchValue({
       fla: estFla
+    })
+    this.save();
+  }
+
+
+  setIsVfd(){
+    this.shaftPowerForm.patchValue({
+      efficiencyVFD: 100
     })
     this.save();
   }

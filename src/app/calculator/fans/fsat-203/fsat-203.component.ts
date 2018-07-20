@@ -43,7 +43,7 @@ export class Fsat203Component implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     // this.fsatService.test();
-    this.inputs = this.fsat203Service.getMockData();
+    this.inputs = this.fsat203Service.getDefaultData();
     this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     this.checkBasics();
     this.checkGasDensity();
@@ -104,14 +104,20 @@ export class Fsat203Component implements OnInit {
   updateBarometricPressure(info: FanRatedInfo) {
     this.saveBasics(info);
     this.inputs.PlaneData.FanInletFlange.barometricPressure = info.globalBarometricPressure;
+    this.checkPlane('1');
     this.inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure = info.globalBarometricPressure;
+    this.checkPlane('2');
     this.inputs.PlaneData.FlowTraverse.barometricPressure = info.globalBarometricPressure;
+    this.checkPlane('3a');
+    let i: number = 1;
     this.inputs.PlaneData.AddlTraversePlanes.forEach(plane => {
       plane.barometricPressure = info.globalBarometricPressure;
+      this.checkTraversePlanes();
     })
     this.inputs.PlaneData.InletMstPlane.barometricPressure = info.globalBarometricPressure;
+    this.checkPlane('4');
     this.inputs.PlaneData.OutletMstPlane.barometricPressure = info.globalBarometricPressure;
-    this.calculate();
+    this.checkPlane('5');
   }
 
   checkGasDensity() {

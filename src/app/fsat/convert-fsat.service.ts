@@ -110,14 +110,14 @@ export class ConvertFsatService {
 
   convertInletPressureData(data: InletPressureData, oldSettings: Settings, newSettings: Settings): InletPressureData {
     let dataCpy: InletPressureData = JSON.parse(JSON.stringify(data));
-    data.airTreatmentLoss = this.convertNum(dataCpy.airTreatmentLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.flowMeasurementLoss = this.convertNum(dataCpy.flowMeasurementLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.inletDamperLoss = this.convertNum(dataCpy.inletDamperLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.inletDuctworkLoss = this.convertNum(dataCpy.inletDuctworkLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.inletLoss = this.convertNum(dataCpy.inletLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.inletSystemEffectLoss = this.convertNum(dataCpy.inletSystemEffectLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.processRequirements = this.convertNum(dataCpy.processRequirements, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
-    data.systemDamperLoss = this.convertNum(dataCpy.systemDamperLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.airTreatmentLoss = this.convertNum(dataCpy.airTreatmentLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.flowMeasurementLoss = this.convertNum(dataCpy.flowMeasurementLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.inletDamperLoss = this.convertNum(dataCpy.inletDamperLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.inletDuctworkLoss = this.convertNum(dataCpy.inletDuctworkLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.inletLoss = this.convertNum(dataCpy.inletLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.inletSystemEffectLoss = this.convertNum(dataCpy.inletSystemEffectLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.processRequirements = this.convertNum(dataCpy.processRequirements, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
+    dataCpy.systemDamperLoss = this.convertNum(dataCpy.systemDamperLoss, oldSettings.fanPressureMeasurement, newSettings.fanPressureMeasurement);
     return dataCpy;
   }
 
@@ -176,11 +176,11 @@ export class ConvertFsatService {
       result.gasDensity = this.convertUnitsService.value(result.gasDensity).from('lbscf').to(settings.densityMeasurement);
     }
 
-    if (settings.fanPressureMeasurement != 'inHg') {
-      result.gasTotalPressure = this.convertUnitsService.value(result.gasTotalPressure).from('inHg').to(settings.fanPressureMeasurement);
-      result.gasVelocityPressure = this.convertUnitsService.value(result.gasVelocityPressure).from('inHg').to(settings.fanPressureMeasurement);
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      result.gasTotalPressure = this.convertUnitsService.value(result.gasTotalPressure).from('inH2o').to(settings.fanPressureMeasurement);
+      result.gasVelocityPressure = this.convertUnitsService.value(result.gasVelocityPressure).from('inH2o').to(settings.fanPressureMeasurement);
       if (result.staticPressure) {
-        result.staticPressure = this.convertUnitsService.value(result.staticPressure).from('inHg').to(settings.fanPressureMeasurement);
+        result.staticPressure = this.convertUnitsService.value(result.staticPressure).from('inH2o').to(settings.fanPressureMeasurement);
       }
     }
     if (settings.fanFlowRate != 'ft3/min') {
