@@ -13,6 +13,10 @@
       <sub>p</sub>)</label>
     <input name="pitotTubeCoefficient" type="number" step="any" class="form-control" formControlName="pitotTubeCoefficient" id="pitotTubeCoefficient"
       (input)="save()" (focus)="focusField('pitotTubeCoefficient')" onfocus="this.select();">
+    <span class="alert-danger pull-right small" *ngIf="pitotDataForm.controls.pitotTubeCoefficient.invalid && !pitotDataForm.controls.pitotTubeCoefficient.pristine">
+      <span *ngIf="pitotDataForm.controls.pitotTubeCoefficient.errors.required">Value Required</span>
+      <span *ngIf="pitotDataForm.controls.pitotTubeCoefficient.errors.max">Value can't be greater than {{shaftPowerForm.controls.pitotTubeCoefficient.errors.max.max}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="numTraverseHoles">Number of Traverse Holes</label>

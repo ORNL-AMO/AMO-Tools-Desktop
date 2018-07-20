@@ -176,7 +176,7 @@
   <div class="form-group">
     <label for="isVFD">Fan Equipped with a VFD</label>
     <div class="input-group">
-      <select class="form-control" name="isVFD" formControlName="isVFD" id="isVFD" (change)="save()" (focus)="focusField('isVFD')">
+      <select class="form-control" name="isVFD" formControlName="isVFD" id="isVFD" (change)="setIsVfd()" (focus)="focusField('isVFD')">
         <option [ngValue]="'Yes'">Yes</option>
         <option [ngValue]="'No'">No</option>
       </select>
@@ -190,6 +190,7 @@
       <span class="input-group-addon units">%</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.efficiencyVFD.invalid && !shaftPowerForm.controls.efficiencyVFD.pristine">
+      <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.required">Value Required</span>
       <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.max">Value can't be greater than {{shaftPowerForm.controls.efficiencyVFD.errors.max.max}}.</span>
       <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.min">Value can't be less than {{shaftPowerForm.controls.efficiencyVFD.errors.min.min}}.</span>
     </span>
