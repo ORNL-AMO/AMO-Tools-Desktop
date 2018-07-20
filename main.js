@@ -48,7 +48,6 @@ app.on('ready', function () {
       autoUpdater.checkForUpdates();
       log.info('checking for update..');
       autoUpdater.on('update-available', (event, info) => {
-        win.webContents.send('test', 'sent message test');
         coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
       });
       autoUpdater.on('update-not-available', (event, info) => {
