@@ -64,7 +64,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of tableData; let i=index;">
+          <tr (mouseenter)="highlightPoint(i)" (mouseleave)="unhighlightPoint(i)" *ngFor="let data of tableData; let i=index;">
             <td>
               <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
             </td>
@@ -72,6 +72,7 @@
             <td>{{data.flowRate}}</td>
             <td>{{data.distance}}</td>
             <td>{{data.fluidPower}}</td>
+            <td class="delete-row" (click)="deleteFromTable(i)">Delete</td>
           </tr>
         </tbody>
       </table>
