@@ -41,7 +41,7 @@ export class FanDataFormComponent implements OnInit {
 
   drives: Array<{display: string, value: number}>;
   fanTypes: Array<{display: string, value: number}>;
-  showPumpData: boolean = false;
+  showFanData: boolean = false;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
   showFanSpecified: boolean = false;
@@ -100,14 +100,14 @@ export class FanDataFormComponent implements OnInit {
 
   initFanData() {
     if (this.showMotorDrive || this.showFanSpecified || this.showFanType) {
-      this.showPumpData = true;
+      this.showFanData = true;
     } else {
-      this.showPumpData = false;
+      this.showFanData = false;
     }
   }
 
   toggleFanData() {
-    if (this.showPumpData == false) {
+    if (this.showFanData == false) {
       this.showFanSpecified = false;
       this.showFanType = false;
       this.showMotorDrive = false;

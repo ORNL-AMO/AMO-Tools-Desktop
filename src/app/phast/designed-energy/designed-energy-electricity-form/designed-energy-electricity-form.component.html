@@ -4,8 +4,7 @@
     <div class="input-group">
       <input name="kwRating" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('kwRating')" [(ngModel)]="inputs.kwRating"
         (input)="calculate()" onfocus="this.select();" />
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+      <span class="input-group-addon units">kW</span>
     </div>
   </div>
   <div class="form-group">
