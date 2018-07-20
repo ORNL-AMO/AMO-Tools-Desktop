@@ -340,9 +340,9 @@ export class Fsat203Service {
           numTraverseHoles: 10,
           numInsertionPoints: 3,
           traverseData: [
-            [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
-            [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
-            [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           ]
         },
         AddlTraversePlanes: [
@@ -360,9 +360,9 @@ export class Fsat203Service {
             numTraverseHoles: 10,
             numInsertionPoints: 3,
             traverseData: [
-              [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
-              [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
-              [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
           }
         ],
@@ -409,7 +409,7 @@ export class Fsat203Service {
         powerFactorAtLoad: 0.99,
         efficiencyMotor: undefined,
         efficiencyVFD: 100,
-        efficiencyBelt: 1,
+        efficiencyBelt: 100,
         sumSEF: 0,
         mainsDataAvailable: 'Yes',
         isVFD: 'No',
@@ -493,9 +493,9 @@ export class Fsat203Service {
           staticPressure: -18.1,
           width: 32.63,
           traverseData: [
-            [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-            [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-            [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
+            [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
+            [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
+            [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
           ]
         },
         AddlTraversePlanes: [
@@ -513,9 +513,9 @@ export class Fsat203Service {
             staticPressure: -17,
             width: 32.63,
             traverseData: [
-              [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-              [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-              [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
+              [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
+              [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
+              [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
             ]
           }
         ],
@@ -557,7 +557,7 @@ export class Fsat203Service {
       FanShaftPower: {
         amps: 105,
         driveType: "Direct Drive",
-        efficiencyBelt: 1,
+        efficiencyBelt: 100,
         efficiencyClass: "Energy Efficient",
         efficiencyMotor: 100,
         efficiencyVFD: 100,
