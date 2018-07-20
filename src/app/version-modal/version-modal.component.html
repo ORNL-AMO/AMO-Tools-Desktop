@@ -11,46 +11,48 @@
       <div class="modal-body scroll-item">
         <label>Application</label>
         <ul>
-          <li>Enhanced: Made facility info more prominent and collapsible</li>
-          <li>Fixed: Problems with Import/Export Functionality</li>
-          <li>Added: The ability to Import/Export pre-assessments</li>
-          <li>Added: The ability to copy assessments (with or without scenarios)</li>
-          <li>Enhanced: Pre-assessments can now be used for pumps or process heating</li>
-          <li>Enhanced: Pre-assessments energy source is non-exclusive (can be both fuel and electricity)</li>
-          <li>Enhanced: Ease of creating new scenarios and a “quick add” for Explore Opportunities</li>
-          <li>Added: Custom Material Management page and ability to import/export custom materials</li>
-          <li>Fixed: Various Bug fixes</li>
+          <li>Enhanced: Added absolute temperature scales (Kelvin and Rankine) to unit converter</li>
+          <li>Added: Ability to rename an export within the export box to reduce possibility of deleting the .json from the file
+            name in windows</li>
+          <li>Updated: Top bar navigation. The House Icon directs to the home screen; the folder icon directs to "All Assessments"</li>
         </ul>
         <label>PSAT</label>
         <ul>
-          <li>Disabled: Ability to optimize with a not-fixed specific speed</li>
-          <li>Fixed: Various Bug fixes</li>
+          <li>Fixed: General bug and text fixes</li>
+          <li>Enhanced: Added results to the right side of System Setup - Field Data</li>
         </ul>
         <label>PHAST</label>
         <ul>
-          <li>Updated: PHAST Explore Opportunities page</li>
-          <li>Enhanced: Unit choices and decimal places shown</li>
-          <li>Added: Various warnings for invalid data entry</li>
-          <li>Added: Fuel composition to Input Data Report</li>
-          <li>Enhanced: Verbiage relating to reactions</li>
-          <li>Enhanced: Electrotechnology Energy Input Results now calculate amount of electrical power requred in addition to fuel input</li>
-          <li>Enhanced: Electrotechnology Sankey's include breakdown of electricty and chemical inputs</li>
-          <li>Enhanced: Added label to Sankey if there is added energy via an exothermic reaction</li>
-          <li>Enhanced: Metered and Design Energy can model hybrid energy sources</li>
-          <li>Returned: Ability to add multiple cooling losses</li>
-          <li>Fixed: Various Bug fixes</li>
+          <li>Fixed: General bug and text fixes</li>
+          <li>Fixed: Navigation - Next button on "Other Losses" page of System Setup now directs to "Aux Equipment"</li>
+        </ul>
+        <label>FSAT</label>
+        <ul>
+          <li>New Feature: Fan Assessment Tool- similar to the pump tool, this allows users to compare current fan setups to
+            modification scenarios to analyze potential savings</li>
+          <li>Added: Popup calculators for estimating fan inlet/outlet pressures based on estimations of system losses</li>
+          <li>Added: Popup calculator for the calculation of fan inlet and outlet pressures and flow based on a pitot tube traverse
+            in accordance with AMCA 203</li>
+          <li>Added: Fan Reports and Sankeys</li>
         </ul>
         <label>Calculators</label>
         <ul>
-          <li>Added: Steam and Saturated Fluid Properties Calculators</li>
-          <li>Added: Motor Drive Comparison Calculator</li>
-          <li>Added: New method for Load Estimation Calculator</li>
-          <li>Added: Power Factor Correction Calculator</li>
-          <li>Fixed: Various Bug fixes</li>
+          <li>Added: Replace Motor Calculator - Calculate the energy savings, cost savings, and payback period for replacing
+            an existing motor with a higher efficiency motor.</li>
+          <li>Added: Replace vs. Rewind Calculator - Compare the cost and energy expenditure of rewinding a failed motor versus
+            replacing it with a new energy-efficient model.</li>
+          <li>Added: Operating points calculator - Calculation of fan inlet and outlet pressures, flow, and energy use based
+            on a pitot tube traverse in accordance with AMCA 203</li>
+          <li>Added: Fan curve calculator - Develop fan curves, adopted from pump curve calculator</li>
+          <li>Added: System curve calculator - to develop fan system curves, adopted from pump system curve calculator</li>
+          <li>Enhanced: Steam Properties and Saturated Properties graphs - smoothed constant temperature lines</li>
+          <li>Enhanced: Added popup modals to many calculator graphs to enlarge graphs</li>
+          <li>Enhanced: Added ability to click on line graphs and create a table with the data</li>
         </ul>
         <label>Known Issues</label>
         <ul>
           <li>The Mac and Linux releases have significantly slower app start times than in previous builds</li>
+          <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
           <li>Assessments made in a previous release may experience errors</li>
           <li>Import files made in a previous release will not be useable</li>
         </ul>
