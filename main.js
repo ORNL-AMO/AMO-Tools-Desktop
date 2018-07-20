@@ -36,7 +36,7 @@ app.on('ready', function () {
 
   if (isDev()) {
     win.toggleDevTools();
-  };
+  }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -53,15 +53,18 @@ app.on('ready', function () {
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
       });
+      autoUpdater.on('download-progress', (progressObj) => {
+        win.webContents.send('progress', progressObj.percent)
+      });
     }
   })
 
   autoUpdater.on('error', (event, error) => {
   });
 
-  autoUpdater.on('download-progress', (event, progressObj) => {
-    log.info(progressObj);
-  });
+  // autoUpdater.on('download-progress', (progressObj) => {
+  //   log.info(progressObj);
+  // });
 
   autoUpdater.on('update-downloaded', (event, info) => {
     autoUpdater.quitAndInstall();
