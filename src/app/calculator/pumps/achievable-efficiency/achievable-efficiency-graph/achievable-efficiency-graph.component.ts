@@ -64,6 +64,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>;
   tablePointsMax: Array<any>;
   tablePointsAvg: Array<any>;
+  deleteCount: number = 0;
 
   tableFlowRate: string;
   tableMaxEfficiency: string;
@@ -702,7 +703,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length;
+    let i = this.tableData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
     //max line
@@ -756,10 +757,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.tablePointsAvg = new Array<any>();
     this.focusDMax = new Array<any>();
     this.focusDAvg = new Array<any>();
+    this.deleteCount = 0;
   }
 
   //dynamic table
   replaceFocusPoints() {
+
+    this.svg.selectAll('.tablePoint').remove();
+
     for (let i = 0; i < this.tableData.length; i++) {
 
       let tableFocusMax = this.svg.append("g")
@@ -792,6 +797,62 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       tableFocusAvg.attr("transform", "translate(" + this.x(this.focusDAvg[i].x) + "," + this.y(this.focusDAvg[i].y) + ")");
     }
   }
+
+  deleteFromTable(i: number) {
+
+    for (let j = i; j < this.tableData.length - 1; j++) {
+      this.tableData[j] = this.tableData[j + 1];
+      this.tablePointsMax[j] = this.tablePointsMax[j + 1];
+      this.tablePointsAvg[j] = this.tablePointsAvg[j + 1];
+      this.focusDMax[j] = this.focusDMax[j + 1];
+      this.focusDAvg[j] = this.focusDAvg[j + 1];
+    }
+
+    if (i != this.tableData.length - 1) {
+      this.deleteCount += 1;
+    }
+
+    this.tableData.pop();
+    this.tablePointsMax.pop();
+    this.tablePointsAvg.pop();
+    this.focusDMax.pop();
+    this.focusDAvg.pop();
+    this.replaceFocusPoints();
+  }
+
+  highlightPoint(i: number) {
+    let x = this.x;
+    let y = this.y;
+    var highlightedMax = this.svg.select('#tablePointMax-' + i)
+      .attr('r', 8);
+    var highlightedAvg = this.svg.select('#tablePointAvg-' + i)
+      .attr('r', 8);
+
+    repeat();
+
+    function repeat() {
+      let tempXPos = (Math.random() * (2 - (0)) + (0)) - 1;
+      let tempYPos = (Math.random() * (2 - (0)) + (0)) - 1;
+
+      highlightedMax.transition()
+        .ease(d3.easeBounce)
+        .duration(50)
+        .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
+        .on('end', repeat);
+      highlightedAvg.transition()
+        .ease(d3.easeBounce)
+        .duration(50)
+        .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
+        .on('end', repeat);
+    }
+  }
+
+  unhighlightPoint(i: number) {
+    this.svg.select('#tablePointMax-' + i).interrupt().attr('r', 6);
+    this.svg.select('#tablePointAvg-' + i).interrupt().attr('r', 6);
+    this.replaceFocusPoints();
+  }
+
 
   getAvgData() {
     let data = new Array();

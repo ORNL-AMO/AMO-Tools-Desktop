@@ -828,35 +828,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("opacity", 0);
 
       });
-
-
-    // var defs = this.svg.append("defs");
-
-
-    // var dropShadowFilter = defs.append('svg:filter')
-    //   .attr('id', 'drop-shadow')
-    //   .attr('filterUnits', "userSpaceOnUse")
-    //   .attr('width', '250%')
-    //   .attr('height', '250%');
-    // dropShadowFilter.append('svg:feGaussianBlur')
-    //   .attr('in', 'SourceGraphic')
-    //   .attr('stdDeviation', 2)
-    //   .attr('result', 'blur-out');
-    // dropShadowFilter.append('svg:feColorMatrix')
-    //   .attr('in', 'blur-out')
-    //   .attr('type', 'hueRotate')
-    //   .attr('values', 180)
-    //   .attr('result', 'color-out');
-    // dropShadowFilter.append('svg:feOffset')
-    //   .attr('in', 'color-out')
-    //   .attr('dx', 3)
-    //   .attr('dy', 3)
-    //   .attr('result', 'the-shadow');
-    // dropShadowFilter.append('svg:feBlend')
-    //   .attr('in', 'SourceGraphic')
-    //   .attr('in2', 'the-shadow')
-    //   .attr('mode', 'normal');
-
   }
 
 
