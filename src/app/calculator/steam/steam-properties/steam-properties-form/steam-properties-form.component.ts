@@ -130,13 +130,30 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.quantityValueUnits = quantityObj.displayUnits;
 
     if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
+
       const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.steamPressureMeasurement;
       this.pressureError = 'Pressure must be between ' + err;
     }
 
 
     if (input.quantityValue < quantityObj.min || input.quantityValue > quantityObj.max) {
-      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + quantityObj.displayUnits;
+      let units;
+      if (quantityObj.displayUnits == 'kJkgK') {
+        units = 'kJ/kgK';
+      }
+      else if (quantityObj.displayUnits == 'kJkg') {
+        units = 'kJ/kg';
+      }
+      else if (quantityObj.displayUnits == 'btulbF') {
+        units = 'Btu/lbF';
+      }
+      else if (quantityObj.displayUnits == 'btulb') {
+        units = 'Btu/lb';
+      }
+      else {
+        units = quantityObj.displayUnits;
+      }
+      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + units;
       this.quantityValueError = quantityObj.type + ' must be between ' + err;
     }
     if (this.pressureError !== null || this.quantityValueError !== null) {
