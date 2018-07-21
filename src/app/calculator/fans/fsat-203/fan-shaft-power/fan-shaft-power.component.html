@@ -5,7 +5,7 @@
     <span class="fa fa-check pull-right" *ngIf="shaftPowerDone"></span>
   </label>
   <div class="form-group">
-    <label for="isMethodOne">Method for Establishing Fan Input Power</label>
+    <label for="isMethodOne">Method for Establishing Motor Input Power</label>
     <select class="form-control" name="isMethodOne" formControlName="isMethodOne" id="isMethodOne" (change)="save()" (focus)="focusField('isMethodOne')">
       <option [ngValue]="true">Know Motor Input Power</option>
       <option [ngValue]="false">Calculate Motor Input Power</option>

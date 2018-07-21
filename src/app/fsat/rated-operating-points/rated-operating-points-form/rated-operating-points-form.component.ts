@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RatedOperatingDataPoint } from '../rated-operating-points.component';
-import { Settings } from 'http2';
+import { Settings } from '../../../shared/models/settings';
+
 
 @Component({
   selector: 'app-rated-operating-points-form',

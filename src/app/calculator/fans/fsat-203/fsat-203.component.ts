@@ -65,9 +65,9 @@ export class Fsat203Component implements OnInit {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
       this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
       this.results = this.fsatService.fan203(this.inputs, this.settings);
-      this.results.fanEfficiencyStaticPressure = this.results.fanEfficiencyStaticPressure * 100;
-      this.results.fanEfficiencyStaticPressureRise = this.results.fanEfficiencyStaticPressureRise * 100;
-      this.results.fanEfficiencyTotalPressure = this.results.fanEfficiencyTotalPressure * 100;
+      // this.results.fanEfficiencyStaticPressure = this.results.fanEfficiencyStaticPressure;
+      // this.results.fanEfficiencyStaticPressureRise = this.results.fanEfficiencyStaticPressureRise;
+      // this.results.fanEfficiencyTotalPressure = this.results.fanEfficiencyTotalPressure;
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,
