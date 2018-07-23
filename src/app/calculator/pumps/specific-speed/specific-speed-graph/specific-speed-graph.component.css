@@ -73,3 +73,12 @@ tr>td {
   opacity: 1;
   border-color: #212529;
 }
+
+.delete-row {
+  color: red;
+}
+
+.delete-row:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

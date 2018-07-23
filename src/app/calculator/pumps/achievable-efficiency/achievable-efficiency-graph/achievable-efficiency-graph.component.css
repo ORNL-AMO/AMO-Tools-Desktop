@@ -1,7 +1,6 @@
-#gridToggle{
+#gridToggle {
   position: absolute;
   z-index: 9999;
-
   left: 30px
 }
 
@@ -19,14 +18,12 @@
   opacity: 0.7;
 }
 
-
 g.tick line {
   stroke: red;
   opacity: 0.7;
 }
 
-
-.grid .tick { 
+.grid .tick {
   stroke: lightgrey;
   opacity: 0.7;
 }
@@ -34,7 +31,6 @@ g.tick line {
 .grid path {
   stroke-width: 0;
 }
-
 
 .key-color {
   border-radius: 12px;
@@ -45,13 +41,12 @@ g.tick line {
   margin: auto;
 }
 
-tr > td,
-tr > th{
-    text-align: center;
+tr>td, tr>th {
+  text-align: center;
 }
 
-tr > td {
-    vertical-align: middle;
+tr>td {
+  vertical-align: middle;
 }
 
 .graph-table {
@@ -96,4 +91,13 @@ tr > td {
   cursor: pointer;
   opacity: 1;
   border-color: #212529;
+}
+
+.delete-row {
+  color: red;
+}
+
+.delete-row:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }

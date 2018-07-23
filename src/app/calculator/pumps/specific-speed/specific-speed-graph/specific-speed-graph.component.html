@@ -60,13 +60,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of tableData; let i=index;">
+          <tr (mouseenter)="highlightPoint(i)" (mouseleave)="unhighlightPoint(i)" *ngFor="let data of tableData; let i=index;">
             <td>
               <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
             </td>
             <td>{{i + 1}}</td>
             <td>{{data.specificSpeed}}</td>
             <td>{{data.efficiencyCorrection}}</td>
+            <td class="delete-row" (click)="deleteFromTable(i)">Delete</td>
           </tr>
         </tbody>
       </table>

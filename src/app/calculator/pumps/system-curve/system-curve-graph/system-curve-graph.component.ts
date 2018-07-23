@@ -72,6 +72,7 @@ export class SystemCurveGraphComponent implements OnInit {
   flowMeasurement: string;
   distanceMeasurement: string;
   powerMeasurement: string;
+  deleteCount: number = 0;
 
   canvasWidth: number;
   canvasHeight: number;
@@ -96,7 +97,7 @@ export class SystemCurveGraphComponent implements OnInit {
     this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
     this.tablePoints = new Array<any>();
     this.focusD = new Array<any>();
-    
+
     if (!this.lossCoefficient) {
       this.lossCoefficient = 0;
     }
@@ -542,7 +543,7 @@ export class SystemCurveGraphComponent implements OnInit {
         this.flowMeasurement = flowMeasurement;
         this.distanceMeasurement = distanceMeasurement;
         this.powerMeasurement = powerMeasurement;
-        
+
         this.detailBox
           .style("padding-top", "10px")
           .style("padding-right", "10px")
@@ -641,7 +642,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length;
+    let i = this.tableData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
     let tableFocus = this.svg.append("g")
@@ -680,12 +681,15 @@ export class SystemCurveGraphComponent implements OnInit {
     this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
     this.tablePoints = new Array<any>();
     this.focusD = new Array<any>();
+    this.deleteCount = 0;
   }
 
   //dynamic table
   replaceFocusPoints() {
+
+    this.svg.selectAll('.tablePoint').remove();
+
     for (let i = 0; i < this.tablePoints.length; i++) {
-      let borderColorIndex = Math.floor(i / this.graphColors.length);
 
       let tableFocus = this.svg.append("g")
         .attr("class", "tablePoint")
@@ -696,13 +700,56 @@ export class SystemCurveGraphComponent implements OnInit {
       tableFocus.append("circle")
         .attr("r", 6)
         .attr("id", "tablePoint-" + i)
-        .style("fill", this.graphColors[i % this.graphColors.length])
-        .style("stroke", this.graphColors[borderColorIndex % this.graphColors.length])
+        .style("fill",  this.tableData[i].fillColor)
+        .style("stroke", this.tableData[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
 
       tableFocus.attr("transform", "translate(" + this.x(this.focusD[i].x) + "," + this.y(this.focusD[i].y) + ")");
     }
+  }
+
+  deleteFromTable(i: number) {
+
+    for (let j = i; j < this.tableData.length - 1; j++) {
+      this.tableData[j] = this.tableData[j + 1];
+      this.tablePoints[j] = this.tablePoints[j + 1];
+      this.focusD[j] = this.focusD[j + 1];
+    }
+
+    if (i != this.tableData.length - 1) {
+      this.deleteCount += 1;
+    }
+
+    this.tableData.pop();
+    this.tablePoints.pop();
+    this.focusD.pop();
+    this.replaceFocusPoints();
+  }
+
+  highlightPoint(i: number) {
+    let x = this.x;
+    let y = this.y;
+    var highlightedPoint = this.svg.select('#tablePoint-' + i)
+      .attr('r', 8);
+
+    repeat();
+
+    function repeat() {
+      let tempXPos = (Math.random() * (2 - (0)) + (0)) - 1;
+      let tempYPos = (Math.random() * (2 - (0)) + (0)) - 1;
+
+      highlightedPoint.transition()
+        .ease(d3.easeBounce)
+        .duration(50)
+        .attr("transform", "translate(" + tempXPos + "," + tempYPos + ")")
+        .on('end', repeat);
+    }
+  }
+
+  unhighlightPoint(i: number) {
+    this.svg.select('#tablePoint-' + i).interrupt().attr('r', 6);
+    this.replaceFocusPoints();
   }
 
   findPointValues(x, y, increment) {
