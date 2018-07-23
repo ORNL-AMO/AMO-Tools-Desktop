@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput } from "../../shared/models/steam";
+import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput } from "../../shared/models/steam";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 
@@ -10,7 +10,11 @@ export class SteamService {
 
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
-  
+
+  test() {
+    console.log(steamAddon);
+  }
+
   convertSteamPropertiesQuantityValue(steamPropertiesInput: SteamPropertiesInput, settings: Settings, forInput: boolean, output?: SteamPropertiesOutput) {
     if (forInput === true) {
       if (steamPropertiesInput.thermodynamicQuantity === 0) { // convert temperature to kelvin
@@ -31,13 +35,13 @@ export class SteamService {
       } else if (steamPropertiesInput.thermodynamicQuantity === 1) { // convert specific Enthalpy
         output.specificEnthalpy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
         output.specificEntropy = this.convertUnitsService.value(output.specificEntropy).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
-        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
+        output.temperature = this.convertUnitsService.value(output.temperature - 273.15).from('C').to(settings.steamTemperatureMeasurement);
       } else if (steamPropertiesInput.thermodynamicQuantity === 2) {
         output.specificEntropy = this.convertUnitsService.value(steamPropertiesInput.quantityValue).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
-        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
+        output.temperature = this.convertUnitsService.value(output.temperature - 273.15).from('C').to(settings.steamTemperatureMeasurement);
         output.specificEnthalpy = this.convertUnitsService.value(output.specificEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
-      }else{
-        output.temperature = this.convertUnitsService.value(output.temperature-273.15).from('C').to(settings.steamTemperatureMeasurement);
+      } else {
+        output.temperature = this.convertUnitsService.value(output.temperature - 273.15).from('C').to(settings.steamTemperatureMeasurement);
       }
     }
   }
@@ -77,6 +81,51 @@ export class SteamService {
     output.liquidVolume = this.convertUnitsService.value(output.liquidVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
 
     return output;
+  }
+
+
+  boiler(input?: BoilerInput): BoilerOutput {
+    let dataTest: any = {
+      deaeratorPressure : 10, combustionEfficiency : 85, blowdownRate : 2,
+      steamPressure : 20, thermodynamicQuantity : 1, //1 is ENTHALPY
+      quantityValue : 2000, steamMassFlow : 45
+    }
+    return steamAddon.boiler(dataTest);
+  }
+
+  deaerator() {
+
+  }
+
+  flashTank() {
+
+  }
+
+  header() {
+
+  }
+
+  heatLoss() {
+
+  }
+  prvWithDesuperheating() {
+
+  }
+  prvWithoutDesuperheating() {
+
+  }
+  saturatedPressure() {
+
+  }
+
+  saturatedTemperature() {
+
+  }
+  steamPropertiesData() {
+
+  }
+  turbine() {
+
   }
 
   getDisplayUnit(unit: string) {
