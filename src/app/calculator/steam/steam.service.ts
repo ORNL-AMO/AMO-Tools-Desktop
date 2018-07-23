@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput } from "../../shared/models/steam";
+import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, PrvWithDesuperheatingInput, PrvWithDesuperheatingOutput, PrvWithoutDesuperheatingInput, PrvWithoutDesuperheatingOutput, TurbineInput, TurbineOutput } from "../../shared/models/steam";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 
@@ -84,48 +84,51 @@ export class SteamService {
   }
 
 
-  boiler(input?: BoilerInput): BoilerOutput {
-    let dataTest: any = {
-      deaeratorPressure : 10, combustionEfficiency : 85, blowdownRate : 2,
-      steamPressure : 20, thermodynamicQuantity : 1, //1 is ENTHALPY
-      quantityValue : 2000, steamMassFlow : 45
-    }
-    return steamAddon.boiler(dataTest);
+  boiler(input: BoilerInput): BoilerOutput {
+    return steamAddon.boiler(input);
   }
 
-  deaerator() {
-
+  deaerator(input: DeaeratorInput): DeaeratorOutput {
+    return steamAddon.deaerator(input);
   }
 
-  flashTank() {
-
+  flashTank(input: FlashTankInput): FlashTankOutput {
+    return steamAddon.flashTank(input);
   }
 
-  header() {
-
+  header(input: HeaderInput): HeaderOutput {
+    return steamAddon.header(input);
   }
 
-  heatLoss() {
-
+  heatLoss(input: HeatLossInput): HeatLossOutput {
+    return steamAddon.heatLoss(input)
   }
-  prvWithDesuperheating() {
-
+  prvWithDesuperheating(input: PrvWithDesuperheatingInput): PrvWithDesuperheatingOutput {
+    return steamAddon.prvWithDesuperheating(input)
   }
-  prvWithoutDesuperheating() {
-
+  prvWithoutDesuperheating(inputs: PrvWithoutDesuperheatingInput): PrvWithoutDesuperheatingOutput {
+    return steamAddon.prvWithoutDesuperheating(inputs);
   }
-  saturatedPressure() {
+  // saturatedPressure() {
 
-  }
+  // }
 
-  saturatedTemperature() {
+  // saturatedTemperature() {
 
-  }
-  steamPropertiesData() {
+  // }
 
-  }
-  turbine() {
+  // steamPropertiesData() {
+  //   var input = {
+  //     pressure: 5,
+  //     wantEntropy: false,
+  //     temperature: 300
+  //   };
 
+  //   var res = steamAddon.steamPropertiesData(input);
+  //   return res;
+  // }
+  turbine(inputs: TurbineInput): TurbineOutput {
+    return steamAddon.turbine(inputs);
   }
 
   getDisplayUnit(unit: string) {

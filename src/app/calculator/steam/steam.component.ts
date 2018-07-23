@@ -14,8 +14,6 @@ export class SteamComponent implements OnInit {
   constructor(private calculatorService: CalculatorService, private steamService: SteamService) { }
 
   ngOnInit() {
-    let test = this.steamService.boiler();
-    console.log(test);
   }
 
   showTool(str: string) {
