@@ -103,6 +103,7 @@ export class DashboardComponent implements OnInit {
     })
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(viewStr => {
       if(viewStr){
+        console.log(viewStr)
         this.dashboardView = viewStr;
       }
     })
@@ -198,7 +199,7 @@ export class DashboardComponent implements OnInit {
   }
 
   hideScreen() {
-    this.dashboardView = 'assessment-dashboard';
+    this.assessmentService.dashboardView.next('assessment-dashboard');
   }
 
   showPreAssessmentModal(calcIndex: number) {
@@ -408,7 +409,7 @@ export class DashboardComponent implements OnInit {
       })
       this.reportRollupService.getReportData(this.workingDirectory);
       //this.getSelected(this.workingDirectory);
-      this.dashboardView = 'detailed-report';
+      this.assessmentService.dashboardView.next('detailed-report');
     } else {
       this.addToast('No items have been selected');
     }
@@ -445,7 +446,7 @@ export class DashboardComponent implements OnInit {
     this.workingDirectory.subDirectory.forEach(dir => {
       dir.selected = false;
     });
-    this.dashboardView = 'assessment-dashboard';
+    this.assessmentService.dashboardView.next('assessment-dashboard');
   }
 
   checkImportData(data: ImportExportData) {

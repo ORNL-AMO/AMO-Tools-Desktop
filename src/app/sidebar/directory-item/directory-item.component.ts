@@ -44,9 +44,6 @@ export class DirectoryItemComponent implements OnInit {
     if (this.directory.id != undefined) {
       this.validDirectory = true;
       this.populateDirectories(this.directory);
-      if (this.directory.id == this.selectedDirectoryId) {
-        this.toggleSelected(this.directory);
-      }
     }
   }
 

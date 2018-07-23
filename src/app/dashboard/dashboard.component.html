@@ -3,8 +3,7 @@
 
         <div class="col-2 sidebar-bg p-0" [ngClass]="{'modal-open': isModalOpen}">
             <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
-                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
-                (selectCalculator)="viewCalculator($event)" (openModal)="openModal($event)">
+                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)" (openModal)="openModal($event)">
             </app-sidebar>
         </div>
 
@@ -19,10 +18,10 @@
         </div>
 
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'calculator'">
-            <app-calculator (selectCalculator)="viewCalculator($event)"></app-calculator>
+            <app-calculator></app-calculator>
         </div>
         <div class="col-10 dashboard-scroll pb-4 scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
-            <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
+            <app-landing-screen [directory]="allDirectories"></app-landing-screen>
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'tutorials'">
             <app-tutorials></app-tutorials>
