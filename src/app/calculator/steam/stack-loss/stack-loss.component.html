@@ -1,0 +1,39 @@
+<div class="d-flex h-100 modify-conditions steam">
+  <div class="d-flex flex-column modification w-50">
+    <div #leftPanelHeader class="header mr-2 ml-2">
+      <div class="col-md-auto ico-col">
+        <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
+      </div>
+      <h3>Stack Loss Calculator</h3>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <div class="form-group">
+        <label class="small" for="method">Type of fuel</label>
+        <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')" (blur)="changeField('default')"
+          (change)="getForm()">
+          <option [ngValue]="'volume'">Gas</option>
+          <option [ngValue]="'mass'">Solid/Liquid</option>
+        </select>
+      </div>
+      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings" (changeField)="changeField($event)"
+        (emitCalculate)="calculate($event)"></app-stack-loss-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
+      </div>
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+        <a (click)="setTab('help')">Help</a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-stack-loss-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-stack-loss-help>
+      <div class="d-flex flex-column w-100 justify-content-center align-items-center pt-4" *ngIf="tabSelect == 'results'">
+        <h5 class="text-center">Stack Loss (%)</h5>
+        <app-percent-graph [value]="stackLossPercent" [valueDescription]="'Stack Loss'" [fontSize]="32" [unit]="'%'" [title]="'stack-loss-percent'"></app-percent-graph>
+      </div>
+    </div>
+  </div>
+</div>
