@@ -244,7 +244,8 @@ export class DashboardComponent implements OnInit {
   }
 
   changeWorkingDirectory(directory: Directory) {
-    this.assessmentService.dashboardView.next('assessment-dashboard');
+    // console.log('set dashboard view');
+    // this.assessmentService.dashboardView.next('assessment-dashboard');
     this.workingDirectory = this.populateDirectories(directory);
     this.getWorkingDirectoryData();
   }
