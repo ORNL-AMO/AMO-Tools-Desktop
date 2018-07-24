@@ -134,9 +134,9 @@ export class SteamPropertiesFormComponent implements OnInit {
       this.pressureError = 'Pressure must be between ' + err;
     }
 
-
     if (input.quantityValue < quantityObj.min || input.quantityValue > quantityObj.max) {
-      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + quantityObj.displayUnits;
+      let units: string = this.getDisplayUnit(quantityObj.displayUnits);
+      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + units;
       this.quantityValueError = quantityObj.type + ' must be between ' + err;
     }
     if (this.pressureError !== null || this.quantityValueError !== null) {
