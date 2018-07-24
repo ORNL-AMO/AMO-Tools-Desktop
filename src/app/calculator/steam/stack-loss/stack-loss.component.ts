@@ -24,7 +24,7 @@ export class StackLossComponent implements OnInit {
 
   headerHeight: number;
 
-  currentField: string;
+  currentField: string = 'default';
   method: string = 'volume';
   tabSelect: string = 'results';
   stackLossForm: FormGroup;
