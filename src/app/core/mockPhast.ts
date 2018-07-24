@@ -1162,7 +1162,7 @@ export const MockPhastSettings: Settings = {
     steamSpecificEnthalpyMeasurement: "btuLb",
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",
-    steamMassFlowMeasurement: "lbhr",
+    steamMassFlowMeasurement: "klb",
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,

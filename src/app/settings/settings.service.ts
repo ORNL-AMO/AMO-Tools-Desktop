@@ -188,7 +188,7 @@ export class SettingsService {
         steamSpecificEnthalpyMeasurement: 'btuLb',
         steamSpecificEntropyMeasurement: 'btulbF',
         steamSpecificVolumeMeasurement: 'ft3lb',
-        steamMassFlowMeasurement: 'lbhr',
+        steamMassFlowMeasurement: 'klb',
         energyResultUnit: 'MMBtu',
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
@@ -217,7 +217,7 @@ export class SettingsService {
         steamSpecificEnthalpyMeasurement: 'kJkg',
         steamSpecificEntropyMeasurement: 'kJkgK',
         steamSpecificVolumeMeasurement: 'm3kg',
-        steamMassFlowMeasurement: 'kghr',
+        steamMassFlowMeasurement: 'tonne',
         energyResultUnit: 'GJ',
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
@@ -317,7 +317,7 @@ export class SettingsService {
         settings.steamSpecificVolumeMeasurement = 'ft3/lb';
       }
       if (!settings.steamMassFlowMeasurement) {
-        settings.steamMassFlowMeasurement = 'lb/hr';
+        settings.steamMassFlowMeasurement = 'klb';
       }
     } else {
       if (!settings.steamTemperatureMeasurement) {
@@ -336,7 +336,7 @@ export class SettingsService {
         settings.steamSpecificVolumeMeasurement = 'm3/kg';
       }
       if (!settings.steamMassFlowMeasurement) {
-        settings.steamMassFlowMeasurement = 'kg/hr';
+        settings.steamMassFlowMeasurement = 'tonne';
       }
     }
     return settings;
@@ -344,7 +344,6 @@ export class SettingsService {
 
 
   setFanUnits(settings: Settings): Settings {
-    console.log('set fan units');
     if (settings.unitsOfMeasure == 'Metric' || settings.unitsOfMeasure == 'Other') {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'kgNm3';
@@ -384,7 +383,6 @@ export class SettingsService {
         settings.fanTemperatureMeasurement = 'F';
       }
     }
-    console.log(settings.fanTemperatureMeasurement);
 
     if (!settings.fanPowerMeasurement) {
       settings.fanPowerMeasurement = 'hp';
