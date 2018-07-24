@@ -126,7 +126,7 @@ export class SteamService {
     return this.convertUnitsService.value(val).from('kg').to(settings.steamMassFlowMeasurement);
   }
 
-  boiler(input: BoilerInput): BoilerOutput {
+  boiler(input: BoilerInput, settings: Settings): BoilerOutput {
     return steamAddon.boiler(input);
   }
 

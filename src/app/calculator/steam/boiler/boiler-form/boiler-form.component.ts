@@ -5,13 +5,13 @@ import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/model
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-heat-loss-form',
-  templateUrl: './heat-loss-form.component.html',
-  styleUrls: ['./heat-loss-form.component.css']
+  selector: 'app-boiler-form',
+  templateUrl: './boiler-form.component.html',
+  styleUrls: ['./boiler-form.component.css']
 })
-export class HeatLossFormComponent implements OnInit {
+export class BoilerFormComponent implements OnInit {
   @Input()
-  heatLossForm: FormGroup;
+  boilerForm: FormGroup;
   @Input()
   settings: Settings;
   @Output('emitCalculate')
@@ -34,11 +34,11 @@ export class HeatLossFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(this.heatLossForm);
+    this.emitCalculate.emit(this.boilerForm);
   }
 
   getOptionDisplay(): string {
-    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.heatLossForm.controls.thermodynamicQuantity.value });
+    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.boilerForm.controls.thermodynamicQuantity.value });
     return selectedQuantity.display;
   }
 
@@ -52,16 +52,16 @@ export class HeatLossFormComponent implements OnInit {
 
   getOptionDisplayUnit() {
     let displayUnit: string;
-    if (this.heatLossForm.controls.thermodynamicQuantity.value == 0) {
+    if (this.boilerForm.controls.thermodynamicQuantity.value == 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (this.heatLossForm.controls.thermodynamicQuantity.value == 1) {
+    } else if (this.boilerForm.controls.thermodynamicQuantity.value == 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (this.heatLossForm.controls.thermodynamicQuantity.value == 2) {
+    } else if (this.boilerForm.controls.thermodynamicQuantity.value == 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (this.heatLossForm.controls.thermodynamicQuantity.value == 3) {
+    } else if (this.boilerForm.controls.thermodynamicQuantity.value == 3) {
       return displayUnit;
     }
   }

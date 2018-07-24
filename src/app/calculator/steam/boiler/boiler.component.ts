@@ -1,27 +1,27 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { BoilerInput, BoilerOutput } from '../../../shared/models/steam';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
-import { HeatLossService } from './heat-loss.service';
-import { HeatLossInput, HeatLossOutput } from '../../../shared/models/steam';
+import { BoilerService } from './boiler.service';
 
 @Component({
-  selector: 'app-heat-loss',
-  templateUrl: './heat-loss.component.html',
-  styleUrls: ['./heat-loss.component.css']
+  selector: 'app-boiler',
+  templateUrl: './boiler.component.html',
+  styleUrls: ['./boiler.component.css']
 })
-export class HeatLossComponent implements OnInit {
+export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
 
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
-  heatLossForm: FormGroup;
-  input: HeatLossInput;
-  results: HeatLossOutput;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private heatLossService: HeatLossService) { }
+  boilerForm: FormGroup;
+  input: BoilerInput;
+  results: BoilerOutput;
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private boilerService: BoilerService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -31,7 +31,7 @@ export class HeatLossComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.getForm();
-    this.calculate(this.heatLossForm);
+    this.calculate(this.boilerForm);
   }
 
   setTab(str: string) {
@@ -42,13 +42,13 @@ export class HeatLossComponent implements OnInit {
   }
 
   getForm() {
-    this.heatLossForm = this.heatLossService.initForm();
+    this.boilerForm = this.boilerService.initForm();
   }
 
   calculate(form: FormGroup) {
     if (form.status == 'VALID') {
-      this.input = this.heatLossService.getObjFromForm(form);
-      this.results = this.steamService.heatLoss(this.input, this.settings);
+      this.input = this.boilerService.getObjFromForm(form);
+      this.results = this.steamService.boiler(this.input, this.settings);
     }
   }
 }
