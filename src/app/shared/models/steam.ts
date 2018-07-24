@@ -162,10 +162,10 @@ export interface HeaderOutput {
 }
 
 export interface HeaderInputObj {
-  pressure: 1.8438,
-  thermodynamicQuantity: 0,
-  quantityValue: 475.8,
-  massFlow: 0.3082
+  pressure: number,
+  thermodynamicQuantity: number,
+  quantityValue: number,
+  massFlow: number
 }
 
 export interface HeaderOutputObj {
