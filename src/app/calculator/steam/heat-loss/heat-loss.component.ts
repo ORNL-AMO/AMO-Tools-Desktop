@@ -64,7 +64,7 @@ export class HeatLossComponent implements OnInit {
   calculate(form: FormGroup) {
     if (form.status == 'VALID') {
       this.input = this.heatLossService.getObjFromForm(form);
-      this.results = this.steamService.heatLoss(this.input);
+      this.results = this.steamService.heatLoss(this.input, this.settings);
     }
   }
 }

@@ -23,7 +23,9 @@
       </tr>
       <tr>
         <td class="bold w-50">Mass Flow</td>
-        <td class="text-center w-50">{{results.inletMassFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.inletMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
       </tr>
       <tr>
         <td class="bold w-50">Specific Enthalpy</td>
@@ -81,7 +83,9 @@
       </tr>
       <tr>
         <td class="bold w-50">Mass Flow</td>
-        <td class="text-center w-50">{{results.outletMassFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.outletMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
       </tr>
       <tr>
         <td class="bold w-50">Specific Enthalpy</td>

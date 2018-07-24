@@ -30,7 +30,8 @@
     <div class="input-group">
       <input class="form-control" name="inletMassFlow" id="inletMassFlow" formControlName="inletMassFlow" type="number" (input)="calculate()"
         (focus)="focusField('inletMassFlow')" (blur)="focusOut()">
-      <span class="input-group-addon units"><!--Mass flow setting needed--></span>
+      <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}/hr</span>
+
     </div>
   </div>
 
