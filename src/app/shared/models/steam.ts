@@ -297,3 +297,28 @@ export interface TurbineOutput {
   outletTemperature: number;
   powerOut: number;
 }
+
+export const ThermodynamicQuantityOptions: Array<Quantity> = [
+  {
+    value: 0,
+    display: 'Temperature'
+  },
+  {
+    value: 1,
+    display: 'Enthalpy'
+  },
+  {
+    value: 2,
+    display: 'Entropy'
+  },
+  {
+    value: 3,
+    display: 'Quality'
+  }
+]
+
+export interface Quantity {
+
+  value: number,
+  display: string
+}

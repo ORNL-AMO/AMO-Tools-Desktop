@@ -5,6 +5,7 @@ import { SteamComponent } from "./steam.component";
 import { SteamService } from "./steam.service";
 import { SaturatedPropertiesModule } from "./saturated-properties/saturated-properties.module";
 import { StackLossModule } from './stack-loss/stack-loss.module';
+import { HeatLossModule } from './heat-loss/heat-loss.module';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { StackLossModule } from './stack-loss/stack-loss.module';
     CommonModule,
     SteamPropertiesModule,
     SaturatedPropertiesModule,
-    StackLossModule
+    StackLossModule,
+    HeatLossModule
   ],
   declarations: [
     SteamComponent
