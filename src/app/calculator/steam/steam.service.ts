@@ -83,6 +83,48 @@ export class SteamService {
     return output;
   }
 
+  //ENTROPY
+  convertSteamSpecificEntropyOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
+  }
+  convertSteamSpecificEntropyInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamSpecificEntropyMeasurement).to('kJkgK');
+  }
+  //ENTHALPY
+  convertSteamSpecificEnthalpyOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
+  }
+  convertSteamSpecificEnthalpyInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamSpecificEnthalpyMeasurement).to('kJkg');
+  }
+  //PRESSURE
+  convertSteamPressureInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamPressureMeasurement).to('MPa');
+  }
+  convertSteamPressureOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('MPa').to(settings.steamPressureMeasurement);
+  }
+  //TEMPERATURE
+  convertSteamTemperatureInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamTemperatureMeasurement).to('C') + 273.15;
+  }
+  convertSteamTemperatureOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val - 273.15).from('C').to(settings.steamTemperatureMeasurement);
+  }
+  //SPECIFIC VOLUME
+  convertSteamSpecificVolumeMeasurementInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamSpecificVolumeMeasurement).to('m3kg');
+  }
+  convertSteamSpecificVolumeMeasurementOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
+  }
+  //MASS FLOW
+  convertSteamMassFlowInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamMassFlowMeasurement).to('kg');
+  }
+  convertSteamMassFlowOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('kg').to(settings.steamMassFlowMeasurement);
+  }
 
   boiler(input: BoilerInput): BoilerOutput {
     return steamAddon.boiler(input);
@@ -100,8 +142,37 @@ export class SteamService {
     return steamAddon.header(input);
   }
 
-  heatLoss(input: HeatLossInput): HeatLossOutput {
-    return steamAddon.heatLoss(input)
+  heatLoss(input: HeatLossInput, settings: Settings): HeatLossOutput {
+    //convert inputs
+    input.inletMassFlow = this.convertSteamMassFlowInput(input.inletMassFlow, settings);
+    input.inletPressure = this.convertSteamPressureInput(input.inletPressure, settings);
+    if (input.thermodynamicQuantity == 0) {
+      input.quantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 1) {
+      input.quantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 2) {
+      input.quantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    //get results
+    let results: HeatLossOutput = steamAddon.heatLoss(input);
+    //convert outputs
+    //flow
+    results.inletMassFlow = this.convertSteamMassFlowOutput(results.inletMassFlow, settings);
+    results.outletMassFlow = this.convertSteamMassFlowOutput(results.outletMassFlow, settings);
+    //pressure
+    results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
+    results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);    
+    //enthalpy
+    results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    //entropy
+    results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletSpecificEntropy, settings);
+    //temp
+    results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
+    results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
+    return results;
+
   }
   prvWithDesuperheating(input: PrvWithDesuperheatingInput): PrvWithDesuperheatingOutput {
     return steamAddon.prvWithDesuperheating(input)

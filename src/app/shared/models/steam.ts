@@ -162,10 +162,10 @@ export interface HeaderOutput {
 }
 
 export interface HeaderInputObj {
-  pressure: 1.8438,
-  thermodynamicQuantity: 0,
-  quantityValue: 475.8,
-  massFlow: 0.3082
+  pressure: number,
+  thermodynamicQuantity: number,
+  quantityValue: number,
+  massFlow: number
 }
 
 export interface HeaderOutputObj {
@@ -296,4 +296,29 @@ export interface TurbineOutput {
   outletSpecificEntropy: number;
   outletTemperature: number;
   powerOut: number;
+}
+
+export const ThermodynamicQuantityOptions: Array<Quantity> = [
+  {
+    value: 0,
+    display: 'Temperature'
+  },
+  {
+    value: 1,
+    display: 'Enthalpy'
+  },
+  {
+    value: 2,
+    display: 'Entropy'
+  },
+  {
+    value: 3,
+    display: 'Quality'
+  }
+]
+
+export interface Quantity {
+
+  value: number,
+  display: string
 }

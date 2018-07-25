@@ -50,11 +50,11 @@ export class SettingsDbService {
     let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId == assessment.id });
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.getByDirectoryId(assessment.directoryId);
-      selectedSettings = this.checkSettings(selectedSettings);
     }
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.globalSettings;
     }
+    selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
   }
 
@@ -71,7 +71,7 @@ export class SettingsDbService {
       settings = this.settingService.setSteamUnits(settings);
     }
 
-    if(!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr'){
+    if(!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr' || settings.steamMassFlowMeasurement == 'lbhr'){
       settings.steamMassFlowMeasurement = 'klb';
     }
 
