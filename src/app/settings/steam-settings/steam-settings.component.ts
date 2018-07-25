@@ -19,7 +19,9 @@ export class SteamSettingsComponent implements OnInit {
   steamSpecificEnthalpyMeasurements: Array<any> = [];
   steamSpecificEntropyMeasurements: Array<any> = [];
   specificVolumeMeasurements: Array<any> = [];
-  // steamMassFlowMeasurements: Array<any> = [];
+  steamMassFlowMeasurements: Array<any> = [];
+  steamEnergyMeasurements: Array<any> = [];
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -29,8 +31,8 @@ export class SteamSettingsComponent implements OnInit {
     this.steamSpecificEnthalpyMeasurements = new Array();
     this.steamSpecificEntropyMeasurements = new Array();
     this.specificVolumeMeasurements = new Array();
-    // this.steamMassFlowMeasurements = new Array();
-
+    this.steamMassFlowMeasurements = new Array();
+    this.steamEnergyMeasurements = new Array();
     //pressureMeasurements
     let tmpList = [
       'kPa',
@@ -100,18 +102,37 @@ export class SteamSettingsComponent implements OnInit {
       this.specificVolumeMeasurements.push(tmpPossibility);
     })
 
-    // //massFlowMeasurements
-    // tmpList = [
-    //   'lbhr',
-    //   'kghr'
-    // ];
-    // tmpList.forEach(unit => {
-    //   let tmpPossibility = {
-    //     unit: unit,
-    //     display: this.getUnitName(unit)
-    //   }
-    //   this.steamMassFlowMeasurements.push(tmpPossibility);
-    // })
+    //massFlowMeasurements
+    tmpList = [
+      'klb',
+      'tonne'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.steamMassFlowMeasurements.push(tmpPossibility);
+    })
+
+    //steamEnergyMeasurements
+    tmpList = [
+      'MMBtu',
+      'Btu',
+      'GJ',
+      'kJ',
+      'kcal',
+      'kgce',
+      'kgoe',
+      'kWh'
+    ]
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.steamEnergyMeasurements.push(tmpPossibility);
+    })
   }
 
   save() {
@@ -124,8 +145,8 @@ export class SteamSettingsComponent implements OnInit {
     }
   }
 
-  getUnitDisplay(unit: any){
-    if(unit){
+  getUnitDisplay(unit: any) {
+    if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }

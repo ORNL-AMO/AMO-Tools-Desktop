@@ -71,8 +71,12 @@ export class SettingsDbService {
       settings = this.settingService.setSteamUnits(settings);
     }
 
-    if(!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr' || settings.steamMassFlowMeasurement == 'lbhr'){
+    if (!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr' || settings.steamMassFlowMeasurement == 'lbhr') {
       settings.steamMassFlowMeasurement = 'klb';
+    }
+
+    if (!settings.steamEnergyMeasurement) {
+      settings.steamEnergyMeasurement = 'MMBtu';
     }
 
     if (!settings.densityMeasurement ||

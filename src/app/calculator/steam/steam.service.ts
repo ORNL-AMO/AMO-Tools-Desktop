@@ -125,9 +125,56 @@ export class SteamService {
   convertSteamMassFlowOutput(val: number, settings: Settings): number {
     return this.convertUnitsService.value(val).from('kg').to(settings.steamMassFlowMeasurement);
   }
+  //Energy
+  convertEnergyFlowInput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from(settings.steamEnergyMeasurement).to('MJ')
+  }
+  convertEnergyFlowOutput(val: number, settings: Settings): number {
+    return this.convertUnitsService.value(val).from('MJ').to(settings.steamEnergyMeasurement);
+  }
 
   boiler(input: BoilerInput, settings: Settings): BoilerOutput {
-    return steamAddon.boiler(input);
+    input.steamMassFlow = this.convertSteamMassFlowInput(input.steamMassFlow, settings);
+    input.deaeratorPressure = this.convertSteamPressureInput(input.deaeratorPressure, settings);
+    input.steamPressure = this.convertSteamPressureInput(input.steamPressure, settings);
+
+    if (input.thermodynamicQuantity == 0) {
+      input.quantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 1) {
+      input.quantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 2) {
+      input.quantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    //send to suite
+    let results: BoilerOutput = steamAddon.boiler(input);
+    //Convert Output
+    //pressure
+    results.steamPressure = this.convertSteamPressureOutput(results.steamPressure, settings);
+    results.blowdownPressure = this.convertSteamPressureOutput(results.blowdownPressure, settings);
+    results.feedwaterPressure = this.convertSteamPressureOutput(results.feedwaterPressure, settings);
+    //temp
+    results.steamTemperature = this.convertSteamTemperatureOutput(results.steamTemperature, settings);
+    results.blowdownTemperature = this.convertSteamTemperatureOutput(results.blowdownTemperature, settings);
+    results.feedwaterTemperature = this.convertSteamTemperatureOutput(results.feedwaterTemperature, settings);
+    //enthalpy
+    results.steamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.steamSpecificEnthalpy, settings);
+    results.blowdownSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.blowdownSpecificEnthalpy, settings);
+    results.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.feedwaterSpecificEnthalpy, settings);
+    //entropy
+    results.steamSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.steamSpecificEntropy, settings);
+    results.blowdownSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.blowdownSpecificEntropy, settings);
+    results.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.feedwaterSpecificEntropy, settings);
+    //massFlow
+    results.steamMassFlow = this.convertSteamMassFlowOutput(results.steamMassFlow, settings);
+    results.blowdownMassFlow = this.convertSteamMassFlowOutput(results.blowdownMassFlow, settings);
+    results.feedwaterMassFlow = this.convertSteamMassFlowOutput(results.feedwaterMassFlow, settings);
+    //energy
+    results.steamEnergyFlow = this.convertEnergyFlowOutput(results.steamEnergyFlow, settings);
+    results.blowdownEnergyFlow = this.convertEnergyFlowOutput(results.blowdownEnergyFlow, settings);
+    results.feedwaterEnergyFlow = this.convertEnergyFlowOutput(results.feedwaterEnergyFlow, settings);
+    results.boilerEnergy = this.convertEnergyFlowOutput(results.boilerEnergy, settings);
+    results.fuelEnergy = this.convertEnergyFlowOutput(results.fuelEnergy, settings);
+    return results;
   }
 
   deaerator(input: DeaeratorInput): DeaeratorOutput {
@@ -161,7 +208,7 @@ export class SteamService {
     results.outletMassFlow = this.convertSteamMassFlowOutput(results.outletMassFlow, settings);
     //pressure
     results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
-    results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);    
+    results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     //enthalpy
     results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
     results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);

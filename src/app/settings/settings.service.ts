@@ -83,7 +83,8 @@ export class SettingsService {
       'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg'],
       'fanSpecificHeatGas': [settings.fanSpecificHeatGas || 'btulbF'],
       'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp'],
-      'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F']
+      'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F'],
+      'steamEnergyMeasurement': [settings.steamEnergyMeasurement || 'MMBtu']
     });
   }
 
@@ -127,7 +128,8 @@ export class SettingsService {
       fanBarometricPressure: form.controls.fanBarometricPressure.value,
       fanSpecificHeatGas: form.controls.fanSpecificHeatGas.value,
       fanPowerMeasurement: form.controls.fanPowerMeasurement.value,
-      fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value
+      fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value,
+      steamEnergyMeasurement: form.controls.steamEnergyMeasurement.value
     };
     return tmpSettings;
   }
@@ -170,7 +172,8 @@ export class SettingsService {
       fanBarometricPressure: settings.fanBarometricPressure || 'inHg',
       fanSpecificHeatGas: settings.fanSpecificHeatGas || 'btulbF',
       fanPowerMeasurement: settings.fanPowerMeasurement || 'hp',
-      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F'
+      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F',
+      steamEnergyMeasurement: settings.steamEnergyMeasurement || 'kWh'
     }
     return newSettings;
   }
@@ -199,7 +202,8 @@ export class SettingsService {
         fanPressureMeasurement: 'inH2o',
         fanBarometricPressure: 'inHg',
         fanSpecificHeatGas: 'btulbF',
-        fanTemperatureMeasurement: 'F'
+        fanTemperatureMeasurement: 'F',
+        steamEnergyMeasurement: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -228,7 +232,8 @@ export class SettingsService {
         fanPressureMeasurement: 'Pa',
         fanBarometricPressure: 'kPa',
         fanSpecificHeatGas: 'kJkgC',
-        fanTemperatureMeasurement: 'F'
+        fanTemperatureMeasurement: 'C',
+        steamEnergyMeasurement: 'kWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -319,6 +324,9 @@ export class SettingsService {
       if (!settings.steamMassFlowMeasurement) {
         settings.steamMassFlowMeasurement = 'klb';
       }
+      if (!settings.steamEnergyMeasurement) {
+        settings.steamEnergyMeasurement = 'MMBtu'
+      }
     } else {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'C';
@@ -337,6 +345,9 @@ export class SettingsService {
       }
       if (!settings.steamMassFlowMeasurement) {
         settings.steamMassFlowMeasurement = 'tonne';
+      }
+      if (!settings.steamEnergyMeasurement) {
+        settings.steamEnergyMeasurement = 'kWh'
       }
     }
     return settings;
@@ -360,7 +371,7 @@ export class SettingsService {
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'kJkgC';
       }
-      if(!settings.fanTemperatureMeasurement){
+      if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'C';
       }
     } else {
@@ -379,7 +390,7 @@ export class SettingsService {
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'btulbF';
       }
-      if(!settings.fanTemperatureMeasurement){
+      if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'F';
       }
     }
