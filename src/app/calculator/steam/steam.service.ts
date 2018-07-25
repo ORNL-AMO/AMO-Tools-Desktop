@@ -181,7 +181,7 @@ export class SteamService {
     return steamAddon.deaerator(input);
   }
 
-  flashTank(input: FlashTankInput): FlashTankOutput {
+  flashTank(input: FlashTankInput, settings: Settings): FlashTankOutput {
     return steamAddon.flashTank(input);
   }
 
