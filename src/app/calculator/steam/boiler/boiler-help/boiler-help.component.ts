@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { BoilerRanges, BoilerService } from '../boiler.service';
+import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-boiler-help',
@@ -13,10 +15,48 @@ export class BoilerHelpComponent implements OnInit {
   settings: Settings;
   @Input()
   thermodynamicQuantity: number;
-  
-  constructor() { }
+
+  rangeValues: BoilerRanges;
+  constructor(private boilerService: BoilerService, private steamService: SteamService) { }
 
   ngOnInit() {
+    this.getRanges();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.thermodynamicQuantity) {
+      if (!changes.thermodynamicQuantity.isFirstChange()) {
+        this.getRanges();
+      }
+    }
+  }
+
+
+  getRanges() {
+    this.rangeValues = this.boilerService.getRangeValues(this.settings, this.thermodynamicQuantity);
+  }
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      return this.steamService.getDisplayUnit(unit);
+    } else {
+      return unit;
+    }
+  }
+
+  getOptionDisplayUnit() {
+    let displayUnit: string;
+    if (this.thermodynamicQuantity == 0) {
+      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      return displayUnit;
+    } else if (this.thermodynamicQuantity == 1) {
+      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      return displayUnit;
+    } else if (this.thermodynamicQuantity == 2) {
+      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      return displayUnit;
+    } else if (this.thermodynamicQuantity == 3) {
+      return displayUnit;
+    }
+  }
 }
