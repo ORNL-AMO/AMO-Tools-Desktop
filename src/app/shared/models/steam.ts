@@ -37,7 +37,7 @@ export interface BoilerInput {
   combustionEfficiency: number;
   blowdownRate: number;
   steamPressure: number;
-  quantityType: number;
+  thermodynamicQuantity: number;
   quantityValue: number;
   steamMassFlow: number;
 }
@@ -68,4 +68,257 @@ export interface BoilerOutput {
   feedwaterEnergyFlow: number;
   boilerEnergy: number;
   fuelEnergy: number;
+}
+
+
+export interface DeaeratorInput {
+  deaeratorPressure: number;
+  ventRate: number;
+  feedwaterMassFlow: number;
+  waterPressure: number;
+  waterThermodynamicQuantity: number; //1 is ENTHALPY
+  waterQuantityValue: number;
+  steamPressure: number;
+  steamThermodynamicQuantity: number; //2 is ENTROPY
+  steamQuantityValue: number;
+}
+
+
+export interface DeaeratorOutput {
+  feedwaterEnergyFlow: number;
+  feedwaterMassFlow: number;
+  feedwaterPressure: number;
+  feedwaterQuality: number;
+  feedwaterSpecificEnthalpy: number;
+  feedwaterSpecificEntropy: number;
+  feedwaterTemperature: number;
+  inletSteamEnergyFlow: number;
+  inletSteamMassFlow: number;
+  inletSteamPressure: number;
+  inletSteamQuality: number;
+  inletSteamSpecificEnthalpy: number;
+  inletSteamSpecificEntropy: number;
+  inletSteamTemperature: number;
+  inletWaterEnergyFlow: number;
+  inletWaterMassFlow: number;
+  inletWaterPressure: number;
+  inletWaterQuality: number;
+  inletWaterSpecificEnthalpy: number;
+  inletWaterSpecificEntropy: number;
+  inletWaterTemperature: number;
+  ventedSteamEnergyFlow: number;
+  ventedSteamMassFlow: number;
+  ventedSteamPressure: number;
+  ventedSteamQuality: number;
+  ventedSteamSpecificEnthalpy: number;
+  ventedSteamSpecificEntropy: number;
+  ventedSteamTemperature: number;
+}
+
+export interface FlashTankOutput {
+  inletWaterEnergyFlow: number;
+  inletWaterMassFlow: number;
+  inletWaterPressure: number;
+  inletWaterQuality: number;
+  inletWaterSpecificEnthalpy: number;
+  inletWaterSpecificEntropy: number;
+  inletWaterTemperature: number;
+  outletGasEnergyFlow: number;
+  outletGasMassFlow: number;
+  outletGasPressure: number;
+  outletGasQuality: number;
+  outletGasSpecificEnthalpy: number;
+  outletGasSpecificEntropy: number;
+  outletGasTemperature: number;
+  outletLiquidEnergyFlow: number;
+  outletLiquidMassFlow: number;
+  outletLiquidPressure: number;
+  outletLiquidQuality: number;
+  outletLiquidSpecificEnthalpy: number;
+  outletLiquidSpecificEntropy: number;
+  outletLiquidTemperature: number;
+}
+
+export interface FlashTankInput {
+  inletWaterPressure: number;
+  thermodynamicQuantity: number; //1 is ENTHALPY
+  quantityValue: number;
+  inletWaterMassFlow: number;
+  tankPressure: number;
+}
+
+
+export interface HeaderInput {
+  headerPressure: number;
+  inlets: Array<HeaderInputObj>;
+}
+
+export interface HeaderOutput {
+  header: HeaderOutputObj;
+  inlet1: HeaderOutputObj;
+  inlet2: HeaderOutputObj;
+  inlet3: HeaderOutputObj;
+  inlet4: HeaderOutputObj;
+}
+
+export interface HeaderInputObj {
+  pressure: number,
+  thermodynamicQuantity: number,
+  quantityValue: number,
+  massFlow: number
+}
+
+export interface HeaderOutputObj {
+  energyFlow: number;
+  massFlow: number;
+  pressure: number;
+  quality: number;
+  specificEnthalpy: number;
+  specificEntropy: number;
+  temperature: number;
+}
+
+
+export interface HeatLossInput {
+  inletPressure: number;
+  thermodynamicQuantity: number; //0 is TEMPERATURE
+  quantityValue: number;
+  inletMassFlow: number;
+  percentHeatLoss: number;
+}
+
+export interface HeatLossOutput {
+  heatLoss: number;
+  inletEnergyFlow: number;
+  inletMassFlow: number;
+  inletPressure: number;
+  inletQuality: number;
+  inletSpecificEnthalpy: number;
+  inletSpecificEntropy: number;
+  inletTemperature: number;
+  outletEnergyFlow: number;
+  outletMassFlow: number;
+  outletPressure: number;
+  outletQuality: number;
+  outletSpecificEnthalpy: number;
+  outletSpecificEntropy: number;
+  outletTemperature: number;
+}
+
+export interface PrvWithDesuperheatingInput {
+  inletPressure: number;
+  thermodynamicQuantity: number;//0 is TEMPERATURE
+  quantityValue: number;
+  inletMassFlow: number;
+  outletPressure: number;
+  feedwaterPressure: number;
+  feedwaterThermodynamicQuantity: number; //2 is ENTROPY
+  feedwaterQuantityValue: number;
+  desuperheatingTemp: number;
+}
+export interface PrvWithDesuperheatingOutput {
+  feedwaterEnergyFlow: number;
+  feedwaterMassFlow: number;
+  feedwaterPressure: number;
+  feedwaterQuality: number;
+  feedwaterSpecificEnthalpy: number;
+  feedwaterSpecificEntropy: number;
+  feedwaterTemperature: number;
+  inletEnergyFlow: number;
+  inletMassFlow: number;
+  inletPressure: number;
+  inletQuality: number;
+  inletSpecificEnthalpy: number;
+  inletSpecificEntropy: number;
+  inletTemperature: number;
+  outletEnergyFlow: number;
+  outletMassFlow: number;
+  outletPressure: number;
+  outletQuality: number;
+  outletSpecificEnthalpy: number;
+  outletSpecificEntropy: number;
+  outletTemperature: number;
+}
+
+export interface PrvWithoutDesuperheatingInput {
+  inletPressure: number;
+  thermodynamicQuantity: number; //0 is TEMPERATURE
+  quantityValue: number;
+  inletMassFlow: number;
+  outletPressure: number;
+}
+
+export interface PrvWithoutDesuperheatingOutput {
+  inletEnergyFlow: number;
+  inletMassFlow: number;
+  inletPressure: number;
+  inletQuality: number;
+  inletSpecificEnthalpy: number;
+  inletSpecificEntropy: number;
+  inletTemperature: number;
+  outletEnergyFlow: number;
+  outletMassFlow: number;
+  outletPressure: number;
+  outletQuality: number;
+  outletSpecificEnthalpy: number;
+  outletSpecificEntropy: number;
+  outletTemperature: number;
+}
+
+
+export interface TurbineInput {
+  solveFor: number; // outlet properties - unknown to solve for
+  inletPressure: number;
+  inletQuantity: number;// SteamProperties::ThermodynamicQuantity::temperature
+  inletQuantityValue: number;
+  turbineProperty: number;// massFlow
+  isentropicEfficiency: number;
+  generatorEfficiency: number;
+  massFlowOrPowerOut: number; // massFlow in this case
+  outletSteamPressure: number;
+}
+
+export interface TurbineOutput {
+  energyOut: number;
+  generatorEfficiency: number;
+  inletEnergyFlow: number;
+  inletPressure: number;
+  inletQuality: number;
+  inletSpecificEnthalpy: number;
+  inletSpecificEntropy: number;
+  inletTemperature: number;
+  isentropicEfficiency: number;
+  massFlow: number;
+  outletEnergyFlow: number;
+  outletPressure: number;
+  outletQuality: number;
+  outletSpecificEnthalpy: number;
+  outletSpecificEntropy: number;
+  outletTemperature: number;
+  powerOut: number;
+}
+
+export const ThermodynamicQuantityOptions: Array<Quantity> = [
+  {
+    value: 0,
+    display: 'Temperature'
+  },
+  {
+    value: 1,
+    display: 'Enthalpy'
+  },
+  {
+    value: 2,
+    display: 'Entropy'
+  },
+  {
+    value: 3,
+    display: 'Quality'
+  }
+]
+
+export interface Quantity {
+
+  value: number,
+  display: string
 }

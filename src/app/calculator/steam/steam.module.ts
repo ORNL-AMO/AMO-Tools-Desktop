@@ -4,13 +4,19 @@ import { SteamPropertiesModule } from './steam-properties/steam-properties.modul
 import { SteamComponent } from "./steam.component";
 import { SteamService } from "./steam.service";
 import { SaturatedPropertiesModule } from "./saturated-properties/saturated-properties.module";
+import { StackLossModule } from './stack-loss/stack-loss.module';
+import { HeatLossModule } from './heat-loss/heat-loss.module';
+import { BoilerModule } from './boiler/boiler.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
     SteamPropertiesModule,
-    SaturatedPropertiesModule
+    SaturatedPropertiesModule,
+    StackLossModule,
+    HeatLossModule,
+    BoilerModule
   ],
   declarations: [
     SteamComponent

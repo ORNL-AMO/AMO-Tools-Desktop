@@ -14,8 +14,6 @@ import { CalculatorService } from '../calculator/calculator.service';
 export class SidebarComponent implements OnInit {
   @Output('directoryChange')
   directoryChange = new EventEmitter();
-  @Output('selectCalculator')
-  selectCalculator = new EventEmitter<string>();
   @Input()
   directory: Directory;
   @Input()
@@ -93,7 +91,7 @@ export class SidebarComponent implements OnInit {
     }
   }
   chooseCalculator(str: string) {
-    this.selectCalculator.emit();
+    this.assessmentService.dashboardView.next('calculator');
     this.calculatorService.selectedToolType.next(str);
     this.calculatorService.selectedTool.next('none');
   }

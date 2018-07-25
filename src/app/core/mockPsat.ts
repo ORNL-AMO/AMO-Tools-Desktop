@@ -229,7 +229,7 @@ export const MockPsatSettings: Settings = {
     steamSpecificEnthalpyMeasurement: "btuLb",
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",
-    steamMassFlowMeasurement: "lbhr",
+    steamMassFlowMeasurement: "klb",
     fuelCost: 3.99,
     steamCost: 4.69,
     defaultPanelTab: 'help',

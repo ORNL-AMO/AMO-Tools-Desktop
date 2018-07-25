@@ -52,17 +52,29 @@
       </select>
     </div>
   </div>
-<!--
+
   <div class="form-group">
     <label for="steamMassFlowMeasurement">Mass Flow</label>
     <div class="input-group calc-addon-group">
       <select name="steamMassFlowMeasurement" class="form-control" formControlName="steamMassFlowMeasurement" id="steamMassFlowMeasurement"
         (change)="save()" autofocus>
-        <option *ngFor="let measurement of steamMassFlowMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+        <option *ngFor="let measurement of steamMassFlowMeasurements" [ngValue]="measurement.unit">{{measurement.display}} per hour
+          <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>/hr
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steamEnergyMeasurement">Energy</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamEnergyMeasurement" class="form-control" formControlName="steamEnergyMeasurement" id="steamEnergyMeasurement"
+        (change)="save()" autofocus>
+        <option *ngFor="let measurement of steamEnergyMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
           <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
         </option>
       </select>
     </div>
   </div>
--->
+
 </form>

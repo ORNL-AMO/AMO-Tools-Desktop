@@ -3,6 +3,7 @@ import { Directory, DirectoryDbRef } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { AssessmentService } from '../../assessment/assessment.service';
 
 @Component({
   selector: 'app-directory-item',
@@ -26,7 +27,7 @@ export class DirectoryItemComponent implements OnInit {
   isFirstChange: boolean = true;
   childDirectories: Directory;
   validDirectory: boolean = false;
-  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
@@ -43,13 +44,11 @@ export class DirectoryItemComponent implements OnInit {
     if (this.directory.id != undefined) {
       this.validDirectory = true;
       this.populateDirectories(this.directory);
-      if (this.directory.id == this.selectedDirectoryId) {
-        this.toggleSelected(this.directory);
-      }
     }
   }
 
   toggleSelected(directory: Directory) {
+    this.assessmentService.dashboardView.next('assessment-dashboard');
     this.selectSignal.emit(directory);
   }
 

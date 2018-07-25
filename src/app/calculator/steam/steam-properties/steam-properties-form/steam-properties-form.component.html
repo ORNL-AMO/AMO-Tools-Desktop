@@ -33,7 +33,7 @@
         <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();"
           (input)="calculate()" (focus)="focusVariableField(steamPropertiesForm.controls.thermodynamicQuantity.value)" autofocus>
         <span class="input-group-addon units" *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getDisplayUnit(quantityValueUnits)"></span>
-        <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null">{{quantityValueError}}</span>
+        <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null" [innerHTML]="quantityValueError"></span>
       </div>
     </div>
 

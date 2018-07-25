@@ -83,7 +83,8 @@ export class SettingsService {
       'fanBarometricPressure': [settings.fanBarometricPressure || 'inHg'],
       'fanSpecificHeatGas': [settings.fanSpecificHeatGas || 'btulbF'],
       'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp'],
-      'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F']
+      'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F'],
+      'steamEnergyMeasurement': [settings.steamEnergyMeasurement || 'MMBtu']
     });
   }
 
@@ -127,7 +128,8 @@ export class SettingsService {
       fanBarometricPressure: form.controls.fanBarometricPressure.value,
       fanSpecificHeatGas: form.controls.fanSpecificHeatGas.value,
       fanPowerMeasurement: form.controls.fanPowerMeasurement.value,
-      fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value
+      fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value,
+      steamEnergyMeasurement: form.controls.steamEnergyMeasurement.value
     };
     return tmpSettings;
   }
@@ -170,7 +172,8 @@ export class SettingsService {
       fanBarometricPressure: settings.fanBarometricPressure || 'inHg',
       fanSpecificHeatGas: settings.fanSpecificHeatGas || 'btulbF',
       fanPowerMeasurement: settings.fanPowerMeasurement || 'hp',
-      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F'
+      fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F',
+      steamEnergyMeasurement: settings.steamEnergyMeasurement || 'kWh'
     }
     return newSettings;
   }
@@ -188,7 +191,7 @@ export class SettingsService {
         steamSpecificEnthalpyMeasurement: 'btuLb',
         steamSpecificEntropyMeasurement: 'btulbF',
         steamSpecificVolumeMeasurement: 'ft3lb',
-        steamMassFlowMeasurement: 'lbhr',
+        steamMassFlowMeasurement: 'klb',
         energyResultUnit: 'MMBtu',
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
@@ -199,7 +202,8 @@ export class SettingsService {
         fanPressureMeasurement: 'inH2o',
         fanBarometricPressure: 'inHg',
         fanSpecificHeatGas: 'btulbF',
-        fanTemperatureMeasurement: 'F'
+        fanTemperatureMeasurement: 'F',
+        steamEnergyMeasurement: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -217,7 +221,7 @@ export class SettingsService {
         steamSpecificEnthalpyMeasurement: 'kJkg',
         steamSpecificEntropyMeasurement: 'kJkgK',
         steamSpecificVolumeMeasurement: 'm3kg',
-        steamMassFlowMeasurement: 'kghr',
+        steamMassFlowMeasurement: 'tonne',
         energyResultUnit: 'GJ',
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
@@ -228,7 +232,8 @@ export class SettingsService {
         fanPressureMeasurement: 'Pa',
         fanBarometricPressure: 'kPa',
         fanSpecificHeatGas: 'kJkgC',
-        fanTemperatureMeasurement: 'F'
+        fanTemperatureMeasurement: 'C',
+        steamEnergyMeasurement: 'kWh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -317,7 +322,10 @@ export class SettingsService {
         settings.steamSpecificVolumeMeasurement = 'ft3/lb';
       }
       if (!settings.steamMassFlowMeasurement) {
-        settings.steamMassFlowMeasurement = 'lb/hr';
+        settings.steamMassFlowMeasurement = 'klb';
+      }
+      if (!settings.steamEnergyMeasurement) {
+        settings.steamEnergyMeasurement = 'MMBtu'
       }
     } else {
       if (!settings.steamTemperatureMeasurement) {
@@ -336,7 +344,10 @@ export class SettingsService {
         settings.steamSpecificVolumeMeasurement = 'm3/kg';
       }
       if (!settings.steamMassFlowMeasurement) {
-        settings.steamMassFlowMeasurement = 'kg/hr';
+        settings.steamMassFlowMeasurement = 'tonne';
+      }
+      if (!settings.steamEnergyMeasurement) {
+        settings.steamEnergyMeasurement = 'kWh'
       }
     }
     return settings;
@@ -344,7 +355,6 @@ export class SettingsService {
 
 
   setFanUnits(settings: Settings): Settings {
-    console.log('set fan units');
     if (settings.unitsOfMeasure == 'Metric' || settings.unitsOfMeasure == 'Other') {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'kgNm3';
@@ -361,7 +371,7 @@ export class SettingsService {
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'kJkgC';
       }
-      if(!settings.fanTemperatureMeasurement){
+      if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'C';
       }
     } else {
@@ -380,11 +390,10 @@ export class SettingsService {
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'btulbF';
       }
-      if(!settings.fanTemperatureMeasurement){
+      if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'F';
       }
     }
-    console.log(settings.fanTemperatureMeasurement);
 
     if (!settings.fanPowerMeasurement) {
       settings.fanPowerMeasurement = 'hp';
