@@ -63,6 +63,14 @@ export const energy = {
         display: '(GJ)'
       }
       , to_anchor: 1000000000
+    },
+    MJ: {
+      name: {
+        singular: 'Megajoule',
+        plural: 'Megajoules',
+        display: '(MJ)'
+      },
+      to_anchor: 1000000
     }
 
     , cal: {

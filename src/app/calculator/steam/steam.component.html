@@ -59,7 +59,19 @@
             </p>
           </div>
         </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')"> -->
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('boiler')">Boiler Calculator</a>
+            <p>
 
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -77,8 +89,12 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'stack-loss'">
   <app-stack-loss></app-stack-loss>
-</div>
+<div>
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'heat-loss'">
   <app-heat-loss></app-heat-loss>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'boiler'">
+  <app-boiler></app-boiler>
 </div>

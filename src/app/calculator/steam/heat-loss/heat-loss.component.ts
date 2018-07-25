@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -15,12 +15,6 @@ export class HeatLossComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event) {
-  //   this.resizeTabs();
-  // }
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -40,16 +34,6 @@ export class HeatLossComponent implements OnInit {
     this.input = this.heatLossService.getObjFromForm(this.heatLossForm);
     this.calculate(this.heatLossForm);
   }
-  // ngAfterViewInit() {
-  //   setTimeout(() => {
-  //     this.resizeTabs();
-  //   }, 100);
-  // }
-  // resizeTabs() {
-  //   if (this.leftPanelHeader.nativeElement.clientHeight) {
-  //     this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-  //   }
-  // }
 
   setTab(str: string) {
     this.tabSelect = str;
