@@ -49,6 +49,7 @@ export class BoilerComponent implements OnInit {
     if (form.status == 'VALID') {
       this.input = this.boilerService.getObjFromForm(form);
       this.results = this.steamService.boiler(this.input, this.settings);
+      console.log(this.results);
     }
   }
 }

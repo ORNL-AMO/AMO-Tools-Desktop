@@ -1,3 +1,61 @@
-<p>
-  boiler-form works!
-</p>
+<form [formGroup]="boilerForm">
+  <div class="form-group">
+    <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure" type="number" (input)="calculate()"
+        (focus)="focusField('deaeratorPressure')" (blur)="focusOut()">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="combustionEfficiency">Combustion Efficiency</label>
+    <div class="input-group">
+      <input class="form-control" name="combustionEfficiency" id="combustionEfficiency" formControlName="combustionEfficiency" type="number" (input)="calculate()"
+        (focus)="focusField('combustionEfficiency')" (blur)="focusOut()">
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small" for="blowdownRate">Blowdown Rate</label>
+    <div class="input-group">
+      <input class="form-control" name="blowdownRate" id="blowdownRate" formControlName="blowdownRate" type="number" (input)="calculate()"
+        (focus)="focusField('blowdownRate')" (blur)="focusOut()">
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <label class="group-label w-100">Steam</label>
+  <div class="form-group">
+    <label class="small" for="steamPressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="steamPressure" id="steamPressure" formControlName="steamPressure" type="number" (input)="calculate()"
+        (focus)="focusField('steamPressure')" (blur)="focusOut()">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="small" for="thermodynamicQuantity">Calculation Method</label>
+    <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
+      (change)="calculate()" (focus)="focusField('thermodynamicQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number" (input)="calculate()"
+        (focus)="focusField('quantityValue')" (blur)="focusOut()">
+      <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit()"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="steamMassFlow">Steam Mass Flow</label>
+    <div class="input-group">
+      <input class="form-control" name="steamMassFlow" id="steamMassFlow" formControlName="steamMassFlow" type="number" (input)="calculate()"
+        (focus)="focusField('steamMassFlow')" (blur)="focusOut()">
+      <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}/hr</span>
+    </div>
+  </div>
+</form>
