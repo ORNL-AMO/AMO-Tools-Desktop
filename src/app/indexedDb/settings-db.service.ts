@@ -71,6 +71,10 @@ export class SettingsDbService {
       settings = this.settingService.setSteamUnits(settings);
     }
 
+    if(!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr'){
+      settings.steamMassFlowMeasurement = 'klb';
+    }
+
     if (!settings.densityMeasurement ||
       !settings.fanFlowRate ||
       !settings.fanPressureMeasurement ||

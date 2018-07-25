@@ -322,7 +322,7 @@ export const MockFsatSettings: Settings = {
     steamSpecificEnthalpyMeasurement: "kJkg",
     steamSpecificEntropyMeasurement: "kJkgK",
     steamSpecificVolumeMeasurement: "m3kg",
-    steamMassFlowMeasurement: "kghr",
+    steamMassFlowMeasurement: "klb",
     currentMeasurement: null,
     viscosityMeasurement: null,
     voltageMeasurement: null,

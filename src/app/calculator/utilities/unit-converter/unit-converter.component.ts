@@ -9,7 +9,7 @@ import { length } from '../../../shared/convert-units/definitions/length';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any = 'existingApparentPower';
+  measure: any = 'length';
   from: string;
   to: string;
   value1: number;
@@ -68,7 +68,7 @@ export class UnitConverterComponent implements OnInit {
       display: 'Voltage'
     },
     {
-      measure: 'existingApparentPower',
+      measure: 'apparentPower',
       display: 'Apparent Power'
     },
     {
