@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam';
 import { SteamService } from '../../steam.service';
+import { HeatLossService } from '../heat-loss.service';
 
 @Component({
   selector: 'app-heat-loss-form',
@@ -20,7 +21,7 @@ export class HeatLossFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private heatLossService: HeatLossService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;
@@ -64,5 +65,11 @@ export class HeatLossFormComponent implements OnInit {
     } else if (this.heatLossForm.controls.thermodynamicQuantity.value == 3) {
       return displayUnit;
     }
+  }
+
+  setQuantityRanges() {
+    let quantityMinMax: { min: number, max: number } = this.heatLossService.getQuantityRange(this.settings, this.heatLossForm.controls.thermodynamicQuantity.value);
+    this.heatLossForm.controls.quantityValue.setValue(0);
+    this.heatLossForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
   }
 }
