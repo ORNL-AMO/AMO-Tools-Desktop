@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-boiler-help',
@@ -8,6 +9,11 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BoilerHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  settings: Settings;
+  @Input()
+  thermodynamicQuantity: number;
+  
   constructor() { }
 
   ngOnInit() {

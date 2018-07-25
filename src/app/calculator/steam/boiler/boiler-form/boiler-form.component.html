@@ -2,41 +2,61 @@
   <div class="form-group">
     <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
     <div class="input-group">
-      <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure" type="number" (input)="calculate()"
-        (focus)="focusField('deaeratorPressure')" (blur)="focusOut()">
+      <input class="form-control" name="deaeratorPressure" id="deaeratorPressure" formControlName="deaeratorPressure" type="number"
+        (input)="calculate()" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
+      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than {{boilerForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than {{boilerForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label class="small" for="combustionEfficiency">Combustion Efficiency</label>
     <div class="input-group">
-      <input class="form-control" name="combustionEfficiency" id="combustionEfficiency" formControlName="combustionEfficiency" type="number" (input)="calculate()"
-        (focus)="focusField('combustionEfficiency')" (blur)="focusOut()">
+      <input class="form-control" name="combustionEfficiency" id="combustionEfficiency" formControlName="combustionEfficiency"
+        type="number" (input)="calculate()" (focus)="focusField('combustionEfficiency')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine">
+      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.max">Value can't be greater than {{boilerForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+      <span *ngIf="boilerForm.controls.combustionEfficiency.errors.min">Value can't be less than {{boilerForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="blowdownRate">Blowdown Rate</label>
     <div class="input-group">
       <input class="form-control" name="blowdownRate" id="blowdownRate" formControlName="blowdownRate" type="number" (input)="calculate()"
-        (focus)="focusField('blowdownRate')" (blur)="focusOut()">
+        (focus)="focusField('blowdownRate')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine">
+      <span *ngIf="boilerForm.controls.blowdownRate.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.blowdownRate.errors.max">Value can't be greater than {{boilerForm.controls.blowdownRate.errors.max.max}} %.</span>
+      <span *ngIf="boilerForm.controls.blowdownRate.errors.min">Value can't be less than {{boilerForm.controls.blowdownRate.errors.min.min}} %.</span>
+    </span>
   </div>
   <label class="group-label w-100">Steam</label>
   <div class="form-group">
     <label class="small" for="steamPressure">Pressure</label>
     <div class="input-group">
       <input class="form-control" name="steamPressure" id="steamPressure" formControlName="steamPressure" type="number" (input)="calculate()"
-        (focus)="focusField('steamPressure')" (blur)="focusOut()">
+        (focus)="focusField('steamPressure')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.steamPressure.invalid && !boilerForm.controls.steamPressure.pristine">
+      <span *ngIf="boilerForm.controls.steamPressure.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.steamPressure.errors.max">Value can't be greater than {{boilerForm.controls.steamPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="boilerForm.controls.steamPressure.errors.min">Value can't be less than {{boilerForm.controls.steamPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="thermodynamicQuantity">Calculation Method</label>
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
-      (change)="calculate()" (focus)="focusField('thermodynamicQuantity')" (blur)="focusOut()">
+      (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')" (blur)="focusOut()">
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
   </div>
@@ -45,17 +65,31 @@
     <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
     <div class="input-group">
       <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number" (input)="calculate()"
-        (focus)="focusField('quantityValue')" (blur)="focusOut()">
+        (focus)="focusField('quantityValue')" (blur)="focusOut()" onfocus="this.select();">
       <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit()"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.quantityValue.invalid && !boilerForm.controls.quantityValue.pristine">
+      <span *ngIf="boilerForm.controls.quantityValue.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.quantityValue.errors.max">Value can't be greater than {{boilerForm.controls.quantityValue.errors.max.max}}
+        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+        .</span>
+      <span *ngIf="boilerForm.controls.quantityValue.errors.min">Value can't be less than {{boilerForm.controls.quantityValue.errors.min.min}}
+        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>.
+      </span>
+    </span>
   </div>
 
   <div class="form-group">
     <label class="small" for="steamMassFlow">Steam Mass Flow</label>
     <div class="input-group">
       <input class="form-control" name="steamMassFlow" id="steamMassFlow" formControlName="steamMassFlow" type="number" (input)="calculate()"
-        (focus)="focusField('steamMassFlow')" (blur)="focusOut()">
+        (focus)="focusField('steamMassFlow')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}/hr</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.steamMassFlow.invalid && !boilerForm.controls.steamMassFlow.pristine">
+      <span *ngIf="boilerForm.controls.steamMassFlow.errors.required">Value Required</span>
+      <span *ngIf="boilerForm.controls.steamMassFlow.errors.max">Value can't be greater than {{boilerForm.controls.steamMassFlow.errors.max.max}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+      <span *ngIf="boilerForm.controls.steamMassFlow.errors.min">Value can't be less than {{boilerForm.controls.steamMassFlow.errors.min.min}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+    </span>
   </div>
 </form>

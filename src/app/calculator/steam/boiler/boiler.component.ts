@@ -42,14 +42,46 @@ export class BoilerComponent implements OnInit {
   }
 
   getForm() {
-    this.boilerForm = this.boilerService.initForm();
+    this.boilerForm = this.boilerService.initForm(this.settings);
   }
 
   calculate(form: FormGroup) {
+    this.input = this.boilerService.getObjFromForm(form);
     if (form.status == 'VALID') {
-      this.input = this.boilerService.getObjFromForm(form);
       this.results = this.steamService.boiler(this.input, this.settings);
-      console.log(this.results);
+    } else {
+      this.results = this.getEmptyResults();
     }
+  }
+
+  getEmptyResults(): BoilerOutput {
+    let results: BoilerOutput = {
+      steamPressure: 0,
+      steamTemperature: 0,
+      steamSpecificEnthalpy: 0,
+      steamSpecificEntropy: 0,
+      steamQuality: 0,
+      steamMassFlow: 0,
+      steamEnergyFlow: 0,
+
+      blowdownPressure: 0,
+      blowdownTemperature: 0,
+      blowdownSpecificEnthalpy: 0,
+      blowdownSpecificEntropy: 0,
+      blowdownQuality: 0,
+      blowdownMassFlow: 0,
+      blowdownEnergyFlow: 0,
+
+      feedwaterPressure: 0,
+      feedwaterTemperature: 0,
+      feedwaterSpecificEnthalpy: 0,
+      feedwaterSpecificEntropy: 0,
+      feedwaterQuality: 0,
+      feedwaterMassFlow: 0,
+      feedwaterEnergyFlow: 0,
+      boilerEnergy: 0,
+      fuelEnergy: 0,
+    }
+    return results;
   }
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam';
 import { SteamService } from '../../steam.service';
+import { BoilerService } from '../boiler.service';
 
 @Component({
   selector: 'app-boiler-form',
@@ -20,7 +21,7 @@ export class BoilerFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private boilerService: BoilerService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;
@@ -64,5 +65,11 @@ export class BoilerFormComponent implements OnInit {
     } else if (this.boilerForm.controls.thermodynamicQuantity.value == 3) {
       return displayUnit;
     }
+  }
+
+  setQuantityRanges() {
+    let quantityMinMax: { min: number, max: number } = this.boilerService.getQuantityRange(this.settings, this.boilerForm.controls.thermodynamicQuantity.value);
+    this.boilerForm.controls.quantityValue.setValue(0);
+    this.boilerForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
   }
 }
