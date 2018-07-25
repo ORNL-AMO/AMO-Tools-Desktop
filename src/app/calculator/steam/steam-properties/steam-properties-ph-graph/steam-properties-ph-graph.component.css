@@ -1,0 +1,13 @@
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+  
+  .area {
+    fill: lightsteelblue;
+  }
+
+  .expanded-chart {
+    padding: 10px;
+  }

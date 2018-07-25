@@ -12,7 +12,8 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-steam-properties-form (changeField)="setField($event)" [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings" [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
+            <app-steam-properties-form (changeField)="setField($event)" [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings"
+              [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
           </div>
         </div>
         <div class="row">
@@ -32,17 +33,48 @@
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-              </li><!--
-              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-              <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-            </li>
+              </li>
+              <!--
+              -->
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
+              </li>
             </ul>
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11">
-                <app-steam-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()" [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
+            <div class="12">
+              <div class="row">
+                <div class="col-12">
+                  <form [formGroup]="graphToggleForm">
+                    <div class="form-group justify-content-center">
+                      <select name="graphToggle" class="form-control" formControlName="graphToggle" id="graphToggle" (change)="toggleGraph()">
+                        <option [ngValue]=0>T-S Diagram</option>
+                        <option [ngValue]=1>P-H Diagram</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div *ngIf="graphToggle == '0'" class="row justify-content-center data-row">
+                <div class="col-11">
+                  <app-steam-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()"
+                    [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
+                </div>
+              </div>
+              <div *ngIf="graphToggle == '1'" class="row justify-content-center data-row">
+                <div class="col-11">
+                  <app-steam-properties-ph-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()"
+                    [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-ph-graph>
+                </div>
+              </div>
             </div>
           </div>
+          <!-- <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+              <app-steam-properties-graph [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()"
+                [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
+            </div>
+          </div> -->
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'help'">
             <div class="col-11">
               <app-steam-properties-help [currentField]="currentField"></app-steam-properties-help>
