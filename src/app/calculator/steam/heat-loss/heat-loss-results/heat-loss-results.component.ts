@@ -13,6 +13,8 @@ export class HeatLossResultsComponent implements OnInit {
   results: HeatLossOutput;
   @Input()
   settings: Settings;
+  @Input()
+  percentHeatLoss: number;
 
   constructor(private steamService: SteamService) { }
 
