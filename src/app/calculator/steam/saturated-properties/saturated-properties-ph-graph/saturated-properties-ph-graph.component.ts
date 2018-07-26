@@ -503,11 +503,8 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
     }
 
     if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement != 'kPa') {
-      console.log('converting pressure unit from kPa to ' + this.settings.steamPressureMeasurement);
-      console.log('yMax before conversion = ' + this.yMax);
       this.yMax = this.convertVal(this.yMax, 'kPa', this.settings.steamPressureMeasurement);
       this.yMin = this.convertVal(this.yMin, 'kPa', this.settings.steamPressureMeasurement);
-      console.log('yMax after conversion = ' + this.yMax);
     }
 
     this.canvasReady = true;
@@ -822,6 +819,12 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
       x.domain([this.xMin, this.xMax]);
       y.domain([this.yMin, this.yMax]);
 
+      if (this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+        liquidEnthalpy = this.convertVal(liquidEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
+        gasEnthalpy = this.convertVal(gasEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
+      }
+
+
       let pointADataset = {
         'pressure': pressure,
         'enthalpy': liquidEnthalpy
@@ -831,11 +834,6 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         'pressure': pressure,
         'enthalpy': gasEnthalpy
       }
-
-      console.log('liquidEnthalpy = ' + liquidEnthalpy);
-      console.log('gasEnthalpy = ' + gasEnthalpy);
-
-      
 
       let lineDataset = this.getDataSet([pressure, pressure], [liquidEnthalpy, gasEnthalpy]);
 

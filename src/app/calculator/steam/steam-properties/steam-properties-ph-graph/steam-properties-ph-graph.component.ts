@@ -46,8 +46,8 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   curveArea: any;
   xMaxDefault: number = 4000;
   xMinDefault: number = 0;
-  yMinDefault: number = 0;
-  yMaxDefault: number = 1000;
+  yMinDefault: number = 0.1;
+  yMaxDefault: number = 100000;
   point: any;
   htmlElement: any;
   host: d3.Selection<any>;
@@ -497,9 +497,9 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
       this.xMin = this.convertVal(this.xMin, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
     }
 
-    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement != this.defaultPressureUnit) {
-      this.yMax = this.convertVal(this.yMax, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.yMin = this.convertVal(this.yMin, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
+    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement != 'kPa') {
+      this.yMax = this.convertVal(this.yMax, 'kPa', this.settings.steamPressureMeasurement);
+      this.yMin = this.convertVal(this.yMin, 'kPa', this.settings.steamPressureMeasurement);
     }
 
     this.canvasReady = true;
@@ -547,7 +547,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
     //define domain for x and y axis
     x.domain([this.xMin, this.xMax]);
-    y.domain([0.1, 100000]);
+    y.domain([this.yMin, this.yMax]);
 
     let area = d3.area()
       .x(function (d) {
@@ -604,12 +604,12 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     //main dataset with area
     let dataset = this.getDataSet(this.pressureArray, this.enthalpyArray);
 
-    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
-      x.domain([this.convertVal(0, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement), this.convertVal(this.xMax, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement)]);
-    }
-    else {
-      x.domain([0, this.xMax]);
-    }
+    // if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+    //   x.domain([this.convertVal(0, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement), this.convertVal(this.xMax, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement)]);
+    // }
+    // else {
+    //   x.domain([0, this.xMax]);
+    // }
 
     // add the area
     this.svg.append("path")
@@ -686,7 +686,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
     //define domain for x and y axis
     x.domain([this.xMin, this.xMax]);
-    y.domain([0.1, 100000]);
+    y.domain([this.yMin, this.yMax]);
 
     let valueLine = d3.line()
       .x(function (d) {
@@ -729,7 +729,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     let x = d3.scaleLinear().range([0, this.width]);
     let y = d3.scaleLog().range([this.height, 0]);
     x.domain([this.xMin, this.xMax]);
-    y.domain([0.1, 100000]);
+    y.domain([this.yMin, this.yMax]);
     return d3.axisLeft(y).ticks(5);
   }
 
@@ -737,7 +737,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     let x = d3.scaleLinear().range([0, this.width]);
     let y = d3.scaleLog().range([this.height, 0]);
     x.domain([this.xMin, this.xMax]);
-    y.domain([0.1, 100000]);
+    y.domain([this.yMin, this.yMax]);
 
     return d3.axisBottom(x).ticks(11);
   }
@@ -777,7 +777,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     //define domain for x and y axis
     x.domain([this.xMin, this.xMax]);
     // y.domain([this.yMin, this.yMax]);
-    y.domain([0.1, 100000]);
+    y.domain([this.yMin, this.yMax]);
 
     //rescale x axis
     this.xAxis.transition()
@@ -864,7 +864,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
       //define domain for x and y axis
       x.domain([this.xMin, this.xMax]);
-      y.domain([0.1, 100000]);
+      y.domain([this.yMin, this.yMax]);
 
       let dataset = {
         'pressure': pressure,
