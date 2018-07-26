@@ -15,7 +15,6 @@ export class HeatLossComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   heatLossForm: FormGroup;

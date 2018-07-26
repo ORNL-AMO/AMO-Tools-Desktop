@@ -1,0 +1,56 @@
+<form [formGroup]="feedwaterForm">
+  <div class="form-group">
+    <label class="small" for="inletPressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="inletPressure" id="inletPressure" formControlName="inletPressure" type="number" (input)="calculate()"
+        (focus)="focusField('inletPressure')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="feedwaterForm.controls.inletPressure.invalid && !feedwaterForm.controls.inletPressure.pristine">
+      <span *ngIf="feedwaterForm.controls.inletPressure.errors.required">Value Required</span>
+      <span *ngIf="feedwaterForm.controls.inletPressure.errors.max">Value can't be greater than {{feedwaterForm.controls.inletPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="feedwaterForm.controls.inletPressure.errors.min">Value can't be less than {{feedwaterForm.controls.inletPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+
+  <div class="form-group">
+    <label class="small" for="feedwaterThermodynamicQuantity">Calculation Method</label>
+    <select name="feedwaterThermodynamicQuantity" class="form-control" formControlName="feedwaterThermodynamicQuantity" id="feedwaterThermodynamicQuantity"
+      (change)="setQuantityRanges()" (focus)="focusField('feedwaterThermodynamicQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number" (input)="calculate()"
+        (focus)="focusField('quantityValue')" (blur)="focusOut()" onfocus="this.select();">
+      <span *ngIf="feedwaterForm.controls.feedwaterThermodynamicQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit()"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="feedwaterForm.controls.quantityValue.invalid && !feedwaterForm.controls.quantityValue.pristine">
+      <span *ngIf="feedwaterForm.controls.quantityValue.errors.required">Value Required</span>
+      <span *ngIf="feedwaterForm.controls.quantityValue.errors.max">Value can't be greater than {{feedwaterForm.controls.quantityValue.errors.max.max}}
+        <span *ngIf="feedwaterForm.controls.feedwaterThermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+        .</span>
+      <span *ngIf="feedwaterForm.controls.quantityValue.errors.min">Value can't be less than {{feedwaterForm.controls.quantityValue.errors.min.min}}
+        <span *ngIf="feedwaterForm.controls.feedwaterThermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>.
+      </span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="desuperheatingTemp">Desuperheating Temperature</label>
+    <div class="input-group">
+      <input class="form-control" name="desuperheatingTemp" id="inletPressure" formControlName="desuperheatingTemp" type="number"
+        (input)="calculate()" (focus)="focusField('desuperheatingTemp')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamTemperatureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="feedwaterForm.controls.desuperheatingTemp.invalid && !feedwaterForm.controls.desuperheatingTemp.pristine">
+      <span *ngIf="feedwaterForm.controls.desuperheatingTemp.errors.required">Value Required</span>
+      <span *ngIf="feedwaterForm.controls.desuperheatingTemp.errors.max">Value can't be greater than {{feedwaterForm.controls.desuperheatingTemp.errors.max.max}} {{settings.steamTemperatureMeasurement}}.</span>
+      <span *ngIf="feedwaterForm.controls.desuperheatingTemp.errors.min">Value can't be less than {{feedwaterForm.controls.desuperheatingTemp.errors.min.min}} {{settings.steamTemperatureMeasurement}}.</span>
+    </span>
+  </div>
+</form>
