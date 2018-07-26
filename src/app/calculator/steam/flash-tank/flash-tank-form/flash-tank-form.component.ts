@@ -71,6 +71,7 @@ export class FlashTankFormComponent implements OnInit {
     let quantityMinMax: { min: number, max: number } = this.flashTankService.getQuantityRange(this.settings, this.flashTankForm.controls.thermodynamicQuantity.value);
     this.flashTankForm.controls.quantityValue.setValue(0);
     this.flashTankForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.calculate();
   }
 
 
