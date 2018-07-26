@@ -109,6 +109,10 @@
   <app-heat-loss></app-heat-loss>
 </div>
 
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'boiler'">
+  <app-boiler></app-boiler>
+</div>
+
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'flash-tank'">
   <app-flash-tank></app-flash-tank>
 </div>
