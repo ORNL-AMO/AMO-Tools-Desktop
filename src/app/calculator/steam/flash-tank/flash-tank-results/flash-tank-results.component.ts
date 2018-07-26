@@ -1,25 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HeatLossOutput } from '../../../../shared/models/steam';
+import { FlashTankOutput } from '../../../../shared/models/steam';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-heat-loss-results',
-  templateUrl: './heat-loss-results.component.html',
-  styleUrls: ['./heat-loss-results.component.css']
+  selector: 'app-flash-tank-results',
+  templateUrl: './flash-tank-results.component.html',
+  styleUrls: ['./flash-tank-results.component.css']
 })
-export class HeatLossResultsComponent implements OnInit {
+export class FlashTankResultsComponent implements OnInit {
   @Input()
-  results: HeatLossOutput;
+  results: FlashTankOutput;
   @Input()
   settings: Settings;
-  @Input()
-  percentHeatLoss: number;
 
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
   }
+
   getDisplayUnit(unit: string) {
     if (unit) {
       return this.steamService.getDisplayUnit(unit);
@@ -27,5 +26,4 @@ export class HeatLossResultsComponent implements OnInit {
       return unit;
     }
   }
-
 }

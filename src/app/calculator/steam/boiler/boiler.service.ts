@@ -12,13 +12,13 @@ export class BoilerService {
   initForm(settings: Settings): FormGroup {
     let ranges: BoilerRanges = this.getRangeValues(settings, 1);
     let form: FormGroup = this.formBuilder.group({
-      deaeratorPressure: [10, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
-      combustionEfficiency: [85, [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
-      blowdownRate: [2, [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
-      steamPressure: [20, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      combustionEfficiency: ['', [Validators.required, Validators.min(ranges.combustionEfficiencyMin), Validators.max(ranges.combustionEfficiencyMax)]],
+      blowdownRate: ['', [Validators.required, Validators.min(ranges.blowdownRateMin), Validators.max(ranges.blowdownRateMax)]],
+      steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
       thermodynamicQuantity: [1, [Validators.required]],
-      quantityValue: [2000, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      steamMassFlow: [45, [Validators.required, Validators.min(ranges.steamMassFlowMin), Validators.max(ranges.steamMassFlowMax)]],
+      quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      steamMassFlow: ['', [Validators.required, Validators.min(ranges.steamMassFlowMin), Validators.max(ranges.steamMassFlowMax)]],
     })
     return form;
   }

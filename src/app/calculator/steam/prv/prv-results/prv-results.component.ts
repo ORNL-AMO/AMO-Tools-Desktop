@@ -1,20 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HeatLossOutput } from '../../../../shared/models/steam';
+import { PrvOutput } from '../../../../shared/models/steam';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-heat-loss-results',
-  templateUrl: './heat-loss-results.component.html',
-  styleUrls: ['./heat-loss-results.component.css']
+  selector: 'app-prv-results',
+  templateUrl: './prv-results.component.html',
+  styleUrls: ['./prv-results.component.css']
 })
-export class HeatLossResultsComponent implements OnInit {
+export class PrvResultsComponent implements OnInit {
   @Input()
-  results: HeatLossOutput;
+  results: PrvOutput;
   @Input()
   settings: Settings;
   @Input()
-  percentHeatLoss: number;
+  isSuperHeating: boolean;
 
   constructor(private steamService: SteamService) { }
 
@@ -27,5 +27,4 @@ export class HeatLossResultsComponent implements OnInit {
       return unit;
     }
   }
-
 }

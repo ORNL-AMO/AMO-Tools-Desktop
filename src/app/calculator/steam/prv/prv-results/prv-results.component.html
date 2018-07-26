@@ -1,5 +1,5 @@
 <div *ngIf="results">
-  <label class="group-label">Inlet Steam</label>
+  <label class="group-label">Inlet</label>
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
@@ -19,7 +19,8 @@
         <td class="text-center w-50">
           <span *ngIf="results.inletQuality == 0">Liquid</span>
           <span *ngIf="results.inletQuality == 1">Gas</span>
-        </td>
+          <span *ngIf="results.inletQuality != 0 || results.inletQuality != 1">{{results.inletQuality}}</span>
+        </td>        
       </tr>
       <tr>
         <td class="bold w-50">Mass Flow</td>
@@ -46,20 +47,7 @@
     </tbody>
   </table>
 
-  <label class="group-label">Heat Loss</label>
-  <table class="table table-hover table-striped">
-    <tbody>
-      <tr>
-        <td class="text-center w-50"> {{percentHeatLoss}} %</td>
-      </tr>
-      <tr>
-        <!-- <td class="bold w-50">Heat Loss</td> -->
-        <td class="text-center w-50">{{results.heatLoss |sigFigs: '6'}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <label class="group-label">Outlet Steam</label>
+  <label class="group-label">Outlet</label>
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
@@ -79,6 +67,7 @@
         <td class="text-center w-50">
           <span *ngIf="results.outletQuality == 0">Liquid</span>
           <span *ngIf="results.outletQuality == 1">Gas</span>
+          <span *ngIf="results.outletQuality != 0 || results.outletQuality != 1">{{results.inletQuality}}</span>
         </td>
       </tr>
       <tr>
@@ -102,6 +91,54 @@
       <tr>
         <td class="bold w-50">Energy Flow</td>
         <td class="text-center w-50">{{results.outletEnergyFlow |sigFigs: '6'}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label class="group-label" *ngIf="isSuperHeating">Feedwater</label>
+  <table class="table table-hover table-striped" *ngIf="isSuperHeating">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Pressure</td>
+        <td class="text-center w-50">{{results.feedwaterPressure |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Temperature</td>
+        <td class="text-center w-50">{{results.feedwaterTemperature |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Phase</td>
+        <td class="text-center w-50">
+          <span *ngIf="results.feedwaterQuality == 0">Liquid</span>
+          <span *ngIf="results.feedwaterQuality == 1">Gas</span>
+          <span *ngIf="results.feedwaterQuality != 0 || results.feedwaterQuality != 1">{{results.feedwaterQuality}}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Mass Flow</td>
+        <td class="text-center w-50">{{results.feedwaterMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Enthalpy</td>
+        <td class="text-center w-50">{{results.feedwaterSpecificEnthalpy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Entropy</td>
+        <td class="text-center w-50">{{results.feedwaterSpecificEntropy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Flow</td>
+        <td class="text-center w-50">{{results.feedwaterEnergyFlow |sigFigs: '6'}}</td>
       </tr>
     </tbody>
   </table>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, PrvWithDesuperheatingInput, PrvWithDesuperheatingOutput, PrvWithoutDesuperheatingInput, PrvWithoutDesuperheatingOutput, TurbineInput, TurbineOutput } from "../../shared/models/steam";
+import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput } from "../../shared/models/steam";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 
@@ -181,8 +181,42 @@ export class SteamService {
     return steamAddon.deaerator(input);
   }
 
-  flashTank(input: FlashTankInput): FlashTankOutput {
-    return steamAddon.flashTank(input);
+  flashTank(input: FlashTankInput, settings: Settings): FlashTankOutput {
+    //convert inputs
+    input.inletWaterPressure = this.convertSteamPressureInput(input.inletWaterPressure, settings);
+    input.inletWaterMassFlow = this.convertSteamMassFlowInput(input.inletWaterMassFlow, settings);
+    input.tankPressure = this.convertSteamPressureInput(input.tankPressure, settings);
+    if (input.thermodynamicQuantity == 0) {
+      input.quantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 1) {
+      input.quantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 2) {
+      input.quantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    //get results w/ converted inputs
+    let results: FlashTankOutput = steamAddon.flashTank(input);
+    //convert outputs
+    //flow
+    results.inletWaterMassFlow = this.convertSteamMassFlowOutput(results.inletWaterMassFlow, settings);
+    results.outletGasMassFlow = this.convertSteamMassFlowOutput(results.outletGasMassFlow, settings);
+    results.outletLiquidMassFlow = this.convertSteamMassFlowOutput(results.outletLiquidMassFlow, settings);
+    //pressure
+    results.inletWaterPressure = this.convertSteamPressureOutput(results.inletWaterPressure, settings);
+    results.outletGasPressure = this.convertSteamPressureOutput(results.outletGasPressure, settings);
+    results.outletLiquidPressure = this.convertSteamPressureOutput(results.outletLiquidPressure, settings);
+    //enthalpy
+    results.inletWaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletWaterSpecificEnthalpy, settings);
+    results.outletGasSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletGasSpecificEnthalpy, settings);
+    results.outletLiquidSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletLiquidSpecificEnthalpy, settings);
+    //entropy
+    results.inletWaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletWaterSpecificEntropy, settings);
+    results.outletGasSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletGasSpecificEntropy, settings);
+    results.outletLiquidSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletLiquidSpecificEntropy, settings);
+    //temp
+    results.inletWaterTemperature = this.convertSteamTemperatureOutput(results.inletWaterTemperature, settings);
+    results.outletGasTemperature = this.convertSteamTemperatureOutput(results.outletGasTemperature, settings);
+    results.outletLiquidTemperature = this.convertSteamTemperatureOutput(results.outletLiquidTemperature, settings);
+    return results;
   }
 
   header(input: HeaderInput): HeaderOutput {
@@ -211,9 +245,9 @@ export class SteamService {
     results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     //enthalpy
     results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
-    results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletSpecificEnthalpy, settings);
     //entropy
-    results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEnthalpy, settings);
+    results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEntropy, settings);
     results.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletSpecificEntropy, settings);
     //temp
     results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
@@ -221,11 +255,90 @@ export class SteamService {
     return results;
 
   }
-  prvWithDesuperheating(input: PrvWithDesuperheatingInput): PrvWithDesuperheatingOutput {
-    return steamAddon.prvWithDesuperheating(input)
+  prvWithoutDesuperheating(input: PrvInput, settings: Settings): PrvOutput {
+    //convert inputs
+    input.inletPressure = this.convertSteamPressureInput(input.inletPressure, settings);
+    input.inletMassFlow = this.convertSteamMassFlowInput(input.inletMassFlow, settings);
+    input.outletPressure = this.convertSteamPressureInput(input.outletPressure, settings);
+    if (input.thermodynamicQuantity == 0) {
+      input.quantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 1) {
+      input.quantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 2) {
+      input.quantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    //calc results
+    let results: PrvOutput = steamAddon.prvWithoutDesuperheating(input);
+    //convert results
+    //flow
+    results.inletMassFlow = this.convertSteamMassFlowOutput(results.inletMassFlow, settings);
+    results.outletMassFlow = this.convertSteamMassFlowOutput(results.outletMassFlow, settings);
+    //pressure
+    results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
+    results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
+    //enthalpy
+    results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    //entropy
+    results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletSpecificEntropy, settings);
+    //temp
+    results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
+    results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
+    //energyFlow
+    results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings); 
+    results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
+    return results;
   }
-  prvWithoutDesuperheating(inputs: PrvWithoutDesuperheatingInput): PrvWithoutDesuperheatingOutput {
-    return steamAddon.prvWithoutDesuperheating(inputs);
+  prvWithDesuperheating(input: PrvInput, settings: Settings): PrvOutput {
+    //convert inputs
+    input.inletPressure = this.convertSteamPressureInput(input.inletPressure, settings);
+    input.inletMassFlow = this.convertSteamMassFlowInput(input.inletMassFlow, settings);
+    input.outletPressure = this.convertSteamPressureInput(input.outletPressure, settings);
+    input.feedwaterPressure = this.convertSteamPressureInput(input.feedwaterPressure, settings);
+    input.desuperheatingTemp = this.convertSteamTemperatureInput(input.desuperheatingTemp, settings);
+    if (input.thermodynamicQuantity == 0) {
+      input.quantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 1) {
+      input.quantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.thermodynamicQuantity == 2) {
+      input.quantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    if (input.feedwaterThermodynamicQuantity == 0) {
+      input.feedwaterQuantityValue = this.convertSteamTemperatureInput(input.quantityValue, settings);
+    } else if (input.feedwaterThermodynamicQuantity == 1) {
+      input.feedwaterQuantityValue = this.convertSteamSpecificEnthalpyInput(input.quantityValue, settings);
+    } else if (input.feedwaterThermodynamicQuantity == 2) {
+      input.feedwaterQuantityValue = this.convertSteamSpecificEntropyInput(input.quantityValue, settings);
+    }
+    //calc results
+    let results: PrvOutput = steamAddon.prvWithDesuperheating(input);
+    //convert results
+    //flow
+    results.inletMassFlow = this.convertSteamMassFlowOutput(results.inletMassFlow, settings);
+    results.outletMassFlow = this.convertSteamMassFlowOutput(results.outletMassFlow, settings);
+    results.feedwaterMassFlow = this.convertSteamMassFlowOutput(results.feedwaterMassFlow, settings);
+    //pressure
+    results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
+    results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
+    results.feedwaterPressure = this.convertSteamPressureOutput(results.feedwaterPressure, settings);
+    //enthalpy
+    results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.feedwaterSpecificEnthalpy, settings);
+    //entropy
+    results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletSpecificEntropy, settings);
+    results.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.feedwaterSpecificEntropy, settings);
+    //temp
+    results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
+    results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
+    results.feedwaterTemperature = this.convertSteamTemperatureOutput(results.feedwaterTemperature, settings);
+    //energyFlow
+    results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings); 
+    results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
+    results.feedwaterEnergyFlow = this.convertEnergyFlowOutput(results.feedwaterEnergyFlow, settings);
+    return results;
   }
   // saturatedPressure() {
 
