@@ -8,6 +8,7 @@ import { StackLossModule } from './stack-loss/stack-loss.module';
 import { HeatLossModule } from './heat-loss/heat-loss.module';
 import { BoilerModule } from './boiler/boiler.module';
 import { FlashTankModule } from './flash-tank/flash-tank.module';
+import { PrvModule } from './prv/prv.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FlashTankModule } from './flash-tank/flash-tank.module';
     StackLossModule,
     HeatLossModule,
     BoilerModule,
-    FlashTankModule
+    FlashTankModule,
+    PrvModule
   ],
   declarations: [
     SteamComponent

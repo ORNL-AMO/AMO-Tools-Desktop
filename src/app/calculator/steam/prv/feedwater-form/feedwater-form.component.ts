@@ -69,7 +69,8 @@ export class FeedwaterFormComponent implements OnInit {
 
   setQuantityRanges() {
     let quantityMinMax: { min: number, max: number } = this.prvService.getQuantityRange(this.settings, this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value);
-    this.feedwaterForm.controls.quantityValue.setValue(0);
-    this.feedwaterForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.feedwaterForm.controls.feedwaterQuantityValue.setValue(0);
+    this.feedwaterForm.controls.feedwaterQuantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.calculate();
   }
 }

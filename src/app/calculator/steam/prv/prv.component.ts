@@ -32,7 +32,7 @@ export class PrvComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.getForm();
-    this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm);
+    this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm, this.isSuperHeating);
     this.calculate(this.inletForm, this.feedwaterForm)
   }
 
@@ -60,14 +60,14 @@ export class PrvComponent implements OnInit {
 
   calculate(inletForm: FormGroup, feedwaterForm: FormGroup) {
     if (this.isSuperHeating) {
-      this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm);
+      this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
       if ((inletForm.status == 'VALID') && (feedwaterForm.status == 'VALID')) {
         this.results = this.steamService.prvWithDesuperheating(this.input, this.settings);
       } else {
         this.results = this.getEmptyResults();
       }
     } else {
-      this.input = this.prvService.getObjFromForm(inletForm);
+      this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
       if (inletForm.status == 'VALID') {
         this.results = this.steamService.prvWithoutDesuperheating(this.input, this.settings);
       } else {

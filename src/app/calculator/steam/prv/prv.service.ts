@@ -55,13 +55,13 @@ export class PrvService {
   }
 
 
-  getObjFromForm(inletForm: FormGroup, feedwaterForm?: FormGroup): PrvInput {
+  getObjFromForm(inletForm: FormGroup, feedwaterForm: FormGroup, isSuperHeating: boolean): PrvInput {
     let feedwaterPressure: number;
     let feedwaterThermodynamicQuantity: number;
     let feedwaterQuantityValue: number;
     let desuperheatingTemp: number;
-    if (feedwaterForm) {
-      feedwaterPressure = feedwaterForm.controls.thermodynamicQuantity.value;
+    if (isSuperHeating) {
+      feedwaterPressure = feedwaterForm.controls.feedwaterPressure.value;
       feedwaterThermodynamicQuantity = feedwaterForm.controls.feedwaterThermodynamicQuantity.value;
       feedwaterQuantityValue = feedwaterForm.controls.feedwaterQuantityValue.value;
       desuperheatingTemp = feedwaterForm.controls.desuperheatingTemp.value;

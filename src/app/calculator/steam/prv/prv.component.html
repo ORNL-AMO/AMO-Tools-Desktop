@@ -8,13 +8,14 @@
     </div>
     <div class="d-flex flex-column m-4">
       <app-inlet-form [inletForm]="inletForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="setInletForm($event)"></app-inlet-form>
-      <div class="form-group">
-        <select class="form-control w-100" [(ngModel)]="isSuperHeating" name="isSuperHeating" id="isSuperHeating">
+      <div class="form-group mt-2 mb-2">
+        <select (focus)="changeField('isSuperHeating')" class="form-control w-100" [(ngModel)]="isSuperHeating" name="isSuperHeating" id="isSuperHeating">
           <option [ngValue]="true">With Desuperheating</option>
           <option [ngValue]="false">Without Desuperheating</option>
         </select>
       </div>
-      <app-feedwater-form *ngIf="isSuperHeating" [feedwaterForm]="feedwaterForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="setFeedwaterForm($event)"></app-feedwater-form>
+      <app-feedwater-form *ngIf="isSuperHeating" [feedwaterForm]="feedwaterForm" [settings]="settings" (emitChangeField)="changeField($event)"
+        (emitCalculate)="setFeedwaterForm($event)"></app-feedwater-form>
     </div>
   </div>
   <div class="d-flex flex-column w-50">
@@ -30,7 +31,7 @@
       <app-prv-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [thermodynamicQuantity]="input.thermodynamicQuantity"
         [feedwaterThermodynamicQuantity]="input.feedwaterThermodynamicQuantity"></app-prv-help>
       <div class="d-flex flex-column w-100 justify-content-center align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-prv-results [results]="results" [settings]="settings"></app-prv-results>
+        <app-prv-results [results]="results" [settings]="settings" [isSuperHeating]="isSuperHeating"></app-prv-results>
       </div>
     </div>
   </div>

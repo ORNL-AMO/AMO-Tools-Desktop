@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PrvOutput } from '../../../../shared/models/steam';
 import { Settings } from '../../../../shared/models/settings';
+import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-prv-results',
@@ -12,10 +13,18 @@ export class PrvResultsComponent implements OnInit {
   results: PrvOutput;
   @Input()
   settings: Settings;
-  
-  constructor() { }
+  @Input()
+  isSuperHeating: boolean;
+
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
   }
-
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      return this.steamService.getDisplayUnit(unit);
+    } else {
+      return unit;
+    }
+  }
 }

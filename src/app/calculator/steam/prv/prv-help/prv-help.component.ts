@@ -19,6 +19,7 @@ export class PrvHelpComponent implements OnInit {
   feedwaterThermodynamicQuantity: number;
 
   rangeValues: PrvRanges;
+  feedwaterRangesValues: PrvRanges;
   constructor(private prvService: PrvService, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -27,15 +28,18 @@ export class PrvHelpComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.thermodynamicQuantity) {
-      if (!changes.thermodynamicQuantity.isFirstChange()) {
-        this.getRanges();
-      }
+      this.getRanges();
+    }
+    if (changes.feedwaterThermodynamicQuantity) {
+      this.getRanges();
     }
   }
 
 
   getRanges() {
+    console.log('get ranges');
     this.rangeValues = this.prvService.getRangeValues(this.settings, this.thermodynamicQuantity);
+    this.feedwaterRangesValues = this.prvService.getRangeValues(this.settings, this.feedwaterThermodynamicQuantity);
   }
 
   getDisplayUnit(unit: string) {
