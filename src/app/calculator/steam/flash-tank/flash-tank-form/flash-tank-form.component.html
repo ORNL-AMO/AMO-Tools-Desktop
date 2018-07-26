@@ -1,3 +1,70 @@
-<p>
-  flash-tank-form works!
-</p>
+<form [formGroup]="flashTankForm">
+  <div class="form-group">
+    <label class="small" for="inletWaterPressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="inletWaterPressure" id="inletWaterPressure" formControlName="inletWaterPressure" type="number" (input)="calculate()"
+        (focus)="focusField('inletWaterPressure')" (blur)="focusOut()"  onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="flashTankForm.controls.inletWaterPressure.invalid && !flashTankForm.controls.inletWaterPressure.pristine">
+      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.required">Value Required</span>
+      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.max">Value can't be greater than {{flashTankForm.controls.inletWaterPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="flashTankForm.controls.inletWaterPressure.errors.min">Value can't be less than {{flashTankForm.controls.inletWaterPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+
+  <div class="form-group">
+    <label class="small" for="thermodynamicQuantity">Calculation Method</label>
+    <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
+      (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number" (input)="calculate()"
+        (focus)="focusField('quantityValue')" (blur)="focusOut()" onfocus="this.select();">
+      <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit()"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="flashTankForm.controls.quantityValue.invalid && !flashTankForm.controls.quantityValue.pristine">
+      <span *ngIf="flashTankForm.controls.quantityValue.errors.required">Value Required</span>
+      <span *ngIf="flashTankForm.controls.quantityValue.errors.max">Value can't be greater than {{flashTankForm.controls.quantityValue.errors.max.max}}
+        <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+        .</span>
+      <span *ngIf="flashTankForm.controls.quantityValue.errors.min">Value can't be less than {{flashTankForm.controls.quantityValue.errors.min.min}}
+        <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>.
+      </span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="inletWaterMassFlow">Mass Flow</label>
+    <div class="input-group">
+      <input class="form-control" name="inletWaterMassFlow" id="inletWaterMassFlow" formControlName="inletWaterMassFlow" type="number" (input)="calculate()"
+        (focus)="focusField('inletWaterMassFlow')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}/hr</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="flashTankForm.controls.inletWaterMassFlow.invalid && !flashTankForm.controls.inletWaterMassFlow.pristine">
+      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.required">Value Required</span>
+      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.max">Value can't be greater than {{flashTankForm.controls.inletWaterMassFlow.errors.max.max}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+      <span *ngIf="flashTankForm.controls.inletWaterMassFlow.errors.min">Value can't be less than {{flashTankForm.controls.inletWaterMassFlow.errors.min.min}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="tankPressure">Tank Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="tankPressure" id="tankPressure" formControlName="tankPressure" type="number" (input)="calculate()"
+        (focus)="focusField('tankPressure')" (blur)="focusOut()"  onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="flashTankForm.controls.tankPressure.invalid && !flashTankForm.controls.tankPressure.pristine">
+      <span *ngIf="flashTankForm.controls.tankPressure.errors.required">Value Required</span>
+      <span *ngIf="flashTankForm.controls.tankPressure.errors.max">Value can't be greater than {{flashTankForm.controls.tankPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="flashTankForm.controls.tankPressure.errors.min">Value can't be less than {{flashTankForm.controls.tankPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+</form>

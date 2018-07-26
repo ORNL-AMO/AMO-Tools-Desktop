@@ -25,6 +25,7 @@ export class BoilerResultsComponent implements OnInit {
       this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';
     }
   }
+
   getDisplayUnit(unit: string) {
     if (unit) {
       return this.steamService.getDisplayUnit(unit);
@@ -32,4 +33,5 @@ export class BoilerResultsComponent implements OnInit {
       return unit;
     }
   }
+  
 }
