@@ -13,7 +13,11 @@ export class HeatLossResultsComponent implements OnInit {
   results: HeatLossOutput;
   @Input()
   settings: Settings;
+  @Input()
+  percentHeatLoss: number;
   energyMeasurement: string;
+
+
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
