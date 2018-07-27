@@ -305,6 +305,9 @@ export class SteamService {
     //temp
     results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
     results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
+    //energy flow
+    results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings);
+    results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
     return results;
 
   }
