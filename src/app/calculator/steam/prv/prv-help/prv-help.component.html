@@ -2,10 +2,19 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam after a pressure drop.
+    <small class="text-muted">Calculates the properties of steam after a pressure drop with optional desuperheating.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+        after a pressure drop.
+        <hr>
+      </small>
+    </h6>
+  </div>
   <div class="my-2" *ngIf="currentField == 'inletPressure'">
     <h6>
       Inlet Pressure

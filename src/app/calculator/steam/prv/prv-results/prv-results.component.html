@@ -19,7 +19,7 @@
         <td class="text-center w-50">
           <span *ngIf="results.inletQuality == 0">Liquid</span>
           <span *ngIf="results.inletQuality == 1">Gas</span>
-          <span *ngIf="results.inletQuality != 0 || results.inletQuality != 1">{{results.inletQuality}}</span>
+          <span *ngIf="results.inletQuality != 0 && results.inletQuality != 1">{{results.inletQuality}}</span>
         </td>        
       </tr>
       <tr>
@@ -42,7 +42,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.inletEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.inletEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -67,7 +67,7 @@
         <td class="text-center w-50">
           <span *ngIf="results.outletQuality == 0">Liquid</span>
           <span *ngIf="results.outletQuality == 1">Gas</span>
-          <span *ngIf="results.outletQuality != 0 || results.outletQuality != 1">{{results.inletQuality}}</span>
+          <span *ngIf="results.outletQuality != 0 && results.outletQuality != 1">{{results.inletQuality}}</span>
         </td>
       </tr>
       <tr>
@@ -90,7 +90,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.outletEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.outletEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -138,7 +138,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.feedwaterEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.feedwaterEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
