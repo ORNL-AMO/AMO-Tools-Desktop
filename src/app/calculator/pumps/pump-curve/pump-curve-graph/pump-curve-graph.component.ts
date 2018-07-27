@@ -9,6 +9,7 @@ import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SystemCurveService } from '../../system-curve/system-curve.service';
 
 @Component({
   selector: 'app-pump-curve-graph',
@@ -25,6 +26,19 @@ export class PumpCurveGraphComponent implements OnInit {
   settings: Settings;
   @Input()
   isFan: boolean;
+
+  //SystemCurve 
+  @Input()
+  curveConstants: any;
+  @Input()
+  pointOne: any;
+  @Input()
+  pointTwo: any;
+  @Input()
+  staticHead: number;
+  @Input()
+  lossCoefficient: number;
+
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -75,7 +89,7 @@ export class PumpCurveGraphComponent implements OnInit {
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.isGridToggled = false;
@@ -167,11 +181,13 @@ export class PumpCurveGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
+
+  //merge system curve
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       //pump-curve.component toggles the toggleCalculate value when calculating
       //check for changes to toggleCalculate
-      if (changes.toggleCalculate) {
+      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead) {
         //if changes draw new graph
         if (this.checkForm()) {
           this.makeGraph();
@@ -182,6 +198,24 @@ export class PumpCurveGraphComponent implements OnInit {
       this.firstChange = false;
     }
   }
+
+
+  //original version
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.firstChange) {
+  //     //pump-curve.component toggles the toggleCalculate value when calculating
+  //     //check for changes to toggleCalculate
+  //     if (changes.toggleCalculate) {
+  //       //if changes draw new graph
+  //       if (this.checkForm()) {
+  //         this.makeGraph();
+  //         this.svg.style("display", null);
+  //       }
+  //     }
+  //   } else {
+  //     this.firstChange = false;
+  //   }
+  // }
 
   getDisplayUnit(unit: string) {
     if (unit) {
@@ -440,6 +474,19 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
       this.makeModifiedCurve(modifiedData);
     }
+
+    //System Curve merge
+    //Load data here
+    let systemCurveData;
+    if (this.x.domain()[1] < 500) {
+      systemCurveData = this.findPointValues(this.x, this.y, (this.x.domain()[1] / 500));
+    }
+    else {
+      systemCurveData = this.findPointValues(this.x, this.y, 1);
+    }
+
+    this.makeSystemCurve(this.x, this.y, systemCurveData);
+
 
     let flowMeasurement: string;
     let distanceMeasurement: string;
@@ -852,23 +899,148 @@ export class PumpCurveGraphComponent implements OnInit {
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
-    //========= chart resize functions ==========
-    expandChart() {
-      this.expanded = true;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
+
+
+
+  //system-curve graphing
+  makeSystemCurve(x, y, data) {
+
+    var line = d3.line()
+      .x(function (d) { return x(d.x); })
+      .y(function (d) { return y(d.y); })
+      .curve(d3.curveNatural);
+
+    this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", line)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      // .style("stroke", "#145A32")
+      .style("stroke", "red")
+      .style("stroke-dasharray", ("3, 3"))
+      .style('pointer-events', 'none');
+
+    d3.select("path.domain").attr("d", "");
+  }
+
+  findPointValues(x, y, increment) {
+
+    var powerMeasurement: string;
+    if (this.isFan) {
+      powerMeasurement = this.settings.fanPowerMeasurement;
+    } else {
+      powerMeasurement = this.settings.powerMeasurement;
     }
-  
-    contractChart() {
-      this.expanded = false;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
+
+    //Load data here
+    var data = [];
+
+    var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
+
+    if (head >= 0) {
+      let tmpFluidPower;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
+      }
+      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
+      }
+      data.push({
+        x: 0,
+        y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.controls.systemLossExponent.value),
+        fluidPower: tmpFluidPower
+      });
     }
-    //========== end chart resize functions ==========
+    else {
+      data.push({
+        x: 0,
+        y: 0,
+        fluidPower: 0
+      });
+    }
+
+
+    for (var i = 0; i <= x.domain()[1]; i += increment) {
+      var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.controls.systemLossExponent.value);
+      if (head > y.domain()[1]) {
+        y.domain([0, (head + (head / 9))]);
+      }
+
+      if (head >= 0) {
+        let tmpFluidPower: number;
+        if (this.isFan) {
+          tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);
+        } else {
+          tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);;
+        }
+        if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
+        }
+        data.push({
+          x: i,
+          y: head,
+          fluidPower: tmpFluidPower
+        });
+      }
+      else {
+        data.push({
+          x: i,
+          y: 0,
+          fluidPower: 0
+        });
+      }
+    }
+
+    head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
+
+    if (head >= 0) {
+      let tmpFluidPower: number;
+      if (this.isFan) {
+        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);
+      } else {
+        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);;
+      }
+      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
+      }
+      data.push({
+        x: x.domain()[1],
+        y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value),
+        fluidPower: tmpFluidPower
+      });
+    }
+    else {
+      data.push({
+        x: x.domain()[1],
+        y: 0,
+        fluidPower: 0
+      });
+
+    }
+
+    return data;
+  }
 }
