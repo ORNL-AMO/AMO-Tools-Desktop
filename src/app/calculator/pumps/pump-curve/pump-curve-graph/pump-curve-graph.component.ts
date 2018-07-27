@@ -181,7 +181,6 @@ export class PumpCurveGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
-
   //merge system curve
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -198,24 +197,6 @@ export class PumpCurveGraphComponent implements OnInit {
       this.firstChange = false;
     }
   }
-
-
-  //original version
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.firstChange) {
-  //     //pump-curve.component toggles the toggleCalculate value when calculating
-  //     //check for changes to toggleCalculate
-  //     if (changes.toggleCalculate) {
-  //       //if changes draw new graph
-  //       if (this.checkForm()) {
-  //         this.makeGraph();
-  //         this.svg.style("display", null);
-  //       }
-  //     }
-  //   } else {
-  //     this.firstChange = false;
-  //   }
-  // }
 
   getDisplayUnit(unit: string) {
     if (unit) {
@@ -936,7 +917,6 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      // .style("stroke", "#145A32")
       .style("stroke", "red")
       .style("stroke-dasharray", ("3, 3"))
       .style('pointer-events', 'none');
