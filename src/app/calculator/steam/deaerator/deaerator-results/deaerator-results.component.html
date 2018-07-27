@@ -113,7 +113,9 @@
       <tr>
         <td class="bold w-50">Saturated</td>
         <td class="text-center w-50">
-          {{results.inletWaterQuality}}
+          <span *ngIf="results.inletWaterQuality == 0">Liquid</span>
+          <span *ngIf="results.inletWaterQuality == 1">Gas</span>
+          <span *ngIf="results.inletWaterQuality != 0 && results.inletWaterQuality != 1">{{results.inletWaterQuality}}</span>
         </td>
       </tr>
       <tr>
@@ -159,9 +161,9 @@
       <tr>
         <td class="bold w-50">Saturated</td>
         <td class="text-center w-50">
-          {{results.inletSteamQuality}}
-          <!-- <span *ngIf="results.inletQuality == 0">Liquid</span>
-            <span *ngIf="results.inletQuality == 1">Gas</span> -->
+            <span *ngIf="results.inletSteamQuality == 0">Liquid</span>
+            <span *ngIf="results.inletSteamQuality == 1">Gas</span>
+            <span *ngIf="results.inletSteamQuality != 0 && results.inletSteamQuality != 1">{{results.inletSteamQuality}}</span>
         </td>
       </tr>
       <tr>
