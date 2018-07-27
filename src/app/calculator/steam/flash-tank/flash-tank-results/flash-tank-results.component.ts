@@ -14,9 +14,15 @@ export class FlashTankResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  energyMeasurement: string;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
+    if (this.settings.steamEnergyMeasurement == 'kWh') {
+      this.energyMeasurement = 'kW';
+    } else {
+      this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';
+    }
   }
 
   getDisplayUnit(unit: string) {
