@@ -162,8 +162,8 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
           </tr>
         </tbody>
       </table>
@@ -232,10 +232,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.desuperheatingTempMin}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMin}}
               <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
             </td>
-            <td class="w-50 text-center">{{rangeValues.desuperheatingTempMax}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMax}}
               <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
             </td>
           </tr>
