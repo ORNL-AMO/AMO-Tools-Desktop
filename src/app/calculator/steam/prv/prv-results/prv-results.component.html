@@ -115,7 +115,7 @@
         <td class="text-center w-50">
           <span *ngIf="results.feedwaterQuality == 0">Liquid</span>
           <span *ngIf="results.feedwaterQuality == 1">Gas</span>
-          <span *ngIf="results.feedwaterQuality != 0 || results.feedwaterQuality != 1">{{results.feedwaterQuality}}</span>
+          <span *ngIf="results.feedwaterQuality != 0 && results.feedwaterQuality != 1">{{results.feedwaterQuality}}</span>
         </td>
       </tr>
       <tr>
