@@ -68,7 +68,7 @@ export class InletFormComponent implements OnInit {
   }
 
   setQuantityRanges() {
-    let quantityMinMax: { min: number, max: number } = this.prvService.getQuantityRange(this.settings, this.inletForm.controls.thermodynamicQuantity.value);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.inletForm.controls.thermodynamicQuantity.value);
     this.inletForm.controls.quantityValue.setValue(0);
     this.inletForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
     this.calculate();

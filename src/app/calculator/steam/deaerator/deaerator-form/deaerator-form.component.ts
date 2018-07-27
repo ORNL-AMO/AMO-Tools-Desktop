@@ -72,14 +72,14 @@ export class DeaeratorFormComponent implements OnInit {
   }
 
   setWaterQuantityRanges() {
-    let quantityMinMax: { min: number, max: number } = this.deaeratorService.getQuantityRange(this.settings, this.deaeratorForm.controls.waterThermodynamicQuantity.value);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.deaeratorForm.controls.waterThermodynamicQuantity.value);
     this.deaeratorForm.controls.waterQuantityValue.setValue(0);
     this.deaeratorForm.controls.waterQuantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
     this.calculate();
   }
 
   setSteamQuantityRanges() {
-    let quantityMinMax: { min: number, max: number } = this.deaeratorService.getQuantityRange(this.settings, this.deaeratorForm.controls.steamThermodynamicQuantity.value);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.deaeratorForm.controls.steamThermodynamicQuantity.value);
     this.deaeratorForm.controls.steamQuantityValue.setValue(0);
     this.deaeratorForm.controls.steamQuantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
     this.calculate();

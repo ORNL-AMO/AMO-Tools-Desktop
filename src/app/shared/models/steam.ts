@@ -153,20 +153,26 @@ export interface HeaderInput {
   inlets: Array<HeaderInputObj>;
 }
 
-export interface HeaderOutput {
-  header: HeaderOutputObj;
-  inlet1: HeaderOutputObj;
-  inlet2: HeaderOutputObj;
-  inlet3: HeaderOutputObj;
-  inlet4: HeaderOutputObj;
-}
-
 export interface HeaderInputObj {
   pressure: number,
   thermodynamicQuantity: number,
   quantityValue: number,
   massFlow: number
 }
+
+export interface HeaderOutput {
+  header: HeaderOutputObj;
+  inlet1: HeaderOutputObj;
+  inlet2: HeaderOutputObj;
+  inlet3: HeaderOutputObj;
+  inlet4: HeaderOutputObj;
+  inlet5: HeaderOutputObj;
+  inlet6: HeaderOutputObj;
+  inlet7: HeaderOutputObj;
+  inlet8: HeaderOutputObj;
+  inlet9: HeaderOutputObj;
+}
+
 
 export interface HeaderOutputObj {
   energyFlow: number;

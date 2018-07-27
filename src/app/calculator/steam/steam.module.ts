@@ -10,6 +10,7 @@ import { BoilerModule } from './boiler/boiler.module';
 import { FlashTankModule } from './flash-tank/flash-tank.module';
 import { PrvModule } from './prv/prv.module';
 import { DeaeratorModule } from './deaerator/deaerator.module';
+import { HeaderModule } from './header/header.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { DeaeratorModule } from './deaerator/deaerator.module';
     BoilerModule,
     FlashTankModule,
     PrvModule,
-    DeaeratorModule
+    DeaeratorModule,
+    HeaderModule
   ],
   declarations: [
     SteamComponent
