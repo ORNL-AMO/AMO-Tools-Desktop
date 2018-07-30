@@ -248,15 +248,17 @@ export interface PrvOutput {
 
 
 export interface TurbineInput {
-  solveFor: number; // outlet properties - unknown to solve for
+  solveFor: number; // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
   inletPressure: number;
-  inletQuantity: number;// SteamProperties::ThermodynamicQuantity::temperature
+  inletQuantity: number;
   inletQuantityValue: number;
-  turbineProperty: number;// massFlow
+  turbineProperty: number;// massFlow = 0, powerOut = 1
   isentropicEfficiency: number;
   generatorEfficiency: number;
-  massFlowOrPowerOut: number; // massFlow in this case
+  massFlowOrPowerOut: number; // massFlow or powerOut
   outletSteamPressure: number;
+  outletQuantity: number,
+  outletQuantityValue: number
 }
 
 export interface TurbineOutput {

@@ -458,7 +458,7 @@ export class SteamService {
   //   var res = steamAddon.steamPropertiesData(input);
   //   return res;
   // }
-  turbine(inputs: TurbineInput): TurbineOutput {
+  turbine(inputs: TurbineInput, settings: Settings): TurbineOutput {
     return steamAddon.turbine(inputs);
   }
 

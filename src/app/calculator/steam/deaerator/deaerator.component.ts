@@ -85,7 +85,6 @@ export class DeaeratorComponent implements OnInit {
       ventedSteamSpecificEntropy: 0,
       ventedSteamTemperature: 0
     }
-
     return emptyResults;
   }
 }
