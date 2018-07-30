@@ -47,6 +47,7 @@ export class TurbineComponent implements OnInit {
 
   calculate(form: FormGroup) {
     this.input = this.turbineService.getObjFromForm(form);
+    // console.log(form);
     if (form.status == 'VALID') {
       this.results = this.steamService.turbine(this.input, this.settings);
     } else {
