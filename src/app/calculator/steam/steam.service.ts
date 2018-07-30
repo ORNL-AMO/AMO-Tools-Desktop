@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput } from "../../shared/models/steam";
+import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput, HeaderOutputObj } from "../../shared/models/steam";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 
@@ -13,6 +13,27 @@ export class SteamService {
 
   test() {
     console.log(steamAddon);
+  }
+
+  getQuantityRange(settings: Settings, thermodynamicQuantity: number): { min: number, max: number } {
+    let _min: number = 0;
+    let _max: number = 1;
+    //temp
+    if (thermodynamicQuantity == 0) {
+      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
+      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
+    }
+    //enthalpy
+    else if (thermodynamicQuantity == 1) {
+      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
+      _max = Number(this.convertUnitsService.value(3700).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
+    }
+    //entropy
+    else if (thermodynamicQuantity == 2) {
+      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
+      _max = Number(this.convertUnitsService.value(6.52).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
+    }
+    return { min: _min, max: _max };
   }
 
   convertSteamPropertiesQuantityValue(steamPropertiesInput: SteamPropertiesInput, settings: Settings, forInput: boolean, output?: SteamPropertiesOutput) {
@@ -272,8 +293,31 @@ export class SteamService {
     return results;
   }
 
-  header(input: HeaderInput): HeaderOutput {
-    return steamAddon.header(input);
+  header(input: HeaderInput, settings: Settings): HeaderOutput {
+    //convertInputs
+    input.headerPressure = this.convertSteamPressureInput(input.headerPressure, settings);
+    input.inlets.forEach(inlet => {
+      inlet.pressure = this.convertSteamPressureInput(inlet.pressure, settings);
+      inlet.massFlow = this.convertSteamMassFlowInput(inlet.massFlow, settings);
+      if (inlet.thermodynamicQuantity == 0) {
+        inlet.quantityValue = this.convertSteamTemperatureInput(inlet.quantityValue, settings);
+      } else if (inlet.thermodynamicQuantity == 1) {
+        inlet.quantityValue = this.convertSteamSpecificEnthalpyInput(inlet.quantityValue, settings);
+      } else if (inlet.thermodynamicQuantity == 2) {
+        inlet.quantityValue = this.convertSteamSpecificEntropyInput(inlet.quantityValue, settings);
+      }
+    })
+    let results: HeaderOutput = steamAddon.header(input);
+    //converOutput
+    for (var key in results) {
+      results[key].energyFlow = this.convertEnergyFlowOutput(results[key].energyFlow, settings);
+      results[key].massFlow = this.convertSteamMassFlowOutput(results[key].massFlow, settings);
+      results[key].pressure = this.convertSteamPressureOutput(results[key].pressure, settings);
+      results[key].specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results[key].specificEnthalpy, settings);
+      results[key].specificEntropy = this.convertSteamSpecificEntropyOutput(results[key].specificEntropy, settings);
+      results[key].temperature = this.convertSteamTemperatureOutput(results[key].temperature, settings);
+    }
+    return results;
   }
 
   heatLoss(input: HeatLossInput, settings: Settings): HeatLossOutput {

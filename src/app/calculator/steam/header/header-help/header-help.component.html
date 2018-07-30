@@ -1,8 +1,8 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    Flash Tank Calculator
+    Header Calculator
     <br>
-    <small class="text-muted">Determines the mass flows and properties of any resulting outlet gas and/or liquid for given inlet conditions.
+    <small class="text-muted">Calculates the combined steam properties of multiple steam inlets.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -10,16 +10,15 @@
   <div class="my-2" *ngIf="currentField == 'default'">
     <h6>
       <small class="text-muted">
-        Input inlet conditions to determine mass flows and properties of resulting outlet gas and/or liquid.
+        Input header pressure and inlet conditions to determine the combined steam properties.
         <hr>
       </small>
     </h6>
   </div>
 
-
-  <div class="my-2" *ngIf="currentField == 'inletWaterPressure'">
+  <div class="my-2" *ngIf="currentField == 'headerPressure'">
     <h6>
-      Inlet Water Pressure
+      Header Pressure
       <br>
       <small class="text-muted">
         NEEDED
@@ -34,12 +33,23 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletWaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.inletWaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{pressureRanges.min}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{pressureRanges.max}} {{settings.steamPressureMeasurement}}</td>
           </tr>
         </tbody>
       </table>
     </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'numInlets'">
+    <h6>
+      Number of Inlets
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
@@ -74,21 +84,20 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{inletRanges.quantityMin}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
             </td>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{inletRanges.quantityMax}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
-  <div class="my-2" *ngIf="currentField == 'inletWaterMassFlow'">
+  <div class="my-2" *ngIf="currentField == 'pressure'">
     <h6>
-      Inlet Water Mass Flow
+      Steam Pressure
       <br>
       <small class="text-muted">
         NEEDED
@@ -103,17 +112,17 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletWaterMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{rangeValues.inletWaterMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{inletRanges.pressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{inletRanges.pressureMax}} {{settings.steamPressureMeasurement}}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'tankPressure'">
+  <div class="my-2" *ngIf="currentField == 'massFlow'">
     <h6>
-      Tank Pressure
+      Inlet Mass Flow
       <br>
       <small class="text-muted">
         NEEDED
@@ -128,14 +137,11 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.tankPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.tankPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
-
-
 </div>

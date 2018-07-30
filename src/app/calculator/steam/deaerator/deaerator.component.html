@@ -1,5 +1,5 @@
-<div class="d-flex h-100 modify-conditions steam">
-  <div class="d-flex flex-column modification w-50">
+<div class="d-flex h-100 modify-conditions steam calculator">
+  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
     <div #leftPanelHeader class="header mr-2 ml-2">
       <div class="col-md-auto ico-col">
         <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
@@ -10,7 +10,7 @@
       <app-deaerator-form [deaeratorForm]="deaeratorForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-deaerator-form>
     </div>
   </div>
-  <div class="d-flex flex-column w-50">
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
       <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0" (click)="setTab('results')">Results</a>
@@ -22,7 +22,7 @@
     <div class="d-flex">
       <app-deaerator-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [waterThermodynamicQuantity]="input.waterThermodynamicQuantity"
         [steamThermodynamicQuantity]="input.steamThermodynamicQuantity"></app-deaerator-help>
-      <div class="d-flex flex-column w-100 justify-content-center align-items-center pt-4" *ngIf="tabSelect == 'results'">
+      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
         <app-deaerator-results [results]="results" [settings]="settings"></app-deaerator-results>
       </div>
     </div>
