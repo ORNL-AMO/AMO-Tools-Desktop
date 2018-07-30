@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   results: HeaderOutput;
   numInlets: number = 3;
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  inletThermoQuantity: number = 0;
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) { }
 
   ngOnInit() {
@@ -38,8 +39,9 @@ export class HeaderComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
-  changeField(str: string) {
+  changeField(str: string, index: number) {
     this.currentField = str;
+    this.inletThermoQuantity = this.inletForms[index].controls.thermodynamicQuantity.value;
   }
 
   getForms() {
@@ -78,7 +80,6 @@ export class HeaderComponent implements OnInit {
       })
       if (formTest == true) {
         this.results = this.steamService.header(this.input, this.settings);
-        console.log(this.results);
       } else {
         this.results = this.getEmptyResults();
       }

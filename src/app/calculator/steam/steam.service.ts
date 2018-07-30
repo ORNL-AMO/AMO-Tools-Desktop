@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput } from "../../shared/models/steam";
+import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput, HeaderOutputObj } from "../../shared/models/steam";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 
@@ -309,6 +309,14 @@ export class SteamService {
     })
     let results: HeaderOutput = steamAddon.header(input);
     //converOutput
+    for (var key in results) {
+      results[key].energyFlow = this.convertEnergyFlowOutput(results[key].energyFlow, settings);
+      results[key].massFlow = this.convertSteamMassFlowOutput(results[key].massFlow, settings);
+      results[key].pressure = this.convertSteamPressureOutput(results[key].pressure, settings);
+      results[key].specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results[key].specificEnthalpy, settings);
+      results[key].specificEntropy = this.convertSteamSpecificEntropyOutput(results[key].specificEntropy, settings);
+      results[key].temperature = this.convertSteamTemperatureOutput(results[key].temperature, settings);
+    }
     return results;
   }
 

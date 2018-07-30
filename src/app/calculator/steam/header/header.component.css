@@ -5,3 +5,9 @@
   .ng-valid:not(form) {
     border-left: 5px solid #42A948; /* green */
   }
+
+
+  
+  .data-column{
+    max-height: 100%;
+}

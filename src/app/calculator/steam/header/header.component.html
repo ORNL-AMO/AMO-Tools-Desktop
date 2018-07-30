@@ -1,5 +1,5 @@
-<div class="d-flex h-100 modify-conditions steam">
-  <div class="d-flex flex-column modification w-50">
+<div class="d-flex h-100 modify-conditions steam calculator">
+  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
     <div #leftPanelHeader class="header mr-2 ml-2">
       <div class="col-md-auto ico-col">
         <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
@@ -29,11 +29,11 @@
         </select>
       </div>
       <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm" [index]="index+1" [settings]="settings"
-        (emitChangeField)="changeField($event)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+        (emitChangeField)="changeField($event, index)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
     </div>
   </div>
-  <div class="d-flex flex-column w-50">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
       <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0" (click)="setTab('results')">Results</a>
       </div>
@@ -42,8 +42,8 @@
       </div>
     </div>
     <div class="d-flex">
-      <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"></app-header-help>
-      <div class="d-flex flex-column w-100 justify-content-center align-items-center pt-4" *ngIf="tabSelect == 'results'">
+      <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
+      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
         <app-header-results *ngIf="results.header" [results]="results.header" [settings]="settings" [name]="'Combined Header'"></app-header-results>
         <app-header-results *ngIf="results.inlet1" [results]="results.header" [settings]="settings" [name]="'Inlet 1'"></app-header-results>
         <app-header-results *ngIf="numInlets > 1" [results]="results.header" [settings]="settings" [name]="'Inlet 2'"></app-header-results>

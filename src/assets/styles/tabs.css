@@ -33,6 +33,11 @@ Tabs
     color: #0F0F0F;
   }
   
+  .calculator .tabs.primary a {
+    background: #c8c8c8;
+  }
+
+
   .tabs.primary li:hover {
     text-decoration: none;
     background: #efefef;
