@@ -2,10 +2,21 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">DESCRIPTION NEEDED
+    <small class="text-muted">Determines the mass flows and properties of any resulting outlet gas and/or liquid for given inlet conditions.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'inletWaterPressure'">
+    <h6>
+      <small class="text-muted">
+        Input inlet conditions to determine mass flows and properties of resulting outlet gas and/or liquid.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
   <div class="my-2" *ngIf="currentField == 'inletWaterPressure'">
     <h6>
       Inlet Water Pressure
@@ -63,8 +74,12 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMin}} <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span></td>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMax}} <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span></td>
+            <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
+            <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
           </tr>
         </tbody>
       </table>

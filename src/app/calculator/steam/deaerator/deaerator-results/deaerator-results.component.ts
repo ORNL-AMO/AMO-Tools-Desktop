@@ -1,16 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FlashTankOutput } from '../../../../shared/models/steam';
+import { DeaeratorOutput } from '../../../../shared/models/steam';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-flash-tank-results',
-  templateUrl: './flash-tank-results.component.html',
-  styleUrls: ['./flash-tank-results.component.css']
+  selector: 'app-deaerator-results',
+  templateUrl: './deaerator-results.component.html',
+  styleUrls: ['./deaerator-results.component.css']
 })
-export class FlashTankResultsComponent implements OnInit {
+export class DeaeratorResultsComponent implements OnInit {
   @Input()
-  results: FlashTankOutput;
+  results: DeaeratorOutput;
   @Input()
   settings: Settings;
 
@@ -32,4 +32,5 @@ export class FlashTankResultsComponent implements OnInit {
       return unit;
     }
   }
+
 }

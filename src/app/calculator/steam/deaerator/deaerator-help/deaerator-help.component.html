@@ -1,21 +1,22 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    Boiler Calculator
+    Deaerator Calculator
     <br>
-    <small class="text-muted">Determines the amount of fuel energy required to produce steam with specified properties at a given flow rate using general
-      boiler operational characteristics.
+    <small class="text-muted">Determines the required water and steam flows for a required feedwater mass flow.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
   <div class="my-2" *ngIf="currentField == 'default'">
     <h6>
       <small class="text-muted">
-        Input steam properties, flow rate, and general boiler operational characteristics to determine the amount of fuel energy
-        required to produce steam at the specified properties.
+        Input deaerator conditions and required feedwater mass flow to determine the required water and steam flows.
         <hr>
       </small>
     </h6>
   </div>
+
+
+
   <div class="my-2" *ngIf="currentField == 'deaeratorPressure'">
     <h6>
       Deaerator Pressure
@@ -41,9 +42,9 @@
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'combustionEfficiency'">
+  <div class="my-2" *ngIf="currentField == 'ventRate'">
     <h6>
-      Combustion Efficiency
+      Vent Rate
       <br>
       <small class="text-muted">
         NEEDED
@@ -58,17 +59,17 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.combustionEfficiencyMin}} %</td>
-            <td class="w-50 text-center">{{rangeValues.combustionEfficiencyMax}} %</td>
+            <td class="w-50 text-center">{{rangeValues.ventRateMin}} %</td>
+            <td class="w-50 text-center">{{rangeValues.ventRateMax}} %</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'blowdownRate'">
+  <div class="my-2" *ngIf="currentField == 'feedwaterMassFlow'">
     <h6>
-      Blowdown Rate
+      Feedwater Mass Flow
       <br>
       <small class="text-muted">
         NEEDED
@@ -83,8 +84,32 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.blowdownRateMin}} %</td>
-            <td class="w-50 text-center">{{rangeValues.blowdownRateMax}} %</td>
+            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'waterPressure'">
+    <h6>
+      Water Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{rangeValues.waterPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.waterPressureMax}} {{settings.steamPressureMeasurement}}</td>
           </tr>
         </tbody>
       </table>
@@ -92,7 +117,7 @@
   </div>
 
 
-  <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
+  <div class="my-2" *ngIf="currentField == 'waterThermodynamicQuantity' || currentField == 'steamThermodynamicQuantity'">
     <h6>
       Measurement Method
       <br>
@@ -103,12 +128,12 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'quantityValue'">
+  <div class="my-2" *ngIf="currentField == 'waterQuantityValue'">
     <h6>
-      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
-      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
-      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
-      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
+      <span *ngIf="waterThermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="waterThermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="waterThermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="waterThermodynamicQuantity == 3">Saturated Quality</span>
       Value
       <br>
       <small class="text-muted">
@@ -124,11 +149,11 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{rangeValues.waterQuantityValueMin}}
+              <span *ngIf="waterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity)"></span>
             </td>
-            <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{rangeValues.waterQuantityValueMax}}
+              <span *ngIf="waterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(waterThermodynamicQuantity)"></span>
             </td>
           </tr>
         </tbody>
@@ -160,12 +185,13 @@
     </div>
   </div>
 
-
-
-
-  <div class="my-2" *ngIf="currentField == 'steamMassFlow'">
+  <div class="my-2" *ngIf="currentField == 'steamQuantityValue'">
     <h6>
-      Steam Mass Flow
+      <span *ngIf="steamThermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="steamThermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="steamThermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="steamThermodynamicQuantity == 3">Saturated Quality</span>
+      Value
       <br>
       <small class="text-muted">
         NEEDED
@@ -180,8 +206,12 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.steamMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{rangeValues.steamMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.steamQuantityValueMin}}
+              <span *ngIf="steamThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity)"></span>
+            </td>
+            <td class="w-50 text-center">{{rangeValues.steamQuantityValueMax}}
+              <span *ngIf="steamThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(steamThermodynamicQuantity)"></span>
+            </td>
           </tr>
         </tbody>
       </table>

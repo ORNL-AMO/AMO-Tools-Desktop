@@ -2,10 +2,19 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam after a pressure drop.
+    <small class="text-muted">Calculates the properties of steam after a pressure drop with optional desuperheating.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+        after a pressure drop.
+        <hr>
+      </small>
+    </h6>
+  </div>
   <div class="my-2" *ngIf="currentField == 'inletPressure'">
     <h6>
       Inlet Pressure
@@ -153,8 +162,8 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
           </tr>
         </tbody>
       </table>
@@ -194,10 +203,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{feedwaterRangeValues.quantityValueMin}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMin}}
               <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
             </td>
-            <td class="w-50 text-center">{{feedwaterRangeValues.quantityValueMax}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMax}}
               <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
             </td>
           </tr>
@@ -223,10 +232,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.desuperheatingTempMin}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMin}}
               <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
             </td>
-            <td class="w-50 text-center">{{rangeValues.desuperheatingTempMax}}
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMax}}
               <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
             </td>
           </tr>

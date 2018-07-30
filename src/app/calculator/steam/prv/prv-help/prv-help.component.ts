@@ -37,7 +37,6 @@ export class PrvHelpComponent implements OnInit {
 
 
   getRanges() {
-    console.log('get ranges');
     this.rangeValues = this.prvService.getRangeValues(this.settings, this.thermodynamicQuantity);
     this.feedwaterRangesValues = this.prvService.getRangeValues(this.settings, this.feedwaterThermodynamicQuantity);
   }

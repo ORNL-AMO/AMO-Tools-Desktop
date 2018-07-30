@@ -124,7 +124,8 @@ export class SteamSettingsComponent implements OnInit {
       'kcal',
       'kgce',
       'kgoe',
-      'kWh'
+      'kWh',
+      'MJ'
     ]
     tmpList.forEach(unit => {
       let tmpPossibility = {
