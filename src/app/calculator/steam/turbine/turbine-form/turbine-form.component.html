@@ -50,7 +50,7 @@
 
   <label class="group-label">Turbine Properties</label>
   <div class="form-group">
-    <label class="small" for="turbineProperty">Calculation Method</label>
+    <label class="small" for="turbineProperty">Selected Turbine Property</label>
     <select name="turbineProperty" class="form-control" formControlName="turbineProperty" id="turbineProperty" (change)="calculate()"
       (focus)="focusField('turbineProperty')" (blur)="focusOut()">
       <option *ngFor="let option of turbineOptions" [ngValue]="option.value">{{option.display}}</option>
