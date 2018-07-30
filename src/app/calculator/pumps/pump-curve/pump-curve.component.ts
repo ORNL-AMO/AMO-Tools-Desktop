@@ -11,7 +11,9 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FSAT } from '../../../shared/models/fans';
 import { SystemCurveService } from '../system-curve/system-curve.service';
-import { FormGroup } from '../../../../../node_modules/@angular/forms';
+import { FormGroup } from '@angular/forms';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -89,7 +91,6 @@ export class PumpCurveComponent implements OnInit {
 
         //system curve merge
         if (this.calculator.systemCurve) {
-          console.log('this.calculator.systemCurve exists');
           this.initDefault();
           this.setPointValuesFromCalc(true);
           this.curveConstants.form.patchValue({
