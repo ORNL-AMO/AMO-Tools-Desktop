@@ -34,6 +34,8 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
+  selectedCalcTypeSub: Subscription;
+  selectedCalculatorType: string;
   selectedCalcSub: Subscription;
   selectedCalculator: string;
   constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
@@ -49,13 +51,18 @@ export class SidebarComponent implements OnInit {
       this.isUpdateAvailable = val;
     })
 
-    this.selectedCalcSub = this.calculatorService.selectedToolType.subscribe(calcType => {
-      this.selectedCalculator = calcType;
+    this.selectedCalcTypeSub = this.calculatorService.selectedToolType.subscribe(calcType => {
+      this.selectedCalculatorType = calcType;
+    })
+
+    this.selectedCalcSub = this.calculatorService.selectedTool.subscribe(calculator => {
+      this.selectedCalculator = calculator;
     })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
     this.selectedCalcSub.unsubscribe();
   }
 
@@ -126,5 +133,9 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
+  }
+
+  selectCalculator(str: string){
+    this.calculatorService.selectedToolType.next(str);
   }
 }
