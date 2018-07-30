@@ -1,0 +1,134 @@
+<div *ngIf="results">
+  <label class="group-label">Inlet Water</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Pressure</td>
+        <td class="text-center w-50">{{results.inletWaterPressure |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Temperature</td>
+        <td class="text-center w-50">{{results.inletWaterTemperature |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Saturated</td>
+        <td class="text-center w-50">{{results.inletWaterQuality}}</td>
+        
+      </tr>
+      <tr>
+        <td class="bold w-50">Mass Flow</td>
+        <td class="text-center w-50">{{results.inletWaterMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Enthalpy</td>
+        <td class="text-center w-50">{{results.inletWaterSpecificEnthalpy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Entropy</td>
+        <td class="text-center w-50">{{results.inletWaterSpecificEntropy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Flow</td>
+        <td class="text-center w-50">{{results.inletWaterEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label class="group-label">Outlet Gas</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Pressure</td>
+        <td class="text-center w-50">{{results.outletGasPressure |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Temperature</td>
+        <td class="text-center w-50">{{results.outletGasTemperature |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Saturated</td>
+        <td class="text-center w-50">{{results.outletGasQuality}}</td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Mass Flow</td>
+        <td class="text-center w-50">{{results.outletGasMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Enthalpy</td>
+        <td class="text-center w-50">{{results.outletGasSpecificEnthalpy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Entropy</td>
+        <td class="text-center w-50">{{results.outletGasSpecificEntropy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Flow</td>
+        <td class="text-center w-50">{{results.outletGasEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label class="group-label">Outlet Liquid</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold w-50">Pressure</td>
+        <td class="text-center w-50">{{results.outletLiquidPressure |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Temperature</td>
+        <td class="text-center w-50">{{results.outletGasTemperature |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Saturated</td>
+        <td class="text-center w-50">{{results.outletLiquidQuality}}</td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Mass Flow</td>
+        <td class="text-center w-50">{{results.outletLiquidMassFlow |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Enthalpy</td>
+        <td class="text-center w-50">{{results.outletLiquidSpecificEnthalpy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Specific Entropy</td>
+        <td class="text-center w-50">{{results.outletLiquidSpecificEntropy |sigFigs: '6'}}
+          <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold w-50">Energy Flow</td>
+        <td class="text-center w-50">{{results.outletLiquidEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

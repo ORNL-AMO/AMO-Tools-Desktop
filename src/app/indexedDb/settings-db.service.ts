@@ -54,7 +54,9 @@ export class SettingsDbService {
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.globalSettings;
     }
-    selectedSettings = this.checkSettings(selectedSettings);
+    if (selectedSettings) {
+      selectedSettings = this.checkSettings(selectedSettings);
+    }
     return selectedSettings;
   }
 

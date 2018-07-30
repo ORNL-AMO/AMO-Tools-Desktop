@@ -41,7 +41,8 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('stack-loss')">Stack Loss Calculator</a>
             <p>
-
+              Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion
+              specifications.
             </p>
           </div>
         </div>
@@ -55,7 +56,7 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('heat-loss')">Heat Loss Calculator</a>
             <p>
-
+              Calculates the energy (heat) loss and outlet steam properties given inlet steam conditions and a % heat loss.
             </p>
           </div>
         </div>
@@ -68,7 +69,63 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('boiler')">Boiler Calculator</a>
             <p>
+              Determines the amount of fuel energy required to produce steam with specified properties at a given flow rate using general
+              boiler operational characteristics.
+            </p>
+          </div>
+        </div>
 
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')"> -->
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('flash-tank')">Flash Tank Calculator</a>
+            <p>
+              Determines the mass flows and properties of any resulting outlet gas and/or liquid for given inlet conditions.
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')"> -->
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('prv')">PRV W/ Desuperheating Calculator</a>
+            <p>
+              Calculates the properties of steam after a pressure drop with optional desuperheating.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')"> -->
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('deaerator')">Deaerator Calculator</a>
+            <p>
+              Determines the required water and steam flows for a required feedwater mass flow.
+            </p>
+          </div>
+        </div>
+
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img src="assets/images/saturated-properties.png" class="calc-img" (click)="showTool('saturated-properties')"> -->
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('header')">Header Calculator</a>
+            <p>
+              Calculates the combined steam properties of multiple steam inlets.
             </p>
           </div>
         </div>
@@ -89,7 +146,7 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'stack-loss'">
   <app-stack-loss></app-stack-loss>
-<div>
+</div>
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'heat-loss'">
   <app-heat-loss></app-heat-loss>
@@ -97,4 +154,21 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'boiler'">
   <app-boiler></app-boiler>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'flash-tank'">
+  <app-flash-tank></app-flash-tank>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'prv'">
+  <app-prv></app-prv>
+</div>
+
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'deaerator'">
+  <app-deaerator></app-deaerator>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'header'">
+  <app-header></app-header>
 </div>

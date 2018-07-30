@@ -68,8 +68,9 @@ export class HeatLossFormComponent implements OnInit {
   }
 
   setQuantityRanges() {
-    let quantityMinMax: { min: number, max: number } = this.heatLossService.getQuantityRange(this.settings, this.heatLossForm.controls.thermodynamicQuantity.value);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.heatLossForm.controls.thermodynamicQuantity.value);
     this.heatLossForm.controls.quantityValue.setValue(0);
     this.heatLossForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.calculate();
   }
 }

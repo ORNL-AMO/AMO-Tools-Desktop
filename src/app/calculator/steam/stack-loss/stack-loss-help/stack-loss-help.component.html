@@ -2,11 +2,19 @@
   <h5>
     Stack Loss Help
     <br>
-    <small class="text-muted">DESCRIPTION NEEDED
+    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion specifications.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'measurementType'">
+  <div class="my-1" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input fuel type and stack gas and combustion characteristics to determine the amount of heat lost in the boiler stack gas.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'measurementType'">
     <h6>
       Type of Fuel
       <br>
@@ -16,7 +24,7 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'gasTypeId'">
+  <div class="my-1" *ngIf="currentField == 'gasTypeId'">
     <h6>
       Fuel
       <br>
@@ -29,18 +37,18 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'flueGasTemperature'">
+  <div class="my-1" *ngIf="currentField == 'flueGasTemperature'">
     <h6>
       Gas temperature
       <br>
       <small class="text-muted">
-        Measure flue gas temperature by using "proper" temperature probe. Type of temperature probe depends on flue gas temperature
+        Measure stack gas temperature by using "proper" temperature probe. Type of temperature probe depends on stack gas temperature
         and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
         <hr>
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'oxygenCalculationMethod'">
+  <div class="my-1" *ngIf="currentField == 'oxygenCalculationMethod'">
     <h6>
       O
       <sub>2</sub> in Flue Gas / Excess Air Dropdown
@@ -54,12 +62,12 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'excessAirPercentage'">
+  <div class="my-1" *ngIf="currentField == 'excessAirPercentage'">
     <h6>
       Excess Air
       <br>
       <small class="text-muted">
-        The excess air value represents excess air used in burners plus all air entering the furnace and going as flue gases form
+        The excess air value represents excess air used in burners plus all air entering the furnace and going as stack gases form
         the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
         <hr>
       </small>
@@ -81,14 +89,14 @@
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'o2InFlueGas'">
+  <div class="my-1" *ngIf="currentField == 'o2InFlueGas'">
     <h6>
       O
       <sub>2</sub> in Flue Gas
       <br>
       <small class="text-muted">
-        The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the same location
-        where flue gas temperature is measured to maintain accuracy of the calculations.
+        The volumetric percentage of oxygen present in the stack gas. Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location
+        where stack gas temperature is measured to maintain accuracy of the calculations.
         <hr>
       </small>
     </h6>
@@ -108,19 +116,19 @@
       </table>
     </div>
   </div>
-  <div class="my-2" *ngIf="currentField == 'combustionAirTemperature'">
+  <div class="my-1" *ngIf="currentField == 'combustionAirTemperature'">
     <h6>
       Ambient Air Temperature
       <br>
       <small class="text-muted">
-        Ambient air temperature (&#8457; or &#8451;) entering the burners. Use temperature recorder/indicator reading or actual
-        measurement using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
+        Ambient air temperature (&#8457; or &#8451;) entering the burners. Use temperature recorder/indicator reading or actual measurement
+        using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
         <hr>
       </small>
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'fuelTemperature'">
+  <div class="my-1" *ngIf="currentField == 'fuelTemperature'">
     <h6>
       Fuel temperature
       <br>
@@ -131,12 +139,14 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'moistureInAirComposition'">
+  <div class="my-1" *ngIf="currentField == 'moistureInAirComposition'">
     <h6>
       Moisture in Air
       <br>
       <small class="text-muted">
         The moisture of the air (mass water / mass dry air). Can be determined with a psychometric chart.
+        <hr>
+        The default value is based on 50% Relative Humidity, 70 &#8457;
         <hr>
       </small>
     </h6>
@@ -156,17 +166,17 @@
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'ashDischargeTemperature'">
+  <div class="my-1" *ngIf="currentField == 'ashDischargeTemperature'">
     <h6>
       Ash Discharge Temperature
       <br>
       <small class="text-muted">
-        Temperature of the ash in the flue gas outlet.
+        Temperature of the ash in the stack gas outlet.
         <hr>
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'fuelTemperature'">
+  <div class="my-1" *ngIf="currentField == 'fuelTemperature'">
     <h6>
       Fuel temperature
       <br>
@@ -177,7 +187,7 @@
       </small>
     </h6>
   </div>
-  <div class="my-2" *ngIf="currentField == 'unburnedCarbonInAsh'">
+  <div class="my-1" *ngIf="currentField == 'unburnedCarbonInAsh'">
     <h6>
       Unburned Carbon in Ash
       <br>
@@ -202,20 +212,19 @@
     </div>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'default'">
+  <div class="my-1" *ngIf="currentField == 'default'">
     <h6>
       Savings Suggestions
       <br>
       <small class="text-muted">
-        Maintain appropriate level of oxygen in flue gases by controlling air-fuel ratio for the burners
+        Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners
         <hr> Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide
-        and hydrogen in flue gases
-        <hr> Eliminate or reduce air leakage in the furnace. See "Opening Losses" section
-        <hr> Consider use of heat recovery from flue gases. Consider use of various methods of heat recovery to reduce flue gas
+        and hydrogen in stack gases
+        <hr> Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce stack gas
         temperature leaving the heating system
         <hr> Use preheated combustion air through use of recuperators or regenerators
-        <hr> Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of flue gases
-        <hr> Review process temperature settings and lower it where possible during part-load operations. This can reduce flue
+        <hr> Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases
+        <hr> Review process temperature settings and lower it where possible during part-load operations. This can reduce flustacke
         gas temperature leaving the heating system
         <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
         There may additional measures when considering specific situations and the user is encouraged to review and apply

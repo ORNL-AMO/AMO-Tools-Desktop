@@ -1,0 +1,247 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Flash Tank Calculator
+    <br>
+    <small class="text-muted">Calculates the properties of steam after a pressure drop with optional desuperheating.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+        after a pressure drop.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'inletPressure'">
+    <h6>
+      Inlet Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
+    <h6>
+      Measurement Method
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'quantityValue'">
+    <h6>
+      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
+      Value
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
+            <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'inletMassFlow'">
+    <h6>
+      Inlet Mass Flow
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'outletPressure'">
+    <h6>
+      Outlet Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{rangeValues.outletPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.outletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'isSuperHeating'">
+    <h6>
+      With or Without Desuperheating
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'feedwaterPressure'">
+    <h6>
+      Feedwater Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'feedwaterThermodynamicQuantity'">
+    <h6>
+      Measurement Method
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'feedwaterQuantityValue'">
+    <h6>
+      <span *ngIf="feedwaterThermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="feedwaterThermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="feedwaterThermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="feedwaterThermodynamicQuantity == 3">Saturated Quality</span>
+      Value
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMin}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMax}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'desuperheatingTemp'">
+    <h6>
+      Desuperheating Temperature
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMin}}
+              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+            </td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMax}}
+              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

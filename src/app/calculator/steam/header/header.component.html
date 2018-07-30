@@ -1,0 +1,60 @@
+<div class="d-flex h-100 modify-conditions steam calculator">
+  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
+    <div #leftPanelHeader class="header mr-2 ml-2">
+      <div class="col-md-auto ico-col">
+        <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
+      </div>
+      <h3>Header Calculator</h3>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <form [formGroup]="headerPressureForm">
+        <div class="form-group">
+          <label class="small" for="headerPressure">Header Pressure</label>
+          <div class="input-group">
+            <input class="form-control" name="headerPressure" id="headerPressure" formControlName="headerPressure" type="number" (input)="calculate()"
+              (focus)="changeField('headerPressure')" (blur)="changeField('default')" onfocus="this.select();">
+            <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="headerPressureForm.controls.headerPressure.invalid && !headerPressureForm.controls.headerPressure.pristine">
+            <span *ngIf="headerPressureForm.controls.headerPressure.errors.required">Value Required</span>
+            <span *ngIf="headerPressureForm.controls.headerPressure.errors.max">Value can't be greater than {{headerPressureForm.controls.headerPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+            <span *ngIf="headerPressureForm.controls.headerPressure.errors.min">Value can't be less than {{headerPressureForm.controls.headerPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+          </span>
+        </div>
+      </form>
+      <div class="form-group mt-2 mb-2">
+        <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control w-100" [(ngModel)]="numInlets"
+          name="numInlets" id="numInlets">
+          <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
+        </select>
+      </div>
+      <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm" [index]="index+1" [settings]="settings"
+        (emitChangeField)="changeField($event, index)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0" (click)="setTab('results')">Results</a>
+      </div>
+      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+        <a (click)="setTab('help')">Help</a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
+      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
+        <app-header-results *ngIf="results.header" [results]="results.header" [settings]="settings" [name]="'Combined Header'"></app-header-results>
+        <app-header-results *ngIf="results.inlet1" [results]="results.header" [settings]="settings" [name]="'Inlet 1'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 1" [results]="results.header" [settings]="settings" [name]="'Inlet 2'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 2" [results]="results.header" [settings]="settings" [name]="'Inlet 3'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 3" [results]="results.header" [settings]="settings" [name]="'Inlet 4'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 4" [results]="results.header" [settings]="settings" [name]="'Inlet 5'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 5" [results]="results.header" [settings]="settings" [name]="'Inlet 6'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 6" [results]="results.header" [settings]="settings" [name]="'Inlet 7'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 7" [results]="results.header" [settings]="settings" [name]="'Inlet 8'"></app-header-results>
+        <app-header-results *ngIf="numInlets > 8" [results]="results.header" [settings]="settings" [name]="'Inlet 9'"></app-header-results>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,147 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Header Calculator
+    <br>
+    <small class="text-muted">Calculates the combined steam properties of multiple steam inlets.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input header pressure and inlet conditions to determine the combined steam properties.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'headerPressure'">
+    <h6>
+      Header Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{pressureRanges.min}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{pressureRanges.max}} {{settings.steamPressureMeasurement}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'numInlets'">
+    <h6>
+      Number of Inlets
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
+    <h6>
+      Measurement Method
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'quantityValue'">
+    <h6>
+      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
+      Value
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{inletRanges.quantityMin}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+            </td>
+            <td class="w-50 text-center">{{inletRanges.quantityMax}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Steam Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{inletRanges.pressureMin}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{inletRanges.pressureMax}} {{settings.steamPressureMeasurement}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'massFlow'">
+    <h6>
+      Inlet Mass Flow
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{inletRanges.massFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
