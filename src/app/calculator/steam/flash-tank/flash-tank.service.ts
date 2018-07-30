@@ -3,10 +3,11 @@ import { Settings } from '../../../shared/models/settings';
 import { Validators, FormBuilder, FormGroup } from '../../../../../node_modules/@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FlashTankInput } from '../../../shared/models/steam';
+import { SteamService } from '../steam.service';
 
 @Injectable()
 export class FlashTankService {
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {
     let ranges: FlashTankRanges = this.getRangeValues(settings, 0);
@@ -44,7 +45,7 @@ export class FlashTankService {
   }
 
   getRangeValues(settings: Settings, thermodynamicQuantity: number): FlashTankRanges {
-    let quantityMinMax: {min: number, max: number} = this.getQuantityRange(settings, thermodynamicQuantity);
+    let quantityMinMax: {min: number, max: number} = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: FlashTankRanges = {
       inletWaterPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       inletWaterPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
@@ -56,28 +57,6 @@ export class FlashTankService {
       tankPressureMax: 3185
     }
     return ranges;
-  }
-
-
-  getQuantityRange(settings: Settings, thermodynamicQuantity: number): { min: number, max: number } {
-    let _min: number = 0;
-    let _max: number = 1;
-    //temp
-    if (thermodynamicQuantity == 0) {
-      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
-    } 
-    //enthalpy
-    else if (thermodynamicQuantity == 1) {
-      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(3700).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
-    } 
-    //entropy
-    else if (thermodynamicQuantity == 2) {
-      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(6.52).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
-    }
-    return { min: _min, max: _max };
   }
 }
 

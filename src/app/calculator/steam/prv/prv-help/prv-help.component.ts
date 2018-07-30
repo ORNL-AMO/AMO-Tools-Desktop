@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { PrvRanges, PrvService } from '../prv.service';
+import { PrvRanges, PrvService, FeedwaterRanges } from '../prv.service';
 import { SteamService } from '../../steam.service';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -19,7 +19,7 @@ export class PrvHelpComponent implements OnInit {
   feedwaterThermodynamicQuantity: number;
 
   rangeValues: PrvRanges;
-  feedwaterRangesValues: PrvRanges;
+  feedwaterRangesValues: FeedwaterRanges;
   constructor(private prvService: PrvService, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -37,9 +37,8 @@ export class PrvHelpComponent implements OnInit {
 
 
   getRanges() {
-    console.log('get ranges');
     this.rangeValues = this.prvService.getRangeValues(this.settings, this.thermodynamicQuantity);
-    this.feedwaterRangesValues = this.prvService.getRangeValues(this.settings, this.feedwaterThermodynamicQuantity);
+    this.feedwaterRangesValues = this.prvService.getFeedwaterRangeValues(this.settings, this.feedwaterThermodynamicQuantity);
   }
 
   getDisplayUnit(unit: string) {
@@ -50,18 +49,18 @@ export class PrvHelpComponent implements OnInit {
     }
   }
 
-  getOptionDisplayUnit() {
+  getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
-    if (this.thermodynamicQuantity == 0) {
+    if (quantity == 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 1) {
+    } else if (quantity == 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 2) {
+    } else if (quantity == 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 3) {
+    } else if (quantity == 3) {
       return displayUnit;
     }
   }

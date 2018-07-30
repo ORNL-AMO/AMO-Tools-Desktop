@@ -39,7 +39,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.inletWaterEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.inletWaterEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -71,19 +71,19 @@
       </tr>
       <tr>
         <td class="bold w-50">Specific Enthalpy</td>
-        <td class="text-center w-50">{{results.inletWaterSpecificEnthalpy |sigFigs: '6'}}
+        <td class="text-center w-50">{{results.outletGasSpecificEnthalpy |sigFigs: '6'}}
           <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Specific Entropy</td>
-        <td class="text-center w-50">{{results.inletWaterSpecificEntropy |sigFigs: '6'}}
+        <td class="text-center w-50">{{results.outletGasSpecificEntropy |sigFigs: '6'}}
           <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.outletGasEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.outletGasEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -115,19 +115,19 @@
       </tr>
       <tr>
         <td class="bold w-50">Specific Enthalpy</td>
-        <td class="text-center w-50">{{results.outletGasSpecificEnthalpy |sigFigs: '6'}}
+        <td class="text-center w-50">{{results.outletLiquidSpecificEnthalpy |sigFigs: '6'}}
           <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span>
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Specific Entropy</td>
-        <td class="text-center w-50">{{results.outletGasSpecificEntropy |sigFigs: '6'}}
+        <td class="text-center w-50">{{results.outletLiquidSpecificEntropy |sigFigs: '6'}}
           <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
         </td>
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.outletLiquidEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.outletLiquidEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>

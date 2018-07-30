@@ -1,0 +1,56 @@
+<form [formGroup]="inletForm">
+  <label class="group-label">Inlet {{index}}</label>
+  <div class="form-group">
+    <label class="small" for="pressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="pressure" id="pressure" formControlName="pressure" type="number" (input)="calculate()"
+        (focus)="focusField('pressure')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="inletForm.controls.pressure.invalid && !inletForm.controls.pressure.pristine">
+      <span *ngIf="inletForm.controls.pressure.errors.required">Value Required</span>
+      <span *ngIf="inletForm.controls.pressure.errors.max">Value can't be greater than {{inletForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="inletForm.controls.pressure.errors.min">Value can't be less than {{inletForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="thermodynamicQuantity">Calculation Method</label>
+    <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
+      (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number" (input)="calculate()"
+        (focus)="focusField('quantityValue')" (blur)="focusOut()" onfocus="this.select();">
+      <span *ngIf="inletForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit()"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="inletForm.controls.quantityValue.invalid && !inletForm.controls.quantityValue.pristine">
+      <span *ngIf="inletForm.controls.quantityValue.errors.required">Value Required</span>
+      <span *ngIf="inletForm.controls.quantityValue.errors.max">Value can't be greater than {{inletForm.controls.quantityValue.errors.max.max}}
+        <span *ngIf="inletForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+        .</span>
+      <span *ngIf="inletForm.controls.quantityValue.errors.min">Value can't be less than {{inletForm.controls.quantityValue.errors.min.min}}
+        <span *ngIf="inletForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit()"></span>.
+      </span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="massFlow">Mass Flow</label>
+    <div class="input-group">
+      <input class="form-control" name="massFlow" id="massFlow" formControlName="massFlow" type="number" (input)="calculate()"
+        (focus)="focusField('massFlow')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}/hr</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="inletForm.controls.massFlow.invalid && !inletForm.controls.massFlow.pristine">
+      <span *ngIf="inletForm.controls.massFlow.errors.required">Value Required</span>
+      <span *ngIf="inletForm.controls.massFlow.errors.max">Value can't be greater than {{inletForm.controls.massFlow.errors.max.max}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+      <span *ngIf="inletForm.controls.massFlow.errors.min">Value can't be less than {{inletForm.controls.massFlow.errors.min.min}} {{settings.steamMassFlowMeasurement}}/hr.</span>
+    </span>
+  </div>
+</form>

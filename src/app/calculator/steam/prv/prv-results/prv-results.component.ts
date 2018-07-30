@@ -15,11 +15,17 @@ export class PrvResultsComponent implements OnInit {
   settings: Settings;
   @Input()
   isSuperHeating: boolean;
-
+  energyMeasurement: string;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
+    if (this.settings.steamEnergyMeasurement == 'kWh') {
+      this.energyMeasurement = 'kW';
+    } else {
+      this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';
+    }
   }
+
   getDisplayUnit(unit: string) {
     if (unit) {
       return this.steamService.getDisplayUnit(unit);

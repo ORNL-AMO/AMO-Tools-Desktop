@@ -2,10 +2,18 @@
   <h5>
     Heat Loss Calculator
     <br>
-    <small class="text-muted">DESCRIPTION NEEDED
+    <small class="text-muted">Calculates the energy (heat) loss and outlet steam properties given inlet steam conditions and a % heat loss.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input inlet steam conditions and % heat loss to determine energy (heat) loss and outlet steam properties.
+        <hr>
+      </small>
+    </h6>
+  </div>
   <div class="my-2" *ngIf="currentField == 'inletPressure'">
     <h6>
       Inlet Pressure
