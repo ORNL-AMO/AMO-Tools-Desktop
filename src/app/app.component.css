@@ -958,10 +958,14 @@ Sidebar
   .sidebar-group li span:hover {
     cursor: pointer;
   }
-.sidebar-group li.selected span {
+.sidebar-group li.selected span, .sidebar-group span.sidebar-item.selected {
   color: #000;
   background: #eee;
   font-weight: bold;
+}
+
+.sidebar-group li span:hover{
+  background: #eee;
 }
 
 /* .sidebar-group li.sub-directory .sub-directory {
