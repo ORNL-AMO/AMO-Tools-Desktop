@@ -21,6 +21,9 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   output: SaturatedPropertiesOutput;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Input()
+  ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
+
 
   constructor(private steamService: SteamService) { }
 
@@ -29,17 +32,15 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   }
 
   setValidators(){
-    let ranges: {minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } = this.getRanges();
     if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 0){
-      this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(ranges.minPressure), Validators.max(ranges.maxPressure)]);
+      this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
       this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators()
       this.saturatedPropertiesForm.controls.saturatedTemperature.reset();
     }else if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 1){
-      this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(ranges.minTemp), Validators.max(ranges.maxTemp)]);
+      this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
       this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators()
       this.saturatedPropertiesForm.controls.saturatedPressure.reset();
     }
-    this.calculate();
   }
 
   calculate() {
@@ -68,29 +69,4 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   getDisplayUnit(unit: string) {
     return this.steamService.getDisplayUnit(unit);
   }
-
-
-  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
-    let minTemp: number, maxTemp: number, minPressure: number, maxPressure: number;
-    if (this.settings.steamTemperatureMeasurement == 'F') {
-      minTemp = 32;
-      maxTemp = 705.1;
-    } else {
-      minTemp = 0;
-      maxTemp = 373.9;
-    }
-
-    if (this.settings.steamPressureMeasurement == 'psi') {
-      minPressure = 0.2;
-      maxPressure = 3200.1;
-    } else if (this.settings.steamPressureMeasurement == 'kPa') {
-      minPressure = 1;
-      maxPressure = 22064;
-    } else if (this.settings.steamPressureMeasurement == 'bar') {
-      minPressure = 0.01;
-      maxPressure = 220.64;
-    }
-    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure }
-  }
-
 }

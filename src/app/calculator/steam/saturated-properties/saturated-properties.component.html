@@ -11,7 +11,7 @@
 
     <div class="d-flex flex-column m-4">
       <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings" [output]="saturatedPropertiesOutput"
-        (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)"> </app-saturated-properties-form>
+        (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)" [ranges]="ranges"></app-saturated-properties-form>
       <div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
         <button (click)="addRow()" class="btn-add-row">Create Row</button>
       </div>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">
-      <app-saturated-properties-help [currentField]="currentField"></app-saturated-properties-help>
+      <app-saturated-properties-help [currentField]="currentField" [ranges]="ranges" [settings]="settings"></app-saturated-properties-help>
     </div>
   </div>
 </div>

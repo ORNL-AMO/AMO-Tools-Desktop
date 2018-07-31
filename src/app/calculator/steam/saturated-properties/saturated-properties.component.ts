@@ -25,7 +25,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.getChartWidth();
   }
 
-
+  ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
   saturatedPropertiesForm: FormGroup;
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
   pressureOrTemperature: number;
@@ -52,6 +52,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.ranges = this.getRanges();
     this.saturatedPropertiesOutput = this.getEmptyResults();
     this.getForm();
     this.calculate(this.saturatedPropertiesForm);
@@ -144,5 +145,28 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   toggleGraph() {
     this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
+  }
+
+  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
+    let minTemp: number, maxTemp: number, minPressure: number, maxPressure: number;
+    if (this.settings.steamTemperatureMeasurement == 'F') {
+      minTemp = 32;
+      maxTemp = 705.1;
+    } else {
+      minTemp = 0;
+      maxTemp = 373.9;
+    }
+
+    if (this.settings.steamPressureMeasurement == 'psi') {
+      minPressure = 0.2;
+      maxPressure = 3200.1;
+    } else if (this.settings.steamPressureMeasurement == 'kPa') {
+      minPressure = 1;
+      maxPressure = 22064;
+    } else if (this.settings.steamPressureMeasurement == 'bar') {
+      minPressure = 0.01;
+      maxPressure = 220.64;
+    }
+    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure }
   }
 }
