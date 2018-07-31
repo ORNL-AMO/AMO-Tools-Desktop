@@ -20,11 +20,12 @@ import { SharedModule } from '../../../shared/shared.module';
     SystemCurveFormComponent,
     SystemCurveGraphComponent
   ],
-   exports: [
-     SystemCurveComponent
-   ],
-   providers: [
-     SystemCurveService
-   ]
+  exports: [
+    SystemCurveComponent,
+    SystemCurveFormComponent
+  ],
+  providers: [
+    SystemCurveService
+  ]
 })
 export class SystemCurveModule { }

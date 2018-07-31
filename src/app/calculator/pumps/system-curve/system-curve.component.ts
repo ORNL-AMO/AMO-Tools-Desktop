@@ -43,7 +43,7 @@ export class SystemCurveComponent implements OnInit {
   headerHeight: number;
 
   pointOne: { form: FormGroup, fluidPower: number };
-  pointTwo: { form: FormGroup, fluidPower: number };;
+  pointTwo: { form: FormGroup, fluidPower: number };
 
   staticHead: number;
   lossCoefficient: number;
@@ -83,7 +83,8 @@ export class SystemCurveComponent implements OnInit {
           })
           this.showForm = true;
         }
-      } else {
+      } 
+      else {
         this.initializeCalculator();
         this.initDefault();
         this.setPointValuesFromCalc(true);
