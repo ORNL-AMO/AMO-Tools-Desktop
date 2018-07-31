@@ -119,13 +119,23 @@
   </div>
 
 
-  <div class="my-2" *ngIf="currentField == 'waterThermodynamicQuantity' || currentField == 'steamThermodynamicQuantity'">
+  <div class="my-2" *ngIf="currentField == 'waterThermodynamicQuantity'">
     <h6>
       Measurement Method
       <br>
       <small class="text-muted">
         Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
-        the generated steam.
+        the inlet water.
+        <hr>
+      </small>
+    </h6>
+  </div>  <div class="my-2" *ngIf="currentField == 'steamThermodynamicQuantity'">
+    <h6>
+      Measurement Method
+      <br>
+      <small class="text-muted">
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the inlet steam.
         <hr>
       </small>
     </h6>
