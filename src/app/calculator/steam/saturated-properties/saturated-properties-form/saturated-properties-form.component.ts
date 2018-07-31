@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesInput, SaturatedPropertiesOutput } from "../../../../shared/models/steam";
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
@@ -16,113 +16,81 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Output()
-  emitCalculate = new EventEmitter<SaturatedPropertiesInput>();
-  @Output()
-  emitSetPressureOrTemperature = new EventEmitter<number>();
+  emitCalculate = new EventEmitter<FormGroup>();
   @Input()
   output: SaturatedPropertiesOutput;
-
-  readonly pressureCheck: PressureProperties = {
-    'psi': {
-      min: 0.2, max: 3200.1, displayUnits: 'psi'
-    },
-    'kPa': {
-      min: 1, max: 22064, displayUnits: 'kPa'
-    },
-    'bar': {
-      min: 0.01, max: 220.64, displayUnits: 'Bar'
-    }
-  };
-
-  readonly temperatureCheck: TemperatureProperties = {
-    'F': {
-      min: 32, max: 705.1, displayUnits: 'Degrees F'
-    },
-    'C': {
-      min: 0, max: 373.9, displayUnits: 'Degrees C'
-    }
-  };
-
-  temperatureError: string = null;
-  pressureError: string = null;
-
-  input: SaturatedPropertiesInput;
-  // output: SaturatedPropertiesOutput;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
-    this.input = {
-      saturatedPressure: 0,
-      saturatedTemperature: 0
-    };
+    this.setValidators();
+  }
 
-    // this.output = {
-    //   saturatedPressure: 0,
-    //   saturatedTemperature: 0,
-    //   liquidEnthalpy: 0,
-    //   gasEnthalpy: 0,
-    //   evaporationEnthalpy: 0,
-    //   liquidEntropy: 0,
-    //   gasEntropy: 0,
-    //   evaporationEntropy: 0,
-    //   liquidVolume: 0,
-    //   gasVolume: 0,
-    //   evaporationVolume: 0
-    // };
-
-    // this.calculate();
+  setValidators(){
+    let ranges: {minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } = this.getRanges();
+    if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 0){
+      this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(ranges.minPressure), Validators.max(ranges.maxPressure)]);
+      this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators()
+      this.saturatedPropertiesForm.controls.saturatedTemperature.reset();
+    }else if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 1){
+      this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(ranges.minTemp), Validators.max(ranges.maxTemp)]);
+      this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators()
+      this.saturatedPropertiesForm.controls.saturatedPressure.reset();
+    }
+    this.calculate();
   }
 
   calculate() {
-    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
-    this.temperatureError = this.pressureError = null;
-    this.emitSetPressureOrTemperature.emit(this.saturatedPropertiesForm.controls.pressureOrTemperature.value);
-
-    if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
-      const pressure = this.saturatedPropertiesForm.controls.saturatedPressure.value;
-      const properties = this.pressureCheck[this.settings.steamPressureMeasurement];
-      if (pressure < properties.min || pressure > properties.max) {
-        this.pressureError = 'Pressure must be between ' + properties.min + ' and ' + properties.max + ' ' + properties.displayUnits;
-        return;
+    if(this.saturatedPropertiesForm.status == 'INVALID'){
+      this.output = {
+        saturatedPressure: 0,
+        saturatedTemperature: 0,
+        liquidEnthalpy: 0,
+        gasEnthalpy: 0,
+        evaporationEnthalpy: 0,
+        liquidEntropy: 0,
+        gasEntropy: 0,
+        evaporationEntropy: 0,
+        liquidVolume: 0,
+        gasVolume: 0,
+        evaporationVolume: 0
       }
-      this.input.saturatedPressure = pressure;
-    } else {
-      const temperature = this.saturatedPropertiesForm.controls.saturatedTemperature.value;
-      const properties = this.temperatureCheck[this.settings.steamTemperatureMeasurement];
-      if (temperature < properties.min || temperature > properties.max) {
-        this.temperatureError = 'Temperature must be between ' + properties.min + ' and ' + properties.max + ' ' + properties.displayUnits;
-        return;
-      }
-      this.input.saturatedTemperature = temperature;
     }
-    // this.output = this.steamService.saturatedProperties(this.input, this.saturatedPropertiesForm.controls.pressureOrTemperature.value, this.settings);
-
-    this.emitCalculate.emit(this.input);
+    this.emitCalculate.emit(this.saturatedPropertiesForm);
   }
 
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
 
   getDisplayUnit(unit: string) {
     return this.steamService.getDisplayUnit(unit);
   }
 
-}
 
+  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
+    let minTemp: number, maxTemp: number, minPressure: number, maxPressure: number;
+    if (this.settings.steamTemperatureMeasurement == 'F') {
+      minTemp = 32;
+      maxTemp = 705.1;
+    } else {
+      minTemp = 0;
+      maxTemp = 373.9;
+    }
 
-interface Properties {
-  readonly min: number;
-  readonly max: number;
-  readonly displayUnits: string;
-  readonly type?: string;
-}
+    if (this.settings.steamPressureMeasurement == 'psi') {
+      minPressure = 0.2;
+      maxPressure = 3200.1;
+    } else if (this.settings.steamPressureMeasurement == 'kPa') {
+      minPressure = 1;
+      maxPressure = 22064;
+    } else if (this.settings.steamPressureMeasurement == 'bar') {
+      minPressure = 0.01;
+      maxPressure = 220.64;
+    }
+    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure }
+  }
 
-interface TemperatureProperties {
-  readonly F: Properties;
-  readonly C: Properties;
-}
-
-interface PressureProperties {
-  readonly psi: Properties;
-  readonly kPa: Properties;
-  readonly bar: Properties;
 }

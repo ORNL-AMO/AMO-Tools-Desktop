@@ -1,57 +1,30 @@
-<div class="calc-help" style="margin-top: 0px;">
-  <div class="help-content">
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Saturated Properties
+    <br>
+    <small class="text-muted">Calculates the properties of saturated steam under various conditions.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-    <div class="card" *ngIf="currentField == 'pressure'">
-      <div class="card-header">
-        Saturated Pressure
-      </div>
-      <div class="card-block">
-        <label>
-          <u>
-            <strong>Description</strong>
-          </u>
-        </label>
-        <p>
-          Absolute Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase change.
-        </p>
-        <label>
-          <u>
-            <strong>Input</strong>
-          </u>
-        </label>
-        <p>
-          Units:
-          <strong> kPa </strong>or
-          <strong> psi </strong>
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'temp'">
-      <div class="card-header">
-        Saturated Temperature
-      </div>
-      <div class="card-block">
-        <label>
-          <u>
-            <strong>Description</strong>
-          </u>
-        </label>
-        <p>
-          Temperature of the steam. Temperature cannot be above the critical point, as there is no longer a phase change.
-        </p>
-        <label>
-          <u>
-            <strong>Input</strong>
-          </u>
-        </label>
-        <p>
-          Units:
-          <strong> &#8451; </strong>or
-          <strong> &#8457;</strong>
-        </p>
-      </div>
-    </div>
-
+  <div class="my-2" *ngIf="currentField == 'saturatedPressure'">
+    <h6>
+      Header Pressure
+      <br>
+      <small class="text-muted">
+        Absolute Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase change.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'saturatedTemperature'">
+    <h6>
+      Saturated Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the steam. Temperature cannot be above the critical point, as there is no longer a phase change.
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>

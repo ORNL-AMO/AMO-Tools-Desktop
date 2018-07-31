@@ -41,11 +41,6 @@ export class SaturatedPropertiesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
-    this.saturatedPropertiesForm = this.formBuilder.group({
-      'pressureOrTemperature': [0, Validators.required],
-      'saturatedPressure': [0, Validators.required],
-      'saturatedTemperature': [0, Validators.required]
-    });
 
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
@@ -57,20 +52,9 @@ export class SaturatedPropertiesComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
-    this.saturatedPropertiesOutput = {
-      saturatedPressure: 0,
-      saturatedTemperature: 0,
-      liquidEnthalpy: 0,
-      gasEnthalpy: 0,
-      evaporationEnthalpy: 0,
-      liquidEntropy: 0,
-      gasEntropy: 0,
-      evaporationEntropy: 0,
-      liquidVolume: 0,
-      gasVolume: 0,
-      evaporationVolume: 0
-    };
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.getForm();
+    this.calculate(this.saturatedPropertiesForm);
   }
 
   ngAfterViewInit() {
@@ -79,6 +63,14 @@ export class SaturatedPropertiesComponent implements OnInit {
       this.getChartHeight();
       this.changeDetectorRef.detectChanges();
     }, 100)
+  }
+
+  getForm() {
+    this.saturatedPropertiesForm = this.formBuilder.group({
+      'pressureOrTemperature': [0, Validators.required],
+      'saturatedPressure': ['', Validators.required],
+      'saturatedTemperature': ['']
+    });
   }
 
   setTab(str: string) {
@@ -90,7 +82,6 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   getChartWidth() {
-    console.log('get');
     if (this.lineChartContainer) {
       this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
     }
@@ -107,20 +98,32 @@ export class SaturatedPropertiesComponent implements OnInit {
       this.chartContainerHeight = 800;
     }
   }
-
-  setPressureOrTemperature(val: number) {
-    this.pressureOrTemperature = val;
-    if (val == 1) {
-      this.setField('temp');
+  calculate(form: FormGroup) {
+    let input: SaturatedPropertiesInput = {
+      saturatedTemperature: form.controls.saturatedTemperature.value,
+      saturatedPressure: form.controls.saturatedPressure.value,
     }
-    else {
-      this.setField('pressure');
+    this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
+    if (this.saturatedPropertiesForm.status == 'VALID') {
+      this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+      this.plotReady = true;
     }
   }
 
-  calculate(input: SaturatedPropertiesInput) {
-    this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
-    this.plotReady = true;
+  getEmptyResults(): SaturatedPropertiesOutput {
+    return {
+      saturatedPressure: 0,
+      saturatedTemperature: 0,
+      liquidEnthalpy: 0,
+      gasEnthalpy: 0,
+      evaporationEnthalpy: 0,
+      liquidEntropy: 0,
+      gasEntropy: 0,
+      evaporationEntropy: 0,
+      liquidVolume: 0,
+      gasVolume: 0,
+      evaporationVolume: 0
+    };
   }
 
   addRow() {
