@@ -27,7 +27,11 @@ export class TurbineResultsComponent implements OnInit {
   }
   getDisplayUnit(unit: string) {
     if (unit) {
-      return this.steamService.getDisplayUnit(unit);
+      if (unit != 'kWh') {
+        return this.steamService.getDisplayUnit(unit);
+      }else{
+        return 'kW'
+      }
     } else {
       return unit;
     }

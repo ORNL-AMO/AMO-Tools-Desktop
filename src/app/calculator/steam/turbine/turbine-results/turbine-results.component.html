@@ -66,7 +66,9 @@
     </tr>
     <tr>
       <td class="bold w-50">Power Out</td>
-      <td class="text-center w-50">{{results.powerOut |sigFigs: '6'}} <span [innerHTML]="getDisplayUnit(settings.steamPowerMeasurement)"></span>/hr
+      <td class="text-center w-50">{{results.powerOut |sigFigs: '6'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamPowerMeasurement)"></span>
+        <span *ngIf="settings.steamPowerMeasurement != 'kWh'">/hr</span>
       </td>
     </tr>
   </tbody>
