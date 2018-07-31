@@ -352,6 +352,7 @@ export class SteamService {
     //energy flow
     results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings);
     results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
+    results.heatLoss = this.convertEnergyFlowOutput(results.heatLoss, settings);
     return results;
 
   }
