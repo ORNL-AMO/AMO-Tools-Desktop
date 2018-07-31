@@ -1,9 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
-import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
-import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import { CalculatorService } from '../calculator/calculator.service';
 @Component({
@@ -34,10 +32,6 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
-  selectedCalcTypeSub: Subscription;
-  selectedCalculatorType: string;
-  selectedCalcSub: Subscription;
-  selectedCalculator: string;
   constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
 
   ngOnInit() {
@@ -51,19 +45,10 @@ export class SidebarComponent implements OnInit {
       this.isUpdateAvailable = val;
     })
 
-    this.selectedCalcTypeSub = this.calculatorService.selectedToolType.subscribe(calcType => {
-      this.selectedCalculatorType = calcType;
-    })
-
-    this.selectedCalcSub = this.calculatorService.selectedTool.subscribe(calculator => {
-      this.selectedCalculator = calculator;
-    })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
-    this.selectedCalcSub.unsubscribe();
-    this.selectedCalcSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -76,7 +61,7 @@ export class SidebarComponent implements OnInit {
           }
         }
       }
-    } 
+    }
     if (this.firstChange) {
       this.firstChange = false;
     }
@@ -97,17 +82,12 @@ export class SidebarComponent implements OnInit {
       this.selectedDirectoryId = null;
     }
   }
-  chooseCalculator(str: string) {
-    this.assessmentService.dashboardView.next('calculator');
-    this.calculatorService.selectedToolType.next(str);
-    this.calculatorService.selectedTool.next('none');
-  }
 
   getDirectory() {
     return this.directory;
   }
 
-  changeDashboardView(str: string){
+  changeDashboardView(str: string) {
     this.assessmentService.dashboardView.next(str);
   }
 
@@ -133,9 +113,5 @@ export class SidebarComponent implements OnInit {
   closeVersionModal() {
     this.openModal.emit(false);
     this.showVersionModal = false;
-  }
-
-  selectCalculator(str: string){
-    this.calculatorService.selectedToolType.next(str);
   }
 }

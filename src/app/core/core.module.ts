@@ -47,6 +47,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
 import { CoreService } from './core.service';
+import { CalculatorListComponent } from '../sidebar/calculator-list/calculator-list.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { CoreService } from './core.service';
     UpdateModalComponent,
     VersionModalComponent,
     MeasurComponent,
-    OpeningTutorialComponent
+    OpeningTutorialComponent,
+    CalculatorListComponent
   ],
   imports: [
     CommonModule,
