@@ -18,6 +18,7 @@
       <td class="text-center w-50">
         <span *ngIf="results.quality == 0">Liquid</span>
         <span *ngIf="results.quality == 1">Gas</span>
+        <span *ngIf="results.quality != 0 && results.quality != 1">{{results.quality}}</span>
       </td>
     </tr>
     <tr>
