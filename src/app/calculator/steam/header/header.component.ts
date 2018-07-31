@@ -39,9 +39,11 @@ export class HeaderComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
-  changeField(str: string, index: number) {
+  changeField(str: string, index?: number) {
     this.currentField = str;
-    this.inletThermoQuantity = this.inletForms[index].controls.thermodynamicQuantity.value;
+    if (index) {
+      this.inletThermoQuantity = this.inletForms[index].controls.thermodynamicQuantity.value;
+    }
   }
 
   getForms() {

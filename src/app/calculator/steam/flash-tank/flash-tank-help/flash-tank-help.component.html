@@ -2,7 +2,8 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">Determines the mass flows and properties of any resulting outlet gas and/or liquid for given inlet conditions.
+    <small class="text-muted">A flash tank is used to capture the steam generated at high pressure, high temperature liquid has its pressure reduced
+      causing some of the liquid to vaporize, known as flashing.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -22,7 +23,7 @@
       Inlet Water Pressure
       <br>
       <small class="text-muted">
-        NEEDED
+        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
         <hr>
       </small>
     </h6>
@@ -47,7 +48,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the inlet steam.
         <hr>
       </small>
     </h6>
@@ -55,16 +57,45 @@
 
   <div class="my-2" *ngIf="currentField == 'quantityValue'">
     <h6>
-      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
-      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
-      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
-      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
-      Value
-      <br>
-      <small class="text-muted">
-        NEEDED
-        <hr>
-      </small>
+      <div *ngIf="thermodynamicQuantity == 0">
+        <span>Temperature</span>
+        Value
+        <br>
+        <small class="text-muted">
+          The temperature at the inlet. If below boiling point, inlet will be a liquid.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 1">
+        <span>Specific Enthalpy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          compared to the standard state, in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 2">
+        <span>Specific Entropy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 3">
+        <span>Saturated Quality</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          between 0 and 1 indicates mixed flow (both liquid and vapor).
+          <hr>
+        </small>
+      </div>
     </h6>
     <div class="w-100 justify-content-center">
       <table class="table table-hover table-striped">
@@ -91,7 +122,8 @@
       Inlet Water Mass Flow
       <br>
       <small class="text-muted">
-        NEEDED
+        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost
+        or gained.
         <hr>
       </small>
     </h6>
@@ -116,7 +148,7 @@
       Tank Pressure
       <br>
       <small class="text-muted">
-        NEEDED
+        Pressure of flash tank and outlet gas and liquid. Must be below Inlet Pressure.
         <hr>
       </small>
     </h6>
