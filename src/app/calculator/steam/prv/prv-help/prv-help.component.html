@@ -46,7 +46,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the generated steam.
         <hr>
       </small>
     </h6>
@@ -170,7 +171,7 @@
       With or Without Desuperheating
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose whether your PRV contains desuperheating.
         <hr>
       </small>
     </h6>
@@ -207,7 +208,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the generated steam.
         <hr>
       </small>
     </h6>
@@ -264,10 +266,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
+              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
             </td>
             <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
+              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
             </td>
           </tr>
         </tbody>

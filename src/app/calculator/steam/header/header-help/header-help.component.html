@@ -58,7 +58,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the generated steam.
         <hr>
       </small>
     </h6>
@@ -66,7 +67,7 @@
 
   <div class="my-2" *ngIf="currentField == 'quantityValue'">
     <h6>
-      <div *ngIf="feedwaterThermodynamicQuantity == 0">
+      <div *ngIf="thermodynamicQuantity == 0">
         <span>Temperature</span>
         Value
         <br>
@@ -75,7 +76,7 @@
           <hr>
         </small>
       </div>
-      <div *ngIf="feedwaterThermodynamicQuantity == 1">
+      <div *ngIf="thermodynamicQuantity == 1">
         <span>Specific Enthalpy</span>
         Value
         <br>
@@ -85,7 +86,7 @@
           <hr>
         </small>
       </div>
-      <div *ngIf="feedwaterThermodynamicQuantity == 2">
+      <div *ngIf="thermodynamicQuantity == 2">
         <span>Specific entropy</span>
         Value
         <br>
@@ -95,7 +96,7 @@
           <hr>
         </small>
       </div>
-      <div *ngIf="feedwaterThermodynamicQuantity == 3">
+      <div *ngIf="thermodynamicQuantity == 3">
         <span>Saturated Quality</span>
         Value
         <br>
@@ -155,7 +156,8 @@
       Inlet Mass Flow
       <br>
       <small class="text-muted">
-          Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost or gained. 
+        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost
+        or gained.
         <hr>
       </small>
     </h6>
