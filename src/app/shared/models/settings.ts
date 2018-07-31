@@ -18,6 +18,7 @@ export interface Settings {
     steamSpecificVolumeMeasurement?: string,
     steamMassFlowMeasurement?: string,
     steamEnergyMeasurement?: string,
+    steamPowerMeasurement?: string,
     fanPressureMeasurement?: string,
     fanFlowRate?: string,
     fanPowerMeasurement?: string,

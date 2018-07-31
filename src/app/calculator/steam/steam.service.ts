@@ -464,9 +464,12 @@ export class SteamService {
       }
     }
     let results: TurbineOutput = steamAddon.turbine(input);
-    results.massFlow = this.convertSteamMassFlowOutput(results.massFlow, settings);
+    //comes back as tonnes
+    results.massFlow = this.convertUnitsService.value(results.massFlow).from('tonne').to(settings.steamMassFlowMeasurement);
     results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
     results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings);
+    results.energyOut = this.convertEnergyFlowOutput(results.energyOut, settings);
+    results.powerOut = this.convertUnitsService.value(results.powerOut).from('MJ').to(settings.steamPowerMeasurement);
     results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
     results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletSpecificEnthalpy, settings);
@@ -475,6 +478,7 @@ export class SteamService {
     results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEntropy, settings);
     results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
     results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
+
     return results;
   }
 
