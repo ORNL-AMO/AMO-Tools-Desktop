@@ -93,8 +93,14 @@ export class SteamService {
 
     output.gasEntropy = this.convertUnitsService.value(output.gasEntropy).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
     output.liquidEntropy = this.convertUnitsService.value(output.liquidEntropy).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
+    output.evaporationEntropy = this.convertUnitsService.value(output.evaporationEntropy).from('kJkgK').to(settings.steamSpecificEntropyMeasurement);
+
+    output.evaporationEnthalpy = this.convertUnitsService.value(output.evaporationEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
+    output.gasEnthalpy = this.convertUnitsService.value(output.gasEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
+    output.liquidEnthalpy = this.convertUnitsService.value(output.liquidEnthalpy).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement);
 
     output.saturatedPressure = this.convertUnitsService.value(output.saturatedPressure).from('MPa').to(settings.steamPressureMeasurement);
+    
     output.saturatedTemperature = this.convertUnitsService.value(output.saturatedTemperature - 273.15).from('C').to(settings.steamTemperatureMeasurement);
 
     output.evaporationVolume = this.convertUnitsService.value(output.evaporationVolume).from('m3kg').to(settings.steamSpecificVolumeMeasurement);
