@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 
@@ -31,19 +31,27 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   currentField: string;
   nemaForm: FormGroup;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     if (!this.psat) {
-      this.nemaForm = this.psatService.initForm();
-      this.nemaForm.patchValue({
-        frequency: '50 Hz',
-        horsePower: '200',
-        efficiencyClass: 'Standard Efficiency',
-        motorRPM: 1200
+      this.nemaForm = this.formBuilder.group({
+        frequency: ['50 Hz', [Validators.required]],
+        horsePower: ['200', [Validators.required]],
+        efficiencyClass: ['Standard Efficiency', [Validators.required]],
+        motorRPM: [1200, [Validators.required]],
+        efficiency: ['', [Validators.min(1), Validators.max(100)]]
       })
     } else {
-      this.nemaForm = this.psatService.getFormFromPsat(this.psat.inputs);
+      let lineFreq: string = this.psatService.getLineFreqFromEnum(this.psat.inputs.line_frequency);
+      let efficiency: string = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+      this.nemaForm = this.formBuilder.group({
+        frequency: [lineFreq, [Validators.required]],
+        horsePower: [this.psat.inputs.motor_rated_power.toString(), [Validators.required]],
+        efficiencyClass: [efficiency, [Validators.required]],
+        motorRPM: [this.psat.inputs.motor_rated_speed, [Validators.required]],
+        efficiency: [this.psat.inputs.efficiency, [Validators.min(1), Validators.max(100)]]
+      })
     }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;

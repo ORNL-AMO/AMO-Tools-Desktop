@@ -30,6 +30,9 @@
           </button>
         </div>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="nemaForm.controls.motorRPM.invalid && !nemaForm.controls.motorRPM.pristine">
+        <span *ngIf="nemaForm.controls.motorRPM.errors.required">Value Required</span>
+      </span>
     </div>
 
     <div class="form-group">
@@ -43,10 +46,13 @@
       <label for="efficiency">Efficiency</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"
-          onfocus="this.select();" (focus)="focusField('efficiencyClass')" [ngClass]="{'invalid': checkEfficiency() == false}">
+          onfocus="this.select();" (focus)="focusField('efficiencyClass')">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+      <span class="alert-danger pull-right small" *ngIf="nemaForm.controls.efficiency.invalid && !nemaForm.controls.efficiency.pristine">
+        <span *ngIf="nemaForm.controls.efficiency.errors.max">Value can't be greater than {{nemaForm.controls.efficiency.errors.max.max}} %.</span>
+        <span *ngIf="nemaForm.controls.efficiency.errors.min">Value can't be less than {{nemaForm.controls.efficiency.errors.min.min}} %.</span>
+      </span>
     </div>
   </form>
 </div>
