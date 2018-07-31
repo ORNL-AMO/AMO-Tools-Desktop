@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SettingsService } from "../../../settings/settings.service";
 import { Settings } from "../../../shared/models/settings";
@@ -18,6 +18,13 @@ export class SaturatedPropertiesComponent implements OnInit {
   @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
   chartContainerHeight: number;
   chartContainerWidth: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getChartHeight();
+    this.getChartWidth();
+  }
+
 
   saturatedPropertiesForm: FormGroup;
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
@@ -67,7 +74,11 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.changeDetectorRef.detectChanges();
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.changeDetectorRef.detectChanges();
+    }, 100)
   }
 
   setTab(str: string) {
@@ -78,23 +89,22 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.currentField = str;
   }
 
-  getChartWidth(): number {
+  getChartWidth() {
+    console.log('get');
     if (this.lineChartContainer) {
       this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
-      return this.chartContainerWidth;
     }
     else {
-      return 600;
+      this.chartContainerWidth = 600;
     }
   }
 
-  getChartHeight(): number {
+  getChartHeight() {
     if (this.lineChartContainer) {
       this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .7;
-      return this.chartContainerHeight;
     }
     else {
-      return 800;
+      this.chartContainerHeight = 800;
     }
   }
 

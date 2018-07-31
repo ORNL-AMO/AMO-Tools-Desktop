@@ -190,3 +190,13 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .calc-img{
     width: 90%;
 }
+
+
+
+.standalone-calculator .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+
+  .standalone-calculator  .ng-valid:not(form) {
+    border-left: 5px solid #42A948; /* green */
+  }
