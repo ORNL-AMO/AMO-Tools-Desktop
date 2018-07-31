@@ -1,14 +1,13 @@
 <div class="d-flex h-100 modify-conditions steam steam-calculator">
-  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
-    <div #leftPanelHeader class="header mr-2 ml-2">
+  <div class="d-flex flex-column modification w-50 scroll-item mh-100">
+    <div class="header mr-2 ml-2">
       <div class="col-md-auto ico-col">
         <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
       </div>
-      <h3>Flash Tank Calculator</h3>
+      <h3>Steam Turbine Calculator</h3>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-flash-tank-form *ngIf="flashTankForm" [flashTankForm]="flashTankForm" [settings]="settings" (emitChangeField)="changeField($event)"
-        (emitCalculate)="calculate($event)"></app-flash-tank-form>
+      <app-turbine-form [turbineForm]="turbineForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-turbine-form>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -21,9 +20,10 @@
       </div>
     </div>
     <div class="d-flex">
-      <app-flash-tank-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [thermodynamicQuantity]="input.thermodynamicQuantity"></app-flash-tank-help>
+      <app-turbine-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings" [outletQuantity]="input.outletQuantity"
+        [inletQuantity]="input.inletQuantity" [turbineProperty]="input.turbineProperty"></app-turbine-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-flash-tank-results [results]="results" [settings]="settings"></app-flash-tank-results>
+        <app-turbine-results [results]="results" [settings]="settings"></app-turbine-results>
       </div>
     </div>
   </div>

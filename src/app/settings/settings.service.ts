@@ -26,6 +26,7 @@ export class SettingsService {
       'steamSpecificEnthalpyMeasurement': [''],
       'steamSpecificEntropyMeasurement': [''],
       'steamSpecificVolumeMeasurement': [''],
+      'steamPowerMeasurement': [''],
       'steamMassFlowMeasurement': [''],
       'currentMeasurement': [''],
       'viscosityMeasurement': [''],
@@ -59,6 +60,7 @@ export class SettingsService {
       'steamSpecificEntropyMeasurement': [settings.steamSpecificEntropyMeasurement],
       'steamSpecificVolumeMeasurement': [settings.steamSpecificVolumeMeasurement],
       'steamMassFlowMeasurement': [settings.steamMassFlowMeasurement],
+      'steamPowerMeasurement': [settings.steamPowerMeasurement || 'MMBtu'],
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
@@ -103,6 +105,7 @@ export class SettingsService {
       steamSpecificEntropyMeasurement: form.controls.steamSpecificEntropyMeasurement.value,
       steamSpecificVolumeMeasurement: form.controls.steamSpecificVolumeMeasurement.value,
       steamMassFlowMeasurement: form.controls.steamMassFlowMeasurement.value,
+      steamPowerMeasurement: form.controls.steamPowerMeasurement.value,
       currentMeasurement: form.controls.currentMeasurement.value,
       viscosityMeasurement: form.controls.viscosityMeasurement.value,
       voltageMeasurement: form.controls.voltageMeasurement.value,
@@ -149,6 +152,7 @@ export class SettingsService {
       steamSpecificEntropyMeasurement: settings.steamSpecificEntropyMeasurement,
       steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
       steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
+      steamPowerMeasurement: settings.steamPowerMeasurement || 'MMBtu',
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -203,7 +207,8 @@ export class SettingsService {
         fanBarometricPressure: 'inHg',
         fanSpecificHeatGas: 'btulbF',
         fanTemperatureMeasurement: 'F',
-        steamEnergyMeasurement: 'MMBtu'
+        steamEnergyMeasurement: 'MMBtu',
+        steamPowerMeasurement: 'MMBtu'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -233,7 +238,8 @@ export class SettingsService {
         fanBarometricPressure: 'kPa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
-        steamEnergyMeasurement: 'kWh'
+        steamEnergyMeasurement: 'kWh', 
+        steamPowerMeasurement: 'MJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

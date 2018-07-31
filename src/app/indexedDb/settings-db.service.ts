@@ -77,6 +77,10 @@ export class SettingsDbService {
       settings.steamMassFlowMeasurement = 'klb';
     }
 
+    if (!settings.steamPowerMeasurement) {
+      settings.steamPowerMeasurement = 'MMBtu';
+    }
+
     if (!settings.steamEnergyMeasurement) {
       settings.steamEnergyMeasurement = 'MMBtu';
     }
