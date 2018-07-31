@@ -8,27 +8,18 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div #ngChart></div>
+  <div class="d-flex w-100 h-100 justify-content-center align-items-center" #ngChart></div>
+  <div id="gridToggle" class="d-flex">
+    <div class="p-2">
+      <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
+      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
+        [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
     </div>
-  </div>
+    <div class="p-2">
+      <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+      <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
+        [adjustLeft]="94" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
 
-  <!-- this is original graph button container -->
-  <!-- <div id="gridToggle" class="col-md-2"> -->
-  <!-- be sure to change "col-md-2" to "col-md-12" to fit the tooltip -->
-  <div class="row">
-    <div id="gridToggle" class="col-md-12">
-      <div>
-        <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
-        <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
-          [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
-      </div>
-      <div>
-        <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
-        <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-          [adjustLeft]="94" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
-      </div>
     </div>
   </div>
 </div>

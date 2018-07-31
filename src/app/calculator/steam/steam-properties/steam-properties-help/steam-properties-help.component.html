@@ -1,3 +1,81 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Steam Properties
+    <br>
+    <small class="text-muted"> Calculates the properties of steam under various conditions.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Pressure
+      <br>
+      <small class="text-muted">
+        Absolute Pressure of the steam.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'quantityType'">
+    <h6>
+      Quantity Type
+      <br>
+      <small class="text-muted">
+        To determine steam and liquid water properties, a second state variable, in addition to pressure is required.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'temp'">
+    <h6>
+      Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the steam.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'enthalpy'">
+    <h6>
+      Specific Enthalpy
+      <br>
+      <small class="text-muted">
+        Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+        compared to the standard state, in terms of mass.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'entropy'">
+    <h6>
+      Specific Entropy
+      <br>
+      <small class="text-muted">
+        Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+        compared to the standard state, in terms of mass.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'quality'">
+    <h6>
+      Quality
+      <br>
+      <small class="text-muted">
+        Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+</div>
+
+<!-- 
+
 <div class="calc-help" style="margin-top: 0px;">
   <div class="help-content">
 
@@ -142,4 +220,4 @@
 
 
   </div>
-</div>
+</div> -->
