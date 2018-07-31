@@ -200,3 +200,7 @@ a:not([href]):not([tabindex]).disabled-link:hover{
   .standalone-calculator  .ng-valid:not(form) {
     border-left: 5px solid #42A948; /* green */
   }
+
+.standalone-calculator .header h3, .stand-alone-calc .tabs.primary .panel-tab-item a{
+    font-size: 20px;
+}
