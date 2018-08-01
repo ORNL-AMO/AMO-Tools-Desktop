@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-motor-performance-form',
@@ -48,6 +48,7 @@ export class MotorPerformanceFormComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
+    this.setRpmValidation();
   }
 
   modifyPowerArrays() {
@@ -74,6 +75,11 @@ export class MotorPerformanceFormComponent implements OnInit {
         this.options = this.kWatts;
       }
     }
+
+    if(this.performanceForm.controls.efficiencyClass.value == 'Specified'){
+      this.performanceForm.controls.efficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    }
+    this.setRpmValidation();
   }
 
   changePowerArrays() {
@@ -101,47 +107,37 @@ export class MotorPerformanceFormComponent implements OnInit {
     this.emitChange();
   }
 
-  checkEfficiency() {
-    // if (this.tmpEfficiency > 100) {
-    //   this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
-    //   return false;
-    // }
-    // else if (this.tmpEfficiency == 0) {
-    //   this.efficiencyError = "Cannot have 0% efficiency";
-    //   return false;
-    // }
-    // else if (this.tmpEfficiency < 0) {
-    //   this.efficiencyError = "Cannot have negative efficiency";
-    //   return false;
-    // }
-    // else {
-    //   this.efficiencyError = null;
-    //   return true;
-    // }
-  }
+  setRpmValidation() {
+    if (this.performanceForm.controls.efficiencyClass.value == 'Standard Efficiency' || this.performanceForm.controls.efficiencyClass.value == 'Energy Efficient') {
+      if (this.performanceForm.controls.frequency.value == '60 Hz') {
+        this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(540)]);
+        this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
+        if (this.performanceForm.controls.motorRPM.value) {
+          this.performanceForm.controls.motorRPM.markAsDirty();
+        }
+      } else if (this.performanceForm.controls.frequency.value == '50 Hz') {
+        this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(450)]);
+        this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
+        if (this.performanceForm.controls.motorRPM.value) {
+          this.performanceForm.controls.motorRPM.markAsDirty();
+        }
+      }
+    } else if (this.performanceForm.controls.efficiencyClass.value == 'Premium Efficient') {
+      if (this.performanceForm.controls.frequency.value == '60 Hz') {
+        this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(1080)]);
+        this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
+        if (this.performanceForm.controls.motorRPM.value) {
+          this.performanceForm.controls.motorRPM.markAsDirty();
+        }
+      } else if (this.performanceForm.controls.frequency.value == '50 Hz') {
+        this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(900)]);
+        this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
+        if (this.performanceForm.controls.motorRPM.value) {
+          this.performanceForm.controls.motorRPM.markAsDirty();
+        }
+      }
+    }
 
-  checkRPM() {
-    // if (this.tmpEfficiencyClass == 'Standard Efficiency' || this.tmpEfficiencyClass == 'Energy Efficient') {
-    //   if (this.tmpFrequency == '60 Hz' && this.tmpMotorRpm < 540) {
-    //     this.rpmError = 'Motor RPM too small for selected efficiency class';
-    //     return false;
-    //   } else if (this.tmpFrequency == '50 Hz' && this.tmpMotorRpm < 450) {
-    //     this.rpmError = 'Motor RPM too small for selected efficiency class';
-    //     return false;
-    //   }
-    // }
-    // if (this.tmpEfficiencyClass == 'Premium Efficient') {
-    //   if (this.tmpFrequency == '60 Hz' && this.tmpMotorRpm < 1080) {
-    //     this.rpmError = 'Motor RPM too small for selected efficiency class';
-    //     return false;
-    //   } else if (this.tmpFrequency == '50 Hz' && this.tmpMotorRpm < 900) {
-    //     this.rpmError = 'Motor RPM too small for selected efficiency class';
-    //     return false;
-    //   }
-    // }
-    // this.emitChange();
-    // this.rpmError = null;
-    return true;
   }
 
   focusField(str: string) {

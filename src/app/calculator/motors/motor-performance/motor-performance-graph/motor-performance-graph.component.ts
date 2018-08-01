@@ -314,22 +314,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.performanceForm.controls.frequency.status == 'VALID' &&
-      this.performanceForm.controls.horsePower.status == 'VALID' &&
-      this.performanceForm.controls.motorRPM.status == 'VALID' &&
-      this.performanceForm.controls.efficiencyClass.status == 'VALID' &&
-      this.performanceForm.controls.motorVoltage.status == 'VALID' &&
-      this.performanceForm.controls.fullLoadAmps.status == 'VALID'
-    ) {
-      if (this.performanceForm.controls.efficiencyClass.value != '' || this.performanceForm.controls.efficiencyClass.value != undefined) {
-        if (
-          this.performanceForm.controls.efficiency.status == 'VALID'
-        ) {
-          return true;
-        }
-      } else {
-        return true;
-      }
+    if (this.performanceForm.status == 'VALID') {
+      return true
+    }
+    else {
+      return true;
     }
   }
 

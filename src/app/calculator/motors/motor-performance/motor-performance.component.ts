@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
@@ -78,24 +78,25 @@ export class MotorPerformanceComponent implements OnInit {
   getForm(){
     if (!this.psat) {
       this.performanceForm = this.formBuilder.group({
-        frequency: this.psatService.getLineFreqFromEnum(0),
-        horsePower: '200',
-        motorRPM: 1780,
-        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(1),
-        motorVoltage: 460,
-        fullLoadAmps: 225.4,
-        sizeMargin: 1
+        frequency: [this.psatService.getLineFreqFromEnum(0), [Validators.required]],
+        horsePower: ['200', [Validators.required]],
+        motorRPM: [1780, [Validators.required]],
+        efficiencyClass: [this.psatService.getEfficiencyClassFromEnum(1), [Validators.required]],
+        motorVoltage: [460, [Validators.required]],
+        fullLoadAmps: [225.4, [Validators.required]],
+        sizeMargin: [1, [Validators.required]],
+        efficiency: [0, [Validators.min(0), Validators.max(100)]]
       });
     } else {
-      this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
       this.performanceForm = this.formBuilder.group({
-        frequency: this.psatService.getLineFreqFromEnum(this.psat.inputs.line_frequency),
-        horsePower: this.psat.inputs.motor_rated_power.toString(),
-        motorRPM: this.psat.inputs.motor_rated_speed,
-        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class),
-        motorVoltage: this.psat.inputs.motor_rated_voltage,
-        fullLoadAmps: this.psat.inputs.motor_rated_fla,
-        sizeMargin: this.psat.inputs.margin
+        frequency: [this.psatService.getLineFreqFromEnum(this.psat.inputs.line_frequency), [Validators.required]],
+        horsePower: [this.psat.inputs.motor_rated_power.toString(), [Validators.required]],
+        motorRPM: [this.psat.inputs.motor_rated_speed, [Validators.required]],
+        efficiencyClass: [this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class), [Validators.required]],
+        motorVoltage: [this.psat.inputs.motor_rated_voltage, [Validators.required]],
+        fullLoadAmps: [this.psat.inputs.motor_rated_fla, [Validators.required]],
+        sizeMargin: [this.psat.inputs.margin, [Validators.required]],
+        efficiency: [this.psat.inputs.efficiency, [Validators.min(0), Validators.max(100)]]
       });
     }
 
