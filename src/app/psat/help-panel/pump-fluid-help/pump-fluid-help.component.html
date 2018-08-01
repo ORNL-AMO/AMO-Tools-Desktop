@@ -1,212 +1,330 @@
-<div class="help-header">
-
-  <h3>Enter measured data to calculate your system's annual savings potential.</h3>
-  <!-- <p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering pump/fluid data.
-  </p> -->
-
-</div>
-
-
-<div class="help-content">
-
-
-  <div class="card" *ngIf="currentField == 'pumpType'">
-    <div class="card-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Pump &amp; Fluid Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'pumpType'">
+    <h6>
       Pump Type
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000. <br><br>        This value will be used to estimate achievable pump efficiencies based on pump style and operating conditions.
-      </p>
-      <label><u><strong>Input</strong></u></label><br>
-      <label>
-        Options: </label>
-      <ul style="list-style: none;">
-        <li> <strong>End Suction Slurry</strong><br> </li>
-        <li> <strong>End Suction Sewage</strong><br> </li>
-        <li> <strong>End Suction Stock</strong><br> </li>
-        <li> <strong>End Suction Submersible Sewage</strong><br> </li>
-        <li> <strong>API double Suction</strong><br> </li>
-        <li> <strong>Multistage Boiler Feed</strong><br> </li>
-        <li> <strong>End Suction ANSI/API</strong><br> </li>
-        <li> <strong>Axial Flow</strong><br> </li>
-        <li> <strong>Double Suction</strong><br> </li>
-        <li> <strong>Vertical Turbine</strong><br> </li>
-        <li> <strong>Large End Suction</strong><br> </li>
-        <li> <strong>Specified Optimal eff (below)</strong> </li>
-      </ul>
-    </div>
+      <br>
+      <small class="text-muted">
+        Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
+        <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating conditions.
+        <hr>
+      </small>
+    </h6>
+    <!-- <div class="w-100">
+      <label class="group-label w-100">Pump Type Options</label>
+      <div class="d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td class="text-center">End Suction Slurry</td>
+            </tr>
+            <tr>
+              <td class="text-center">End Suction Sewage</td>
+            </tr>
+            <tr>
+              <td class="text-center">End Suction Stock</td>
+            </tr>
+            <tr>
+              <td class="text-center">End Suction Submersible Sewage</td>
+            </tr>
+            <tr>
+              <td class="text-center">API Double Suction</td>
+            </tr>
+            <tr>
+              <td class="text-center">Multistage Boiler Feed</td>
+            </tr>
+            <tr>
+              <td class="text-center">End Suction ANSI/API</td>
+            </tr>
+            <tr>
+              <td class="text-center">Axial Flow</td>
+            </tr>
+            <tr>
+              <td class="text-center">Double Suction</td>
+            </tr>
+            <tr>
+              <td class="text-center">Vertical Turbine</td>
+            </tr>
+            <tr>
+              <td class="text-center">Large End Suction</td>
+            </tr>
+            <tr>
+              <td class="text-center">Specified Optimal eff (below)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> -->
   </div>
 
-  <div class="card" *ngIf="currentField == 'specifiedPumpEfficiency'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'specifiedPumpEfficiency'">
+    <h6>
       Specified Pump Efficiency
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        The specified pump efficiency input is only displayed when the pump style is "Selected optimal eff (below)".<br><br>
-        The input value would normally be the pump efficiency at the specified operating conditions (under the Field
-        data section), as opposed to the best efficiency point flow rate.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Percent (%)</strong><br>
-        Minimum Value Allowed: <strong>0</strong><br>
-        Maximum Value Allowed: <strong>100</strong><br>
-      </p>
+      <br>
+      <small class="text-muted">
+        The specified pump efficiency input is only displayed when the pump style is "Selected optimal eff (below)".
+        <br> The input value would normally be the pump efficiency at the specified operating conditions (under the Field data
+        section), as opposed to the best efficiency point flow rate.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Unit</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">%</td>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'pumpRPM'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'pumpRPM'">
+    <h6>
       Pump Speed
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow rate, head, and
         number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency penalty
         associated with the particular pump application.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>RPM</strong><br> Minimum Value Allowed (Direct Drive): <strong>540</strong><br> Maximum Value Allowed (Direct Drive): <strong>3960</strong><br>
-         Minimum Value Allowed (Belt Drives): <strong>1</strong><br> Maximum Value Allowed (Belt Drives): <strong>&mdash;</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Drive Type</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">Direct Drive</td>
+            <td class="text-center">540</td>
+            <td class="text-center">3960</td>
+          </tr>
+          <tr>
+            <td class="text-center">Belt Drives</td>
+            <td class="text-center">1</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'drive'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'drive'">
+    <h6>
       Drive
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven.  There are three options for
-        belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives.  Of the three, V-Belt drives are the least efficient, Notched V-Belts are slightly better, and Synchronous
-        Belts are the most efficient belts.
-      </p>
-      <p>
-        This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if adjustable
-        frequency drives are used.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Options: <strong>Direct Drive, V-Belt Drive, Notched V-Belt</strong> or <strong>Synchronous Drive</strong>
-      </p>
-    </div>
+      <br>
+      <small class="text-muted">
+        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven. There
+        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt drives
+        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient belts.
+        <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if
+        adjustable frequency drives are used.
+        <hr> Drive options include
+        <u>Direct Drive</u>,
+        <u>V-Belt Drive</u>,
+        <u>Notched V-Belt</u>, or
+        <u>Synchronous Drive</u>.
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'fluidType'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'fluidType'">
+    <h6>
       Fluid Type
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         Fluid Type is the type of fluid in your system.
-      </p>
-      <label><u><strong>Input</strong></u></label><br>
-      <label>
-        Options: </label>
-      <ul style="list-style: none;">
-        <li> <strong>Acetone</strong><br> </li>
-        <li> <strong>Ammonia</strong><br> </li>
-        <li> <strong>Dichlorodifluoromethane refrigerant R-12</strong><br> </li>
-        <li> <strong>Ethanol</strong><br> </li>
-        <li> <strong>Ethylene glycol</strong><br> </li>
-        <li> <strong>Glycerine (glycerol)</strong><br> </li>
-        <li> <strong>Kerosene - jet fuel</strong><br> </li>
-        <li> <strong>Methanol</strong><br> </li>
-        <li> <strong>n-Octane</strong><br> </li>
-        <li> <strong>Other (define your own k. viscosity)</strong><br> </li>
-        <li> <strong>Petroleum</strong><br> </li>
-        <li> <strong>Water</strong> </li>
-      </ul>
-    </div>
+        <hr>
+      </small>
+    </h6>
+    <!-- <div class="w-100">
+      <label class="group-label w-100">Pump Type Options</label>
+      <div class="d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td class="text-center">Acetone</td>
+            </tr>
+            <tr>
+              <td class="text-center">Ammonia</td>
+            </tr>
+            <tr>
+              <td class="text-center">Dichlorodifluoromethane refrigerant R-12</td>
+            </tr>
+            <tr>
+              <td class="text-center">Ethanol</td>
+            </tr>
+            <tr>
+              <td class="text-center">Ethylene glycol</td>
+            </tr>
+            <tr>
+              <td class="text-center">Glycerine (glycerol)</td>
+            </tr>
+            <tr>
+              <td class="text-center">Kerosene - jet fuel</td>
+            </tr>
+            <tr>
+              <td class="text-center">Methanol</td>
+            </tr>
+            <tr>
+              <td class="text-center">n-Octane</td>
+            </tr>
+            <tr>
+              <td class="text-center">Other (define your own k. viscosity)</td>
+            </tr>
+            <tr>
+              <td class="text-center">Petroleum</td>
+            </tr>
+            <tr>
+              <td class="text-center">Water</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> -->
   </div>
 
-  <div class="card" *ngIf="currentField == 'fluidTemperature'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'fluidTemperature'">
+    <h6>
       Fluid Temperature
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         Fluid Temperature is the average temperature of the fluid in your system.
-      </p>
-      <p>
-        This is used in combination with properties of the fluid itself to calculate specific gravity.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Suggested Minimum: <strong>Fluid Freezing Point</strong><br> Suggested Maximum: <strong>Fluid Boiling Point</strong><br>
-      </p>
+        <br> This is used in combination with properties of the fluid itself to calculate specific gravity.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Suggested Minimum</th>
+            <th class="text-center">Suggested Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">Fluid Freezing Point</td>
+            <td class="text-center">Fluid Boiling Point</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'specificGravity'">
-    <div class="card-header">
+
+
+  <div class="my-2" *ngIf="currentField == 'specificGravity'">
+    <h6>
       Specific Gravity
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         Specific Gravity is the ratio of the density of the fluid to water at standard condition.
-      </p>
-      <p>
-        This is used in calculating the fluid power at the specified pump flow rate and head conditions. This can be found
+        <br> This is used in calculating the fluid power at the specified pump flow rate and head conditions. This can be found
         through fluid property tables.
-      </p>
-      <p>
-        This value is automatically calculated for the chosen fluid at the specified temperature. It can also be edited manually if desired.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong><br>
-      </p>
+        <br> This value is automatically calculated for the chosen fluid at the specified temperature. It can also be edited
+        manually if desired.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'viscosity'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'viscosity'">
+    <h6>
       Kinematic Viscosity
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         Kinematic viscosity is the ratio of absolute (or dynamic) viscosity to density - a quantity in which no force is involved.
-      </p>
-      <p>
-        This can be obtained by dividing the absolute viscosity of a fluid with the fluid mass density. It is expressed here in terms of CentiStokes.
-      </p>
-      <p>
-        This value is automatically calculated for the chosen fluid at the specified temperature. For all fluids other than water, this value is only valid at the reference temperature, usually 25 deg C (68 deg F). It can also be edited manually.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong><br>
-      </p>
+        <br> This can be obtained by dividing the absolute viscosity of a fluid with the fluid mass density. It is expressed
+        here in terms of CentiStokes.
+        <br> This value is automatically calculated for the chosen fluid at the specified temperature. For all fluids other than
+        water, this value is only valid at the reference temperature, usually 25 deg C (68 deg F). It can also be edited
+        manually.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'stages'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'stages'">
+    <h6>
       Stages
-    </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
+      <br>
+      <small class="text-muted">
         The number of pump stages. This value is used to calculate pump specific speed.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
 </div>
+
+
+
+<!-- <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering pump/fluid data.
+  </p> -->

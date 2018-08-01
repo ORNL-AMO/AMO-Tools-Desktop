@@ -47,6 +47,9 @@ export class HelpPanelComponent implements OnInit {
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+
+
+
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       if (val) {
         this.getResults();
@@ -63,9 +66,10 @@ export class HelpPanelComponent implements OnInit {
     this.psatService.modifyConditionsTab.subscribe(val => {
       this.currentTab = val;
     })
+
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.getResultsSub.unsubscribe();
   }
   ngAfterViewInit() {
