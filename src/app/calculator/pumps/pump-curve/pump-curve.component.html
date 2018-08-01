@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row calculator-panel" [ngClass]="{'psat': !isFan, 'fsat': isFan}"  *ngIf="settings && pumpCurveForm">
+<div class="modify-conditions panel-container row calculator-panel" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && pumpCurveForm">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -19,10 +19,21 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
-              [selectedFormView]="selectedFormView"></app-pump-curve-form>
+            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()"
+              (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
           </div>
         </div>
+
+
+        <!-- merging system curve to pump curve -->
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <app-system-curve-form [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo"
+              [(curveConstants)]="curveConstants" (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
+          </div>
+        </div>
+
+
       </div>
       <div class="col-6 align-top">
         <div class="help-panel">
@@ -30,8 +41,10 @@
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-              </li><!--
-              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              </li>
+              <!--
+              -->
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
@@ -44,7 +57,15 @@
             </div>
             <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
               <div class="col-11" id="pumpCurveGraph">
-                <app-pump-curve-graph [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
+
+                <!-- combined pump-system curve -->
+                <app-pump-curve-graph [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
+                  [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne"
+                  [pointTwo]="pointTwo" [curveConstants]="curveConstants" [lossCoefficient]="lossCoefficient"></app-pump-curve-graph>
+
+                <!-- original pump curve -->
+                <!-- <app-pump-curve-graph [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
+                  [selectedFormView]="selectedFormView"></app-pump-curve-graph> -->
                 <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
               </div>
               <!-- <div class="col-11">

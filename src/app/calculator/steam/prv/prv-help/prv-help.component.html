@@ -2,7 +2,8 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">Calculates the properties of steam after a pressure drop with optional desuperheating.
+    <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+      after a pressure drop.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -20,7 +21,7 @@
       Inlet Pressure
       <br>
       <small class="text-muted">
-        NEEDED
+        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
         <hr>
       </small>
     </h6>
@@ -45,7 +46,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the inlet steam.
         <hr>
       </small>
     </h6>
@@ -53,16 +55,45 @@
 
   <div class="my-2" *ngIf="currentField == 'quantityValue'">
     <h6>
-      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
-      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
-      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
-      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
-      Value
-      <br>
-      <small class="text-muted">
-        NEEDED
-        <hr>
-      </small>
+      <div *ngIf="thermodynamicQuantity == 0">
+        <span>Temperature</span>
+        Value
+        <br>
+        <small class="text-muted">
+          The temperature at the inlet. If below boiling point, inlet will be a liquid.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 1">
+        <span>Specific Enthalpy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          compared to the standard state, in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 2">
+        <span>Specific Entropy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="thermodynamicQuantity == 3">
+        <span>Saturated Quality</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          between 0 and 1 indicates mixed flow (both liquid and vapor).
+          <hr>
+        </small>
+      </div>
     </h6>
     <div class="w-100 justify-content-center">
       <table class="table table-hover table-striped">
@@ -73,10 +104,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
             </td>
             <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
             </td>
           </tr>
         </tbody>
@@ -89,7 +120,8 @@
       Inlet Mass Flow
       <br>
       <small class="text-muted">
-        NEEDED
+        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost
+        or gained.
         <hr>
       </small>
     </h6>
@@ -114,7 +146,7 @@
       Outlet Pressure
       <br>
       <small class="text-muted">
-        NEEDED
+        Outlet pressure of the PRV. Must be lower than the inlet pressure.
         <hr>
       </small>
     </h6>
@@ -139,7 +171,7 @@
       With or Without Desuperheating
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose whether your PRV contains desuperheating.
         <hr>
       </small>
     </h6>
@@ -150,7 +182,7 @@
       Feedwater Pressure
       <br>
       <small class="text-muted">
-        NEEDED
+        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
         <hr>
       </small>
     </h6>
@@ -176,7 +208,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        the generated steam.
         <hr>
       </small>
     </h6>
@@ -184,16 +217,45 @@
 
   <div class="my-2" *ngIf="currentField == 'feedwaterQuantityValue'">
     <h6>
-      <span *ngIf="feedwaterThermodynamicQuantity == 0">Temperature</span>
-      <span *ngIf="feedwaterThermodynamicQuantity == 1">Specific Enthalpy</span>
-      <span *ngIf="feedwaterThermodynamicQuantity == 2">Specific Entropy</span>
-      <span *ngIf="feedwaterThermodynamicQuantity == 3">Saturated Quality</span>
-      Value
-      <br>
-      <small class="text-muted">
-        NEEDED
-        <hr>
-      </small>
+      <div *ngIf="feedwaterThermodynamicQuantity == 0">
+        <span>Temperature</span>
+        Value
+        <br>
+        <small class="text-muted">
+          The feedwater temperature.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="feedwaterThermodynamicQuantity == 1">
+        <span>Specific Enthalpy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          compared to the standard state, in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="feedwaterThermodynamicQuantity == 2">
+        <span>Specific entropy</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          in terms of mass.
+          <hr>
+        </small>
+      </div>
+      <div *ngIf="feedwaterThermodynamicQuantity == 3">
+        <span>Saturated Quality</span>
+        Value
+        <br>
+        <small class="text-muted">
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          between 0 and 1 indicates mixed flow (both liquid and vapor).
+          <hr>
+        </small>
+      </div>
     </h6>
     <div class="w-100 justify-content-center">
       <table class="table table-hover table-striped">
@@ -203,11 +265,11 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMin}}
+              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
             </td>
-            <td class="w-50 text-center">{{feedwaterRangesValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMax}}
+              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
             </td>
           </tr>
         </tbody>
@@ -220,7 +282,8 @@
       Desuperheating Temperature
       <br>
       <small class="text-muted">
-        NEEDED
+        The target temperature for desuperheating the outlet steam. Must be below outlet temperature without desuperheating to have
+        an effect.
         <hr>
       </small>
     </h6>
