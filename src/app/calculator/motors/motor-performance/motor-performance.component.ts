@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
@@ -32,24 +32,10 @@ export class MotorPerformanceComponent implements OnInit {
 
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    if (!this.psat) {
-      this.performanceForm = this.psatService.initForm();
-      //default values for standalone calculator
-      this.performanceForm.patchValue({
-        frequency: this.psatService.getLineFreqFromEnum(0),
-        horsePower: '200',
-        motorRPM: 1780,
-        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(1),
-        motorVoltage: 460,
-        fullLoadAmps: 225.4,
-        sizeMargin: 1
-      });
-    } else {
-      this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    }
+    this.getForm();
 
     //use system settings for standalone calculator
     if (!this.settings) {
@@ -86,5 +72,32 @@ export class MotorPerformanceComponent implements OnInit {
   }
   changeField(str: string) {
     this.currentField = str;
+  }
+
+
+  getForm(){
+    if (!this.psat) {
+      this.performanceForm = this.formBuilder.group({
+        frequency: this.psatService.getLineFreqFromEnum(0),
+        horsePower: '200',
+        motorRPM: 1780,
+        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(1),
+        motorVoltage: 460,
+        fullLoadAmps: 225.4,
+        sizeMargin: 1
+      });
+    } else {
+      this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
+      this.performanceForm = this.formBuilder.group({
+        frequency: this.psatService.getLineFreqFromEnum(this.psat.inputs.line_frequency),
+        horsePower: this.psat.inputs.motor_rated_power.toString(),
+        motorRPM: this.psat.inputs.motor_rated_speed,
+        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class),
+        motorVoltage: this.psat.inputs.motor_rated_voltage,
+        fullLoadAmps: this.psat.inputs.motor_rated_fla,
+        sizeMargin: this.psat.inputs.margin
+      });
+    }
+
   }
 }
