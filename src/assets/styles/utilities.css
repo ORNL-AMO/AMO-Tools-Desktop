@@ -202,5 +202,5 @@ a:not([href]):not([tabindex]).disabled-link:hover{
   }
 
 .standalone-calculator .header h3, .stand-alone-calc .tabs.primary .panel-tab-item a{
-    font-size: 20px;
+    font-size: 18px;
 }

@@ -55,11 +55,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      if (this.settings.powerMeasurement != 'hp') {
-        this.nemaForm.patchValue({
-          horsePower: 150
-        })
-      }
+    }
+    if (this.settings.powerMeasurement != 'hp') {
+      this.nemaForm.patchValue({
+        horsePower: '150'
+      })
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

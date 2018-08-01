@@ -50,6 +50,7 @@
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="nemaForm.controls.efficiency.invalid && !nemaForm.controls.efficiency.pristine">
+          <span *ngIf="nemaForm.controls.efficiency.required">Value required</span>
         <span *ngIf="nemaForm.controls.efficiency.errors.max">Value can't be greater than {{nemaForm.controls.efficiency.errors.max.max}} %.</span>
         <span *ngIf="nemaForm.controls.efficiency.errors.min">Value can't be less than {{nemaForm.controls.efficiency.errors.min.min}} %.</span>
       </span>

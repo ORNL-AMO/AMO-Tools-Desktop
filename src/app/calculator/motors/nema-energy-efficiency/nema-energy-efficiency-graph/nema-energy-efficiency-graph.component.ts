@@ -23,6 +23,7 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
   calculate() {
     if (this.nemaForm.status == 'VALID') {
       const efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
+      console.log(this.nemaForm.controls.motorRPM.value);
       return this.psatService.nema(
         this.nemaForm.controls.frequency.value,
         this.nemaForm.controls.motorRPM.value,
