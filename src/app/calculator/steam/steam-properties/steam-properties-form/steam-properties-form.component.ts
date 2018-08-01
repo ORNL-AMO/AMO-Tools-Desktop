@@ -16,68 +16,19 @@ export class SteamPropertiesFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<SteamPropertiesInput>();
+  emitCalculate = new EventEmitter<FormGroup>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()
   steamPropertiesOutput: SteamPropertiesOutput;
+  @Output('emitQuantityChange')
+  emitQuantityChange = new EventEmitter<number>();
 
-  pressureError: string = null;
-  quantityValueError: string = null;
-  quantityValueUnits: string = null;
-
-  // contains mins and maxes for all quality types, indexed into using thermodynamicQuantity
-  readonly checkQuantity: Array<TemperatureProperties | SpecificEnthalpyProperties | SpecificEntropyProperties | Properties> = [
-    {
-      'F': {
-        min: 32, max: 1472, type: 'Temperature', displayUnits: 'F'
-      },
-      'C': {
-        min: 0, max: 800, type: 'Temperature', displayUnits: 'C'
-      }
-    },
-    {
-      'btuLb': {
-        min: 21.5, max: 1590.7, type: 'Specific Enthalpy', displayUnits: 'btuLb'
-      },
-      'kJkg': {
-        min: 50, max: 3700, type: 'Specific Enthalpy', displayUnits: 'kJkg'
-      }
-    },
-    {
-      'btulbF': {
-        min: 0, max: 1.557, type: 'Specific Entropy', displayUnits: 'btulbF'
-      },
-      'kJkgK': {
-        min: 0, max: 6.52, type: 'Specific Entropy', displayUnits: 'kJkgK'
-      }
-    },
-    {
-      min: 0, max: 1, type: 'Saturated Quality', displayUnits: ''
-    },
-  ];
-
-  readonly pressureCheck: PressureProperties = {
-    'psi': {
-      min: 0.2, max: 14503.7, displayUnits: 'psi'
-    },
-    'kPa': {
-      min: 1, max: 100000, displayUnits: 'kPa'
-    },
-    'bar': {
-      min: 0.01, max: 1000, displayUnits: 'bar'
-    }
-  };
 
   constructor(private steamService: SteamService) {
   }
 
   ngOnInit() {
-    this.steamPropertiesOutput = {
-      pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
-    };
-    this.quantityValueUnits = this.settings.steamTemperatureMeasurement;
-
   }
 
   getDisplayUnit(unit: string) {
@@ -92,87 +43,46 @@ export class SteamPropertiesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  focusVariableField(i: number) {
-    if (i == 0) {
-      this.focusField('temp');
-    }
-    else if (i == 1) {
-      this.focusField('enthalpy');
-    }
-    else if (i == 2) {
-      this.focusField('entropy');
-    }
-    else {
-      this.focusField('quality');
+  setQuantityValue() {
+    this.steamPropertiesForm.controls.quantityValue.setValue('');
+    this.emitQuantityChange.emit(this.steamPropertiesForm.controls.thermodynamicQuantity.value);
+    this.steamPropertiesOutput = {
+      pressure: 0,
+      temperature: 0,
+      specificEnthalpy: 0,
+      specificEntropy: 0,
+      quality: 0,
+      specificVolume: 0
     }
   }
-
   calculate() {
-    this.pressureError = this.quantityValueError = null;
-    const input: SteamPropertiesInput = {
-      thermodynamicQuantity: this.steamPropertiesForm.controls.thermodynamicQuantity.value,
-      pressure: this.steamPropertiesForm.controls.pressure.value,
-      quantityValue: this.steamPropertiesForm.controls.quantityValue.value
-    };
-
-    const pressureObj: Properties = this.pressureCheck[this.settings.steamPressureMeasurement];
-    let quantityObj = this.checkQuantity[0]['F'];
-
-    if (input.thermodynamicQuantity === 0) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamTemperatureMeasurement];
-    } else if (input.thermodynamicQuantity === 1) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamSpecificEnthalpyMeasurement];
-    } else if (input.thermodynamicQuantity === 2) {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity][this.settings.steamSpecificEntropyMeasurement];
-    } else {
-      quantityObj = this.checkQuantity[input.thermodynamicQuantity];
+    if (this.steamPropertiesForm.status == 'INVALID') {
+      this.steamPropertiesOutput = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0
+      }
     }
-    this.quantityValueUnits = quantityObj.displayUnits;
-
-    if (this.steamPropertiesForm.controls.pressure.invalid || input.pressure < pressureObj.min || input.pressure > pressureObj.max) {
-      const err: string = pressureObj.min + ' and ' + pressureObj.max + ' ' + this.settings.steamPressureMeasurement;
-      this.pressureError = 'Pressure must be between ' + err;
-    }
-
-    if (input.quantityValue < quantityObj.min || input.quantityValue > quantityObj.max) {
-      let units: string = this.getDisplayUnit(quantityObj.displayUnits);
-      const err: string = quantityObj.min + ' and ' + quantityObj.max + ' ' + units;
-      this.quantityValueError = quantityObj.type + ' must be between ' + err;
-    }
-    if (this.pressureError !== null || this.quantityValueError !== null) {
-      return;
-    }
-
-    // this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
-    this.emitCalculate.emit(input);
+    this.emitCalculate.emit(this.steamPropertiesForm);
   }
 
-}
+  getOptionDisplayUnit(quantity: number) {
+    let displayUnit: string;
+    if (quantity == 0) {
+      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      return displayUnit;
+    } else if (quantity == 1) {
+      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      return displayUnit;
+    } else if (quantity == 2) {
+      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      return displayUnit;
+    } else if (quantity == 3) {
+      return displayUnit;
+    }
+  }
 
-interface Properties {
-  readonly min: number;
-  readonly max: number;
-  readonly displayUnits: string;
-  readonly type?: string;
-}
-
-interface TemperatureProperties {
-  readonly F: Properties;
-  readonly C: Properties;
-}
-
-interface SpecificEnthalpyProperties {
-  readonly btuLb: Properties;
-  readonly kJkg: Properties;
-}
-
-interface SpecificEntropyProperties {
-  readonly btulbF: Properties;
-  readonly kJkgK: Properties;
-}
-
-interface PressureProperties {
-  readonly psi: Properties;
-  readonly kPa: Properties;
-  readonly bar: Properties;
 }

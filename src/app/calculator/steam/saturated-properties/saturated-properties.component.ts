@@ -105,7 +105,7 @@ export class SaturatedPropertiesComponent implements OnInit {
       saturatedPressure: form.controls.saturatedPressure.value,
     }
     this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
-    if (this.saturatedPropertiesForm.status == 'VALID') {
+    if (form.status == 'VALID') {
       this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
       this.plotReady = true;
     }

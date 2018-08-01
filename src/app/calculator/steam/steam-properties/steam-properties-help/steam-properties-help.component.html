@@ -16,60 +16,72 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{ranges.minPressure}}
+              <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+            </td>
+            <td class="w-50 text-center">{{ranges.maxPressure}}
+              <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="my-2" *ngIf="currentField == 'quantityType'">
+  <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
     <h6>
-      Quantity Type
+      Measurement Method
       <br>
       <small class="text-muted">
-        To determine steam and liquid water properties, a second state variable, in addition to pressure is required.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'temp'">
-    <h6>
-      Temperature
-      <br>
-      <small class="text-muted">
-        Temperature of the steam.
+        NEEDED
         <hr>
       </small>
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'enthalpy'">
+  <div class="my-2" *ngIf="currentField == 'quantityValue'">
     <h6>
-      Specific Enthalpy
+      <span *ngIf="thermodynamicQuantity == 0">Temperature</span>
+      <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy</span>
+      <span *ngIf="thermodynamicQuantity == 2">Specific Entropy</span>
+      <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
       <br>
       <small class="text-muted">
-        Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
-        compared to the standard state, in terms of mass.
+        <span *ngIf="thermodynamicQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a liquid.</span>
+        <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the
+          material, compared to the standard state, in terms of mass.</span>
+        <span *ngIf="thermodynamicQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard
+          state, in terms of mass.</span>
+        <span *ngIf="thermodynamicQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam;
+          a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
         <hr>
       </small>
     </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'entropy'">
-    <h6>
-      Specific Entropy
-      <br>
-      <small class="text-muted">
-        Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
-        compared to the standard state, in terms of mass.
-        <hr>
-      </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'quality'">
-    <h6>
-      Quality
-      <br>
-      <small class="text-muted">
-        Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam.
-        <hr>
-      </small>
-    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">{{ranges.minQuantityValue}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+            </td>
+            <td class="w-50 text-center">{{ranges.maxQuantityValue}}
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

@@ -11,7 +11,7 @@
 
     <div class="d-flex flex-column m-4">
       <app-steam-properties-form (changeField)="setField($event)" [(steamPropertiesForm)]="steamPropertiesForm" [settings]="settings"
-        [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)"> </app-steam-properties-form>
+        [steamPropertiesOutput]="steamPropertiesOutput" (emitCalculate)="calculate($event)" (emitQuantityChange)="updateForm($event)"></app-steam-properties-form>
       <div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
         <button (click)="addRow()" class="btn-add-row">Create Row</button>
       </div>
@@ -36,14 +36,14 @@
         </select>
       </form>
       <div class="w-100 h-100" #lineChartContainer>
-        <app-steam-properties-graph *ngIf="graphToggle == '0'" [settings]="settings" [chartContainerHeight]="getChartHeight()" [chartContainerWidth]="getChartWidth()"
-          [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
-        <app-steam-properties-ph-graph *ngIf="graphToggle == '1'" [settings]="settings" [chartContainerHeight]="getChartHeight()"
-          [chartContainerWidth]="getChartWidth()" [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-ph-graph>
+        <app-steam-properties-graph *ngIf="graphToggleForm.controls.graphToggle.value == 0" [settings]="settings" [chartContainerHeight]="chartContainerHeight"
+          [chartContainerWidth]="chartContainerWidth" [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-graph>
+        <app-steam-properties-ph-graph *ngIf="graphToggleForm.controls.graphToggle.value == 1" [settings]="settings" [chartContainerHeight]="chartContainerHeight"
+          [chartContainerWidth]="chartContainerWidth" [steamPropertiesOutput]="steamPropertiesOutput" [plotReady]="plotReady"></app-steam-properties-ph-graph>
       </div>
     </div>
     <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">
-      <app-steam-properties-help [currentField]="currentField"></app-steam-properties-help>
+      <app-steam-properties-help [currentField]="currentField" [ranges]="ranges" [settings]="settings" [thermodynamicQuantity]="steamPropertiesForm.controls.thermodynamicQuantity.value"></app-steam-properties-help>
     </div>
   </div>
 </div>
