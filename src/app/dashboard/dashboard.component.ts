@@ -103,7 +103,6 @@ export class DashboardComponent implements OnInit {
     })
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(viewStr => {
       if(viewStr){
-        console.log(viewStr)
         this.dashboardView = viewStr;
       }
     })

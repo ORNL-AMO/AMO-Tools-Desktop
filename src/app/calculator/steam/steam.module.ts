@@ -7,6 +7,11 @@ import { SaturatedPropertiesModule } from "./saturated-properties/saturated-prop
 import { StackLossModule } from './stack-loss/stack-loss.module';
 import { HeatLossModule } from './heat-loss/heat-loss.module';
 import { BoilerModule } from './boiler/boiler.module';
+import { FlashTankModule } from './flash-tank/flash-tank.module';
+import { PrvModule } from './prv/prv.module';
+import { DeaeratorModule } from './deaerator/deaerator.module';
+import { HeaderModule } from './header/header.module';
+import { TurbineModule } from './turbine/turbine.module';
 
 
 @NgModule({
@@ -16,7 +21,12 @@ import { BoilerModule } from './boiler/boiler.module';
     SaturatedPropertiesModule,
     StackLossModule,
     HeatLossModule,
-    BoilerModule
+    BoilerModule,
+    FlashTankModule,
+    PrvModule,
+    DeaeratorModule,
+    HeaderModule,
+    TurbineModule
   ],
   declarations: [
     SteamComponent

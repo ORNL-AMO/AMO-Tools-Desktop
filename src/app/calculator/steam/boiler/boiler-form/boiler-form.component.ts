@@ -68,8 +68,9 @@ export class BoilerFormComponent implements OnInit {
   }
 
   setQuantityRanges() {
-    let quantityMinMax: { min: number, max: number } = this.boilerService.getQuantityRange(this.settings, this.boilerForm.controls.thermodynamicQuantity.value);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.boilerForm.controls.thermodynamicQuantity.value);
     this.boilerForm.controls.quantityValue.setValue(0);
     this.boilerForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
+    this.calculate();
   }
 }

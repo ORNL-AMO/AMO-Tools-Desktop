@@ -21,7 +21,7 @@ export class SteamSettingsComponent implements OnInit {
   specificVolumeMeasurements: Array<any> = [];
   steamMassFlowMeasurements: Array<any> = [];
   steamEnergyMeasurements: Array<any> = [];
-
+  steamPowerMeasurements: Array<any> = [];
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -33,6 +33,7 @@ export class SteamSettingsComponent implements OnInit {
     this.specificVolumeMeasurements = new Array();
     this.steamMassFlowMeasurements = new Array();
     this.steamEnergyMeasurements = new Array();
+    this.steamPowerMeasurements = new Array();
     //pressureMeasurements
     let tmpList = [
       'kPa',
@@ -124,7 +125,8 @@ export class SteamSettingsComponent implements OnInit {
       'kcal',
       'kgce',
       'kgoe',
-      'kWh'
+      'kWh',
+      'MJ'
     ]
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -133,6 +135,18 @@ export class SteamSettingsComponent implements OnInit {
       }
       this.steamEnergyMeasurements.push(tmpPossibility);
     })
+
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      if (unit == 'kWh') {
+        tmpPossibility.display = 'Kilowatts';
+      }
+      this.steamPowerMeasurements.push(tmpPossibility);
+    })
+
   }
 
   save() {
@@ -148,6 +162,16 @@ export class SteamSettingsComponent implements OnInit {
   getUnitDisplay(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+
+  getPowerDisplay(unit: any) {
+    if (unit) {
+      if (unit == 'kWh') {
+        return '(kW)'
+      } else {
+        return this.convertUnitsService.getUnit(unit).unit.name.display;
+      }
     }
   }
 

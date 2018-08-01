@@ -1,14 +1,16 @@
 <form [formGroup]="curveConstants.form" class="form-section">
+  <label class="group-label">
+    System Curve</label>
   <div class="form-group">
     <label *ngIf="!isFan" class="small" for="specificGravity">Fluid Specific Gravity</label>
     <label *ngIf="isFan" class="small" for="specificGravity">Compressibility Factor</label>
-    <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity"
-      (input)="saveChanges()" onfocus="this.select();">
+    <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="saveChanges()"
+      onfocus="this.select();">
   </div>
   <div class="form-group">
     <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
-    <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent"
-      id="systemLossExponent" (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
+    <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent" id="systemLossExponent"
+      (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
     <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
   </div>
 </form>
@@ -17,8 +19,7 @@
 <form [formGroup]="pointOne.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment">Point 1</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment"
-      id="pointAdjustment">
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
   </div>
@@ -27,8 +28,8 @@
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate" (input)="saveChanges()"
         onfocus="this.select();">
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
   </div>
   <div class="form-group">
@@ -37,19 +38,21 @@
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head1" formControlName="head" (input)="saveChanges()"
         onfocus="this.select();">
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
   </div>
   <div class="row">
     <div class="col-6">
-      <small>Fluid Power, 
+      <small>Fluid Power,
         <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.powerMeasurement)"></span>
         <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPowerMeasurement)"></span>
       </small>
     </div>
     <div class="col-6 text-center">
-      <small><strong>{{pointOne.fluidPower| number:'2.2-2'}}</strong></small>
+      <small>
+        <strong>{{pointOne.fluidPower| number:'2.2-2'}}</strong>
+      </small>
     </div>
   </div>
 </form>
@@ -57,8 +60,7 @@
 <form [formGroup]="pointTwo.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment2">Point 2</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment"
-      id="pointAdjustment2">
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment2">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
   </div>
@@ -67,8 +69,8 @@
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate" (input)="saveChanges()"
         onfocus="this.select();" autofocus>
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
   </div>
   <div class="form-group">
@@ -77,19 +79,21 @@
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head2" formControlName="head" (input)="saveChanges()"
         onfocus="this.select();">
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
   </div>
   <div class="row">
     <div class="col-6">
-      <small>Fluid Power, 
+      <small>Fluid Power,
         <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.powerMeasurement)"></span>
         <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPowerMeasurement)"></span>
       </small>
     </div>
     <div class="col-6 text-center">
-      <small><strong>{{pointTwo.fluidPower | number:'2.2-2'}}</strong></small>
+      <small>
+        <strong>{{pointTwo.fluidPower | number:'2.2-2'}}</strong>
+      </small>
     </div>
   </div>
 </form>

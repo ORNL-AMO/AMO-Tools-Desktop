@@ -68,6 +68,9 @@ export class StackLossComponent implements OnInit {
       this.stackLossForm = this.flueGasLossesService.initFormVolume(1);
     } else if (this.method == 'mass') {
       this.stackLossForm = this.flueGasLossesService.initFormMass(1);
+      this.stackLossForm.patchValue({
+        moistureInAirComposition: .0077
+      })
     }
   }
 

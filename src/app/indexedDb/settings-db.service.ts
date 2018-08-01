@@ -54,7 +54,9 @@ export class SettingsDbService {
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.globalSettings;
     }
-    selectedSettings = this.checkSettings(selectedSettings);
+    if (selectedSettings) {
+      selectedSettings = this.checkSettings(selectedSettings);
+    }
     return selectedSettings;
   }
 
@@ -73,6 +75,10 @@ export class SettingsDbService {
 
     if (!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr' || settings.steamMassFlowMeasurement == 'lbhr') {
       settings.steamMassFlowMeasurement = 'klb';
+    }
+
+    if (!settings.steamPowerMeasurement) {
+      settings.steamPowerMeasurement = 'MMBtu';
     }
 
     if (!settings.steamEnergyMeasurement) {

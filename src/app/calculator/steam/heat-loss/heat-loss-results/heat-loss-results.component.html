@@ -41,7 +41,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.inletEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.inletEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -50,11 +50,11 @@
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
-        <td class="text-center w-50"> &mdash; % </td>
+        <td class="text-center w-50"> {{percentHeatLoss}} %</td>
       </tr>
       <tr>
         <!-- <td class="bold w-50">Heat Loss</td> -->
-        <td class="text-center w-50">{{results.heatLoss |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.heatLoss |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>
@@ -101,7 +101,7 @@
       </tr>
       <tr>
         <td class="bold w-50">Energy Flow</td>
-        <td class="text-center w-50">{{results.outletEnergyFlow |sigFigs: '6'}}</td>
+        <td class="text-center w-50">{{results.outletEnergyFlow |sigFigs: '6'}} {{energyMeasurement}}</td>
       </tr>
     </tbody>
   </table>

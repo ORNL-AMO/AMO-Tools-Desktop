@@ -27,7 +27,8 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
 
-
+  graphToggle: string = '0';
+  graphToggleForm: FormGroup;
   plotReady: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
@@ -37,6 +38,10 @@ export class SaturatedPropertiesComponent implements OnInit {
       'pressureOrTemperature': [0, Validators.required],
       'saturatedPressure': [0, Validators.required],
       'saturatedTemperature': [0, Validators.required]
+    });
+
+    this.graphToggleForm = this.formBuilder.group({
+      'graphToggle': [0, Validators.required]
     });
 
     if (!this.settings) {
@@ -124,5 +129,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     };
   }
 
-
+  toggleGraph() {
+    this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
+  }
 }

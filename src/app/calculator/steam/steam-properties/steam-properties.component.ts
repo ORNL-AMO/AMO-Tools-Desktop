@@ -4,7 +4,6 @@ import { Settings } from "../../../shared/models/settings";
 import { SettingsService } from "../../../settings/settings.service";
 import { ConvertUnitsService } from "../../../shared/convert-units/convert-units.service";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { SteamPropertiesOutput, SteamPropertiesInput } from '../../../shared/models/steam';
 import { SteamService } from '../steam.service';
 
@@ -26,6 +25,8 @@ export class SteamPropertiesComponent implements OnInit {
   steamPropertiesOutput: SteamPropertiesOutput;
   tabSelect: string = 'results';
   currentField: string = 'pressure';
+  graphToggle: string = '0';
+  graphToggleForm: FormGroup;
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   plotReady: boolean = false;
@@ -37,6 +38,10 @@ export class SteamPropertiesComponent implements OnInit {
       'pressure': [0, Validators.required],
       'thermodynamicQuantity': [0, Validators.required],
       'quantityValue': [0, Validators.required]
+    });
+
+    this.graphToggleForm = this.formBuilder.group({
+      'graphToggle': [0, Validators.required]
     });
 
     if (!this.settings) {
@@ -98,5 +103,10 @@ export class SteamPropertiesComponent implements OnInit {
       entropy: this.steamPropertiesOutput.specificEntropy,
       volume: this.steamPropertiesOutput.specificVolume
     };
+  }
+
+
+  toggleGraph() {
+    this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
   }
 }
