@@ -141,6 +141,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -219,15 +225,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
+
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
     let curveGraph = this.ngChartContainer.nativeElement;
-
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
       this.canvasWidth = curveGraph.clientWidth;
