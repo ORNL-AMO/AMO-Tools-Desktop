@@ -41,7 +41,9 @@ export class MotorDriveGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.buildChart();
+    setTimeout(() => {
+      this.buildChart();
+    }, 100)
   }
 
   ngOnChanges(changes: SimpleChanges) {
