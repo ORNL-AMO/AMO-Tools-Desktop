@@ -19,7 +19,7 @@ export class BoilerService {
       steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
       thermodynamicQuantity: [1, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      steamMassFlow: ['', [Validators.required, Validators.min(ranges.steamMassFlowMin), Validators.max(ranges.steamMassFlowMax)]],
+      steamMassFlow: ['', [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
     })
     return form;
   }
@@ -33,7 +33,7 @@ export class BoilerService {
       steamPressure: [inputs.steamPressure, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
       thermodynamicQuantity: [inputs.thermodynamicQuantity, [Validators.required]],
       quantityValue: [inputs.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      steamMassFlow: [inputs.steamMassFlow, [Validators.required, Validators.min(ranges.steamMassFlowMin), Validators.max(ranges.steamMassFlowMax)]],
+      steamMassFlow: [inputs.steamMassFlow, [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
     })
     return form;
   }

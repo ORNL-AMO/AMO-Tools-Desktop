@@ -23,7 +23,7 @@ export class HeaderService {
       pressure: ['', [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
-      massFlow: ['', [Validators.required, Validators.min(ranges.massFlowMin), Validators.max(ranges.massFlowMax)]]
+      massFlow: ['', [Validators.required, Validators.min(ranges.massFlowMin)]]
     })
     return tmpForm;
   }
@@ -42,7 +42,7 @@ export class HeaderService {
       pressure: [inputObj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity, [Validators.required]],
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
-      massFlow: [inputObj.massFlow, [Validators.required, Validators.min(ranges.massFlowMin), Validators.max(ranges.massFlowMax)]]
+      massFlow: [inputObj.massFlow, [Validators.required, Validators.min(ranges.massFlowMin)]]
     })
     return tmpForm;
   }

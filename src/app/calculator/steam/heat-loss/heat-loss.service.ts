@@ -16,7 +16,7 @@ export class HeatLossService {
       inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin), Validators.max(ranges.inletMassFlowMax)]],
+      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       percentHeatLoss: ['', [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
     })
     return tmpForm;
@@ -28,7 +28,7 @@ export class HeatLossService {
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity], //0 is TEMPERATURE
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin), Validators.max(ranges.inletMassFlowMax)]],
+      inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       percentHeatLoss: [inputObj.percentHeatLoss, [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
     })
     return tmpForm;

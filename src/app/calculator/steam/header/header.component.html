@@ -23,7 +23,8 @@
         </div>
       </form>
       <div class="form-group mt-2 mb-2">
-        <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control w-100" [(ngModel)]="numInlets"
+        <label for="numInlets">Number of Inlets</label>
+        <select (focus)="changeField('numInlets')" (change)="getInletForms()" class="form-control" [(ngModel)]="numInlets"
           name="numInlets" id="numInlets">
           <option *ngFor="let numInletOption of numInletOptions" [ngValue]="numInletOption">{{numInletOption}}</option>
         </select>
