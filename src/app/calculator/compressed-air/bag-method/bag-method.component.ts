@@ -31,6 +31,7 @@ export class BagMethodComponent implements OnInit {
 
   calculateAnnualConsumption(inputs: BagMethodInput) {
     this.outputs = StandaloneService.bagMethod(inputs);
+    this.outputs.annualConsumption = this.inputs.operatingTime * this.outputs.flowRate * 60;
   }
 
   changeField(str: string) {
