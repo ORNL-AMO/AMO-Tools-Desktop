@@ -311,7 +311,6 @@ select.form-control:not([size]):not([multiple]) {
  }
 
  .calc-addon-group{
-          width: 50%;
      min-width: 150px;
  }
  .incrementor .units{
