@@ -258,6 +258,7 @@ export class PumpCurveGraphComponent implements OnInit {
     d3.select("app-pump-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
     if (this.checkForm()) {
       this.makeGraph();
+      // this.addLegend();
     }
   }
 
@@ -713,8 +714,6 @@ export class PumpCurveGraphComponent implements OnInit {
         this.distanceMeasurement = distanceMeasurement;
         this.powerMeasurement = powerMeasurement;
 
-        console.log('flowMeasurement = ' + flowMeasurement);
-
 
         if (isNaN(xVal) == false) {
           if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
@@ -917,6 +916,92 @@ export class PumpCurveGraphComponent implements OnInit {
           .duration(600)
           .style("opacity", 0);
       });
+
+    this.addLegend();
+  }
+
+
+  addLegend() {
+    // define legend box size and space
+    let legendRectHeight = 1;
+    let legendRectWidth = 30;
+    let legendSpacing = 5;
+
+    // width of lines
+    let pathStrokeWidth = "2px";
+
+    this.svg.append("text")
+      .attr("class", "legend")
+      .attr("id", "legend-text-0")
+      .attr("x", this.width - legendSpacing - this.margin.right - 20)
+      .attr("y", ((legendSpacing * 0) * 2) + (this.margin.top))
+      .style("fill", "#145A32")
+      .style("font-family", "sans-serif")
+      .style("font-size", "10px")
+      .text("Baseline");
+
+    this.svg.append("text")
+      .attr("class", "legend")
+      .attr("id", "legend-text-1")
+      .attr("x", this.width - legendSpacing - this.margin.right - 20)
+      .attr("y", ((legendSpacing * 1) * 2) + (this.margin.top))
+      .style("fill", "#3498DB")
+      .style("font-family", "sans-serif")
+      .style("font-size", "10px")
+      .text("Modification");
+
+    this.svg.append("text")
+      .attr("class", "legend")
+      .attr("id", "legend-text-2")
+      .attr("x", this.width - legendSpacing - this.margin.right - 20)
+      .attr("y", ((legendSpacing * 2) * 2) + (this.margin.top))
+      .style("fill", "red")
+      .style("font-family", "sans-serif")
+      .style("font-size", "10px")
+      .text("System Curve");
+
+
+    // adds line in the same color as used in the graph
+    let item0 = d3.select("#legend-text-" + 0).node();
+    let bb0 = item0.getBBox();
+    let item1 = d3.select("#legend-text-" + 1).node();
+    let bb1 = item1.getBBox();
+    let item2 = d3.select("#legend-text-" + 2).node();
+    let bb2 = item2.getBBox();
+    
+    this.svg.append("path")
+      .attr("class", "legend")
+      .attr("data-legend-key", 0)
+      .attr("data-color", "#145A32")
+      .attr("d", "M" + (bb0.x - legendSpacing - legendRectWidth) + "," + (bb0.y + bb0.height / 2) + " L" + (bb0.x - legendSpacing) + "," + (bb0.y + bb0.height / 2))
+      .style("stroke", "#145A32")
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .attr("height", legendRectHeight)
+      .attr("width", legendRectWidth);
+
+    this.svg.append("path")
+      .attr("class", "legend")
+      .attr("data-legend-key", 1)
+      .attr("data-color", "#3498DB")
+      .attr("d", "M" + (bb1.x - legendSpacing - legendRectWidth) + "," + (bb1.y + bb1.height / 2) + " L" + (bb1.x - legendSpacing) + "," + (bb1.y + bb1.height / 2))
+      .style("stroke", "#3498DB")
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .attr("height", legendRectHeight)
+      .attr("width", legendRectWidth);
+
+    this.svg.append("path")
+      .attr("class", "legend")
+      .attr("data-legend-key", 2)
+      .attr("data-color", "red")
+      .attr("d", "M" + (bb2.x - legendSpacing - legendRectWidth) + "," + (bb2.y + bb2.height / 2) + " L" + (bb2.x - legendSpacing) + "," + (bb2.y + bb0.height / 2))
+      .style("stroke", "red")
+      .style("stroke-width", "2px")
+      .style("stroke-dasharray", ("3, 3"))
+      .style("fill", "none")
+      .attr("height", legendRectHeight)
+      .attr("width", legendRectWidth);
   }
 
   toggleGrid() {
@@ -947,6 +1032,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
     line.data([data]).attr("d", guideLine);
   }
+
   makeModifiedCurve(data) {
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
