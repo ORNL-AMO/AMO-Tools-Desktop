@@ -15,7 +15,7 @@ export class DeaeratorService {
     let tmpForm: FormGroup = this.formBuilder.group({
       deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
       ventRate: ['', [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
-      feedwaterMassFlow: ['', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin), Validators.max(ranges.feedwaterMassFlowMax)]],
+      feedwaterMassFlow: ['', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
       waterPressure: ['', [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
       waterThermodynamicQuantity: [1, [Validators.required]],
       waterQuantityValue: ['', [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
@@ -31,7 +31,7 @@ export class DeaeratorService {
     let tmpForm: FormGroup = this.formBuilder.group({
       deaeratorPressure: [inputObj.deaeratorPressure, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
       ventRate: [inputObj.ventRate, [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
-      feedwaterMassFlow: [inputObj.feedwaterMassFlow, [Validators.required, Validators.min(ranges.feedwaterMassFlowMin), Validators.max(ranges.feedwaterMassFlowMax)]],
+      feedwaterMassFlow: [inputObj.feedwaterMassFlow, [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
       waterPressure: [inputObj.waterPressure, [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
       waterThermodynamicQuantity: [1, [Validators.required]],
       waterQuantityValue: [inputObj.waterQuantityValue, [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
