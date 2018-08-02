@@ -1,143 +1,118 @@
-<div class="help-header" *ngIf="!inPreAssessment">
+<div class="p-2 pt-3 d-flex flex-column help-info" *ngIf="!inPreAssessment">
+  <h5>
+    Metered Energy Help
+    <br>
+    <small class="text-muted">
+      Enter data about the energy of processing heating equipment based on metered fuel use. This allows the user to compare PHAST
+      calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
+      metered fuel energy used by the measurement period (hours/days/weeks).
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Metered Energy Help</h3>
-  <p>
-    Enter data about the energy of processing heating equipment based on metered fuel use. This allows the user to compare PHAST
-    calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
-    metered fuel energy used by the measurement period (hours/days/weeks).
-  </p>
+
+  <div class="my-2" *ngIf="currentField == 'fuelType'">
+    <h6>
+      Fuel Type
+      <br>
+      <small class="text-muted">
+        Fuel used in heat zone.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Flow Rate
+      <br>
+      <small class="text-muted">
+        Metered flow rate of fuel, as measured during the collection period. If flow rate is unknown, it can be calculated using
+        the button below using data about.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'heatingValue'">
+    <h6>
+      Heating Value - HHV
+      <br>
+      <small class="text-muted">
+        Higher heating value of the fuel (calculated based on fuel composition).
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'collectionTime'">
+    <h6>
+      Fuel Collection Time
+      <br>
+      <small class="text-muted">
+        Time period over which fuel meter data was collected.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricityUsed'">
+    <h6>
+      Electicity Used
+      <br>
+      <small class="text-muted">
+        Metered electricity used by auxiliary equipment during collection period.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricityCollectionTime'">
+    <h6>
+      Electicity Collection Time
+      <br>
+      <small class="text-muted">
+        Time period over which auxiliary electricity meter data was collected.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'fuelDescription'">
+    <h6>
+      Type of Fuel
+      <br>
+      <small class="text-muted">
+        Gas or Solid/Liquid Fuels.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'fuelEnergy'">
+    <h6>
+      Metered Fuel Energy
+      <br>
+      <small class="text-muted">
+        The amount of fuel energy measured by the fuel meter during the data collection time
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Calculate using Flow Rate
+      <br>
+      <small class="text-muted">
+        The volume of fuel measured by the meter during the data collection time
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
   <!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
   </p>-->
-</div>
-
-
-<div class="help-content">
-
-  <div class="card" *ngIf="currentField == 'fuelType'">
-    <div class="card-header">
-      Fuel Type
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Fuel used in heat zone
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'flowRate'">
-    <div class="card-header">
-      Flow Rate
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Metered flow rate of fuel, as measured during the collection period. If flow rate is unknown, it can be calculated using
-        the button below using data about
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'heatingValue'">
-    <div class="card-header">
-      Heating Value - HHV
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Higher heating value of the fuel (calculated based on fuel composition)
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'collectionTime'">
-    <div class="card-header">
-      Fuel Collection Time
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Time period over which fuel meter data was collected
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electricityUsed'">
-    <div class="card-header">
-      Electicity Used
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Metered electricity used by auxiliary equipment during collection period
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electricityCollectionTime'">
-    <div class="card-header">
-      Electicity Collection Time
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Time period over which auxiliary electricity meter data was collected
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'fuelDescription'">
-    <div class="card-header">
-      Type of Fuel
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        Gas or Solid/Liquid Fuels
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'fuelEnergy'">
-    <div class="card-header">
-      Metered Fuel Energy
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        The amount of fuel energy measured by the fuel meter during the data collection time
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'flowRate'">
-    <div class="card-header">
-      Calculate using Flow Rate
-    </div>
-    <div class="card-header">
-      <strong>
-        <u>Description:</u>
-      </strong>
-      <p>
-        The volume of fuel measured by the meter during the data collection time
-      </p>
-    </div>
-  </div>
-</div>

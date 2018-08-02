@@ -1,110 +1,129 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Slag Losses Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-<div class="help-header">
 
-  <h3>Slag Losses Help</h3>
+  <div class="my-2" *ngIf="currentField == 'weight'">
+    <h6>
+      Weight
+      <br>
+      <small class="text-muted">
+        Weight of material discharged. Note that the values vary with time during the cycle and this is average over the cycle time.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'inletTemperature'">
+    <h6>
+      Inlet Temperature
+      <br>
+      <small class="text-muted">
+        Inlet temperature for the material discharged.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'outletTemperature'">
+    <h6>
+      Outlet Temperature
+      <br>
+      <small class="text-muted">
+        Outlet temperature for the material discharged.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'specificHeat'">
+    <h6>
+      Specific Heat
+      <br>
+      <small class="text-muted">
+        Specific Heat of the slag material.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+    <h6>
+      Correction Factor
+      <br>
+      <small class="text-muted">
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      Savings Suggestions
+      <br>
+      <small class="text-muted">
+        Improve material handling with the furnace to increase yield and reduce slag.<br>
+        Install combustion gas (air) pre-heater.
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
+
   <!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering loss data.
   </p> -->
-
-</div>
-
-
-<div class="help-content">
-
-
-  <div class="card" *ngIf="currentField == 'weight'">
-    <div class="card-header">
-      Weight
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Weight of material discharged. Note that the values vary with time during the cycle and this is average over the cycle time.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Lb/hr</strong> or <strong>kg/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'inletTemperature'">
-    <div class="card-header">
-      Inlet Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Inlet temperature for the material discharged.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'outletTemperature'">
-    <div class="card-header">
-      Outlet Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Outlet temperature for the material discharged.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'specificHeat'">
-    <div class="card-header">
-      Specific Heat
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Specific Heat of the slag material.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'correctionFactor'">
-    <div class="card-header">
-      Correction Factor
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Engineering correction factor multiplied to the result to account for a known systematic error.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Btu/(SCF-&#8457;)</strong> or <strong>kJ/(kg-&#8451;)</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
-      Savings Suggestions
-    </div>
-    <div class="card-block">
-      <!-- <label><u><strong>Description</strong></u></label> -->
-      <ul>
-        <li class="help-general">Improve material handling with the furnace to increase yield and reduce slag.</li>
-        <li class="help-general">Install combustion gas (air) pre-heater.</li>
-      </ul>
-    </div>
-  </div>
-
-
-</div>

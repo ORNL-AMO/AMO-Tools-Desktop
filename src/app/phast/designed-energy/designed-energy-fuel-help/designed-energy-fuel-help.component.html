@@ -1,64 +1,62 @@
-<div class="help-header" *ngIf="!inPreAssessment">
+<div class="p-2 pt-3 d-flex flex-column help-info" *ngIf="!inPreAssessment">
+  <h5>
+    Designed Energy Help
+    <br>
+    <small class="text-muted">
+      Enter data about the design of processing heating equipment. This allows the user to compare PHAST calculations to the design
+      of the equipment. This method calculates total energy used by a furnace by multiplying total rated capacity of burners
+      (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and duty cycle.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Designed Energy Help</h3>
-  <p>Enter data about the design of processing heating equipment. This allows the user to compare PHAST calculations to the
-    design of the equipment. This method calculates total energy used by a furnace by multiplying total rated capacity of
-    burners (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and duty cycle</p>
+
+  <div class="my-2" *ngIf="currentField == 'fuelType'">
+    <h6>
+      Fuel Type
+      <br>
+      <small class="text-muted">
+        Fuel used in heat zone.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'totalBurnerCapacity'">
+    <h6>
+      Total Burner Rated Capacity
+      <br>
+      <small class="text-muted">
+        Total rated capacity of all burners in zone.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'percentCapacityUsed'">
+    <h6>
+      Percent of Rated Capacity Used
+      <br>
+      <small class="text-muted">
+        % of capacity in use by furnace.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'percentOperatingHours'">
+    <h6>
+      Percent of Operating Hours
+      <br>
+      <small class="text-muted">
+        Percent of operating hours that the zone is running.
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
   <!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
   </p>-->
-
-</div>
-
-
-<div class="help-content">
-
-  <div class="card" *ngIf="currentField == 'fuelType'">
-    <div class="card-header">
-      Fuel Type
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Fuel used in heat zone
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'totalBurnerCapacity'">
-    <div class="card-header">
-      Total Burner Rated Capacity
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Total rated capacity of all burners in zone
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'percentCapacityUsed'">
-    <div class="card-header">
-      Percent of Rated Capacity Used
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        % of capacity in use by furnace
-      </p>
-    </div>
-  </div>
-
-
-  <div class="card" *ngIf="currentField == 'percentOperatingHours'">
-    <div class="card-header">
-      Percent of Operating Hours
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Percent of operating hours that the zone is running
-      </p>
-    </div>
-  </div>
-</div>

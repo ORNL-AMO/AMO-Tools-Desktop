@@ -1,125 +1,132 @@
-<div class="help-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+        Auxiliary Equipment Help
+        <br>
+        <small class="text-muted">
+            Enter data for additional/auxiliary equipment that uses energy in connection with process heating equipment.
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
 
-    <h3>Auxiliary Equipment Help</h3>
-    <p>Enter data for additional/auxiliary equipment that uses energy in connection with process heating equipment.</p>
+
+    <div class="my-2" *ngIf="currentField == 'name'">
+        <h6>
+            Equipment Name
+            <br>
+            <small class="text-muted">
+                Enter a descriptive name for the equipment (ex. Fan #1).
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'dutyCycle'">
+        <h6>
+            Duty Cycle
+            <br>
+            <small class="text-muted">
+                % of time equipment is on.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'motorPower'">
+        <h6>
+            Motor Power
+            <br>
+            <small class="text-muted">
+                Calculate motor power based on phase, voltage, current and power factor or enter rated power.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'motorPhase'">
+        <h6>
+            Motor Phase
+            <br>
+            <small class="text-muted">
+                1 or 3 phases.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'supplyVoltage'">
+        <h6>
+            Supply Voltage
+            <br>
+            <small class="text-muted">
+                Electric power supply (volts) into the motor.
+                <hr>
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Units</th>
+                        <th class="text-center">Minimum</th>
+                        <th class="text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Volts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">480</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'averageCurrent'">
+        <h6>
+            Average Current
+            <br>
+            <small class="text-muted">
+                Average current supplied to the motor.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'powerFactor'">
+        <h6>
+            Power Factor
+            <br>
+            <small class="text-muted">
+                Average power factor incoming to the motor.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'totalConnectedPower'">
+        <h6>
+            Total Connected Power
+            <br>
+            <small class="text-muted">
+                Power used by the equipment.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'ratedCapacity'">
+        <h6>
+            Rated Capacity
+            <br>
+            <small class="text-muted">
+                The percent of rated capacity that is used.
+            </small>
+        </h6>
+    </div>
+
+
+</div>
+
     <!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
   </p>-->
-
-</div>
-
-
-<div class="help-content">
-
-    <div class="card" *ngIf="currentField == 'name'">
-        <div class="card-header">
-            Equipment Name
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                Enter a descriptive name for the equipment (ex. Fan #1)
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'dutyCycle'">
-        <div class="card-header">
-            Duty Cycle
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                % of time equipment is on
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'motorPower'">
-        <div class="card-header">
-            Motor Power
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                Calculate motor power based on phase, voltage, current and power factor or enter rated power.
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'motorPhase'">
-        <div class="card-header">
-            Motor Phase
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                1 or 3 phases
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'supplyVoltage'">
-        <div class="card-header">
-            Supply Voltage
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                Electric power supply (volts) into the motor
-            </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>V</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>480</strong><br>
-          </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'averageCurrent'">
-        <div class="card-header">
-            Average Current
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                Average current supplied to the motor
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'powerFactor'">
-        <div class="card-header">
-            Power Factor
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-                Average power factor incoming to the motor
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'totalConnectedPower'">
-        <div class="card-header">
-            Total Connected Power
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-               Power used by the equipment
-            </p>
-        </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'ratedCapacity'">
-        <div class="card-header">
-            Rated Capacity
-        </div>
-        <div class="card-header">
-            <strong><u>Description:</u></strong>
-            <p>
-               The percent of rated capacity that is used.
-            </p>
-        </div>
-    </div>
-</div>
