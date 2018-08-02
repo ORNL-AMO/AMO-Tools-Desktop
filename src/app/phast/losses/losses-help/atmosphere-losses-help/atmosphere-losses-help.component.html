@@ -1,205 +1,169 @@
-<div class="help-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Atmosphere Losses Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+    <hr class="my-1 hr-spacer">
+    <small class="text-muted">
+      This is used to model replacement or make-up atmosphere gas, not total flow of make-up gas.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Atmosphere Losses Help</h3>
-  <!-- <p>Enter loss data</p>
-  <p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
-  </p> -->
-  <p *ngIf="currentField == 'default'">
-    This is used to model replacement or make-up atmosphere gas, not total flow of make-up gas.
-  </p>
-</div>
 
-
-<div class="help-content">
-
-  <div class="card" *ngIf="currentField == 'materialName'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'materialName'">
+    <h6>
       Atmosphere Gas
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas, click "Add New
         Gas". You can "start with existing gas" and edit the condition factor or add a completely new gas. You cannot use
         the name of a gas already in the database.
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'specificHeat'">
-    <div class="card-header">
-      Specific heat of gas
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+
+  <div class="my-2" *ngIf="currentField == 'specificHeat'">
+    <h6>
+      Specific Heat of Gas
+      <br>
+      <small class="text-muted">
         Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>Btu/(SCF-&#8457;)</strong> or
-        <strong>kJ/(Nm
-          <sup>3</sup>-&#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'inletTemp'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'inletTemp'">
+    <h6>
       Inlet Temperature
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber. Use temperature
         recorder/indicator reading or actual measurement.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>&#8457;</strong> or
-        <strong>&#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'outletTemp'">
-    <div class="card-header">
-      Outlet temperature
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+
+  <div class="my-2" *ngIf="currentField == 'outletTemp'">
+    <h6>
+      Outlet Temperature
+      <br>
+      <small class="text-muted">
         Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber. Use temperature
         recorder/indicator reading or actual measurement.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>&#8457;</strong> or
-        <strong>&#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'flowRate'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
       Flow Rate
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard conditions and
         actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement
         point.
         <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour
         value.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>SCF/hr</strong> or
-        <strong>Nm
-          <sup>3</sup>
-        </strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'correctionFactor'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+    <h6>
       Correction Factor
-    </div>
-    <div class="card-block">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Engineering correction factor multiplied to the result to account for a known systematic error.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
       Savings Suggestions
-    </div>
-    <div class="card-block">
-      <!-- <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label> -->
-      <ul>
-        <li class="help-general">Optimize (minimize) use of process atmosphere flow rate</li>
-        <li class="help-general">Preheat atmosphere to a higher temperature entering the furnace</li>
-        <li class="help-general">
-          <strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating
-          conditions. There may additional measures when considering specific situations and the user is encouraged to review
-          and apply the appropriate measures</li>
-      </ul>
-    </div>
+      <br>
+      <small class="text-muted">
+        Optimize (minimize) use of process atmosphere flow rate
+        <br> Preheat atmosphere to a higher temperature entering the furnace
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures
+      </small>
+    </h6>
   </div>
+
 
 </div>
+
+
+<!-- <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+  </p> -->

@@ -1,152 +1,181 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Wall Losses Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
 
-<div class="help-header">
+  <div class="my-2" *ngIf="currentField == 'avgSurfaceTemp'">
+    <h6>
+      Average Surface Temperature
+      <br>
+      <small class="text-muted">
+        Average temperature for the exposed wall surfaces. The average value should be calculated based on actual measurement at
+        several locations for the furnace outside areas. The actual temperatures can vary over a wide range and care should
+        be taken to use weighted average. use infra-red radiation temperature measurement (with proper emissivity correction)
+        whenever possible.
+      </small>
+    </h6>
+  </div>
 
-  <h3>Wall Losses Help</h3>
-  <!-- <p>Enter loss data</p>
+
+  <div class="my-2" *ngIf="currentField == 'ambientTemp'">
+    <h6>
+      Ambient Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the area where the equipment is located. In some cases it may be necessary to take temperature reading at
+        the bottom or top of the equipment to make sure that the temperature is not much higher than the room-ambient temperature.
+        Use weighted average if the temperature readings vary too much.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'windVelocity'">
+    <h6>
+      Wind Velocity
+      <br>
+      <small class="text-muted">
+        This is average wind velocity over the entire surface. For most indoor installation this can be assumed to be zero. For outdoor
+        installations it is necessary to measure wind velocity or use available data from other sources such as weather report.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'surfaceShape'">
+    <h6>
+      Surface Shape / Orientation
+      <br>
+      <small class="text-muted">
+        Type of wall surface. To add a new surface, click "Add New Surface". You can "start with existing surface" and edit the Surface
+        Shape / Orientation Factor or add a completely new surface. You cannot use the name of a surface already in the database.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'surfaceEmissivity'">
+    <h6>
+      Surface Emissivity
+      <br>
+      <small class="text-muted">
+        Surface emissivity of the outside surface of heat loss. Default value is 0.9. The user can change this value for their specific
+        case.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'surfaceArea'">
+    <h6>
+      Total Outside Surface Area
+      <br>
+      <small class="text-muted">
+        Total surface area for the wall being considered and exposed to the ambient. Use actual measurement or calculate/estimate
+        based on the equipment drawings.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+    <h6>
+      Correction Factor
+      <br>
+      <small class="text-muted">
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      Savings Suggestions
+      <br>
+      <small class="text-muted">
+        Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation
+        <br> Use proper insulation and thickness to reduce furnace casing or surface temperature while rebuilding the furnace
+        <br> Consider use of low weight, fiber insulation when appropriate
+        <br> Account for process atmosphere composition (i.e. presence of hydrogen) in the furnace. Select the insulation to
+        provide barrier to gas penetration in the insulation voids
+        <br> Reduce or eliminate external wall cooling if used
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
+<!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
   </p> -->
-
-</div>
-
-
-<div class="help-content">
-
-
-  <div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
-    <div class="card-header">
-      Average Surface Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>Average temperature for the exposed wall surfaces. The average value should be calculated based on actual
-        measurement at several locations for the furnace outside areas. The actual temperatures can vary over a wide
-        range and care should be taken to use weighted average. use infra-red radiation temperature measurement (with
-        proper emissivity correction) whenever possible.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-
-  <div class="card" *ngIf="currentField == 'ambientTemp'">
-    <div class="card-header">
-      Ambient Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Temperature of the area where the equipment is located. In some cases it may be necessary to take temperature
-        reading at the bottom or top of the equipment to make sure that the temperature is not much higher than the
-        room-ambient temperature. Use weighted average if the temperature readings vary too much.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'windVelocity'">
-    <div class="card-header">
-      Wind Velocity
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        This is average wind velocity over the entire surface. For most indoor installation this can be assumed to be
-        zero. For outdoor installations it is necessary to measure wind velocity or use available data from other
-        sources such as weather report.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>mph</strong> or <strong>kph</strong><br> Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'surfaceShape'">
-    <div class="card-header">
-      Surface Shape / Orientation
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Type of wall surface. To add a new surface, click "Add New Surface".  You can "start with existing surface"
-        and edit the Surface Shape / Orientation Factor or add a completely new surface.  You cannot use the name of a surface already in the database.
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'surfaceEmissivity'">
-    <div class="card-header">
-      Surface Emissivity
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Surface emissivity of the outside surface of heat loss. Default value is 0.9. The user can change this value
-        for their specific case.
-      </p>
-      <p>
-        Minimum Value Allowed: <strong>0</strong><br>
-        Maximum Value Allowed: <strong>1</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'surfaceArea'">
-    <div class="card-header">
-      Total Outside Surface Area
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Total surface area for the wall being considered and exposed to the ambient. Use actual measurement or
-        calculate/estimate based on the equipment drawings.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>ft<sup>2</sup></strong> or <strong>m<sup>2</sup></strong><br> Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'correctionFactor'">
-    <div class="card-header">
-      Correction Factor
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Engineering correction factor multiplied to the result to account for a known systematic error.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
-      Savings Suggestions
-    </div>
-    <div class="card-block">
-      <!-- <label><u><strong>Description</strong></u></label> -->
-      <ul>
-        <li class="help-general">Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation</li>
-        <li class="help-general">Use proper insulation and thickness to reduce furnace casing or surface temperature while rebuilding the furnace</li>
-        <li class="help-general">Consider use of low weight, fiber insulation when appropriate</li>
-        <li class="help-general">Account for process atmosphere composition (i.e. presence of hydrogen) in the furnace. Select the insulation to provide barrier to gas penetration in the insulation voids</li>
-        <li class="help-general">Reduce or eliminate external wall cooling if used</li>
-        <li class="help-general">Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
-      </ul>
-    </div>
-  </div>
-
-</div>

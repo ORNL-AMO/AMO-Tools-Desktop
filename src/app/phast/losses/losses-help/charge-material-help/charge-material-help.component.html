@@ -1,893 +1,711 @@
-<div class="help-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Charge Material Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Charge Material Help</h3>
-  <!-- <p>Enter loss data</p>
-    <p class="text-muted">
-      <span class="fa fa-youtube-play"></span> Watch tutorial on entering charge material data.
-    </p> -->
 
-</div>
-<div class="help-content">
   <!--Solid, Liquid and Gas Charge Material-->
-  <div class="card" *ngIf="currentField == 'chargeMaterialType'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'chargeMaterialType'">
+    <h6>
       Charge Material Type
-    </div>
-    <div class="card-body">
-      <label>
+      <br>
+      <small class="text-muted">
+        Charge Material Type options include
         <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <ul>
-        <li>Solid</li>
-        <li>Liquid</li>
-        <li>Gas</li>
-      </ul>
-    </div>
+          Solid
+        </u>,
+        <u>
+          Liquid
+        </u>, or
+        <u>Gas</u>.
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialName'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialName'">
+    <h6>
       Material Name
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Select material from the drop down list. The material properties cells below this will be filled in if the material is selected
         from the list.
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
+
 
   <!--Solid Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
-    <div class="card-header">
-      Average Heat of the solid material
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+  <div class="my-2" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
+    <h6>
+      Average Heat of the Solid Material
+      <br>
+      <small class="text-muted">
         Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
         may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialLatentHeatOfFusion'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialLatentHeatOfFusion'">
+    <h6>
       Latent Heat of Fusion
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Latent heat of melting or fusion or phase change for the solid material.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>Btu/lb</strong> or
-        <strong>kJ/kg</strong>
-      </p>
-    </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialHeatOfLiquid'">
-    <div class="card-header">
-      Specific Heat of liquid from molten material
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+
+  <div class="my-2" *ngIf="currentField == 'materialHeatOfLiquid'">
+    <h6>
+      Specific Heat of liquid from Molten Material
+      <br>
+      <small class="text-muted">
         Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
         may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialMeltingPoint'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialMeltingPoint'">
+    <h6>
       Melting Point
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Temperature of melting for the solid material.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterContentAsCharged'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'waterContentAsCharged'">
+    <h6>
       Water Content as Charged
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Water content of the charge material as percentage of total charge weight - wet basis. This value can be obtained from moisture
         tests or specifications for the material charged.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterContentAsDischarged'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'waterContentAsDischarged'">
+    <h6>
       Water Content as Discharged
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Water content of the discharged material as percentage of total discharged weight - wet basis. This value can be obtained
         from moisture tests or specifications for the material discharged.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'percentChargeMelted'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'percentChargeMelted'">
+    <h6>
       Charge Melted
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Charge material melted (as % of solid dry material charged). Use value or data from process/production engineering or measurement
         of the final product.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'percentChargeReacted'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'percentChargeReacted'">
+    <h6>
       Charge Reacted
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Charge material (as % of dry material) reacted. Use value or data from process/production engineering or measurement of the
         final product.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterVaporDischargeTemperature'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'waterVaporDischargeTemperature'">
+    <h6>
       Water Vapor Discharge Temperature
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Temperature of water vapor (usually mixed with exhaust air or flue gases) as it is discharged form the furnace/oven.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'chargeMaterialDischargeTemperature'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'chargeMaterialDischargeTemperature'">
+    <h6>
       Charge Material Discharge Temperature
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or actual measurement.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'additionalHeatRequired'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'additionalHeatRequired'">
+    <h6>
       Additional Heat Required
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Insert value of additional heat required and not accounted for in the above calculations.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>Btu/lb</strong> or
-        <strong>kJ/kg</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
 
   <!--Liquid Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatLiquid'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'materialSpecificHeatLiquid'">
+    <h6>
       Specific Heat of the Liquid
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
         may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialVaporizingTemperature'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialVaporizingTemperature'">
+    <h6>
       Vaporizing Temperature of Liquid
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Vaporizing temperature of the liquid.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialLatentHeat'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialLatentHeat'">
+    <h6>
       Latent Heat of Vaporization
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Latent heat of vaporizing or evaporation for the liquid.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>Btu/lb</strong> or
-        <strong>kJ/kg</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatVapor'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'materialSpecificHeatVapor'">
+    <h6>
       Specific Heat of Vapor
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Give specific heat value for the vapor resulting from vaporizing of the liquid at the temperature range of the vaporizing
         temperature and final temperature (discharge temperature) of the liquid/vapor.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-      </p>
-    </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'liquidVaporized'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'liquidVaporized'">
+    <h6>
       Charge Liquid Vaporized
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Charge liquid vaporized (% liquid charged) during the heating process. Get the value (data) from process/production engineering
         or measurement of the final product.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'liquidReacted'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'liquidReacted'">
+    <h6>
       Charge Liquid Reacted (% of Charge)
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Charge Liquid Reacted
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
 
   <!--Gas Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeat'">
-    <div class="card-header">
-      Specific Heat of gas
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+  <div class="my-2" *ngIf="currentField == 'materialSpecificHeat'">
+    <h6>
+      Specific Heat of Gas
+      <br>
+      <small class="text-muted">
         Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
         may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="alert alert-info">
-      <p>
-        This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
-        If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
-        If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding it
-        as a new material by clicking "Add New ... "
-      </p>
-    </div>
+    <h6>
+      <small class="text-muted">
+        <hr>
+      </small>
+      <div class="alert alert-info">
+        <small class="text-muted">
+          This value comes from the PHAST Materials Database. Its value can be changed here, however, it will not be saved in the database.
+          If you change the dropdown menu value, then this number will change to reflect the value stored in the database.
+          If you will be using the same adjustments to a value for multiple assessments, you may want to consider adding
+          it as a new material by clicking "Add New ... "
+        </small>
+      </div>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'vaporInGas'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'vaporInGas'">
+    <h6>
       Vapor in Gas Mixture
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Vapor mixed with the feed gas expressed as % of the total mixture charge weight. Use test data or charge material specifications.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'specificHeatOfVapor'">
-    <div class="card-header">
-      Specific Heat of vapor
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+
+  <div class="my-2" *ngIf="currentField == 'specificHeatOfVapor'">
+    <h6>
+      Specific Heat of Vapor
+      <br>
+      <small class="text-muted">
         Amount of heat per unit mass required to raise the temperature by one degree of temperature. Use available data from handbooks
         based on average of inlet and outlet temperature.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'gasReacted'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'gasReacted'">
+    <h6>
       Feed Gas Reacted
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Fraction of DRY gas feed that reacts in system.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>%</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-        <br>Maximum Value Allowed:
-        <strong>100</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">100</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
 
   <!-- All -->
-  <div class="card" *ngIf="currentField == 'initialTemperature'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'initialTemperature'">
+    <h6>
       Initial Temperature
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Inlet temperature for the charge material. Use production data or actual measurement.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'dischargeTemperature'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'dischargeTemperature'">
+    <h6>
       Discharge Temperature
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or actual measurement.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>
-          &#8457;</strong> or
-        <strong>
-          &#8451;</strong>
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'heatOfReaction'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'heatOfReaction'">
+    <h6>
       Heat of Reaction
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Mass based change in enthalpy due to a reaction. Do not use negative values for exothermic reactions, instead change the
         below dropdown menu.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong> Btu/(lb-
-          &#8457;)</strong> or
-        <strong>kJ/(kg-
-          &#8451;)</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'endothermicOrExothermic'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'endothermicOrExothermic'">
+    <h6>
       Endothermic/Exothermic
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Type of reaction. Select from the drop down menu and select endothermic or exothermic. Use positive number (+ve) in either
         one of these cases.
-      </p>
-    </div>
+      </small>
+    </h6>
   </div>
 
-  <div class="card" *ngIf="currentField == 'feedRate'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'feedRate'">
+    <h6>
       Feed Rate
-    </div>
-    <div class="card-body">
-      <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label>
-      <p>
+      <br>
+      <small class="text-muted">
         Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for batch furnaces
         the total weight should be corrected for cycle time to obtain weight per hour value.
-      </p>
-      <label>
-        <u>
-          <strong>Input</strong>
-        </u>
-      </label>
-      <p>
-        Units:
-        <strong>lb/hr</strong> or
-        <strong>kg/hr</strong>
-        <br> Minimum Value Allowed:
-        <strong>0</strong>
-      </p>
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
       Savings Suggestions
-    </div>
-    <div class="card-body">
-      <!-- <label>
-        <u>
-          <strong>Description</strong>
-        </u>
-      </label> -->
-      <ul>
-        <li class="help-general">Explore possibilities of lowering the final product temperature</li>
-        <li class="help-general">Preheating the charge or load material entering the furnace</li>
-        <li class="help-general">Pre-drying to reduce moisture content of the load entering the furnace</li>
-        <li class="help-general">Maintain charge feed rate as close to the rated capacity as possible</li>
-        <li class="help-general">Consider possibility of reducing endothermic reactions by controlling process conditions</li>
-        <li class="help-general">Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-          There may additional measures when considering specific situations and the user is encouraged to review and apply
-          the appropriate measures</li>
-      </ul>
-    </div>
+      <br>
+      <small class="text-muted">
+        Explore possibilities of lowering the final product temperature
+        <br> Preheating the charge or load material entering the furnace
+        <br> Pre-drying to reduce moisture content of the load entering the furnace
+        <br> Maintain charge feed rate as close to the rated capacity as possible
+        <br> Consider possibility of reducing endothermic reactions by controlling process conditions
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures
+      </small>
+    </h6>
   </div>
+
+  
 </div>
+
+  <!-- <p>Enter loss data</p>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on entering charge material data.
+    </p> -->
