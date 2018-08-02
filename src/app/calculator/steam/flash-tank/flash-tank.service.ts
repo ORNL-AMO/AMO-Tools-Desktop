@@ -15,7 +15,7 @@ export class FlashTankService {
       inletWaterPressure: ['', [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
       thermodynamicQuantity: [1, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletWaterMassFlow: ['', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin), Validators.max(ranges.inletWaterMassFlowMax)]],
+      inletWaterMassFlow: ['', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: ['', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
     })
     return tmpForm;
@@ -27,7 +27,7 @@ export class FlashTankService {
       inletWaterPressure: [inputObj.inletWaterPressure, [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity],
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletWaterMassFlow: [inputObj.inletWaterMassFlow, [Validators.required, Validators.min(ranges.inletWaterMassFlowMin), Validators.max(ranges.inletWaterMassFlowMax)]],
+      inletWaterMassFlow: [inputObj.inletWaterMassFlow, [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: [inputObj.tankPressure, [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
     })
     return tmpForm;

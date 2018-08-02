@@ -15,7 +15,7 @@ export class PrvService {
       inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [2, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin), Validators.max(ranges.inletMassFlowMax)]],
+      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       outletPressure: ['', [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
     })
     return tmpForm;
@@ -27,7 +27,7 @@ export class PrvService {
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [inputObj.thermodynamicQuantity],
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin), Validators.max(ranges.inletMassFlowMax)]],
+      inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       outletPressure: [inputObj.outletPressure, [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
     })
     return tmpForm;

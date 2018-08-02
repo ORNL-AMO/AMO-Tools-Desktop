@@ -40,14 +40,7 @@ export const mass = {
             }
             , to_anchor: 1000000
         }
-        , ton: {
-            name: {
-                singular: 'Short Ton'
-                , plural: 'Short Ton',
-                display: '()'
-            }
-            , to_anchor: 1000000
-        }
+
         , u: {
             name: {
                 singular: 'Atomic Mass Unite'
@@ -90,7 +83,14 @@ export const mass = {
                 display: '(klb)'
             }
             , to_anchor: 1000
-        },
+        }, ton: {
+            name: {
+                singular: 'Imperial Ton'
+                , plural: 'Imperial Ton',
+                display: '()'
+            }
+            , to_anchor: 2240
+        }
     },
     _anchors: {
         metric: {
