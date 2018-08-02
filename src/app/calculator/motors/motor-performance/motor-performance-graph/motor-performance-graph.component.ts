@@ -318,7 +318,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       return true
     }
     else {
-      return true;
+      return false;
     }
   }
 

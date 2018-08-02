@@ -45,6 +45,7 @@ tr>td {
 
 .graph-table td, .graph-table th {
   font-size: 14px;
+  padding: 3px;
 }
 
 .graph-table tr {
