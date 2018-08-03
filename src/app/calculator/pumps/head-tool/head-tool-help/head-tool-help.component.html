@@ -27,8 +27,8 @@
         <hr>
       </small>
     </h6>
-    <div class="justify-content-center">
-      <table class="table table-hover table-striped">
+    <div class="d-flex justify-content-center">
+      <table class="table table-hover table-striped w-50">
         <tbody>
           <tr>
             <th class="text-center">Minimum</th>
@@ -50,8 +50,8 @@
         <hr>
       </small>
     </h6>
-    <div class="justify-content-center">
-      <table class="table table-hover table-striped">
+    <div class="d-flex justify-content-center">
+      <table class="table table-hover table-striped w-50">
         <tbody>
           <tr>
             <th class="text-center">Minimum</th>
@@ -132,31 +132,6 @@
             </tr>
             <tr>
               <td class="text-center">0 {{settings.pressureMeasurement}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="my-2" *ngIf="currentField == 'suctionTankFluidSurfaceElevation'">
-      <h6>
-        Suction Tank fluid surface elevation (Zs)
-        <br>
-        <small class="text-muted">
-          The elevation of the tank (or well, lake, etc.) (in feet or meters). Both the suction tank fluid surface elevation and the
-          discharge gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level) or
-          relative (e.g., floor level).
-          <hr>
-        </small>
-      </h6>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0 {{settings.distanceMeasurement}}</td>
             </tr>
           </tbody>
         </table>
@@ -279,7 +254,7 @@
           <hr>
           <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient adjustments
           are made to the 4th order of the pipe diameter ratio.
-          <hr> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
+          <br> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
           at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient for
           the valve would be 0.4 x (
           <sup>16</sup>&frasl;
@@ -421,7 +396,7 @@
         </small>
       </h6>
       <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped w-50">
+        <table class="table table-hover table-striped w-75">
           <tbody>
             <tr>
               <th class="w-50 text-center">Minimum</th>
