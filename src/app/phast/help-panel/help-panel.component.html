@@ -1,32 +1,55 @@
-<!--help panel for spec tabs-->
-<div class="help-panel">
+<div class="scroll-item mr-2 ml-2" [ngStyle]="{'height.px': helpHeight}">
+
   <div class="header">
     <h3>Help</h3>
   </div>
-  <div *ngIf="settingsTab.step == 1" class="help-content">
-    <h3>System Basics</h3>
-    <p>Your system basics help define the units of measure and other information related to the system you are modeling for
-      this assessment. These settings are inherited by default from your directory or applications settings and can be customized
-      for this assessment.
-    </p>
-    <div class="alert alert-info">
-      <p>
-        Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
-        this tool.
-      </p>
+
+  <div class="pr-1 pl-2 help-panel">
+
+
+    <div *ngIf="settingsTab.step == 1" class="p-2 d-flex flex-column">
+      <h6>
+        System Basics
+        <br>
+        <small class="text-muted">
+          Your system basics help define the units of measure and other information related to the system you are modeling for this
+          assessment. These settings are inherited by default from your directory or applications settings and can be customized
+          for this assessment.
+          <hr>
+        </small>
+        <div class="alert alert-info">
+          <small class="text-muted">
+            Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
+            this tool.
+          </small>
+        </div>
+      </h6>
     </div>
-  </div>
 
-  <div class="help-content" *ngIf="settingsTab.step == 3">
-    <h3>Operating Costs</h3>
-    <p>Per unit cost of fuel, steam and electricity related to the operation of the process heating system.</p>
-  </div>
 
-  <div class="help-content" *ngIf="settingsTab.step == 2">
-    <h3>Operating Hours</h3>
-    <p>Denotes the annual operating hours during which the facility utilizes process heating equipment to heat or melt the charge
-      material. Either the total hours of operation or the operating schedule (day/week, hours/day) should be entered.</p>
-    <p>Use the Operating Conditions At Time of Assessment box to add notes about the operating conditions at the time of the
-      assessment.</p>
+    <div *ngIf="settingsTab.step == 3" class="p-2 d-flex flex-column">
+      <h6>
+        Operating Costs
+        <br>
+        <small class="text-muted">
+          Per unit cost of fuel, steam and electricity related to the operation of the process heating system.
+        </small>
+      </h6>
+    </div>
+
+
+    <div *ngIf="settingsTab.step == 2" class="p-2 d-flex flex-column">
+      <h6>
+        Operating Hours
+        <br>
+        <small class="text-muted">
+          Denotes the annual operating hours during which the facility utilizes process heating equipment to heat or melt the charge
+          material. Either the total hours of operation or the operating schedule (day/week, hours/day) should be entered.
+          <br> Use the Operating Conditions At Time of Assessment box to add notes about the operating conditions at the time
+          of the assessment.
+        </small>
+      </h6>
+    </div>
+
   </div>
 </div>

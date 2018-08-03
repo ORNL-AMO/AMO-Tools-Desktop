@@ -1,191 +1,262 @@
-<div class="help-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Cooling Losses Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Cooling Losses Help</h3>
+
+  <!-- All -->
+  <div class="my-2" *ngIf="currentField == 'coolingMedium'">
+    <h6>
+      Cooling Medium
+      <br>
+      <small class="text-muted">
+        Select the appropriate cooling medium: gas or liquid. The default values for gas represent air, the default values for liquid
+        represent water.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'inletTemp'">
+    <h6>
+      Inlet Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the cooling medium as it enters the unit. Use production data or actual measurement.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'outletTemp'">
+    <h6>
+      Outlet Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the cooling medium as it enters the unit. Use production data or actual measurement.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'correctionFactor'">
+    <h6>
+      Correction Factor
+      <br>
+      <small class="text-muted">
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!--Gas -->
+  <div class="my-2" *ngIf="currentField == 'gasFlow'">
+    <h6>
+      Gas Flow
+      <br>
+      <small class="text-muted">
+        Volumetric flow rate of gas per hour. Note that for batch furnaces the total weight should be corrected for cycle time to
+        obtain weight per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'gasDensity'">
+    <h6>
+      Gas Density
+      <br>
+      <small class="text-muted">
+        Density of the cooling gas. Default value is for air; may be more accurate to compute as the average of density based on
+        inlet and outlet temperature.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'avgSpecificHeatGas'">
+    <h6>
+      Average Specific Heat
+      <br>
+      <small class="text-muted">
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        <br>Default value is for
+        <strong>air</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!--Liquid and Water-->
+  <div class="my-2" *ngIf="currentField == 'liquidFlow'">
+    <h6>
+      Liquid Flow
+      <br>
+      <small class="text-muted">
+        Volumetric flow rate of liquid per hour. Note that for batch furnaces the total weight should be corrected for cycle time
+        to obtain weight per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!--Liquid-->
+  <div class="my-2" *ngIf="currentField == 'density'">
+    <h6>
+      Density
+      <br>
+      <small class="text-muted">
+        Density of the cooling liquid. Default value is for water; may be more accurate to compute as the average of density based
+        on inlet and outlet temperature.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'avgSpecificHeatLiquid'">
+    <h6>
+      Average Specific Heat
+      <br>
+      <small class="text-muted">
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        <br>Default value is for
+        <strong>water</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      Savings Suggestions
+      <br>
+      <small class="text-muted">
+        Insulate water or air cooled parts where possible
+        <br> Look for cracks, breaks and erosion of insulation. Repair and maintain furnace insulation
+        <br> Reduce or eliminate use of water cooled components by using high temperature materials for the components where
+        possible
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures.
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
   <!-- <p>Enter loss data<br>Note: the default Average Specific Heat and Density values are for Air or Water (depending on the chosen cooling medium).</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
   </p> -->
-
-</div>
-
-
-<div class="help-content">
-  <!-- All -->
-  <div class="card" *ngIf="currentField == 'coolingMedium'">
-    <div class="card-header">
-      Cooling Medium
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Select the appropriate cooling medium: gas or liquid.  The default values for gas represent air, the default values for liquid represent water.
-      </p>
-     </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'inletTemp'">
-    <div class="card-header">
-      Inlet temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        The temperature of the cooling medium as it enters the unit. Use production data or actual measurement.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'outletTemp'">
-    <div class="card-header">
-      Outlet temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        The temperature of the cooling medium as it enters the unit. Use production data or actual measurement.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'correctionFactor'">
-    <div class="card-header">
-      Correction Factor
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Engineering correction factor multiplied to the result to account for a known systematic error.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <!--Gas -->
-  <div class="card" *ngIf="currentField == 'gasFlow'">
-    <div class="card-header">
-      Gas Flow
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Volumetric flow rate of gas per hour. Note that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>SCFM</strong> or <strong>Nm<sup>3</sup>/min</strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'gasDensity'">
-    <div class="card-header">
-      Gas Density
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Density of the cooling gas. Default value is for air; may be more accurate to compute as the average of density based on inlet and outlet temperature.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>lb/SCF</strong> or <strong>kg/Nm<sup>3</sup></strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'avgSpecificHeatGas'">
-    <div class="card-header">
-      Average Specific Heat
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature.<br>Default value is for
-        <strong>air</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Btu/(lb-&#8457;)</strong> or <strong>kJ/(kg-&#8451;)</strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <!--Liquid and Water-->
-  <div class="card" *ngIf="currentField == 'liquidFlow'">
-    <div class="card-header">
-      Liquid Flow
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Volumetric flow rate of liquid per hour. Note that for batch furnaces the total weight should be corrected for
-        cycle time to obtain weight per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>U.S. gal/min</strong> or <strong>L/min</strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <!--Liquid-->
-  <div class="card" *ngIf="currentField == 'density'">
-    <div class="card-header">
-      Density
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Density of the cooling liquid. Default value is for water; may be more accurate to compute as the average of
-        density based on inlet and outlet temperature
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>lb/gal</strong> or <strong>kg/L</strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'avgSpecificHeatLiquid'" >
-    <div class="card-header">
-      Average Specific Heat
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature.<br>Default value is for <strong>water</strong>;
-        may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Btu/(lb-&#8457;)</strong> or <strong>kJ/(kg-&#8451;)</strong><br>Minimum Value Allowed: <strong>0</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
-      Savings Suggestions
-    </div>
-    <div class="card-block">
-      <!-- <label><u><strong>Description</strong></u></label> -->
-      <ul>
-        <li class="help-general">Insulate water or air cooled parts where possible</li>
-        <li class="help-general">Look for cracks, breaks and erosion of insulation.  Repair and maintain furnace insulation</li>
-        <li class="help-general">Reduce or eliminate use of water cooled components by using high temperature materials for the components where possible</li>
-        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only.  Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures.</li>
-      </ul>
-    </div>
-  </div>
-</div>

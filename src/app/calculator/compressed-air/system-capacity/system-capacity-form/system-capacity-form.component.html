@@ -1,6 +1,9 @@
 <form>
   <div class="form-section">
-    <label class="bold">Pipe Size (ft)</label>
+    <div class="form-group">
+      <label class="bold">Pipe Size (in.)</label>
+      <label class="bold text-center">Pipe Length</label>
+    </div>
     <div class="form-group">
       <label for="oneHalf"><sup>1</sup>&frasl;<sub>2</sub></label>
       <div class="input-group">
@@ -131,14 +134,14 @@
     <div class="form-group">
       <label class="bold">Total Receiver Volume</label>
       <div class="text-center small">
-        <span *ngIf="outputs.totalReceiverVolume"><strong>{{outputs.totalReceiverVolume | number:'1.0-2'}} ft<sup>2</sup></strong></span>
+        <span *ngIf="outputs.totalReceiverVolume"><strong>{{outputs.totalReceiverVolume | number:'1.0-2'}} ft<sup>3</sup></strong></span>
         <span *ngIf="!outputs.totalReceiverVolume"><strong>&mdash; &mdash;</strong></span>
       </div>
     </div>
     <div class="form-group">
       <label class="bold">Total Capacity of Compressed Air System</label>
       <div class="text-center small">
-        <span *ngIf="outputs.totalCapacityOfCompressedAirSystem"><strong>{{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-2'}} ft<sup>2</sup></strong></span>
+        <span *ngIf="outputs.totalCapacityOfCompressedAirSystem"><strong>{{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-2'}} ft<sup>3</sup></strong></span>
         <span *ngIf="!outputs.totalCapacityOfCompressedAirSystem"><strong>&mdash; &mdash;</strong></span>
       </div>
     </div>

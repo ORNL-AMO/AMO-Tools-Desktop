@@ -10,13 +10,15 @@ import { PumpCurveGraphComponent } from './pump-curve-graph/pump-curve-graph.com
 import { PumpCurveHelpComponent } from './pump-curve-help/pump-curve-help.component';
 import { PumpCurveService } from './pump-curve.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { SystemCurveModule } from '../system-curve/system-curve.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SystemCurveModule
   ],
   declarations: [
     PumpCurveComponent,
@@ -24,7 +26,7 @@ import { SharedModule } from '../../../shared/shared.module';
     PumpCurveEquationFormComponent,
     PumpCurveFormComponent,
     PumpCurveGraphComponent,
-    PumpCurveHelpComponent
+    PumpCurveHelpComponent,
   ],
   exports: [
     PumpCurveComponent

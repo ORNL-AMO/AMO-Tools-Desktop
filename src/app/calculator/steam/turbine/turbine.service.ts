@@ -19,7 +19,7 @@ export class TurbineService {
       turbineProperty: [0, Validators.required],// massFlow = 0, powerOut = 1
       isentropicEfficiency: ['', [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
       generatorEfficiency: ['', [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
-      massFlowOrPowerOut: ['', [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin), Validators.max(ranges.massFlowOrPowerOutMax)]],
+      massFlowOrPowerOut: ['', [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: ['', [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
       outletQuantity: [0],
       outletQuantityValue: ['', [ Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
@@ -37,7 +37,7 @@ export class TurbineService {
       turbineProperty: [inputObj.turbineProperty, Validators.required],// massFlow = 0, powerOut = 1
       isentropicEfficiency: [inputObj.isentropicEfficiency, [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
       generatorEfficiency: [inputObj.generatorEfficiency, [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
-      massFlowOrPowerOut: [inputObj.massFlowOrPowerOut, [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin), Validators.max(ranges.massFlowOrPowerOutMax)]],
+      massFlowOrPowerOut: [inputObj.massFlowOrPowerOut, [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: [inputObj.outletSteamPressure, [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
       outletQuantity: [inputObj.outletQuantity],
       outletQuantityValue: [inputObj.outletQuantityValue, [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
