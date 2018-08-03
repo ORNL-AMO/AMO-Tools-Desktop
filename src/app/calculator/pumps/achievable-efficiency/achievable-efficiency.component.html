@@ -1,3 +1,72 @@
+<div class="d-flex h-100 modify-conditions psat" *ngIf="settings">
+	<div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+		<div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+			<div class="col-md-auto">
+				<img src="assets/images/pump-eff.png" class="ico-size">
+			</div>
+			<div class="pl-2">
+				<h3>Achievable Efficiency Calculator</h3>
+			</div>
+		</div>
+		<div class="d-flex flex-column m-4">
+			<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
+		</div>
+	</div>
+	<div class="d-flex flex-column w-50 mh-100 scroll-item">
+		<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+					<div>Results</div>
+				</a>
+			</div>
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+					<div>Help</div>
+				</a>
+			</div>
+		</div>
+		<div class="d-flex mr-2 ml-2">
+			<div class="p-4 pt-2 d-flex flex-column help-info" *ngIf="tabSelect == 'help'">
+				<h5>
+					Achievable Efficiency Calculator Help
+					<br>
+					<small class="text-muted">
+						Determine the achievable pump efficiency for various pump styles which are based on the Hydraulic Institute (HI) standard
+						ANSI/HI 1.3-2000.
+					</small>
+				</h5>
+				<hr class="my-1 hr-spacer">
+				<div class="my-2">
+					<h6>
+						Pump Type
+						<br>
+						<small class="text-muted">
+							Represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
+							<hr>
+						</small>
+					</h6>
+				</div>
+				<div class="my-2">
+					<h6>
+						Flow Rate
+						<br>
+						<small class="text-muted">
+							Represents either the measured or required rate of flow.
+							<hr>
+						</small>
+					</h6>
+				</div>
+			</div>
+			<div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'" id="achievableEfficiencyGraph">
+				<app-achievable-efficiency-graph class="w-100" *ngIf="tabSelect == 'results'" [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- 
 <div class="modify-conditions panel-container row psat" *ngIf="settings">
 	<div class="col-12">
 		<div class="row align-items-top calculator-panel">
@@ -22,8 +91,10 @@
 						<ul class="tabs primary tab-row">
 							<li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
 								<a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-							</li><!--
-							--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+							</li>
+							<!--
+							--
+							<li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
 								<a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
 							</li>
 						</ul>
@@ -53,4 +124,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->

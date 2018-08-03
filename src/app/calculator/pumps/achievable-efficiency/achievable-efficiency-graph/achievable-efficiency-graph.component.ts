@@ -132,6 +132,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
+  }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -209,10 +216,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
   // ========== end tooltip functions ==========
-
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
