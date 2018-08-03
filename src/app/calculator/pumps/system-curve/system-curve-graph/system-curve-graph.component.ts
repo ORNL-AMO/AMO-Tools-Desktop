@@ -112,7 +112,11 @@ export class SystemCurveGraphComponent implements OnInit {
         this.toggleGrid();
       });
   }
-
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
+  }
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -191,9 +195,7 @@ export class SystemCurveGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
@@ -700,7 +702,7 @@ export class SystemCurveGraphComponent implements OnInit {
       tableFocus.append("circle")
         .attr("r", 6)
         .attr("id", "tablePoint-" + i)
-        .style("fill",  this.tableData[i].fillColor)
+        .style("fill", this.tableData[i].fillColor)
         .style("stroke", this.tableData[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
