@@ -1,17 +1,4 @@
-.form-header{
-    font-size: 12px;
-}
-
-.header{
-    padding-bottom: 0px;
-}
-
-label{
-    font-weight: normal;
-    font-size: small;
-}
-
-
-form{
-    padding-top: 0px;
+.group-label{
+    width: 100%;
+    font-size: larger;
 }
