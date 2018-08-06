@@ -1,110 +1,96 @@
-<!--<div class="help-header">-->
-  <!--<h3>-->
-    <!--O<sub>2</sub> Enrichment Help-->
-  <!--</h3>-->
-  <!--<p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings-->
-    <!--when oxygen in combustion, "air", is changed from standard (21%) to a higher value. Enter data for current ("Combustion-->
-    <!--with Air") and new ("Combustion with Oxygen Enriched Air") configurations.</p>-->
-<!--</div>-->
-    <div class="help-content">
-      <div class="card" *ngIf="currentField == 'o2CombAir'">
-        <div class="card-header">
-          O<sub>2</sub> Combustion Air
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Molar (or volumetric) fraction (%) of O<sub>2</sub> in incoming air for combustion. Oxygen enrichment can result
-            in increased efficiency, lower emissions, and improved temperature stability.
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: %<strong></strong><br> Minimum Value Allowed: <strong>21</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'combAirTemp'">
-        <div class="card-header">
-          Combustion Air Preheat Temperature
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Temperature of the incoming combustion air after preheating. Use of preheated combustion air increases the available heat
-            (compared to combustion air at ambient temperature).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: &#8457;<strong></strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'o2FlueGas'">
-        <div class="card-header">
-          O<sub>2</sub> in Flue Gases
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content). Higher
-            O
-            <sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue
-            gas (lowering the available heat).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: % Dry<strong></strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'flueGasTemp'">
-        <div class="card-header">
-          Flue Gas Temperature
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Temperature of the outgoing flue gas. Higher flue gas temperature increases the heat content of flue gases and indicates
-            less heat was retained by the system (lower available heat).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: &#8457;<strong></strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'fuelConsumption'">
-        <div class="card-header">
-          Fuel Consumption
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Energy of consumed fuel
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: MMBtu/hr<strong></strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'default'">
-        <div class="help-header">
-          <h3>
-            O<sub>2</sub> Enrichment
-          </h3>
-          <p>
-          Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
-          when oxygen in combustion, "air", is changed from standard (21%) to a higher value. Enter data for current ("Combustion
-          with Air") and new ("Combustion with Oxygen Enriched Air") configurations.
-          </p>
-        </div>
-        <div class="card-block">
-          <div class="alert alert-info">
-            <p>
-              Note: This calculator is only valid for natural gas fuels in North America.
-            </p>
-          </div>
-        </div>
-      </div>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    O
+    <sub>2</sub> Enrichment
+    <br>
+    <small class="text-muted"> Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
+      when oxygen in combustion, "air", is changed from standard (21%) to a higher value. Enter data for current ("Combustion
+      with Air") and new ("Combustion with Oxygen Enriched Air") configurations.
+
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'o2CombAir'">
+    <h6>
+      O
+      <sub>2</sub> Combustion Air
+      <br>
+      <small class="text-muted">
+        Molar (or volumetric) fraction (%) of O
+        <sub>2</sub> in incoming air for combustion. Oxygen enrichment can result in increased efficiency, lower emissions, and
+        improved temperature stability.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped w-50">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">21 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'combAirTemp'">
+    <h6>
+      Combustion Air Preheat Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the incoming combustion air after preheating. Use of preheated combustion air increases the available heat
+        (compared to combustion air at ambient temperature).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'o2FlueGas'">
+    <h6>
+      O
+      <sub>2</sub> in Flue Gases
+      <br>
+      <small class="text-muted">
+        Molar (or volumetric) fraction (% Dry) of O
+        <sub>2</sub> in outgoing flue gas (ignoring moisture content). Higher O
+        <sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering
+        the available heat).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flueGasTemp'">
+    <h6>
+      Flue Gas Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the outgoing flue gas. Higher flue gas temperature increases the heat content of flue gases and indicates
+        less heat was retained by the system (lower available heat).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fuelConsumption'">
+    <h6>
+      Fuel Consumption
+      <br>
+      <small class="text-muted">
+        Energy of consumed fuel
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="d-flex justify-content-center w-100" *ngIf="currentField == 'default'">
+    <div class="alert alert-info">
+      <p>
+        Note: This calculator is only valid for natural gas fuels in North America.
+      </p>
+    </div>
+  </div>
 </div>
