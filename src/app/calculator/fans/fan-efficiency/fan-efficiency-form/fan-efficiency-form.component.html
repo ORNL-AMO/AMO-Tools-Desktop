@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="fanType">Fan Type</label>
         <div class="input-group">
-            <select class="form-control" name="fanType" id="fanType" [(ngModel)]="inputs.fanType" (change)="emitCalculate()" (focus)="focusField('fanType')">
+            <select class="form-control" name="fanType" id="fanType" [(ngModel)]="inputs.fanType" (change)="emitCalculate()" (focus)="focusField('fanType')" required>
                 <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
             </select>
         </div>
@@ -11,7 +11,7 @@
         <label for="fanSpeed">Fan Speed</label>
         <div class="input-group">
             <input type="number" name="fanSpeed" min="0" step="10" class="form-control" [(ngModel)]="inputs.fanSpeed" id="fanSpeed" (input)="emitCalculate()"
-                (focus)="focusField('fanSpeed')" onfocus="this.select();">
+                (focus)="focusField('fanSpeed')" onfocus="this.select();" required>
             <span class="input-group-addon units">rpm</span>
         </div>
         <span class="alert-warning pull-right small" *ngIf="fanSpeedError !== null">{{fanSpeedError}}</span>
@@ -23,7 +23,7 @@
         </label>
         <div class="input-group">
             <input name="inletPressure" type="number" step="any" class="form-control" [(ngModel)]="inputs.inletPressure" id="inletPressure"
-                (input)="emitCalculate()" (focus)="focusField('inletPressure')" onfocus="this.select();">
+                (input)="emitCalculate()" (focus)="focusField('inletPressure')" onfocus="this.select();" required>
             <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
         </div>
     </div>
@@ -35,7 +35,7 @@
         </label>
         <div class="input-group">
             <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" [(ngModel)]="inputs.outletPressure"
-                id="outletPressure" (input)="emitCalculate()" (focus)="focusField('outletPressure')" onfocus="this.select();">
+                id="outletPressure" (input)="emitCalculate()" (focus)="focusField('outletPressure')" onfocus="this.select();" required>
             <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
         </div>
         <span class="alert-warning pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span>
@@ -47,7 +47,7 @@
         </label>
         <div class="input-group">
             <input name="flowRate" type="number" min="0" step="any" class="form-control" [(ngModel)]="inputs.flowRate" id="flowRate"
-                (input)="emitCalculate()" (focus)="focusField('flowRate')" onfocus="this.select();">
+                (input)="emitCalculate()" (focus)="focusField('flowRate')" onfocus="this.select();" required>
             <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
         </div>
         <span class="alert-warning pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
@@ -58,7 +58,7 @@
             <!-- <a class="form-text small click-link" *ngIf="baseline" (click)="calculatCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate Compressibility Factor</a> -->
         </label>
         <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" [(ngModel)]="inputs.compressibility"
-            id="compressibilityFactor" (input)="emitCalculate()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();">
+            id="compressibilityFactor" (input)="emitCalculate()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();" required>
         <span class="alert-warning pull-right small" *ngIf="compressibilityFactorError !== null">{{compressibilityFactorError}}</span>
     </div>
 </form>
