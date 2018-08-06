@@ -117,6 +117,12 @@ export class PumpCurveGraphComponent implements OnInit {
       });
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
+  }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -195,9 +201,6 @@ export class PumpCurveGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
 
   //merge system curve
   ngOnChanges(changes: SimpleChanges) {
@@ -968,7 +971,7 @@ export class PumpCurveGraphComponent implements OnInit {
     let bb1 = item1.getBBox();
     let item2 = d3.select("#legend-text-" + 2).node();
     let bb2 = item2.getBBox();
-    
+
     this.svg.append("path")
       .attr("class", "legend")
       .attr("data-legend-key", 0)
