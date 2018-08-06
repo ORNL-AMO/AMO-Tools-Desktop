@@ -1116,7 +1116,7 @@ Calculators
 
 .ico-size2 {
   height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(255, 0, 22, 0.42));
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);

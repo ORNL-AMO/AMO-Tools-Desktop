@@ -1,108 +1,83 @@
-<div class="help-panel">
-  <div class="calc-help">
-    <!--<div class="help-header">
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Efficiency Improvement Calculater Help
+    <br>
+    <small class="text-muted"> Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions
+      (Flue gas oxygen levels and temperature and combustion temperature).
 
-      <h3>Efficiency Improvement Calculater Help</h3>
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'flueGasOxygen'">
+    <h6>
+      Flue Gas O
+      <sub>2</sub>
+      <br>
+      <small class="text-muted">
+        The volumetric or molar fraction of O
+        <sub>2</sub> in the exhaust (flue) gases (ignoring moisture content). Higher O
+        <sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering
+        the available heat).
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flueGasTemp'">
+    <h6>
+      Flue Gas Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the outgoing flue gas. Higher flue gas temperature increases the heat content of flue gases and indicates
+        less heat was retained by the system (lower available heat).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'combustionAirTemp'">
+    <h6>
+      Combustion Air Temp
+      <br>
+      <small class="text-muted">
+        Temperature of the incoming combustion air after preheating. Use of preheated combustion air increases the available heat
+        (compared to combustion air at ambient temperature).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'energyInput'">
+    <h6>
+      Energy Input
+      <br>
+      <small class="text-muted">
+        Energy of input fuel.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="d-flex justify-content-center w-100" *ngIf="currentField == 'default'">
+    <div class="alert alert-info">
       <p>
-        Provides calculation of available heat (the heat that remains within the heating system as a fraction of the
-        heat input, which is an indication of thermal efficiency) and fuel savings for fuel fired furnaces and expected
-        energy savings when the burner operating conditions are changed. Achieving a decrease in flue gas oxygen implies
-        a reduction in excess air, which increases the available heat.  Enter data for "current" and "new"
-        configurations.
+        Note: This calculator is only valid for natural gas fuels in North America.
       </p>
-    <p class="text-muted">
-      <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
-    </p>
-  </div>-->
-
-
-    <div class="help-content">
-      <div class="card" *ngIf="currentField == 'flueGasOxygen'">
-        <div class="card-header">
-          Flue Gas O<sub>2</sub>
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            The volumetric or molar fraction of O<sub>2</sub> in the exhaust (flue) gases (ignoring moisture content). Higher
-            O
-            <sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue
-            gas (lowering the available heat).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>Percent (%)</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
-            <strong>100</strong><br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'flueGasTemp'">
-        <div class="card-header">
-          Flue Gas Temperature
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Temperature of the outgoing flue gas. Higher flue gas temperature increases the heat content of flue gases and indicates
-            less heat was retained by the system (lower available heat).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong> &#8457;</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'combustionAirTemp'">
-        <div class="card-header">
-          Combustion Air Temp
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Temperature of the incoming combustion air after preheating. Use of preheated combustion air increases the available heat
-            (compared to combustion air at ambient temperature).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong> &#8457;</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'energyInput'">
-        <div class="card-header">
-          Energy Input
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Energy of input fuel.
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>MMBtu/hr</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-
-        <div class="card" *ngIf="currentField == 'default'">
-          <div class="card-header">
-            Efficiency Improvement
-          </div>
-          <div class="card-block">
-            <label><u>Description:</u></label>
-            <p>
-              Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions (Flue gas oxygen levels and temperature and combustion temperature).
-            </p>
-            <div class="alert alert-info">
-              <p>
-                Note: This calculator is only valid for natural gas fuels in North America.
-              </p>
-            </div>
-          </div>
-        </div>
     </div>
   </div>
 </div>
