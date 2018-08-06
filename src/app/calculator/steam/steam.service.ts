@@ -310,7 +310,7 @@ export class SteamService {
     let results: HeaderOutput = steamAddon.header(input);
     //converOutput
     for (var key in results) {
-      results[key].energyFlow = this.convertEnergyFlowOutput(results[key].energyFlow, settings) / 1000000;
+      results[key].energyFlow = this.convertEnergyFlowOutput(results[key].energyFlow, settings) / 1000;
       results[key].massFlow = this.convertSteamMassFlowOutput(results[key].massFlow, settings);
       results[key].pressure = this.convertSteamPressureOutput(results[key].pressure, settings);
       results[key].specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results[key].specificEnthalpy, settings);
