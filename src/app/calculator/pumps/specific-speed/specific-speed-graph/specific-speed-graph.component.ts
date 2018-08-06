@@ -95,7 +95,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.resizeGraph();
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
   }
 
   ngOnChanges(changes: SimpleChanges) {

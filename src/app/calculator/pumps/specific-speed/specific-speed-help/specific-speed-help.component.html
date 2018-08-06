@@ -1,52 +1,55 @@
-<div class="help-panel">
-  <div class="help-content">
-    <div class="card" *ngIf="currentField == 'pumpType'">
-      <div class="card-header">
-        Pump Type
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
-        </p>
-      </div>
-    </div>
+<div class="p-4 pt-2 d-flex flex-column help-info" *ngIf="!isFan">
+  <h5>
+    Specific Speed Help
+    <br>
+    <small class="text-muted">
+      For each pump type there is an optimal specific speed based on size, flow rate, and specific speed. Operation at the optimal
+      specific speed allows a pump to operate at maximum efficiency. Hydraulic Institute standards also include factors for
+      wear and surface finish on wetted parts that are not considered in these calculations.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'pumpType'">
+    <h6>
+      Pump Type
+      <br>
+      <small class="text-muted">
+        Represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-    <div class="card" *ngIf="currentField == 'pumpRPM'">
-      <div class="card-header">
-        Pump Speed
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The speed of the pump in revolutions per minute (rpm).
-        </p>
-      </div>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'pumpRPM'">
+    <h6>
+      Pump Speed
+      <br>
+      <small class="text-muted">
+        The speed of the pump in revolutions per minute (rpm).
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-    <div class="card" *ngIf="currentField == 'flowRate'">
-      <div class="card-header">
-        Flow Rate
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Volume of liquid that travels through the pump in a given time (measured in gallons per minute or gpm).
-        </p>
-      </div>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Flow Rate
+      <br>
+      <small class="text-muted">
+        Volume of liquid that travels through the pump in a given time (measured in gallons per minute or gpm).
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-    <div class="card" *ngIf="currentField == 'head'">
-      <div class="card-header">
-        Head
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Head is the height at which a pump can raise water up.
-        </p>
-      </div>
-    </div>
-
+  <div class="my-2" *ngIf="currentField == 'head'">
+    <h6>
+      Head
+      <br>
+      <small class="text-muted">
+        Head is the height at which a pump can raise water up.
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>
