@@ -14,8 +14,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   graphColors: Array<string>;
   @Input()
   psatOptions: Array<{ name: string, psat: PSAT }>;
-  @Input()
-  barChartWidth: number;
+
   @Input()
   pieChartWidth: number;
   @Input()
@@ -41,6 +40,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('init');
     this.modifications = new Array<Modification>();
     this.allNotes = new Array<Array<string>>();
     if (this.psatOptions === null || this.psatOptions === undefined) {
@@ -69,16 +69,16 @@ export class PsatReportGraphsPrintComponent implements OnInit {
 
       if (this.modifications[i].notes) {
         if (this.modifications[i].notes.systemBasicsNotes) {
-          notes.push("Charge Material - " + this.modifications[i].notes.systemBasicsNotes);
+          notes.push("System Basics - " + this.modifications[i].notes.systemBasicsNotes);
         }
         if (this.modifications[i].notes.pumpFluidNotes) {
-          notes.push("Wall Loss - " + this.modifications[i].notes.pumpFluidNotes);
+          notes.push("Pump Fluid - " + this.modifications[i].notes.pumpFluidNotes);
         }
         if (this.modifications[i].notes.motorNotes) {
-          notes.push("Atmosphere Loss - " + this.modifications[i].notes.motorNotes);
+          notes.push("Motor- " + this.modifications[i].notes.motorNotes);
         }
         if (this.modifications[i].notes.fieldDataNotes) {
-          notes.push("Fixture Loss - " + this.modifications[i].notes.fieldDataNotes);
+          notes.push("Field Data - " + this.modifications[i].notes.fieldDataNotes);
         }
       }
       this.allNotes.push(notes);
