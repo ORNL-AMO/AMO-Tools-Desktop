@@ -8,6 +8,7 @@
     </div>
     <div class="d-flex flex-column m-4">
       <app-turbine-form [turbineForm]="turbineForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-turbine-form>
+      <span *ngIf="warning !== null" class="alert-warning pull-right small">{{warning}}</span>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
