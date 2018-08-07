@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
 import {StandaloneService} from "../../standalone.service";
 import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
 
@@ -8,6 +8,15 @@ import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
   styleUrls: ['./air-velocity.component.css']
 })
 export class AirVelocityComponent implements OnInit {
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
 
   inputs: AirVelocityInput;
   outputs: PipeSizes;
@@ -37,7 +46,17 @@ export class AirVelocityComponent implements OnInit {
     // this.getAirVelocity();
     // console.log(this.airVelocityOutput);
   }
-  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   getAirVelocity (inputs: AirVelocityInput) {
     this.outputs = StandaloneService.airVelocity(inputs);
   }

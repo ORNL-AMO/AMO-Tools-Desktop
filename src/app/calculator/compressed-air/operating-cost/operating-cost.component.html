@@ -1,3 +1,32 @@
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/operation-cost.png" class="ico-size5">
+      </div>
+      <div class="pl-2">
+        <h3>Operation Cost Calculations</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-operating-cost-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculateOperationCost($event)" (emitChangeField)="setField($event)"></app-operating-cost-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-operating-cost-help [currentField]="currentField"></app-operating-cost-help>
+    </div>
+  </div>
+</div>
+
+<!-- 
 <div class="panel-container row compressed-air">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
@@ -23,4 +52,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

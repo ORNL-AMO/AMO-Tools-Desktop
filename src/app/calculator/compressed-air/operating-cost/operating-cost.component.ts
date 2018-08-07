@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {OperatingCostInput, OperatingCostOutput} from "../../../shared/models/standalone";
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-operating-cost',
@@ -8,6 +8,14 @@ import {OperatingCostInput, OperatingCostOutput} from "../../../shared/models/st
   styleUrls: ['./operating-cost.component.css']
 })
 export class OperatingCostComponent implements OnInit {
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
@@ -35,11 +43,21 @@ export class OperatingCostComponent implements OnInit {
       totalAnnualCost: 0,
     };
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   calculateOperationCost(inputs: OperatingCostInput) {
     this.outputs = StandaloneService.operatingCost(inputs);
   }
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
 }
