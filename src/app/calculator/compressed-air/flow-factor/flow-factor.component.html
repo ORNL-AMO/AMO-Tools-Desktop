@@ -1,3 +1,78 @@
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/pneumatic-valve-flow-factor.png" class="ico-size5">
+      </div>
+      <div class="pl-2">
+        <h3>Pneumatic Valve Flow Factor</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-flow-factor-form [inputs]="inputs" (setUser)="setUserFlowRate($event)" (calculate)="getValveFlowFactor()" [(userFlowRate)]="userFlowRate"
+        [valveFlowFactor]="valveFlowFactor" (emitChangeField)="changeField($event)"></app-flow-factor-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          Flow Factor Help
+          <br>
+          <small class="text-muted"> There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow
+            coefficient C
+            <sub>v</sub> equal to 1. The second one is used for calculating C
+            <sub>v</sub>
+            when the flow rate is known.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'inletPressure'">
+          <h6>
+            Inlet Pressure
+            <br>
+            <small class="text-muted">
+              Pressure entering the pneumatic valve
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'outletPressure'">
+          <h6>
+            Outlet Pressure
+            <br>
+            <small class="text-muted">
+              Pressure leaving the pneumatic valve.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'flowRate'">
+          <h6>
+            Flow Rate
+            <br>
+            <small class="text-muted">
+              Flow rate in the valve.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
 <div class="panel-container row compressed-air">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
@@ -20,8 +95,10 @@
           <div class="tab-content">
             <div class="card-header">Description</div>
             <p>
-              There are two calculators in this section. The first one can be used for finding flow rate for a pipe
-              with flow coefficient C<sub>v</sub> equal to 1. The second one is used for calculating C<sub>v</sub>
+              There are two calculators in this section. The first one can be used for finding flow rate for a pipe with flow coefficient
+              C
+              <sub>v</sub> equal to 1. The second one is used for calculating C
+              <sub>v</sub>
               when the flow rate is known.
             </p>
             <div class="card" *ngIf="currentField == 'inletPressure'">
@@ -53,4 +130,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
