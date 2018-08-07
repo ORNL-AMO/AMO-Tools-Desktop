@@ -76,6 +76,10 @@ Tabs
     border-bottom: #2C3E50 groove 3px;
   }
 
+  .compressed-air .tabs.primary .active a {
+    border: none;
+    border-bottom:   #A569BD groove 3px;
+  }
 
 
 

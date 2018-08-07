@@ -1,59 +1,80 @@
-<div class="panel-container row compressed-air">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="panel-column col-6 align-top">
-        <div class="header">
-          <h3>Leak Loss Estimator - Bag Method</h3>
-        </div>
-        <div class="row">
-          <div class="col-12 tab-content">
-            <app-bag-method-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculateAnnualConsumption($event)"
-                                 (emitChangeField)="changeField($event)"></app-bag-method-form>
-          </div>
-        </div>
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/leakage-loss-estimator.png" class="ico-size5">
       </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="header">
-            <h3>Help</h3>
-          </div>
-          <div class="card-header">Description</div>
-          <div>
-            <p>Use the calculator to estimate the leakage rate of orifices in your compressed air system. Cover a suspected leak with a trash bag and calculate the number of seconds it takes to fill the bag. Once done, close the bag and measure its dimensions. Compressed air leaks should be tagged and fixed at first chance, this calculator just helps to quantify the savings.</p>
-          </div>
+      <div class="pl-2">
+        <h3>Leak Loss Estimator - Bag Method</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-bag-method-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculateAnnualConsumption($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          Bag Method Help
+          <br>
+          <small class="text-muted"> Use the calculator to estimate the leakage rate of orifices in your compressed air system. Cover a suspected leak
+            with a trash bag and calculate the number of seconds it takes to fill the bag. Once done, close the bag and measure
+            its dimensions. Compressed air leaks should be tagged and fixed at first chance, this calculator just helps to
+            quantify the savings.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
 
-          <div class="card" *ngIf="currentField == 'operatingHours'">
-            <div class="card-header">
-              Operating Time
-            </div>
-            <div class="card-block">
-              <p>The hours per year that the compressor system is in use.</p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'fillTime'">
-            <div class="card-header">
-              Bag Fill Time
-            </div>
-            <div class="card-block">
-              <p>The number of seconds it takes to fill the bag.</p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'height'">
-            <div class="card-header">
-              Height of Bag
-            </div>
-            <div class="card-block">
-              <p>The height of the bag after inflation in inches.</p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'diameter'">
-            <div class="card-header">
-              Diameter of Bag
-            </div>
-            <div class="card-block">
-              <p>The diameter of the bag after inflation in inches.</p>
-            </div>
-          </div>
+        <div class="my-2" *ngIf="currentField == 'operatingHours'">
+          <h6>
+            Operating Time
+            <br>
+            <small class="text-muted">
+              The hours per year that the compressor system is in use.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'fillTime'">
+          <h6>
+            Bag Fill Time
+            <br>
+            <small class="text-muted">
+              The number of seconds it takes to fill the bag.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'height'">
+          <h6>
+            Height of Bag
+            <br>
+            <small class="text-muted">
+              The height of the bag after inflation in inches.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'diameter'">
+          <h6>
+            Diameter of Bag
+            <br>
+            <small class="text-muted">
+              The diameter of the bag after inflation in inches.
+              <hr>
+            </small>
+          </h6>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {BagMethodInput, BagMethodOutput} from "../../../shared/models/standalone";
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-bag-method',
@@ -8,6 +8,16 @@ import {BagMethodInput, BagMethodOutput} from "../../../shared/models/standalone
   styleUrls: ['./bag-method.component.css']
 })
 export class BagMethodComponent implements OnInit {
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
 
   inputs: BagMethodInput;
   outputs: BagMethodOutput;
@@ -27,6 +37,18 @@ export class BagMethodComponent implements OnInit {
       flowRate: 0,
       annualConsumption: 0
     };
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   calculateAnnualConsumption(inputs: BagMethodInput) {
