@@ -1,4 +1,41 @@
-<div class="modify-conditions panel-container row general">
+<div class="d-flex h-100 modify-conditions general">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto ico-col">
+        <img src="assets/images/chp.png" class="ico-size3">
+      </div>
+      <div class="pl-2">
+        <h3>Heat and Power Calculator</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-combined-heat-power-help *ngIf="tabSelect == 'help'" [currentField]="currentField" [inputs]="inputs"></app-combined-heat-power-help>
+      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
+        <app-combined-heat-power-results [results]="results"></app-combined-heat-power-results>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="modify-conditions panel-container row general">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -8,11 +45,11 @@
               Heat and Power Calculator
             </h3>
           </div>
-            <div class="row">
-              <div class="col-12">
-                <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
-              </div>
+          <div class="row">
+            <div class="col-12">
+              <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
             </div>
+          </div>
         </div>
       </div>
       <div class="col-6 align-top">
@@ -21,9 +58,11 @@
             <ul class="tabs primary tab-row">
               <li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
                 <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
-              </li><!--
-              --><li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-                  <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
+              </li>
+              <!--
+              --
+              <li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
               </li>
             </ul>
           </div>
@@ -43,5 +82,4 @@
       </div>
     </div>
   </div>
-</div>
-
+</div> -->
