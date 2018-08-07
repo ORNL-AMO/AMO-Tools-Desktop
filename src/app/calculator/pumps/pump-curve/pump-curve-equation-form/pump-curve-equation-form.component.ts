@@ -27,6 +27,9 @@ export class PumpCurveEquationFormComponent implements OnInit {
     2, 3, 4, 5, 6
   ]
 
+  warning: boolean = false;
+  constantWarning: string = null;
+
   // maxFlow
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
@@ -39,7 +42,24 @@ export class PumpCurveEquationFormComponent implements OnInit {
   }
 
   emitCalculateChanges() {
-    this.calculate.emit(true);
+    this.checkWarnings();
+    if (this.warning) {
+
+    }
+    else {
+      this.calculate.emit(true);
+    }
+  }
+
+  checkWarnings() {
+    if (this.pumpCurveForm.headConstant <= 0) {
+      this.constantWarning = "Value must be greater than 0.";
+      this.warning = true;
+    }
+    else {
+      this.warning = false;
+      this.constantWarning = null;
+    }
   }
 
   setOrder() {
