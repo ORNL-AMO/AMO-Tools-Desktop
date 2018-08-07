@@ -38,7 +38,6 @@ export class PumpCurveFormComponent implements OnInit {
     'Speed'
   ]
 
-  warning: boolean = false;
   modWarning: string = null;
 
   constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
@@ -60,10 +59,7 @@ export class PumpCurveFormComponent implements OnInit {
 
   calculate() {
     this.checkWarnings();
-    if (this.warning) {
-
-    }
-    else {
+    if (this.modWarning == null) {
       this.emitCalculate.emit(true);
     }
   }
@@ -130,10 +126,8 @@ export class PumpCurveFormComponent implements OnInit {
   checkWarnings() {
     if (this.pumpCurveForm.modifiedMeasurement < (this.pumpCurveForm.baselineMeasurement * .5) || this.pumpCurveForm.modifiedMeasurement > (this.pumpCurveForm.baselineMeasurement * 1.5)) {
       this.modWarning = "Modified value must be within +/-50% of the baseline value.";
-      this.warning = true;
     }
     else {
-      this.warning = false;
       this.modWarning = null;
     }
   }
