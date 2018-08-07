@@ -1,37 +1,42 @@
-<div class="card">
-  <div class="card-header">
+<div class="my-2">
+  <h6>
     General
-  </div>
-  <div class="card-block small d-flex flex-column">
-    <p>General method is used when the user needs to order a receiver tank to meet the compressed air requirements.</p>
+    <br>
+    <small class="text-muted">
+      General method is used when the user needs to order a receiver tank to meet the compressed air requirements.
+      <hr>
+    </small>
+  </h6>
+</div>
 
-    <div class="help-content">
-      <div class="card" *ngIf="currentField == 'airDemand'">
-        <div class="card-header">
-          Air Demand
-        </div>
-        <div class="card-block">
-          <p>Amount of air needed, which comes out of the receiver tank.</p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'allowablePressureDrop'">
-        <div class="card-header">
-          Allowable Pressure Drop
-        </div>
-        <div class="card-block">
-          <p>The pressure drop inside the receiver tank within the tolerable limits.</p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'atmosphericPressure'">
-        <div class="card-header">
-          Atmospheric Pressire
-        </div>
-        <div class="card-block">
-          <p>General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric
-            pressure at that location can be given. </p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="my-2" *ngIf="currentField == 'airDemand'">
+  <h6>
+    Air Demand
+    <br>
+    <small class="text-muted">
+      Amount of air needed, which comes out of the receiver tank.
+      <hr>
+    </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'allowablePressureDrop'">
+  <h6>
+    Allowable Pressure Drop
+    <br>
+    <small class="text-muted">
+      The pressure drop inside the receiver tank within the tolerable limits.
+      <hr>
+    </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+  <h6>
+    Atmospheric Pressure
+    <br>
+    <small class="text-muted">
+      General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+      at that location can be given.
+      <hr>
+    </small>
+  </h6>
 </div>
