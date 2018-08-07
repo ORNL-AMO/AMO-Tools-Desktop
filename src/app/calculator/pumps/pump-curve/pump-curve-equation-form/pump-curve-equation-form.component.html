@@ -7,9 +7,9 @@
     <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
       id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')" *ngIf="!isFan">
     <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-           id="maxFlow" onfocus="this.select();" (focus)="focusField('fanMaxFlow')" *ngIf="isFan">
-      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+      id="maxFlow" onfocus="this.select();" (focus)="focusField('fanMaxFlow')" *ngIf="isFan">
+    <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+    <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
   </div>
 </div>
 
@@ -21,7 +21,7 @@
     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
   </select>
   <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('pressureOrder')"
-          (change)="setOrder()" *ngIf="isFan">
+    (change)="setOrder()" *ngIf="isFan">
     <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
   </select>
 </div>
@@ -31,7 +31,10 @@
   <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')" *ngIf="!isFan">
   <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')" *ngIf="isFan">
+    id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')" *ngIf="isFan">
+  <span class="alert-danger pull-right small" *ngIf="constantWarning !== null">
+    {{constantWarning}}
+  </span>
 </div>
 
 <div class="form-group">
@@ -39,7 +42,7 @@
   <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow" onfocus="this.select();" (focus)="focusField('headFlow')" *ngIf="!isFan">
   <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow" onfocus="this.select();" (focus)="focusField('pressureFlow')" *ngIf="isFan">
+    id="headFlow" onfocus="this.select();" (focus)="focusField('pressureFlow')" *ngIf="isFan">
 </div>
 
 
@@ -50,7 +53,7 @@
   <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow2" onfocus="this.select();" (focus)="focusField('headFlow2')" *ngIf="!isFan">
   <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow2" onfocus="this.select();" (focus)="focusField('pressureFlow2')" *ngIf="isFan">
+    id="headFlow2" onfocus="this.select();" (focus)="focusField('pressureFlow2')" *ngIf="isFan">
 </div>
 
 
@@ -61,7 +64,7 @@
   <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow3" onfocus="this.select();" (focus)="focusField('headFlow3')" *ngIf="!isFan">
   <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow3" onfocus="this.select();" (focus)="focusField('pressureFlow3')" *ngIf="isFan">
+    id="headFlow3" onfocus="this.select();" (focus)="focusField('pressureFlow3')" *ngIf="isFan">
 </div>
 
 <div class="form-group" *ngIf="pumpCurveForm.headOrder > 3">
@@ -71,7 +74,7 @@
   <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow4" onfocus="this.select();" (focus)="focusField('headFlow4')" *ngIf="!isFan">
   <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow4" onfocus="this.select();" (focus)="focusField('pressureFlow4')" *ngIf="isFan">
+    id="headFlow4" onfocus="this.select();" (focus)="focusField('pressureFlow4')" *ngIf="isFan">
 </div>
 
 <div class="form-group row" *ngIf="pumpCurveForm.headOrder > 4">
@@ -81,7 +84,7 @@
   <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow5" onfocus="this.select();" (focus)="focusField('headFlow5')" *ngIf="!isFan">
   <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow5" onfocus="this.select();" (focus)="focusField('pressureFlow5')" *ngIf="isFan">
+    id="headFlow5" onfocus="this.select();" (focus)="focusField('pressureFlow5')" *ngIf="isFan">
 </div>
 
 <div class="form-group row" *ngIf="pumpCurveForm.headOrder > 5">
@@ -91,5 +94,5 @@
   <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
     id="headFlow6" onfocus="this.select();" (focus)="focusField('headFlow6')" *ngIf="!isFan">
   <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-         id="headFlow6" onfocus="this.select();" (focus)="focusField('pressureFlow6')" *ngIf="isFan">
+    id="headFlow6" onfocus="this.select();" (focus)="focusField('pressureFlow6')" *ngIf="isFan">
 </div>
