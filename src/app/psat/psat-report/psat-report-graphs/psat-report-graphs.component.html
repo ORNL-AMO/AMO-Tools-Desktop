@@ -74,9 +74,8 @@
   <div *ngIf="printView" class="row show-print print-component">
     <!-- contains pie and bar chart print views -->
     <div class="col-12">
-      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions" [barChartWidth]="getBarWidth()"
-        [pieChartWidth]="getPieWidth()" [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs"
-        [allChartData]="allChartData"></app-psat-report-graphs-print>
+      <app-psat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [psatOptions]="psatOptions" [pieChartWidth]="getPieWidth()"
+        [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs" [allChartData]="allChartData"></app-psat-report-graphs-print>
     </div>
   </div>
 

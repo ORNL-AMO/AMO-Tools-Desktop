@@ -5,6 +5,7 @@ import { SteamService } from '../steam.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PrvService } from './prv.service';
 import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-prv',
@@ -22,7 +23,9 @@ export class PrvComponent implements OnInit {
   input: PrvInput;
   results: PrvOutput;
   isSuperHeating: boolean = false;
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private prvService: PrvService) { }
+
+  warning: string = null;
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private prvService: PrvService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -53,7 +56,7 @@ export class PrvComponent implements OnInit {
     this.calculate(this.inletForm, this.feedwaterForm);
   }
 
-  setInletForm(form: FormGroup){
+  setInletForm(form: FormGroup) {
     this.inletForm = form;
     this.calculate(this.inletForm, this.feedwaterForm);
   }
@@ -63,6 +66,7 @@ export class PrvComponent implements OnInit {
       this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
       if ((inletForm.status == 'VALID') && (feedwaterForm.status == 'VALID')) {
         this.results = this.steamService.prvWithDesuperheating(this.input, this.settings);
+        this.checkWarning(this.results, this.input);
       } else {
         this.results = this.getEmptyResults();
       }
@@ -75,6 +79,27 @@ export class PrvComponent implements OnInit {
       }
     }
   }
+
+
+  checkWarning(results: PrvOutput, input: PrvInput) {
+    if (results.outletSpecificEnthalpy > results.inletSpecificEnthalpy) {
+      this.warning = "Outlet specific enthalpy associated with set desuperheating temperature is greater than inlet specific enthalpy. Desuperheating canceled.";
+    }
+    else if (input.desuperheatingTemp) {
+      let desuperheatingTemp = this.convertUnitsService.value(input.desuperheatingTemp - 273.15).from('C').to(this.settings.steamTemperatureMeasurement);
+      if (desuperheatingTemp > results.inletTemperature) {
+        this.warning = "Outlet specific enthalpy associated with set desuperheating temperature is greater than inlet specific enthalpy. Desuperheating canceled.";
+      } 
+      else {
+        this.warning = null;
+      }
+    }
+    else {
+      this.warning = null;
+    }
+  }
+
+
 
   getEmptyResults(): PrvOutput {
     let emptyResults: PrvOutput = {

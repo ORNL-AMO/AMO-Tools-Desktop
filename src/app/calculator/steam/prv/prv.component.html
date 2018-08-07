@@ -9,13 +9,15 @@
     <div class="d-flex flex-column m-4">
       <app-inlet-form [inletForm]="inletForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="setInletForm($event)"></app-inlet-form>
       <div class="form-group mt-2 mb-2">
-        <select (focus)="changeField('isSuperHeating')" class="form-control w-100" [(ngModel)]="isSuperHeating" name="isSuperHeating" id="isSuperHeating">
+        <select (focus)="changeField('isSuperHeating')" class="form-control w-100" [(ngModel)]="isSuperHeating" name="isSuperHeating"
+          id="isSuperHeating">
           <option [ngValue]="true">With Desuperheating</option>
           <option [ngValue]="false">Without Desuperheating</option>
         </select>
       </div>
       <app-feedwater-form *ngIf="isSuperHeating" [feedwaterForm]="feedwaterForm" [settings]="settings" (emitChangeField)="changeField($event)"
         (emitCalculate)="setFeedwaterForm($event)"></app-feedwater-form>
+      <span *ngIf="warning !== null" class="alert-warning pull-right small">{{warning}}</span>
     </div>
   </div>
   <div class="d-flex flex-column w-50 scroll-item mh-100">

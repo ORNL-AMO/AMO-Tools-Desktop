@@ -129,9 +129,6 @@ export class PsatReportGraphsComponent implements OnInit {
       } else {
         selectedResults = this.psatService.resultsModified(selectedInputs, this.settings, baselinePumpEfficiency);
       }
-      console.log(psat.name);
-      console.log(selectedResults);
-      console.log('====')
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
     else {

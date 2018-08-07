@@ -20,6 +20,9 @@ export class TurbineComponent implements OnInit {
   turbineForm: FormGroup;
   input: TurbineInput;
   results: TurbineOutput;
+
+  warning: string;
+
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private turbineService: TurbineService) { }
 
   ngOnInit() {
@@ -47,7 +50,14 @@ export class TurbineComponent implements OnInit {
 
   calculate(form: FormGroup) {
     this.input = this.turbineService.getObjFromForm(form);
-    // console.log(form);
+
+    if (this.input.inletPressure < this.input.outletSteamPressure) {
+      this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure."
+    }
+    else {
+      this.warning = null;
+    }
+
     if (form.status == 'VALID') {
       this.results = this.steamService.turbine(this.input, this.settings);
     } else {
