@@ -22,7 +22,7 @@ export class TurbineService {
       massFlowOrPowerOut: ['', [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: ['', [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
       outletQuantity: [0],
-      outletQuantityValue: ['', [ Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
+      outletQuantityValue: ['', [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
     })
     return tmpForm;
   }

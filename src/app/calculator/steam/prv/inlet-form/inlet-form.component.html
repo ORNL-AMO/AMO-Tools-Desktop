@@ -64,8 +64,10 @@
     </div>
     <span class="alert-danger pull-right small" *ngIf="inletForm.controls.outletPressure.invalid && !inletForm.controls.outletPressure.pristine">
       <span *ngIf="inletForm.controls.outletPressure.errors.required">Value Required</span>
-      <span *ngIf="inletForm.controls.outletPressure.errors.max">Value can't be greater than {{inletForm.controls.percentHeatLoss.errors.max.max}} %.</span>
-      <span *ngIf="inletForm.controls.outletPressure.errors.min">Value can't be less than {{inletForm.controls.percentHeatLoss.errors.min.min}} %.</span>
+      <span *ngIf="inletForm.controls.outletPressure.errors.max">Value can't be greater than {{inletForm.controls.outletPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="inletForm.controls.outletPressure.errors.min">Value can't be less than {{inletForm.controls.outletPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      <!-- <span *ngIf="inletForm.controls.outletPressure.errors.max">Value can't be greater than {{inletForm.controls.percentHeatLoss.errors.max.max}} %.</span>
+      <span *ngIf="inletForm.controls.outletPressure.errors.min">Value can't be less than {{inletForm.controls.percentHeatLoss.errors.min.min}} %.</span> -->
     </span>
   </div>
 </form>
