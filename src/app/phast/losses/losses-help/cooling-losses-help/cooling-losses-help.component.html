@@ -89,7 +89,11 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
+                <sup>3</sup>/min</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -116,7 +120,12 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/SCF</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/Nm
+                <sup>3</sup>
+              </span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -144,7 +153,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -172,7 +184,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal/min</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -200,7 +215,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/gal</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/L</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -228,7 +246,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -256,7 +277,7 @@
 
 </div>
 
-  <!-- <p>Enter loss data<br>Note: the default Average Specific Heat and Density values are for Air or Water (depending on the chosen cooling medium).</p>
+<!-- <p>Enter loss data<br>Note: the default Average Specific Heat and Density values are for Air or Water (depending on the chosen cooling medium).</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
   </p> -->
