@@ -6,7 +6,6 @@
     padding-left:15px;
     padding-right: 15px;
     padding-bottom: 0px;
-    margin-bottom: 10px;
 }
 
 
@@ -113,3 +112,21 @@ h5{
 .pre-assessment-form label, .pre-assessment-form input{
     font-size: small;
 }
+
+.group-label{
+    width: 100%;
+    padding: .25rem;
+}
+
+  
+  td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+  }
+  
+  tbody{
+    box-shadow: 0 4px 8px 0 grey
+  }
+  
