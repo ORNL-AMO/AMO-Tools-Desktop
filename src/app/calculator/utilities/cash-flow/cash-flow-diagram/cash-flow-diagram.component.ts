@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { CashFlowService } from '../cash-flow.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { Subscription } from '../../../../../../node_modules/rxjs';
 
 
 @Component({
@@ -86,7 +87,7 @@ export class CashFlowDiagramComponent implements OnInit {
 
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
-
+  calcSub: Subscription;
   constructor(private cashFlowService: CashFlowService, private svgToPngService: SvgToPngService) {
 
   }
@@ -105,6 +106,26 @@ export class CashFlowDiagramComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+    // this.chartContainerWidth = this.window.innerWidth * 0.38;
+    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
+    this.chartContainerHeight = 500;
+
+    this.graphData = new Array<any>();
+    this.compileGraphData();
+    this.resizeGraph();
+
+    this.calcSub = this.cashFlowService.calculate.subscribe(val => {
+      this.compileGraphData();
+      this.updateGraph();
+    });
+    }, 50)
+  }
+
+  ngOnDestroy(){
+    this.calcSub.unsubscribe();
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -185,21 +206,6 @@ export class CashFlowDiagramComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-
-    // this.chartContainerWidth = this.window.innerWidth * 0.38;
-    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
-    this.chartContainerHeight = 500;
-
-    this.graphData = new Array<any>();
-    this.compileGraphData();
-    this.resizeGraph();
-
-    this.cashFlowService.calculate.subscribe(val => {
-      this.compileGraphData();
-      this.updateGraph();
-    });
-  }
 
 
   resizeGraph() {
