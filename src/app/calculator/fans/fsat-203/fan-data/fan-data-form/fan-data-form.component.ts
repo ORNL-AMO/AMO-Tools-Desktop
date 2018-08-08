@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Plane } from '../../../../../shared/models/fans';
 import { Fsat203Service } from '../../fsat-203.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
@@ -31,7 +31,7 @@ export class FanDataFormComponent implements OnInit {
   constructor(private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings);
+    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
   }
 

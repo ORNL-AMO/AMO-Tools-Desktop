@@ -13,3 +13,7 @@ label{
 .form-control{
     font-size: small;
 }
+
+.group-label{
+    font-size: medium;
+}
