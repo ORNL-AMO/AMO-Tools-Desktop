@@ -28,8 +28,24 @@
     <div class="d-flex mr-2 ml-2">
       <app-motor-drive-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-drive-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-motor-drive-graph class="w-100" [results]="outputData"></app-motor-drive-graph>
-        <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
+        <div class="d-block w-100">
+          <app-motor-drive-graph class="w-100" [results]="outputData"></app-motor-drive-graph>
+        </div>
+        <div class="d-block w-100 pt-4">
+          <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
+        </div>
+        <div class="pr-4 pl-4 pt-1 d-flex flex-column help-info">
+          <h6>
+            Note
+            <br>
+            <small class="text-muted">
+              Synchronous belts are the most efficient choice. However, notched belts may be a better choice when vibration damping is
+              needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque changes that
+              could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer before
+              deciding to replace any belt.
+            </small>
+          </h6>
+        </div>
       </div>
     </div>
   </div>

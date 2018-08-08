@@ -122,10 +122,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.isGridToggled = false;
 
-    d3.select('app-motor-performance').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+    // d3.select('app-motor-performance').selectAll('#gridToggleBtn')
+    //   .on("click", () => {
+    //     this.toggleGrid();
+    //   });
 
   }
 
@@ -249,7 +249,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
 
-    d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
+    // d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
 
     this.makeGraph();
   }

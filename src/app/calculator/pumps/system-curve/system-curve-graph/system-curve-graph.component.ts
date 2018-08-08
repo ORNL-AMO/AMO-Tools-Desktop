@@ -106,11 +106,6 @@ export class SystemCurveGraphComponent implements OnInit {
     }
 
     this.isGridToggled = false;
-
-    d3.select('app-system-curve').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -242,7 +237,6 @@ export class SystemCurveGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    d3.select("app-system-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
     this.makeGraph();
   }
 

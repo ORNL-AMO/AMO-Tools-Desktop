@@ -112,11 +112,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.pumpType = this.efficiencyForm.controls.pumpType.value;
 
     this.isGridToggled = false;
-
-    d3.select('app-achievable-efficiency').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
   }
 
 
@@ -251,9 +246,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-
-    d3.select("app-achievable-efficiency").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     this.makeGraph();
   }
 
