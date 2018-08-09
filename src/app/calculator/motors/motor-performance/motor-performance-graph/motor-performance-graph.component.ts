@@ -122,10 +122,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.isGridToggled = false;
 
-    d3.select('app-motor-performance').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+    // d3.select('app-motor-performance').selectAll('#gridToggleBtn')
+    //   .on("click", () => {
+    //     this.toggleGrid();
+    //   });
 
   }
 
@@ -139,6 +139,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -219,15 +225,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
+
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
     let curveGraph = this.ngChartContainer.nativeElement;
-
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
       this.canvasWidth = curveGraph.clientWidth;
@@ -246,7 +249,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
 
-    d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
+    // d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
 
     this.makeGraph();
   }
@@ -311,22 +314,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.performanceForm.controls.frequency.status == 'VALID' &&
-      this.performanceForm.controls.horsePower.status == 'VALID' &&
-      this.performanceForm.controls.motorRPM.status == 'VALID' &&
-      this.performanceForm.controls.efficiencyClass.status == 'VALID' &&
-      this.performanceForm.controls.motorVoltage.status == 'VALID' &&
-      this.performanceForm.controls.fullLoadAmps.status == 'VALID'
-    ) {
-      if (this.performanceForm.controls.efficiencyClass.value != '' || this.performanceForm.controls.efficiencyClass.value != undefined) {
-        if (
-          this.performanceForm.controls.efficiency.status == 'VALID'
-        ) {
-          return true;
-        }
-      } else {
-        return true;
-      }
+    if (this.performanceForm.status == 'VALID') {
+      return true
+    }
+    else {
+      return false;
     }
   }
 

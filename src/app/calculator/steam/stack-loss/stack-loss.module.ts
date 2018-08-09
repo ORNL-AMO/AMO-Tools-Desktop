@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StackLossByMassComponent } from './stack-loss-form/stack-loss-by-mass/stack-loss-by-mass.component';
 import { StackLossByVolumeComponent } from './stack-loss-form/stack-loss-by-volume/stack-loss-by-volume.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { StackLossService } from './stack-loss.service';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { SharedModule } from '../../../shared/shared.module';
     SharedModule
   ],
   declarations: [StackLossComponent, StackLossFormComponent, StackLossHelpComponent, StackLossByMassComponent, StackLossByVolumeComponent],
-  exports: [StackLossComponent]
+  exports: [StackLossComponent],
+  providers: [StackLossService]
 })
 export class StackLossModule { }

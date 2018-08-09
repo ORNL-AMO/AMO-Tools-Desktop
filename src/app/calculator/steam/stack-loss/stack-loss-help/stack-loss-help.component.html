@@ -2,7 +2,8 @@
   <h5>
     Stack Loss Help
     <br>
-    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion specifications.
+    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion
+      specifications.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -39,7 +40,7 @@
   </div>
   <div class="my-1" *ngIf="currentField == 'flueGasTemperature'">
     <h6>
-      Gas temperature
+      Stack Gas Temperature
       <br>
       <small class="text-muted">
         Measure stack gas temperature by using "proper" temperature probe. Type of temperature probe depends on stack gas temperature
@@ -47,6 +48,18 @@
         <hr>
       </small>
     </h6>
+    <div class="justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Ambient Temperature</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="my-1" *ngIf="currentField == 'oxygenCalculationMethod'">
     <h6>
@@ -95,8 +108,9 @@
       <sub>2</sub> in Flue Gas
       <br>
       <small class="text-muted">
-        The volumetric percentage of oxygen present in the stack gas. Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location
-        where stack gas temperature is measured to maintain accuracy of the calculations.
+        The volumetric percentage of oxygen present in the stack gas. Flue gas O
+        <sub>2</sub> (dry basis) reading is taken at the same location where stack gas temperature is measured to maintain accuracy
+        of the calculations.
         <hr>
       </small>
     </h6>
@@ -126,6 +140,18 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Stack Gas Temperature</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="my-1" *ngIf="currentField == 'fuelTemperature'">
@@ -145,8 +171,7 @@
       <br>
       <small class="text-muted">
         The moisture of the air (mass water / mass dry air). Can be determined with a psychometric chart.
-        <hr>
-        The default value is based on 50% Relative Humidity, 70 &#8457;
+        <hr> The default value is based on 50% Relative Humidity, 70 &#8457;
         <hr>
       </small>
     </h6>
@@ -220,8 +245,8 @@
         Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners
         <hr> Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide
         and hydrogen in stack gases
-        <hr> Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce stack gas
-        temperature leaving the heating system
+        <hr> Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce stack
+        gas temperature leaving the heating system
         <hr> Use preheated combustion air through use of recuperators or regenerators
         <hr> Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases
         <hr> Review process temperature settings and lower it where possible during part-load operations. This can reduce flustacke

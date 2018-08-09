@@ -1,4 +1,4 @@
-#gridToggle {
+/* #gridToggle {
   position: absolute;
   z-index: 9999;
   left: 30px
@@ -16,7 +16,7 @@
   font-size: 12px;
   height: 28px;
   vertical-align: middle;
-}
+} */
 
 .key-color {
   border-radius: 12px;
@@ -36,7 +36,6 @@ tr>td {
 }
 
 .graph-table {
-  width: 100%;
   text-align: center;
 }
 
@@ -46,6 +45,7 @@ tr>td {
 
 .graph-table td, .graph-table th {
   font-size: 14px;
+  padding: 3px;
 }
 
 .graph-table tr {

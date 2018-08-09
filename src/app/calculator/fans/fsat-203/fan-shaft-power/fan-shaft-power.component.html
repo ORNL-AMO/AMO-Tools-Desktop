@@ -116,10 +116,20 @@
       <label>Calculated Averages</label>
       <div class="input-group">
         <div class="area-val mx-auto">
-          {{fanShaftPower.voltage | sigFigs: '6'}}
+          <span *ngIf="fanShaftPower.voltage">
+            {{fanShaftPower.voltage | sigFigs: '6'}}
+          </span>
+          <span class="bold" *ngIf="!fanShaftPower.voltage">
+            &mdash; &mdash;
+          </span>
         </div>
         <div class="area-val mx-auto">
-          {{fanShaftPower.amps | sigFigs: '6'}}
+          <span *ngIf="fanShaftPower.amps">
+            {{fanShaftPower.amps | sigFigs: '6'}}
+          </span>
+          <span class="bold" *ngIf="!fanShaftPower.amps">
+            &mdash; &mdash;
+          </span>
         </div>
       </div>
       <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.phase1Voltage.invalid && !shaftPowerForm.controls.phase1Voltage.pristine">
@@ -152,7 +162,12 @@
       <span class="input-group-addon units">hp</span>
     </div>
     <div class="area-val" *ngIf="shaftPowerForm.controls.isMethodOne.value == false">
-      {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
+      <span *ngIf="fanShaftPower.motorShaftPower">
+        {{fanShaftPower.motorShaftPower | sigFigs: '6'}} hp
+      </span>
+      <span class="amp-volt-err" *ngIf="!fanShaftPower.motorShaftPower">
+        &mdash; &mdash;
+      </span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.motorShaftPower.invalid && !shaftPowerForm.controls.motorShaftPower.pristine">
       <span *ngIf="shaftPowerForm.controls.motorShaftPower.errors.required">Value Required</span>

@@ -2,13 +2,15 @@ table {
     table-layout: fixed;
 }
 th {
-    white-space: nowrap;
     text-align: center;
     font-size: medium;
+    padding: 3px;
 }
 td{
     font-size: small;
     text-align: center;
+    justify-content: center;
+    align-content: center;
     border-right: solid 1px darkgray;
     border-left: solid 1px darkgray;
     padding: 3px;

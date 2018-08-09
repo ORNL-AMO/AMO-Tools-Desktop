@@ -1,8 +1,6 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
-import { SettingsService } from "../../../settings/settings.service";
-import { ConvertUnitsService } from "../../../shared/convert-units/convert-units.service";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamPropertiesOutput, SteamPropertiesInput } from '../../../shared/models/steam';
 import { SteamService } from '../steam.service';
@@ -17,6 +15,17 @@ export class SteamPropertiesComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getChartHeight();
+    this.getChartWidth();
+    this.resizeTabs();
+  }
+
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
+
   @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
   chartContainerHeight: number;
   chartContainerWidth: number;
@@ -30,16 +39,10 @@ export class SteamPropertiesComponent implements OnInit {
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   plotReady: boolean = false;
-
+  ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number }
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
-    this.steamPropertiesForm = this.formBuilder.group({
-      'pressure': [0, Validators.required],
-      'thermodynamicQuantity': [0, Validators.required],
-      'quantityValue': [0, Validators.required]
-    });
-
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
     });
@@ -50,48 +53,89 @@ export class SteamPropertiesComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
-    this.steamPropertiesOutput = {
-      pressure: 0, temperature: 0, quality: 0, specificEnthalpy: 0, specificEntropy: 0, specificVolume: 0
-    };
+    this.steamPropertiesOutput = this.getEmptyResults();
+    this.getForm(0);
+    this.calculate(this.steamPropertiesForm);
   }
 
   ngAfterViewInit() {
-    this.changeDetectorRef.detectChanges();
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.changeDetectorRef.detectChanges();
+    }, 50)
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  getForm(quantityValue: number) {
+    this.ranges = this.getRanges(quantityValue);
+    this.steamPropertiesForm = this.formBuilder.group({
+      'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
+      'thermodynamicQuantity': [quantityValue, Validators.required],
+      'quantityValue': ['', [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
+    });
+  }
+
+  updateForm(quantityValue: number) {
+    this.ranges = this.getRanges(quantityValue);
+    this.steamPropertiesForm.controls.quantityValue.setValidators([Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)])
   }
 
   setTab(str: string) {
     this.tabSelect = str;
+  }  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+    console.log(this.headerHeight);
   }
 
   setField(str: string) {
     this.currentField = str;
   }
 
-  getChartWidth(): number {
+  getChartWidth() {
     if (this.lineChartContainer) {
       this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
-      return this.chartContainerWidth;
     }
     else {
-      return 600;
+      this.chartContainerWidth = 600;
     }
   }
 
-  getChartHeight(): number {
+  getChartHeight() {
     if (this.lineChartContainer) {
       this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .8;
-      return this.chartContainerHeight;
     }
     else {
-      return 800;
+      this.chartContainerHeight = 800;
     }
   }
 
+  calculate(form: FormGroup) {
+    let input: SteamPropertiesInput = {
+      quantityValue: form.controls.quantityValue.value,
+      thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
+      pressure: form.controls.pressure.value
+    }
+    if (form.status == 'VALID') {
+      this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
+      this.plotReady = true;
+    }
+  }
 
-  calculate(input: SteamPropertiesInput) {
-    this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
-    this.plotReady = true;
+  getEmptyResults(): SteamPropertiesOutput {
+    return {
+      pressure: 0,
+      temperature: 0,
+      specificEnthalpy: 0,
+      specificEntropy: 0,
+      quality: 0,
+      specificVolume: 0
+    }
   }
 
   addRow() {
@@ -105,8 +149,23 @@ export class SteamPropertiesComponent implements OnInit {
     };
   }
 
-
   toggleGraph() {
     this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
+  }
+
+  getRanges(quantityValue: number): { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number } {
+    let minPressure: number, maxPressure: number;
+    let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
+    if (this.settings.steamPressureMeasurement == 'psi') {
+      minPressure = 0.2;
+      maxPressure = 14503.7;
+    } else if (this.settings.steamPressureMeasurement == 'kPa') {
+      minPressure = 1;
+      maxPressure = 100000;
+    } else if (this.settings.steamPressureMeasurement == 'bar') {
+      minPressure = 0.01;
+      maxPressure = 1000;
+    }
+    return { minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure }
   }
 }

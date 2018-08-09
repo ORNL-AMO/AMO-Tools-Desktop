@@ -1,182 +1,201 @@
-<div class="help-panel">
-  <div class="calc-help">
-    <div class="help-header">
-      <h3>Flow and Energy Used</h3>
-      <p>
-        Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
-        the gas is a fuel (i.e. natural gas, propane).
-      </p>
-      <!-- <p class="text-muted">
-        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
-      </p> -->
-    </div>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Flow and Energy Used
+    <br>
+    <small class="text-muted"> Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations
+      when the gas is a fuel (i.e. natural gas, propane).
 
-    <div class="help-content">
-      <div class="card" *ngIf="currentField == 'gasType'">
-        <div class="card-header">
-          Gas Type
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            A drop down list of several gases used within fuel-fired gases. Changing this automatically changes the field "Specific gravity
-            of gas".
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'orificeDiameter'">
-        <div class="card-header">
-          Orifice Diameter
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Diameter of orifice.
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>in</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'insidePipeDiameter'">
-        <div class="card-header">
-          Inside Pipe Diameter
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Inside diameter of pipe
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>in</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'orificePressureDrop'">
-        <div class="card-header">
-          Orifice Pressure Drop
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Pressure drop across the orifice.
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>inch W.C.</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'operatingTime'">
-        <div class="card-header">
-          Operating Time
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Total time for flow / heating
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>Hours</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'sectionType'">
-        <div class="card-header">
-          Section Type
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Type of orifice. Changing this automatically changes the field "Coefficient of Discharge"
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'gasTemperature'">
-        <div class="card-header">
-          Gas Temperature
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Temperature of the gas entering the orifice
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong> &#8457;</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'gasPressure'">
-        <div class="card-header">
-          Gas Pressure
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Pressure of the gas entering the orifice
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>psig</strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'dischargeCoefficient'">
-        <div class="card-header">
-          Coefficient of Discharge
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Coefficient to take viscosity and turbulence into account when calculating flow rate. Here, this is based on the Type of Orifice used.<br>
-            Square Edge ~ 0.5<br>
-            Sharp Edge ~ 0.6<br>
-            Venturi ~ 0.8<br>
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
-          </p>
-          <figure>
-            <img class="w-100 mx-auto p-2" src="assets/images/furnace-energy-used-calc-discharge.png">
-            <figcaption><font size="1"> Source: Eclipse Combustion Engineering Guide, 1986, Chapter 1, Page 6</font></figcaption>
-          </figure>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'gasHeatingValue'">
-        <div class="card-header">
-          Gas Heating Value - HHV
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Higher heating value of gas (dependent on type of gas).
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong>Btu / ft<sup>3</sup></strong><br> Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
-      <div class="card" *ngIf="currentField == 'specificGravity'">
-        <div class="card-header">
-          Specific Gravity
-        </div>
-        <div class="card-block">
-          <label><u>Description:</u></label>
-          <p>
-            Specific gravity of the gas relative to air (density of gas / density of air) at standard temperature and pressure
-          </p>
-          <label><u>Input:</u></label>
-          <p>
-            Minimum Value Allowed: <strong>0</strong><br>
-          </p>
-        </div>
-      </div>
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'gasType'">
+    <h6>
+      Gas Type
+      <br>
+      <small class="text-muted">
+        A drop down list of several gases used within fuel-fired gases. Changing this automatically changes the field "Specific gravity
+        of gas".
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'orificeDiameter'">
+    <h6>
+      Orifice Diameter
+      <br>
+      <small class="text-muted">
+        Diameter of orifice.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'insidePipeDiameter'">
+    <h6>
+      Inside Pipe Diameter
+      <br>
+      <small class="text-muted">
+        Inside diameter of pipe
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'orificePressureDrop'">
+    <h6>
+      Orifice Pressure Drop
+      <br>
+      <small class="text-muted">
+        Pressure drop across the orifice.
+
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'operatingTime'">
+    <h6>
+      Operating Time
+      <br>
+      <small class="text-muted">
+        Total time for flow / heating
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'sectionType'">
+    <h6>
+      Type of Orifice
+      <br>
+      <small class="text-muted">
+        Type of orifice. Changing this automatically changes the field "Coefficient of Discharge"
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Type of Orifice</th>
+            <th class="w-50 text-center">Coefficient</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Square Edge</td>
+            <td class="w-50 text-center">0.5</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Sharp Edge</td>
+            <td class="w-50 text-center">0.6</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Venturi</td>
+            <td class="w-50 text-center">0.8</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <figure>
+      <img class="w-100 mx-auto p-2" src="assets/images/furnace-energy-used-calc-discharge.png">
+      <figcaption>
+        <font size="1"> Source: Eclipse Combustion Engineering Guide, 1986, Chapter 1, Page 6</font>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'gasTemperature'">
+    <h6>
+      Gas Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the gas entering the orifice
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'gasPressure'">
+    <h6>
+      Gas Pressure
+      <br>
+      <small class="text-muted">
+        Pressure of the gas entering the orifice
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'dischargeCoefficient'">
+    <h6>
+      Coefficient of Discharge
+      <br>
+      <small class="text-muted">
+        Coefficient to take viscosity and turbulence into account when calculating flow rate. Here, this is based on the Type of
+        Orifice used.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Type of Orifice</th>
+            <th class="w-50 text-center">Coefficient</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Square Edge</td>
+            <td class="w-50 text-center">0.5</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Sharp Edge</td>
+            <td class="w-50 text-center">0.6</td>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Venturi</td>
+            <td class="w-50 text-center">0.8</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0</td>
+            <td class="w-50 text-center">1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <figure>
+      <img class="w-100 mx-auto p-2" src="assets/images/furnace-energy-used-calc-discharge.png">
+      <figcaption>
+        <font size="1"> Source: Eclipse Combustion Engineering Guide, 1986, Chapter 1, Page 6</font>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'gasHeatingValue'">
+    <h6>
+      Gas Heating Value - HHV
+      <br>
+      <small class="text-muted">
+        Higher heating value of gas (dependent on type of gas).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'specificGravity'">
+    <h6>
+      Specific Gravity
+      <br>
+      <small class="text-muted">
+        Specific gravity of the gas relative to air (density of gas / density of air) at standard temperature and pressure
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>

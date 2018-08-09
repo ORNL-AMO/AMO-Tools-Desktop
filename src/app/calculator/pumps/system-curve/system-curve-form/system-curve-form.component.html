@@ -5,12 +5,12 @@
     <label *ngIf="!isFan" class="small" for="specificGravity">Fluid Specific Gravity</label>
     <label *ngIf="isFan" class="small" for="specificGravity">Compressibility Factor</label>
     <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="saveChanges()"
-      onfocus="this.select();">
+      onfocus="this.select();" (focus)="focusField('specificGravity')">
   </div>
   <div class="form-group">
     <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
     <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent" id="systemLossExponent"
-      (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
+      (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}" (focus)="focusField('systemLossExponent')">
     <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
   </div>
 </form>
@@ -19,7 +19,7 @@
 <form [formGroup]="pointOne.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment">Point 1</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment">
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment" (focus)="focusField('pointAdjustment')">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
   </div>
@@ -27,7 +27,7 @@
     <label class="small" for="flowRate1">Flow Rate</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate" (input)="saveChanges()"
-        onfocus="this.select();">
+        onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
@@ -37,7 +37,7 @@
     <label *ngIf="isFan" class="small" for="head2">Pressure</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head1" formControlName="head" (input)="saveChanges()"
-        onfocus="this.select();">
+        onfocus="this.select();" (focus)="focusField('head')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
@@ -60,7 +60,7 @@
 <form [formGroup]="pointTwo.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment2">Point 2</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment2">
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment2" (focus)="focusField('specificGravity')">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
   </div>
@@ -68,7 +68,7 @@
     <label class="small" for="flowRate2">Flow Rate</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate" (input)="saveChanges()"
-        onfocus="this.select();" autofocus>
+        onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
@@ -78,7 +78,7 @@
     <label *ngIf="isFan" class="small" for="head2">Pressure</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head2" formControlName="head" (input)="saveChanges()"
-        onfocus="this.select();">
+        onfocus="this.select();" (focus)="focusField('head')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>

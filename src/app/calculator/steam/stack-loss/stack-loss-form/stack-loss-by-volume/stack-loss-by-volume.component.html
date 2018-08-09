@@ -13,10 +13,16 @@
       <label class="small" for="flueGasTemperature">Stack Gas Temperature</label>
       <div class="input-group">
         <input name="flueGasTemperature" type="number" step="10" class="form-control" formControlName="flueGasTemperature" id="flueGasTemperature"
-          onfocus="this.select();" (input)="calculate()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="setCombustionValidation()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="stackLossForm.controls.flueGasTemperature.invalid && !stackLossForm.controls.flueGasTemperature.pristine">
+        <span *ngIf="stackLossForm.controls.flueGasTemperature.errors.required">Value Required</span>
+        <span *ngIf="stackLossForm.controls.flueGasTemperature.errors.min">Value can't be less than Ambient Temperature ({{stackLossForm.controls.flueGasTemperature.errors.min.min}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).</span>
+      </span>
     </div>
 
     <div class="form-group">
@@ -34,13 +40,17 @@
           id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span>
       <div class="form-group">
         <label class="small">Excess Air</label>
         <div class="text-center small">
           {{calculationExcessAir | number:'2.2-2'}} %
         </div>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="stackLossForm.controls.o2InFlueGas.invalid && !stackLossForm.controls.o2InFlueGas.pristine">
+        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.required">Value Required</span>
+        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.max">Value can't be greater than {{stackLossForm.controls.o2InFlueGas.errors.max.max}} %.</span>
+        <span *ngIf="stackLossForm.controls.o2InFlueGas.errors.min">Value can't be less than {{stackLossForm.controls.o2InFlueGas.errors.min.min}} %.</span>
+      </span>
     </div>
 
     <div class="form-group" *ngIf="calcMethodExcessAir">
@@ -57,19 +67,28 @@
           (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span>
+      <span class="alert-danger pull-right small" *ngIf="stackLossForm.controls.excessAirPercentage.invalid && !stackLossForm.controls.excessAirPercentage.pristine">
+        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.required">Value Required</span>
+        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.max">Value can't be greater than {{stackLossForm.controls.excessAirPercentage.errors.max.max}} %.</span>
+        <span *ngIf="stackLossForm.controls.excessAirPercentage.errors.min">Value can't be less than {{stackLossForm.controls.excessAirPercentage.errors.min.min}} %.</span>
+      </span>
     </div>
 
     <div class="form-group">
       <label class="small" for="combustionAirTemperature">Ambient Air Temperature</label>
       <div class="input-group">
         <input name="combustionAirTemperature" type="number" step="10" class="form-control" formControlName="combustionAirTemperature"
-          id="combustionAirTemperature" onfocus="this.select();" (input)="setFuelTemp()" (focus)="focusField('combustionAirTemperature')"
+          id="combustionAirTemperature" onfocus="this.select();" (input)="setFuelTempValidation()" (focus)="focusField('combustionAirTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="combustionAirTempWarning !== null">{{combustionAirTempWarning}}</span>
+      <span class="alert-danger pull-right small" *ngIf="stackLossForm.controls.combustionAirTemperature.invalid && !stackLossForm.controls.combustionAirTemperature.pristine">
+        <span *ngIf="stackLossForm.controls.combustionAirTemperature.errors.required">Value Required</span>
+        <span *ngIf="stackLossForm.controls.combustionAirTemperature.errors.max">Value can't be greater than Stack Gas Temperature ({{stackLossForm.controls.combustionAirTemperature.errors.max.max}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>).</span>
+      </span>
     </div>
 
     <!-- <div class="form-group">

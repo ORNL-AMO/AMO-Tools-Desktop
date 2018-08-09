@@ -6,6 +6,12 @@
     padding: 6px;
 }
 
+.group-label{
+    width: 100%;
+    padding: .25rem;
+    font-size: medium;
+}
+
 .group-label:hover{
     cursor: pointer;
     background-color: #D5D8DC;

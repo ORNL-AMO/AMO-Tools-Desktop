@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import {StandaloneService} from "../../standalone.service";
 import {  PneumaticAirRequirementInput, PneumaticAirRequirementOutput} from "../../../shared/models/standalone";
 
@@ -8,6 +8,14 @@ import {  PneumaticAirRequirementInput, PneumaticAirRequirementOutput} from "../
   styleUrls: ['./pneumatic-air.component.css']
 })
 export class PneumaticAirComponent implements OnInit {
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
@@ -29,6 +37,17 @@ export class PneumaticAirComponent implements OnInit {
       volumeAirIntakePiston: 0,
       compressionRatio: 0
     };
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
   calculatePneumaticAirRequirement(inputs: PneumaticAirRequirementInput) {
     this.outputs = StandaloneService.pneumaticAirRequirement(inputs);

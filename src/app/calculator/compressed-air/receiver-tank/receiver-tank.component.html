@@ -1,7 +1,73 @@
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/receiver-tank-calculation.png" class="ico-size5">
+      </div>
+      <div class="pl-2">
+        <h3>Receiver Tank - Size Calculations</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <div class="tab-content">
+        <form>
+          <div class="form-section">
+            <div class="form-group">
+              <label for="method">Calculation Method</label>
+              <div class="input-group">
+                <select name="method" class="form-control" id="method" [(ngModel)]="method" (change)="setCurrentForm()">
+                  <option *ngFor="let method of methods" [ngValue]="method.value">{{method.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-section pt-1">
+            <app-general-method-form *ngIf="method == 0" (emitChangeField)="changeField($event, 'general-method')"></app-general-method-form>
+            <app-dedicated-storage-form *ngIf="method == 1" (emitChangeField)="changeField($event, 'dedicated-storage')"></app-dedicated-storage-form>
+            <app-metered-storage-form *ngIf="method == 2" (emitChangeField)="changeField($event, 'metered-storage')"></app-metered-storage-form>
+            <app-delay-method-form *ngIf="method == 3" (emitChangeField)="changeField($event, 'delay-method')"></app-delay-method-form>
+          </div>
+        </form>
+      </div>
+      <div class="group-label pt-3">Usable Air Capacity Calculations</div>
+      <app-air-capacity-form (emitChangeField)="changeField($event, 'air-capacity')"></app-air-capacity-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          Reciever Tank Help
+          <br>
+          <small class="text-muted"> The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line
+            pulsations or frequent loading and unloading of the compressor. There are four methods to calculate the required
+            size of the receiver tank.
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+        <app-air-capacity-help *ngIf="currentForm == 'air-capacity'" [currentField]="currentField"></app-air-capacity-help>
+        <app-general-method-help *ngIf="currentForm == 'general-method'" [currentField]="currentField"></app-general-method-help>
+        <app-dedicated-storage-help *ngIf="currentForm == 'dedicated-storage'" [currentField]="currentField"></app-dedicated-storage-help>
+        <app-metered-storage-help *ngIf="currentForm == 'metered-storage'" [currentField]="currentField"></app-metered-storage-help>
+        <app-delay-method-help *ngIf="currentForm == 'delay-method'" [currentField]="currentField"></app-delay-method-help>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 
 <div class="panel-container row compressed-air">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
-      <div class="panel-column col-6 align-top" >
+      <div class="panel-column col-6 align-top">
         <div class="header">
           <h3>Receiver Tank - Size Calculations</h3>
         </div>
@@ -60,4 +126,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
