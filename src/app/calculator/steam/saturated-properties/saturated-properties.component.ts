@@ -23,7 +23,12 @@ export class SaturatedPropertiesComponent implements OnInit {
   onResize(event) {
     this.getChartHeight();
     this.getChartWidth();
+    this.resizeTabs();
   }
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  headerHeight: number;
 
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
   saturatedPropertiesForm: FormGroup;
@@ -62,10 +67,15 @@ export class SaturatedPropertiesComponent implements OnInit {
     setTimeout(() => {
       this.getChartWidth();
       this.getChartHeight();
+      this.resizeTabs();
       this.changeDetectorRef.detectChanges();
     }, 100)
   }
-
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   getForm() {
     this.saturatedPropertiesForm = this.formBuilder.group({
       'pressureOrTemperature': [0, Validators.required],

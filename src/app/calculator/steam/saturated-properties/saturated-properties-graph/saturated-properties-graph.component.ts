@@ -123,7 +123,9 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   ngOnInit() {
     this.initData();
     this.initCanvas();
-    this.buildChart();
+    if (this.chartContainerHeight && this.chartContainerWidth) {
+      this.buildChart();
+    }
   }
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
@@ -402,8 +404,8 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
-      containerWidth = JSON.parse(JSON.stringify(this.chartContainerWidth));
-      containerHeight = JSON.parse(JSON.stringify(this.chartContainerHeight));
+      containerWidth = this.chartContainerWidth;
+      containerHeight = this.chartContainerHeight;
       this.margin = {
         top: 10,
         right: 20,

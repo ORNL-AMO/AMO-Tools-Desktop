@@ -19,7 +19,12 @@ export class SteamPropertiesComponent implements OnInit {
   onResize(event) {
     this.getChartHeight();
     this.getChartWidth();
+    this.resizeTabs();
   }
+
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
 
   @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
   chartContainerHeight: number;
@@ -58,7 +63,10 @@ export class SteamPropertiesComponent implements OnInit {
       this.getChartWidth();
       this.getChartHeight();
       this.changeDetectorRef.detectChanges();
-    }, 100)
+    }, 50)
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   getForm(quantityValue: number) {
@@ -77,6 +85,12 @@ export class SteamPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+    console.log(this.headerHeight);
   }
 
   setField(str: string) {
