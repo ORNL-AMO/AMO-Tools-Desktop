@@ -54,7 +54,6 @@ export class StandaloneService {
   }
 
   static airSystemCapacity(input: AirSystemCapacityInput): AirSystemCapacityOutput {
-    console.log(input);
     return standaloneAddon.airSystemCapacity(input);
   }
 

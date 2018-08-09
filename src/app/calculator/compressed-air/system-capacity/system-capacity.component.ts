@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {AirSystemCapacityInput, AirSystemCapacityOutput} from "../../../shared/models/standalone";
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-system-capacity',
@@ -8,6 +8,15 @@ import {AirSystemCapacityInput, AirSystemCapacityOutput} from "../../../shared/m
   styleUrls: ['./system-capacity.component.css']
 })
 export class SystemCapacityComponent implements OnInit {
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   inputs: AirSystemCapacityInput;
   outputs: AirSystemCapacityOutput;
@@ -50,10 +59,19 @@ export class SystemCapacityComponent implements OnInit {
       totalCapacityOfCompressedAirSystem: 0
     };
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
 
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   getTotalPipeVolume() {
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
-    console.log(this.outputs);
     return this.outputs.totalPipeVolume;
   }
 }

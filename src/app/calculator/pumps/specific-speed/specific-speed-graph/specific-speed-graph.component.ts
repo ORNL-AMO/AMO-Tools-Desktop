@@ -87,15 +87,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.curveChanged = false;
 
     this.isGridToggled = false;
-
-    d3.select('app-specific-speed').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
   }
 
   ngAfterViewInit() {
-    this.resizeGraph();
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -212,8 +209,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       }
       this.width = this.canvasWidth - this.margin.left - this.margin.right;
       this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-      d3.select("app-specific-speed").select("#gridToggle").style("top", (this.height + 100) + "px");
-
       if (this.checkForm()) {
         this.makeGraph();
       }

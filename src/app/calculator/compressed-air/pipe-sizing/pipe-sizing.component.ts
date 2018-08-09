@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
 
@@ -8,6 +8,17 @@ import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standa
   styleUrls: ['./pipe-sizing.component.css']
 })
 export class PipeSizingComponent implements OnInit {
+
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
@@ -26,6 +37,17 @@ export class PipeSizingComponent implements OnInit {
       crossSectionalArea: 0,
       pipeDiameter: 0
     };
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   calculatePipeSize(inputs: PipeSizingInput) {

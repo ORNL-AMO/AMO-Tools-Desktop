@@ -21,7 +21,7 @@
     <button type="button" class="btn btn-secondary" (click)="setGraphType('value')" [ngClass]="{'active': resultType == 'value'}">Energy Use</button>
     <button type="button" class="btn btn-secondary" (click)="setGraphType('energyCost')" [ngClass]="{'active': resultType == 'energyCost'}">Energy Cost</button>
   </div>
-  <div #pieChartContainer class="w-100" *ngIf="values.length != 0" [ngClass]="{'pt-1': inRollup}">
+  <div #pieChartContainer class="w-100 pt-3" *ngIf="values.length != 0" [ngClass]="{'pt-1': inRollup}">
     <app-pie-chart [sideBySide]="!inRollup && !printView" [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
       [printView]="printView" [exportName]="exportName"></app-pie-chart>
   </div>

@@ -1,70 +1,65 @@
-<div class="pre-assessment-furnace card-form">
-  <div class="row">
-    <div class="col" [ngStyle]="{'color': assessment.borderColor}">
-      <label *ngIf="!isEditingName" class="group-label loss-label">
-        <span *ngIf="assessment.collapsed" class="fa fa-caret-down" (click)="collapsePreAssessment()"></span>
-        <span *ngIf="!assessment.collapsed" class="fa fa-caret-up" (click)="collapsePreAssessment()"></span>
-        <span class="furnace-name" (click)="collapsePreAssessment()">{{assessment.name}}</span>
-        <span class="fa fa-times pull-right" (click)="deletePreAssessment()"></span>
-        <span class="fa fa-pencil pull-right" (click)="editName()"></span>
-      </label>
-      <label class="group-label loss-label" *ngIf="isEditingName">
-        <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required" (input)="calculate()">
-        <span *ngIf="assessment.name" class="fa fa-check" (click)="doneEditingName()"></span>
-      </label>
-    </div>
+<div class="d-flex flex-column pr-2">
+  <div class="d-flex w-100" [ngStyle]="{'color': assessment.borderColor}">
+    <label *ngIf="!isEditingName" class="group-label">
+      <span *ngIf="assessment.collapsed" class="fa fa-caret-down" (click)="collapsePreAssessment()"></span>
+      <span *ngIf="!assessment.collapsed" class="fa fa-caret-up" (click)="collapsePreAssessment()"></span>
+      <span class="furnace-name" (click)="collapsePreAssessment()">{{assessment.name}}</span>
+      <span class="fa fa-times pull-right" (click)="deletePreAssessment()"></span>
+      <span class="fa fa-pencil pull-right" (click)="editName()"></span>
+    </label>
+    <label class="group-label" *ngIf="isEditingName">
+      <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required" (input)="calculate()">
+      <span *ngIf="assessment.name" class="fa fa-check" (click)="doneEditingName()"></span>
+    </label>
   </div>
 
-  <div class="pre-assessement-form" [@collapsed]="assessment.collapsedState">
-    <div class="row">
-      <div class="col btn-col">
-        <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Metered')" [ngClass]="{'active': assessment.type == 'Metered'}">Metered</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Designed')" [ngClass]="{'active':  assessment.type == 'Designed'}">Designed</button>
-        </div>
+  <div class="d-flex flex-column pre-assessement-form" [@collapsed]="assessment.collapsedState">
+    <div class="d-flex w-100 justify-content-center pt-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
+      <div class="btn-group btn-group-sm align-self-center">
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Metered')" [ngClass]="{'active': assessment.type == 'Metered'}">Metered</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Designed')" [ngClass]="{'active':  assessment.type == 'Designed'}">Designed</button>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col btn-col d-flex flex-column">
-        <div class="btn-group btn-group-sm align-self-center">
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.electric == true}">Electric</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.fuel == true}">Fuel</button>
-          <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.steam == true}">Steam-based</button>
-        </div>
-        <div class="pl-1 pr-1 pb-1">
-          <span class="text-muted small mx-auto">Select multiple energy source types for hybrid units.</span>
-        </div>
+    <div class="d-flex flex-column w-100 justify-content-center pt-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
+      <div class="btn-group btn-group-sm align-self-center">
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.electric == true}">Electric</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.fuel == true}">Fuel</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.steam == true}">Steam-based</button>
+      </div>
+      <div class="text-center pl-1 pr-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
+        <span class="text-muted small mx-auto">Select multiple energy source types for hybrid units.</span>
       </div>
     </div>
-    <div class="row">
-      <div class="mx-auto col-12" *ngIf="assessment.type == 'Metered'">
+    <div class="d-flex flex-column" *ngIf="assessment.collapsedState != 'closed'">
+      <div class="mx-auto w-100 pr-2 pl-2" *ngIf="assessment.type == 'Metered'">
         <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-metered>
       </div>
-      <div class="mx-auto col-12" *ngIf="assessment.type == 'Designed'">
+      <div class="mx-auto w-100 pr-2 pl-2" *ngIf="assessment.type == 'Designed'">
         <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
       </div>
-    </div>
-    <div class="row">
-      <div class="mx-auto col-12">
+      <div class="mx-auto w-100 pr-2 pl-2">
         <app-pre-assessment-cost-form [settings]="settings" (emitCalculate)="calculate()" [preAssessment]="assessment"></app-pre-assessment-cost-form>
       </div>
-    </div>
-    <div class="row form-results bold">
-      <div class="col-6">
-        <span class="pull-right">Energy Used</span>
-      </div>
-      <div class="col-6">
-        <span class="pull-left">{{getEnergyUsed(assessment) | sigFigs:'6'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-        </span>
-      </div>
-      <div class="col-6">
-        <span class="pull-right">Energy Cost</span>
-      </div>
-      <div class="col-6">
-        <span class="pull-left">{{getEnergyCost(assessment) | currency}}</span>
+      <div class="d-flex w-100 justify-content-center pr-2 pl-2 pt-2">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td class="bold w-50 text-center">Energy Used</td>
+              <td class="text-center w-50">
+                {{getEnergyUsed(assessment) | sigFigs:'6'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="bold w-50 text-center">Energy Cost</td>
+              <td class="text-center w-50">{{getEnergyCost(assessment) | currency}} months
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>

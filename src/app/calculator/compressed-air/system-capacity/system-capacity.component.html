@@ -1,3 +1,68 @@
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/air-system-capacity.png" class="ico-size5">
+      </div>
+      <div class="pl-2">
+        <h3>Compressed Air - System Capacity</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-system-capacity-form [inputs]="inputs" [outputs]="outputs" (calculate)="getTotalPipeVolume()"></app-system-capacity-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          System Capacity Help
+          <br>
+          <small class="text-muted"> This is used to find the total air quantity that the compressed air system can contain at any instant of time,
+            including the air in the pipes and receivers. The total capacity of the compressed air system can be obtained
+            by adding the volumes of pipes and receivers.
+            <hr> Pipe sizes used are nominal Schedule 40 pipe sizes
+
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2">
+          <h6>
+            Pipe Size
+            <br>
+            <small class="text-muted">
+              Pipe that is sized too small can create big pressure losses and reduce operating efficiency. Enter the length for different
+              Nominal Pipe sizes total.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2">
+          <h6>
+            Enter Number of Recievers
+            <br>
+            <small class="text-muted">
+              Input capacity values of different receivers.
+              <hr>
+            </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 
 <div class="panel-container row compressed-air">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
@@ -50,4 +115,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

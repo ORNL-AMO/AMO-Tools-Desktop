@@ -156,7 +156,9 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   ngOnInit() {
     this.initData();
     this.initCanvas();
-    this.buildChart();
+    if (this.chartContainerHeight && this.chartContainerWidth) {
+      this.buildChart();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

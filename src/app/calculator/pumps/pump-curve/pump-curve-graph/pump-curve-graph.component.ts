@@ -111,10 +111,12 @@ export class PumpCurveGraphComponent implements OnInit {
 
   ngOnInit() {
     this.isGridToggled = false;
-    d3.select('app-pump-curve').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -195,9 +197,6 @@ export class PumpCurveGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
 
   //merge system curve
   ngOnChanges(changes: SimpleChanges) {
@@ -206,7 +205,7 @@ export class PumpCurveGraphComponent implements OnInit {
       //check for changes to toggleCalculate
       if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead) {
         //if changes draw new graph
-        if (this.checkForm()) {
+        if (this.checkForm() && this.margin) {
           this.makeGraph();
           this.svg.style("display", null);
         }
@@ -255,7 +254,6 @@ export class PumpCurveGraphComponent implements OnInit {
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
 
-    d3.select("app-pump-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
     if (this.checkForm()) {
       this.makeGraph();
       // this.addLegend();
@@ -968,7 +966,7 @@ export class PumpCurveGraphComponent implements OnInit {
     let bb1 = item1.getBBox();
     let item2 = d3.select("#legend-text-" + 2).node();
     let bb2 = item2.getBBox();
-    
+
     this.svg.append("path")
       .attr("class", "legend")
       .attr("data-legend-key", 0)

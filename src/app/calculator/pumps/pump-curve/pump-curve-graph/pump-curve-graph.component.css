@@ -1,10 +1,4 @@
-#gridToggle{
-    position: absolute;
-    z-index: 9999;
-  
-    left: 30px
-  } 
-  
+
   .grid .tick { 
     stroke: lightgrey;
     opacity: 0.7;

@@ -1,84 +1,77 @@
-<div class="help-panel">
-  <div class="help-header">
-    <h3>Motor Performance</h3>
-    <p>
-      Plots current, efficiency, power factor vs motor shaft load for a given motor description
-    </p>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Motor Performance
+    <br>
+    <small class="text-muted"> Plots current, efficiency, power factor vs motor shaft load for a given motor description
+
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'frequency'">
+    <h6>
+      Line Frequency
+      <br>
+      <small class="text-muted">
+        Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in transmission and
+        distribution from electricity generation sources to customers.
+        <hr>
+      </small>
+    </h6>
   </div>
 
-  <div class="help-content">
-    <div class="card" *ngIf="currentField == 'frequency'">
-      <div class="card-header">
-        Line Frequency
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in
-          transmission and distribution from electricity generation sources to customers.
-        </p>
-      </div>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'horsePower'">
+    <h6>
+      Motor Power
+      <br>
+      <small class="text-muted">
+        The power rating of equipment is the highest power input allowed to flow through the motor.
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-    <div class="card" *ngIf="currentField == 'horsePower'">
-      <div class="card-header">
-        Motor Power
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The power rating of equipment is the highest power input allowed to flow through the motor.
-        </p>
-      </div>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'motorRPM'">
+    <h6>
+      Motor RPM
+      <br>
+      <small class="text-muted">
+        The speed at which a motor will operate.
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-    <div class="card" *ngIf="currentField == 'motorRPM'">
-      <div class="card-header">
-        Motor RPM
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The speed at which a motor will operate.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'efficiency'">
-      <div class="card-header">
-        Efficiency Class
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The energy efficiency of electric motors is defined in the international standard on efficiency classes for motors:
-          IEC 60034 Part 30 - Efficiency classes of line operated AC motors (IE code).
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'motorVoltage'">
-      <div class="card-header">
-        Voltage
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The voltage at which the motor is designed to operate.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'fullLoadAmps'">
-      <div class="card-header">
-        Full load Amps
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Full load current is the maximum current that the motor can draw/supply safely by meeting (either supplying or consuming) the full-load conditions.
-        </p>
-      </div>
-    </div>
+  <div class="my-2" *ngIf="currentField == 'efficiency'">
+    <h6>
+      Efficiency Class
+      <br>
+      <small class="text-muted">
+        The energy efficiency of electric motors is defined in the international standard on efficiency classes for motors: IEC 60034
+        Part 30 - Efficiency classes of line operated AC motors (IE code).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'motorVoltage'">
+    <h6>
+      Voltage
+      <br>
+      <small class="text-muted">
+        The voltage at which the motor is designed to operate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fullLoadAmps'">
+    <h6>
+      Full load Amps
+      <br>
+      <small class="text-muted">
+        Full load current is the maximum current that the motor can draw/supply safely by meeting (either supplying or consuming)
+        the full-load conditions.
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>

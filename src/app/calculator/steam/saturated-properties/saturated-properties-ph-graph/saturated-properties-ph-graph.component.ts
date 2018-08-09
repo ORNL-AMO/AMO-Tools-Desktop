@@ -160,7 +160,9 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   ngOnInit() {
     this.initData();
     this.initCanvas();
-    this.buildChart();
+    if (this.chartContainerHeight && this.chartContainerWidth) {
+      this.buildChart();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -517,8 +519,8 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
-      containerWidth = this.chartContainerWidth;
-      containerHeight = this.chartContainerHeight;
+      containerWidth = JSON.parse(JSON.stringify(this.chartContainerWidth));
+      containerHeight = JSON.parse(JSON.stringify(this.chartContainerHeight));
       this.margin = {
         top: 10,
         right: 20,

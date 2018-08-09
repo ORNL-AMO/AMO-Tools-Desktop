@@ -1,87 +1,92 @@
-<div class="card">
-  <div class="card-header">
-    Description
-  </div>
-  <p>
-    This calculator helps in finding the cost of operation of the compressor in both fully and partially load instances.
-  </p>
-</div>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Operating Costs Help
+    <br>
+    <small class="text-muted"> This calculator helps in finding the cost of operation of the compressor in both fully and partially load instances.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-<div class="help-content">
-  <div class="card" *ngIf="currentField == 'motorBhp'">
-    <div class="card-header">
-      Compressor Motor Brake Horse Power
-    </div>
-    <div class="card-block">
-      <p>Input power required at the compressor input shaft for a specific speed, capacity and pressure condition. It is generally shown on the compressor panel.       </p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'bhpUnloaded'">
-    <div class="card-header">
-      Compressor Motor Brake Horse Power Un-loaded
-    </div>
-    <div class="card-block">
-      <p>Brake horse power in the Un-loaded condition.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'annualOperatingHours'">
-    <div class="card-header">
-      Annual Operating Hours
-    </div>
-    <div class="card-block">
-      <p>Time for which the compressor operates in a year.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'runTimeUnloaded'">
-    <div class="card-header">
-      Run-time Un-loaded %
-    </div>
-    <div class="card-block">
-      <p>Percentage of time the compressor runs in un-loaded condition.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'runTimeLoaded'">
-    <div class="card-header">
-      Run-time Loaded %
-    </div>
-    <div class="card-block">
-      <p>Percentage of time the compressor runs in loaded condition.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'efficiencyLoaded'">
-    <div class="card-header">
-      Efficiency Loaded
-    </div>
-    <div class="card-block">
-      <p>
-        Percentage of efficiency in loaded condition.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'efficiencyUnloaded'">
-    <div class="card-header">
-      Efficiency Un-loaded
-    </div>
-    <div class="card-block">
-      <p>Percentage of efficiency in un-loaded condition.</p>
-    </div>
-  </div>
-  <div class="card" *ngIf="currentField == 'costOfElectricity'">
-    <div class="card-header">
-      Cost of Electricity
-    </div>
-    <div class="card-block">
-      <p>Cost of electricity per kWh.</p>
-    </div>
-  </div>
-  <!-- <div class="card" *ngIf="currentField == 'motorBhp'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'airFlow'">
+    <h6>
       Air Flow
-    </div>
-    <div class="card-block">
-      <p>
+      <br>
+      <small class="text-muted">
         Volumetric flow rate of the air in the compresser system, referenced to the compresseor inlet conditions.
-      </p>
-    </div>
-  </div> -->
+        <hr>
+      </small>
+    </h6>
+  </div>
 
+
+  <div class="help-content">
+    <div class="my-2" *ngIf="currentField == 'motorBhp'">
+      <h6>
+        Compressor Motor Brake Horse Power
+        <br>
+        <small class="text-muted">
+          Input power required at the compressor input shaft for a specific speed, capacity and pressure condition. It is generally
+          shown on the compressor panel.
+        </small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'bhpUnloaded'">
+      <h6>
+        Compressor Motor Brake Horse Power Un-loaded
+        <br>
+        <small class="text-muted">
+          Brake horse power in the Un-loaded condition.</small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'annualOperatingHours'">
+      <h6>
+        Annual Operating Hours
+        <br>
+        <small class="text-muted">
+          Time for which the compressor operates in a year.</small>
+      </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'runTimeUnloaded'">
+      <h6>
+        Run-time Un-loaded %
+        <br>
+        <small class="text-muted">
+          Percentage of time the compressor runs in un-loaded condition.
+        </small>
+      </h6>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'runTimeLoaded'">
+    <h6>
+      Run-time Loaded %
+      <br>
+      <small class="text-muted">
+        Percentage of time the compressor runs in loaded condition.</small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'efficiencyLoaded'">
+    <h6>
+      Efficiency Loaded
+      <br>
+      <small class="text-muted">
+
+        Percentage of efficiency in loaded condition.</small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'efficiencyUnloaded'">
+    <h6>
+      Efficiency Un-loaded
+      <br>
+      <small class="text-muted">
+        Percentage of efficiency in un-loaded condition.</small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'costOfElectricity'">
+    <h6>
+      Cost of Electricity
+      <br>
+      <small class="text-muted">
+        Cost of electricity per kWh.</small>
+    </h6>
+  </div>
 </div>

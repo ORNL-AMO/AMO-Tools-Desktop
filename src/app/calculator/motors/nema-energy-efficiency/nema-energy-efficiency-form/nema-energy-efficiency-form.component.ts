@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-nema-energy-efficiency-form',
   templateUrl: './nema-energy-efficiency-form.component.html',
@@ -58,24 +58,6 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
     }
   }
 
-  checkEfficiency() {
-    if (this.nemaForm.controls.efficiency.value > 100) {
-      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
-      return false;
-    }
-    else if (this.nemaForm.controls.efficiency.value == 0) {
-      this.efficiencyError = "Cannot have 0% efficiency";
-      return false;
-    }
-    else if (this.nemaForm.controls.efficiency.value < 0) {
-      this.efficiencyError = "Cannot have negative efficiency";
-      return false;
-    }
-    else {
-      this.efficiencyError = null;
-      return true;
-    }
-  }
 
   modifyPowerArrays() {
     if (this.nemaForm.controls.efficiencyClass.value === 'Premium Efficient') {
@@ -100,7 +82,15 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
       } else {
         this.options = this.kWatts;
       }
+
     }
+    if(this.nemaForm.controls.efficiencyClass.value == 'Specified'){
+      this.nemaForm.controls.efficiency.setValidators([Validators.min(1), Validators.max(100), Validators.required])
+    }else{
+      this.nemaForm.controls.efficiency.clearValidators();
+      this.nemaForm.controls.efficiency.reset();
+    }
+
   }
 
   focusField(str: string) {

@@ -1,41 +1,43 @@
-<form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="inletPressure">Inlet Pressure</label>
-      <div class="input-group">
-        <input name="inletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="inletPressure"
-          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
-        <span class="input-group-addon units">psi</span>
+<div class="tab-content">
+  <form>
+    <div class="form-section">
+      <div class="form-group">
+        <label for="inletPressure">Inlet Pressure</label>
+        <div class="input-group">
+          <input name="inletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="inletPressure"
+            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
+          <span class="input-group-addon units">psi</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="outletPressure">Outlet Pressure</label>
+        <div class="input-group">
+          <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
+            (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
+          <span class="input-group-addon units">psi</span>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="userFlowRate">
+        <label for="flowRate">Flow Rate
+          <a class="form-text small click-link" (click)="setUserFlowRate(false)">Automatically Calculate</a>
+        </label>
+        <div class="input-group">
+          <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate" (input)="emitChange()"
+            onfocus="this.select();" (focus)="changeField('flowRate')">
+          <span class="input-group-addon units">SCFM</span>
+        </div>
       </div>
     </div>
-    <div class="form-group">
-      <label for="outletPressure">Outlet Pressure</label>
-      <div class="input-group">
-        <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
-          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
-        <span class="input-group-addon units">psi</span>
+    <div class="form-section pt-1">
+      <div class="form-group" *ngIf="!userFlowRate">
+        <label class="bold">Flow Rate
+          <a class="form-text small click-link" (click)="setUserFlowRate(true)">Add Flow Rate</a>
+        </label>
+        <div class="text-center small bold">
+          {{inputs.flowRate | number:'1.0-2'}} SCFM
+        </div>
       </div>
-    </div>
-    <div class="form-group" *ngIf="userFlowRate">
-      <label for="flowRate">Flow Rate
-        <a class="form-text small click-link" (click)="setUserFlowRate(false)">Automatically Calculate</a>
-      </label>
-      <div class="input-group">
-        <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate" (input)="emitChange()"
-               onfocus="this.select();" (focus)="changeField('flowRate')">
-        <span class="input-group-addon units">SCFM</span>
-      </div>
-    </div>
-  </div>
-  <div class="form-group" *ngIf="!userFlowRate">
-    <label class="bold">Flow Rate
-      <a class="form-text small click-link" (click)="setUserFlowRate(true)">Add Flow Rate</a>
-    </label>
-    <div class="text-center small bold">
-      {{inputs.flowRate | number:'1.0-2'}} SCFM
-    </div>
-  </div>
-  <!-- <div class="form-section">
+      <!-- <div class="form-section">
     <div class="form-group">
       <label for="inletPressureKnown">Inlet Pressure</label>
       <div class="input-group">
@@ -53,10 +55,12 @@
       </div>
     </div> -->
 
-  <div class="form-group">
-    <label class="bold">Valve Flow Factor</label>
-    <div class="text-center small bold">
-      {{ valveFlowFactor | sigFigs:'6'}} SCFM
+      <div class="form-group">
+        <label class="bold">Valve Flow Factor</label>
+        <div class="text-center small bold">
+          {{ valveFlowFactor | sigFigs:'6'}} SCFM
+        </div>
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
