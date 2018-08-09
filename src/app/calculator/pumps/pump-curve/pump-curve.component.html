@@ -9,18 +9,35 @@
         <h3 *ngIf="isFan">Fan Curve Calculator</h3>
       </div>
     </div>
-    <div class="d-flex flex-column pt-1 pr-4 pl-4 pb-4">
-      <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
-        <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
+    <div class="d-flex flex-column pt-2 pr-4 pl-4 pb-4">
+      <div class="d-block">
+        <h5 class="group-label" (click)="togglePumpCurveCollapse()">
+          <span *ngIf="!isFan">Pump</span>
+          <span *ngIf="isFan">Fan</span>Curve Data
+          <span *ngIf="pumpCurveCollapsed == 'open'" class="fa fa-caret-down pull-right"></span>
+          <span *ngIf="pumpCurveCollapsed == 'closed'" class="fa fa-caret-up pull-right"></span>
+        </h5>
+        <div class="d-block" [@collapsed]="pumpCurveCollapsed">
+          <div class="pt-1 pump-curve-form-section" *ngIf="pumpCurveCollapsed == 'open'">
+            <div class="w-100 justify-content-center btn-group btn-group-sm">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
+              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
+            </div>
+            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()"
+              (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
+          </div>
+        </div>
       </div>
-      <div class="pt-1">
-        <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()"
-          (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
-      </div>
-      <div class="pt-1 mb-3">
-        <app-system-curve-form [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo"
-          [(curveConstants)]="curveConstants" (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
+      <div class="d-block pt-3">
+        <h5 class="group-label" (click)="toggleSystemCurveCollapse()">System Curve Data
+          <span *ngIf="systemCurveCollapsed == 'open'" class="fa fa-caret-down pull-right"></span>
+          <span *ngIf="systemCurveCollapsed == 'closed'" class="fa fa-caret-up pull-right"></span>
+        </h5>
+        <div class="mb-3 d-block" [@collapsed]="systemCurveCollapsed">
+          <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings"
+            [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (save)="changes()" (setVals)="setPointValuesFromCalc()"
+            [inAssessment]="inAssessment" (changeField)="setField($event, 'system-curve')"></app-system-curve-form>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +55,8 @@
       </div>
     </div>
     <div class="d-flex mr-2 ml-2">
-      <app-pump-curve-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-pump-curve-help>
+      <app-pump-curve-help *ngIf="tabSelect == 'help' && focusedForm == 'pump-curve'" [currentField]="currentField" [isFan]="isFan"></app-pump-curve-help>
+      <app-system-curve-help *ngIf="tabSelect == 'help' && focusedForm == 'system-curve'" [isFan]="isFan"></app-system-curve-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="pumpCurveGraph">
         <app-pump-curve-graph class="w-100" [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
           [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"
@@ -50,83 +68,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-<!--
-<div class="modify-conditions panel-container row calculator-panel" [ngClass]="{'psat': !isFan, 'fsat': isFan}" *ngIf="settings && pumpCurveForm">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/pump-curve.png" class="ico-size">
-          </div>
-          <div class="col">
-            <h3 *ngIf="!isFan">Pump Curve Calculator</h3>
-            <h3 *ngIf="isFan">Fan Curve Calculator</h3>
-          </div>
-        </div>
-        <div class="row justify-content-center pump-curve-toggle-switch">
-          <div class="btn-group btn-group-sm align-self-center">
-            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()"
-              (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
-          </div>
-        </div>
-
-
-        <!-- merging system curve to pump curve --
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <app-system-curve-form [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo"
-              [(curveConstants)]="curveConstants" (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
-          </div>
-        </div>
-
-
-      </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="row">
-            <ul class="tabs primary tab-row">
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-              </li>
-              <!--
-              --
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-              </li>
-            </ul>
-            <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-              <div class="col-11">
-                <div class="calc-help">
-                  <app-pump-curve-help [currentField]="currentField"></app-pump-curve-help>
-                </div>
-              </div>
-            </div>
-            <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
-              <div class="col-11" id="pumpCurveGraph">
-                <app-pump-curve-graph [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
-                  [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo"
-                  [curveConstants]="curveConstants" [lossCoefficient]="lossCoefficient"></app-pump-curve-graph>
-              </div>
-            </div>
-            <div class="row justify-content-center" style="width: 100%;" *ngIf="tabSelect == 'results'">
-              <div class="col-11" style="top: 60px;">
-                <p [innerHTML]="regEquation"></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>-->

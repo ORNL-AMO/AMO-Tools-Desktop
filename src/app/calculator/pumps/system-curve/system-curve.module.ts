@@ -24,7 +24,8 @@ import { SystemCurveHelpComponent } from './system-curve-help/system-curve-help.
   ],
   exports: [
     SystemCurveComponent,
-    SystemCurveFormComponent
+    SystemCurveFormComponent,
+    SystemCurveHelpComponent
   ],
   providers: [
     SystemCurveService

@@ -38,6 +38,8 @@ export class SystemCurveFormComponent implements OnInit {
   fsat: FSAT;
   @Input()
   isFan: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   exponentInputError: string = null;
   pumpForm: any;
@@ -108,6 +110,10 @@ export class SystemCurveFormComponent implements OnInit {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  focusField(str: string){
+    this.changeField.emit(str);
   }
 
 }

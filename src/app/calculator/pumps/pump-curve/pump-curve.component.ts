@@ -13,11 +13,26 @@ import { FSAT } from '../../../shared/models/fans';
 import { SystemCurveService } from '../system-curve/system-curve.service';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
-  styleUrls: ['./pump-curve.component.css']
+  styleUrls: ['./pump-curve.component.css'],
+  animations: [
+    trigger('collapsed', [
+      state('open', style({
+        height: 500,
+        opacity: 100
+      })),
+      state('closed', style({
+        height: 0,
+        opacity: 0
+      })),
+      transition('closed => open', animate('.5s ease-in')),
+      transition('open => closed', animate('.5s ease-out'))
+    ])
+  ]
 })
 export class PumpCurveComponent implements OnInit {
   @Input()
@@ -46,6 +61,8 @@ export class PumpCurveComponent implements OnInit {
   }
 
   headerHeight: number;
+  pumpCurveCollapsed: string = 'open';
+  systemCurveCollapsed: string = 'open';
 
   //system curve variables
   pointOne: { form: FormGroup, fluidPower: number };
@@ -64,7 +81,7 @@ export class PumpCurveComponent implements OnInit {
   saving: boolean = false;
   pumpFormExists: boolean = false;
   showSystemCurveForm: boolean = false;
-
+  focusedForm: string = 'pump-curve';
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
@@ -224,8 +241,9 @@ export class PumpCurveComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setField(str: string) {
+  setField(str: string, formStr: string) {
     this.currentField = str;
+    this.focusedForm = formStr;
   }
   initForm() {
     this.pumpCurveForm = {
@@ -529,6 +547,23 @@ export class PumpCurveComponent implements OnInit {
       this.calculateP1Flow();
       this.calculateP2Flow();
       this.calculateValues();
+    }
+  }
+
+
+  toggleSystemCurveCollapse() {
+    if (this.systemCurveCollapsed == 'open') {
+      this.systemCurveCollapsed = 'closed';
+    } else {
+      this.systemCurveCollapsed = 'open';
+    }
+  }
+
+  togglePumpCurveCollapse() {
+    if (this.pumpCurveCollapsed == 'open') {
+      this.pumpCurveCollapsed = 'closed';
+    } else {
+      this.pumpCurveCollapsed = 'open';
     }
   }
 }
