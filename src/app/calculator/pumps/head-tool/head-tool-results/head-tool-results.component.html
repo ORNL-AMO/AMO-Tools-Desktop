@@ -1,30 +1,30 @@
-<div class="output-summary">
-  <table class="table head-tool-summary">
+<label class="group-label pt-2">
+    Result Data</label>
+<table class="table table-hover table-striped">
     <tbody>
-      <tr>
-        <th>Differential Elevation Head</th>
-        <td>{{results.differentialElevationHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
-      <tr>
-          <th>Differential Pressure Head</th>
-          <td [ngClass]="{'invalid': results.differentialPressureHead < 0}">{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
-      <tr>
-          <th>Differential Velocity Head</th>
-          <td>{{results.differentialVelocityHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
-      <tr>
-          <th>Estimated Suction Friction Head</th>
-          <td>{{results.estimatedSuctionFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
-      <tr>
-          <th>Discharge Friction Head</th>
-          <td>{{results.estimatedDischargeFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
-      <tr>
-          <th>Pump Head</th>
-          <td [ngClass]="{'invalid': results.pumpHead < 0}">{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
-      </tr>
+        <tr>
+            <td class="w-50 text-center">Differential Elevation Head</td>
+            <td class="w-50 text-center">{{results.differentialElevationHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
+        <tr>
+            <td class="w-50 text-center">Differential Pressure Head</td>
+            <td class="w-50 text-center" [ngClass]="{'invalid': results.differentialPressureHead < 0}">{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
+        <tr>
+            <td class="w-50 text-center">Differential Velocity Head</td>
+            <td class="w-50 text-center">{{results.differentialVelocityHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
+        <tr>
+            <td class="w-50 text-center">Estimated Suction Friction Head</td>
+            <td class="w-50 text-center">{{results.estimatedSuctionFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
+        <tr>
+            <td class="w-50 text-center">Discharge Friction Head</td>
+            <td class="w-50 text-center">{{results.estimatedDischargeFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
+        <tr>
+            <td class="w-50 text-center">Pump Head</td>
+            <td class="w-50 text-center" [ngClass]="{'invalid': results.pumpHead < 0}">{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+        </tr>
     </tbody>
-  </table>
-</div>
+</table>

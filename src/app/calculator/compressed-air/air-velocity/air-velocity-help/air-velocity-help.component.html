@@ -1,38 +1,44 @@
-<div class="card">
-  <div class="card-header">
-    Description
-  </div>
-  <p>This calculator helps in finding the velocity of compressed air through all the different piping involved in the system.</p>
-</div>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Velocity in the Piping Help
+    <br>
+    <small class="text-muted">This calculator helps in finding the velocity of compressed air through all the different piping involved in the system.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-<div class="help-content">
-  <div class="card" *ngIf="currentField == 'airFlow'">
-    <div class="card-header">
+  <div class="my-2" *ngIf="currentField == 'airFlow'">
+    <h6>
       Air Flow
-    </div>
-    <div class="card-block">
-      <p>
+      <br>
+      <small class="text-muted">
         Volumetric flow rate of the air in the compresser system, referenced to the compresseor inlet conditions.
-      </p>
-    </div>
+        <hr>
+      </small>
+    </h6>
   </div>
-  <div class="card" *ngIf="currentField == 'pipePressure'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'pipePressure'">
+    <h6>
       Pipe Pressure
-    </div>
-    <div class="card-block">
-      <p>
-        Pressure of air flowing through the pipe </p>
-    </div>
+      <br>
+      <small class="text-muted">
+        Pressure of air flowing through the pipe
+        <hr>
+      </small>
+    </h6>
   </div>
-  <div class="card" *ngIf="currentField == 'atmosphericPressure'">
-    <div class="card-header">
+
+  <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+    <h6>
       Atmospheric Pressure
-    </div>
-    <div class="card-block">
-      <p>
+      <br>
+      <small class="text-muted">
+
         General Value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
-        at that location can be given. </p>
-    </div>
+        at that location can be given.
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>

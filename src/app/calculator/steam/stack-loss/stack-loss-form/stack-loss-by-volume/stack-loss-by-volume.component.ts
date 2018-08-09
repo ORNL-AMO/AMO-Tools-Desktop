@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { LossesService } from '../../../../../phast/losses/losses.service';
 import { PhastService } from '../../../../../phast/phast.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
@@ -19,7 +19,7 @@ export class StackLossByVolumeComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
-  
+
   options: any;
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -27,9 +27,6 @@ export class StackLossByVolumeComponent implements OnInit {
   ];
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
-  calculationWarning: string = null;
-  combustionAirTempWarning: string = null;
-  
   calcMethodExcessAir: boolean;
   constructor(private suiteDbService: SuiteDbService, private lossesService: LossesService, private phastService: PhastService) { }
 
@@ -42,7 +39,9 @@ export class StackLossByVolumeComponent implements OnInit {
         }
       }
     }
-    //this.setCalcMethod();
+    this.setCalcMethod();
+    this.setCombustionValidation();
+    this.setFuelTempValidation();
   }
   focusOut() {
     this.changeField.emit('default');
@@ -50,6 +49,25 @@ export class StackLossByVolumeComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
+  setCombustionValidation() {
+    this.stackLossForm.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(this.stackLossForm.controls.flueGasTemperature.value)]);
+    this.stackLossForm.controls.combustionAirTemperature.reset(this.stackLossForm.controls.combustionAirTemperature.value);
+    if (this.stackLossForm.controls.combustionAirTemperature.value) {
+      this.stackLossForm.controls.combustionAirTemperature.markAsDirty();
+    }
+    this.calculate();
+  }
+
+  setFuelTempValidation() {
+    this.stackLossForm.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(this.stackLossForm.controls.combustionAirTemperature.value)]);
+    this.stackLossForm.controls.flueGasTemperature.reset(this.stackLossForm.controls.flueGasTemperature.value);
+    if (this.stackLossForm.controls.flueGasTemperature.value) {
+      this.stackLossForm.controls.flueGasTemperature.markAsDirty();
+    }
+    this.calculate();
+  }
+
   calcExcessAir() {
     let input = {
       CH4: this.stackLossForm.controls.CH4.value,
@@ -66,37 +84,33 @@ export class StackLossByVolumeComponent implements OnInit {
       o2InFlueGas: this.stackLossForm.controls.o2InFlueGas.value,
       excessAir: this.stackLossForm.controls.excessAirPercentage.value
     };
-    this.calculationWarning = null;
-    this.combustionAirTempWarning = null;
-
-    if (this.stackLossForm.controls.combustionAirTemperature.value > this.stackLossForm.controls.flueGasTemperature.value) {
-      this.combustionAirTempWarning = "Combustion air temperature must be less than flue gas temperature";
-    }
-    else {
-      this.combustionAirTempWarning = null;
-    }
 
     if (!this.calcMethodExcessAir) {
-      if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
-        this.calculationExcessAir = 0.0;
-        this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
-      } else {
+      if (this.stackLossForm.controls.o2InFlueGas.status == 'VALID') {
         this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
-      }
-      this.stackLossForm.patchValue({
-        excessAirPercentage: this.calculationExcessAir
-      });
-    }
-    else {
-      if (input.excessAir < 0) {
-        this.calculationFlueGasO2 = 0.0;
-        this.calculationWarning = 'Excess Air must be greater than 0 percent';
+        this.stackLossForm.patchValue({
+          excessAirPercentage: this.calculationExcessAir,
+        })
       } else {
-        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
+        this.calculationExcessAir = 0;
+        this.stackLossForm.patchValue({
+          excessAirPercentage: this.calculationExcessAir,
+        })
       }
-      this.stackLossForm.patchValue({
-        o2InFlueGas: this.calculationFlueGasO2
-      });
+    }
+
+    if (this.calcMethodExcessAir) {
+      if (this.stackLossForm.controls.excessAirPercentage.status == 'VALID') {
+        this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
+        this.stackLossForm.patchValue({
+          o2InFlueGas: this.calculationFlueGasO2,
+        })
+      } else {
+        this.calculationFlueGasO2 = 0;
+        this.stackLossForm.patchValue({
+          o2InFlueGas: this.calculationFlueGasO2,
+        })
+      }
     }
     this.calculate();
   }
@@ -123,11 +137,11 @@ export class StackLossByVolumeComponent implements OnInit {
     return test;
   }
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(this.stackLossForm);
   }
 
-  setFuelTemp(){
+  setFuelTemp() {
     this.stackLossForm.patchValue({
       fuelTemperature: this.stackLossForm.controls.combustionAirTemperature.value
     })

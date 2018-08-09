@@ -1,3 +1,18 @@
-.pump-curve-toggle-switch{
-    padding-top: 15px;
+.btn-group{
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm{
+    font-size: small !important;
+}
+
+
+.pump-curve-form-section{
+    border-bottom: 1px dashed;
+}
+
+h5.group-label:hover{
+    cursor: pointer;
+    background: #efefef;
 }

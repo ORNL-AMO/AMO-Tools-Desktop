@@ -66,15 +66,15 @@ export class FanDataComponent implements OnInit {
     }
 
     if (str == '3a') {
-      this.calcVelocityData(this.planeData.FlowTraverse);
+      this.calcVelocityData(this.planeData.FlowTraverse, str);
     }
 
     if (str == '3b') {
-      this.calcVelocityData(this.planeData.AddlTraversePlanes[0]);
+      this.calcVelocityData(this.planeData.AddlTraversePlanes[0], str);
     }
 
     if (str == '3c') {
-      this.calcVelocityData(this.planeData.AddlTraversePlanes[1]);
+      this.calcVelocityData(this.planeData.AddlTraversePlanes[1], str);
     }
     this.stepTab = str;
     this.emitChangePlane.emit(str);
@@ -86,13 +86,13 @@ export class FanDataComponent implements OnInit {
 
   savePlane(plane: Plane, str: string) {
     if (str == '3a' || str == '3b' || str == '3c') {
-      this.calcVelocityData(plane);
+      this.calcVelocityData(plane, str);
     }
     this.emitSave.emit({ plane: plane, planeNumber: str })
   }
 
-  calcVelocityData(plane: Plane) {
-    let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane, this.settings);
+  calcVelocityData(plane: Plane, planeNum) {
+    let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane, this.settings, planeNum);
     if (formObj.status == 'VALID') {
       this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
     } else {
@@ -101,7 +101,7 @@ export class FanDataComponent implements OnInit {
   }
 
   saveTraversePlane(plane: Plane, str: string) {
-    this.calcVelocityData(plane);
+    this.calcVelocityData(plane, str);
     this.emitSaveTraverse.emit({ plane: plane, planeNumber: str })
   }
 

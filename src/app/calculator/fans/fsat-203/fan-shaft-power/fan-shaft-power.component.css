@@ -38,4 +38,17 @@ label{
 
 .amp-volt-input{
     text-align: center;
+    border-left: 1px solid #9c9c9c !important;
+}
+
+.group-label{
+    width: 100%;
+    padding: .25rem;
+    font-size: medium;
+}
+
+
+.amp-volt-err{
+    color: red;
+    font-weight: bold;
 }

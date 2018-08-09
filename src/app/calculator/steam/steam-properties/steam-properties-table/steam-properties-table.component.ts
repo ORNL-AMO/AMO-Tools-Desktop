@@ -15,11 +15,6 @@ export class SteamPropertiesTableComponent implements OnInit {
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
-  pressureUnits: string;
-  tempUnits: string;
-  enthalpyUnits: string;
-  entropyUnits: string;
-  volumeUnits: string;
 
   constructor(private steamService: SteamService) { }
 

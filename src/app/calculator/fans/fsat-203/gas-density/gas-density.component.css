@@ -22,3 +22,14 @@ label{
 .fa-exclamation-circle{
     color: #B03A2E;
 }
+
+.group-label{
+    width: 100%;
+    padding: .25rem;
+    font-size: medium;
+}
+
+.gas-density-err{
+    color: red;
+    font-weight: bold;
+}

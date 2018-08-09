@@ -1,3 +1,8 @@
 label{
     font-size: small;
 }
+
+.form-section{
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}

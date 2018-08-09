@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
@@ -19,9 +19,6 @@ export class StackLossByMassComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  moistureInAirCompositionError: string = null;
-  unburnedCarbonInAshError: string = null;
-  combustionAirTempWarning: string = null;
   options: any;
   showModal: boolean = false;
 
@@ -32,12 +29,11 @@ export class StackLossByMassComponent implements OnInit {
 
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
-  calculationWarning: string = null;
   calcMethodExcessAir: boolean;
 
 
   constructor(private suiteDbService: SuiteDbService,
-    private phastService: PhastService) { }
+    private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
 
   ngOnInit() {
@@ -50,12 +46,32 @@ export class StackLossByMassComponent implements OnInit {
       }
     }
     this.setCalcMethod();
+    this.setCombustionValidation();
+    this.setFuelTempValidation();
   }
   focusOut() {
     this.changeField.emit('default');
   }
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  setCombustionValidation() {
+    this.stackLossForm.controls.combustionAirTemperature.setValidators([Validators.required, Validators.max(this.stackLossForm.controls.flueGasTemperature.value)]);
+    this.stackLossForm.controls.combustionAirTemperature.reset(this.stackLossForm.controls.combustionAirTemperature.value);
+    if (this.stackLossForm.controls.combustionAirTemperature.value) {
+      this.stackLossForm.controls.combustionAirTemperature.markAsDirty();
+    }
+    this.calculate();
+  }
+
+  setFuelTempValidation() {
+    this.stackLossForm.controls.flueGasTemperature.setValidators([Validators.required, Validators.min(this.stackLossForm.controls.combustionAirTemperature.value)]);
+    this.stackLossForm.controls.flueGasTemperature.reset(this.stackLossForm.controls.flueGasTemperature.value);
+    if (this.stackLossForm.controls.flueGasTemperature.value) {
+      this.stackLossForm.controls.flueGasTemperature.markAsDirty();
+    }
+    this.calculate();
   }
 
   calcExcessAir() {
@@ -71,39 +87,35 @@ export class StackLossByMassComponent implements OnInit {
       o2InFlueGas: this.stackLossForm.controls.o2InFlueGas.value,
       excessAir: this.stackLossForm.controls.excessAirPercentage.value
     };
-    this.calculationWarning = null;
-    this.combustionAirTempWarning = null;
-
-    if (this.stackLossForm.controls.combustionAirTemperature.value > this.stackLossForm.controls.flueGasTemperature.value) {
-      this.combustionAirTempWarning = "Combustion air temperature must be less than flue gas temperature";
-    }
-    else {
-      this.combustionAirTempWarning = null;
-    }
 
     if (!this.calcMethodExcessAir) {
-      if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
-        this.calculationExcessAir = 0.0;
-        this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
-      } else {
+      if (this.stackLossForm.controls.o2InFlueGas.status == 'VALID') {
         this.calculationExcessAir = this.phastService.flueGasByMassCalculateExcessAir(input);
-      }
-      this.stackLossForm.patchValue({
-        excessAirPercentage: this.calculationExcessAir
-      });
-    } else {
-      if (input.excessAir < 0) {
-        this.calculationFlueGasO2 = 0.0;
-
-        this.calculationWarning = 'Excess Air must be greater than 0 percent';
+        this.stackLossForm.patchValue({
+          excessAirPercentage: this.calculationExcessAir
+        })
       } else {
-        this.calculationFlueGasO2 = this.phastService.flueGasByMassCalculateO2(input);
+        this.calculationExcessAir = 0
+        this.stackLossForm.patchValue({
+          excessAirPercentage: this.calculationExcessAir
+        })
       }
-      this.stackLossForm.patchValue({
-        o2InFlueGas: this.calculationFlueGasO2
-      });
-      this.calculate();
     }
+
+    if (this.calcMethodExcessAir) {
+      if (this.stackLossForm.controls.excessAirPercentage.status == 'VALID') {
+        this.calculationFlueGasO2 = this.phastService.flueGasByMassCalculateO2(input);
+        this.stackLossForm.patchValue({
+          o2InFlueGas: this.calculationFlueGasO2
+        })
+      } else {
+        this.calculationFlueGasO2 = 0
+        this.stackLossForm.patchValue({
+          o2InFlueGas: this.calculationFlueGasO2
+        })
+      }
+    }
+    this.calculate();
   }
 
   setProperties() {
@@ -117,36 +129,14 @@ export class StackLossByMassComponent implements OnInit {
       moisture: this.roundVal(tmpFlueGas.moisture, 4),
       nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
     });
-    this.checkInputError();
   }
-
-  checkInputError(bool?: boolean) {
-    if (this.stackLossForm.controls.moistureInAirComposition.value < 0 || this.stackLossForm.controls.moistureInAirComposition.value > 100) {
-      this.moistureInAirCompositionError = 'Moisture in Combustion Air must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.moistureInAirCompositionError = null;
-    }
-    if (this.stackLossForm.controls.unburnedCarbonInAsh.value < 0 || this.stackLossForm.controls.unburnedCarbonInAsh.value > 100) {
-      this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.unburnedCarbonInAshError = null;    }
-
-  }
-
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(this.stackLossForm);
   }
 
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
     return test;
-  }
-
-  setFuelTemp(){
-    this.stackLossForm.patchValue({
-      fuelTemperature: this.stackLossForm.controls.combustionAirTemperature.value
-    })
-    this.calculate();
   }
 
   changeMethod() {

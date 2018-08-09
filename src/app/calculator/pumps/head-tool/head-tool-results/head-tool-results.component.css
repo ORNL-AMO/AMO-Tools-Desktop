@@ -2,6 +2,25 @@
     color: red;
 }
 
-.head-tool-summary td, .head-tool-summary th{
-    font-size: large;
+td{
+    font-size: small;
+}
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+td > span {
+    font-weight: bold;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.group-label{
+    font-weight: bold;
 }

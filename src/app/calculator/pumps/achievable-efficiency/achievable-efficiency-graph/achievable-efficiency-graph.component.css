@@ -1,8 +1,3 @@
-#gridToggle {
-  position: absolute;
-  z-index: 9999;
-  left: 30px
-}
 
 /* .grid .tick {
   stroke: red;
@@ -60,6 +55,7 @@ tr>td {
 
 .graph-table td, .graph-table th {
   font-size: 14px;
+  padding: 3px;
 }
 
 .graph-table tr {
