@@ -90,7 +90,7 @@
         <div class="assessment-padding d-flex flex-column scroll-item print-height w-100" [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
-                <div class="row print-break-before">
+                <div *ngIf="_psatAssessments.length > 0" class="row print-break-before">
                     <div class="col-12">
                         <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
                     </div>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
 
-                <div class="row print-break-before">
+                <div *ngIf="_phastAssessments.length > 0" class="row print-break-before">
                     <div class="col-12">
                         <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup-print>
                     </div>
