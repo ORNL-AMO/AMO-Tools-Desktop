@@ -479,6 +479,11 @@
         The diameter/speed of the system in the original pump curve
         <hr>
       </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'fanBaselineMeasurement'">
@@ -499,16 +504,11 @@
         Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed
         <hr>
       </small>
-    </h6>
-  </div>
-  <div class="my-2" *ngIf="currentField == 'measurementOption'">
-    <h6>
-      Diameter/Speed
-      <br>
-      <small class="text-muted">
-        Allows the user to make a new fan curve by simulating a change in impeller diameter or fan speed
-        <hr>
-      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'modifiedMeasurement'">
@@ -519,6 +519,11 @@
         The diameter/speed of the system in the modified pump curve
         <hr>
       </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'fanModifiedMeasurement'">
