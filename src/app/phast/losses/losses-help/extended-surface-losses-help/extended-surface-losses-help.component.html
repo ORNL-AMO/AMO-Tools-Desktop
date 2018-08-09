@@ -42,7 +42,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">&#8451;</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -110,7 +113,7 @@
 
 
 
-  <!-- <p>Enter loss data</p>
+<!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering extended surface loss data.
   </p> -->

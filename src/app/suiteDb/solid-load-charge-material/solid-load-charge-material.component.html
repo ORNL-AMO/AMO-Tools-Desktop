@@ -31,11 +31,11 @@
               <label class="small" for="materialName">Material Name</label>
               <div class="input-group" *ngIf="!editExistingMaterial">
                 <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-                />
+                  (focus)="focusField('substance')" />
               </div>
               <div class="input-group" *ngIf="editExistingMaterial">
                 <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
-                />
+                  (focus)="focusField('substance')" />
               </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>

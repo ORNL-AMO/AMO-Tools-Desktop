@@ -7,232 +7,293 @@
 </div>
 <div class="row justify-content-center data-row align-items-center">
   <div class="col-11">
-    <div class="card-help">
-      <div class="help-panel">
-        <div class="help-content">
-          <div class="card" *ngIf="currentField == 'selectedMaterial'">
-            <div class="card-header">
-              Start With Existing
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Use an existing fuel's properties to get started.
-              </p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'substance'">
-            <div class="card-header">
-              Name of New Substance
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Use a unique name for your new substance. Duplicates will not be saved.
-              </p>
-            </div>
-          </div>
-          <div class="card" *ngIf="currentField == 'carbon'">
-            <div class="card-header">
-              Carbon (C)
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Carbon composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
 
-          <div class="card" *ngIf="currentField == 'hydrogen'">
-            <div class="card-header">
-              Hydrogen (H
-              <sub>2</sub>)
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Hydrogen composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
+    <div class="p-2 pt-3 d-flex flex-column help-info">
+      <h5>
+        Custom Solid/Liquid Fuels Help
+        <br>
+        <small class="text-muted">
+        </small>
+      </h5>
+      <hr class="my-1 hr-spacer">
 
-          <div class="card" *ngIf="currentField == 'inertAsh'">
-            <div class="card-header">
-              Inert ash
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Inert ash composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
 
-          <div class="card" *ngIf="currentField == 'moisture'">
-            <div class="card-header">
-              Moisture
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Moisture composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
-
-          <div class="card" *ngIf="currentField == 'nitrogen'">
-            <div class="card-header">
-              Nitrogen (N)
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Nitrogen composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
-
-          <div class="card" *ngIf="currentField == 'o2'">
-            <div class="card-header">
-              Oxygen (O
-              <sub>2</sub>)
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Oxygen composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
-
-          <div class="card" *ngIf="currentField == 'sulphur'">
-            <div class="card-header">
-              Sulphur (S)
-            </div>
-            <div class="card-block">
-              <label>
-                <u>
-                  <strong>Description</strong>
-                </u>
-              </label>
-              <p>
-                Sulphur composition of solid fuel by mass
-              </p>
-              <label>
-                <u>
-                  <strong>Input</strong>
-                </u>
-              </label>
-              <p>
-                Minimum Value Allowed:
-                <strong>0</strong>
-                <br> Maximum Value Allowed:
-                <strong>100</strong>
-              </p>
-            </div>
-          </div>
-
-        </div>
+      <div class="my-2" *ngIf="currentField == 'selectedMaterial'">
+        <h6>
+          Start With Existing
+          <br>
+          <small class="text-muted">
+            Use an existing fuel's properties to get started.
+          </small>
+        </h6>
       </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'substance'">
+        <h6>
+          Name of New Substance
+          <br>
+          <small class="text-muted">
+            Use a unique name for your new substance. Duplicates will not be saved.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'carbon'">
+        <h6>
+          Carbon (C)
+          <br>
+          <small class="text-muted">
+            Carbon composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'hydrogen'">
+        <h6>
+          Hydrogen (H
+          <sub>2</sub>)
+          <br>
+          <small class="text-muted">
+            Hydrogen composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'inertAsh'">
+        <h6>
+          Inert Ash
+          <br>
+          <small class="text-muted">
+            Inert ash composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'moisture'">
+        <h6>
+          Moisture
+          <br>
+          <small class="text-muted">
+            Moisture composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'nitrogen'">
+        <h6>
+          Nitrogen (N)
+          <br>
+          <small class="text-muted">
+            Nitrogen composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'o2'">
+        <h6>
+          Oxygen (O
+          <sub>2</sub>)
+          <br>
+          <small class="text-muted">
+            Oxygen composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'sulphur'">
+        <h6>
+          Sulphur (S)
+          <br>
+          <small class="text-muted">
+            Oxygen composition of solid fuel by mass.
+            <hr>
+          </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="text-center">Minimum</th>
+                <th class="text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="text-center">0%</td>
+                <td class="text-center">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h6>
+          <small class="text-muted">
+            <hr>
+          </small>
+          <div class="alert alert-info">
+            <small class="text-muted">
+              Note: The fuel analysis will be adjusted to make the total composition equal to 100% for calculations.
+            </small>
+          </div>
+        </h6>
+      </div>
+
+
     </div>
   </div>
 </div>

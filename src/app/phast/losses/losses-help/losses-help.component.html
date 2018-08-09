@@ -1,19 +1,19 @@
 <div class="help-panel">
-    <app-charge-material-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'charge-material'"></app-charge-material-help>
-    <app-wall-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'wall-losses'"></app-wall-losses-help>
-    <app-atmosphere-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'atmosphere-losses'"></app-atmosphere-losses-help>
-    <app-fixture-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'fixture-losses'"></app-fixture-losses-help>
-    <app-opening-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'opening-losses'"></app-opening-losses-help>
-    <app-cooling-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'cooling-losses'"></app-cooling-losses-help>
-    <app-flue-gas-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'flue-gas-losses'"></app-flue-gas-losses-help>
-    <app-gas-leakage-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'gas-leakage-losses'"></app-gas-leakage-losses-help>
-    <app-extended-surface-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'extended-surface-losses'"></app-extended-surface-losses-help>
+    <app-charge-material-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'charge-material'"></app-charge-material-help>
+    <app-wall-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'wall-losses'"></app-wall-losses-help>
+    <app-atmosphere-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'atmosphere-losses'"></app-atmosphere-losses-help>
+    <app-fixture-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'fixture-losses'"></app-fixture-losses-help>
+    <app-opening-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'opening-losses'"></app-opening-losses-help>
+    <app-cooling-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'cooling-losses'"></app-cooling-losses-help>
+    <app-flue-gas-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'flue-gas-losses'"></app-flue-gas-losses-help>
+    <app-gas-leakage-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'gas-leakage-losses'"></app-gas-leakage-losses-help>
+    <app-extended-surface-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'extended-surface-losses'"></app-extended-surface-losses-help>
     <app-other-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'other-losses'"></app-other-losses-help>
-    <app-auxiliary-power-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'auxiliary-power'"></app-auxiliary-power-losses-help>
-    <app-slag-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'slag'"></app-slag-help>
-    <app-exhaust-gas-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'exhaust-gas'"></app-exhaust-gas-help>
-    <app-energy-input-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'energy-input'"></app-energy-input-help>
-    <app-energy-input-exhaust-gas-losses-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses-help>
+    <app-auxiliary-power-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'auxiliary-power'"></app-auxiliary-power-losses-help>
+    <app-slag-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'slag'"></app-slag-help>
+    <app-exhaust-gas-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'exhaust-gas'"></app-exhaust-gas-help>
+    <app-energy-input-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'energy-input'"></app-energy-input-help>
+    <app-energy-input-exhaust-gas-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses-help>
     <app-heat-system-efficiency-help [currentField]="currentField" [settings]="settings" *ngIf="lossesTab.componentStr == 'heat-system-efficiency'"></app-heat-system-efficiency-help>
     <app-operations-help [currentField]="currentField" *ngIf="lossesTab.componentStr == 'operations'"></app-operations-help>
 </div>
