@@ -72,6 +72,7 @@ export class SidebarComponent implements OnInit {
   }
 
   toggleSelected(dir: Directory) {
+    this.assessmentService.dashboardView.next('assessment-dashboard');
     if (dir) {
       if (dir.collapsed == true) {
         dir.collapsed = false;
