@@ -99,3 +99,14 @@
 .phast-image{
 	width: 90px;
 }
+
+
+.skyline{
+	position: relative;
+	bottom: 0;
+	opacity: .75;
+}
+
+.landing-menu{
+	z-index: +1;
+}

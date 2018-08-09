@@ -2,12 +2,12 @@
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
 
         <div class="col-2 sidebar-bg p-0" [ngClass]="{'modal-open': isModalOpen}">
-            <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
-                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)" (openModal)="openModal($event)">
+            <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle" [workingDirectory]="getWorkingDirectory()"
+                [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)" (openModal)="openModal($event)">
             </app-sidebar>
         </div>
 
-        <div class="col-10 pb-4" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+        <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
@@ -20,7 +20,7 @@
         <div class="col-10 pl-0 pr-0 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator></app-calculator>
         </div>
-        <div class="col-10 dashboard-scroll pb-4 scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
+        <div class="col-10 pb-4 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen [directory]="allDirectories"></app-landing-screen>
         </div>
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'tutorials'">
