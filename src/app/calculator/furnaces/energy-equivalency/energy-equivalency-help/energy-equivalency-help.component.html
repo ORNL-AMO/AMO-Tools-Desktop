@@ -1,188 +1,138 @@
-<div class="help-panel">
-  <div class="calc-help">
-    <!--    <div class="help-header">
-      <h3>Energy Equivalency Calculater Help</h3>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Energy Equivalency Calculater Help
+    <br>
+    <small class="text-muted">Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
+      (Btu/hr or kJ/hr) to electricity (kW), or vice versa.
+
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'fuelFiredEfficiency'">
+    <h6>
+      Fuel Fired Efficiency (Electrical)
+      <br>
+      <small class="text-muted">
+        Furnace efficiency of the baseline (fuel-fired furnace).
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'electricallyHeatedEfficiency'">
+    <h6>
+      Electrical Heated Efficiency (Electrical)
+      <br>
+      <small class="text-muted">
+        Furnace efficiency of the alternate (electric furnace).
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelFiredHeatInput'">
+    <h6>
+      Fuel Fired Heat Input (Electrical)
+      <br>
+      <small class="text-muted">
+        Required heat input of fuel-fired equipment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'electricallyHeatedEfficiencyFuel'">
+    <h6>
+      Electrically Heated Efficiency (Fuel)
+      <br>
+      <small class="text-muted">
+        Furnace efficiency of the baseline (electric furnace)
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelFiredEfficiencyFuel'">
+    <h6> Fuel-Fired Efficiency (Fuel)
+      <br>
+      <small class="text-muted">
+        Furnace efficiency of the alternate (fuel-fired furance)
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 d-flex justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricalHeatInput'">
+    <h6>
+      Electrical Heat Input (Fuel)
+      <br>
+      <small class="text-muted">
+        Required heat input for electrically heated equipment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="d-flex justify-content-center w-100" *ngIf="currentField == 'default'">
+    <div class="alert alert-info">
       <p>
-        Provides calculations for converting values of energy input requirements when the heat source is changed from
-        fuel-firing (Btu/hr or kJ/hr) to electricity (kW), or vice versa.
+        Note: This calculator is only valid for natural gas fuels in North America.
       </p>
-      <p class="text-muted">
-        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
-      </p>
-    </div>-->
-    <!--<div class="help-header">-->
-      <!--<p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing-->
-        <!--(Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>-->
-    <!--</div>-->
-    <div class="help-content">
-      <!--top fuel fired input field-->
-      <div class="card" *ngIf="currentField == 'fuelFiredEfficiency'">
-        <div class="card-header">
-          Fuel Fired Efficiency (Electrical)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Furnace efficiency of the baseline (fuel-fired furnace).
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>Percentage (%)</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-            <br> Maximum Value Allowed:
-            <strong>100</strong>
-            <br>
-          </p>
-        </div>
-      </div>
-
-      <!--from top form-->
-      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiency'">
-        <div class="card-header">
-          Electrical Heated Efficiency (Electrical)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Furnace efficiency of the alternate (electric furnace).
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>Percentage (%)</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-            <br> Maximum Value Allowed:
-            <strong>100</strong>
-            <br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fuelFiredHeatInput'">
-        <div class="card-header">
-          Fuel Fired Heat Input (Electrical)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Required heat input of fuel-fired equipment.
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>MMBtu/hr</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiencyFuel'">
-        <div class="card-header">
-          Electrically Heated Efficiency (Fuel)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Furnace efficiency of the baseline (electric furnace)
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>Percentage (%)</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-            <br> Maximum Value Allowed:
-            <strong>100</strong>
-            <br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fuelFiredEfficiencyFuel'">
-        <div class="card-header">
-          Fuel-Fired Efficiency (Fuel)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Furnace efficiency of the alternate (fuel-fired furance)
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>Percentage (%)</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-            <br> Maximum Value Allowed:
-            <strong>100</strong>
-            <br>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'electricalHeatInput'">
-        <div class="card-header">
-          Electrical Heat Input (Fuel)
-        </div>
-        <div class="card-block">
-          <label>
-            <u>Description:</u>
-          </label>
-          <p>
-            Required heat input for electrically heated equipment.
-          </p>
-          <label>
-            <u>Input:</u>
-          </label>
-          <p>
-            Units:
-            <strong>Kilowatt (kW)</strong>
-            <br> Minimum Value Allowed:
-            <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'default'">
-        <div class="help-header">
-          <h3>
-            Energy Equivalency
-          </h3>
-          <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
-            (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
-        </div>
-        <div class="card-block">
-          <div class="alert alert-info">
-            <p>
-              Note: This calculator is only valid for natural gas fuels in North America.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

@@ -125,21 +125,21 @@ export class FlowPressuresFormComponent implements OnInit {
 
   checkPlane(planeNumber: string) {
     if (planeNumber == '1') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanInletFlange, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanInletFlange, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane1Done = true;
       } else {
         this.plane1Done = false;
       }
     } else if (planeNumber == '2') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanEvaseOrOutletFlange, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanEvaseOrOutletFlange, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane2Done = true;
       } else {
         this.plane2Done = false;
       }
     } else if (planeNumber == '3a') {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FlowTraverse, this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FlowTraverse, this.settings, planeNumber);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.FlowTraverse);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -148,14 +148,14 @@ export class FlowPressuresFormComponent implements OnInit {
         this.plane3aDone = false;
       }
     } else if (planeNumber == '4') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.InletMstPlane, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.InletMstPlane, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane4Done = true;
       } else {
         this.plane4Done = false;
       }
     } else if (planeNumber == '5') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.OutletMstPlane, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.OutletMstPlane, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane5Done = true;
       } else {
@@ -167,7 +167,7 @@ export class FlowPressuresFormComponent implements OnInit {
 
   checkTraversePlanes() {
     if (this.fsat.fieldData.planeData.AddlTraversePlanes.length > 0) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[0], this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[0], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[0]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -179,7 +179,7 @@ export class FlowPressuresFormComponent implements OnInit {
       this.plane3bDone = true;
     }
     if (this.fsat.fieldData.planeData.AddlTraversePlanes.length > 1) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[1], this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[1], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[1]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {

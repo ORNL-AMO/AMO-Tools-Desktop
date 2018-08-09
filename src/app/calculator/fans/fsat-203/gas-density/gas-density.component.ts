@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../../shared/models/fans';
-import { Fsat203Service } from '../fsat-203.service';
+import { Fsat203Service, GasDensityRanges } from '../fsat-203.service';
 import { FsatService } from '../../../../fsat/fsat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -114,5 +114,14 @@ export class GasDensityComponent implements OnInit {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  setValidators() {
+    let ranges: GasDensityRanges = this.fsat203Service.getGasDensityRanges(this.settings);
+    this.fsat203Service.setRelativeHumidityValidators(this.gasDensityForm);
+    this.fsat203Service.setWetBulbValidators(this.gasDensityForm, ranges);
+    this.fsat203Service.setDewPointValidators(this.gasDensityForm, ranges);
+    this.fsat203Service.setCustomValidators(this.gasDensityForm, ranges);
+    this.getDensity();
   }
 }

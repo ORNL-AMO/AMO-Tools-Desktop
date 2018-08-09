@@ -24,3 +24,10 @@
     font-size: small;
     text-align: center;
 }
+
+
+.group-label{
+    width: 100%;
+    padding: .25rem;
+    font-size: medium;
+}

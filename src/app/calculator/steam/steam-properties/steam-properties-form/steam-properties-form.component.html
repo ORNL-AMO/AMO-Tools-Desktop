@@ -7,15 +7,19 @@
         <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure" onfocus="this.select();" (focus)="focusField('pressure')"
           (input)="calculate()">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
-        <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="steamPropertiesForm.controls.pressure.invalid && !steamPropertiesForm.controls.pressure.pristine">
+        <span *ngIf="steamPropertiesForm.controls.pressure.errors.required">Value Required</span>
+        <span *ngIf="steamPropertiesForm.controls.pressure.errors.max">Value can't be greater than {{steamPropertiesForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="steamPropertiesForm.controls.pressure.errors.min">Value can't be less than {{steamPropertiesForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
     </div>
 
     <div class="form-group">
       <label for="thermodynamicQuantity">Quantity Type</label>
       <div class="input-group calc-addon-group">
         <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity" id="thermodynamicQuantity"
-          (change)="calculate()" autofocus>
+          (change)="setQuantityValue()" autofocus (focus)="focusField('thermodynamicQuantity')">
           <option [ngValue]=0>Temperature</option>
           <option [ngValue]=1>Specific Enthalpy</option>
           <option [ngValue]=2>Specific Entropy</option>
@@ -31,10 +35,18 @@
       <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">Quality</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue" onfocus="this.select();"
-          (input)="calculate()" (focus)="focusVariableField(steamPropertiesForm.controls.thermodynamicQuantity.value)" autofocus>
-        <span class="input-group-addon units" *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getDisplayUnit(quantityValueUnits)"></span>
-        <span class="alert-danger pull-right small" *ngIf="quantityValueError !== null" [innerHTML]="quantityValueError"></span>
+          (input)="calculate()"  (focus)="focusField('quantityValue')" autofocus>
+        <span class="input-group-addon units" *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value)"></span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="steamPropertiesForm.controls.quantityValue.invalid && !steamPropertiesForm.controls.quantityValue.pristine">
+        <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.required">Value Required</span>
+        <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.max">Value can't be greater than {{steamPropertiesForm.controls.quantityValue.errors.max.max}}
+          <span *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value)"></span>
+          .</span>
+        <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.min">Value can't be less than {{steamPropertiesForm.controls.quantityValue.errors.min.min}}
+          <span *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value)"></span>.
+        </span>
+      </span>
     </div>
 
     <div class="form-group">

@@ -112,11 +112,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.pumpType = this.efficiencyForm.controls.pumpType.value;
 
     this.isGridToggled = false;
-
-    d3.select('app-achievable-efficiency').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
   }
 
 
@@ -130,6 +125,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -210,10 +212,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
-
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
@@ -248,9 +246,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-
-    d3.select("app-achievable-efficiency").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     this.makeGraph();
   }
 

@@ -1,65 +1,70 @@
-<div class="help-panel">
-  <div class="help-header">
-    <h3>NEMA Energy Efficiency</h3>
-    <p>
-      <strong>NEMA</strong>(National Electrical Manufacturers Association) labeled electric motors are designed to assist
-      purchasers in optimizing motor system efficiency, reducing electrical power consumption and costs, and
-      improving system reliability. The predicted efficiency is based on a
-      <strong>TEFC</strong>(Totally Enclosed, Fan-Cooled) Motor from NEMA MG1, based on size, rotating speed and efficiency
-      class.
-    </p>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    NEMA Energy Efficiency
+    <br>
+    <small class="text-muted">
+      <strong>NEMA</strong> (National Electrical Manufacturers Association) labeled electric motors are designed to assist purchasers
+      in optimizing motor system efficiency, reducing electrical power consumption and costs, and improving system reliability.
+      <br>The predicted efficiency is based on a
+      <strong>TEFC</strong> (Totally Enclosed, Fan-Cooled) Motor from NEMA MG1, based on size, rotating speed and efficiency class.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'frequency'">
+    <h6>
+      Line Frequency
+      <br>
+      <small class="text-muted">
+        Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in transmission and
+        distribution from electricity generation sources to customers.
+        <hr>
+      </small>
+    </h6>
   </div>
-
-  <div class="help-content">
-    <div class="card" *ngIf="currentField == 'frequency'">
-      <div class="card-header">
-        Line Frequency
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          Utility frequency, line frequency or mains frequency is the frequency level of the AC electricity used in
-          transmission and distribution from electricity generation sources to customers.
-        </p>
-      </div>
+  <div class="my-2" *ngIf="currentField == 'horsePower'">
+    <h6>
+      Horse Power
+      <br>
+      <small class="text-muted">
+        The highest power input allowed to flow through the motor.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'motorRPM'">
+    <h6>
+      Motor RPM
+      <br>
+      <small class="text-muted">
+        The speed at which a motor will operate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'efficiencyClass'">
+    <h6>
+      Efficiency Class
+      <br>
+      <small class="text-muted">
+        The energy efficiency of electric motors is defined in the international standard on efficiency classes for motors: IEC 60034
+        Part 30 - Efficiency classes of line operated AC motors (IE code)
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <label class="group-label">Specified Efficiency</label>
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">1 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
-    <div class="card" *ngIf="currentField == 'horsePower'">
-      <div class="card-header">
-        Horse Power
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The highest power input allowed to flow through the motor.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'motorRPM'">
-      <div class="card-header">
-        Motor RPM
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The speed at which a motor will operate.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="currentField == 'efficiency'">
-      <div class="card-header">
-        Efficiency Class
-      </div>
-      <div class="card-block small">
-        <label><u><strong>Description</strong></u></label>
-        <p>
-          The energy efficiency of electric motors is defined in the international standard on efficiency classes for motors:
-          IEC 60034 Part 30 - Efficiency classes of line operated AC motors (IE code)
-        </p>
-      </div>
-    </div>
-
   </div>
 </div>

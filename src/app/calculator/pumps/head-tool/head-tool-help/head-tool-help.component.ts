@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-head-tool-help',
@@ -10,10 +11,19 @@ export class HeadToolHelpComponent implements OnInit {
   currentField: string;
   @Input()
   headToolType: string;
+  @Input()
+  settings: Settings;
+
   dischargeLineLossCoefficientsExample: boolean = false;
+  smallUnit: string;
   constructor() { }
 
   ngOnInit() {
+    if (this.settings.distanceMeasurement == 'ft') {
+      this.smallUnit = 'in'
+    } else {
+      this.smallUnit = 'mm'
+    }
   }
 
   showExample(bool: boolean) {

@@ -1,57 +1,34 @@
-<div class="modify-conditions panel-container row fsat" *ngIf="settings">
-	<div class="col-12">
-		<div class="row align-items-top calculator-panel">
-			<div class="modification panel-column col-6 align-top">
-				<div #leftPanelHeader class="row header">
-					<div class="col-md-auto ico-col">
-						<img src="assets/images/pump-eff.png" class="ico-size">
-					</div>
-					<div class="col">
-						<h3>Optimal Fan Efficiency Calculator</h3>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						<app-fan-efficiency-form [(inputs)]="inputs" [settings]="settings" (emitChange)="changeField($event)" (calculate)="calculate()"></app-fan-efficiency-form>
-					</div>
-				</div>
+<div class="d-flex h-100 modify-conditions fsat standalone-calculator" *ngIf="settings">
+	<div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+		<div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+			<div class="col-md-auto">
+				<img src="assets/images/pump-eff.png" class="ico-size">
 			</div>
-			<div class="col-6 align-top">
-				<div class="help-panel">
-					<div class="row">
-						<ul class="tabs primary tab-row">
-							<li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-								<a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-							</li><!--
-							--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-								<a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-							</li>
-						</ul>
-					</div>
-					<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-						<div class="col-11" id="achievableEfficiencyGraph">
-							<div class="row justify-content-center align-items-center">
-								<div class="col">
-									<h5 class="text-center">Optimal Fan Efficiency</h5>
-								</div>
-							</div>
-							<div class="row justify-content-center align-items-center">
-								<div class="col-8">
-									<app-percent-graph [value]="fanEfficiency" [valueDescription]="'Optimal Fan Efficiency'" [fontSize]="32" [unit]="'%'" [title]="'fan-efficiency'"></app-percent-graph>
-								</div>
-							</div>
-							<!-- Optimal Fan Efficiency: {{fanEfficiency}} -->
-							<!-- <app-fan-efficiency-graph *ngIf="tabSelect == 'results'" [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-fan-efficiency-graph> -->
-						</div>
-					</div>
-					<div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-						<div class="col-11">
-							<div class="calc-help">
-								<app-fan-efficiency-help [currentField]="currentField"></app-fan-efficiency-help>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div class="pl-2">
+				<h3>Optimal Fan Efficiency Calculator</h3>
+			</div>
+		</div>
+		<div class="d-flex flex-column m-4">
+			<app-fan-efficiency-form [(inputs)]="inputs" [settings]="settings" (emitChange)="changeField($event)" (calculate)="calculate()"></app-fan-efficiency-form>
+		</div>
+	</div>
+	<div class="d-flex flex-column w-50 mh-100 scroll-item">
+		<div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+				<a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+					<div>Graph</div>
+				</a>
+			</div>
+			<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+				<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+					<div>Help</div>
+				</a>
+			</div>
+		</div>
+		<div class="d-flex mr-2 ml-2">
+			<app-fan-efficiency-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-fan-efficiency-help>
+			<div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'">
+				<app-percent-graph [value]="fanEfficiency" [valueDescription]="'Optimal Fan Efficiency'" [fontSize]="32" [unit]="'%'" [title]="'fan-efficiency'"></app-percent-graph>
 			</div>
 		</div>
 	</div>

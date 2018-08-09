@@ -21,7 +21,7 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
   }
 
   calculate() {
-    if (this.checkForm()) {
+    if (this.nemaForm.status == 'VALID') {
       const efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
       return this.psatService.nema(
         this.nemaForm.controls.frequency.value,
@@ -35,30 +35,4 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
       return 0;
     }
   }
-
-  checkForm() {
-    if (this.nemaForm.controls.motorRPM.value != 0) {
-      if (
-        this.nemaForm.controls.frequency.status == 'VALID' &&
-        this.nemaForm.controls.horsePower.status == 'VALID' &&
-        this.nemaForm.controls.motorRPM.status == 'VALID' &&
-        this.nemaForm.controls.efficiencyClass.status == 'VALID'
-      ) {
-        if (this.nemaForm.controls.efficiencyClass.value == 'Specified') {
-          if (
-            this.nemaForm.controls.efficiency.status == 'VALID'
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return true;
-        }
-      } else {
-        return false;
-      }
-    }
-  }
-
 }
