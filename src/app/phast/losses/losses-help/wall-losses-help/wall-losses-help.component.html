@@ -54,7 +54,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">mph</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">km/hr</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -120,7 +123,14 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft
+                <sup>2</sup>
+              </span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m
+                <sup>2</sup>
+              </span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>

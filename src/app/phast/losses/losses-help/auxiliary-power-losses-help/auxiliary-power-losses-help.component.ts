@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-auxiliary-power-losses-help',
@@ -6,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./auxiliary-power-losses-help.component.css']
 })
 export class AuxiliaryPowerLossesHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   currentField: string;
   constructor() { }

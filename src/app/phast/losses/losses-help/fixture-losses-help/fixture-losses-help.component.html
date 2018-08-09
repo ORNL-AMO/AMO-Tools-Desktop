@@ -41,7 +41,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(lb-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(kg-&#8451;)</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -81,7 +84,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lb/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -147,10 +153,9 @@
         <br> Investigate alternate high strength material to reduce weight of the fixtures etc.
         <br> Where possible reduce cooling of conveyors, belts, fixtures baskets etc. during their return from unloading to loading
         station
-        <hr>
-        Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating
-        conditions. There may additional measures when considering specific situations and the user is encouraged to review
-        and apply the appropriate measures
+        <hr> Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures
       </small>
     </h6>
   </div>
@@ -160,7 +165,7 @@
 
 
 
-  <!-- <p>Enter loss data</p>
+<!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering fixture loss data.
   </p> -->

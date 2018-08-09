@@ -24,6 +24,7 @@ export class FieldDataHelpComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(this.psat.inputs);
     this.minFlowRate = this.getMinFlowRate();
     this.maxFlowRate = this.getMaxFlowRate();
     this.currentFieldSub = this.helpPanelService.currentField.subscribe((val) => {

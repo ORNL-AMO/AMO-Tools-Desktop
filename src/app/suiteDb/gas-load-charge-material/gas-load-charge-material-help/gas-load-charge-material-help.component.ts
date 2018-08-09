@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-gas-load-charge-material-help',
@@ -11,6 +11,11 @@ export class GasLoadChargeMaterialHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes.currentField');
+    console.log(changes.currentField);
   }
 
 }

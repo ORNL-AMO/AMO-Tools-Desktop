@@ -26,7 +26,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Lb/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -74,7 +77,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(SCF-&#8457;)</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -113,8 +119,8 @@
       Savings Suggestions
       <br>
       <small class="text-muted">
-        Improve material handling with the furnace to increase yield and reduce slag.<br>
-        Install combustion gas (air) pre-heater.
+        Improve material handling with the furnace to increase yield and reduce slag.
+        <br> Install combustion gas (air) pre-heater.
       </small>
     </h6>
   </div>
@@ -123,7 +129,7 @@
 </div>
 
 
-  <!-- <p>Enter loss data</p>
+<!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering loss data.
   </p> -->

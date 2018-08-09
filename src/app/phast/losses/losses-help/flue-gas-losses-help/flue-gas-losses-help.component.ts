@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-flue-gas-losses-help',
@@ -6,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./flue-gas-losses-help.component.css']
 })
 export class FlueGasLossesHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   currentField: string;
 

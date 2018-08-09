@@ -49,7 +49,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -76,7 +79,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -103,7 +109,10 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm</span>
+            </td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -210,8 +219,8 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
-            <td class="text-center">100</td>
+            <td class="text-center">0%</td>
+            <td class="text-center">100%</td>
           </tr>
         </tbody>
       </table>
@@ -238,7 +247,7 @@
 
 </div>
 
-  <!-- <p>Enter loss data</p>
+<!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering opening loss data.
   </p> -->

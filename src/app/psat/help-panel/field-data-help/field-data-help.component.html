@@ -59,8 +59,8 @@
           </tr>
           <tr>
             <td class="text-center">Currency</td>
-            <td class="text-center">0</td>
-            <td class="text-center">1</td>
+            <td class="text-center">0 $/kWh</td>
+            <td class="text-center">1 $/kWh</td>
           </tr>
         </tbody>
       </table>
@@ -126,7 +126,7 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0.1</td>
+            <td class="text-center">0.1 {{settings.distanceMeasurement}}</td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -170,7 +170,8 @@
             <th class="text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">0</td>
+            <td *ngIf="psat.inputs.load_estimation_method == 0" class="text-center">0 kW</td>
+            <td *ngIf="psat.inputs.load_estimation_method == 1" class="text-center">0 A</td>
             <td class="text-center">&mdash;</td>
           </tr>
         </tbody>
@@ -197,8 +198,8 @@
             <th class="text-center">Suggested Maximum</th>
           </tr>
           <tr>
-            <td class="text-center">1</td>
-            <td class="text-center">13800</td>
+            <td class="text-center">1 V</td>
+            <td class="text-center">13800 V</td>
           </tr>
         </tbody>
       </table>
