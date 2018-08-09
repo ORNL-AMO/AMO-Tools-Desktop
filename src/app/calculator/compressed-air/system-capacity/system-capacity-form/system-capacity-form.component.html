@@ -144,7 +144,9 @@
         <label class="bold">Total Pipe Volume</label>
         <div class="text-center small">
           <span *ngIf="outputs.totalPipeVolume">
-            <strong>{{outputs.totalPipeVolume | number:'1.0-2'}} ft</strong>
+            <strong>{{outputs.totalPipeVolume | number:'1.0-2'}} ft
+              <sup>3</sup>
+            </strong>
           </span>
           <span *ngIf="!outputs.totalPipeVolume">
             <strong>&mdash; &mdash;</strong>
