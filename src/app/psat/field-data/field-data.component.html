@@ -19,8 +19,7 @@
       <div class="input-group" [ngClass]="{'indicate-different': isCostKwhrDifferent()}">
         <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
           (input)="checkCost()" (focus)="focusField('costKwHr')" onfocus="this.select();">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+        <span class="input-group-addon units">$/kWh</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
     </div>

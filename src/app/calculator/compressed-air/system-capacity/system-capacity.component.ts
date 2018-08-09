@@ -53,7 +53,6 @@ export class SystemCapacityComponent implements OnInit {
 
   getTotalPipeVolume() {
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
-    console.log(this.outputs);
     return this.outputs.totalPipeVolume;
   }
 }
