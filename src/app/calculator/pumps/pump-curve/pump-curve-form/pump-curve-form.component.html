@@ -61,6 +61,9 @@
             </span>
             <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
           </div>
+          <span class="alert-danger pull-right small" *ngIf="modWarning !== null">
+            {{modWarning}}
+          </span>
         </div>
       </div>
     </div>
