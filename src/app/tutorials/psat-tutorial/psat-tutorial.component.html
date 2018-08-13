@@ -4,9 +4,11 @@
     <div class="d-flex">
       <!-- 1 -->
       <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
-        <img *ngIf="index < 7" class="d-block img-fluid" src="assets/images/tutorial/psat/psat-dark.PNG">
-        <img *ngIf="index > 6 && index < 9" class="d-block img-fluid" src="assets/images/tutorial/psat/assessment-dark.PNG">
-        <img *ngIf="index > 8 && index < 12" class="d-block img-fluid" src="assets/images/tutorial/psat/mod-conditions-dark.PNG">
+        <img *ngIf="index < 4" class="d-block img-fluid" src="assets/images/tutorial/psat/psat-dark.PNG">
+        <img *ngIf="index > 3 && index < 7 " class="d-block img-fluid" src="assets/images/tutorial/psat/setup-dark.PNG">
+        <img *ngIf="index == 7" class="d-block img-fluid" src="assets/images/tutorial/psat/assessment-dark.PNG">
+        <img *ngIf="index == 8 || index == 9" class="d-block img-fluid" src="assets/images/tutorial/psat/explore-sankey-dark.PNG">
+        <img *ngIf="index > 9 && index < 12" class="d-block img-fluid" src="assets/images/tutorial/psat/mod-conditions-dark.PNG">
         <img *ngIf="index > 11" class="d-block img-fluid" src="assets/images/tutorial/psat/dark-report.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[1]}">
@@ -49,7 +51,7 @@
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[12]}">
         <img class="d-block img-fluid" src="assets/images/tutorial/psat/12-report-1.PNG">
       </div>
-       <div class="carousel-item active" [ngClass]="{'show-img': showItem[13]}">
+      <div class="carousel-item active" [ngClass]="{'show-img': showItem[13]}">
         <div *ngIf="showItem[13]" class="row justify-content-center align-items-center get-started">
           <div class="card">
             <div class="card-header">
@@ -66,7 +68,7 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </div>
