@@ -56,6 +56,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('settings.energyResultUnit = ' + this.settings.energyResultUnit);
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
@@ -108,7 +109,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   calculate(loss: AuxPowLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
-      loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss);
+      console.log('calculate, tmpLoss = ');
+      console.log(tmpLoss);
+      loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss, this.settings);
     } else {
       loss.powerUsed = null;
     }
