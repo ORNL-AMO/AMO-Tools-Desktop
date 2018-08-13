@@ -11,6 +11,7 @@ import { PsatService } from '../../psat/psat.service';
 import { ExecutiveSummaryService } from '../../phast/phast-report/executive-summary.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { FsatService } from '../../fsat/fsat.service';
 
 @Component({
   selector: 'app-folder-summary',
@@ -30,15 +31,18 @@ export class FolderSummaryComponent implements OnInit {
   numAssessments: number = 0;
   numPhasts: number = 0;
   numPsats: number = 0;
+  numFsats: number = 0;
   settingsForm: FormGroup;
   psatEnergyUsed: number = 0;
   psatEnergyCost: number = 0;
   phastEnergyUsed: number = 0;
   phastEnergyCost: number = 0;
+  fsatEnergyUsed: number = 0;
+  fsatEnergyCost: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
   counter: any;
-  constructor(private settingsService: SettingsService, private psatService: PsatService,
+  constructor(private settingsService: SettingsService, private psatService: PsatService, private fsatService: FsatService,
     private convertUnitsService: ConvertUnitsService, private executiveSummaryService: ExecutiveSummaryService,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
@@ -67,6 +71,8 @@ export class FolderSummaryComponent implements OnInit {
     this.psatEnergyCost = 0;
     this.phastEnergyUsed = 0;
     this.phastEnergyCost = 0;
+    this.fsatEnergyUsed = 0;
+    this.fsatEnergyCost = 0;
     this.totalCost = 0;
     this.totalEnergy = 0;
     if (this.assessments) {
@@ -74,6 +80,7 @@ export class FolderSummaryComponent implements OnInit {
       let test = _.countBy(this.directory.assessments, 'type');
       this.numPhasts = test.PHAST || 0;
       this.numPsats = test.PSAT || 0;
+      this.numFsats = test.FSAT || 0;
       this.directory.assessments.forEach(assessment => {
         if (assessment.type == 'PSAT') {
           if (assessment.psat.setupDone) {
@@ -89,13 +96,21 @@ export class FolderSummaryComponent implements OnInit {
             this.phastEnergyCost = this.phastEnergyCost + result.annualCost;
           }
         }
+        else if (assessment.type == 'FSAT') {
+          if (assessment.fsat.setupDone) {
+            let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+            let result = this.fsatService.getResults(assessment.fsat, 'existing', this.directorySettings);
+            this.fsatEnergyUsed = result.annualEnergy + this.fsatEnergyUsed;
+            this.fsatEnergyCost = result.annualCost + this.fsatEnergyCost;
+          }
+        }
       })
     }
   }
 
   getTotals() {
-    this.totalCost = this.phastEnergyCost + this.psatEnergyCost;
-    this.totalEnergy = this.phastEnergyUsed + this.convertUnitsService.value(this.psatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit);
+    this.totalCost = this.phastEnergyCost + this.psatEnergyCost + this.fsatEnergyCost;
+    this.totalEnergy = this.phastEnergyUsed + this.convertUnitsService.value(this.psatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit) + this.convertUnitsService.value(this.fsatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit);
     return { totalCost: this.totalCost, totalEnergy: this.totalEnergy };
   }
 
