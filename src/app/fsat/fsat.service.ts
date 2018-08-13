@@ -47,7 +47,7 @@ export class FsatService {
   }
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
-    
+
     input.BaseGasDensity = this.convertFsatService.convertGasDensityForCalculations(input.BaseGasDensity, settings);
     input.FanRatedInfo = this.convertFsatService.convertFanRatedInfoForCalculations(input.FanRatedInfo, settings);
     if (input.PlaneData) {
@@ -158,6 +158,7 @@ export class FsatService {
         results = this.fanResultsModified(input);
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
+      results.annualCost = results.annualCost * 1000;
       return results;
     } else {
       return this.getEmptyResults();
