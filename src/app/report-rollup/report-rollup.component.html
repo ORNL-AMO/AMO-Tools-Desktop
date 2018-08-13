@@ -52,7 +52,7 @@
 
         <div class="p-1 sidebar hide-print scroll-item" id="sidebar" [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}">
             <ul id="sidebar-list">
-                <li *ngFor="let item of _psatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="setFocused(item.assessment)">
+                <li *ngFor="let item of _psatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center psat">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-psat-diagram.png">
@@ -62,7 +62,7 @@
                         </span>
                     </div>
                 </li>
-                <li *ngFor="let item of _phastAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="setFocused(item.assessment)">
+                <li *ngFor="let item of _phastAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center phast">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-phast-diagram.png">
@@ -72,7 +72,7 @@
                         </span>
                     </div>
                 </li>
-                <li *ngFor="let item of _fsatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="setFocused(item.assessment)">
+                <li *ngFor="let item of _fsatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center fsat">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-fsat-diagram.png">

@@ -12,7 +12,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    pathMatch: 'full',
+    redirectTo: ''
   },
   {
     path: 'phast/:id',
