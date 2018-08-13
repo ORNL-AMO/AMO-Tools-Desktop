@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
     if (!this.tutorialShown) {
       if (this.settingsDbService.globalSettings) {
         if (!this.settingsDbService.globalSettings.disableTutorial) {
-          this.assessmentService.openingTutorial.next(true);
+          this.assessmentService.openingTutorial.next('landing-screen');
           this.tutorialShown = true;
         }
       }

@@ -1,3 +1,15 @@
 p{
     font-size: medium;
 }
+
+.general .btn-primary{
+    background: #145A32;
+}
+
+.psat .btn-primary{
+    background: #2980b9;
+}
+
+.phast .btn-primary{
+    background: #BF3D00;
+}

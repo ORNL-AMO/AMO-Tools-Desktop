@@ -1,7 +1,11 @@
 <!-- <div #coreContainer> -->
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
-        <app-opening-tutorial (closeTutorial)="closeTutorial()"></app-opening-tutorial>
+        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()"></app-opening-tutorial>
+        <app-psat-tutorial *ngIf="tutorialType == 'psat-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-tutorial>
+        <app-phast-tutorial *ngIf="tutorialType == 'phast-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-tutorial>
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"></app-dashboard-tutorial>
+
     </div>
 
     <router-outlet></router-outlet>

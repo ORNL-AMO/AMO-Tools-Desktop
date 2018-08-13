@@ -13,9 +13,24 @@ export class TutorialsComponent implements OnInit {
   ngOnInit() {
   }
 
-  viewOpeningTutorial(){
+  viewOpeningTutorial() {
     this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next(true);
+    this.assessmentService.openingTutorial.next('landing-screen');
   }
 
+
+  viewPsatTutorial() {
+    this.assessmentService.tutorialShown = false;
+    this.assessmentService.openingTutorial.next('psat-tutorial');
+  }
+
+  viewPhastTutorial() {
+    this.assessmentService.tutorialShown = false;
+    this.assessmentService.openingTutorial.next('phast-tutorial');
+  }
+
+  viewDashboardTutorial() {
+    this.assessmentService.tutorialShown = false;
+    this.assessmentService.openingTutorial.next('dashboard-tutorial');
+  }
 }
