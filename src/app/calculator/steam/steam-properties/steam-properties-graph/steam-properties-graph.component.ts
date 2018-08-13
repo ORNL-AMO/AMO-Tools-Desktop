@@ -379,7 +379,8 @@ export class SteamPropertiesGraphComponent implements OnInit {
       containerWidth = this.chartContainerWidth;
       containerHeight = this.chartContainerHeight;
       this.margin = {
-        top: 10,
+        // top: 10,
+        top: 0,
         right: 20,
         bottom: 50,
         left: 70
@@ -393,7 +394,8 @@ export class SteamPropertiesGraphComponent implements OnInit {
       containerWidth = graphContainer.clientWidth;
       containerHeight = graphContainer.clientHeight * .9;
       this.margin = {
-        top: containerHeight * 0.05,
+        // top: containerHeight * 0.05,
+        top: 0,
         right: containerWidth * 0.05,
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.05

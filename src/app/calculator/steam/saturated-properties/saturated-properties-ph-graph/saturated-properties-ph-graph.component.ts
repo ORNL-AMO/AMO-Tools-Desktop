@@ -46,6 +46,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   curveArea: any;
   xMaxDefault: number = 4000;
   xMinDefault: number = 0;
+  // yMinDefualt: number = 0.01;
   yMinDefault: number = 0.1;
   yMaxDefault: number = 100000;
   htmlElement: any;
