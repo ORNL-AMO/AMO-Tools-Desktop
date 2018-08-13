@@ -50,6 +50,7 @@ import { CoreService } from './core.service';
 import { CalculatorListComponent } from '../sidebar/calculator-list/calculator-list.component';
 import { PsatTutorialComponent } from '../tutorials/psat-tutorial/psat-tutorial.component';
 import { PhastTutorialComponent } from '../tutorials/phast-tutorial/phast-tutorial.component';
+import { DashboardTutorialComponent } from '../tutorials/dashboard-tutorial/dashboard-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { PhastTutorialComponent } from '../tutorials/phast-tutorial/phast-tutori
     OpeningTutorialComponent,
     CalculatorListComponent,
     PsatTutorialComponent,
-    PhastTutorialComponent
+    PhastTutorialComponent,
+    DashboardTutorialComponent
   ],
   imports: [
     CommonModule,
