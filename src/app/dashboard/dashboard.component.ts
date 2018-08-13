@@ -23,6 +23,7 @@ import { CoreService } from '../core/core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
+import { CalculatorService } from '../calculator/calculator.service';
 
 
 @Component({
@@ -70,10 +71,12 @@ export class DashboardComponent implements OnInit {
   selectedCalcIndex: number;
   dashboardViewSub: Subscription;
   workingDirectorySub: Subscription;
+  selectedTool: string;
+  selectedToolSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef) {
+    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -113,6 +116,10 @@ export class DashboardComponent implements OnInit {
         this.changeWorkingDirectory(directory)
       }
     })
+
+    this.selectedToolSub = this.calculatorService.selectedTool.subscribe(toolStr => {
+      this.selectedTool = toolStr;
+    })
   }
 
   ngOnDestroy() {
@@ -122,6 +129,7 @@ export class DashboardComponent implements OnInit {
     this.exportAllSub.unsubscribe();
     this.workingDirectorySub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
+    this.selectedToolSub.unsubscribe();
   }
 
   ngAfterViewInit() {
