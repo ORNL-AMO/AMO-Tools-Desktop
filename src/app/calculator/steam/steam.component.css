@@ -13,3 +13,13 @@ a:not([href]):not([tabindex]){
 img {
   cursor: pointer;
 }
+
+
+.fa-hourglass-half{
+  font-size: xx-large;
+}
+
+
+.fa-hourglass-half:hover{
+  cursor: pointer;
+}
