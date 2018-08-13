@@ -49,6 +49,7 @@ import { DeleteDataService } from '../indexedDb/delete-data.service';
 import { CoreService } from './core.service';
 import { CalculatorListComponent } from '../sidebar/calculator-list/calculator-list.component';
 import { PsatTutorialComponent } from '../tutorials/psat-tutorial/psat-tutorial.component';
+import { PhastTutorialComponent } from '../tutorials/phast-tutorial/phast-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PsatTutorialComponent } from '../tutorials/psat-tutorial/psat-tutorial.
     MeasurComponent,
     OpeningTutorialComponent,
     CalculatorListComponent,
-    PsatTutorialComponent
+    PsatTutorialComponent,
+    PhastTutorialComponent
   ],
   imports: [
     CommonModule,

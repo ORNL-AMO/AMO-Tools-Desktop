@@ -23,4 +23,9 @@ export class TutorialsComponent implements OnInit {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.openingTutorial.next('psat-tutorial');
   }
+
+  viewPhastTutorial(){
+    this.assessmentService.tutorialShown = false;
+    this.assessmentService.openingTutorial.next('phast-tutorial');
+  }
 }
