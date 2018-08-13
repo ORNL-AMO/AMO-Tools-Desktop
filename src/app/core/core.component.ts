@@ -35,6 +35,7 @@ export class CoreComponent implements OnInit {
   calcSub: Subscription;
   assessmentSub: Subscription;
   settingsSub: Subscription;
+  tutorialType: string;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
@@ -63,6 +64,7 @@ export class CoreComponent implements OnInit {
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
         this.hideTutorial = false;
+        this.tutorialType = val;
       }
     })
 
