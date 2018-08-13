@@ -416,9 +416,22 @@ export class PhastService {
     return results;
   }
 
-  auxiliaryPowerLoss(inputs: AuxiliaryPowerLoss) {
-    //No Conversions
-    return phastAddon.auxiliaryPowerLoss(inputs);
+  auxiliaryPowerLoss(inputs: AuxiliaryPowerLoss, settings?: Settings) {
+    if (settings !== undefined && settings !== null) {
+      if (settings.energyResultUnit == 'Btu') {
+        inputs.powerUsed = phastAddon.auxiliaryPowerLoss(inputs);
+      }
+      else if (settings.energyResultUnit == 'kWh') {
+        inputs.powerUsed = this.convertUnitsService.value(phastAddon.auxiliaryPowerLoss(inputs)).from('btuhr').to('kW');
+      }
+      else {
+        inputs.powerUsed = this.convertUnitsService.value(phastAddon.auxiliaryPowerLoss(inputs)).from('Btu').to(settings.energyResultUnit);
+      }
+      return inputs.powerUsed;
+    }
+    else {
+      return phastAddon.auxiliaryPowerLoss(inputs);
+    }
   }
 
   //Electric Arc Furnace
