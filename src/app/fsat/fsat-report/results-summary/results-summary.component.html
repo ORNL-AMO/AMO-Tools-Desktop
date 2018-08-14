@@ -1,12 +1,14 @@
 <div class="output-summary">
 
+  <h4 class="show-print">Report Results</h4>
 
   <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}" *ngFor="let modification of fsat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
+        <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}" *ngFor="let modification of fsat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
       </tr>
     </thead>
     <tbody>
@@ -16,8 +18,11 @@
           &mdash; &mdash;
         </td>
         <td class="percent-graph" *ngFor="let modification of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div class="col-10 mx-auto gauge-chart-width" *ngIf="modification.percentSavings">
+          <div class="hide-print col-10 mx-auto gauge-chart-width" *ngIf="modification.percentSavings">
             <app-percent-graph [value]="modification.percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'psat-opportunities-savings'"></app-percent-graph>
+          </div>
+          <div class="show-print text-center" *ngIf="modification.percentSavings">
+            {{getSavingsPercentage(baselineResults, modification) | number:'1.0'}} %
           </div>
           <div *ngIf="!modification.percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>
