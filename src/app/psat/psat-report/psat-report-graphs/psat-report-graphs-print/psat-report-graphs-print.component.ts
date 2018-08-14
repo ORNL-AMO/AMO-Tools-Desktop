@@ -40,7 +40,6 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('init');
     this.modifications = new Array<Modification>();
     this.allNotes = new Array<Array<string>>();
     if (this.psatOptions === null || this.psatOptions === undefined) {

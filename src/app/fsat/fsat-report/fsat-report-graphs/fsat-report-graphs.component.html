@@ -70,14 +70,14 @@
 
 
   <!-- if show print then content will init -->
-  <!-- <div *ngIf="printView" class="row show-print print-component"> -->
-  <!-- contains pie and bar chart print views -->
-  <!-- <div class="col-12">
+  <div *ngIf="printView" class="row show-print print-component">
+    <!-- contains pie and bar chart print views -->
+    <div class="col-12">
       <app-fsat-report-graphs-print [settings]="settings" [graphColors]="graphColors" [fsatOptions]="fsatOptions" [barChartWidth]="getBarWidth()"
         [pieChartWidth]="getPieWidth()" [printView]="true" [modExists]="modExists" [printSankey]="printSankey" [printGraphs]="printGraphs"
         [allChartData]="allChartData"></app-fsat-report-graphs-print>
     </div>
-  </div> -->
+  </div>
 
 
 </div>

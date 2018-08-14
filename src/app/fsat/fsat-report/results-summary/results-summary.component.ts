@@ -43,6 +43,10 @@ export class ResultsSummaryComponent implements OnInit {
     }
   }
 
+  getSavingsPercentage(baseline: FsatOutput, modification: FsatOutput): number {
+    return this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, modification.annualCost);
+  }
+
   getResults() {
     this.baselineResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {

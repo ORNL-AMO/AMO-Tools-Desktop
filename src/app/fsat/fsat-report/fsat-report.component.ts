@@ -8,6 +8,8 @@ import { FsatService } from '../fsat.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
+import { FsatReportService } from './fsat-report.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-fsat-report',
@@ -41,13 +43,22 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
+
+  showPrint: boolean = false;
+  showPrintDiv: boolean = false;
+  selectAll: boolean = false;
+  printReportGraphs: boolean;
+  printReportSankey: boolean;
+  printResults: boolean;
+  printInputData: boolean;
+
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
+  constructor(private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService, private fsatReportService: FsatReportService) { }
 
   ngOnInit() {
     this.initPrintLogic();
@@ -71,29 +82,29 @@ export class FsatReportComponent implements OnInit {
       this.fsat.modifications = new Array();
     }
 
-    // //subscribe to print event
-    // this.psatReportService.showPrint.subscribe(printVal => {
-    //   //shows loading print view
-    //   this.showPrintDiv = printVal;
-    //   if (printVal == true) {
-    //     //use delay to show loading before print payload starts
-    //     setTimeout(() => {
-    //       this.showPrint = printVal;
-    //     }, 20)
-    //   } else {
-    //     this.showPrint = printVal;
-    //   }
-    // });
+    //subscribe to print event
+    this.fsatReportService.showPrint.subscribe(printVal => {
+      //shows loading print view
+      this.showPrintDiv = printVal;
+      if (printVal == true) {
+        //use delay to show loading before print payload starts
+        setTimeout(() => {
+          this.showPrint = printVal;
+        }, 20)
+      } else {
+        this.showPrint = printVal;
+      }
+    });
 
-    // if (this.printView !== undefined) {
-    //   if (this.printView) {
-    //     this.showPrint = true;
-    //   }
-    // }
+    if (this.printView !== undefined) {
+      if (this.printView) {
+        this.showPrint = true;
+      }
+    }
   }
-  
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight && !changes.containerHeight.firstChange){
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
   }
@@ -101,13 +112,13 @@ export class FsatReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    },100)
+    }, 100)
   }
 
-  getContainerHeight(){
+  getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
   }
 
   setTab(str: string) {
@@ -148,12 +159,12 @@ export class FsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    // if (this.inRollup) {
-    //   this.printReportGraphs = true;
-    //   this.printReportSankey = true;
-    //   this.printResults = true;
-    //   this.printInputData = true;
-    // }
+    if (this.inRollup) {
+      this.printReportGraphs = true;
+      this.printReportSankey = true;
+      this.printResults = true;
+      this.printInputData = true;
+    }
   }
 
   showModal(): void {
@@ -168,63 +179,63 @@ export class FsatReportComponent implements OnInit {
   }
 
   resetPrintSelection() {
-    // this.selectAll = false;
-    // this.printReportGraphs = false;
-    // this.printReportSankey = false;
-    // this.printResults = false;
-    // this.printInputData = false;
+    this.selectAll = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printResults = false;
+    this.printInputData = false;
   }
 
-  // togglePrint(section: string): void {
-  //   switch (section) {
-  //     case "select-all": {
-  //       this.selectAll = !this.selectAll;
-  //       if (this.selectAll) {
-  //         this.printReportGraphs = true;
-  //         this.printReportSankey = true;
-  //         this.printResults = true;
-  //       }
-  //       else {
-  //         this.printReportGraphs = false;
-  //         this.printReportSankey = false;
-  //         this.printResults = false;
-  //       }
-  //       break;
-  //     }
-  //     case "reportGraphs": {
-  //       this.printReportGraphs = !this.printReportGraphs;
-  //       break;
-  //     }
-  //     case "reportSankey": {
-  //       this.printReportSankey = !this.printReportSankey;
-  //       break;
-  //     }
-  //     case "results": {
-  //       this.printResults = !this.printResults;
-  //       break;
-  //     }
-  //     case "inputData": {
-  //       this.printInputData = !this.printInputData;
-  //       break;
-  //     }
-  //     default: {
-  //       break;
-  //     }
-  //   }
-  // }
+  togglePrint(section: string): void {
+    switch (section) {
+      case "select-all": {
+        this.selectAll = !this.selectAll;
+        if (this.selectAll) {
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
+          this.printResults = true;
+        }
+        else {
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
+          this.printResults = false;
+        }
+        break;
+      }
+      case "reportGraphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "reportSankey": {
+        this.printReportSankey = !this.printReportSankey;
+        break;
+      }
+      case "results": {
+        this.printResults = !this.printResults;
+        break;
+      }
+      case "inputData": {
+        this.printInputData = !this.printInputData;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
 
   print(): void {
-    // this.closeModal(false);
-    // //when print clicked set show print value to true
-    // this.psatReportService.showPrint.next(true);
-    // setTimeout(() => {
-    //   let win = this.windowRefService.nativeWindow;
-    //   let doc = this.windowRefService.getDoc();
-    //   win.print();
-    //   //after printing hide content again
-    //   this.psatReportService.showPrint.next(false);
-    //   this.resetPrintSelection();
-    // }, 2000);
+    this.closeModal(false);
+    //when print clicked set show print value to true
+    this.fsatReportService.showPrint.next(true);
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      let doc = this.windowRefService.getDoc();
+      win.print();
+      //after printing hide content again
+      this.fsatReportService.showPrint.next(false);
+      this.resetPrintSelection();
+    }, 2000);
   }
 
 }
