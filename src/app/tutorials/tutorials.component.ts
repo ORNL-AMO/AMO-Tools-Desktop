@@ -17,13 +17,7 @@ export class TutorialsComponent implements OnInit {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.openingTutorial.next('landing-screen');
   }
-
-
-  viewPsatTutorial() {
-    this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next('psat-tutorial');
-  }
-
+  
   viewPhastTutorial() {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.openingTutorial.next('phast-tutorial');
@@ -32,5 +26,10 @@ export class TutorialsComponent implements OnInit {
   viewDashboardTutorial() {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.openingTutorial.next('dashboard-tutorial');
+  }
+
+  viewTutorial(str: string){
+    this.assessmentService.tutorialShown = false;
+    this.assessmentService.openingTutorial.next(str);
   }
 }
