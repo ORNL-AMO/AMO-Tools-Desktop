@@ -51,6 +51,7 @@ import { CalculatorListComponent } from '../sidebar/calculator-list/calculator-l
 import { PsatTutorialComponent } from '../tutorials/psat-tutorial/psat-tutorial.component';
 import { PhastTutorialComponent } from '../tutorials/phast-tutorial/phast-tutorial.component';
 import { DashboardTutorialComponent } from '../tutorials/dashboard-tutorial/dashboard-tutorial.component';
+import { PsatSystemSetupComponent } from '../tutorials/psat-system-setup/psat-system-setup.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { DashboardTutorialComponent } from '../tutorials/dashboard-tutorial/dash
     CalculatorListComponent,
     PsatTutorialComponent,
     PhastTutorialComponent,
-    DashboardTutorialComponent
+    DashboardTutorialComponent,
+    PsatSystemSetupComponent
   ],
   imports: [
     CommonModule,
