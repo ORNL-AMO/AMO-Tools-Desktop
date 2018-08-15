@@ -1,0 +1,5 @@
+@media print {
+    .print-section-header {
+        font-size: 30px;
+    }
+}

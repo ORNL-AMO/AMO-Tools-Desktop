@@ -163,7 +163,7 @@ export class FsatReportComponent implements OnInit {
       this.printReportGraphs = true;
       this.printReportSankey = true;
       this.printResults = true;
-      this.printInputData = true;
+      this.printInputData = false;
     }
   }
 

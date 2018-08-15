@@ -77,22 +77,20 @@ export class PsatSankeyComponent implements OnInit {
     if(!this.baseline && !this.isBaseline){
       this.baseline = this.compareService.baselinePSAT;
     }
-    if (this.location != "sankey-diagram") {
-      // this.location = this.location + this.modIndex.toString();
+
+    if (this.printView) {
+    }
+    else if (this.location != "sankey-diagram") {
       if (this.location == 'baseline') {
         this.location = this.assessmentName + '-baseline';
       }
       else {
         this.location = this.assessmentName + '-modification';
       }
-
-      if (this.printView) {
-        this.location = this.location + '-' + this.modIndex;
-      }
-      this.location = this.location.replace(/ /g, "");
-      this.location = this.location.replace(/[\])}[{(]/g, '');
-      this.location = this.location.replace(/#/g, "");
     }
+    this.location = this.location.replace(/ /g, "");
+    this.location = this.location.replace(/[\])}[{(]/g, '');
+    this.location = this.location.replace(/#/g, "");
   }
 
   ngAfterViewInit() {
@@ -104,7 +102,7 @@ export class PsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
-        if (this.location != "sankey-diagram") {
+        if (this.location != "sankey-diagram" && !this.printView) {
           if (this.isBaseline) {
             this.location = this.assessmentName + '-baseline';
           }

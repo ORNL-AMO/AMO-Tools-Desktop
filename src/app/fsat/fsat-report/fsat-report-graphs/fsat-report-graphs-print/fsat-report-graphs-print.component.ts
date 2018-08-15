@@ -28,15 +28,19 @@ export class FsatReportGraphsPrintComponent implements OnInit {
   printGraphs: boolean;
   @Input()
   allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
+  @Input()
+  assessmentName: string;
 
   baselineFsat: { name: string, fsat: FSAT };
   allNotes: Array<Array<string>>;
   modifications: Array<Modification>;
+  // assessmentName: string;
 
 
   constructor() { }
 
   ngOnInit() {
+    this.assessmentName = this.assessmentName.replace(/ /g, "-");
     this.modifications = new Array<Modification>();
     this.allNotes = new Array<Array<string>>();
     if (this.fsatOptions === null || this.fsatOptions === undefined) {

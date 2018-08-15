@@ -92,7 +92,7 @@
         </div>
         <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-input-summary [fsat]="fsat" [settings]="settings"></app-input-summary>
+            <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="printInputData"></app-input-summary>
         </div>
         <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)"
             [ngStyle]="{'height.px':reportContainerHeight}">

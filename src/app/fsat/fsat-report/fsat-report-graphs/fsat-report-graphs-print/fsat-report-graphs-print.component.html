@@ -69,7 +69,7 @@
             </div>
             <div class="row show-print">
               <div class="col-12">
-                <app-fsat-sankey [settings]="settings" [fsat]="baselineFsat.fsat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                <app-fsat-sankey [settings]="settings" [fsat]="baselineFsat.fsat" [location]="assessmentName + '-fsat-baseline-print-sankey-' + i" [printView]="true"
                   [modIndex]="i" [isBaseline]="true"></app-fsat-sankey>
               </div>
             </div>
@@ -80,7 +80,7 @@
             </div>
             <div class="row show-print" *ngIf="modExists">
               <div class="col-12">
-                <app-fsat-sankey [settings]="settings" [fsat]="fsatOption.fsat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                <app-fsat-sankey [settings]="settings" [fsat]="fsatOption.fsat" [location]="assessmentName + '-fsat-modification-print-sankey-' + i" [printView]="true"
                   [modIndex]="i" [isBaseline]="false"></app-fsat-sankey>
               </div>
             </div>

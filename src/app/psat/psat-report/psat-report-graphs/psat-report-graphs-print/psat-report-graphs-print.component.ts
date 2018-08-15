@@ -27,6 +27,8 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   printGraphs: boolean;
   @Input()
   allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
+  @Input()
+  assessmentName: string;
   // @Input()
   // allPieLabels: Array<Array<string>>;
   // @Input()
@@ -40,6 +42,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.assessmentName = this.assessmentName.replace(/ /g, "-");
     this.modifications = new Array<Modification>();
     this.allNotes = new Array<Array<string>>();
     if (this.psatOptions === null || this.psatOptions === undefined) {
