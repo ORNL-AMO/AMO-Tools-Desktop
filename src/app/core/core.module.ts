@@ -52,6 +52,7 @@ import { PsatTutorialComponent } from '../tutorials/psat-tutorial/psat-tutorial.
 import { PhastTutorialComponent } from '../tutorials/phast-tutorial/phast-tutorial.component';
 import { DashboardTutorialComponent } from '../tutorials/dashboard-tutorial/dashboard-tutorial.component';
 import { PsatSystemSetupComponent } from '../tutorials/psat-system-setup/psat-system-setup.component';
+import { PsatAssessmentTutorialComponent } from '../tutorials/psat-assessment-tutorial/psat-assessment-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { PsatSystemSetupComponent } from '../tutorials/psat-system-setup/psat-sy
     PsatTutorialComponent,
     PhastTutorialComponent,
     DashboardTutorialComponent,
-    PsatSystemSetupComponent
+    PsatSystemSetupComponent,
+    PsatAssessmentTutorialComponent
   ],
   imports: [
     CommonModule,
