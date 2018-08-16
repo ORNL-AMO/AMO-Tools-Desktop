@@ -3,8 +3,9 @@
     <div class="close pull-right click-item" (click)="close()">&times;</div>
     <div class="d-flex">
       <!-- 1 -->
-      <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
-        <img *ngIf="index == 0 || index == 1 || index == 2" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/explore-ops-dark.jpg">
+      <div class="carousel-item active" [ngClass]="{'show-img-1': show}">        
+        <img *ngIf="index == 0 || index == 1" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/assessment-1-dark.jpg">
+        <img *ngIf="index == 2" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/explore-ops-dark.jpg">
         <img *ngIf="index == 3" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/assessment-menu-dark.jpg">
         <img *ngIf="index == 4" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/modify-conditions-1-dark.jpg">
         <img *ngIf="index > 4" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/modify-conditions-dark.jpg">
@@ -71,13 +72,10 @@
         <span class="fa" [ngClass]="{'fa-circle-o': !showItem[4], 'fa-circle': showItem[4]}"></span>
         <span class="fa" [ngClass]="{'fa-circle-o': !showItem[5], 'fa-circle': showItem[5]}"></span>
         <span class="fa" [ngClass]="{'fa-circle-o': !showItem[6], 'fa-circle': showItem[6]}"></span>
-        <span class="fa" [ngClass]="{'fa-circle-o': !showItem[7], 'fa-circle': showItem[7]}"></span>
-        <span class="fa" [ngClass]="{'fa-circle-o': !showItem[8], 'fa-circle': showItem[8]}"></span>
-        <span class="fa" [ngClass]="{'fa-circle-o': !showItem[9], 'fa-circle': showItem[9]}"></span>
       </div>
     </div>
     <div class="col-1">
-      <h5 *ngIf="index != 9" class="pull-right caption-control click-item" (click)="next()">Next
+      <h5 *ngIf="index != 6" class="pull-right caption-control click-item" (click)="next()">Next
         <span class="fa fa-caret-right"></span>
       </h5>
     </div>
