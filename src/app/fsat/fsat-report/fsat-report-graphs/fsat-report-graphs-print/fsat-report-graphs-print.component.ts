@@ -66,20 +66,20 @@ export class FsatReportGraphsPrintComponent implements OnInit {
     for (let i = 0; i < this.modifications.length; i++) {
       let notes = new Array<string>();
 
-      // if (this.modifications[i].notes) {
-      //   if (this.modifications[i].notes.systemBasicsNotes) {
-      //     notes.push("System Basics - " + this.modifications[i].notes.systemBasicsNotes);
-      //   }
-      //   if (this.modifications[i].notes.pumpFluidNotes) {
-      //     notes.push("Pump Fluid - " + this.modifications[i].notes.pumpFluidNotes);
-      //   }
-      //   if (this.modifications[i].notes.motorNotes) {
-      //     notes.push("Motor- " + this.modifications[i].notes.motorNotes);
-      //   }
-      //   if (this.modifications[i].notes.fieldDataNotes) {
-      //     notes.push("Field Data - " + this.modifications[i].notes.fieldDataNotes);
-      //   }
-      // }
+      if (this.modifications[i].notes) {
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Field Data - " + this.modifications[i].notes.fieldDataNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fan Motor - " + this.modifications[i].notes.fanMotorNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fan Setup - " + this.modifications[i].notes.fanSetupNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fluid - " + this.modifications[i].notes.fluidNotes);
+        }
+      }
       this.allNotes.push(notes);
     }
   }
