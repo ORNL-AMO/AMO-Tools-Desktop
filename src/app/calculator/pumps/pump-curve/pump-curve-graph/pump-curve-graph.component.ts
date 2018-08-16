@@ -101,6 +101,9 @@ export class PumpCurveGraphComponent implements OnInit {
   deleteCount: number = 0;
 
   systemCurveChanged: boolean = false;
+  systemCurveMaxY: number;
+  maxX: any;
+  maxY: any;
 
   @Input()
   toggleCalculate: boolean;
@@ -277,6 +280,8 @@ export class PumpCurveGraphComponent implements OnInit {
     let data = new Array<any>();
     if (this.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+      console.log('maxDataFlow = ');
+      console.log(maxDataFlow);
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
@@ -293,7 +298,10 @@ export class PumpCurveGraphComponent implements OnInit {
         }
       }
     } else if (this.selectedFormView == 'Equation') {
+      console.log('selectedFormView = Equation');
       this.pumpCurveService.regEquation.next(null);
+      console.log('pumpCurveForm = ');
+      console.log(this.pumpCurveForm);
       for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
@@ -349,12 +357,12 @@ export class PumpCurveGraphComponent implements OnInit {
     let systemCurveData = new Array<any>();
     let maxSystemCurveX = _.maxBy(systemCurveData, (val) => { return val.x });
     let maxSystemCurveY = _.maxBy(systemCurveData, (val) => { return val.y });
-
     // systemCurveData = this.getSystemCurveData();
 
     let modifiedData = new Array<any>();
     let maxX = _.maxBy(data, (val) => { return val.x });
     let maxY = _.maxBy(data, (val) => { return val.y });
+
     if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
       modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
       let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
@@ -366,6 +374,48 @@ export class PumpCurveGraphComponent implements OnInit {
         maxY = modMaxY;
       }
     }
+
+    this.maxX = maxX;
+    this.maxY = maxY;
+
+    if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
+      if (this.pointOne.form.controls.head.value > this.maxY.y) {
+        console.log('setting maxY to pointOne');
+        this.maxY.y = this.pointOne.form.controls.head.value;
+      }
+    }
+    else {
+      if (this.pointTwo.form.controls.head.value > this.maxY.y) {
+        console.log('setting maxY to pointTwo');
+        this.maxY.y = this.pointTwo.form.controls.head.value;
+      }
+    }
+
+    if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.head.value) {
+      if (this.pointOne.form.controls.flowRate.value > this.maxX.x) {
+        console.log('setting maxX to pointOne');
+        this.maxX.x = this.pointOne.form.controls.flowRate.value;
+      }
+    }
+    else {
+      if (this.pointTwo.form.controls.flowRate.value > this.maxX.x) {
+        console.log('setting maxX to pointTwo');
+        this.maxX.x = this.pointTwo.form.controls.flowRate.value;
+      }
+    }
+
+    console.log('maxX = ');
+    console.log(this.maxX);
+    console.log('maxY = ');
+    console.log(this.maxY);
+
+    // var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.controls.systemLossExponent.value);
+    // let head = this.curveConstants.form.controls.head;
+    console.log('staticHead = ' + this.staticHead);
+
+    // console.log(this.curveConstants.form.controls);
+
+
 
     //Remove  all previous graphs
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
@@ -417,13 +467,22 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
+
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, maxX.x + 200]);
+      .domain([0, this.maxX.x + 200]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, maxY.y + 100]);
+      .domain([0, this.maxY.y + 100]);
+
+    // this.x = d3.scaleLinear()
+    //   .range([0, this.width])
+    //   .domain([0, maxX.x + 200]);
+
+    // this.y = d3.scaleLinear()
+    //   .range([this.height, 0])
+    //   .domain([0, maxY.y + 100]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -483,13 +542,26 @@ export class PumpCurveGraphComponent implements OnInit {
     //Load data here
     // let systemCurveData;
     if (this.x.domain()[1] < 500) {
+      console.log('increment = ' + this.x.domain()[1] + ' / 500 = ' + (this.x.domain()[1] / 500));
       systemCurveData = this.findPointValues(this.x, this.y, (this.x.domain()[1] / 500));
     }
     else {
+      console.log('increment = 1');
       systemCurveData = this.findPointValues(this.x, this.y, 1);
     }
 
+    // console.log('systemCurveData = ');
+    // console.log(systemCurveData);
+
+    console.log('this.pointOne = ');
+    console.log(this.pointOne);
+    console.log('this.pointTwo = ');
+    console.log(this.pointTwo);
+
     this.makeSystemCurve(this.x, this.y, systemCurveData);
+
+    console.log('x.domain()[1] = ');
+    console.log(this.x.domain()[1]);
 
 
     let flowMeasurement: string;
@@ -1014,9 +1086,13 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   makeBaselineCurve(data) {
+    console.log('makeBaselineCurve, data = ');
+    console.log(data);
+    data.pop();
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })
+      // .curve(d3.curveLinear);
       .curve(d3.curveNatural);
 
     let line = this.svg.append("path")
@@ -1105,6 +1181,9 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   findPointValues(x, y, increment): Array<any> {
+
+    console.log('increment = ');
+    console.log(increment);
 
     var powerMeasurement: string;
     if (this.isFan) {
@@ -1200,6 +1279,15 @@ export class PumpCurveGraphComponent implements OnInit {
       });
 
     }
+    // console.log('y.domain()[1] = ' + this.y.domain()[1]);
+    // console.log('lodash maxBy(data, "y") = ');
+    // console.log(_.maxBy(data, 'y'));
+
+    this.systemCurveMaxY = _.maxBy(data, 'y');
+    if (this.systemCurveMaxY > this.maxY) {
+      this.maxY = this.systemCurveMaxY;
+    }
+
 
     return data;
   }
