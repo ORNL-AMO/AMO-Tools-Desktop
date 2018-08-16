@@ -55,8 +55,24 @@
         <div class="card-header bold">
           Process Heating Tutorial
         </div>
-        <div class="card-body text-center">
-          <button class="btn btn-primary mx-auto" (click)="viewPhastTutorial()">View Process Heating Tutorial</button>
+        <div class="card-body">
+          <div class="card-body">
+            <ul>
+              <li>
+                  <a class="click-link" (click)="viewTutorial('phast-tutorial')">Full Process Heating Tutorial</a>
+              </li>
+              <li>
+                  <a class="click-link" (click)="viewTutorial('phast-setup-tutorial')">System Setup Tutorial</a>
+              </li>
+              <li>
+                  <a class="click-link" (click)="viewTutorial('phast-assessment-tutorial')">Assessment Tutorial</a>
+              </li>
+              <li>
+                  <a class="click-link" (click)="viewTutorial('phast-report-tutorial')">Report Tutorial</a>
+              </li>
+            </ul>
+            <a class="click-link"></a>
+          </div>
         </div>
       </div>
     </div>
