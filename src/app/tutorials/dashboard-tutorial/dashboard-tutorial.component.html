@@ -3,11 +3,9 @@
     <div class="close pull-right click-item" (click)="close()">&times;</div>
     <div class="d-flex">
       <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
-        <img *ngIf="index < 3" class="d-block img-fluid" src="assets/images/tutorial/dashboard/welcome-dark.PNG">
-        <img *ngIf="index > 2 && index < 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/folder-dark.PNG">
-
-        <img *ngIf="index == 6 " class="d-block img-fluid" src="assets/images/tutorial/dashboard/pre-assessment-dark.PNG">
-        <img *ngIf="index > 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/rollup-dark.PNG">
+        <img *ngIf="index < 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/dashboard-1-dark.jpg">
+        <img *ngIf="index == 6 " class="d-block img-fluid" src="assets/images/tutorial/dashboard/pre-assessment-dark.jpg">
+        <img *ngIf="index > 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/report-dark.jpg">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[1]}">
         <img class="d-block img-fluid" src="assets/images/tutorial/dashboard/1-welcome.PNG">
@@ -56,8 +54,9 @@
     <div class="col-10 d-flex flex-column">
       <div class="d-flex mx-auto circle-div">
         <h5 *ngIf="index == 1">Welcome</h5>
-        <h5 *ngIf="index > 1 && index < 7">Dashboard</h5>
-        <h5 *ngIf="index > 6">Rollup</h5>
+        <h5 *ngIf="index > 1 && index < 6">Dashboard</h5>
+        <h5 *ngIf="index == 6">Pre-Assessment / Screening</h5>
+        <h5 *ngIf="index > 6">Rollup Report</h5>
       </div>
       <div class="p-1 d-flex mx-auto circle-div">
         <span class="fa" [ngClass]="{'fa-circle-o': !showItem[1], 'fa-circle': showItem[1]}"></span>
