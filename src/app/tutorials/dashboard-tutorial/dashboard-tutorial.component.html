@@ -3,6 +3,7 @@
     <div class="close pull-right click-item" (click)="close()">&times;</div>
     <div class="d-flex">
       <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
+        <!-- <img *ngIf="index == 0" class="d-block img-fluid" src="assets/images/tutorial/dashboard/dashboard-1.PNG"> -->
         <img *ngIf="index < 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/dashboard-1-dark.jpg">
         <img *ngIf="index == 6 " class="d-block img-fluid" src="assets/images/tutorial/dashboard/pre-assessment-dark.jpg">
         <img *ngIf="index > 6" class="d-block img-fluid" src="assets/images/tutorial/dashboard/report-dark.jpg">
@@ -35,8 +36,13 @@
               <h3>Finish Tutorial</h3>
             </div>
             <div class="card-body d-flex flex-column">
-              <p class="lead">Now that you've had a quick introduction, click below to return to other tutorials!</p>
-              <button class="btn btn-primary" (click)="close()">Return to Tutorials</button>
+              <p class="lead">Now that you've had a quick introduction, click below to view your dashboard.</p>
+              <button class="btn btn-primary" (click)="close()">View Dashboard</button>
+              <div class="d-flex p-4">
+                <input class="dont-show" type="checkbox" [(ngModel)]="dontShow">
+                <label class="dont-show">Don't show this again
+                </label>
+              </div>
             </div>
           </div>
         </div>

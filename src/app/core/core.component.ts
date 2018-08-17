@@ -60,7 +60,7 @@ export class CoreComponent implements OnInit {
       this.showScreenshot = false;
     }
 
-    this.openingTutorialSub = this.assessmentService.openingTutorial.subscribe(val => {
+    this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
         this.hideTutorial = false;

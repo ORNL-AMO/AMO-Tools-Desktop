@@ -89,16 +89,9 @@ export class DashboardComponent implements OnInit {
     this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
     })
-    if (!this.settingsDbService.globalSettings.disableTutorial) {
-      this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
-        if (this.settingsDbService.globalSettings) {
-          this.settingsDbService.globalSettings.disableTutorial = val;
-          this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-            this.settingsDbService.setAll();
-          });
-        }
-      })
-    }
+
+    //this.initializeTutorials();
+    
     this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
       if (val) {
         this.exportAll();
@@ -143,6 +136,20 @@ export class DashboardComponent implements OnInit {
       this.suiteDbService.initCustomDbMaterials();
     }
   }
+
+  // initializeTutorials(){
+  //   if (!this.settingsDbService.globalSettings.disableTutorial) {
+  //     this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
+  //       if (this.settingsDbService.globalSettings) {
+  //         this.settingsDbService.globalSettings.disableTutorial = val;
+  //         this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+  //           this.settingsDbService.setAll();
+  //         });
+  //       }
+  //     })
+  //   }
+  // }
+
   getWorkingDirectoryData() {
     // this.updateDbData();
     this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
@@ -186,7 +193,7 @@ export class DashboardComponent implements OnInit {
     if (!this.tutorialShown) {
       if (this.settingsDbService.globalSettings) {
         if (!this.settingsDbService.globalSettings.disableTutorial) {
-          this.assessmentService.openingTutorial.next('landing-screen');
+          this.assessmentService.showTutorial.next('landing-screen');
           this.tutorialShown = true;
         }
       }
@@ -340,6 +347,7 @@ export class DashboardComponent implements OnInit {
       this.assessmentDbService.setAll().then(() => {
         this.settingsDbService.setAll().then(() => {
           this.calculatorDbService.setAll().then(() => {
+            this.assessmentService.showTutorial.next('landing-screnn');
             this.assessmentService.tutorialShown = false;
             this.tutorialShown = false;
             this.initData();

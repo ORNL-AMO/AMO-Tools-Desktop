@@ -15,21 +15,21 @@ export class TutorialsComponent implements OnInit {
 
   viewOpeningTutorial() {
     this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next('landing-screen');
+    this.assessmentService.showTutorial.next('landing-screen');
   }
   
   viewPhastTutorial() {
     this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next('phast-tutorial');
+    this.assessmentService.showTutorial.next('phast-tutorial');
   }
 
   viewDashboardTutorial() {
     this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next('dashboard-tutorial');
+    this.assessmentService.showTutorial.next('dashboard-tutorial');
   }
 
   viewTutorial(str: string){
     this.assessmentService.tutorialShown = false;
-    this.assessmentService.openingTutorial.next(str);
+    this.assessmentService.showTutorial.next(str);
   }
 }

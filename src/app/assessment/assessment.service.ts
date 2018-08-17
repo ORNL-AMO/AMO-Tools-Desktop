@@ -17,7 +17,7 @@ export class AssessmentService {
   createAssessment: BehaviorSubject<boolean>;
   // checkForUpdates: BehaviorSubject<boolean>;
   updateAvailable: BehaviorSubject<boolean>;
-  openingTutorial: BehaviorSubject<string>;
+  showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
   dashboardView: BehaviorSubject<string>;
   workingDirectoryId: BehaviorSubject<number>;
@@ -26,7 +26,7 @@ export class AssessmentService {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
-    this.openingTutorial = new BehaviorSubject<string>(null);
+    this.showTutorial = new BehaviorSubject<string>(null);
     this.dashboardView = new BehaviorSubject<string>('landing-screen');
     this.workingDirectoryId = new BehaviorSubject<number>(null);
   }

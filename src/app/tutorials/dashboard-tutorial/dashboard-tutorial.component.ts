@@ -1,4 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-dashboard-tutorial',
@@ -13,15 +15,15 @@ export class DashboardTutorialComponent implements OnInit {
 
   index: number = 0;
   showWelcomeText: Array<boolean> = [false, false, false, false];
-  //dontShow: boolean = true;
+  dontShow: boolean = true;
   show: boolean = true;
-  constructor() { }
+  constructor(private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.next();
     }, 1000)
- }
+  }
 
   next() {
     this.showItem[this.index] = false;
@@ -35,13 +37,16 @@ export class DashboardTutorialComponent implements OnInit {
     this.showItem[this.index] = true;
   }
   close() {
-    // if(this.dontShow){
-    //   // this.sendDontShow();
-    // }
+    if (this.dontShow) {
+      this.sendDontShow();
+    }
     this.closeTutorial.emit(true);
   }
 
-  // sendDontShow(){
-  //   this.settingsService.setDontShow.next(this.dontShow);
-  // }
+  sendDontShow(){
+    this.settingsDbService.globalSettings.disableDashboardTutorial = this.dontShow;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
+  }
 }

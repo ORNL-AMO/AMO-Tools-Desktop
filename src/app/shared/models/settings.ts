@@ -46,7 +46,8 @@ export interface Settings {
     electricityCost?: number,
     fuelCost?: number,
     steamCost?: number,
-    disableTutorial?: boolean
+    disableTutorial?: boolean,
+    disableDashboardTutorial?: boolean
 }
 
 
