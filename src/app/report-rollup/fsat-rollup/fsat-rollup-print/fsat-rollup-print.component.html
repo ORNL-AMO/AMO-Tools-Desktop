@@ -1,0 +1,32 @@
+<div class="print-break-before show-print" *ngIf="settings">
+
+    <div class="row justify-content-center row-bottom-divider">
+        <div class="col-12">
+            <h3>FSAT Rollup Report</h3>
+        </div>
+    </div>
+    <div class="print-avoid-break">
+        <div class="row justify-content-center">
+            <div class="col-12 header text-center">
+                <h5>Energy Use</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <app-fsat-rollup-graphs [settings]="settings" [printView]="true"></app-fsat-rollup-graphs>
+        </div>
+    </div>
+    <div class="print-avoid-break">
+        <div class="row justify-content-center">
+            <div class="col-12 header text-center">
+                <h5>Fans Summary</h5>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <app-fsat-rollup-fan-summary [settings]="settings" [printView]="true"></app-fsat-rollup-fan-summary>
+            </div>
+        </div>
+    </div>
+</div>

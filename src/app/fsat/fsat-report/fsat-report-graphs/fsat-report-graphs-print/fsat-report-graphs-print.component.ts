@@ -1,20 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PSAT, Modification } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
+import { FSAT, Modification } from '../../../../shared/models/fans';
 
 @Component({
-  selector: 'app-psat-report-graphs-print',
-  templateUrl: './psat-report-graphs-print.component.html',
-  styleUrls: ['./psat-report-graphs-print.component.css']
+  selector: 'app-fsat-report-graphs-print',
+  templateUrl: './fsat-report-graphs-print.component.html',
+  styleUrls: ['./fsat-report-graphs-print.component.css']
 })
-export class PsatReportGraphsPrintComponent implements OnInit {
+export class FsatReportGraphsPrintComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
   graphColors: Array<string>;
   @Input()
-  psatOptions: Array<{ name: string, psat: PSAT }>;
-
+  fsatOptions: Array<{ name: string, fsat: FSAT }>;
+  @Input()
+  barChartWidth: number;
   @Input()
   pieChartWidth: number;
   @Input()
@@ -29,14 +30,11 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
   @Input()
   assessmentName: string;
-  // @Input()
-  // allPieLabels: Array<Array<string>>;
-  // @Input()
-  // allPieValues: Array<Array<number>>;
 
-  baselinePsat: { name: string, psat: PSAT };
+  baselineFsat: { name: string, fsat: FSAT };
   allNotes: Array<Array<string>>;
   modifications: Array<Modification>;
+  // assessmentName: string;
 
 
   constructor() { }
@@ -45,8 +43,8 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     this.assessmentName = this.assessmentName.replace(/ /g, "-");
     this.modifications = new Array<Modification>();
     this.allNotes = new Array<Array<string>>();
-    if (this.psatOptions === null || this.psatOptions === undefined) {
-      console.error('psat print error');
+    if (this.fsatOptions === null || this.fsatOptions === undefined) {
+      console.error('fsat print error');
       return;
     }
     this.setBaseline();
@@ -56,13 +54,12 @@ export class PsatReportGraphsPrintComponent implements OnInit {
     }
   }
 
-
   setBaseline(): void {
-    this.baselinePsat = this.psatOptions[0];
+    this.baselineFsat = this.fsatOptions[0];
   }
 
   getAllModifications() {
-    this.modifications = (JSON.parse(JSON.stringify(this.baselinePsat.psat.modifications)))
+    this.modifications = (JSON.parse(JSON.stringify(this.baselineFsat.fsat.modifications)))
   }
 
   getAllNotes() {
@@ -70,20 +67,21 @@ export class PsatReportGraphsPrintComponent implements OnInit {
       let notes = new Array<string>();
 
       if (this.modifications[i].notes) {
-        if (this.modifications[i].notes.systemBasicsNotes) {
-          notes.push("System Basics - " + this.modifications[i].notes.systemBasicsNotes);
-        }
-        if (this.modifications[i].notes.pumpFluidNotes) {
-          notes.push("Pump Fluid - " + this.modifications[i].notes.pumpFluidNotes);
-        }
-        if (this.modifications[i].notes.motorNotes) {
-          notes.push("Motor- " + this.modifications[i].notes.motorNotes);
-        }
         if (this.modifications[i].notes.fieldDataNotes) {
           notes.push("Field Data - " + this.modifications[i].notes.fieldDataNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fan Motor - " + this.modifications[i].notes.fanMotorNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fan Setup - " + this.modifications[i].notes.fanSetupNotes);
+        }
+        if (this.modifications[i].notes.fieldDataNotes) {
+          notes.push("Fluid - " + this.modifications[i].notes.fluidNotes);
         }
       }
       this.allNotes.push(notes);
     }
   }
+
 }

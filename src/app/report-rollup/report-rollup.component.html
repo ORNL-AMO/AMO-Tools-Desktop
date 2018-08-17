@@ -87,7 +87,8 @@
         <!-- End .sidebar -->
 
 
-        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline" [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)">
+        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline" [ngStyle]="{'height.px': sidebarHeight}"
+            (scroll)="checkActiveAssessment($event)">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
                 <div *ngIf="_psatAssessments.length > 0" class="row print-break-before">
@@ -119,12 +120,13 @@
                 <div class="row print-break-before">
                     <div class="col-12">
                         <!--fsat print-->
+                        <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>
                     </div>
                 </div>
                 <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
                     <div class="col-12">
                         <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment" [settings]="item.settings"
-                            [inRollup]="true"></app-fsat-report>
+                            [inRollup]="true" [printView]="printView"></app-fsat-report>
                     </div>
                 </div>
             </div>

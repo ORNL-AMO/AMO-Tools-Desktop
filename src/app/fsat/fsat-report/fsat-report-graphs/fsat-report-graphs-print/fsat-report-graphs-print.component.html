@@ -1,11 +1,11 @@
-<div *ngFor="let psatOption of psatOptions; let i = index">
+<div *ngFor="let fsatOption of fsatOptions; let i = index">
 
   <div *ngIf="!modExists || i > 0">
     <div class="row justify-content-center align-items-center print-graphs-container show-print">
 
       <!-- page title -->
       <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-        Scenario: {{psatOption.name}}
+        Scenario: {{fsatOption.name}}
       </div>
       <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
         Baseline
@@ -29,7 +29,7 @@
             Baseline
           </div>
           <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-            {{psatOption.name}}
+            {{fsatOption.name}}
           </div>
         </div>
 
@@ -48,14 +48,14 @@
         <!-- bar chart title -->
         <div class="row show-print print-bar-chart-title print-pad-graph-title" *ngIf="modExists && printGraphs">
           <div align="center" class="print-center-title">
-            PSAT Power ({{settings.powerMeasurement}})
+            FSAT Power ({{settings.powerMeasurement}})
           </div>
         </div>
         <!-- bar chart -->
         <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
           <div class="col-12">
-            <app-psat-bar-chart [settings]="settings" [printView]="true" [graphColors]="graphColors" [labels]="allChartData.barLabels"
-              [psat1Name]="baselinePsat.name" [psat2Name]="psatOption.name" [psat1Values]="allChartData.barValues[0]" [psat2Values]="allChartData.barValues[i]"></app-psat-bar-chart>
+            <app-fsat-bar-chart [settings]="settings" [printView]="true" [graphColors]="graphColors" [labels]="allChartData.barLabels"
+              [fsat1Name]="baselineFsat.name" [fsat2Name]="fsatOption.name" [fsat1Values]="allChartData.barValues[0]" [fsat2Values]="allChartData.barValues[i]"></app-fsat-bar-chart>
           </div>
         </div>
 
@@ -69,19 +69,19 @@
             </div>
             <div class="row show-print">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="baselinePsat.psat" [location]="assessmentName + '-psat-baseline-print-sankey-' + i"
-                  [printView]="true" [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
+                <app-fsat-sankey [settings]="settings" [fsat]="baselineFsat.fsat" [location]="assessmentName + '-fsat-baseline-print-sankey-' + i" [printView]="true"
+                  [modIndex]="i" [isBaseline]="true"></app-fsat-sankey>
               </div>
             </div>
             <div class="row show-print print-pad-graph-title" *ngIf="modExists">
               <div align="center" class="print-graph-title print-center-title">
-                Scenario: {{psatOption.name}}
+                Scenario: {{fsatOption.name}}
               </div>
             </div>
             <div class="row show-print" *ngIf="modExists">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="psatOption.psat" [location]="assessmentName + '-psat-modification-print-sankey-' + i"
-                  [printView]="true" [modIndex]="i" [isBaseline]="false" [baseline]="baselinePsat.psat"></app-psat-sankey>
+                <app-fsat-sankey [settings]="settings" [fsat]="fsatOption.fsat" [location]="assessmentName + '-fsat-modification-print-sankey-' + i" [printView]="true"
+                  [modIndex]="i" [isBaseline]="false"></app-fsat-sankey>
               </div>
             </div>
           </div>

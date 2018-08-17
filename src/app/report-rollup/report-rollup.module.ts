@@ -40,6 +40,7 @@ import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy
 import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
 import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
 import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat-rollup-graphs.component';
+import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-rollup-print.component';
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat
     FsatRollupEnergyTableComponent,
     FsatRollupFanSummaryComponent,
     FsatRollupFanSummaryTableComponent,
-    FsatRollupGraphsComponent
+    FsatRollupGraphsComponent,
+    FsatRollupPrintComponent
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]
