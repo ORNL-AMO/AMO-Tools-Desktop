@@ -192,7 +192,7 @@ export class DashboardComponent implements OnInit {
     this.workingDirectory = this.allDirectories;
     if (!this.tutorialShown) {
       if (this.settingsDbService.globalSettings) {
-        if (!this.settingsDbService.globalSettings.disableTutorial) {
+        if (!this.assessmentService.tutorialShown && !this.settingsDbService.globalSettings.disableTutorial) {
           this.assessmentService.showTutorial.next('landing-screen');
           this.tutorialShown = true;
         }
@@ -349,6 +349,7 @@ export class DashboardComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.assessmentService.showTutorial.next('landing-screnn');
             this.assessmentService.tutorialShown = false;
+            console.log('set false');
             this.tutorialShown = false;
             this.initData();
             this.hideDeleteModal();

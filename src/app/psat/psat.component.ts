@@ -206,8 +206,6 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.psatService.secondaryTab.next('explore-opportunities');
-    this.psatService.mainTab.next('system-setup');
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
     if (this.addNewSub) this.addNewSub.unsubscribe();
@@ -216,6 +214,8 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
+    this.psatService.secondaryTab.next('explore-opportunities');
+    this.psatService.mainTab.next('system-setup');
   }
 
   ngAfterViewInit() {
@@ -239,6 +239,7 @@ export class PsatComponent implements OnInit {
   }
 
   checkTutorials() {
+    console.log('check')
     if (this.mainTab == 'system-setup') {
       if (!this.settingsDbService.globalSettings.disablePsatSetupTutorial) {
         this.assessmentService.tutorialShown = false;

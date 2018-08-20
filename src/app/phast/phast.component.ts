@@ -188,8 +188,6 @@ export class PhastComponent implements OnInit {
 
   ngOnDestroy() {
     //reset tabs when leaving phast assessment
-    this.lossesService.lossesTab.next(1);
-    this.phastService.initTabs();
     this.mainTabSubscription.unsubscribe();
     this.actvatedRouteSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
@@ -199,9 +197,12 @@ export class PhastComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
+    this.addNewSubscription.unsubscribe();
+    //reset services
+    this.lossesService.lossesTab.next(1);
+    this.phastService.initTabs();
     this.phastCompareService.selectedModification.next(undefined);
     this.phastCompareService.setNoModification();
-    this.addNewSubscription.unsubscribe();
   }
   //function used for getting container height, container height used for scrolling
   getContainerHeight() {
