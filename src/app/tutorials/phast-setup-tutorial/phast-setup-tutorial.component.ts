@@ -38,7 +38,7 @@ export class PhastSetupTutorialComponent implements OnInit {
     this.showItem[this.index] = true;
   }
   close() {
-    if (this.dontShow) {
+    if (this.dontShow && !this.inTutorials) {
       this.sendDontShow();
     }
     this.closeTutorial.emit(true);
