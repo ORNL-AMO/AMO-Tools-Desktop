@@ -1,5 +1,7 @@
-<label class="group-label">
+<label class="group-label" *ngIf="!isFan">
   Head Equation Coefficients</label>
+  <label class="group-label" *ngIf="isFan">
+    Pressure Equation Coefficients</label>
 
 <div class="form-group">
   <label for="maxFlow">Max Flow</label>
