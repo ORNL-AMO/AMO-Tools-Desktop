@@ -121,11 +121,13 @@ export class FieldDataComponent implements OnInit {
   }
 
   disableForm() {
-    this.psatForm.disable();
+    // this.psatForm.disable();
+    // console.log(this.psatForm);
+    this.psatForm.controls.loadEstimatedMethod.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.loadEstimatedMethod.enable();
   }
 
   focusField(str: string) {

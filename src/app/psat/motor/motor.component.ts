@@ -195,11 +195,16 @@ export class MotorComponent implements OnInit {
   }
 
   disableForm() {
-    this.psatForm.disable();
+    this.psatForm.controls.frequency.disable();
+    this.psatForm.controls.horsePower.disable();
+    this.psatForm.controls.efficiencyClass.disable();
+    //this.psatForm.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.frequency.enable();
+    this.psatForm.controls.horsePower.enable();
+    this.psatForm.controls.efficiencyClass.enable();
     if (this.psat.inputs.optimize_calculation) {
       this.disableOptimized();
     }
@@ -336,29 +341,34 @@ export class MotorComponent implements OnInit {
       this.startSavePolling();
     }
     let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-    let estEfficiency = this.psatService.estFLA(
-      this.psatForm.controls.horsePower.value,
-      this.psatForm.controls.motorRPM.value,
-      this.psatForm.controls.frequency.value,
-      this.psatForm.controls.efficiencyClass.value,
-      tmpEfficiency,
-      this.psatForm.controls.motorVoltage.value,
-      this.settings
-    );
-    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-    this.psatService.flaRange.flaMin = estEfficiency * .95;
+    if (!this.disableFLA()) {
+      let estEfficiency = this.psatService.estFLA(
+        this.psatForm.controls.horsePower.value,
+        this.psatForm.controls.motorRPM.value,
+        this.psatForm.controls.frequency.value,
+        this.psatForm.controls.efficiencyClass.value,
+        tmpEfficiency,
+        this.psatForm.controls.motorVoltage.value,
+        this.settings
+      );
+      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+      this.psatService.flaRange.flaMin = estEfficiency * .95;
 
-    if (this.psatForm.controls.fullLoadAmps.value) {
-      if ((this.psatForm.controls.fullLoadAmps.value < this.psatService.flaRange.flaMin) || (this.psatForm.controls.fullLoadAmps.value > this.psatService.flaRange.flaMax)) {
-        this.flaError = 'Value is outside expected range';
-        return false;
+      if (this.psatForm.controls.fullLoadAmps.value) {
+        if ((this.psatForm.controls.fullLoadAmps.value < this.psatService.flaRange.flaMin) || (this.psatForm.controls.fullLoadAmps.value > this.psatService.flaRange.flaMax)) {
+          this.flaError = 'Value is outside expected range';
+          return false;
+        } else {
+          this.flaError = null;
+          return true;
+        }
       } else {
         this.flaError = null;
         return true;
       }
-    } else {
+    }else {
       this.flaError = null;
-      return true;
+      return true; 
     }
   }
 

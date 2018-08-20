@@ -91,10 +91,6 @@ export class PumpFluidComponent implements OnInit {
   isFirstChange: boolean = true;
   rpmError: string = null;
   temperatureError: string = null;
-  different: any = {
-    pumpRPM: null
-  };
-
   tempUnit: string;
   constructor(private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -137,11 +133,15 @@ export class PumpFluidComponent implements OnInit {
   }
 
   disableForm() {
-    this.psatForm.disable();
+    this.psatForm.controls.pumpType.disable();
+    this.psatForm.controls.drive.disable();
+    this.psatForm.controls.fluidType.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.pumpType.enable();
+    this.psatForm.controls.drive.enable();
+    this.psatForm.controls.fluidType.enable();
   }
 
   addNum(str: string) {

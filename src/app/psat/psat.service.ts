@@ -47,7 +47,7 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
-    if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
+    if (settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature) {
       psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     return psatInputs;
@@ -658,7 +658,7 @@ export class PsatService {
     }
     else if (num == 1) {
       fixedSpeed = 'No';
-    }else{
+    } else {
       fixedSpeed = 'Yes';
     }
     return fixedSpeed;
@@ -708,7 +708,7 @@ export class PsatService {
       'fixedSpeed': ['Yes', Validators.required],
       'frequency': ['', Validators.required],
       'horsePower': ['', Validators.required],
-      'motorRPM': ['', Validators.required],
+      'motorRPM': ['', [Validators.required, Validators.min(1)]],
       'efficiencyClass': ['', Validators.required],
       'efficiency': [''],
       'motorVoltage': ['', Validators.required],
@@ -724,7 +724,8 @@ export class PsatService {
       'measuredVoltage': ['', Validators.required],
       'optimizeCalculation': [''],
       'implementationCosts': ['']
-    })}
+    })
+  }
 
   getFormFromPsat(psatInputs: PsatInputs): FormGroup {
     if (!psatInputs.fixed_speed) {
@@ -750,7 +751,7 @@ export class PsatService {
       'fixedSpeed': [fixedSpeed, Validators.required],
       'frequency': [lineFreq, Validators.required],
       'horsePower': [psatInputs.motor_rated_power, Validators.required],
-      'motorRPM': [psatInputs.motor_rated_speed, (Validators.required, Validators.min(1))],
+      'motorRPM': [psatInputs.motor_rated_speed, [Validators.required, Validators.min(1)]],
       'efficiencyClass': [effClass, Validators.required],
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
@@ -959,20 +960,20 @@ export class PsatService {
       message: null
     };
     let range = this.getMotorRpmMinMax(lineFreqEnum, effClass);
-      if (motorRPM >= range.min && motorRPM <= range.max) {
-        response.valid = true;
-        return response;
-      } else if (motorRPM < range.min) {
-        response.valid = false;
-        response.message = 'Motor RPM too small for selected efficiency class';
-        return response;
-      } else if (motorRPM > range.max) {
-        response.valid = false;
-        response.message = 'Motor RPM too large for selected efficiency class';
-        return response;
-      } else {
-        return response;
-      }
+    if (motorRPM >= range.min && motorRPM <= range.max) {
+      response.valid = true;
+      return response;
+    } else if (motorRPM < range.min) {
+      response.valid = false;
+      response.message = 'Motor RPM too small for selected efficiency class';
+      return response;
+    } else if (motorRPM > range.max) {
+      response.valid = false;
+      response.message = 'Motor RPM too large for selected efficiency class';
+      return response;
+    } else {
+      return response;
+    }
   }
 
   getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {
@@ -980,10 +981,10 @@ export class PsatService {
       min: 1,
       max: 3600
     }
-    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1 )) { // if 60Hz and Standard or Energy Efficiency
+    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1)) { // if 60Hz and Standard or Energy Efficiency
       rpmRange.min = 540;
       rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && (effClass == 0 ||  effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
+    } else if (lineFreqEnum == 1 && (effClass == 0 || effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
       rpmRange.min = 450;
       rpmRange.max = 3300;
     } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency

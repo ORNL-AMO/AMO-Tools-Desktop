@@ -432,9 +432,9 @@ export class PsatComponent implements OnInit {
     }
 
     if (
-      this.psatService.isPumpFluidFormValid(tmpForm) &&
-      this.psatService.isMotorFormValid(tmpForm) &&
-      this.psatService.isFieldDataFormValid(tmpForm)
+      (this.psatService.isPumpFluidFormValid(tmpForm) &&
+        this.psatService.isMotorFormValid(tmpForm) &&
+        this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
     ) {
       this._psat.setupDone = true;
 
