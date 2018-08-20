@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 
@@ -10,6 +10,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 export class DashboardTutorialComponent implements OnInit {
   @Output('closeTutorial')
   closeTutorial = new EventEmitter<boolean>();
+  @Input()
+  inTutorials: boolean;
 
   showItem: Array<boolean> = [true, false, false, false, false, false, false, false, false, false, false, false];
 

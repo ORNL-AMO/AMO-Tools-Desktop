@@ -3,18 +3,18 @@
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()"></app-opening-tutorial>
         
-        <app-psat-report-tutorial *ngIf="tutorialType == 'psat-report-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-report-tutorial>
+        <app-psat-report-tutorial *ngIf="tutorialType == 'psat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-report-tutorial>
         <app-psat-tutorial *ngIf="tutorialType == 'psat-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-tutorial>
-        <app-psat-assessment-tutorial *ngIf="tutorialType == 'psat-assessment-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-assessment-tutorial>
-        <app-psat-system-setup *ngIf="tutorialType == 'psat-system-setup'" (closeTutorial)="closeTutorial()"></app-psat-system-setup>
+        <app-psat-assessment-tutorial *ngIf="tutorialType == 'psat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-assessment-tutorial>
+        <app-psat-system-setup *ngIf="tutorialType == 'psat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-system-setup>
         
         <app-phast-tutorial *ngIf="tutorialType == 'phast-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-tutorial>
-        <app-phast-setup-tutorial *ngIf="tutorialType == 'phast-setup-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-setup-tutorial>
-        <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-assessment-tutorial>
-        <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-report-tutorial>
+        <app-phast-setup-tutorial *ngIf="tutorialType == 'phast-setup-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-setup-tutorial>
+        <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-assessment-tutorial>
+        <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
         
         
-        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"></app-dashboard-tutorial>
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
 
     </div>
 

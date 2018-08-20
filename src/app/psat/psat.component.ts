@@ -168,6 +168,7 @@ export class PsatComponent implements OnInit {
             this.psatService.secondaryTab.next('explore-opportunities');
           }
         }
+        this.checkTutorials();
         this.getContainerHeight();
       })
       this.secondaryTabSub = this.psatService.secondaryTab.subscribe(val => {
@@ -223,14 +224,6 @@ export class PsatComponent implements OnInit {
     }, 100);
   }
 
-  // setCompareVal() {
-  //   this.compareService.baselinePSAT = this._psat;
-  //   if (this._psat.modifications) {
-  //     if (this._psat.modifications) {
-  //       this.compareService.modifiedPSAT = this._psat.modifications[this.modificationIndex].psat;
-  //     }
-  //   }
-  // }
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
@@ -242,6 +235,25 @@ export class PsatComponent implements OnInit {
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
+    }
+  }
+
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disablePsatSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-system-setup');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disablePsatAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disablePsatReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-report-tutorial');
+      }
     }
   }
 

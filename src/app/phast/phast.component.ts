@@ -125,6 +125,7 @@ export class PhastComponent implements OnInit {
         this.mainTab = val;
         //on tab change get container height
         this.getContainerHeight();
+        this.checkTutorials();
       })
       //subscription for stepTab
       this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
@@ -244,6 +245,25 @@ export class PhastComponent implements OnInit {
     }
     else {
       return 'success';
+    }
+  }
+
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-setup-tutorial');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-report-tutorial');
+      }
     }
   }
 

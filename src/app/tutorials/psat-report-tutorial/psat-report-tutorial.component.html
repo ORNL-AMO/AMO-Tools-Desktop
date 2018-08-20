@@ -15,14 +15,18 @@
             <div class="card-header">
               <h3>Finish Tutorial</h3>
             </div>
-            <div class="card-body d-flex flex-column">
+            <div *ngIf="inTutorials" class="card-body d-flex flex-column">
               <p class="lead">Now that you've had a quick introduction, click below to return to other tutorials!</p>
               <button class="btn btn-primary" (click)="close()">Return to Tutorials</button>
-              <!-- <div class="d-flex p-4">
+            </div>
+            <div *ngIf="!inTutorials" class="card-body d-flex flex-column">
+              <p class="lead">Now that you've had a quick introduction, click below to return to the pump report!</p>
+              <button class="btn btn-primary" (click)="close()">Return to Pump Report</button>
+              <div class="d-flex p-4">
                 <input class="dont-show" type="checkbox" [(ngModel)]="dontShow">
                 <label class="dont-show">Don't show this again
                 </label>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>

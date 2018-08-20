@@ -47,7 +47,13 @@ export interface Settings {
     fuelCost?: number,
     steamCost?: number,
     disableTutorial?: boolean,
-    disableDashboardTutorial?: boolean
+    disableDashboardTutorial?: boolean,
+    disablePsatSetupTutorial?: boolean,
+    disablePsatAssessmentTutorial?: boolean,
+    disablePsatReportTutorial?: boolean,
+    disablePhastSetupTutorial?: boolean,
+    disablePhastAssessmentTutorial?: boolean,
+    disablePhastReportTutorial?: boolean
 }
 
 
