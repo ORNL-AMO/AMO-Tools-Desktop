@@ -4,56 +4,65 @@
     <div class="d-flex">
       <!-- 1 -->
       <div class="carousel-item active" [ngClass]="{'show-img-1': show}">
-        <img *ngIf="index < 6" class="d-block img-fluid" src="assets/images/tutorial/phast/welcome-dark.PNG">
-        <img *ngIf="index > 5 && index < 9 " class="d-block img-fluid" src="assets/images/tutorial/phast/heat-balance-dark.PNG">
-        <img *ngIf="index == 9" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment-dark-1.PNG">
-        <img *ngIf="index == 10" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment-dark-2.PNG">
-        <img *ngIf="index == 11" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment-menu-dark.PNG">
-        <img *ngIf="index > 11 && index < 14" class="d-block img-fluid" src="assets/images/tutorial/phast/mod-conditions-dark.PNG">
-        <img *ngIf="index > 13" class="d-block img-fluid" src="assets/images/tutorial/phast/report-dark.PNG">
+        <img *ngIf="index < 6" class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/welcome-dark.jpg">
+        <img *ngIf="index > 5 && index < 9" class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/setup-heat-balance-dark.jpg">
+        
+        <img *ngIf="index == 9" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/assessment-1-dark.jpg">
+        <img *ngIf="index == 10" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/explore-ops-dark.jpg">
+        <img *ngIf="index == 11" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/assessment-menu-dark.jpg">
+        <img *ngIf="index == 12" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/modify-conditions-1-dark.jpg">
+        <img *ngIf="index == 13" class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/modify-conditions-dark.jpg">
+
+        <img *ngIf="index > 13" class="d-block img-fluid" src="assets/images/tutorial/phast/report-dark.jpg">
       </div>
+      
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[1]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/1-welcome.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/welcome.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[2]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/2-navigation.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/navigation-1.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[3]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/3-setup-nav.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/navigation-2.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[4]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/4-system-setup.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/system-setup-1.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[5]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/5-system-setup-2.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/system-setup-2.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[6]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/6-setup-heat-balance.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/heat-balance.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[7]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/7-heat-balance-2.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/heat-balance-2.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[8]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/8-heat-balance-3.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/system-setup/heat-balance-3.PNG">
       </div>
+
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[9]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/9-assessment-1.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/explore-ops-1.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[10]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/10-assessment-2.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/explore-ops-2.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[11]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/11-assessment-menu.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/mod-menu.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[12]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/12-assessment-3.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/mod-conditions-1.PNG">
       </div>
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[13]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/13-assessment-4.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/assessment/mod-conditions-2.PNG">
       </div>
+
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[14]}">
-        <img class="d-block img-fluid" src="assets/images/tutorial/phast/14-report.PNG">
+        <img class="d-block img-fluid" src="assets/images/tutorial/phast/report.PNG">
       </div>
+
+
+
       <div class="carousel-item active" [ngClass]="{'show-img': showItem[15]}">
         <div *ngIf="showItem[15]" class="row justify-content-center align-items-center get-started">
           <div class="card">
@@ -80,9 +89,9 @@
     <div class="col-10 d-flex flex-column">
       <div class="d-flex mx-auto circle-div">
         <h5 *ngIf="index == 1">Welcome</h5>
-        <h5 *ngIf="index == 2">Navigation</h5>
-        <h5 *ngIf="index > 2 && index < 7">System Setup</h5>
-        <h5 *ngIf="index > 6 && index < 14">Assessment</h5>
+        <h5 *ngIf="index == 2 || index == 3">Navigation</h5>
+        <h5 *ngIf="index > 3 && index < 9">System Setup</h5>
+        <h5 *ngIf="index > 8 && index < 14">Assessment</h5>
         <h5 *ngIf="index == 14">Report</h5>
         <h5 *ngIf="index == 15">Finish</h5>
       </div>
