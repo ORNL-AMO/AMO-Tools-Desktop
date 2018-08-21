@@ -18,7 +18,7 @@
     <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 'Specified Optimal Efficiency'">
       <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
       <div class="input-group">
-        <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
+        <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100" class="form-control" formControlName="specifiedPumpEfficiency"
           id="specifiedPumpEfficiency" onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
