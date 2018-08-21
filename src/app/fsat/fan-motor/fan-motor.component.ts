@@ -274,12 +274,12 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
     if (this.fanMotorForm.controls.lineFrequency.value && this.fanMotorForm.controls.motorRpm.value != '') {
-      let tmp = this.psatService.checkMotorRpm(this.fanMotorForm.controls.lineFrequency.value, this.fanMotorForm.controls.motorRpm.value, this.fanMotorForm.controls.efficiencyClass.value);
-      if (tmp.message) {
-        this.rpmError = tmp.message;
-      } else {
+   //   let tmp = this.psatService.checkMotorRpm(this.fanMotorForm.controls.lineFrequency.value, this.fanMotorForm.controls.motorRpm.value, this.fanMotorForm.controls.efficiencyClass.value);
+      // if (tmp.message) {
+      //   this.rpmError = tmp.message;
+      // } else {
         this.rpmError = null;
-      }
+      //}
     } else if (this.fanMotorForm.controls.motorRpm.value == '') {
       this.rpmError = 'Field Required';
     }

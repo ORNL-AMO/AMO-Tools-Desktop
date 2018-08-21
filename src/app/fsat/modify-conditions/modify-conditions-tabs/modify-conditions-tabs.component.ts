@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModifyConditionsService } from '../modify-conditions.service';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../../compare.service';
@@ -7,8 +7,9 @@ import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { FSAT } from '../../../shared/models/fans';
-import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../fsat.service';
+import { FsatWarningService, FanFieldDataWarnings } from '../../fsat-warning.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -16,6 +17,8 @@ import { FsatService } from '../../fsat.service';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
@@ -40,7 +43,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService,
     private fsatFluidService: FsatFluidService, private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService, private fanSetupService: FanSetupService,
-  private fsatService: FsatService) { }
+  private fsatService: FsatService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
@@ -91,7 +94,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
       validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.fieldData);
       isDifferent = this.compareService.checkFanFieldDataDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -100,6 +103,25 @@ export class ModifyConditionsTabsComponent implements OnInit {
       badgeStr = ['loss-different'];
     }
     return badgeStr;
+  }
+
+  checkFieldDataWarnings(){
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanFieldDataWarnings   = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
   }
 
   setFluidBadgeClass(baseline: FSAT, modification?: FSAT){
