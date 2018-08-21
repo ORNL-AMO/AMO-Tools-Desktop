@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { SettingsService } from '../../settings/settings.service';
-import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-opening-tutorial',
@@ -17,7 +17,7 @@ export class OpeningTutorialComponent implements OnInit {
   showWelcomeText: Array<boolean> = [false, false, false, false];
   dontShow: boolean = true;
   show: boolean = true;
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -44,6 +44,9 @@ export class OpeningTutorialComponent implements OnInit {
   }
 
   sendDontShow(){
-    this.settingsService.setDontShow.next(this.dontShow);
+    this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
+    this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+      this.settingsDbService.setAll();
+    });
   }
 }

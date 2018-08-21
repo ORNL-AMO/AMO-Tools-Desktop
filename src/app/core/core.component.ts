@@ -14,6 +14,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
+import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-core',
@@ -36,10 +37,11 @@ export class CoreComponent implements OnInit {
   assessmentSub: Subscription;
   settingsSub: Subscription;
   tutorialType: string;
+  inTutorialsView: boolean;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef, private windowRefService: WindowRefService,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
@@ -60,11 +62,13 @@ export class CoreComponent implements OnInit {
       this.showScreenshot = false;
     }
 
-    this.openingTutorialSub = this.assessmentService.openingTutorial.subscribe(val => {
+    this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
+      this.inTutorialsView = (this.router.url == '/');
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
         this.hideTutorial = false;
         this.tutorialType = val;
+        this.changeDetectorRef.detectChanges();
       }
     })
 

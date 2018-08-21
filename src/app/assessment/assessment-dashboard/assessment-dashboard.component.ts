@@ -3,6 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { Directory } from '../../shared/models/directory';
 import { Calculator } from '../../shared/models/calculators';
 import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AssessmentService } from '../assessment.service';
 
 
 @Component({
@@ -39,9 +41,16 @@ export class AssessmentDashboardComponent implements OnInit {
   view: string;
   isFirstChange: boolean = true;
 
-  constructor() { }
+  constructor(private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    if (this.settingsDbService.globalSettings) {
+      console.log(this.settingsDbService.globalSettings.disableDashboardTutorial)
+      if (!this.settingsDbService.globalSettings.disableDashboardTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('dashboard-tutorial');
+      }
+    }
     if (!this.view) {
       this.view = 'grid';
     }
@@ -87,19 +96,19 @@ export class AssessmentDashboardComponent implements OnInit {
     this.isChecked = bool;
   }
 
-  newDir(){
+  newDir() {
     this.emitNewDir.emit(true);
   }
 
-  emitGenReport(){
+  emitGenReport() {
     this.genReport.emit(true);
   }
 
-  emitExport(){
+  emitExport() {
     this.exportEmit.emit(true);
   }
 
-  emitImport(){
+  emitImport() {
     this.importEmit.emit(true);
   }
 

@@ -46,7 +46,6 @@ export class FsatRollupGraphsComponent implements OnInit {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.fsatResults.subscribe((fsats: Array<FsatResultsData>) => {
       if (fsats.length != 0) {
-        console.log('fsat.length != 0');
         this.totalEnergyUse = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualEnergy });
         this.totalCost = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualCost });
         this.resultData = fsats;
@@ -114,8 +113,6 @@ export class FsatRollupGraphsComponent implements OnInit {
       this.pieChartData.push(val.percent);
       this.backgroundColors.push(val.color);
     });
-    console.log('this.results = ');
-    console.log(this.results);
     this.getColors();
   }
 
