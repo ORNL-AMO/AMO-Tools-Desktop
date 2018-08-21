@@ -3,6 +3,8 @@ import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { PsatWarningService, FieldDataWarnings } from '../../psat-warning.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -10,6 +12,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   displayPumpFluidTooltip: boolean;
   pumpFluidBadgeHover: boolean;
@@ -24,7 +28,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;
-  constructor(private compareService: CompareService, private psatService: PsatService) { }
+  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
@@ -68,7 +72,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
       validModTest = this.psatService.isFieldDataFormValid(modifiedForm)
       isDifferent = this.compareService.checkFieldDataDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkInputError();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -77,6 +81,25 @@ export class ModifyConditionsTabsComponent implements OnInit {
       badgeStr = ['loss-different'];
     }
     return badgeStr;
+  }
+
+  checkInputError(){
+    let hasWarning: boolean = false;
+    let baselineFieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.compareService.baselinePSAT, this.settings);
+    for(var key in baselineFieldDataWarnings){
+      if(baselineFieldDataWarnings[key] !== null){
+        hasWarning = true;
+      }
+    }
+    if(this.compareService.modifiedPSAT && !hasWarning){
+      let modifiedFieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.compareService.modifiedPSAT, this.settings);
+      for(var key in modifiedFieldDataWarnings){
+        if(modifiedFieldDataWarnings[key] !== null){
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
   }
 
   setPumpFluidBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
