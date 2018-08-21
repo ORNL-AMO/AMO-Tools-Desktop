@@ -139,7 +139,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   checkWarnings(){
-    this.fieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+    this.fieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, this.baseline);
   }
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;

@@ -9,13 +9,16 @@ import { PSAT } from '../shared/models/psat';
 export class PsatWarningService {
 
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
-
-  checkFieldData(psat: PSAT, settings: Settings): FieldDataWarnings {
+  //FIELD DATA
+  checkFieldData(psat: PSAT, settings: Settings, baseline?: boolean): FieldDataWarnings {
     let flowError = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
     let voltageError = this.checkVoltage(psat);
     let costError = this.checkCost(psat);
     let opFractionError = this.checkOpFraction(psat);
-    let ratedPowerError = this.checkRatedPower(psat);
+    let ratedPowerError = null;
+    if (baseline && psat.inputs.load_estimation_method == 0) {
+      ratedPowerError = this.checkRatedPower(psat);
+    }
     let marginError = this.checkMargin(psat);
     let headError = this.checkHead(psat);
     return {
@@ -166,8 +169,137 @@ export class PsatWarningService {
     }
   }
 
-}
+  //MOTOR
+  checkMotorWarnings(psat: PSAT, settings: Settings): MotorWarnings {
+    let rpmError = this.checkMotorRpm(psat);
+    let voltageError = this.checkMotorVoltage(psat);
+    let flaError = this.checkFLA(psat, settings);
+    let efficiencyError = this.checkEfficiency(psat);
+    let ratedPowerError = this.checkMotorRatedPower(psat, settings);
+    return {
+      rpmError: rpmError,
+      voltageError: voltageError,
+      flaError: flaError,
+      efficiencyError: efficiencyError,
+      ratedPowerError: ratedPowerError
+    }
+  }
 
+  checkMotorRpm(psat: PSAT) {
+    let range: { min: number, max: number } = this.getMotorRpmMinMax(psat.inputs.line_frequency, psat.inputs.efficiency_class)
+    if (psat.inputs.motor_rated_speed < range.min) {
+      return 'Motor RPM too small for selected efficiency class';
+    } else if (psat.inputs.motor_rated_speed > range.max) {
+      return 'Motor RPM too large for selected efficiency class';
+    } else {
+      return null;
+    }
+  }
+  getMotorRpmMinMax(lineFreqEnum: number, effClass: number): { min: number, max: number } {
+    let rpmRange = {
+      min: 1,
+      max: 3600
+    }
+    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1)) { // if 60Hz and Standard or Energy Efficiency
+      rpmRange.min = 540;
+      rpmRange.max = 3600;
+    } else if (lineFreqEnum == 1 && (effClass == 0 || effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
+      rpmRange.min = 450;
+      rpmRange.max = 3300;
+    } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
+      rpmRange.min = 1080;
+      rpmRange.max = 3600;
+    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
+      rpmRange.min = 900;
+      rpmRange.max = 3000;
+    }
+    return rpmRange;
+  }
+
+  checkMotorVoltage(psat: PSAT) {
+    if (psat.inputs.motor_rated_voltage < 208) {
+      return "Voltage should be greater than 208 V."
+    } else if (psat.inputs.motor_rated_voltage > 15180) {
+      return "Voltage should be less than 15180 V.";
+    } else {
+      return null;
+    }
+  }
+
+  checkMotorRatedPower(psat: PSAT, settings: Settings) {
+    let motorFieldPower;
+    if (psat.inputs.load_estimation_method == 0) {
+      motorFieldPower = psat.inputs.motor_field_power;
+    } else {
+      motorFieldPower = psat.inputs.motor_field_current;
+    }
+    if (motorFieldPower && psat.inputs.motor_rated_power) {
+      let val, compare;
+      if (settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+      } else {
+        val = psat.inputs.motor_rated_power;
+        compare = motorFieldPower;
+      }
+      val = val * 1.5;
+      if (compare > val) {
+        return 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  checkFLA(psat: PSAT, settings: Settings) {
+    if (
+      psat.inputs.motor_rated_power &&
+      psat.inputs.motor_rated_speed &&
+      psat.inputs.line_frequency &&
+      psat.inputs.efficiency_class &&
+      psat.inputs.efficiency &&
+      psat.inputs.motor_rated_voltage
+    ) {
+      let estEfficiency = this.psatService.estFLA(
+        psat.inputs.motor_rated_power,
+        psat.inputs.motor_rated_speed,
+        this.psatService.getLineFreqFromEnum(psat.inputs.line_frequency),
+        this.psatService.getEfficiencyClassFromEnum(psat.inputs.efficiency_class),
+        psat.inputs.efficiency,
+        psat.inputs.motor_rated_voltage,
+        settings
+      );
+      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+      this.psatService.flaRange.flaMin = estEfficiency * .95;
+      if (psat.inputs.motor_rated_fla < this.psatService.flaRange.flaMin) {
+        return 'Value should be greater than ' + Math.round(this.psatService.flaRange.flaMin);
+      } else if (psat.inputs.motor_rated_fla > this.psatService.flaRange.flaMax) {
+        return 'Value should be less than ' + Math.round(this.psatService.flaRange.flaMax);
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  checkEfficiency(psat: PSAT) {
+    if (psat.inputs.efficiency > 100) {
+      return "Unrealistic efficiency, shouldn't be greater then 100%";
+    }
+    else if (psat.inputs.efficiency == 0) {
+      return "Cannot have 0% efficiency";
+    }
+    else if (psat.inputs.efficiency < 0) {
+      return "Cannot have negative efficiency";
+    }
+    else {
+      return null;
+    }
+  }
+}
 
 export interface FieldDataWarnings {
   flowError: string,
@@ -177,5 +309,12 @@ export interface FieldDataWarnings {
   ratedPowerError: string,
   marginError: string,
   headError: string
+}
 
+export interface MotorWarnings {
+  rpmError: string;
+  voltageError: string;
+  flaError: string;
+  efficiencyError: string;
+  ratedPowerError: string;
 }

@@ -21,7 +21,7 @@
           (input)="save()" (focus)="focusField('costKwHr')" onfocus="this.select();">
         <span class="input-group-addon units">$/kWh</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.costError !== null">{{costError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.costError !== null">{{fieldDataWarnings.costError}}</span>
     </div>
 
     <div class="form-group">

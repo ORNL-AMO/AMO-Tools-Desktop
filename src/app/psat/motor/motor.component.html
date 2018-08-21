@@ -16,51 +16,49 @@
 
     <div class="form-group">
       <label for="horsePower">Rated Motor Power</label>
-      <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="checkRatedPower()"
-        (focus)="focusField('horsePower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
+      <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="save()"
+        (focus)="focusField('horsePower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': motorWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
-      <span class="alert-warning pull-right small" *ngIf="ratedPowerError !== null && !psat.inputs.optimize_calculation">{{ratedPowerError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="motorWarnings.ratedPowerError !== null && !psat.inputs.optimize_calculation">{{motorWarnings.ratedPowerError}}</span>
     </div>
 
     <div class="form-group">
       <label for="motorRPM">Motor RPM</label>
-      <div name="motorRPM" class="input-group" [ngClass]="{'indicate-different': isMotorRatedSpeedDifferent(),'error': rpmError !== null, 'invalid': psatForm.controls.motorRPM.invalid}">
-        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>-->
-        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>-->
-        <input [readonly]="!selected" type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" (input)="checkMotorRpm()"
+      <div name="motorRPM" class="input-group" [ngClass]="{'indicate-different': isMotorRatedSpeedDifferent(),'error': motorWarnings.rpmError !== null, 'invalid': psatForm.controls.motorRPM.invalid}">
+        <input [readonly]="!selected" type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" (input)="save()"
           (focus)="focusField('motorRPM')" onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="motorWarnings.rpmError !== null">{{motorWarnings.rpmError}}</span>
     </div>
 
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent(), 'invalid': psatForm.controls.efficiencyClass.invalid}">
+        (change)="modifyPowerArrays()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent(), 'invalid': psatForm.controls.efficiencyClass.invalid}">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.efficiencyClass.value == 'Specified'">
       <label for="efficiency">Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isEfficiencyDifferent(),'error': efficiencyError !== null, 'invalid': psatForm.controls.efficiency.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isEfficiencyDifferent(),'error': motorWarnings.efficiencyError !== null, 'invalid': psatForm.controls.efficiency.invalid}">
         <input [readonly]="!selected" name="efficiency" type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency"
-          (input)="checkEfficiency()" (focus)="focusField('efficiency')" onfocus="this.select();">
+          (input)="save()" (focus)="focusField('efficiency')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="motorWarnings.efficiencyError !== null">{{motorWarnings.efficiencyError}}</span>
     </div>
 
     <div class="form-group">
       <label for="motorVoltage">Rated Voltage</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': voltageError !== null, 'invalid': psatForm.controls.motorVoltage.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': motorWarnings.voltageError !== null, 'invalid': psatForm.controls.motorVoltage.invalid}">
         <input [readonly]="!selected" name="motorVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage"
-          (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
+          (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
         <span class="input-group-addon units">V</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="motorWarnings.voltageError !== null">{{motorWarnings.voltageError}}</span>
     </div>
 
     <div class="form-group">
@@ -68,12 +66,12 @@
         Full-Load Amps
         <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
         <input [readonly]="!selected" name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
-          (input)="checkFLA()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
+          (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
-      <span class="alert-warning small pull-right" *ngIf="flaError !== null">{{flaError}}</span>
+      <span class="alert-warning small pull-right" *ngIf="motorWarnings.flaError !== null">{{motorWarnings.flaError}}</span>
     </div>
   </div>
 </form>
