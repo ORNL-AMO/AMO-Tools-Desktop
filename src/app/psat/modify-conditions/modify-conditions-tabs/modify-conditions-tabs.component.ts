@@ -111,7 +111,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
       validModTest = this.psatService.isPumpFluidFormValid(modifiedForm)
       isDifferent = this.compareService.checkPumpDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkPumpFluidWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -120,6 +120,25 @@ export class ModifyConditionsTabsComponent implements OnInit {
       badgeStr = ['loss-different'];
     }
     return badgeStr;
+  }
+
+  checkPumpFluidWarnings(){
+    let hasWarning: boolean = false;
+    let baselinePumpFluidWarnings: { rpmError: string, temperatureError: string }  = this.psatWarningService.checkPumpFluidWarnings(this.compareService.baselinePSAT, this.settings);
+    for (var key in baselinePumpFluidWarnings) {
+      if (baselinePumpFluidWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedPSAT && !hasWarning) {
+      let modifiedPumpFluidWarnings: { rpmError: string, temperatureError: string }  = this.psatWarningService.checkPumpFluidWarnings(this.compareService.modifiedPSAT, this.settings);
+      for (var key in modifiedPumpFluidWarnings) {
+        if (modifiedPumpFluidWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
   }
 
   setMotorBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {

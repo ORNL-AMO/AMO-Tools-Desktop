@@ -8,7 +8,7 @@
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
       <label for="pumpType">Pump Type</label>
-      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="startSavePolling()" (focus)="focusField('pumpType')"
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="save()" (focus)="focusField('pumpType')"
         [ngClass]="{'indicate-different': isPumpStyleDifferent(), 'invalid': psatForm.controls.pumpType.invalid}">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
         <option *ngIf="!baseline" [ngValue]="'Specified Optimal Efficiency'">Specified Optimal Efficiency</option>
@@ -19,7 +19,7 @@
       <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
       <div class="input-group">
         <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
-          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
+          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -28,7 +28,7 @@
       <label for="pumpRPM">Pump Speed</label>
       <div class="input-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': rpmError !== null, 'invalid': psatForm.controls.pumpRPM.invalid}">
         <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="10" class="form-control" formControlName="pumpRPM"
-          id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
+          id="pumpRPM" (input)="save()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
@@ -36,7 +36,7 @@
 
     <div class="form-group">
       <label for="drive">Drive</label>
-      <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="startSavePolling()" (focus)="focusField('drive')"
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="save()" (focus)="focusField('drive')"
         [ngClass]="{'indicate-different': isDriveDifferent(), 'invalid': psatForm.controls.drive.invalid}">
         <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
       </select>
@@ -57,20 +57,20 @@
           id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="tempUnit"></span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="temperatureError !== null" [innerHtml]="temperatureError"></span>
     </div>
 
     <div class="form-group">
       <label for="gravity">Specific Gravity</label>
       <input [readonly]="!selected" type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity"
-        id="gravity" (input)="startSavePolling()" (focus)="focusField('specificGravity')" onfocus="this.select();" [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid': psatForm.controls.gravity.invalid}">
+        id="gravity" (input)="save()" (focus)="focusField('spWecificGravity')" onfocus="this.select();" [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid': psatForm.controls.gravity.invalid}">
     </div>
 
     <div class="form-group">
       <label for="viscosity">Kinematic Viscosity</label>
       <div class="input-group" [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid': psatForm.controls.viscosity.invalid}">
         <input [readonly]="!selected" type="number" min="0" name="viscosity" step="any" class="form-control" formControlName="viscosity"
-          id="viscosity" (input)="startSavePolling()" (focus)="focusField('viscosity')" onfocus="this.select();">
+          id="viscosity" (input)="save()" (focus)="focusField('viscosity')" onfocus="this.select();">
         <span class="input-group-addon units">cSt</span>
       </div>
     </div>
@@ -85,7 +85,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input [readonly]="!selected" type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages"
-          (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
+          (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
       </div>
     </div>
   </div>

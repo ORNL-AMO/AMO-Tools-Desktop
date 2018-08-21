@@ -4,6 +4,7 @@ import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PSAT } from '../shared/models/psat';
+import { fluidProperties } from './psatConstants';
 
 @Injectable()
 export class PsatWarningService {
@@ -285,6 +286,7 @@ export class PsatWarningService {
     }
   }
 
+  //REQUIRED?
   checkEfficiency(psat: PSAT) {
     if (psat.inputs.efficiency > 100) {
       return "Unrealistic efficiency, shouldn't be greater then 100%";
@@ -299,6 +301,72 @@ export class PsatWarningService {
       return null;
     }
   }
+
+
+  //Pump Fluid
+  checkPumpFluidWarnings(psat: PSAT, settings: Settings): { rpmError: string, temperatureError: string } {
+    let rpmError = this.checkPumpRpm(psat);
+    let temperatureError = this.checkTemperatureError(psat, settings);
+    return {
+      rpmError: rpmError,
+      temperatureError: temperatureError
+    }
+  }
+
+  checkPumpRpm(psat: PSAT): string {
+    let min = 1;
+    let max = 0;
+    if (psat.inputs.drive == 0) {
+      min = 540;
+      max = 3960;
+    } else {
+      // TODO UPDATE WITH BELT DRIVE VALS
+      max = Infinity;
+    }
+    if (psat.inputs.pump_rated_speed < min) {
+      return 'Pump Speed should be greater than' + min + ' rpm';
+    } else if (psat.inputs.pump_rated_speed > max) {
+      return 'Pump Speed should be greater than ' + max + ' rpm';
+    } else {
+      return null;
+    }
+  }
+
+  checkTemperatureError(psat: PSAT, settings: Settings): string {
+    let property = fluidProperties[psat.inputs.fluidType];
+    let tempUnit: string;
+    if (settings.temperatureMeasurement == 'C') {
+      tempUnit = '&#8451;';
+    } else if (settings.temperatureMeasurement == 'F') {
+      tempUnit = '&#8457;';
+    } else if (settings.temperatureMeasurement == 'K') {
+      tempUnit = '&#8490;';
+    } else if (settings.temperatureMeasurement == 'R') {
+      tempUnit = '&#176;R';
+    }
+    let maxTemp = this.convertUnitsService.value(212.0).from('F').to(settings.temperatureMeasurement);
+    let minTemp = this.convertUnitsService.value(32.0).from('F').to(settings.temperatureMeasurement);
+    if (psat.inputs.fluidType == 'Water') {
+      if (psat.inputs.fluidTemperature > maxTemp) {
+        return "Warning: Fluid Temperature is greater than the boiling point (" + maxTemp + " " + tempUnit + ") at atmospheric pressure";
+      } else if (psat.inputs.fluidTemperature < minTemp) {
+        return "Warning: Fluid Temperature is less than the freezing point (" + minTemp + " " + tempUnit + ") at atmospheric pressure";
+      } else {
+        return null;
+      }
+    } else {
+      property.boilingPoint = this.convertUnitsService.value(property.boilingPoint).from('F').to(settings.temperatureMeasurement);
+      property.meltingPoint = this.convertUnitsService.value(property.meltingPoint).from('F').to(settings.temperatureMeasurement);
+      if (psat.inputs.fluidTemperature > property.boilingPoint) {
+        return "Warning: Fluid Temperature is greater than the boiling point (" + property.boilingPoint + " " + tempUnit + ") at atmospheric pressure";
+      } else if (psat.inputs.fluidTemperature < property.meltingPoint) {
+        return "Warning: Fluid Temperature is less than the freezing point (" + property.meltingPoint + " " + tempUnit + ") at atmospheric pressure";
+      } else {
+        return null;
+      }
+    }
+  }
+
 }
 
 export interface FieldDataWarnings {
