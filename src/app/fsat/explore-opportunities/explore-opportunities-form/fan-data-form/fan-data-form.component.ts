@@ -19,26 +19,6 @@ export class FanDataFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
 
-  // fanTypes: Array<string> = [
-  //   'Airfoil (SISW)',
-  //   'Backward Curved (SISW)',
-  //   'Radial (SISW)',
-  //   'Radial Tip (SISW)',
-  //   'Backward Inclined (SISW)',
-  //   'Airfoil (DIDW)',
-  //   'Backward Inclined (DIDW)',
-  //   'ICF Air handling',
-  //   'ICF Material handling',
-  //   'ICF Long shavings'
-  // ]
-
-  // drives: Array<string> = [
-  //   'Direct Drive',
-  //   'V-Belt Drive',
-  //   'Notched V-Belt Drive',
-  //   'Synchronous Belt Drive'
-  // ];
-
   drives: Array<{display: string, value: number}>;
   fanTypes: Array<{display: string, value: number}>;
   showFanData: boolean = false;
@@ -64,10 +44,6 @@ export class FanDataFormComponent implements OnInit {
   }
 
   init() {
-    // this.tmpModificationPumpType = this.fsatService.getPumpStyleFromEnum(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.pump_style);
-    // this.tmpBaselinePumpType = this.fsatService.getPumpStyleFromEnum(this.fsat.fanSetup.pump_style);
-    // this.tmpModificationMotorDrive = this.fsatService.getDriveFromEnum(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive);
-    // this.tmpBaselineMotorDrive = this.fsatService.getDriveFromEnum(this.fsat.fanSetup.drive);
     this.initFanSpecified();
     this.initMotorDrive();
     this.initPumpType();
@@ -126,22 +102,18 @@ export class FanDataFormComponent implements OnInit {
   toggleFanType() {
     if (this.showFanType == false) {
       this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType = this.fsat.fanSetup.fanType;
-      // this.tmpModificationPumpType = this.fsatService.getPumpStyleFromEnum(this.fsat.fanSetup.pump_style);
       this.calculate();
     }
   }
   toggleMotorDrive() {
     if (this.showMotorDrive === false) {
       this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive = this.fsat.fanSetup.drive;
-      // this.tmpModificationMotorDrive = this.fsatService.getDriveFromEnum(this.fsat.fanSetup.drive);
       this.calculate();
     }
   }
 
   setFanTypes() {
     this.checkFanTypes();
-    // this.fsat.fanSetup.pump_style = this.fsatService.getPumpStyleEnum(this.tmpBaselinePumpType);
-    // this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.pump_style = this.fsatService.getPumpStyleEnum(this.tmpModificationPumpType);
     if (!this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanSpecified) {
       this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanSpecified = 90;
     }
@@ -152,8 +124,6 @@ export class FanDataFormComponent implements OnInit {
   }
 
   setMotorDrive() {
-    // this.fsat.fanSetup.drive = this.fsatService.getDriveEnum(this.tmpBaselineMotorDrive);
-    // this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive = this.fsatService.getDriveEnum(this.tmpModificationMotorDrive);
     this.calculate();
   }
 
