@@ -8,7 +8,7 @@ import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { FSAT } from '../../../shared/models/fans';
 import { FsatService } from '../../fsat.service';
-import { FsatWarningService, FanFieldDataWarnings } from '../../fsat-warning.service';
+import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings } from '../../fsat-warning.service';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -173,7 +173,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
       validModTest = this.fanMotorService.isFanMotorValid(modification.fanMotor);
       isDifferent = this.compareService.checkFanMotorDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkMotorWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -183,6 +183,26 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     return badgeStr;
   }
+
+  checkMotorWarnings(){
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanMotorWarnings   = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
 
   showTooltip(badge: string) {
     if (badge === 'fieldData') {
