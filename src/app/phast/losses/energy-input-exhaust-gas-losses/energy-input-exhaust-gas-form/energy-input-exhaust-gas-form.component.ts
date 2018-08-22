@@ -86,7 +86,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
       }
     }
 
-    if (this.exhaustGasForm.controls.combustionAirTemp.value >= this.exhaustGasForm.controls.exhaustGasTemp.value) {
+    if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value >= this.exhaustGasForm.controls.exhaustGasTemp.value) {
       this.combustionTempError = 'Combustion air temperature must be less than exhaust gas temperature';
     }
     else {

@@ -27,10 +27,23 @@
     <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
       <div class="card">
         <div class="card-header bold">
-          Pump Tutorial
+          Pump Tutorials
         </div>
-        <div class="card-body text-center">
-          <button class="btn btn-primary mx-auto" (click)="viewPsatTutorial()">View Pump Tutorial</button>
+        <div class="card-body">
+          <ul>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-tutorial')">Full Pump Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-system-setup')">System Setup Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-assessment-tutorial')">Assessment Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-report-tutorial')">Report Tutorial</a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -41,10 +54,24 @@
         <div class="card-header bold">
           Process Heating Tutorial
         </div>
-        <div class="card-body text-center">
-          <button class="btn btn-primary mx-auto" (click)="viewPhastTutorial()">View Process Heating Tutorial</button>
+        <div class="card-body">
+          <ul>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-tutorial')">Full Process Heating Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-setup-tutorial')">System Setup Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-assessment-tutorial')">Assessment Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-report-tutorial')">Report Tutorial</a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+
   </div>
 </div>

@@ -125,6 +125,7 @@ export class PhastComponent implements OnInit {
         this.mainTab = val;
         //on tab change get container height
         this.getContainerHeight();
+        this.checkTutorials();
       })
       //subscription for stepTab
       this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
@@ -187,8 +188,6 @@ export class PhastComponent implements OnInit {
 
   ngOnDestroy() {
     //reset tabs when leaving phast assessment
-    this.lossesService.lossesTab.next(1);
-    this.phastService.initTabs();
     this.mainTabSubscription.unsubscribe();
     this.actvatedRouteSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
@@ -198,9 +197,12 @@ export class PhastComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
     this.openModListSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
+    this.addNewSubscription.unsubscribe();
+    //reset services
+    this.lossesService.lossesTab.next(1);
+    this.phastService.initTabs();
     this.phastCompareService.selectedModification.next(undefined);
     this.phastCompareService.setNoModification();
-    this.addNewSubscription.unsubscribe();
   }
   //function used for getting container height, container height used for scrolling
   getContainerHeight() {
@@ -244,6 +246,25 @@ export class PhastComponent implements OnInit {
     }
     else {
       return 'success';
+    }
+  }
+
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-setup-tutorial');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('phast-report-tutorial');
+      }
     }
   }
 
