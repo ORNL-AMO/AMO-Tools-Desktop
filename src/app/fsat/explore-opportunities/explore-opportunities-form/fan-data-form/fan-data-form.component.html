@@ -50,11 +50,11 @@
         <div class="input-group">
           <input name="modificationFanSpecified" [disabled]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanType != 12"
             type="number" step="any" id="modificationFanSpecified" class="form-control" (focus)="focusField('fanSpecified')"
-            (input)="checkEfficiency(fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified, 2)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified"
+            (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified"
           />
           <span class="input-group-addon units">%</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
+        <span class="alert-warning pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
       </div>
     </form>
   </li>
@@ -68,14 +68,14 @@
     <form *ngIf="showMotorDrive">
       <div class="form-group">
         <label for="baselineMotorDrive">Baseline Motor Drive</label>
-        <select class="form-control" name="drive" [disabled]="true" id="drive" (change)="setMotorDrive()" (focus)="focusField('drive')"
+        <select class="form-control" name="drive" [disabled]="true" id="drive" (change)="calculate()" (focus)="focusField('drive')"
           [(ngModel)]="fsat.fanSetup.drive">
           <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
         </select>
       </div>
       <div class="form-group">
         <label for="modificationMotorDrive">Modification Motor Drive</label>
-        <select class="form-control" name="drive2" id="drive2" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.drive">
+        <select class="form-control" name="drive2" id="drive2" (change)="calculate()" (focus)="focusField('drive')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.drive">
           <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
         </select>
       </div>

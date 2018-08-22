@@ -17,7 +17,7 @@
             (change)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
                                         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
                                     </select>
-          <span class="alert-danger pull-right small" *ngIf="baselineWarnings.ratedPowerError !== null">{{baselineWarnings.ratedPowerError}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings.ratedPowerError !== null">{{baselineWarnings.ratedPowerError}}</span>
 
         </div>
         <div class="form-group">
@@ -27,7 +27,7 @@
             [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
                                         <option  *ngFor="let option2 of options2" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
                                     </select>
-          <span class="alert-danger pull-right small" *ngIf="modificationWarnings.ratedPowerError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.ratedPowerError}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.ratedPowerError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.ratedPowerError}}</span>
         </div>
       </form>
     </li>
@@ -69,7 +69,7 @@
               [(ngModel)]="fsat.fanMotor.specifiedEfficiency" />
             <span class="input-group-addon units">(%)</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="baselineWarnings.efficiencyError !== null">{{baselineWarnings.efficiencyError}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings.efficiencyError !== null">{{baselineWarnings.efficiencyError}}</span>
         </div>
         <div class="form-group">
           <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
@@ -80,7 +80,7 @@
             />
             <span class="input-group-addon units">(%)</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="modificationWarnings.efficiencyError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.efficiencyError}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.efficiencyError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.efficiencyError}}</span>
         </div>
       </form>
     </li>

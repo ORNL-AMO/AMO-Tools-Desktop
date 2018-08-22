@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FSAT } from '../shared/models/fans';
+import { FSAT, FanSetup } from '../shared/models/fans';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
@@ -119,7 +119,6 @@ export class FsatWarningService {
   }
 
   checkEfficiency(fsat: FSAT) {
-    console.log(fsat.fanMotor.specifiedEfficiency)
     if (fsat.fanMotor.specifiedEfficiency) {
       if (fsat.fanMotor.specifiedEfficiency > 100) {
         return "Unrealistic efficiency, shouldn't be greater than 100%";
@@ -209,6 +208,35 @@ export class FsatWarningService {
       } else {
         return null;
       }
+    } else {
+      return null;
+    }
+  }
+
+  //FAN
+  checkFanWarnings(fanSetup: FanSetup): {fanEfficiencyError: string, fanSpeedError: string} {
+    return {
+      fanEfficiencyError: this.checkFanEfficiency(fanSetup),
+      fanSpeedError: this.checkFanSpeed(fanSetup)
+    }
+  }
+
+  checkFanEfficiency(fanSetup: FanSetup) {
+    if (fanSetup.fanSpecified < 0) {
+      return 'Value must be greater than or equal to 0';
+    } else if (fanSetup.fanSpecified > 100) {
+      return 'Value must be less than or equal to 100';
+    } else {
+      return null;
+    }
+  }
+
+  //fanSpeed
+  checkFanSpeed(fanSetup: FanSetup) {
+    if (fanSetup.fanSpeed < 0) {
+      return 'Fan speed must be greater than or equal to 0';
+    } else if (fanSetup.fanSpeed > 5000) {
+      return 'Fan speed must be less than or equal to 5000';
     } else {
       return null;
     }
