@@ -109,11 +109,15 @@ export class FsatWarningService {
 
   //MOTOR
   checkMotorWarnings(fsat: FSAT, settings: Settings): FanMotorWarnings {
+    let efficiencyError: string = null;
+    if (fsat.fanMotor.efficiencyClass == 3) {
+      efficiencyError = this.checkEfficiency(fsat);
+    }
     return {
       rpmError: this.checkMotorRpm(fsat),
       voltageError: this.checkMotorVoltage(fsat),
       flaError: this.checkFLA(fsat, settings),
-      efficiencyError: this.checkEfficiency(fsat),
+      efficiencyError: efficiencyError,
       ratedPowerError: this.checkRatedPower(fsat, settings)
     }
   }
@@ -215,8 +219,12 @@ export class FsatWarningService {
 
   //FAN
   checkFanWarnings(fanSetup: FanSetup): { fanEfficiencyError: string, fanSpeedError: string } {
+    let fanEfficiencyError: string = null;
+    if (fanSetup.fanType == 12) {
+      fanEfficiencyError = this.checkFanEfficiency(fanSetup);
+    }
     return {
-      fanEfficiencyError: this.checkFanEfficiency(fanSetup),
+      fanEfficiencyError: fanEfficiencyError,
       fanSpeedError: this.checkFanSpeed(fanSetup)
     }
   }

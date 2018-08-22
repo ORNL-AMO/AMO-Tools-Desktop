@@ -43,12 +43,12 @@
 
     <div class="form-group" *ngIf="psatForm.controls.efficiencyClass.value == 'Specified'">
       <label for="efficiency">Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isEfficiencyDifferent(),'error': motorWarnings.efficiencyError !== null, 'invalid': psatForm.controls.efficiency.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isEfficiencyDifferent(),'invalid': (psatForm.controls.efficiency.invalid || motorWarnings.efficiencyError !== null)}">
         <input [readonly]="!selected" name="efficiency" type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency"
           (input)="save()" (focus)="focusField('efficiency')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="motorWarnings.efficiencyError !== null">{{motorWarnings.efficiencyError}}</span>
+      <span class="alert-danger pull-right small" *ngIf="motorWarnings.efficiencyError !== null">{{motorWarnings.efficiencyError}}</span>
     </div>
 
     <div class="form-group">

@@ -175,8 +175,11 @@ export class PsatWarningService {
     let rpmError = this.checkMotorRpm(psat);
     let voltageError = this.checkMotorVoltage(psat);
     let flaError = this.checkFLA(psat, settings);
-    let efficiencyError = this.checkEfficiency(psat);
     let ratedPowerError = this.checkMotorRatedPower(psat, settings);
+    let efficiencyError = null;
+    if(psat.inputs.efficiency_class == 3){
+      efficiencyError = this.checkEfficiency(psat);
+    }
     return {
       rpmError: rpmError,
       voltageError: voltageError,
@@ -304,12 +307,17 @@ export class PsatWarningService {
 
 
   //Pump Fluid
-  checkPumpFluidWarnings(psat: PSAT, settings: Settings): { rpmError: string, temperatureError: string } {
+  checkPumpFluidWarnings(psat: PSAT, settings: Settings): { rpmError: string, temperatureError: string, pumpEfficiencyError: string } {
     let rpmError = this.checkPumpRpm(psat);
     let temperatureError = this.checkTemperatureError(psat, settings);
+    let pumpEfficiencyError = null;
+    if(psat.inputs.pump_style == 11){
+      pumpEfficiencyError = this.checkPumpEfficiency(psat);
+    }
     return {
       rpmError: rpmError,
-      temperatureError: temperatureError
+      temperatureError: temperatureError,
+      pumpEfficiencyError: pumpEfficiencyError
     }
   }
 
@@ -364,6 +372,21 @@ export class PsatWarningService {
       } else {
         return null;
       }
+    }
+  }
+
+  checkPumpEfficiency(psat: PSAT) {
+    if (psat.inputs.pump_specified > 100) {
+      return "Unrealistic efficiency, shouldn't be greater then 100%";
+    }
+    else if (psat.inputs.pump_specified == 0) {
+      return "Cannot have 0% efficiency";
+    }
+    else if (psat.inputs.pump_specified < 0) {
+      return "Cannot have negative efficiency";
+    }
+    else {
+      return null;
     }
   }
 

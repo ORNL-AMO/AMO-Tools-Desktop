@@ -43,6 +43,7 @@ export class PumpFluidComponent implements OnInit {
   isFirstChange: boolean = true;
   rpmError: string = null;
   temperatureError: string = null;
+  pumpEfficiencyError: string = null;
   tempUnit: string;
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -173,9 +174,10 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let tmpWarnings:  { rpmError: string, temperatureError: string, pumpEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     this.rpmError = tmpWarnings.rpmError;
     this.temperatureError = tmpWarnings.temperatureError;
+    this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
   }
 
   canCompare() {
@@ -246,6 +248,14 @@ export class PumpFluidComponent implements OnInit {
   isStagesDifferent() {
     if (this.canCompare()) {
       return this.compareService.isStagesDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isSpecifiedEfficiencyDifferent(){
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedEfficiencyDifferent();
     } else {
       return false;
     }
