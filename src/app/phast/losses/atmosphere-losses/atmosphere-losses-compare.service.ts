@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
@@ -7,9 +6,7 @@ export class AtmosphereLossesCompareService {
 
   baselineAtmosphereLosses: AtmosphereLoss[];
   modifiedAtmosphereLosses: AtmosphereLoss[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

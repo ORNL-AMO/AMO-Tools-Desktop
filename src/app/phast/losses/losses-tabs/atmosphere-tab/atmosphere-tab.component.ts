@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { AtmosphereLossesCompareService } from '../../atmosphere-losses/atmosphere-losses-compare.service';
-import { AtmosphereLossesService } from '../../atmosphere-losses/atmosphere-losses.service';
+import { AtmosphereLossesService, AtmosphereLossWarnings } from '../../atmosphere-losses/atmosphere-losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
@@ -26,7 +26,6 @@ export class AtmosphereTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereLossesService: AtmosphereLossesService, private cd: ChangeDetectorRef) { }
 
@@ -36,19 +35,13 @@ export class AtmosphereTabComponent implements OnInit {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.atmosphereLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -92,6 +85,28 @@ export class AtmosphereTabComponent implements OnInit {
     return testVal;
   }
 
+  checkWarnings(): boolean {
+    let hasWarning: boolean = false;
+    this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
+      let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+      for (var key in warnings) {
+        if (warnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    })
+    if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
+      this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
+        let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+        for (var key in warnings) {
+          if (warnings[key] !== null) {
+            hasWarning = true;
+          }
+        }
+      })
+    }
+    return hasWarning;
+  }
 
   checkLossValid(loss: AtmosphereLoss) {
     let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
