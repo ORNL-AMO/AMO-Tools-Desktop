@@ -101,6 +101,9 @@ export class PumpCurveGraphComponent implements OnInit {
   deleteCount: number = 0;
 
   systemCurveChanged: boolean = false;
+  systemCurveMaxY: number;
+  maxX: any;
+  maxY: any;
 
   @Input()
   toggleCalculate: boolean;
@@ -244,15 +247,15 @@ export class PumpCurveGraphComponent implements OnInit {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       if (!this.expanded) {
-        this.margin = { top: 20, right: 50, bottom: 75, left: 120 };
+        this.margin = { top: 10, right: 50, bottom: 75, left: 120 };
 
       }
       else {
-        this.margin = { top: 20, right: 120, bottom: 75, left: 120 };
+        this.margin = { top: 10, right: 120, bottom: 75, left: 120 };
       }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.height = this.canvasHeight - (this.margin.top * 2) - this.margin.bottom;
 
     if (this.checkForm()) {
       this.makeGraph();
@@ -294,7 +297,12 @@ export class PumpCurveGraphComponent implements OnInit {
       }
     } else if (this.selectedFormView == 'Equation') {
       this.pumpCurveService.regEquation.next(null);
-      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
+      data.push({
+        x: 10,
+        y: this.calculateY(this.pumpCurveForm, 10)
+      });
+      for (let i = 20; i <= this.pumpCurveForm.maxFlow + 10; i = i + 10) {
+
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
           data.push({
@@ -327,7 +335,11 @@ export class PumpCurveGraphComponent implements OnInit {
         }
       }
     } else if (this.selectedFormView == 'Equation') {
-      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
+      data.push({
+        x: 10,
+        y: this.calculateY(this.pumpCurveForm, 10)
+      });
+      for (let i = 20; i <= this.pumpCurveForm.maxFlow + 10; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
           data.push({
@@ -347,14 +359,11 @@ export class PumpCurveGraphComponent implements OnInit {
     data = this.getData();
 
     let systemCurveData = new Array<any>();
-    let maxSystemCurveX = _.maxBy(systemCurveData, (val) => { return val.x });
-    let maxSystemCurveY = _.maxBy(systemCurveData, (val) => { return val.y });
-
-    // systemCurveData = this.getSystemCurveData();
 
     let modifiedData = new Array<any>();
     let maxX = _.maxBy(data, (val) => { return val.x });
     let maxY = _.maxBy(data, (val) => { return val.y });
+
     if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
       modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
       let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
@@ -364,6 +373,31 @@ export class PumpCurveGraphComponent implements OnInit {
       }
       if (maxY.y < modMaxY.y) {
         maxY = modMaxY;
+      }
+    }
+
+    this.maxX = maxX;
+    this.maxY = maxY;
+
+    if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
+      if (this.pointOne.form.controls.head.value > this.maxY.y) {
+        this.maxY.y = this.pointOne.form.controls.head.value;
+      }
+    }
+    else {
+      if (this.pointTwo.form.controls.head.value > this.maxY.y) {
+        this.maxY.y = this.pointTwo.form.controls.head.value;
+      }
+    }
+
+    if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.head.value) {
+      if (this.pointOne.form.controls.flowRate.value > this.maxX.x) {
+        this.maxX.x = this.pointOne.form.controls.flowRate.value;
+      }
+    }
+    else {
+      if (this.pointTwo.form.controls.flowRate.value > this.maxX.x) {
+        this.maxX.x = this.pointTwo.form.controls.flowRate.value;
       }
     }
 
@@ -417,13 +451,15 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
+
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, maxX.x + 200]);
+      .domain([0, this.maxX.x + 200]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, maxY.y + 100]);
+      .domain([0, this.maxY.y + 100]);
+
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -490,7 +526,6 @@ export class PumpCurveGraphComponent implements OnInit {
     }
 
     this.makeSystemCurve(this.x, this.y, systemCurveData);
-
 
     let flowMeasurement: string;
     let distanceMeasurement: string;
@@ -626,14 +661,11 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
+
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
 
-        //debug
         this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -657,9 +689,7 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
+        
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
@@ -678,18 +708,15 @@ export class PumpCurveGraphComponent implements OnInit {
         let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
         let xVal = this.x(d.x);
 
-
         //system curve calcs
-        let systemx0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let systemi = bisectDate(systemCurveData, systemx0, 1);
+        let systemi = bisectDate(systemCurveData, x0, 1);
         if (systemi >= systemCurveData.length) {
           systemi = systemCurveData.length - 1
         }
         let systemd0 = systemCurveData[systemi - 1];
         let systemd1 = systemCurveData[systemi];
-        let systemd = systemx0 - systemd0.x > systemd1.x - systemx0 ? systemd1 : systemd0;
+        let systemd = x0 - systemd0.x > systemd1.x - x0 ? systemd1 : systemd0;
         let systemxVal = this.x(systemd.x);
-
 
         //dynamic table
         flowVal = format(d.x);
@@ -715,6 +742,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
         if (isNaN(xVal) == false) {
           if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+
             i = bisectDate(modifiedData, x0, 1);
             let modD0 = modifiedData[i - 1];
             let modD1 = modifiedData[i];
@@ -728,56 +756,8 @@ export class PumpCurveGraphComponent implements OnInit {
                 let sysMod = _.minBy(systemCurveData, (val) => { return val.y });
                 this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
                 this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
-                this.focusSystemCurve.attr("transform", "translate(" + this.x(systemd.x) + "," + this.y(systemd.y) + ")");
-
-                if (minMod.y < minBaseline.y) {
-                  this.detailBox
-                    .style("padding-right", "10px")
-                    .style("padding-left", "10px")
-                    .html(
-                      "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-
-                      "<strong><div>Basleline" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
-                      "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-                      "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
-
-                      //system-curve merge
-                      "<p><strong><div>System Curve</div></strong>" +
-                      "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-                      "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
-                      "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
-
-                    //debug
-                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-                    .style("position", "absolute")
-                    .style("width", detailBoxWidth + "px")
-                    .style("height", detailBoxHeight + "px")
-                    .style("padding-left", "10px")
-                    .style("padding-right", "10px")
-                    .style("font", "12px sans-serif")
-                    .style("background", "rgba(255, 255, 255, 0.7)")
-                    .style("border", "0px")
-                    .style("pointer-events", "none");
-
-                  this.tooltipPointer
-                    .attr("class", "tooltip-pointer")
-                    .html("<div></div>")
-                    .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-                    .style("position", "absolute")
-                    .style("width", "0px")
-                    .style("height", "0px")
-                    .style("border-left", "10px solid transparent")
-                    .style("border-right", "10px solid transparent")
-                    .style("border-bottom", "10px solid white")
-                    .style('pointer-events', 'none');
-                }
-              } else {
-                // this.pointer
-                //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-                //   .style("fill", "#ffffff")
-                // .style("filter", "url(#drop-shadow)");
+                this.focusSystemCurve.attr("transform", "translate(" + this.x(d.x) + "," + this.y(systemd.y) + ")");
+                // this.focusSystemCurve.attr("transform", "translate(" + this.x(systemd.x) + "," + this.y(systemd.y) + ")");
 
                 this.detailBox
                   .style("padding-right", "10px")
@@ -785,18 +765,17 @@ export class PumpCurveGraphComponent implements OnInit {
                   .html(
                     "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
 
-                    "<strong><div>Baseline " + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "/div></p>" +
+                    "<strong><div>Baseline " + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
                     "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-
                     "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
 
                     //system-curve merge
                     "<p><strong><div>System Curve</div></strong>" +
-                    "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +             //dynamic table
-                    "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +      //dynamic table
-                    "<strong><div>Fluid Power:</div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")   //dynamic table
+                    "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
+                    "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
+                    "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
 
-                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
                   .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
                   .style("position", "absolute")
                   .style("width", detailBoxWidth + "px")
@@ -812,7 +791,56 @@ export class PumpCurveGraphComponent implements OnInit {
                 this.tooltipPointer
                   .attr("class", "tooltip-pointer")
                   .html("<div></div>")
-                  .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                  .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
+                  .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+                  .style("position", "absolute")
+                  .style("width", "0px")
+                  .style("height", "0px")
+                  .style("border-left", "10px solid transparent")
+                  .style("border-right", "10px solid transparent")
+                  .style("border-bottom", "10px solid white")
+                  .style('pointer-events', 'none');
+              }
+              else {
+                // this.pointer
+                //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+                //   .style("fill", "#ffffff")
+                // .style("filter", "url(#drop-shadow)");
+
+                this.detailBox
+                  .style("padding-right", "10px")
+                  .style("padding-left", "10px")
+                  .html(
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
+
+                    "<strong><div>Baseline " + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
+
+                    "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
+
+                    //system-curve merge
+                    "<p><strong><div>System Curve</div></strong>" +
+                    "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +             //dynamic table
+                    "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +      //dynamic table
+                    "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")   //dynamic table
+
+                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
+                  .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
+                  .style("position", "absolute")
+                  .style("width", detailBoxWidth + "px")
+                  .style("height", detailBoxHeight + "px")
+                  .style("padding-left", "10px")
+                  .style("padding-right", "10px")
+                  .style("font", "12px sans-serif")
+                  .style("background", "rgba(255, 255, 255, 0.7)")
+                  .style("border", "0px")
+                  .style("box-shadow", "0px 0px 10px 2px grey")
+                  .style("pointer-events", "none");
+
+                this.tooltipPointer
+                  .attr("class", "tooltip-pointer")
+                  .html("<div></div>")
+                  .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
                   .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
                   .style("position", "absolute")
                   .style("width", "0px")
@@ -853,7 +881,7 @@ export class PumpCurveGraphComponent implements OnInit {
                 "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
                 "<strong><div>Fluid Power:</div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
 
-              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
               .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
               .style("position", "absolute")
               .style("width", detailBoxWidth + "px")
@@ -870,7 +898,7 @@ export class PumpCurveGraphComponent implements OnInit {
             this.tooltipPointer
               .attr("class", "tooltip-pointer")
               .html("<div></div>")
-              .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+              .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
               .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
               .style("position", "absolute")
               .style("width", "0px")
@@ -1014,6 +1042,8 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   makeBaselineCurve(data) {
+    data.pop();
+    data[0].y = this.pumpCurveForm.headConstant;
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })
@@ -1032,6 +1062,10 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   makeModifiedCurve(data) {
+    data.pop();
+    this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement
+    let ratio = this.pumpCurveForm.baselineMeasurement / this.pumpCurveForm.modifiedMeasurement;
+    data[0].y = this.pumpCurveForm.headConstant * Math.pow(ratio, 2);
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })
@@ -1102,6 +1136,8 @@ export class PumpCurveGraphComponent implements OnInit {
       .style('pointer-events', 'none');
 
     d3.select("path.domain").attr("d", "");
+
+    // d3.select("path.domain").attr("d", line);
   }
 
   findPointValues(x, y, increment): Array<any> {
@@ -1145,9 +1181,6 @@ export class PumpCurveGraphComponent implements OnInit {
 
     for (var i = 0; i <= x.domain()[1]; i += increment) {
       var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.controls.systemLossExponent.value);
-      if (head > y.domain()[1]) {
-        y.domain([0, (head + (head / 9))]);
-      }
 
       if (head >= 0) {
         let tmpFluidPower: number;
@@ -1200,6 +1233,12 @@ export class PumpCurveGraphComponent implements OnInit {
       });
 
     }
+
+    this.systemCurveMaxY = _.maxBy(data, 'y');
+    if (this.systemCurveMaxY > this.maxY) {
+      this.maxY = this.systemCurveMaxY;
+    }
+
 
     return data;
   }
