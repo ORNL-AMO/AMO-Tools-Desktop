@@ -8,6 +8,7 @@ import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FsatWarningService, FanFluidWarnings } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -45,11 +46,8 @@ export class FsatFluidComponent implements OnInit {
   ]
   //need error string for each warning (nameOfInputField + 'Error')
   //initialize to null
-  barometricPressureError: string = null;
-  relativeHumidityError: string = null;
-  gasDensityError: string = null;
-  specificHeatGasError: string = null;
-  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
+  warnings: FanFluidWarnings;
+  constructor(private fsatWarningService: FsatWarningService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.init();
@@ -73,6 +71,7 @@ export class FsatFluidComponent implements OnInit {
 
   init() {
     this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity);
+    this.checkForWarnings();
   }
 
   disableForm() {
@@ -89,8 +88,8 @@ export class FsatFluidComponent implements OnInit {
 
   save() {
     //save is always called on input so add check for warnings call here
-    this.checkForWarnings();
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.checkForWarnings();
     this.emitSave.emit(this.baseGasDensity);
   }
 
@@ -99,55 +98,8 @@ export class FsatFluidComponent implements OnInit {
   }
 
   checkForWarnings() {
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      //barometricPressure
-      if (this.gasDensityForm.controls.barometricPressure.value < 20) {
-        this.barometricPressureError = 'Value must be greater than 20';
-      } else if (this.gasDensityForm.controls.barometricPressure.value > 40) {
-        this.barometricPressureError = 'Value must be less than 40';
-      } else {
-        //if no error set to null
-        this.barometricPressureError = null;
-      }
-
-    } else {
-      //metric
-      if (this.gasDensityForm.controls.barometricPressure.value < 65) {
-        this.barometricPressureError = 'Value must be greater than 65';
-      } else if (this.gasDensityForm.controls.barometricPressure.value > 140) {
-        this.barometricPressureError = 'Value must be less than 140';
-      } else {
-        //if no error set to null
-        this.barometricPressureError = null;
-      }
-    }
-
-    //add non unitsOfMeasure checks here (% checks usually)
-
-    //relativeHumidity
-    if (this.gasDensityForm.controls.relativeHumidity.value < 0) {
-      this.relativeHumidityError = 'Value must be greater than or equal to 0';
-    } else if (this.gasDensityForm.controls.relativeHumidity.value > 100) {
-      this.relativeHumidityError = 'Value must be less than or equal to 100';
-    } else {
-      this.relativeHumidityError = null;
-    }
-
-    //gasDensity
-    if (this.gasDensityForm.controls.gasDensity.value <= 0) {
-      this.gasDensityError = 'Value must be greater than 0';
-    } else {
-      this.gasDensityError = null;
-    }
-
-    //specificHeat
-    if (this.gasDensityForm.controls.specificHeatGas.value <= 0) {
-      this.specificHeatGasError = 'Value must be greater than 0';
-    } else {
-      this.specificHeatGasError = null;
-    }
+    this.warnings = this.fsatWarningService.checkFanFluidWarnings(this.baseGasDensity, this.settings);
   }
-
 
   getDensity() {
     if (this.gasDensityForm.controls.inputType.value == 'relativeHumidity') {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FSAT, FanSetup } from '../shared/models/fans';
+import { FSAT, FanSetup, BaseGasDensity } from '../shared/models/fans';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
@@ -214,7 +214,7 @@ export class FsatWarningService {
   }
 
   //FAN
-  checkFanWarnings(fanSetup: FanSetup): {fanEfficiencyError: string, fanSpeedError: string} {
+  checkFanWarnings(fanSetup: FanSetup): { fanEfficiencyError: string, fanSpeedError: string } {
     return {
       fanEfficiencyError: this.checkFanEfficiency(fanSetup),
       fanSpeedError: this.checkFanSpeed(fanSetup)
@@ -231,7 +231,6 @@ export class FsatWarningService {
     }
   }
 
-  //fanSpeed
   checkFanSpeed(fanSetup: FanSetup) {
     if (fanSetup.fanSpeed < 0) {
       return 'Fan speed must be greater than or equal to 0';
@@ -242,6 +241,72 @@ export class FsatWarningService {
     }
   }
 
+  //FAN FLUID
+  checkFanFluidWarnings(baseGasDensity: BaseGasDensity, settings: Settings): FanFluidWarnings {
+    let barometricPressureError: string = this.checkBarometricPressurer(baseGasDensity, settings);
+    let relativeHumidityError: string = null;
+    let gasDensityError: string = this.checkGasDensity(baseGasDensity);
+    let specificHeatGasError: string = null;
+    if (baseGasDensity.inputType == 'relativeHumidity') {
+      relativeHumidityError = this.checkRelativeHumidity(baseGasDensity);
+    }
+    if (baseGasDensity.inputType == 'wetBulb') {
+      specificHeatGasError = this.checkSpecificHeat(baseGasDensity);
+    }
+    return {
+      barometricPressureError: barometricPressureError,
+      relativeHumidityError: relativeHumidityError,
+      gasDensityError: gasDensityError,
+      specificHeatGasError: specificHeatGasError
+    }
+  }
+
+  //TODO: NOT Imperial || Other
+  checkBarometricPressurer(baseGasDensity: BaseGasDensity, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      if (baseGasDensity.barometricPressure < 20) {
+        return 'Value should be greater than 20';
+      } else if (baseGasDensity.barometricPressure > 40) {
+        return 'Value should be less than 40';
+      } else {
+        return null;
+      }
+
+    } else {
+      if (baseGasDensity.barometricPressure < 65) {
+        return 'Value should be greater than 65';
+      } else if (baseGasDensity.barometricPressure > 140) {
+        return 'Value should be less than 140';
+      } else {
+        return null;
+      }
+    }
+  }
+
+  checkRelativeHumidity(baseGasDensity: BaseGasDensity) {
+    if (baseGasDensity.relativeHumidity < 0) {
+      return 'Value should be greater than or equal to 0';
+    } else if (baseGasDensity.relativeHumidity > 100) {
+      return 'Value should be less than or equal to 100';
+    } else {
+      return null;
+    }
+  }
+  checkGasDensity(baseGasDensity: BaseGasDensity) {
+    if (baseGasDensity.gasDensity <= 0) {
+      return 'Value should be greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkSpecificHeat(baseGasDensity: BaseGasDensity) {
+    if (baseGasDensity.specificHeatGas <= 0) {
+      return 'Value should be greater than 0';
+    } else {
+      return null;
+    }
+  }
 }
 
 
@@ -263,4 +328,11 @@ export interface FanMotorWarnings {
   flaError: string;
   efficiencyError: string;
   ratedPowerError: string;
+}
+
+export interface FanFluidWarnings {
+  barometricPressureError: string;
+  relativeHumidityError: string;
+  gasDensityError: string;
+  specificHeatGasError: string;
 }
