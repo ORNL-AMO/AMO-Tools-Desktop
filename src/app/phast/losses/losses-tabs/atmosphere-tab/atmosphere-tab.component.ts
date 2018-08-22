@@ -66,6 +66,7 @@ export class AtmosphereTabComponent implements OnInit {
       }
     }
   }
+  
   checkMissingData(): boolean {
     let testVal = false;
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
@@ -87,23 +88,19 @@ export class AtmosphereTabComponent implements OnInit {
 
   checkWarnings(): boolean {
     let hasWarning: boolean = false;
-    this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
-      let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-      for (var key in warnings) {
-        if (warnings[key] !== null) {
-          hasWarning = true;
-        }
-      }
-    })
-    if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
-      this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
+    if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
+      this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
         let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-        for (var key in warnings) {
-          if (warnings[key] !== null) {
-            hasWarning = true;
-          }
-        }
+        hasWarning = this.atmosphereLossesService.checkWarningsExist(warnings);
       })
+    }
+    if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
+      if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
+        this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
+          let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+          hasWarning = this.atmosphereLossesService.checkWarningsExist(warnings);
+        })
+      }
     }
     return hasWarning;
   }

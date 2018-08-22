@@ -25,7 +25,6 @@ export class AuxiliaryPowerTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService, private cd: ChangeDetectorRef) { }
 
@@ -35,11 +34,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.auxiliaryPowerCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     })
 
@@ -47,7 +42,6 @@ export class AuxiliaryPowerTabComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -64,7 +58,26 @@ export class AuxiliaryPowerTabComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-
+  checkWarnings() {
+    let hasWarning: boolean = false;
+    if (this.auxiliaryPowerCompareService.baselineAuxLosses) {
+      this.auxiliaryPowerCompareService.baselineAuxLosses.forEach(loss => {
+        let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
+        if (warnings != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    if (this.auxiliaryPowerCompareService.modifiedAuxLosses) {
+      this.auxiliaryPowerCompareService.modifiedAuxLosses.forEach(loss => {
+        let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
+        if (warnings != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    return hasWarning;
+  }
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.losses.auxiliaryPowerLosses) {

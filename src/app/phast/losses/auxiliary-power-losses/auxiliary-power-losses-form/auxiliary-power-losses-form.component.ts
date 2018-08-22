@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
 import { FormGroup } from '@angular/forms';
+import { AuxiliaryPowerLossesService } from '../auxiliary-power-losses.service';
+import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',
@@ -25,24 +26,23 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
-  firstChange: boolean = true;
   voltageError: string = null;
 
   motorPhases: Array<number> = [
     1,
     3
   ]
-  constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
-
+  constructor(private auxiliaryPowerCompareService: AuxiliaryPowerCompareService, private auxiliaryLossesService: AuxiliaryPowerLossesService) { }
+  
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if(changes.baselineSelected){
+      if(!changes.baselineSelected.firstChange){
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
 
@@ -50,15 +50,17 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkWarnings();
   }
 
   disableForm() {
-    // this.auxLossesForm.disable();
+    this.auxLossesForm.controls.motorPhase.disable();
   }
 
   enableForm() {
-    // this.auxLossesForm.enable();
+    this.auxLossesForm.controls.motorPhase.enable();
   }
+
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -67,24 +69,15 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkVoltageError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.auxLossesForm.controls.supplyVoltage.value < 0 || this.auxLossesForm.controls.supplyVoltage.value > 480) {
-      this.voltageError = 'Supply Voltage must be between 0 and 480';
-    } else {
-      this.voltageError = null;
-    }
-
-    if (this.voltageError) {
-      this.inputError.emit(true);
-    } else {
-      this.inputError.emit(false);
-    }
+  checkWarnings(){
+    let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryLossesService.getLossFromForm(this.auxLossesForm);
+    this.voltageError = this.auxiliaryLossesService.checkWarnings(tmpLoss);
+    let errorExists: boolean = (this.voltageError !== null);
+    this.inputError.emit(errorExists);
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

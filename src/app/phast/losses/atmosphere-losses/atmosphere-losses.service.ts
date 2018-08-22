@@ -78,6 +78,16 @@ export class AtmosphereLossesService {
       return null;
     }
   }
+
+  checkWarningsExist(warnings: AtmosphereLossWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
 }
 
 export interface AtmosphereLossWarnings {

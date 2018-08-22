@@ -111,6 +111,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   checkWarnings() {
     let tmpLoss: AtmosphereLoss = this.atmosphereLossesService.getLossFromForm(this.atmosphereLossForm);
     this.warnings = this.atmosphereLossesService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
