@@ -26,7 +26,6 @@ export class FixtureTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService, private cd: ChangeDetectorRef) { }
 
@@ -36,29 +35,24 @@ export class FixtureTabComponent implements OnInit {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.fixtureLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     })
 
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -89,6 +83,27 @@ export class FixtureTabComponent implements OnInit {
       })
     }
     return testVal;
+  }
+
+  checkWarnings() {
+    let hasWarning: boolean = false;
+    if (this.fixtureLossesCompareService.baselineFixtureLosses) {
+      this.fixtureLossesCompareService.baselineFixtureLosses.forEach(loss => {
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    if (this.fixtureLossesCompareService.modifiedFixtureLosses) {
+      this.fixtureLossesCompareService.modifiedFixtureLosses.forEach(loss => {
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    return hasWarning;
   }
 
 

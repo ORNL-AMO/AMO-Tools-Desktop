@@ -47,7 +47,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     let tmpWarnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(tmpExhaustGas, this.settings);
     this.combustionTempWarning = tmpWarnings.combustionTempWarning;
     this.heatWarning = tmpWarnings.heatWarning;
-    let hasWarning: boolean = ((this.heatWarning !== null) && (this.combustionTempWarning !== null));
+    let hasWarning: boolean = ((this.heatWarning !== null) || (this.combustionTempWarning !== null));
     this.inputError.emit(hasWarning);
   }
 
