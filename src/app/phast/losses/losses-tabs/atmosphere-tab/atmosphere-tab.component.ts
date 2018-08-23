@@ -91,14 +91,20 @@ export class AtmosphereTabComponent implements OnInit {
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
       this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
         let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-        hasWarning = this.atmosphereLossesService.checkWarningsExist(warnings);
+        let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+        if(tmpHasWarning == true){
+          hasWarning = tmpHasWarning;
+        }
       })
     }
     if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
       if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses) {
         this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
           let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-          hasWarning = this.atmosphereLossesService.checkWarningsExist(warnings);
+          let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+          if(tmpHasWarning == true){
+            hasWarning = tmpHasWarning;
+          }
         })
       }
     }

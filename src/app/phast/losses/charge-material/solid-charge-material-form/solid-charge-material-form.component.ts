@@ -8,6 +8,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { SolidMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
+import { SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 
 @Component({
   selector: 'app-solid-charge-material-form',
@@ -38,35 +40,23 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   firstChange: boolean = true;
 
-  initialTempError: string = null;
-  specificHeatError: string = null;
-  latentHeatError: string = null;
-  heatOfLiquidError: string = null;
-  feedRateError: string = null;
-  waterChargedError: string = null;
-  waterDischargedError: string = null;
-  chargeMeltedError: string = null;
-  chargeSolidReactedError: string = null;
-  heatOfReactionError: string = null;
   materialTypes: any;
   selectedMaterialId: any;
   selectedMaterial: any;
-  dischargeTempError: string = null;
-  dischargeOverMeltError: string = null;
-  initialOverMeltError: string = null;
   showModal: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
+  warnings: SolidMaterialWarnings;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if(changes.baselineSelected){
+      if(!changes.baselineSelected.firstChange){
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
 
@@ -83,7 +73,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.checkInputError(true);
+    this.checkWarnings();
   }
 
   ngOnDestroy() {
@@ -93,14 +83,11 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   disableForm() {
     this.chargeMaterialForm.controls.materialId.disable();
     this.chargeMaterialForm.controls.endothermicOrExothermic.disable();
-    // this.chargeMaterialForm.disable();
   }
 
   enableForm() {
     this.chargeMaterialForm.controls.materialId.enable();
     this.chargeMaterialForm.controls.endothermicOrExothermic.enable();
-
-    // this.chargeMaterialForm.enable();
   }
 
   focusField(str: string) {
@@ -125,96 +112,23 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
       materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
-    this.startSavePolling();
+    this.save();
   }
 
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
     return test;
   }
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value < 0) {
-      this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
-    } else {
-      this.specificHeatError = null;
-    }
-    if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value < 0) {
-      this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
-    } else {
-      this.latentHeatError = null;
-    }
-    if (this.chargeMaterialForm.controls.materialHeatOfLiquid.value < 0) {
-      this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
-    } else {
-      this.heatOfLiquidError = null;
-    }
-    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
-      this.feedRateError = 'Charge Feed Rate must be greater than 0';
-    } else {
-      this.feedRateError = null;
-    }
-    if (this.chargeMaterialForm.controls.waterContentAsCharged.value < 0 || this.chargeMaterialForm.controls.waterContentAsCharged.value > 100) {
-      this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.waterChargedError = null;
-    }
-    if (this.chargeMaterialForm.controls.waterContentAsDischarged.value < 0 || this.chargeMaterialForm.controls.waterContentAsDischarged.value > 100) {
-      this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.waterDischargedError = null;
-    }
-    if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.controls.percentChargeMelted.value > 100) {
-      this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.chargeMeltedError = null;
-    }
-    if (this.chargeMaterialForm.controls.percentChargeReacted.value < 0 || this.chargeMaterialForm.controls.percentChargeReacted.value > 100) {
-      this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.chargeSolidReactedError = null;
-    }
-    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
-      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
-    } else {
-      this.heatOfReactionError = null;
-    }
 
-    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
-      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
-    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
-      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
-    } else {
-      this.dischargeTempError = null;
-    }
-
-    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value) {
-      this.initialTempError = "Initial Temperature cannot be greater than Outlet Temperature";
-    }
-    else {
-      this.initialTempError = null;
-    }
-
-    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value && this.chargeMaterialForm.controls.percentChargeMelted.value <= 0) {
-      this.initialOverMeltError = "The initial temperature is higher than the melting point, please enter proper percentage for charge melted.";
-    }
-    else {
-      this.initialOverMeltError = null;
-    }
-
-
-    if (this.initialTempError || this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
-      this.inputError.emit(true);
-      this.chargeMaterialCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.chargeMaterialCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpMaterial: SolidChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(this.chargeMaterialForm).solidChargeMaterial;
+    this.warnings = this.chargeMaterialService.checkSolidWarnings(tmpMaterial);
+    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

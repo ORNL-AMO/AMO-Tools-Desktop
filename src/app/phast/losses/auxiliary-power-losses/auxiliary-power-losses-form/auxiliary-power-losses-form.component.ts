@@ -26,7 +26,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
-  voltageError: string = null;
+  voltageWarning: string = null;
 
   motorPhases: Array<number> = [
     1,
@@ -71,8 +71,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
 
   checkWarnings(){
     let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryLossesService.getLossFromForm(this.auxLossesForm);
-    this.voltageError = this.auxiliaryLossesService.checkWarnings(tmpLoss);
-    let errorExists: boolean = (this.voltageError !== null);
+    this.voltageWarning = this.auxiliaryLossesService.checkWarnings(tmpLoss);
+    let errorExists: boolean = (this.voltageWarning !== null);
     this.inputError.emit(errorExists);
   }
 
