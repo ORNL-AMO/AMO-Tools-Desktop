@@ -53,7 +53,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
   tablePoints: Array<any>;
   deleteCount: number;
 
-
   firstChange: boolean = true;
 
   canvasWidth: number;
@@ -72,6 +71,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   @Input()
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
@@ -87,6 +90,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.curveChanged = false;
 
     this.isGridToggled = false;
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
   ngAfterViewInit() {
@@ -96,6 +103,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('changes');
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
@@ -106,6 +114,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+
+  initColumnTitles() {
+    this.columnTitles = ['Specific Speed', 'Efficiency Correction (%)'];
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -629,6 +641,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
       efficiencyCorrection: tableEfficiencyCorrection.toString()
     }
     this.tableData.push(dataPiece);
+
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    let data = [tableSpecificSpeed.toString(), tableEfficiencyCorrection.toString()];
+    this.rowData.push(data);
+
   }
 
   //dynamic table
@@ -637,6 +658,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.tablePoints = new Array<any>();
     this.focusD = new Array<any>();
     this.deleteCount = 0;
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
 
   }
 
@@ -665,12 +687,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
+  //dynamic table
   deleteFromTable(i: number) {
 
     for (let j = i; j < this.tableData.length - 1; j++) {
       this.tableData[j] = this.tableData[j + 1];
       this.tablePoints[j] = this.tablePoints[j + 1];
       this.focusD[j] = this.focusD[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
 
     if (i != this.tableData.length - 1) {
@@ -680,9 +705,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.tableData.pop();
     this.tablePoints.pop();
     this.focusD.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 
+  //dynamic table
   highlightPoint(i: number) {
     let x = this.x;
     let y = this.y;
@@ -703,11 +731,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
+  //dynamic table
   unhighlightPoint(i: number) {
     this.svg.select('#tablePoint-' + i).interrupt().attr('r', 6);
     this.replaceFocusPoints();
   }
 
+  //dynamic table
   drawPoint() {
     var specificSpeed = this.psatService.roundVal(this.getSpecificSpeed(), 3);
     var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, specificSpeed);
