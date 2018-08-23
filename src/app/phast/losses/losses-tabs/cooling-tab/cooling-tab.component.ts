@@ -4,7 +4,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from '../../cooling-losses/cooling-losses-compare.service';
-import { CoolingLossesService } from '../../cooling-losses/cooling-losses.service';
+import { CoolingLossesService, LiquidCoolingWarnings, GasCoolingWarnings } from '../../cooling-losses/cooling-losses.service';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-cooling-tab',
@@ -25,7 +25,6 @@ export class CoolingTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private coolingLossesCompareService: CoolingLossesCompareService, private coolingLossesService: CoolingLossesService, private cd: ChangeDetectorRef) { }
 
@@ -35,28 +34,22 @@ export class CoolingTabComponent implements OnInit {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     });
-
-    this.compareSubscription = this.coolingLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    });
-
     this.badgeHover = false;
   }
- 
-  ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
+
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -70,6 +63,42 @@ export class CoolingTabComponent implements OnInit {
       }
     }
   }
+
+  checkWarnings() {
+    let hasWarning: boolean = false;
+    if (this.coolingLossesCompareService.baselineCoolingLosses) {
+      this.coolingLossesCompareService.baselineCoolingLosses.forEach(material => {
+        let tmpHasWarning: boolean = this.checkWarningExists(material);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
+        }
+      })
+    }
+    if (this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
+      if (this.coolingLossesCompareService.modifiedCoolingLosses) {
+        this.coolingLossesCompareService.modifiedCoolingLosses.forEach(material => {
+          let tmpHasWarning: boolean = this.checkWarningExists(material);
+          if (tmpHasWarning == true) {
+            hasWarning = tmpHasWarning;
+          }
+        })
+      }
+    }
+    return hasWarning;
+  }
+
+  checkWarningExists(loss: CoolingLoss): boolean {
+    if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air' || loss.coolingLossType == 'Other Gas') {
+      let warnings: GasCoolingWarnings = this.coolingLossesService.checkGasWarnings(loss.gasCoolingLoss);
+      let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
+      return tmpHasWarning;
+    } else if (loss.coolingLossType == 'Liquid' || loss.coolingLossType == 'Water' || loss.coolingLossType == 'Other Liquid') {
+      let warnings: LiquidCoolingWarnings = this.coolingLossesService.checkLiquidWarnings(loss.liquidCoolingLoss);
+      let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
+      return tmpHasWarning;
+    }
+  }
+
   checkMissingData(): boolean {
     let testVal = false;
     if (this.coolingLossesCompareService.baselineCoolingLosses) {
@@ -98,7 +127,7 @@ export class CoolingTabComponent implements OnInit {
       } else {
         return false;
       }
-    }else  if (loss.coolingLossType == 'Liquid') {
+    } else if (loss.coolingLossType == 'Liquid') {
       let tmpForm: FormGroup = this.coolingLossesService.initLiquidFormFromLoss(loss);
       if (tmpForm.status == 'VALID') {
         return true;
