@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -28,7 +27,6 @@ export class EnergyInputFormComponent implements OnInit {
   inSetup: boolean;
 
   flowInput: boolean;
-  firstChange: boolean = true;
   constructor(private energyInputCompareService: EnergyInputCompareService) { }
 
 

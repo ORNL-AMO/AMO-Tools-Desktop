@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas-compare.service';
-//used for other loss monitoring
 import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -64,7 +63,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
-  
+
   canCompare() {
     if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       return true;

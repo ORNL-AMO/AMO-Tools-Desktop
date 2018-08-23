@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
@@ -7,9 +6,7 @@ export class ExtendedSurfaceCompareService {
 
   baselineSurface: ExtendedSurface[];
   modifiedSurface: ExtendedSurface[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

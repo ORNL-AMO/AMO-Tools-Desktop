@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { ExtendedSurfaceLossesService } from '../../extended-surface-losses/extended-surface-losses.service';
+import { ExtendedSurfaceLossesService, ExtendedSurfaceWarnings } from '../../extended-surface-losses/extended-surface-losses.service';
 import { ExtendedSurfaceCompareService } from '../../extended-surface-losses/extended-surface-compare.service';
 import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 import { Subscription } from 'rxjs';
@@ -25,7 +25,6 @@ export class ExtendedSurfaceTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private cd: ChangeDetectorRef ) { }
 
@@ -35,19 +34,13 @@ export class ExtendedSurfaceTabComponent implements OnInit {
       this.setNumLosses();
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.extendedSurfaceCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -71,6 +64,30 @@ export class ExtendedSurfaceTabComponent implements OnInit {
       }
     }
   }
+  
+  checkWarnings(){
+    let hasWarning: boolean = false;
+    if (this.extendedSurfaceCompareService.baselineSurface) {
+      this.extendedSurfaceCompareService.baselineSurface.forEach(loss => {
+        let warnings: ExtendedSurfaceWarnings = this.extendedSurfaceLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.extendedSurfaceLossesService.checkWarningsExist(warnings);
+        if(tmpHasWarning == true){
+          hasWarning = tmpHasWarning;
+        }
+      })
+    }
+    if (this.extendedSurfaceCompareService.modifiedSurface) {
+      this.extendedSurfaceCompareService.modifiedSurface.forEach(loss => {
+        let warnings: ExtendedSurfaceWarnings = this.extendedSurfaceLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.extendedSurfaceLossesService.checkWarningsExist(warnings);
+        if(tmpHasWarning == true){
+          hasWarning = tmpHasWarning;
+        }
+      })
+    }
+    return hasWarning;
+  }
+
   checkMissingData(): boolean {
     let testVal = false;
     if (this.extendedSurfaceCompareService.baselineSurface) {
