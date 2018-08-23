@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { FsatService } from '../fsat.service';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
@@ -8,6 +8,7 @@ import { FanMotorService } from '../fan-motor/fan-motor.service';
 import { FanFieldDataService } from '../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../fan-setup/fan-setup.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -15,7 +16,8 @@ import { ModifyConditionsService } from '../modify-conditions/modify-conditions.
   styleUrls: ['./fsat-tabs.component.css']
 })
 export class FsatTabsComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   mainTab: string;
   stepTab: string;
   assessmentTab: string;

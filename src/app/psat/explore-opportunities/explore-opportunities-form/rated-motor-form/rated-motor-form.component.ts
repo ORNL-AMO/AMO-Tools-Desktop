@@ -3,6 +3,7 @@ import { PSAT } from '../../../../shared/models/psat';
 import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PsatWarningService, MotorWarnings } from '../../../psat-warning.service';
 @Component({
   selector: 'app-rated-motor-form',
   templateUrl: './rated-motor-form.component.html',
@@ -44,7 +45,7 @@ export class RatedMotorFormComponent implements OnInit {
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) { }
 
   ngOnInit() {
     if (this.settings.powerMeasurement == 'hp') {
@@ -72,6 +73,7 @@ export class RatedMotorFormComponent implements OnInit {
     this.initMotorEfficiency();
     this.initRatedMotorPower();
     this.initRatedMotorData();
+    this.checkWarnings();
   }
 
   modifyPowerArrays(isBaseline: boolean) {
@@ -152,6 +154,7 @@ export class RatedMotorFormComponent implements OnInit {
 
 
   calculate() {
+    this.checkWarnings();
     this.emitCalculate.emit(true);
   }
 
@@ -164,6 +167,15 @@ export class RatedMotorFormComponent implements OnInit {
     dsp = dsp.replace(')', '');
     return dsp;
 
+  }
+
+  checkWarnings(){
+    let baselineWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    this.efficiencyError1 = baselineWarnings.efficiencyError;
+    this.ratedPowerError1 = baselineWarnings.ratedPowerError;
+    let modifiedWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+    this.efficiencyError2 = modifiedWarnings.efficiencyError;
+    this.ratedPowerError2 = modifiedWarnings.ratedPowerError;
   }
 
   setEfficiencyClasses() {
@@ -197,69 +209,6 @@ export class RatedMotorFormComponent implements OnInit {
     }
   }
 
-  checkEfficiency(val: number, num: number) {
-    this.calculate();
-    if (val > 100) {
-      this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
-      return false;
-    }
-    else if (val == 0) {
-      this.setErrorMessage(num, "Cannot have 0% efficiency");
-      return false;
-    }
-    else if (val < 0) {
-      this.setErrorMessage(num, "Cannot have negative efficiency");
-      return false;
-    }
-    else {
-      this.setErrorMessage(num, null);
-      return true;
-    }
-  }
-
-  setErrorMessage(num: number, str: string) {
-    if (num == 1) {
-      this.efficiencyError1 = str;
-    } else if (num == 2) {
-      this.efficiencyError2 = str;
-    }
-  }
-
-  checkRatedPower(num: number) {
-    this.calculate();
-    let val;
-    if (num == 1) {
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = this.psat.inputs.motor_rated_power;
-      }
-      val = val * 1.5;
-    } else if (num == 2) {
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power;
-      }
-      val = val * 1.5;
-    }
-    let compareVal = this.psat.inputs.motor_field_power;
-    if (compareVal > val) {
-      if (num == 1) {
-        this.ratedPowerError1 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-      } else if (num == 2) {
-        this.ratedPowerError2 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-      }
-      return false;
-    } else {
-      if (num == 1) {
-        this.ratedPowerError1 = null;
-      } else if (num == 2) {
-        this.ratedPowerError2 = null;
-      }
-      return true
-    }
-  }
   toggleRatedMotorData() {
     if (this.showRatedMotorData == false) {
       this.showRatedMotorPower = false;

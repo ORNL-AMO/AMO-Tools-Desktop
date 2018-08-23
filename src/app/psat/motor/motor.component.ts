@@ -7,6 +7,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -56,14 +57,10 @@ export class MotorComponent implements OnInit {
   psatForm: FormGroup;
   isFirstChange: boolean = true;
   formValid: boolean;
-  rpmError: string = null;
-  voltageError: string = null;
-  flaError: string = null;
-
-  efficiencyError: string = null;
+  motorWarnings: MotorWarnings;
   ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.init();
@@ -102,16 +99,16 @@ export class MotorComponent implements OnInit {
     this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
     this.modifyPowerArrays();
-    this.checkEfficiency(true);
-    this.checkFLA(true);
-    this.checkMotorRpm(true);
-    this.checkMotorVoltage(true);
-    this.checkRatedPower(true);
+    this.checkWarnings();
+  }
+
+  checkWarnings(){
+    this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings)
   }
 
   changeLineFreq() {
     this.defaultRpm();
-    this.startSavePolling();
+    this.save();
   }
 
   modifyPowerArrays() {
@@ -155,7 +152,7 @@ export class MotorComponent implements OnInit {
       this.psatForm.patchValue({
         fullLoadAmps: estEfficiency
       });
-      this.checkFLA();
+      this.save();
     }
   }
 
@@ -195,11 +192,16 @@ export class MotorComponent implements OnInit {
   }
 
   disableForm() {
-    this.psatForm.disable();
+    this.psatForm.controls.frequency.disable();
+    this.psatForm.controls.horsePower.disable();
+    this.psatForm.controls.efficiencyClass.disable();
+    //this.psatForm.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.frequency.enable();
+    this.psatForm.controls.horsePower.enable();
+    this.psatForm.controls.efficiencyClass.enable();
     if (this.psat.inputs.optimize_calculation) {
       this.disableOptimized();
     }
@@ -234,148 +236,11 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMotorRpm(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.frequency.value && this.psatForm.controls.motorRPM.value != '') {
-      let frequencyEnum = this.psatService.getLineFreqEnum(this.psatForm.controls.frequency.value);
-      let effClass = this.psatService.getEfficienyClassEnum(this.psatForm.controls.efficiencyClass.value);
-      let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.controls.motorRPM.value, effClass);
-      if (tmp.message) {
-        this.rpmError = tmp.message;
-      } else {
-        this.rpmError = null;
-      }
-      return tmp.valid;
-    } else if (this.psatForm.controls.motorRPM.value == '') {
-      this.rpmError = 'Required';
-      return false;
-    }
-    else {
-      return null;
-    }
-  }
-
-  checkMotorVoltage(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.motorVoltage.value != '') {
-      let tmp = this.psatService.checkMotorVoltage(this.psatForm.controls.motorVoltage.value);
-      if (tmp.message) {
-        this.voltageError = tmp.message;
-      } else {
-        this.voltageError = null;
-      }
-      return tmp.valid;
-    }
-    else {
-      return null;
-    }
-  }
-
-
-  checkEfficiency(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.efficiency.value > 100) {
-      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
-      return false;
-    }
-    else if (this.psatForm.controls.efficiency.value == 0) {
-      this.efficiencyError = "Cannot have 0% efficiency";
-      return false;
-    }
-    else if (this.psatForm.controls.efficiency.value < 0) {
-      this.efficiencyError = "Cannot have negative efficiency";
-      return false;
-    }
-    else {
-      this.efficiencyError = null;
-      return true;
-    }
-  }
-
-  checkRatedPower(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    this.checkFLA();
-    let motorFieldPower;
-    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
-      motorFieldPower = this.psatForm.controls.motorKW.value;
-    } else if (this.psatForm.controls.loadEstimatedMethod.value == 'Current') {
-      motorFieldPower = this.psatForm.controls.motorAmps.value;
-    }
-    if (motorFieldPower && this.psatForm.controls.horsePower.value) {
-      let val, compare;
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.psatForm.controls.horsePower.value).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(motorFieldPower).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = this.psatForm.controls.horsePower.value;
-        compare = motorFieldPower;
-      }
-      val = val * 1.5;
-      if (compare > val) {
-        this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
-        return false
-      } else {
-        this.ratedPowerError = null;
-        return true
-      }
-    } else {
-      return true;
-    }
-  }
-
-  checkFLA(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-    let estEfficiency = this.psatService.estFLA(
-      this.psatForm.controls.horsePower.value,
-      this.psatForm.controls.motorRPM.value,
-      this.psatForm.controls.frequency.value,
-      this.psatForm.controls.efficiencyClass.value,
-      tmpEfficiency,
-      this.psatForm.controls.motorVoltage.value,
-      this.settings
-    );
-    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-    this.psatService.flaRange.flaMin = estEfficiency * .95;
-
-    if (this.psatForm.controls.fullLoadAmps.value) {
-      if ((this.psatForm.controls.fullLoadAmps.value < this.psatService.flaRange.flaMin) || (this.psatForm.controls.fullLoadAmps.value > this.psatService.flaRange.flaMax)) {
-        this.flaError = 'Value is outside expected range';
-        return false;
-      } else {
-        this.flaError = null;
-        return true;
-      }
-    } else {
-      this.flaError = null;
-      return true;
-    }
-  }
-
-  savePsat(form: FormGroup) {
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.saved.emit(this.selected);
-  }
-
-  changeEfficiencyClass() {
-    this.modifyPowerArrays();
-    this.checkMotorRpm();
-    this.startSavePolling();
-  }
-
-  startSavePolling() {
+  save() {
     this.checkForm(this.psatForm);
-    this.savePsat(this.psatForm)
+    this.psat.inputs = this.psatService.getPsatInputsFromForm(this.psatForm);
+    this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    this.saved.emit(this.selected);
   }
 
   canCompare() {

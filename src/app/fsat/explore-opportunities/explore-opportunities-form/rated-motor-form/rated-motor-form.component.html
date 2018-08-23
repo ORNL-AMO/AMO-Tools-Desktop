@@ -14,20 +14,20 @@
         <div class="form-group">
           <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
           <select name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
-            (change)="checkRatedPower(1)" [(ngModel)]="fsat.fanMotor.motorRatedPower">
+            (change)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
                                         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
                                     </select>
-          <span class="alert-danger pull-right small" *ngIf="ratedPowerError1 !== null">{{ratedPowerError1}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings.ratedPowerError !== null">{{baselineWarnings.ratedPowerError}}</span>
 
         </div>
         <div class="form-group">
           <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
           <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
-            (change)="checkRatedPower(2)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.motorRatedPower"
+            (change)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.motorRatedPower"
             [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
                                         <option  *ngFor="let option2 of options2" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
                                     </select>
-          <span class="alert-danger pull-right small" *ngIf="ratedPowerError2 !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{ratedPowerError2}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.ratedPowerError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.ratedPowerError}}</span>
         </div>
       </form>
     </li>
@@ -65,22 +65,22 @@
           <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
           <div class="input-group">
             <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency"
-              class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(fsat.fanMotor.efficiency, 1)"
-              [(ngModel)]="fsat.fanMotor.efficiency" />
+              class="form-control" (focus)="focusField('motorEfficiency')" (input)="calculate()"
+              [(ngModel)]="fsat.fanMotor.specifiedEfficiency" />
             <span class="input-group-addon units">(%)</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings.efficiencyError !== null">{{baselineWarnings.efficiencyError}}</span>
         </div>
         <div class="form-group">
           <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
           <div class="input-group">
             <input name="modificationMotorEfficiency" [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass != 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.optimize"
               type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
-              [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiency" (input)="checkEfficiency(fsat.modifications[exploreModIndex].fsat.fanMotor.efficiency, 2)"
+              [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.specifiedEfficiency" (input)="calculate()"
             />
             <span class="input-group-addon units">(%)</span>
           </div>
-          <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{efficiencyError2}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings.efficiencyError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.efficiencyError}}</span>
         </div>
       </form>
     </li>

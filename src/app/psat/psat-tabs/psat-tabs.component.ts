@@ -3,13 +3,16 @@ import { PsatService } from '../psat.service';
 import { PSAT } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-psat-tabs',
   templateUrl: './psat-tabs.component.html',
   styleUrls: ['./psat-tabs.component.css']
 })
 export class PsatTabsComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
+  
   currentTab: string;
   calcTab: string;
   mainTab: string;

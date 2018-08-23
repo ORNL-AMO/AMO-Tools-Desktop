@@ -8,14 +8,14 @@
     <div class="form-group">
       <label for="fanType">Fan Type</label>
       <select class="form-control" name="fanType" formControlName="fanType" id="fanType" (change)="save()" (focus)="focusField('fanType')"
-        [ngClass]="{'indicate-different': isFanTypeDifferent()}">
+        [ngClass]="{'indicate-different': isFanTypeDifferent(),'invalid': fanForm.controls.fanType.invalid}">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12">
       <label for="fanSpecified">Specify Fan Efficiency</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(),'error': fanEfficiencyError !== null, 'invalid': fanForm.controls.fanSpecified.invalid}">
         <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified" id="fanSpecified"
           onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
@@ -25,7 +25,7 @@
 
     <div class="form-group">
       <label for="fanSpeed">Fan Speed</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFanSpeedDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isFanSpeedDifferent(),'error': fanSpeedError !== null, 'invalid': fanForm.controls.fanSpeed.invalid}">
         <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed" id="fanSpeed" (input)="save()"
           (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
@@ -36,7 +36,7 @@
     <div class="form-group">
       <label for="drive">Drive</label>
       <select class="form-control" name="drive" formControlName="drive" id="drive" (change)="save()" (focus)="focusField('drive')"
-        [ngClass]="{'indicate-different': isDriveDifferent()}">
+        [ngClass]="{'indicate-different': isDriveDifferent(), 'invalid': fanForm.controls.drive.invalid}">
         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
