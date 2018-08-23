@@ -29,27 +29,12 @@ export class EnergyInputFormComponent implements OnInit {
 
   flowInput: boolean;
   firstChange: boolean = true;
-  constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }
+  constructor(private energyInputCompareService: EnergyInputCompareService) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
 
   ngOnInit() {
     if (this.energyInputForm.controls.flowRateInput.value) {
       this.flowInput = false;
-    }
-
-    if (!this.baselineSelected) {
-      this.disableForm();
     }
   }
 
@@ -58,22 +43,14 @@ export class EnergyInputFormComponent implements OnInit {
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
     })
-    this.startSavePolling();
-  }
-
-  disableForm() {
-    // this.energyInputForm.disable();
-  }
-
-  enableForm() {
-    // this.energyInputForm.enable();
+    this.save();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

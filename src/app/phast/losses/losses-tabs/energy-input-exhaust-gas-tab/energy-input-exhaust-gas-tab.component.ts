@@ -6,6 +6,7 @@ import { EnergyInputExhaustGasService } from '../../energy-input-exhaust-gas-los
 import { EnergyInputExhaustGasCompareService } from '../../energy-input-exhaust-gas-losses/energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-energy-input-exhaust-gas-tab',
   templateUrl: './energy-input-exhaust-gas-tab.component.html',
@@ -16,6 +17,8 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
   phast: PHAST;
   @Input()
   inSetup: boolean;
+  @Input()
+  settings: Settings;
 
   badgeHover: boolean;
   displayTooltip: boolean;
@@ -26,7 +29,6 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
   isDifferent: boolean;
   badgeClass: Array<string>;
   enInput2Done: boolean;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private cd: ChangeDetectorRef) { }
 
@@ -37,18 +39,13 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       this.enInput2Done = this.lossesService.enInput2Done;
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.energyInputExhaustGasCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = this.checkWarnings();
       this.setBadgeClass();
     })
 
     this.badgeHover = false;
   }
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -65,6 +62,26 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
     this.cd.detectChanges();
   }
 
+  checkWarnings() {
+    let hasWarning: boolean = false;
+    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
+      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.forEach(loss => {
+        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
+      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
+        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+          hasWarning = true;
+        }
+      })
+    }
+    return hasWarning;
+  }
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.losses.energyInputExhaustGasLoss) {
