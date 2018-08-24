@@ -78,16 +78,21 @@ tr>td {
 }
 
 .btn-copy-table {
+    margin-top: 20px;
     text-align: center;
     height: 30px;
     width: 125px;
-    border: none;
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.12);
+    opacity: 0.6;
+    background-color: #dcdcdc;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition: ease-in-out 0.2s all;
 }
 
 .btn-copy-table:hover {
-    background-color: white;
+    opacity: 1;
+    border-color: #212529;
+    cursor: pointer;
 }
 
 .copy-table {

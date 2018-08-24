@@ -1,5 +1,4 @@
-
-.grid .tick { 
+.grid .tick {
   stroke: lightgrey;
   opacity: 0.7;
 }
@@ -8,23 +7,12 @@
   stroke-width: 0;
 }
 
-
-.key-color {
-  border-radius: 12px;
-  padding: 8px;
-  box-sizing: border-box;
-  width: 5px;
-  height: 5px;
-  margin: auto;
+tr>td, tr>th {
+  text-align: center;
 }
 
-tr > td,
-tr > th{
-    text-align: center;
-}
-
-tr > td {
-    vertical-align: middle;
+tr>td {
+  vertical-align: middle;
 }
 
 .graph-table {
@@ -32,7 +20,7 @@ tr > td {
 }
 
 .expanded-chart {
-  padding: 10px;
+  padding: 5px;
 }
 
 .graph-table td, .graph-table th {
@@ -78,4 +66,13 @@ tr > td {
 .delete-row:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.key-color {
+  border-radius: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+  width: 5px;
+  height: 5px;
+  margin: auto;
 }

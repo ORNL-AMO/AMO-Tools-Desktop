@@ -40,7 +40,7 @@ export class PercentGraphComponent implements OnInit {
   potential: number = 0;
 
   @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  // @ViewChild('btnDownload') btnDownload: ElementRef;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -60,7 +60,7 @@ export class PercentGraphComponent implements OnInit {
     if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings') {
       this.inChart = true;
       this.chartHeight = 120;
-      this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
+      // this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
     this.initChart();
   }
@@ -153,7 +153,8 @@ export class PercentGraphComponent implements OnInit {
         show: false
       },
       size: {
-        height: this.chartHeight
+        height: this.chartHeight,
+        width: 250
       },
       gauge: {
         width: 20,

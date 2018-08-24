@@ -65,7 +65,6 @@ export class SystemCurveGraphComponent implements OnInit {
   y: any;
   curveChanged: boolean = false;
   graphColors: Array<string>;
-  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>;
   tablePoints: Array<any>;
 
   //dynamic table - specific to system curve graph
@@ -90,11 +89,16 @@ export class SystemCurveGraphComponent implements OnInit {
 
   isFirstChange: boolean = true;
   expanded: boolean = false;
+
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   constructor(private systemCurveService: SystemCurveService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
     this.tablePoints = new Array<any>();
     this.focusD = new Array<any>();
 
@@ -106,12 +110,35 @@ export class SystemCurveGraphComponent implements OnInit {
     }
 
     this.isGridToggled = false;
+
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
     }, 100)
   }
+
+  initColumnTitles() {
+    if (this.isFan) {
+      flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
+      distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
+      headOrPressure = 'Pressure';
+    } else {
+      flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
+      distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
+      headOrPressure = 'Head'
+    }
+      this.columnTitles = ['Flow Rate (' + flowMeasurement + ')', headOrPressure + ' (' + distanceMeasurement + ')', 'Fluid Power (' + powerMeasurement + ')'];
+  }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
@@ -552,8 +579,8 @@ export class SystemCurveGraphComponent implements OnInit {
 
             "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(this.d.fluidPower) + " " + powerMeasurement + "</div></strong></p>")   //dynamic table
 
-          .style("left", Math.min(((this.margin.left + x(this.d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")      //dynamic table
-          .style("top", (this.margin.top + y(this.d.y) + 26) + "px")      //dynamic table
+          .style("left", (this.margin.left + this.x(this.d.x) - (detailBoxWidth / 2)) + "px")
+          .style("top", (this.margin.top + y(this.d.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -567,8 +594,8 @@ export class SystemCurveGraphComponent implements OnInit {
         this.tooltipPointer
           .attr("class", "tooltip-pointer")
           .html("<div></div>")
-          .style("left", (this.margin.left + x(this.d.x)) + 5 + "px") //dynamic table
-          .style("top", (this.margin.top + y(this.d.y) + 16) + "px")  //dynamic table
+          .style("left", (this.margin.left + this.x(this.d.x) - 10) + "px")
+          .style("top", (this.margin.top + y(this.d.y) + 16) + "px")
           .style("position", "absolute")
           .style("width", "0px")
           .style("height", "0px")
@@ -638,7 +665,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
     let tableFocus = this.svg.append("g")
@@ -660,24 +687,22 @@ export class SystemCurveGraphComponent implements OnInit {
 
     this.tablePoints.push(tableFocus);
 
-    let dataPiece = {
+    let colors = {
       borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
-      fillColor: this.graphColors[i % this.graphColors.length],
-      flowRate: flowVal.toString(),
-      headOrPressure: headOrPressure,
-      distance: distanceVal.toString(),
-      fluidPower: powerVal.toString()
-    }
-
-    this.tableData.push(dataPiece);
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    let data = [flowVal.toString(), distanceVal.toString(), powerVal.toString()];
+    this.rowData.push(data);
   }
 
   //dynamic table
   resetTableData() {
-    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, headOrPressure: string, distance: string, fluidPower: string }>();
     this.tablePoints = new Array<any>();
     this.focusD = new Array<any>();
     this.deleteCount = 0;
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
   }
 
   //dynamic table
@@ -696,8 +721,8 @@ export class SystemCurveGraphComponent implements OnInit {
       tableFocus.append("circle")
         .attr("r", 6)
         .attr("id", "tablePoint-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
 
@@ -707,25 +732,25 @@ export class SystemCurveGraphComponent implements OnInit {
 
   deleteFromTable(i: number) {
 
-    for (let j = i; j < this.tableData.length - 1; j++) {
-      this.tableData[j] = this.tableData[j + 1];
+    for (let j = i; j < this.rowData.length - 1; j++) {
       this.tablePoints[j] = this.tablePoints[j + 1];
       this.focusD[j] = this.focusD[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
 
-    if (i != this.tableData.length - 1) {
+    if (i != this.rowData.length - 1) {
       this.deleteCount += 1;
     }
 
-    this.tableData.pop();
     this.tablePoints.pop();
     this.focusD.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 
   highlightPoint(i: number) {
-    let x = this.x;
-    let y = this.y;
     var highlightedPoint = this.svg.select('#tablePoint-' + i)
       .attr('r', 8);
 

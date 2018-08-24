@@ -534,7 +534,6 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
-    //debug
     this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
       .attr("id", "tooltipPointer")
       .attr("class", "tooltip-pointer")
@@ -549,12 +548,6 @@ export class PumpCurveGraphComponent implements OnInit {
       detailBoxWidth = 160;
       detailBoxHeight = 270;
     }
-    // this.pointer = this.svg.append("polygon")
-    //   .attr("id", "pointer")
-    //   //.attr("points", "0,13, 14,13, 7,-2");
-    //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-    //   .style("display", "none")
-    //   .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -626,14 +619,11 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
+
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
 
-        //debug
         this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -657,9 +647,6 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
         this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
@@ -741,14 +728,12 @@ export class PumpCurveGraphComponent implements OnInit {
                       "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
                       "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
 
-                      //system-curve merge
                       "<p><strong><div>System Curve</div></strong>" +
                       "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
                       "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
                       "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
 
-                    //debug
-                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
                     .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
                     .style("position", "absolute")
                     .style("width", detailBoxWidth + "px")
@@ -763,7 +748,7 @@ export class PumpCurveGraphComponent implements OnInit {
                   this.tooltipPointer
                     .attr("class", "tooltip-pointer")
                     .html("<div></div>")
-                    .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                    .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
                     .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
                     .style("position", "absolute")
                     .style("width", "0px")
@@ -774,10 +759,6 @@ export class PumpCurveGraphComponent implements OnInit {
                     .style('pointer-events', 'none');
                 }
               } else {
-                // this.pointer
-                //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-                //   .style("fill", "#ffffff")
-                // .style("filter", "url(#drop-shadow)");
 
                 this.detailBox
                   .style("padding-right", "10px")
@@ -790,13 +771,13 @@ export class PumpCurveGraphComponent implements OnInit {
 
                     "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
 
-                    //system-curve merge
                     "<p><strong><div>System Curve</div></strong>" +
                     "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +             //dynamic table
                     "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +      //dynamic table
                     "<strong><div>Fluid Power:</div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")   //dynamic table
 
-                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                  // .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
                   .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
                   .style("position", "absolute")
                   .style("width", detailBoxWidth + "px")
@@ -812,7 +793,8 @@ export class PumpCurveGraphComponent implements OnInit {
                 this.tooltipPointer
                   .attr("class", "tooltip-pointer")
                   .html("<div></div>")
-                  .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                  // .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                  .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
                   .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
                   .style("position", "absolute")
                   .style("width", "0px")
@@ -848,12 +830,11 @@ export class PumpCurveGraphComponent implements OnInit {
 
                 "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
 
-                //system-curve merge
                 "<p><strong><div>System Curve</div></strong>" +
                 "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
                 "<strong><div>Fluid Power:</div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
 
-              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
               .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
               .style("position", "absolute")
               .style("width", detailBoxWidth + "px")
@@ -870,7 +851,7 @@ export class PumpCurveGraphComponent implements OnInit {
             this.tooltipPointer
               .attr("class", "tooltip-pointer")
               .html("<div></div>")
-              .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+              .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
               .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
               .style("position", "absolute")
               .style("width", "0px")
