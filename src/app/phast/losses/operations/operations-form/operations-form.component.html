@@ -3,7 +3,7 @@
     <label>Operating Hours</label>
     <div class="form-group">
       <label for="weeksPerYear">Weeks / Year</label>
-      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareWeeksPerYear(), 'error': weeksPerYearError !== null, 'invalid': operationsForm.controls.weeksPerYear.status == 'INVALID'}">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareWeeksPerYear(), 'error': warnings.weeksPerYearWarning !== null, 'invalid': operationsForm.controls.weeksPerYear.invalid}">
         <button class="btn input-group-btn" (click)="subtractWeek()">
           <i class="fa fa-minus"></i>
         </button>
@@ -13,11 +13,11 @@
         <input [readonly]="!baselineSelected" name="weeksPerYear" type="number" step="any" min="0" max="52" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
           formControlName="weeksPerYear" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
-      <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.weeksPerYearWarning !== null">{{warnings.weeksPerYearWarning}}</span>
     </div>
     <div class="form-group">
       <label for="daysPerWeek">Days / Week</label>
-      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareDaysPerWeek(), 'error': daysPerWeekError !== null, 'invalid': operationsForm.controls.daysPerWeek.status == 'INVALID'}">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareDaysPerWeek(), 'error': warnings.daysPerWeekWarning !== null, 'invalid': operationsForm.controls.daysPerWeek.invalid}">
         <button class="btn input-group-btn" (click)="subtractWeekDay()">
           <i class="fa fa-minus"></i>
         </button>
@@ -27,11 +27,11 @@
         <input [readonly]="!baselineSelected" name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()"
           formControlName="daysPerWeek" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
-      <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.daysPerWeekWarning !== null">{{warnings.daysPerWeekWarning}}</span>
     </div>
     <div class="form-group">
       <label for="shiftsPerDay">Shifts / Day</label>
-      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareShiftsPerDay(), 'error': shiftsPerDayError !== null, 'invalid': operationsForm.controls.shiftsPerDay.status == 'INVALID'}">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareShiftsPerDay(), 'error': warnings.shiftsPerDayWarning !== null, 'invalid': operationsForm.controls.shiftsPerDay.invalid}">
         <button class="btn input-group-btn" (click)="subtractShift()">
           <i class="fa fa-minus"></i>
         </button>
@@ -41,11 +41,11 @@
         <input [readonly]="!baselineSelected" name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
           formControlName="shiftsPerDay" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
-      <span class="alert-warning pull-right small" *ngIf="shiftsPerDayError !== null">{{shiftsPerDayError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.shiftsPerDayWarning !== null">{{warnings.shiftsPerDayWarning}}</span>
     </div>
     <div class="form-group">
       <label for="hoursPerShift">Hours / Shift</label>
-      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareHoursPerShift(), 'error': hoursPerShiftError !== null || timeError !== null, 'invalid': operationsForm.controls.hoursPerShift.status == 'INVALID'}">
+      <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareHoursPerShift(), 'error': warnings.hoursPerShiftWarning !== null || warnings.timeWarning !== null, 'invalid': operationsForm.controls.hoursPerShift.invalid}">
         <button class="btn input-group-btn" (click)="subtractShiftHr()">
           <i class="fa fa-minus"></i>
         </button>
@@ -55,22 +55,22 @@
         <input [readonly]="!baselineSelected" name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
           formControlName="hoursPerShift" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
-      <span class="alert-warning pull-right small" *ngIf="hoursPerShiftError !== null">{{hoursPerShiftError}}</span>
-      <span class="alert-warning pull-right small" *ngIf="timeError !== null">{{timeError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.hoursPerShiftWarning !== null">{{warnings.hoursPerShiftWarning}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.timeWarning !== null">{{warnings.timeWarning}}</span>
     </div>
     <!--<span class="alert-warning pull-right small" *ngIf="!isCalculated">Above values not used.</span>-->
     <div class="form-group">
       <label for="hoursPerYear">Hours / Year</label>
       <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" formControlName="hoursPerYear"
-        (focus)="focusField('operatingHours')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareHoursPerYear(), 'error': hoursPerYearError !== null, 'invalid': operationsForm.controls.hoursPerYear.status == 'INVALID'}">
-      <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
+        (focus)="focusField('operatingHours')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareHoursPerYear(), 'error': warnings.hoursPerYearWarning !== null, 'invalid': operationsForm.controls.hoursPerYear.invalid}">
+      <span class="alert-warning pull-right small" *ngIf="warnings.hoursPerYearWarning !== null">{{warnings.hoursPerYearWarning}}</span>
     </div>
   </div>
   <div class="form-section">
     <label>Operating Costs</label>
     <div class="form-group">
       <label for="fuelCost">Fuel</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.invalid}">
         <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="startSavePolling()" formControlName="fuelCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
@@ -78,7 +78,7 @@
     </div>
     <div class="form-group">
       <label for="steamCost">Steam</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.invalid}">
         <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="startSavePolling()" formControlName="steamCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
@@ -86,7 +86,7 @@
     </div>
     <div class="form-group">
       <label for="electricityCost">Electricity</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.invalid}">
         <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="startSavePolling()"
           formControlName="electricityCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/kWh</span>

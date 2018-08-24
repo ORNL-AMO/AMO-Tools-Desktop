@@ -3,7 +3,7 @@ import { LossesService } from '../../losses.service';
 
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { OperationsService } from '../../operations/operations.service';
+import { OperationsService, OperationsWarnings } from '../../operations/operations.service';
 import { OperationsCompareService } from '../../operations/operations-compare.service';
 import { Subscription } from 'rxjs';
 
@@ -27,27 +27,21 @@ export class OperationsTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private operationsService: OperationsService, private operationsCompareService: OperationsCompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.operationsCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -64,19 +58,25 @@ export class OperationsTabComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.operationsCompareService.baseline) {
       if (this.checkLossValid(this.operationsCompareService.baseline) == false) {
-        testVal = true;
+        missingData = true;
+      }
+      let warnings: OperationsWarnings = this.operationsService.checkWarnings(this.operationsCompareService.baseline.operatingHours);
+      let tmpHasWarning: boolean = this.operationsService.checkWarningsExist(warnings);
+      if (tmpHasWarning == true) {
+        hasWarning = tmpHasWarning;
       }
     }
     if (this.operationsCompareService.modification) {
       if (this.checkLossValid(this.operationsCompareService.modification) == false) {
-        testVal = true;
+        missingData = true;
       }
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 

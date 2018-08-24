@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/phast/phast';
+import { OperationsService, OperationsWarnings } from '../operations.service';
 @Component({
   selector: 'app-operations-form',
   templateUrl: './operations-form.component.html',
@@ -21,41 +22,13 @@ export class OperationsFormComponent implements OnInit {
   @Input()
   isCalculated: boolean;
 
-  timeError: string = null;
-  weeksPerYearError: string = null;
-  daysPerWeekError: string = null;
-  shiftsPerDayError: string = null;
-  hoursPerShiftError: string = null;
-  hoursPerYearError: string = null;
-  firstChange: boolean = true;
-  constructor(private operationsCompareService: OperationsCompareService) { }
+  warnings: OperationsWarnings;
+  constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService) { }
 
   ngOnInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
+    this.checkWarnings();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      //on changes to baseline selected enable/disable form
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
-
-  disableForm() {
-    // this.operationsForm.disable();
-  }
-
-  enableForm() {
-    // this.operationsForm.enable();
-  }
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -64,67 +37,25 @@ export class OperationsFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
+
+  checkWarnings() {
+    let tmpHours: OperatingHours = this.operationsService.getOperatingDataFromForm(this.operationsForm).hours;
+    this.warnings = this.operationsService.checkWarnings(tmpHours);
+  }
   calculatHrsPerYear() {
-    let timeCheck = this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.hoursPerShift.value;
-    if (timeCheck > 24) {
-      this.timeError = "You have exceeded 24 hours/day  " + " " + "(" + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
-    } else {
-      this.timeError = null;
-    }
-    if (this.operationsForm.controls.weeksPerYear.value > 52 || this.operationsForm.controls.weeksPerYear.value <= 0) {
-      this.weeksPerYearError = "The number of weeks/year must me greater than 0 and equal or less than 52";
-    } else {
-      this.weeksPerYearError = null;
-    }
-    if (this.operationsForm.controls.daysPerWeek.value > 7 || this.operationsForm.controls.daysPerWeek.value <= 0) {
-      this.daysPerWeekError = "The number of day/week must be greater than 0 and equal or less than 7";
-    } else {
-      this.daysPerWeekError = null;
-    }
-    if (this.operationsForm.controls.shiftsPerDay.value <= 0) {
-      this.shiftsPerDayError = "Number of shifts/day must be greater than 0";
-    } else {
-      this.shiftsPerDayError = null;
-    }
-    if (this.operationsForm.controls.hoursPerShift.value > 24 || this.operationsForm.controls.hoursPerShift.value <= 0) {
-      this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
-    } else {
-      this.hoursPerShiftError = null;
-    }
-    // this.phast.operatingHours.isCalculated = true;
-    // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
     let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
     this.operationsForm.patchValue({
       hoursPerYear: tmpHoursPerYear.toFixed(0)
     })
     this.isCalculated = true;
-    if (this.operationsForm.controls.hoursPerYear.value > 8760) {
-      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
-    } else {
-      this.hoursPerYearError = null;
-    }
-    this.startSavePolling();
-    this.checkErrors();
+    this.save()
   }
 
   setNotCalculated() {
-    if (this.operationsForm.controls.hoursPerYear.value > 8760) {
-      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
-    } else {
-      this.hoursPerYearError = null;
-    }
-    this.checkErrors();
-    this.startSavePolling();
     this.isCalculated = false;
+    this.save();
   }
 
-  checkErrors() {
-    if (this.timeError || this.weeksPerYearError || this.daysPerWeekError || this.shiftsPerDayError || this.hoursPerShiftError || this.hoursPerYearError) {
-      this.operationsCompareService.inputError.next(true);
-    } else {
-      this.operationsCompareService.inputError.next(false);
-    }
-  }
 
   addShift() {
     let tmpVal = this.operationsForm.controls.shiftsPerDay.value + 1;
@@ -195,7 +126,8 @@ export class OperationsFormComponent implements OnInit {
     this.calculatHrsPerYear();
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
   }
 

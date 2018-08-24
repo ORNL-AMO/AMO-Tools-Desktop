@@ -1,8 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
-import * as _ from 'lodash';
-import { PhastService } from '../../phast.service';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, OperatingCosts, OperatingHours } from '../../../shared/models/phast/phast';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { FormGroup } from '@angular/forms';
@@ -51,23 +48,11 @@ export class OperationsComponent implements OnInit {
   }
 
   saveLosses() {
-    let tmpOpHours: OperatingHours = {
-      hoursPerShift: this.operationsForm.controls.hoursPerShift.value,
-      hoursPerYear: this.operationsForm.controls.hoursPerYear.value,
-      shiftsPerDay: this.operationsForm.controls.shiftsPerDay.value,
-      daysPerWeek: this.operationsForm.controls.daysPerWeek.value,
-      weeksPerYear: this.operationsForm.controls.weeksPerYear.value,
-      isCalculated: this.isCalculated
-    }
-    let tmpOpCosts: OperatingCosts = {
-      electricityCost: this.operationsForm.controls.electricityCost.value,
-      steamCost: this.operationsForm.controls.steamCost.value,
-      fuelCost: this.operationsForm.controls.fuelCost.value
-    }
-    let implementationCost = this.operationsForm.controls.implementationCost.value;
-    this.phast.operatingCosts = tmpOpCosts;
-    this.phast.operatingHours = tmpOpHours;
-    this.phast.implementationCost = implementationCost;
+    let tmpData: { costs: OperatingCosts, hours: OperatingHours } = this.operationsService.getOperatingDataFromForm(this.operationsForm);
+    tmpData.hours.isCalculated = this.isCalculated;
+    this.phast.operatingCosts = tmpData.costs;
+    this.phast.operatingHours = tmpData.hours;
+    this.phast.implementationCost = this.operationsForm.controls.implementationCost.value;
     this.savedLoss.emit(true);
   }
 
