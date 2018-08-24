@@ -54,6 +54,7 @@ import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
 import { ToastyModule } from '../../../node_modules/ng2-toasty';
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
+import { FsatWarningService } from './fsat-warning.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -114,7 +115,8 @@ import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
     FanFieldDataService,
     ModifyConditionsService,
     CompareService,
-    ConvertFsatService
+    ConvertFsatService,
+    FsatWarningService
   ],
   exports: [
     FsatComponent

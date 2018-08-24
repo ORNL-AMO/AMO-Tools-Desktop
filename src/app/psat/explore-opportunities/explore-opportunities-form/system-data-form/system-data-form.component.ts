@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../../../shared/models/psat';
-import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PsatWarningService, FieldDataWarnings } from '../../../psat-warning.service';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
@@ -35,7 +35,7 @@ export class SystemDataFormComponent implements OnInit {
     opFractionError2: string = null;
 
     tmpBaselineName: string = 'Baseline';
-    constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
+    constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) {
 
     }
 
@@ -57,19 +57,12 @@ export class SystemDataFormComponent implements OnInit {
         this.initHead();
         this.initOpFraction();
         this.initSystemData();
-
-        this.checkCost(1);
-        this.checkCost(2);
-        this.checkFlowRate(1);
-        this.checkFlowRate(2);
-        this.checkOpFraction(1);
-        this.checkOpFraction(2);
     }
 
     initCost() {
         if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
             this.showCost = true;
-        }else{
+        } else {
             this.showCost = false;
         }
     }
@@ -77,7 +70,7 @@ export class SystemDataFormComponent implements OnInit {
     initFlowRate() {
         if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
             this.showFlowRate = true;
-        }else{
+        } else {
             this.showFlowRate = false;
         }
     }
@@ -85,7 +78,7 @@ export class SystemDataFormComponent implements OnInit {
     initHead() {
         if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
             this.showHead = true;
-        }else{
+        } else {
             this.showHead = false;
         }
     }
@@ -93,7 +86,7 @@ export class SystemDataFormComponent implements OnInit {
     initOpFraction() {
         if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
             this.showOperatingFraction = true;
-        }else{
+        } else {
             this.showOperatingFraction = false;
         }
     }
@@ -101,7 +94,7 @@ export class SystemDataFormComponent implements OnInit {
     initSystemData() {
         if (this.showCost || this.showFlowRate || this.showHead || this.showOperatingFraction) {
             this.showSystemData = true;
-        }else{
+        } else {
             this.showSystemData = false;
         }
     }
@@ -148,6 +141,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     calculate() {
+        this.checkWarnings();
         this.emitCalculate.emit(true);
     }
 
@@ -155,117 +149,16 @@ export class SystemDataFormComponent implements OnInit {
         this.changeField.emit(str);
     }
 
-    checkOpFraction(num: number) {
-        this.calculate();
-        let val;
-        if (num == 1) {
-            val = this.psat.inputs.operating_fraction;
-        } else if (num == 2) {
-            val = this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction;
-        }
-        if (val > 1) {
-            if (num == 1) {
-                this.opFractionError1 = 'Operating fraction needs to be between 0 - 1';
-            } else if (num == 2) {
-                this.opFractionError2 = 'Operating fraction needs to be between 0 - 1';
-            }
-            return false;
-        }
-        else if (val < 0) {
-            if (num == 1) {
-                this.opFractionError1 = "Cannot have negative operating fraction";
-            } else if (num == 2) {
-                this.opFractionError2 = "Cannot have negative operating fraction";
-            }
-            return false;
-        }
-        else {
-            if (num == 1) {
-                this.opFractionError1 = null;
-            } else if (num == 2) {
-                this.opFractionError2 = null;
-            }
-            return true;
-        }
+    checkWarnings() {
+        let baselineWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+        this.opFractionError1 = baselineWarnings.opFractionError;
+        this.flowRateError1 = baselineWarnings.flowError;
+        this.costError1 = baselineWarnings.costError;
+        let modificationWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+        this.opFractionError2 = modificationWarnings.opFractionError;
+        this.flowRateError2 = modificationWarnings.flowError;
+        this.costError2 = modificationWarnings.costError;
     }
-    checkFlowRate(num: number) {
-        this.calculate();
-        let tmp: any = {
-            message: null,
-            valid: null
-        };
-        if (num == 1) {
-            if (this.psat.inputs.flow_rate) {
-                tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
-            } else {
-                tmp.message = 'Flow Rate Required';
-                tmp.valid = false;
-            }
-        } else {
-            if (this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
-                tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
-            } else {
-                tmp.message = 'Flow Rate Required';
-                tmp.valid = false;
-            }
-        }
-
-        if (tmp.message) {
-            if (num == 1) {
-                this.flowRateError1 = tmp.message;
-            } else {
-                this.flowRateError2 = tmp.message;
-            }
-        } else {
-            if (num == 1) {
-                this.flowRateError1 = null;
-            } else {
-                this.flowRateError2 = null;
-            }
-        }
-        return tmp.valid;
-    }
-
-
-    checkCost(num: number) {
-        this.calculate();
-        let val;
-        if (num == 1) {
-            val = this.psat.inputs.cost_kw_hour;
-        } else {
-            val = this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour;
-        }
-        if (val < 0) {
-            if (num == 1) {
-                this.costError1 = 'Cannot have negative cost';
-            } else {
-                this.costError2 = 'Cannot have negative cost';
-            }
-            return false;
-        } else if (val > 1) {
-            if (num == 1) {
-                this.costError1 = "Shouldn't be greater then 1";
-            } else {
-                this.costError2 = "Shouldn't be greater then 1";
-            }
-            return false;
-        } else if (val >= 0 && val <= 1) {
-            if (num == 1) {
-                this.costError1 = null;
-            } else {
-                this.costError2 = null
-            }
-            return true;
-        } else {
-            if (num == 1) {
-                this.costError1 = null;
-            } else {
-                this.costError2 = null
-            }
-            return null;
-        }
-    }
-
 
     getUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);

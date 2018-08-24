@@ -17,7 +17,7 @@
         <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="baselineSelected" [fanSetup]="assessment.fsat.fanSetup"
           [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanSetup($event)"></app-fan-setup>
         <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected" [fanMotor]="assessment.fsat.fanMotor"
-          [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanMotor($event)" [fieldData]="assessment.fsat.fieldData"></app-fan-motor>
+          [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanMotor($event)" [fieldData]="assessment.fsat.fieldData" [fsat]="assessment.fsat"></app-fan-motor>
         <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData"
           [modificationIndex]="modificationIndex" [baseline]="true" (emitSave)="saveBaselineFieldData($event)" [fsat]="assessment.fsat"></app-fan-field-data>
       </div>
@@ -41,7 +41,7 @@
           [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)"></app-fan-setup>
         <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected" [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
           [modificationIndex]="modificationIndex" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
-          (emitSave)="saveModFanMotor($event)"></app-fan-motor>
+          (emitSave)="saveModFanMotor($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-motor>
         <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
           [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-field-data>
         <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"

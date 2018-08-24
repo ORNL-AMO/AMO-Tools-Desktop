@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModifyConditionsService } from '../modify-conditions.service';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../../compare.service';
@@ -7,8 +7,9 @@ import { FanMotorService } from '../../fan-motor/fan-motor.service';
 import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { FSAT } from '../../../shared/models/fans';
-import { FormGroup } from '@angular/forms';
 import { FsatService } from '../../fsat.service';
+import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings, FanFluidWarnings } from '../../fsat-warning.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -16,6 +17,8 @@ import { FsatService } from '../../fsat.service';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   modifyConditionsTab: string;
   modifyConditionsTabSub: Subscription;
@@ -40,7 +43,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService,
     private fsatFluidService: FsatFluidService, private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService, private fanSetupService: FanSetupService,
-  private fsatService: FsatService) { }
+    private fsatService: FsatService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
@@ -73,7 +76,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.modifyConditionsService.modifyConditionsTab.next(str);
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let baseline: FSAT = this.compareService.baselineFSAT;
     let modification: FSAT = this.compareService.modifiedFSAT;
     this.fluidBadgeClass = this.setFluidBadgeClass(baseline, modification);
@@ -82,16 +85,16 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.fanSetupBadgeClass = this.setFanSetupBadgeClass(baseline, modification);
   }
 
-  setFanFieldDataBadgeClass(baseline: FSAT, modification?: FSAT){
+  setFanFieldDataBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.fanFieldDataService.isFanFieldDataValid(baseline.fieldData);
     let validModTest = true;
     let isDifferent = false;
-    if(modification){
+    if (modification) {
       validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.fieldData);
       isDifferent = this.compareService.checkFanFieldDataDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -102,16 +105,35 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setFluidBadgeClass(baseline: FSAT, modification?: FSAT){
+  checkFieldDataWarnings() {
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setFluidBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.fsatFluidService.isFanFluidValid(baseline.baseGasDensity);
     let validModTest = true;
     let isDifferent = false;
-    if(modification){
+    if (modification) {
       validModTest = this.fsatFluidService.isFanFluidValid(modification.baseGasDensity);
       isDifferent = this.compareService.checkFluidDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkFanFluidWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -122,16 +144,35 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setFanSetupBadgeClass(baseline: FSAT, modification?: FSAT){
+  checkFanFluidWarnings() {
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.baselineFSAT.baseGasDensity, this.settings);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.modifiedFSAT.baseGasDensity, this.settings);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setFanSetupBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.fanSetupService.isFanSetupValid(baseline.fanSetup);
     let validModTest = true;
     let isDifferent = false;
-    if(modification){
+    if (modification) {
       validModTest = this.fanSetupService.isFanSetupValid(modification.fanSetup);
       isDifferent = this.compareService.checkFanSetupDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkFanSetupWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -142,16 +183,35 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setFanMotorBadgeClass(baseline: FSAT, modification?: FSAT){
+  checkFanSetupWarnings() {
+    let hasWarning: boolean = false;
+    let baselineWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.baselineFSAT.fanSetup);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.modifiedFSAT.fanSetup);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setFanMotorBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: Array<string> = ['success'];
     let validBaselineTest = this.fanMotorService.isFanMotorValid(baseline.fanMotor);
     let validModTest = true;
     let isDifferent = false;
-    if(modification){
+    if (modification) {
       validModTest = this.fanMotorService.isFanMotorValid(modification.fanMotor);
       isDifferent = this.compareService.checkFanMotorDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkMotorWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -161,6 +221,26 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     return badgeStr;
   }
+
+  checkMotorWarnings() {
+    let hasWarning: boolean = false;
+    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings);
+    for (var key in baselineWarnings) {
+      if (baselineWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedFSAT && !hasWarning) {
+      let modifiedWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings);
+      for (var key in modifiedWarnings) {
+        if (modifiedWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
 
   showTooltip(badge: string) {
     if (badge === 'fieldData') {
@@ -171,7 +251,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     else if (badge === 'fanSetup') {
       this.fanSetupBadgeHover = true;
-    }    
+    }
     else if (badge === 'fsatFluid') {
       this.fluidBadgeHover = true;
     }

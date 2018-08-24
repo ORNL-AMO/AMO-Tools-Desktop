@@ -206,6 +206,23 @@ export class CompareService {
       return false;
     }
   }
+  isSpecifiedEfficiencyDifferent(baseline?: PSAT, modification?: PSAT){
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
   //stages
   isStagesDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {

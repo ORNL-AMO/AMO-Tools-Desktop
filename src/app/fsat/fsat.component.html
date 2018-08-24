@@ -1,7 +1,7 @@
 <div #content class="fsat-container d-flex flex-column fsat" *ngIf="assessment && settings">
   <div #header class="w-100 hide-print sticky-top">
     <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
-    <app-fsat-tabs></app-fsat-tabs>
+    <app-fsat-tabs [settings]="settings"></app-fsat-tabs>
   </div>
 
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
@@ -13,7 +13,7 @@
       <app-fan-setup *ngIf="stepTab == 'fan-setup'" [settings]="settings" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup"
         (emitSave)="saveFanSetup($event)"></app-fan-setup>
       <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor"
-        (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"></app-fan-motor>
+        (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData" [fsat]="_fsat"></app-fan-motor>
       <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true" [fieldData]="_fsat.fieldData"
         [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-fan-field-data>
     </div>

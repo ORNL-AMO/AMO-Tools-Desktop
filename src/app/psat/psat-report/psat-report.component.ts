@@ -60,7 +60,7 @@ export class PsatReportComponent implements OnInit {
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
 
   ngOnInit() {
     this.initPrintLogic();
