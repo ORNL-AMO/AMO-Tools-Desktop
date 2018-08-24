@@ -33,9 +33,10 @@ export class FixtureTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.checkWarnings();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
 
@@ -66,46 +67,33 @@ export class FixtureTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.fixtureLossesCompareService.baselineFixtureLosses) {
       this.fixtureLossesCompareService.baselineFixtureLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
+          hasWarning = true;
         }
       })
     }
     if (this.fixtureLossesCompareService.modifiedFixtureLosses && !this.inSetup) {
       this.fixtureLossesCompareService.modifiedFixtureLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
         }
-      })
-    }
-    return testVal;
-  }
-
-  checkWarnings() {
-    let hasWarning: boolean = false;
-    if (this.fixtureLossesCompareService.baselineFixtureLosses) {
-      this.fixtureLossesCompareService.baselineFixtureLosses.forEach(loss => {
         let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
         if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
           hasWarning = true;
         }
       })
     }
-    if (this.fixtureLossesCompareService.modifiedFixtureLosses) {
-      this.fixtureLossesCompareService.modifiedFixtureLosses.forEach(loss => {
-        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
-        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
-          hasWarning = true;
-        }
-      })
-    }
-    return hasWarning;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
-
 
   checkLossValid(loss: FixtureLoss) {
     let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);

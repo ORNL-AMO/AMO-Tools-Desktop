@@ -35,12 +35,12 @@ export class ChargeMaterialTabComponent implements OnInit {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.chargeDone = this.lossesService.chargeDone;
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.checkWarnings()
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
-
     this.badgeHover = false;
   }
 
@@ -69,29 +69,14 @@ export class ChargeMaterialTabComponent implements OnInit {
     }
   }
 
-  checkMissingData(): boolean {
-    let testVal = false;
-    if (this.chargeMaterialCompareService.baselineMaterials) {
-      this.chargeMaterialCompareService.baselineMaterials.forEach(material => {
-        if (this.checkMaterialValid(material) == false) {
-          testVal = true;
-        }
-      })
-    }
-    if (this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
-      this.chargeMaterialCompareService.modifiedMaterials.forEach(material => {
-        if (this.checkMaterialValid(material) == false) {
-          testVal = true;
-        }
-      })
-    }
-    return testVal;
-  }
-
-  checkWarnings(): boolean {
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
     let hasWarning: boolean = false;
     if (this.chargeMaterialCompareService.baselineMaterials) {
       this.chargeMaterialCompareService.baselineMaterials.forEach(material => {
+        if (this.checkMaterialValid(material) == false) {
+          missingData = true;
+        }
         let tmpHasWarning: boolean = this.checkWarningExists(material);
         if (tmpHasWarning == true) {
           hasWarning = tmpHasWarning;
@@ -99,16 +84,17 @@ export class ChargeMaterialTabComponent implements OnInit {
       })
     }
     if (this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
-      if (this.chargeMaterialCompareService.modifiedMaterials) {
-        this.chargeMaterialCompareService.modifiedMaterials.forEach(material => {
-          let tmpHasWarning: boolean = this.checkWarningExists(material);
-          if (tmpHasWarning == true) {
-            hasWarning = tmpHasWarning;
-          }
-        })
-      }
+      this.chargeMaterialCompareService.modifiedMaterials.forEach(material => {
+        if (this.checkMaterialValid(material) == false) {
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(material);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
+        }
+      })
     }
-    return hasWarning;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
   checkWarningExists(material: ChargeMaterial): boolean {

@@ -37,9 +37,10 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.enInput2Done = this.lossesService.enInput2Done;
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.checkWarnings();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
 
@@ -62,26 +63,6 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  checkWarnings() {
-    let hasWarning: boolean = false;
-    if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
-      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.forEach(loss => {
-        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
-          hasWarning = true;
-        }
-      })
-    }
-    if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses) {
-      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
-        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
-        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
-          hasWarning = true;
-        }
-      })
-    }
-    return hasWarning;
-  }
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.losses.energyInputExhaustGasLoss) {
@@ -89,23 +70,33 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+          hasWarning = true;
         }
       })
     }
     if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
+        if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
+          hasWarning = true;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 

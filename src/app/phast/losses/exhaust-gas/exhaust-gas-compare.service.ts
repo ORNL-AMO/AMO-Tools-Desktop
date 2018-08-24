@@ -9,9 +9,7 @@ export class ExhaustGasCompareService {
   baselineExhaustGasLosses: ExhaustGasEAF[];
   modifiedExhaustGasLosses: ExhaustGasEAF[];
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;

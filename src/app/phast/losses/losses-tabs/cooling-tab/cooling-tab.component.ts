@@ -32,9 +32,10 @@ export class CoolingTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.checkWarnings();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     });
     this.badgeHover = false;
@@ -64,29 +65,6 @@ export class CoolingTabComponent implements OnInit {
     }
   }
 
-  checkWarnings() {
-    let hasWarning: boolean = false;
-    if (this.coolingLossesCompareService.baselineCoolingLosses) {
-      this.coolingLossesCompareService.baselineCoolingLosses.forEach(material => {
-        let tmpHasWarning: boolean = this.checkWarningExists(material);
-        if (tmpHasWarning == true) {
-          hasWarning = tmpHasWarning;
-        }
-      })
-    }
-    if (this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
-      if (this.coolingLossesCompareService.modifiedCoolingLosses) {
-        this.coolingLossesCompareService.modifiedCoolingLosses.forEach(material => {
-          let tmpHasWarning: boolean = this.checkWarningExists(material);
-          if (tmpHasWarning == true) {
-            hasWarning = tmpHasWarning;
-          }
-        })
-      }
-    }
-    return hasWarning;
-  }
-
   checkWarningExists(loss: CoolingLoss): boolean {
     if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air' || loss.coolingLossType == 'Other Gas') {
       let warnings: GasCoolingWarnings = this.coolingLossesService.checkGasWarnings(loss.gasCoolingLoss);
@@ -99,23 +77,32 @@ export class CoolingTabComponent implements OnInit {
     }
   }
 
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.coolingLossesCompareService.baselineCoolingLosses) {
       this.coolingLossesCompareService.baselineCoolingLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(loss);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
     if (this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
       this.coolingLossesCompareService.modifiedCoolingLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(loss);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 

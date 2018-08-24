@@ -35,9 +35,10 @@ export class FlueGasTabComponent implements OnInit {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.flueGasDone = this.lossesService.flueGasDone;
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.inputError = this.checkWarnings();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
     this.badgeHover = false;
@@ -68,29 +69,6 @@ export class FlueGasTabComponent implements OnInit {
     }
   }
 
-  checkWarnings(): boolean {
-    let hasWarning: boolean = false;
-    if (this.flueGasCompareService.baselineFlueGasLoss) {
-      this.flueGasCompareService.baselineFlueGasLoss.forEach(loss => {
-        let tmpHasWarning: boolean = this.checkWarningExists(loss);
-        if (tmpHasWarning == true) {
-          hasWarning = tmpHasWarning;
-        }
-      })
-    }
-    if (this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
-      if (this.flueGasCompareService.modifiedFlueGasLoss) {
-        this.flueGasCompareService.modifiedFlueGasLoss.forEach(loss => {
-          let tmpHasWarning: boolean = this.checkWarningExists(loss);
-          if (tmpHasWarning == true) {
-            hasWarning = tmpHasWarning;
-          }
-        })
-      }
-    }
-    return hasWarning;
-  }
-
   checkWarningExists(loss: FlueGas): boolean {
     if (loss.flueGasType == 'By Mass') {
       let warnings: FlueGasWarnings = this.flueGasLossesService.checkFlueGasByMassWarnings(loss.flueGasByMass);
@@ -103,23 +81,32 @@ export class FlueGasTabComponent implements OnInit {
     }
   }
 
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.flueGasCompareService.baselineFlueGasLoss) {
       this.flueGasCompareService.baselineFlueGasLoss.forEach(loss => {
         if (this.checkMaterialValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(loss);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
     if (this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
       this.flueGasCompareService.modifiedFlueGasLoss.forEach(loss => {
         if (this.checkMaterialValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(loss);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 
