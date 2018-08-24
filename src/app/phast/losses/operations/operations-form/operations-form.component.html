@@ -71,7 +71,7 @@
     <div class="form-group">
       <label for="fuelCost">Fuel</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.invalid}">
-        <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="startSavePolling()" formControlName="fuelCost"
+        <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="save()" formControlName="fuelCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
       </div>
@@ -79,7 +79,7 @@
     <div class="form-group">
       <label for="steamCost">Steam</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.invalid}">
-        <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="startSavePolling()" formControlName="steamCost"
+        <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="save()" formControlName="steamCost"
           (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
       </div>
@@ -87,7 +87,7 @@
     <div class="form-group">
       <label for="electricityCost">Electricity</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.invalid}">
-        <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="startSavePolling()"
+        <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="save()"
           formControlName="electricityCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/kWh</span>
       </div>
@@ -97,7 +97,7 @@
     <div class="form-group">
       <label for="implementationCost">Implementation Cost</label>
       <div class="input-group">
-        <input [readonly]="!baselineSelected" name="implementationCost" type="number" step="any" class="form-control" id="implementationCost" (input)="startSavePolling()"
+        <input [readonly]="!baselineSelected" name="implementationCost" type="number" step="any" class="form-control" id="implementationCost" (input)="save()"
           formControlName="implementationCost" (focus)="focusField('implementationCost')" (blur)="focusOut()">
         <span class="units input-group-addon">$</span>
       </div>

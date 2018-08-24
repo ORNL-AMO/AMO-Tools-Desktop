@@ -8,9 +8,7 @@ export class SlagCompareService {
 
   baselineSlag: Slag[];
   modifiedSlag: Slag[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
