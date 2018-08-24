@@ -29,7 +29,6 @@ export class OperationsFormComponent implements OnInit {
     this.checkWarnings();
   }
 
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
