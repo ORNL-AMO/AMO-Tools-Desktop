@@ -91,6 +91,7 @@ export class ExploreCoolingFormComponent implements OnInit {
         this.showCooling = check;
       }
       this.showTemp.push(check);
+      index++
     })
   }
 
