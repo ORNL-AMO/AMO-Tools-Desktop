@@ -23,7 +23,7 @@
           <label for="baselineLiquidFlow">Baseline Liquid Flow</label>
           <div class="input-group">
             <input name="{{'liquidFlow_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="obj.loss.flowRate"
-              id="{{liquidFlow_+index}}" onfocus="this.select();" (input)="checkFlowRate(1, obj.loss.flowRate, index)" (focus)="focusField('liquidFlow')"
+              id="{{'liquidFlow_'+index}}" onfocus="this.select();" (input)="checkFlowRate(1, obj.loss.flowRate, index)" (focus)="focusField('liquidFlow')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
@@ -34,7 +34,7 @@
         <div class="form-group" *ngIf="obj.type == 'Gas'">
           <label for="baselineGasFlow">Baseline Gas Flow</label>
           <div class="input-group">
-            <input name="{{'gasFlow_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'gasFlow_'+index}}" onfocus="this.select();"
+            <input name="{{'gasFlow_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" id="{{'gasFlow_'+index}}" onfocus="this.select();"
               (input)="checkFlowRate(1, obj.loss.gasFlow, index)" (focus)="focusField('gasFlow')" (blur)="focusOut()" [(ngModel)]="obj.loss.flowRate">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
@@ -46,8 +46,8 @@
         <div class="form-group" *ngIf="modifiedLosses[index].type == 'Liquid'">
           <label for="baselineLiquidFlow">Modified Liquid Flow</label>
           <div class="input-group">
-            <input name="{{'liquidFlow_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedLosses[index].loss.flowRate"
-              id="{{liquidFlow_+index}}" onfocus="this.select();" (input)="checkFlowRate(2, modifiedLosses[index].loss.flowRate, index)"
+            <input name="{{'liquidFlowMod_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedLosses[index].loss.flowRate"
+              id="{{'liquidFlowMod_'+index}}" onfocus="this.select();" (input)="checkFlowRate(2, modifiedLosses[index].loss.flowRate, index)"
               (focus)="focusField('liquidFlow')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>

@@ -56,12 +56,16 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       let tmpModified: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       if (material.chargeMaterialType == 'Solid') {
         tmpBaseline = material.solidChargeMaterial;
-        tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].solidChargeMaterial;
       } else if (material.chargeMaterialType == 'Liquid') {
         tmpBaseline = material.liquidChargeMaterial;
-        tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].liquidChargeMaterial;
       } else if (material.chargeMaterialType == 'Gas') {
         tmpBaseline = this.checkGasFeedRate(material.gasChargeMaterial);
+      }
+      if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Solid') {
+        tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].solidChargeMaterial;
+      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Liquid') {
+        tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].liquidChargeMaterial;
+      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Gas') {
         tmpModified = this.checkGasFeedRate(this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].gasChargeMaterial);
       }
       let checkTemp: boolean = this.checkVal(tmpBaseline.initialTemperature, tmpModified.initialTemperature);
