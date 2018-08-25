@@ -15,7 +15,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: ['', Validators.required],
       powerFactor: ['', Validators.required],
       operatingTime: ['', Validators.required],
-      name: ['Loss #'+lossNum]
+      name: ['Loss #' + lossNum]
     })
   }
 
@@ -40,6 +40,16 @@ export class AuxiliaryPowerLossesService {
       operatingTime: [loss.operatingTime, Validators.required],
       name: [loss.name]
     })
+  }
+
+  checkWarnings(loss: AuxiliaryPowerLoss): string {
+    if (loss.supplyVoltage < 0) {
+      return 'Supply Voltage should be greater than 0 V';
+    } else if (loss.supplyVoltage > 480) {
+      return 'Supply Voltage should be less than 480 V';
+    } else {
+      return null;
+    }
   }
 
 }

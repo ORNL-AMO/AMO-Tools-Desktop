@@ -6,6 +6,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { WallLossWarnings, WallLossesService } from '../wall-losses.service';
+import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -35,48 +37,41 @@ export class WallLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
-  windVelocityError: string = null;
-  surfaceAreaError: string = null;
-  firstChange: boolean = true;
-  counter: any;
-  surfaceTmpError: string = null;
-  emissivityError: string = null;
-  surfaceEmissivityError: string = null;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
-  constructor(private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  warnings: WallLossWarnings;
+  constructor(private wallLossCompareService: WallLossCompareService, private wallLossesService: WallLossesService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnInit() {
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
-    this.checkInputError(true);
+    this.checkWarnings();
     if (!this.baselineSelected) {
       this.disableForm();
     }
   }
 
+
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      //on changes to baseline selected enable/disable form
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if(changes.baselineSelected){
+      if(!changes.baselineSelected.firstChange){
+        //on changes to baseline selected enable/disable form
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
 
-  //iterate through form elements and disable
+  //disable select input fields
   disableForm() {
     this.wallLossesForm.controls.surfaceShape.disable();
-    // this.wallLossesForm.disable();
   }
-  //iterate through form elements and enable
+  //enable select input fields
   enableForm() {
     this.wallLossesForm.controls.surfaceShape.enable();
-    // this.wallLossesForm.enable();
   }
 
   //emits to wall-losses.component the focused field changed
@@ -88,47 +83,19 @@ export class WallLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   //check iputs for errors
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.wallLossesForm.controls.windVelocity.value < 0) {
-      this.windVelocityError = 'Wind Velocity must be equal or greater than 0';
-    } else {
-      this.windVelocityError = null;
-    }
-    if (this.wallLossesForm.controls.surfaceArea.value < 0) {
-      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
-    } else {
-      this.surfaceAreaError = null;
-    }
-
-    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
-      this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
-    } else {
-      this.surfaceTmpError = null;
-    }
-    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
-      this.emissivityError = 'Surface emissivity must be between 0 and 1';
-    } else {
-      this.emissivityError = null;
-    }
-
-    if (this.windVelocityError || this.surfaceAreaError || this.surfaceTmpError || this.emissivityError) {
-      this.inputError.emit(true);
-      this.wallLossCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.wallLossCompareService.inputError.next(false);
-    }
+  checkWarnings(){
+    let tmpLoss: WallLoss = this.wallLossesService.getWallLossFromForm(this.wallLossesForm);
+    this.warnings = this.wallLossesService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.wallLossesService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.calculate.emit(true);
     this.saveEmit.emit(true);
   }
-
 
   setProperties() {
     let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
@@ -136,7 +103,7 @@ export class WallLossesFormComponent implements OnInit {
       conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     })
     this.calculate.emit(true);
-    this.checkInputError();
+    this.save();
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));

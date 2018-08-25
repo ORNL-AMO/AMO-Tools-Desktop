@@ -56,7 +56,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('settings.energyResultUnit = ' + this.settings.energyResultUnit);
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

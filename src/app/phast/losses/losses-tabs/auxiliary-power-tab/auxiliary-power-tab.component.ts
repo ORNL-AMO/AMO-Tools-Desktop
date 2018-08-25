@@ -25,7 +25,6 @@ export class AuxiliaryPowerTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService, private cd: ChangeDetectorRef) { }
 
@@ -33,13 +32,10 @@ export class AuxiliaryPowerTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.auxiliaryPowerCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
 
@@ -47,7 +43,6 @@ export class AuxiliaryPowerTabComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -64,7 +59,6 @@ export class AuxiliaryPowerTabComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-
   setNumLosses() {
     if (this.phast.losses) {
       if (this.phast.losses.auxiliaryPowerLosses) {
@@ -72,23 +66,33 @@ export class AuxiliaryPowerTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.auxiliaryPowerCompareService.baselineAuxLosses) {
       this.auxiliaryPowerCompareService.baselineAuxLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
+        if (warnings != null) {
+          hasWarning = true;
         }
       })
     }
     if (this.auxiliaryPowerCompareService.modifiedAuxLosses && !this.inSetup) {
       this.auxiliaryPowerCompareService.modifiedAuxLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
+        if (warnings != null) {
+          hasWarning = true;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 
