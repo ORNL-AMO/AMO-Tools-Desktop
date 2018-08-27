@@ -15,6 +15,15 @@ export const pressure = {
         display: '(kPa)'
       }
       , to_anchor: 1
+    },
+    kPag: {
+      name: {
+        singular: 'Kilopascal'
+        , plural: 'Kilopascals',
+        display: '(kPag)'
+      }
+      , to_anchor: 1
+      , anchor_shift: -101.325
     }
     , MPa: {
       name: {
@@ -39,6 +48,15 @@ export const pressure = {
         display: '(bar)'
       }
       , to_anchor: 100
+    },
+    barg: {
+      name: {
+        singular: 'Bar'
+        , plural: 'Bar',
+        display: '(barg)'
+      }
+      , to_anchor: 100
+      , anchor_shift: -1.01325
     }
     , torr: {
       name: {
@@ -105,6 +123,15 @@ export const pressure = {
         display: '(psi)'
       }
       , to_anchor: 1 / 1000
+    },
+    psig: {
+      name: {
+        singular: 'Pound per Square Inch'
+        , plural: 'Pounds per Square Inch',
+        display: '(psig)'
+      }
+      , to_anchor: 1 / 1000
+      , anchor_shift: -14.696 / 1000
     }
     , ksi: {
       name: {
