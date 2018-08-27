@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { PrvInput, PrvOutput } from '../../../shared/models/steam';
 import { SteamService } from '../steam.service';
@@ -15,6 +15,14 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 export class PrvComponent implements OnInit {
   @Input()
   settings: Settings;
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
 
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -37,6 +45,18 @@ export class PrvComponent implements OnInit {
     this.getForm();
     this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm, this.isSuperHeating);
     this.calculate(this.inletForm, this.feedwaterForm)
+  }
+  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setTab(str: string) {

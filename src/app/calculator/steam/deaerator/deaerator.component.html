@@ -1,8 +1,8 @@
 <div class="d-flex h-100 modify-conditions steam standalone-calculator">
   <div class="d-flex flex-column modification w-50 scroll-item mh-100">
-    <div #leftPanelHeader class="header mr-2 ml-2">
-      <div class="col-md-auto ico-col">
-        <!-- <img src="assets/images/nema.png" class="ico-size4"> -->
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/calculator-icons/steam-icons/deaerator.png" class="ico-size">
       </div>
       <h3>Deaerator Calculator</h3>
     </div>
@@ -10,13 +10,17 @@
       <app-deaerator-form [deaeratorForm]="deaeratorForm" [settings]="settings" (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-deaerator-form>
     </div>
   </div>
-  <div class="d-flex flex-column w-50 mh-100 scroll-item">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0" (click)="setTab('results')">Results</a>
+  <div class="d-flex flex-column w-50 scroll-item mh-100">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
       </div>
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-        <a (click)="setTab('help')">Help</a>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
       </div>
     </div>
     <div class="d-flex">

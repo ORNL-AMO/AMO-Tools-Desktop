@@ -90,7 +90,6 @@ export class SteamPropertiesComponent implements OnInit {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
-    console.log(this.headerHeight);
   }
 
   setField(str: string) {
