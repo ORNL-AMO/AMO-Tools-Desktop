@@ -3,6 +3,7 @@ import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings"
 
 export const MockFsat: Assessment = {
+    isExample: true,
     name: "Fan Example",
     type: "FSAT",
     fsat: {

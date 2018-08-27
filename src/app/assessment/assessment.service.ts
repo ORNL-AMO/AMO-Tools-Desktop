@@ -42,20 +42,17 @@ export class AssessmentService {
       this.subTab = str2;
     }
     if (assessment.type == 'PSAT') {
-      //example psat id == 2
-      if (assessment.psat.setupDone && !str && (assessment.id != 2)) {
+      if (assessment.psat.setupDone && !str && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
-      //example phast id == 1
-      if (assessment.phast.setupDone && !str && (assessment.id != 1)) {
+      if (assessment.phast.setupDone && !str && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
     } else if (assessment.type == 'FSAT') {
-      //example fsat id == 3
-      if (assessment.fsat.setupDone && !str) {
+      if (assessment.fsat.setupDone && !str && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);

@@ -36,8 +36,7 @@
             <app-acknowledgments-page></app-acknowledgments-page>
         </div>
         <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'settings'">
-            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="getWorkingDirectoryData()"
-                (resetSystemSettingsEmit)="showResetSystemSettingsModal()"></app-assessment-settings>
+            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="getData()"></app-assessment-settings>
         </div>
         <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'custom-materials'">
             <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
@@ -209,8 +208,8 @@
         </div>
     </div>
 </div>
-
-<div bsModal #resetSystemSettingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="resetSystemSettingsModalLabel"
+<!-- <app-reset-data-modal *ngIf="showSettingsModal" (closeModal)="hideResetSystemSettingsModal()"></app-reset-data-modal> -->
+<!-- <div bsModal #resetSystemSettingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="resetSystemSettingsModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -277,6 +276,6 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <ng2-toasty></ng2-toasty>

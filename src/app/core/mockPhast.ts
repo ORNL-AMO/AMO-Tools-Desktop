@@ -2,6 +2,7 @@ import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
 declare const packageJson;
 export const MockPhast: Assessment = {
+    isExample: true,
     type: "PHAST",
     name: "Reheat Furnace Case Study",
     phast: {

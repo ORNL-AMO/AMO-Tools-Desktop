@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -7,12 +7,11 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
-import { AnimatedCheckmarkComponent } from '../shared/animated-checkmark/animated-checkmark.component';
 import { Subscription } from 'rxjs';
 
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -49,7 +48,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
   @ViewChild('preAssessmentModal') public preAssessmentModal: ModalDirective;
-  @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
+  // @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
 
   importInProgress: boolean = false;
   isExportView: boolean = false;
@@ -76,14 +75,14 @@ export class DashboardComponent implements OnInit {
   selectedTool: string;
   selectedToolSub: Subscription;
 
-
+  // showSettingsModal: boolean = false;
   //reset application settings
 
-  resetAll: boolean = false;
-  resetAppSettings: boolean = false;
-  resetExampleAssessments: boolean = false;
-  resetUserAssessments: boolean = false;
-  resetCustomMaterials: boolean = false;
+  // resetAll: boolean = false;
+  // resetAppSettings: boolean = false;
+  // resetExampleAssessments: boolean = false;
+  // resetUserAssessments: boolean = false;
+  // resetCustomMaterials: boolean = false;
 
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
@@ -505,101 +504,100 @@ export class DashboardComponent implements OnInit {
     this.toastyService.warning(toastOptions);
   }
 
-  showResetSystemSettingsModal() {
-    this.resetSystemSettingsModal.show();
-  }
+  //  showResetSystemSettingsModal() {
+  //   this.showSettingsModal = true;
+  //  }
 
-  hideResetSystemSettingsModal() {
-    this.resetSystemSettingsModal.hide();
-    this.resetResetSystemSettingsSelection();
-  }
+  //  hideResetSystemSettingsModal() {
+  //   this.showSettingsModal = false;
+  //  }
 
-  resetResetSystemSettingsSelection() {
-    this.resetAll = false;
-    this.resetAppSettings = false;
-    this.resetExampleAssessments = false;
-    this.resetUserAssessments = false;
-    this.resetCustomMaterials = false;
-  }
+  // resetResetSystemSettingsSelection() {
+  //   this.resetAll = false;
+  //   this.resetAppSettings = false;
+  //   this.resetExampleAssessments = false;
+  //   this.resetUserAssessments = false;
+  //   this.resetCustomMaterials = false;
+  // }
 
-  toggleResetSystemSettingsOption(option: string) {
-    switch (option) {
-      case "reset-all": {
-        this.resetAll = !this.resetAll;
-        if (this.resetAll) {
-          this.resetAppSettings = true;
-          this.resetExampleAssessments = true;
-          this.resetUserAssessments = true;
-          this.resetCustomMaterials = true;
-        }
-        else {
-          this.resetAppSettings = false;
-          this.resetExampleAssessments = false;
-          this.resetUserAssessments = false;
-          this.resetCustomMaterials = false;
-        }
-        break;
-      }
-      case "app-settings": {
-        this.resetAppSettings = !this.resetAppSettings;
-        break;
-      }
-      case "example-assessments": {
-        this.resetExampleAssessments = !this.resetExampleAssessments;
-        break;
-      }
-      case "user-assessments": {
-        this.resetUserAssessments = !this.resetUserAssessments;
-        break;
-      }
-      case "custom-materials": {
-        this.resetCustomMaterials = !this.resetCustomMaterials;
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
+  // toggleResetSystemSettingsOption(option: string) {
+  //   switch (option) {
+  //     case "reset-all": {
+  //       this.resetAll = !this.resetAll;
+  //       if (this.resetAll) {
+  //         this.resetAppSettings = true;
+  //         this.resetExampleAssessments = true;
+  //         this.resetUserAssessments = true;
+  //         this.resetCustomMaterials = true;
+  //       }
+  //       else {
+  //         this.resetAppSettings = false;
+  //         this.resetExampleAssessments = false;
+  //         this.resetUserAssessments = false;
+  //         this.resetCustomMaterials = false;
+  //       }
+  //       break;
+  //     }
+  //     case "app-settings": {
+  //       this.resetAppSettings = !this.resetAppSettings;
+  //       break;
+  //     }
+  //     case "example-assessments": {
+  //       this.resetExampleAssessments = !this.resetExampleAssessments;
+  //       break;
+  //     }
+  //     case "user-assessments": {
+  //       this.resetUserAssessments = !this.resetUserAssessments;
+  //       break;
+  //     }
+  //     case "custom-materials": {
+  //       this.resetCustomMaterials = !this.resetCustomMaterials;
+  //       break;
+  //     }
+  //     default: {
+  //       break;
+  //     }
+  //   }
+  // }
 
-  resetSystemSettingsAccept() {
-    console.log('resetSystemSettingsAccept()');
-    if (this.resetAppSettings) {
-      this.resetFactorySystemSettings();
-    }
-    if (this.resetExampleAssessments) {
-      this.resetFactoryExampleAssessments();
-    }
-    if (this.resetUserAssessments) {
-      this.resetFactoryUserAssessments();
-    }
-    if (this.resetCustomMaterials) {
-      this.resetFactoryCustomMaterials();
-    }
-    this.hideResetSystemSettingsModal();
-  }
+  // resetSystemSettingsAccept() {
+  //   console.log('resetSystemSettingsAccept()');
+  //   if (this.resetAppSettings) {
+  //     this.resetFactorySystemSettings();
+  //   }
+  //   if (this.resetExampleAssessments) {
+  //     this.resetFactoryExampleAssessments();
+  //   }
+  //   if (this.resetUserAssessments) {
+  //     this.resetFactoryUserAssessments();
+  //   }
+  //   if (this.resetCustomMaterials) {
+  //     this.resetFactoryCustomMaterials();
+  //   }
+  //   this.hideResetSystemSettingsModal();
+  // }
 
-  resetFactorySystemSettings() {
-    console.log('resetFactorySystemSettings()');
+  // resetFactorySystemSettings() {
+  //   console.log('resetFactorySystemSettings()');
 
-  }
+  // }
 
-  resetFactoryExampleAssessments() {
-    console.log('resetFactoryExampleAssessments()');
+  // resetFactoryExampleAssessments() {
+  //   console.log('resetFactoryExampleAssessments()');
 
-  }
+  // }
 
-  resetFactoryUserAssessments() {
-    console.log('resetFactoryUserAssessments()');
-  }
+  // resetFactoryUserAssessments() {
+  //   console.log('resetFactoryUserAssessments()');
+  // }
 
-  resetFactoryCustomMaterials() {
-    console.log('resetFactoryCustomMaterials()');
-    if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
-      console.log('initCustomDbMaterials()');
-      this.suiteDbService.initCustomDbMaterials();
-    }
-  }
+  // resetFactoryCustomMaterials() {
+  //   console.log('resetFactoryCustomMaterials()');
+  //   if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
+  //     console.log('initCustomDbMaterials()');
+  //     this.suiteDbService.initCustomDbMaterials();
+  //   }
+  // }
 }
 
 export interface ImportDataObjects {

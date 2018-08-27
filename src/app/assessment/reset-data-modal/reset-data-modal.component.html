@@ -1,0 +1,68 @@
+<div bsModal #resetSystemSettingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="resetSystemSettingsModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reset System Settings</h3>
+                <button class="close" (click)="hideResetSystemSettingsModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            All selected options will be restored to the factory default state.
+                            <br>
+                            <span class="red">This cannot be undone!</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row toggle-btn" (click)="toggleResetSystemSettingsOption('reset-all')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="resetAll"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Reset All
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('app-settings')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="resetAppSettings"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Application Settings
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('example-assessments')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="resetExampleAssessments"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Example Assessments
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('user-assessments')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="resetUserAssessments"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Delete User Assessments
+                    </div>
+                </div>
+                <div class="row toggle-btn pad-top-10" (click)="toggleResetSystemSettingsOption('custom-materials')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="resetCustomMaterials"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Delete Custom Materials
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-right" (click)="resetSystemSettingsAccept()" data-dismiss="modal">Accept</button>
+                <button type="button" class="btn btn-secondary pull-left" (click)="hideResetSystemSettingsModal()" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,7 @@ export class AssessmentDbService {
       if (this.indexedDbService.db) {
         this.indexedDbService.getAllAssessments().then(assessments => {
           this.allAssessments = assessments;
+          console.log(this.allAssessments);
           resolve(true)
         })
       } else {
@@ -38,6 +39,46 @@ export class AssessmentDbService {
   getByDirectoryId(id: number): Array<Assessment> {
     let selectedAssessments: Array<Assessment> = _.filter(this.allAssessments, (assessment) => { return assessment.directoryId == id });
     return selectedAssessments;
+  }
+
+  getPhastExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample == true });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type == 'PHAST') {
+          tmpExample = example
+        }
+      })
+    }
+    return tmpExample;
+  }
+
+  getFsatExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment) => { return assessment.isExample == true });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type == 'FSAT') {
+          tmpExample = example
+        }
+      })
+    }
+    return tmpExample;
+  }
+  getPsatExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
+      return (assessment.isExample == true);
+    });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type == 'PSAT') {
+          tmpExample = example
+        }
+      })
+    }
+    return tmpExample;
   }
 
 }

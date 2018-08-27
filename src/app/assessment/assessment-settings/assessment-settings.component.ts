@@ -38,11 +38,18 @@ export class AssessmentSettingsComponent implements OnInit {
   showPhastSettings:boolean = false;
   showSteamSettings: boolean = false;
   showFsatSettings: boolean = false;
+
+  showSettingsModal: boolean = false;
+
   constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
-    let results = this.settingsDbService.getByDirectoryId(this.directory.id);
+    this.initializeSettings();
+  }
+
+  initializeSettings(){
+    let results: Settings = this.settingsDbService.getByDirectoryId(this.directory.id);
     if (results) {
       this.settings = results;
       this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -87,10 +94,7 @@ export class AssessmentSettingsComponent implements OnInit {
   resetData() {
     this.resetDataEmit.emit(true);
   }
-  resetSystemSettings() {
-    console.log('resetSystemSettings()');
-    this.resetSystemSettingsEmit.emit(true);
-  }
+
   //simple toggle function needed for each section
   toggleGeneralSettings(){
     this.showGeneralSettings = !this.showGeneralSettings;
@@ -108,4 +112,14 @@ export class AssessmentSettingsComponent implements OnInit {
   toggleFsatSettings(){
     this.showFsatSettings = !this.showFsatSettings;
   }
+
+  showResetSystemSettingsModal() {
+    this.showSettingsModal = true;
+   }
+
+   hideResetSystemSettingsModal() {
+    this.showSettingsModal = false;
+    this.initializeSettings();
+    this.emitUpdateDirectory.emit(true);
+   }
 }

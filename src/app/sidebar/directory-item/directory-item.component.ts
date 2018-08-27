@@ -30,6 +30,7 @@ export class DirectoryItemComponent implements OnInit {
   constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService) { }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("changes")
     if (changes.directory && !this.isFirstChange) {
       this.populateDirectories(this.directory);
     } else if (changes.newDirEventToggle && !this.isFirstChange) {
@@ -57,6 +58,7 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   populateDirectories(directoryRef: DirectoryDbRef) {
+    console.log('populate')
     this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
     this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
     this.directory.collapsed = false;
