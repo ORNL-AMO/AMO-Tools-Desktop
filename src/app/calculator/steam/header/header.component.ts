@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { HeaderOutput, HeaderInput, HeaderInputObj } from '../../../shared/models/steam';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,7 +14,12 @@ import { Settings } from '../../../shared/models/settings';
 export class HeaderComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   headerPressureForm: FormGroup;
@@ -34,8 +39,17 @@ export class HeaderComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.getForms();
+  } 
+   ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
   }
-
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }
