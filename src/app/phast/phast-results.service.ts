@@ -110,7 +110,7 @@ export class PhastResultsService {
       if (tmpForm.status == 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
-        results.energyInputHeatDelivered = tmpResults.heatDelivered;
+        results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.heatDelivered;
       }
     }
 
