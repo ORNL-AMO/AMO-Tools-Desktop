@@ -1908,6 +1908,23 @@ Toasty Overrides ================================= */
   background-color: rgba(255, 0, 0, 1);
 }
 
+/* modal checklist style */
+.bold-bottom-divider {
+  border-bottom: 2px solid #888;
+}
+
+.bottom-divider {
+  border-bottom: 1px solid #bbb;
+}
+
+.toggle-btn:hover {
+  cursor: pointer;
+}
+
+.pad-top-10 {
+  padding-top: 10px;
+}
+
 /* .chart-container .fa-download:hover,
 #gridToggle .fa-download:hover {
   cursor: pointer;

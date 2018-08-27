@@ -24,7 +24,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
-
+import { SharedModule } from '../shared/shared.module';
 
 import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
 import { AboutPageComponent } from '../about-page/about-page.component';
@@ -103,7 +103,8 @@ import { PhastReportTutorialComponent } from '../tutorials/phast-report-tutorial
     ImportExportModule,
     ReportRollupModule,
     FsatModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    SharedModule
   ],
   providers: [
     AssessmentService,

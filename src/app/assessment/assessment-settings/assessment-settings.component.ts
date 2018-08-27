@@ -21,6 +21,8 @@ export class AssessmentSettingsComponent implements OnInit {
   directory: Directory;
   @Output('resetDataEmit')
   resetDataEmit = new EventEmitter<boolean>();
+  @Output('resetSystemSettingsEmit')
+  resetSystemSettingsEmit = new EventEmitter<boolean>();
   @Output('emitUpdateDirectory')
   emitUpdateDirectory = new EventEmitter<boolean>();
 
@@ -84,6 +86,10 @@ export class AssessmentSettingsComponent implements OnInit {
   }
   resetData() {
     this.resetDataEmit.emit(true);
+  }
+  resetSystemSettings() {
+    console.log('resetSystemSettings()');
+    this.resetSystemSettingsEmit.emit(true);
   }
   //simple toggle function needed for each section
   toggleGeneralSettings(){

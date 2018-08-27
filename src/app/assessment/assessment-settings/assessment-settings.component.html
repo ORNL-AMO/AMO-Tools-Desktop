@@ -75,6 +75,14 @@
         </div>
 
         <div class="reset-data" *ngIf="directory.id == 1">
+          <h3>Restore System Settings</h3>
+          <p class="help-text">Restoring system settings will provide options for resetting all application settings to their default values, returning all example assessments to their original state, deleting all user-created assessments/pre-assessments, and deleting all user-created materials.
+            <span class="red">This cannot be undone!</span>
+          </p>
+          <button class="btn btn-danger pull-right" (click)="resetSystemSettings()">Restore System Settings</button>
+        </div>
+
+        <div class="reset-data" *ngIf="directory.id == 1">
           <h3>Delete Data</h3>
           <p class="help-text">Deleting data will reset your application data to it's initial state and delete everything else.
             <span class="red">This cannot be undone!</span>
