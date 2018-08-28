@@ -80,7 +80,7 @@ export class PsatComponent implements OnInit {
   _psat: PSAT;
   fieldDataReady: boolean = false;
   motorReady: boolean = false;
-  subTab: string = 'system-basics';
+  // subTab: string = 'system-basics';
   settings: Settings;
   isAssessmentSettings: boolean = false;
   isModalOpen: boolean = false;
@@ -98,6 +98,8 @@ export class PsatComponent implements OnInit {
   calcTabSub: Subscription;
   openModSub: Subscription;
   showAdd: boolean;
+  stepTabSubscription:Subscription;
+  stepTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -201,6 +203,10 @@ export class PsatComponent implements OnInit {
           this.showAddNewModal();
         }
       })
+
+      this.stepTabSubscription = this.psatService.stepTab.subscribe(val => {
+        this.stepTab = val;
+      })
     })
   }
 
@@ -215,6 +221,7 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
+    if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
   }
 
   ngAfterViewInit() {

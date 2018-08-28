@@ -2,7 +2,7 @@
   <div #header class="w-100 hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
     <!--system-setup-->
-    <nav class="hide-print" *ngIf="mainTab == 'system-setup'">
+    <!-- <nav class="hide-print" *ngIf="mainTab == 'system-setup'">
       <div class="d-flex tabs psat subtabs progress-tabs flex-wrap">
         <div class="fixed-tab-size success" [ngClass]="{'active': subTab == 'system-basics'}">
           <a (click)="changeSubTab('system-basics')">
@@ -24,7 +24,7 @@
           <app-psat-tabs-tooltip [badgeClass]="tab4Status" [reveal]="display4" [display]="badge4Hover"></app-psat-tabs-tooltip>
         </div>
       </div>
-    </nav>
+    </nav> -->
     <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
       <app-psat-tabs [settings]="settings"></app-psat-tabs>
     </div>
