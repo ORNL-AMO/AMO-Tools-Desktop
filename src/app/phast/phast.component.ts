@@ -421,7 +421,6 @@ export class PhastComponent implements OnInit {
   }
 
   saveNewMod(mod: Modification) {
-    console.log('save new mod');
     this._phast.modifications.push(mod);
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
