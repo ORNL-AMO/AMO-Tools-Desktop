@@ -61,7 +61,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   focusDAvg: Array<any>;
   curveChanged: boolean = false;
   graphColors: Array<string>;
-  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>;
   tablePointsMax: Array<any>;
   tablePointsAvg: Array<any>;
   deleteCount: number = 0;
@@ -100,11 +99,16 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   avgData: any;
   maxData: any;
+
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>();
     this.tablePointsMax = new Array<any>();
     this.tablePointsAvg = new Array<any>();
     this.focusDMax = new Array<any>();
@@ -112,6 +116,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.pumpType = this.efficiencyForm.controls.pumpType.value;
 
     this.isGridToggled = false;
+
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
 
@@ -132,6 +142,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     setTimeout(() => {
       this.resizeGraph();
     }, 100)
+  }
+
+  initColumnTitles() {
+    this.columnTitles = ['Flow Rate (' + this.settings.flowMeasurement + ')', 'Max Efficiency (%)', 'Avg. Efficiency (%)'];
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -615,8 +629,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
         var detailBoxWidth = 160;
         var detailBoxHeight = 120;
-        var tooltipPointerWidth = detailBoxWidth * 0.05;
-        var tooltipPointerHeight = detailBoxHeight * 0.05;
 
         //dynamic table
         tableFlowRate = format(this.maxD.flowRate);
@@ -630,7 +642,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
             "<div class='tooltip-pointer'></div><p><strong><div>Flow Rate: </div></strong><div>" + format(this.maxD.flowRate) + " " + this.settings.flowMeasurement + "</div>" +
             "<strong><div>Maximum: </div></strong><div>" + format(this.maxD.y) + " %</div>" +
             "<strong><div>Average: </div></strong><div>" + format(this.avgD.y) + " %</div></p>")
-          .style("left", Math.min(((this.margin.left + this.x(this.avgD.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
+          .style("left", (this.margin.left + this.x(this.avgD.x) - (detailBoxWidth / 2)) + "px")
           .style("top", (this.margin.top + this.y(this.avgD.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
@@ -646,7 +658,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.tooltipPointer
           .attr("class", "tooltip-pointer")
           .html("<div></div>")
-          .style("left", (this.margin.left + this.x(this.avgD.x)) + 5 + "px")
+          .style("left", (this.margin.left + this.x(this.avgD.x) - 10) + "px")
           .style("top", (this.margin.top + this.y(this.avgD.y) + 16) + "px")
           .style("position", "absolute")
           .style("width", "0px")
@@ -661,25 +673,25 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.detailBox
           .transition()
           .delay(100)
-          .duration(600)
+          .duration(300)
           .style("opacity", 0);
 
         this.tooltipPointer
           .transition()
           .delay(100)
-          .duration(600)
+          .duration(300)
           .style("opacity", 0);
 
         this.focusAvg
           .transition()
           .delay(100)
-          .duration(600)
+          .duration(300)
           .style("opacity", 0);
 
         this.focusMax
           .transition()
           .delay(100)
-          .duration(600)
+          .duration(300)
           .style("opacity", 0);
       });
 
@@ -698,7 +710,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
     //max line
@@ -735,24 +747,24 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     tableFocusAvg.attr("transform", "translate(" + this.x(this.avgD.x) + "," + this.y(this.avgD.y) + ")");
     this.tablePointsAvg.push(tableFocusAvg);
 
-    let dataPiece = {
+    let colors = {
       borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
-      fillColor: this.graphColors[i % this.graphColors.length],
-      flowRate: tableFlowRate.toString(),
-      averageEfficiency: tableAverageEfficiency.toString(),
-      maxEfficiency: tableMaxEfficiency.toString()
+      fillColor: this.graphColors[i % this.graphColors.length]
     };
-    this.tableData.push(dataPiece);
+    this.keyColors.push(colors);
+    let data = [tableFlowRate.toString(), tableMaxEfficiency.toString(), tableAverageEfficiency.toString()];
+    this.rowData.push(data);
   }
 
   //dynamic table
   resetTableData() {
-    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, maxEfficiency: string, averageEfficiency: string }>();
     this.tablePointsMax = new Array<any>();
     this.tablePointsAvg = new Array<any>();
     this.focusDMax = new Array<any>();
     this.focusDAvg = new Array<any>();
     this.deleteCount = 0;
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
   }
 
   //dynamic table
@@ -760,7 +772,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.svg.selectAll('.tablePoint').remove();
 
-    for (let i = 0; i < this.tableData.length; i++) {
+    for (let i = 0; i < this.rowData.length; i++) {
 
       let tableFocusMax = this.svg.append("g")
         .attr("class", "tablePoint")
@@ -770,8 +782,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       tableFocusMax.append("circle")
         .attr("r", 6)
         .attr("id", "tablePointMax-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
       tableFocusMax.attr("transform", "translate(" + this.x(this.focusDMax[i].x) + "," + this.y(this.focusDMax[i].y) + ")");
@@ -785,8 +797,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       tableFocusAvg.append("circle")
         .attr("r", 6)
         .attr("id", "tablePointAvg-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
       tableFocusAvg.attr("transform", "translate(" + this.x(this.focusDAvg[i].x) + "," + this.y(this.focusDAvg[i].y) + ")");
@@ -795,23 +807,25 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   deleteFromTable(i: number) {
 
-    for (let j = i; j < this.tableData.length - 1; j++) {
-      this.tableData[j] = this.tableData[j + 1];
+    for (let j = i; j < this.rowData.length - 1; j++) {
       this.tablePointsMax[j] = this.tablePointsMax[j + 1];
       this.tablePointsAvg[j] = this.tablePointsAvg[j + 1];
       this.focusDMax[j] = this.focusDMax[j + 1];
       this.focusDAvg[j] = this.focusDAvg[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
 
-    if (i != this.tableData.length - 1) {
+    if (i != this.rowData.length - 1) {
       this.deleteCount += 1;
     }
 
-    this.tableData.pop();
     this.tablePointsMax.pop();
     this.tablePointsAvg.pop();
     this.focusDMax.pop();
     this.focusDAvg.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 

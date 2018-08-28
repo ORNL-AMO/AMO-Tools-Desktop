@@ -62,7 +62,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   focusDCurrent: Array<any>;
   curveChanged: boolean = false;
   graphColors: Array<string>;
-  tableData: Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>;
   tablePointsEfficiency: Array<any>;
   tablePointsPower: Array<any>;
   tablePointsCurrent: Array<any>;
@@ -102,11 +101,15 @@ export class MotorPerformanceGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   constructor(private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
-    this.tableData = new Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>();
     this.tablePointsEfficiency = new Array<any>();
     this.tablePointsPower = new Array<any>();
     this.tablePointsCurrent = new Array<any>();
@@ -122,11 +125,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.isGridToggled = false;
 
-    // d3.select('app-motor-performance').selectAll('#gridToggleBtn')
-    //   .on("click", () => {
-    //     this.toggleGrid();
-    //   });
-
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -145,6 +148,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
     setTimeout(() => {
       this.resizeGraph();
     }, 100);
+  }
+
+  initColumnTitles() {
+    this.columnTitles = ['Motor Shaft Load (%)',	'Current (%)',	'Power Factor (%)',	'Efficiency (%)'];
+    
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -825,7 +833,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
 
     //current line
@@ -879,20 +887,18 @@ export class MotorPerformanceGraphComponent implements OnInit {
     tableFocusEfficiency.attr("transform", "translate(" + this.x(this.dEfficiency.x) + "," + this.y(this.dEfficiency.y) + ")");
     this.tablePointsEfficiency.push(tableFocusEfficiency);
 
-    let dataPiece = {
+    let colors = {
       borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
-      fillColor: this.graphColors[i % this.graphColors.length],
-      motorShaftLoad: this.motorShaftLoad.toString(),
-      current: this.current.toString(),
-      powerFactor: this.powerFactor.toString(),
-      efficiency: this.efficiency.toString()
+      fillColor: this.graphColors[i % this.graphColors.length]
     };
-    this.tableData.push(dataPiece);
+    this.keyColors.push(colors);
+    let data = [this.motorShaftLoad.toString(), this.current.toString(), this.powerFactor.toString(), this.efficiency.toString()];
+    this.rowData.push(data);
   }
 
   //dynamic table
   resetTableData() {
-    this.tableData = new Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>();
+    this.rowData = new Array<Array<string>>();
     this.tablePointsCurrent = new Array<any>();
     this.tablePointsPower = new Array<any>();
     this.tablePointsEfficiency = new Array<any>();
@@ -907,7 +913,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.svg.selectAll('.tablePoint').remove();
 
-    for (let i = 0; i < this.tableData.length; i++) {
+    for (let i = 0; i < this.rowData.length; i++) {
 
       let tableFocusCurrent = this.svg.append("g")
         .attr("class", "tablePoint")
@@ -917,8 +923,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       tableFocusCurrent.append("circle")
         .attr("r", 6)
         .attr("id", "tablePointCurrent-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
       tableFocusCurrent.attr("transform", "translate(" + this.x(this.focusDCurrent[i].x) + "," + this.y(this.focusDCurrent[i].y) + ")");
@@ -931,8 +937,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       tableFocusPower.append("circle")
         .attr("r", 6)
         .attr("id", "tablePointPower-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
       tableFocusPower.attr("transform", "translate(" + this.x(this.focusDPower[i].x) + "," + this.y(this.focusDPower[i].y) + ")");
@@ -946,8 +952,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       tableFocusEfficiency.append("circle")
         .attr("r", 6)
         .attr("id", "tablePointEfficiency-" + i)
-        .style("fill", this.tableData[i].fillColor)
-        .style("stroke", this.tableData[i].borderColor)
+        .style("fill", this.keyColors[i].fillColor)
+        .style("stroke", this.keyColors[i].borderColor)
         .style("stroke-width", "3px")
         .style('pointer-events', 'none');
       tableFocusEfficiency.attr("transform", "translate(" + this.x(this.focusDEfficiency[i].x) + "," + this.y(this.focusDEfficiency[i].y) + ")");
@@ -956,33 +962,33 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   deleteFromTable(i: number) {
 
-    for (let j = i; j < this.tableData.length - 1; j++) {
-      this.tableData[j] = this.tableData[j + 1];
+    for (let j = i; j < this.rowData.length - 1; j++) {
       this.tablePointsCurrent[j] = this.tablePointsCurrent[j + 1];
       this.tablePointsEfficiency[j] = this.tablePointsEfficiency[j + 1];
       this.tablePointsPower[j] = this.tablePointsPower[j + 1];
       this.focusDCurrent[j] = this.focusDCurrent[j + 1];
       this.focusDEfficiency[j] = this.focusDEfficiency[j + 1];
       this.focusDPower[j] = this.focusDPower[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
 
-    if (i != this.tableData.length - 1) {
+    if (i != this.rowData.length - 1) {
       this.deleteCount += 1;
     }
 
-    this.tableData.pop();
     this.tablePointsCurrent.pop();
     this.tablePointsEfficiency.pop();
     this.tablePointsPower.pop();
     this.focusDCurrent.pop();
     this.focusDEfficiency.pop();
     this.focusDPower.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 
   highlightPoint(i: number) {
-    let x = this.x;
-    let y = this.y;
     var highlightedEfficiency = this.svg.select('#tablePointEfficiency-' + i)
       .attr('r', 8);
     var highlightedPower = this.svg.select('#tablePointPower-' + i)

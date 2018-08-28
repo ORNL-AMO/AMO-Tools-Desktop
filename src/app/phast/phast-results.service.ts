@@ -63,7 +63,6 @@ export class PhastResultsService {
     results.exothermicHeat = 0 - Math.abs(this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials, settings));
     results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
     results.grossHeatInput = results.totalInput;
-
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings);
     }
@@ -110,7 +109,7 @@ export class PhastResultsService {
       if (tmpForm.status == 'VALID') {
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
-        results.energyInputHeatDelivered = tmpResults.heatDelivered;
+        results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
       }
     }
 

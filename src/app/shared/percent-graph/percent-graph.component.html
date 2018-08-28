@@ -1,13 +1,18 @@
 <div class="percent-chart-container chart-container">
-	<div #ngChart>
+  <div class="d-flex w-100 justify-content-center align-items-center">
+    <div class="row m-0">
+      <div class="col-12 p-0">
+        <div #ngChart></div>
+      </div>
+    </div>
+  </div>
 
-	</div>
+  <div class="col-md-12 text-center hide-print">
+    <div class="graph-btn-container">
+      <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
+      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="22"
+        [adjustPercent]="false"></app-simple-tooltip>
+    </div>
+  </div>
 </div>
 
-
-<div>
-  <span #btnDownload class="percent-chart-btn fa fa-download hide-print" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')"
-        (mouseleave)="hideTooltip('btnExportChart')"></span>
-  <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustBottom]="-87" [adjustLeft]="-62" [adjustPercent]="false"></app-simple-tooltip>
-
-</div>

@@ -1,20 +1,18 @@
 .axis text {
   font: 10px sans-serif;
 }
+
 .axis path, .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
-
 #cashFlowDl {
   position: absolute;
   z-index: 9999;
-
   left: 30px
 }
-
 
 #cashFlowDl .fa-download {
   position: absolute;
@@ -29,22 +27,21 @@
   opacity: 1;
 }
 
-
 .expanded-chart {
-  padding: 10px;
+  padding: 5px;
 }
 
-td{
+td {
   font-size: small;
 }
 
-td{
+td {
   font-size: small;
   border-right: solid 1px darkgray;
   border-left: solid 1px darkgray;
   padding: 3px;
 }
 
-tbody{
+tbody {
   box-shadow: 0 4px 8px 0 grey
 }
