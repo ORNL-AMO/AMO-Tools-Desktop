@@ -107,11 +107,9 @@ export class PhastResultsService {
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
       let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
       if (tmpForm.status == 'VALID') {
-        console.log(results);
         let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
-        console.log(tmpResults);
         results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
-        results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.heatDelivered + phast.losses.energyInputEAF[0].electricityInput;
+        results.energyInputHeatDelivered = results.grossHeatInput - tmpResults.totalChemicalEnergyInput;
       }
     }
 
