@@ -74,13 +74,13 @@
 <div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" [ngClass]="{'phast':assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat':assessment.type == 'FSAT' }">
       <div class="modal-header">
         <button class="close pull-right" (click)="hideReportModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" *ngIf="showReport">
+      <div class="modal-body scroll-item" *ngIf="showReport">
         <app-phast-report *ngIf="assessment.type == 'PHAST'" [assessment]="assessment" [settings]="settings" [phast]="assessment.phast"
           [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
         <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings" [psat]="assessment.psat"

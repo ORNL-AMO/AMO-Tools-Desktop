@@ -113,3 +113,8 @@ padding: 6px
 .fsat .icon-image, .psat .icon-image{
   height: 26px;
 }
+
+.modal-body{
+  max-height: 85vh;
+  overflow: auto;
+}
