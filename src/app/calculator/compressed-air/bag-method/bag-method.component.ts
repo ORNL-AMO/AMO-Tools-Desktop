@@ -18,7 +18,6 @@ export class BagMethodComponent implements OnInit {
 
   headerHeight: number;
 
-
   inputs: BagMethodInput;
   outputs: BagMethodOutput;
 

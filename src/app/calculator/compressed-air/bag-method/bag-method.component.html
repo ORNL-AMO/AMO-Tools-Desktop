@@ -9,7 +9,6 @@
       </div>
     </div>
 
-
     <div class="d-flex flex-column m-4">
       <div class="tab-content">
         <form>
@@ -38,7 +37,6 @@
         </form>
       </div>
 
-      <!-- <app-bag-method-form [inputs]="inputs" [inputsArray]="inputsArray" [outputs]="outputs" [outputsArray]="outputsArray" (calculate)="calculateAnnualConsumption($event)" (emitChangeField)="changeField($event)"></app-bag-method-form> -->
       <app-bag-method-form *ngFor="let input of inputsArray; let i = index" [index]="i" [inputs]="input" [outputs]="outputsArray[i]"
         (calculate)="calculateAnnualConsumption($event)" (deleteLeakage)="deleteLeakage($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
 
@@ -47,12 +45,7 @@
       </div>
 
     </div>
-
-
-
-
   </div>
-
 
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">

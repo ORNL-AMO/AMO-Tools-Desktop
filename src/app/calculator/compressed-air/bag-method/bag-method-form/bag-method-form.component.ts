@@ -9,16 +9,10 @@ import { BagMethodInput, BagMethodOutput } from '../../../../shared/models/stand
 export class BagMethodFormComponent implements OnInit {
   @Input()
   inputs: BagMethodInput;
-  // @Input()
-  // inputsArray: Array<BagMethodInput>;
   @Input()
   outputs: BagMethodOutput;
-  // @Input()
-  // outputsArray: Array<BagMethodOutput>;
   @Output('calculate')
   calculate = new EventEmitter<{ inputs: BagMethodInput, index: number }>();
-  // calculate = new EventEmitter<BagMethodInput>();
-  // calculate = new EventEmitter<Array<BagMethodInput>>();
   @Output('deleteLeakage')
   deleteLeakage = new EventEmitter<number>();
   @Input()
