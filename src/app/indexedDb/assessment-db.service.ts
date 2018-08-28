@@ -17,7 +17,6 @@ export class AssessmentDbService {
       if (this.indexedDbService.db) {
         this.indexedDbService.getAllAssessments().then(assessments => {
           this.allAssessments = assessments;
-          console.log(this.allAssessments);
           resolve(true)
         })
       } else {

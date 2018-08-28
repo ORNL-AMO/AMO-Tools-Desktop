@@ -11,6 +11,9 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Assessment } from '../../shared/models/assessment';
+import { CoreService } from '../../core/core.service';
+import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
+import { AssessmentService } from '../assessment.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -27,7 +30,8 @@ export class ResetDataModalComponent implements OnInit {
   resetExampleAssessments: boolean = false;
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
+  deleting: boolean = false;
+  constructor(private suiteDbService: SuiteDbService, private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
   }
@@ -42,6 +46,7 @@ export class ResetDataModalComponent implements OnInit {
 
   hideResetSystemSettingsModal() {
     this.resetSystemSettingsModal.hide();
+    this.assessmentService.updateSidebarData.next(true);
     this.closeModal.emit(true);
   }
 
@@ -86,24 +91,27 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   resetSystemSettingsAccept() {
-    if (this.resetAppSettings) {
-      this.resetFactorySystemSettings();
-    }
-    if (this.resetExampleAssessments) {
-      this.resetFactoryExampleAssessments();
-    }
-    if (this.resetUserAssessments) {
-      this.resetFactoryUserAssessments();
-    }
+    this.deleting = true;
+    //independent of indexed db
     if (this.resetCustomMaterials) {
       this.resetFactoryCustomMaterials();
     }
-
-    setTimeout(() => {
-      console.log('hide')
-      this.hideResetSystemSettingsModal();
-    },1500)
-    // this.hideResetSystemSettingsModal();
+    //reset all data if resetting user assessments
+    if (this.resetUserAssessments) {
+      this.resetFactoryUserAssessments();
+    } else {
+      //reset settings
+      if (this.resetAppSettings) {
+        this.resetFactorySystemSettings();
+      }
+      //reset just examples
+      if (this.resetExampleAssessments) {
+        this.resetFactoryExampleAssessments();
+      }
+      setTimeout(() => {
+        this.setAllDbData();
+      }, 1500)
+    }
   }
 
   resetFactorySystemSettings() {
@@ -121,8 +129,6 @@ export class ResetDataModalComponent implements OnInit {
     delete tmpSettings.facilityInfo;
     this.indexedDbService.putSettings(tmpSettings).then(() => {
       this.settingsDbService.setAll().then(() => {
-        console.log('reset settings')
-        // this.hideResetSystemSettingsModal();
       });
     })
   }
@@ -145,13 +151,11 @@ export class ResetDataModalComponent implements OnInit {
       }
       //create example directory
       this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
-        console.log('CREATED directory example...')
         //add example settings
         let tmpSettings: Settings = JSON.parse(JSON.stringify(MockPhastSettings));
         tmpSettings.directoryId = dirId;
         delete tmpSettings.facilityInfo;
         this.indexedDbService.addSettings(tmpSettings).then(() => {
-          console.log('CREATED directory settings...')
           //create assessments
           this.createExampleAssessments(dirId);
         })
@@ -167,7 +171,6 @@ export class ResetDataModalComponent implements OnInit {
       //exists
       //delete
       this.indexedDbService.deleteAssessment(psatExample.id).then(() => {
-        console.log('DELETED psat example...')
         //create
         this.createPsatExample(id);
       })
@@ -180,7 +183,6 @@ export class ResetDataModalComponent implements OnInit {
       //exists
       //delete
       this.indexedDbService.deleteAssessment(fsatExample.id).then(() => {
-        console.log('DELETED fsat example...')
         //create
         this.createFsatExample(id);
       })
@@ -193,7 +195,6 @@ export class ResetDataModalComponent implements OnInit {
       //exists
       //delete
       this.indexedDbService.deleteAssessment(phastExample.id).then(() => {
-        console.log('DELETED phast example...')
         //create
         this.createPhastExample(id);
       })
@@ -209,12 +210,10 @@ export class ResetDataModalComponent implements OnInit {
       MockPhast.directoryId = dirId;
       //add example
       this.indexedDbService.addAssessment(MockPhast).then((mockPhastId) => {
-        console.log('CREATED phast example...')
         delete MockPhastSettings.directoryId;
         MockPhastSettings.assessmentId = mockPhastId;
         //add settings
         this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-          console.log('CREATED phast settings...')
           resolve(true)
         });
       });
@@ -226,16 +225,13 @@ export class ResetDataModalComponent implements OnInit {
       MockPsat.directoryId = dirId;
       //add example
       this.indexedDbService.addAssessment(MockPsat).then((assessmentId) => {
-        console.log('CREATED psat example...')
         MockPsatSettings.assessmentId = assessmentId;
         MockPsatSettings.facilityInfo.date = new Date().toDateString();
         //add settings
         this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-          console.log('CREATED psat settings...')
           //add psat calcs
           MockPsatCalculator.assessmentId = assessmentId;
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-            console.log('CREATED psat calculator...')
             resolve(true)
           });
         });
@@ -248,13 +244,10 @@ export class ResetDataModalComponent implements OnInit {
       MockFsat.directoryId = dirId;
       //add example
       this.indexedDbService.addAssessment(MockFsat).then(() => {
-        console.log('CREATED fsat example...')
-
         MockFsatSettings.assessmentId = 3;
         MockFsatSettings.facilityInfo.date = new Date().toDateString();
         //add settings
         this.indexedDbService.addSettings(MockFsatSettings).then(() => {
-          console.log('CREATED fsat settings...')
           resolve(true);
         });
       });
@@ -262,14 +255,53 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   resetFactoryUserAssessments() {
-    console.log('resetFactoryUserAssessments()');
+    //reset entire Db
+    this.indexedDbService.deleteDb().then(
+      results => {
+        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
+          this.coreService.createDirectory().then(() => {
+            this.coreService.createDirectorySettings().then(() => {
+              //after dir setttings add check to see if we want to reset settings or keep existing
+              if (!this.resetAppSettings) {
+                //keep existing
+                this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+                  this.coreService.createExamples().then(() => {
+                    this.setAllDbData();
+                  });
+                })
+              } else {
+                //use reset settings
+                this.coreService.createExamples().then(() => {
+                  this.setAllDbData();
+                });
+              }
+            });
+          });
+        });
+      });
+  }
+
+  setAllDbData() {
+    //after resetting data initialize db services
+    this.directoryDbService.setAll().then(() => {
+      this.assessmentDbService.setAll().then(() => {
+        this.settingsDbService.setAll().then(() => {
+          this.calculatorDbService.setAll().then(() => {
+            this.assessmentService.updateSidebarData.next(true);
+            this.hideResetSystemSettingsModal();
+          })
+        })
+      })
+    })
   }
 
   resetFactoryCustomMaterials() {
-    console.log('resetFactoryCustomMaterials()');
-    if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
-      console.log('initCustomDbMaterials()');
-      this.suiteDbService.initCustomDbMaterials();
-    }
+    this.indexedDbService.clearGasLoadChargeMaterial();
+    this.indexedDbService.clearAtmosphereSpecificHeat();
+    this.indexedDbService.clearFlueGasMaterials();
+    this.indexedDbService.clearLiquidLoadChargeMaterial();
+    this.indexedDbService.clearSolidLiquidFlueGasMaterials();
+    this.indexedDbService.clearSolidLoadChargeMaterial();
+    this.indexedDbService.clearWallLossesSurface();
   }
 }

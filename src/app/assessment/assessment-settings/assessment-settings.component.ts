@@ -1,15 +1,11 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
-import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { PSAT } from '../../shared/models/psat';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-declare const packageJson;
 
 @Component({
   selector: 'app-assessment-settings',
@@ -19,8 +15,6 @@ declare const packageJson;
 export class AssessmentSettingsComponent implements OnInit {
   @Input()
   directory: Directory;
-  @Output('resetDataEmit')
-  resetDataEmit = new EventEmitter<boolean>();
   @Output('resetSystemSettingsEmit')
   resetSystemSettingsEmit = new EventEmitter<boolean>();
   @Output('emitUpdateDirectory')
@@ -90,9 +84,6 @@ export class AssessmentSettingsComponent implements OnInit {
         })
       }
     )
-  }
-  resetData() {
-    this.resetDataEmit.emit(true);
   }
 
   //simple toggle function needed for each section

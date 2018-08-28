@@ -610,6 +610,21 @@ export class IndexedDbService {
       }
     })
   }
+
+  clearGasLoadChargeMaterial(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
   
   //liquidLoadChargeMaterial
   addLiquidLoadChargeMaterial(_material: LiquidLoadChargeMaterial): Promise<any> {
@@ -688,6 +703,21 @@ export class IndexedDbService {
         resolve(e.target.result);
       }
       getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  clearLiquidLoadChargeMaterial(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
         reject(error.target.result)
       }
     })
@@ -775,6 +805,21 @@ export class IndexedDbService {
     })
   }
 
+  clearSolidLoadChargeMaterial(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
   //atmosphereSpecificHeat
   addAtmosphereSpecificHeat(_material: AtmosphereSpecificHeat): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -852,6 +897,21 @@ export class IndexedDbService {
         resolve(e.target.result);
       }
       getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  clearAtmosphereSpecificHeat(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
         reject(error.target.result)
       }
     })
@@ -939,6 +999,21 @@ export class IndexedDbService {
     })
   }
 
+  clearWallLossesSurface(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
   //flueGasMaterial
   addFlueGasMaterial(_material: FlueGasMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1020,6 +1095,21 @@ export class IndexedDbService {
       }
     })
   }
+  clearFlueGasMaterials(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
   //solidLiquidFlueGasMaterial
   addSolidLiquidFlueGasMaterial(_material: SolidLiquidFlueGasMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1102,6 +1192,20 @@ export class IndexedDbService {
     })
   }
 
+  clearSolidLiquidFlueGasMaterials(): Promise<boolean>{
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      clearRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
 
   //calculator
   addCalculator(_calculator: Calculator): Promise<any> {

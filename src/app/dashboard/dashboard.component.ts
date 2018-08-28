@@ -43,12 +43,10 @@ export class DashboardComponent implements OnInit {
   newDirEventToggle: boolean = false;
   dashboardView: string = 'landing-screen';
   goCalcHome: boolean = false;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
   @ViewChild('preAssessmentModal') public preAssessmentModal: ModalDirective;
-  // @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
 
   importInProgress: boolean = false;
   isExportView: boolean = false;
@@ -74,17 +72,7 @@ export class DashboardComponent implements OnInit {
   workingDirectorySub: Subscription;
   selectedTool: string;
   selectedToolSub: Subscription;
-
-  // showSettingsModal: boolean = false;
-  //reset application settings
-
-  // resetAll: boolean = false;
-  // resetAppSettings: boolean = false;
-  // resetExampleAssessments: boolean = false;
-  // resetUserAssessments: boolean = false;
-  // resetCustomMaterials: boolean = false;
-
-
+  sidebarDataSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
@@ -125,6 +113,10 @@ export class DashboardComponent implements OnInit {
     this.selectedToolSub = this.calculatorService.selectedTool.subscribe(toolStr => {
       this.selectedTool = toolStr;
     })
+
+    this.sidebarDataSub = this.assessmentService.updateSidebarData.subscribe(val => {
+      this.newDir();
+    })
   }
 
   ngOnDestroy() {
@@ -135,6 +127,7 @@ export class DashboardComponent implements OnInit {
     this.workingDirectorySub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
     this.selectedToolSub.unsubscribe();
+    this.sidebarDataSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -148,19 +141,6 @@ export class DashboardComponent implements OnInit {
       this.suiteDbService.initCustomDbMaterials();
     }
   }
-
-  // initializeTutorials(){
-  //   if (!this.settingsDbService.globalSettings.disableTutorial) {
-  //     this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
-  //       if (this.settingsDbService.globalSettings) {
-  //         this.settingsDbService.globalSettings.disableTutorial = val;
-  //         this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-  //           this.settingsDbService.setAll();
-  //         });
-  //       }
-  //     })
-  //   }
-  // }
 
   getWorkingDirectoryData() {
     // this.updateDbData();
@@ -286,18 +266,6 @@ export class DashboardComponent implements OnInit {
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 
-  showDeleteModal() {
-    this.deleting = false;
-    this.deleteModal.show();
-  }
-
-  hideDeleteModal() {
-    this.deleteModal.hide();
-    this.deleteModal.onHidden.subscribe(() => {
-      this.deleting = false;
-    })
-  }
-
   showDeleteItemsModal() {
     if (this.checkSelected()) {
       this.deleteItemsModal.show();
@@ -338,38 +306,6 @@ export class DashboardComponent implements OnInit {
     this.isImportView = false;
   }
 
-  deleteData() {
-    this.deleting = true;
-    this.indexedDbService.deleteDb().then(
-      results => {
-        this.suiteDbService.startup();
-        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
-          this.coreService.createDirectory().then(() => {
-            this.coreService.createDirectorySettings().then(() => {
-              this.coreService.createExamples().then(() => {
-                this.setAllDbData();
-              });
-            });
-          });
-        });
-      });
-  }
-  setAllDbData() {
-    this.directoryDbService.setAll().then(() => {
-      this.assessmentDbService.setAll().then(() => {
-        this.settingsDbService.setAll().then(() => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentService.showTutorial.next('landing-screnn');
-            this.assessmentService.tutorialShown = false;
-            console.log('set false');
-            this.tutorialShown = false;
-            this.initData();
-            this.hideDeleteModal();
-          })
-        })
-      })
-    })
-  }
   checkSelected() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();
@@ -503,101 +439,6 @@ export class DashboardComponent implements OnInit {
     }
     this.toastyService.warning(toastOptions);
   }
-
-  //  showResetSystemSettingsModal() {
-  //   this.showSettingsModal = true;
-  //  }
-
-  //  hideResetSystemSettingsModal() {
-  //   this.showSettingsModal = false;
-  //  }
-
-  // resetResetSystemSettingsSelection() {
-  //   this.resetAll = false;
-  //   this.resetAppSettings = false;
-  //   this.resetExampleAssessments = false;
-  //   this.resetUserAssessments = false;
-  //   this.resetCustomMaterials = false;
-  // }
-
-  // toggleResetSystemSettingsOption(option: string) {
-  //   switch (option) {
-  //     case "reset-all": {
-  //       this.resetAll = !this.resetAll;
-  //       if (this.resetAll) {
-  //         this.resetAppSettings = true;
-  //         this.resetExampleAssessments = true;
-  //         this.resetUserAssessments = true;
-  //         this.resetCustomMaterials = true;
-  //       }
-  //       else {
-  //         this.resetAppSettings = false;
-  //         this.resetExampleAssessments = false;
-  //         this.resetUserAssessments = false;
-  //         this.resetCustomMaterials = false;
-  //       }
-  //       break;
-  //     }
-  //     case "app-settings": {
-  //       this.resetAppSettings = !this.resetAppSettings;
-  //       break;
-  //     }
-  //     case "example-assessments": {
-  //       this.resetExampleAssessments = !this.resetExampleAssessments;
-  //       break;
-  //     }
-  //     case "user-assessments": {
-  //       this.resetUserAssessments = !this.resetUserAssessments;
-  //       break;
-  //     }
-  //     case "custom-materials": {
-  //       this.resetCustomMaterials = !this.resetCustomMaterials;
-  //       break;
-  //     }
-  //     default: {
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // resetSystemSettingsAccept() {
-  //   console.log('resetSystemSettingsAccept()');
-  //   if (this.resetAppSettings) {
-  //     this.resetFactorySystemSettings();
-  //   }
-  //   if (this.resetExampleAssessments) {
-  //     this.resetFactoryExampleAssessments();
-  //   }
-  //   if (this.resetUserAssessments) {
-  //     this.resetFactoryUserAssessments();
-  //   }
-  //   if (this.resetCustomMaterials) {
-  //     this.resetFactoryCustomMaterials();
-  //   }
-  //   this.hideResetSystemSettingsModal();
-  // }
-
-  // resetFactorySystemSettings() {
-  //   console.log('resetFactorySystemSettings()');
-
-  // }
-
-  // resetFactoryExampleAssessments() {
-  //   console.log('resetFactoryExampleAssessments()');
-
-  // }
-
-  // resetFactoryUserAssessments() {
-  //   console.log('resetFactoryUserAssessments()');
-  // }
-
-  // resetFactoryCustomMaterials() {
-  //   console.log('resetFactoryCustomMaterials()');
-  //   if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
-  //     console.log('initCustomDbMaterials()');
-  //     this.suiteDbService.initCustomDbMaterials();
-  //   }
-  // }
 }
 
 export interface ImportDataObjects {

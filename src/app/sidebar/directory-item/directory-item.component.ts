@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../assessment/assessment.service';
@@ -24,21 +23,18 @@ export class DirectoryItemComponent implements OnInit {
   @Input()
   dashboardView: string;
 
-  isFirstChange: boolean = true;
   childDirectories: Directory;
   validDirectory: boolean = false;
-  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("changes")
-    if (changes.directory && !this.isFirstChange) {
-      this.populateDirectories(this.directory);
-    } else if (changes.newDirEventToggle && !this.isFirstChange) {
+    if (changes.directory && !changes.directory.firstChange) {
       this.populateDirectories(this.directory);
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.newDirEventToggle && !changes.newDirEventToggle.firstChange) {
+      this.populateDirectories(this.directory);
     }
+    
   }
 
   ngOnInit() {
@@ -58,9 +54,9 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   populateDirectories(directoryRef: DirectoryDbRef) {
-    console.log('populate')
     this.directory.assessments = this.assessmentDbService.getByDirectoryId(directoryRef.id);
     this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directoryRef.id);
     this.directory.collapsed = false;
+    this.cd.detectChanges();
   }
 }
