@@ -112,6 +112,7 @@ export class AssessmentListItemComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
         this.changeDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       })
     })

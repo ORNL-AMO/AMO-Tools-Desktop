@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { Directory } from '../../shared/models/directory';
-import { Calculator } from '../../shared/models/calculators';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentService } from '../assessment.service';
@@ -21,8 +20,6 @@ export class AssessmentDashboardComponent implements OnInit {
   deleteDataSignal = new EventEmitter<boolean>();
   @Output('deleteCheckedItems')
   deleteCheckedItems = new EventEmitter<boolean>();
-  @Output('resetDataEmit')
-  resetDataEmit = new EventEmitter<boolean>();
   @Output('emitNewDir')
   emitNewDir = new EventEmitter<boolean>();
   @Output('genReport')
@@ -45,7 +42,6 @@ export class AssessmentDashboardComponent implements OnInit {
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings) {
-      console.log(this.settingsDbService.globalSettings.disableDashboardTutorial)
       if (!this.settingsDbService.globalSettings.disableDashboardTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('dashboard-tutorial');
@@ -86,10 +82,6 @@ export class AssessmentDashboardComponent implements OnInit {
 
   signalDeleteItems() {
     this.deleteCheckedItems.emit(true);
-  }
-
-  resetData() {
-    this.resetDataEmit.emit(true);
   }
 
   selectAllItems(bool: boolean) {

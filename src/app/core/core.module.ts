@@ -11,7 +11,6 @@ import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { autoUpdater } from 'electron-updater';
 
 import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -24,7 +23,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
-
 
 import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
 import { AboutPageComponent } from '../about-page/about-page.component';

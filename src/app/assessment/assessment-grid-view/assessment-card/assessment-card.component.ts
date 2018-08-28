@@ -147,6 +147,7 @@ export class AssessmentCardComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
         this.changeDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       })
     })
@@ -170,8 +171,9 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
         this.assessmentDbService.setAll().then(() => {
           this.settingsDbService.setAll().then(() => {
+            console.log('delete')
             this.hideDeleteModal();
-            this.changeDirectory.emit(true);
+            this.assessmentService.updateSidebarData.next(true);
           })
         })
       })
