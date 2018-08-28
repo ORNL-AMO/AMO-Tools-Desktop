@@ -26,7 +26,6 @@ export class ExhaustGasTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private exhaustGasService: ExhaustGasService, private exhaustGasCompareService: ExhaustGasCompareService, private cd: ChangeDetectorRef) { }
 
@@ -42,7 +41,6 @@ export class ExhaustGasTabComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 

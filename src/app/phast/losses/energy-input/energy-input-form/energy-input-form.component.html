@@ -63,7 +63,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="electricityInput">Electricty Input</label>
+      <label class="small" for="electricityInput">Electricity Input</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareElectricityInput(), 'invalid': energyInputForm.controls.electricityInput.invalid}">
         <input [readonly]="!baselineSelected" name="{{'electricityInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();" (input)="save()" (focus)="focusField('electricityInput')">
         <!-- <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span> -->

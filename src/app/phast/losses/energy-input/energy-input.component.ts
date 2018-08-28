@@ -82,8 +82,9 @@ export class EnergyInputComponent implements OnInit {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
           results: {
-            heatDelivered: 0,
-            totalChemicalEnergyInput: 0
+            energyInputHeatDelivered: 0,
+            energyInputTotalChemEnergy: 0,
+            grossHeatInput: 0
           },
           collapse: false
         };
@@ -103,8 +104,9 @@ export class EnergyInputComponent implements OnInit {
     this._energyInputs.push({
       form: this.energyInputService.initForm(this._energyInputs.length + 1),
       results: {
-        heatDelivered: 0,
-        totalChemicalEnergyInput: 0
+        energyInputHeatDelivered: 0,
+        energyInputTotalChemEnergy: 0,
+        grossHeatInput: 0
       },
       collapse: false
     });
@@ -121,19 +123,21 @@ export class EnergyInputComponent implements OnInit {
   }
   calculate(loss: EnInputObj) {
     if (loss.form.status == 'VALID') {
-      let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
-      let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
-      loss.results = {
-        heatDelivered: calculation.heatDelivered,
-        totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
-      }
+      // let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      this.energyInputTotal = tmpResults.grossHeatInput;
-      this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
+      loss.results = {
+        energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
+        energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
+        grossHeatInput: tmpResults.grossHeatInput
+      }
+      // let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      // this.energyInputTotal = tmpResults.grossHeatInput;
+      // this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
     } else {
       loss.results = {
-        heatDelivered: null,
-        totalChemicalEnergyInput: null
+        energyInputHeatDelivered: null,
+        energyInputTotalChemEnergy: null,
+        grossHeatInput: null
       }
       this.energyInputTotal = 0;
       this.electricalHeatDelivered = 0;
@@ -170,6 +174,7 @@ export interface EnInputObj {
 }
 
 export interface EnInputResultsObj {
-  heatDelivered: number,
-  totalChemicalEnergyInput: number
+  energyInputHeatDelivered: number,
+  energyInputTotalChemEnergy: number,
+  grossHeatInput: number
 }
