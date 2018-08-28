@@ -44,7 +44,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
   toastId: any;
-  constructor(private phastCompareService: PhastCompareService, private lossesService: LossesService, private toastyService: ToastyService,
+  constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
   ) {
     this.toastyConfig.theme = 'bootstrap';
@@ -72,7 +72,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
   checkExists() {
-    if (this.exploreModIndex || this.exploreModIndex == 0) {
+    if ((this.exploreModIndex || this.exploreModIndex == 0) && this.phast.modifications.length != 0) {
       this.modExists = true;
     } else {
       this.modExists = false;

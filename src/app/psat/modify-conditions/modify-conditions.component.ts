@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
-import * as _ from 'lodash';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';

@@ -26,7 +26,6 @@ export class FixtureTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService, private cd: ChangeDetectorRef) { }
 
@@ -34,31 +33,27 @@ export class FixtureTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.fixtureLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
 
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    } else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -72,25 +67,33 @@ export class FixtureTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.fixtureLossesCompareService.baselineFixtureLosses) {
       this.fixtureLossesCompareService.baselineFixtureLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
+          hasWarning = true;
         }
       })
     }
     if (this.fixtureLossesCompareService.modifiedFixtureLosses && !this.inSetup) {
       this.fixtureLossesCompareService.modifiedFixtureLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
+        if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
+          hasWarning = true;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
-
 
   checkLossValid(loss: FixtureLoss) {
     let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);

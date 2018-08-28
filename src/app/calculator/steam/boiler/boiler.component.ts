@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { BoilerInput, BoilerOutput } from '../../../shared/models/steam';
@@ -14,7 +14,11 @@ import { BoilerService } from './boiler.service';
 export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -33,7 +37,17 @@ export class BoilerComponent implements OnInit {
     this.getForm();
     this.calculate(this.boilerForm);
   }
-
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }

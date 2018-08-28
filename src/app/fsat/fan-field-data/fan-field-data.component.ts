@@ -9,6 +9,7 @@ import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FsatService } from '../fsat.service';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
+import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fan-field-data',
@@ -51,15 +52,7 @@ export class FanFieldDataComponent implements OnInit {
     { value: 1, display: 'Current' }
   ];
 
-  flowRateError: string = null;
-  voltageError: string = null;
-  costError: string = null;
-  opFractionError: string = null;
-  ratedPowerError: string = null;
-  marginError: string = null;
-  outletPressureError: string = null;
-  specificHeatRatioError: string = null;
-  compressibilityFactorError: string = null;
+  warnings: FanFieldDataWarnings;
   fieldDataForm: FormGroup;
   pressureCalcType: string;
   pressureModalSub: Subscription;
@@ -67,7 +60,7 @@ export class FanFieldDataComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string = 'baseline';
-  constructor(private compareService: CompareService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
+  constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -111,7 +104,6 @@ export class FanFieldDataComponent implements OnInit {
   init() {
     if (this.fieldData) {
       this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);
-      this.checkForm(this.fieldDataForm);
       // this.helpPanelService.currentField.next('operatingFraction');
       //init warning messages;
       this.checkForWarnings();
@@ -132,15 +124,6 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  checkForm(form: any) {
-    // this.formValid = this.psatService.isFieldDataFormValid(form);
-    // if (this.formValid) {
-    //   this.isValid.emit(true)
-    // } else {
-    //   this.isInvalid.emit(true)
-    // }
-  }
-
 
   showAmcaModal() {
     this.fsatCopy = JSON.parse(JSON.stringify(this.fsat));
@@ -150,7 +133,6 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   save() {
-    this.checkForWarnings();
     let tmpInletPressureData: InletPressureData = this.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fieldData.outletPressureData;
     let tmpPlaneData: PlaneData = this.fieldData.planeData;
@@ -163,69 +145,11 @@ export class FanFieldDataComponent implements OnInit {
     this.fieldData.fanRatedInfo = tmpfanRatedInfo;
     this.fieldData.pressureCalcResultType = tmpCalcType;
     this.emitSave.emit(this.fieldData);
+    this.checkForWarnings();
   }
 
   checkForWarnings() {
-    //outletPressure
-    if (this.fieldDataForm.controls.outletPressure.value < 0) {
-      this.outletPressureError = 'Outlet pressure must be greater than or equal to 0';
-    } else {
-      this.outletPressureError = null;
-    }
-    //flowRate
-    if (this.fieldDataForm.controls.flowRate.value < 0) {
-      this.flowRateError = 'Flow rate must be greater than or equal to 0';
-    } else {
-      this.flowRateError = null;
-    }
-    //specificHeatRatio
-    if (this.fieldDataForm.controls.specificHeatRatio.value < 0) {
-      this.specificHeatRatioError = 'Specific heat ratio must be greater than or equal to 0';
-    } else {
-      this.specificHeatRatioError = null;
-    }
-    //compressibilityFactor
-    if (this.fieldDataForm.controls.compressibilityFactor.value < 0) {
-      this.compressibilityFactorError = 'Compressibility factor must be greater than or equal to 0';
-    } else {
-      this.compressibilityFactorError = null;
-    }
-    //operatingFraction
-    if (this.fieldDataForm.controls.operatingFraction.value > 1) {
-      this.opFractionError = 'Operating fraction needs to be between 0 - 1';
-    } else if (this.fieldDataForm.controls.operatingFraction.value < 0) {
-      this.opFractionError = "Cannot have negative operating fraction";
-    } else {
-      this.opFractionError = null;
-    }
-
-    //cost
-    if (this.fieldDataForm.controls.cost.value < 0) {
-      this.costError = 'Cannot have negative cost';
-    } else if (this.fieldDataForm.controls.cost.value > 1) {
-      this.costError = "Shouldn't be greater then 1";
-    } else {
-      this.costError = null;
-    }
-
-    //motorPower
-    let tmpVal = this.fsat.fanMotor.motorRatedPower;
-    if (this.fieldDataForm.controls.motorPower.value && tmpVal) {
-      let val, compare;
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.fieldDataForm.controls.motorPower.value).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = tmpVal;
-        compare = this.fieldDataForm.controls.motorPower.value;
-      }
-      val = val * 1.5;
-      if (val < compare) {
-        this.ratedPowerError = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-      } else {
-        this.ratedPowerError = null;
-      }
-    }
+    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
   }
 
 
@@ -340,7 +264,6 @@ export class FanFieldDataComponent implements OnInit {
   getBodyHeight() {
     if (this.modalBody) {
       this.bodyHeight = this.modalBody.nativeElement.clientHeight;
-      console.log(this.bodyHeight);
     } else {
       this.bodyHeight = 0;
     }

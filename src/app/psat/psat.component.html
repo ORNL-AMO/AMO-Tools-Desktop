@@ -26,7 +26,7 @@
       </div>
     </nav>
     <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
-      <app-psat-tabs></app-psat-tabs>
+      <app-psat-tabs [settings]="settings"></app-psat-tabs>
     </div>
   </div>
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">

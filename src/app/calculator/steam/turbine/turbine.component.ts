@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,6 +14,13 @@ import { TurbineService } from './turbine.service';
 export class TurbineComponent implements OnInit {
   @Input()
   settings: Settings;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
 
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -35,6 +42,17 @@ export class TurbineComponent implements OnInit {
     this.getForm();
     this.input = this.turbineService.getObjFromForm(this.turbineForm);
     this.calculate(this.turbineForm);
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setTab(str: string) {

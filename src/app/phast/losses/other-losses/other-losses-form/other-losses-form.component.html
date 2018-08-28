@@ -2,15 +2,15 @@
 
   <div class="form-group">
     <label class="small" for="description">Loss Description</label>
-    <input name="{{'description_'+lossIndex}}" type="text" class="form-control" formControlName="description" id="description"
-      onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('description')" [ngClass]="{'indicate-different': compareDescription(), 'invalid': lossesForm.controls.description.status == 'INVALID'}">
+    <input [readonly]="!baselineSelected" name="{{'description_'+lossIndex}}" type="text" class="form-control" formControlName="description" id="description"
+      onfocus="this.select();" (input)="save()" (focus)="focusField('description')" [ngClass]="{'indicate-different': compareDescription(), 'invalid': lossesForm.controls.description.invalid}">
   </div>
 
   <div class="form-group">
     <label class="small" for="heatLoss">Heat Loss</label>
-    <div class="input-group" [ngClass]="{'indicate-different': compareHeatLoss(), 'invalid': lossesForm.controls.heatLoss.status == 'INVALID'}">
-      <input name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
+    <div class="input-group" [ngClass]="{'indicate-different': compareHeatLoss(), 'invalid': lossesForm.controls.heatLoss.invalid}">
+      <input [readonly]="!baselineSelected" name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
+        onfocus="this.select();" (input)="save()" (focus)="focusField('heatLoss')">
       <span class="input-group-addon units">{{resultsUnit}}</span>
     </div>
   </div>

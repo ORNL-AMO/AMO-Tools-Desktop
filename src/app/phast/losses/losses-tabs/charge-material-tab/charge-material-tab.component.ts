@@ -3,7 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { ChargeMaterialCompareService } from '../../charge-material/charge-material-compare.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { ChargeMaterialService } from '../../charge-material/charge-material.service';
+import { ChargeMaterialService, SolidMaterialWarnings, LiquidMaterialWarnings, GasMaterialWarnings } from '../../charge-material/charge-material.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -27,7 +27,6 @@ export class ChargeMaterialTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private cd: ChangeDetectorRef) { }
 
@@ -36,22 +35,16 @@ export class ChargeMaterialTabComponent implements OnInit {
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
       this.chargeDone = this.lossesService.chargeDone;
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
-      this.setBadgeClass();
-
-    })
-
-    this.compareSubscription = this.chargeMaterialCompareService.inputError.subscribe(val => {
-      this.inputError = val;
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -76,25 +69,49 @@ export class ChargeMaterialTabComponent implements OnInit {
     }
   }
 
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.chargeMaterialCompareService.baselineMaterials) {
       this.chargeMaterialCompareService.baselineMaterials.forEach(material => {
         if (this.checkMaterialValid(material) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(material);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
     if (this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
       this.chargeMaterialCompareService.modifiedMaterials.forEach(material => {
         if (this.checkMaterialValid(material) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let tmpHasWarning: boolean = this.checkWarningExists(material);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
+  checkWarningExists(material: ChargeMaterial): boolean {
+    if (material.chargeMaterialType == 'Gas') {
+      let warnings: GasMaterialWarnings = this.chargeMaterialService.checkGasWarnings(material.gasChargeMaterial);
+      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
+      return tmpHasWarning;
+    } else if (material.chargeMaterialType == 'Liquid') {
+      let warnings: LiquidMaterialWarnings = this.chargeMaterialService.checkLiquidWarnings(material.liquidChargeMaterial);
+      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
+      return tmpHasWarning;
+    } else if (material.chargeMaterialType == 'Solid') {
+      let warnings: SolidMaterialWarnings = this.chargeMaterialService.checkSolidWarnings(material.solidChargeMaterial);
+      let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
+      return tmpHasWarning;
+    }
+  }
 
   checkMaterialValid(material: ChargeMaterial) {
     if (material.chargeMaterialType == 'Gas') {

@@ -277,7 +277,8 @@ export class CompareService {
       return (
         this.isFanTypeDifferent(baseline, modification) ||
         this.isFanSpeedDifferent(baseline, modification) ||
-        this.isDriveDifferent(baseline, modification)
+        this.isDriveDifferent(baseline, modification) || 
+        this.isSpecifiedFanEfficiencyDifferent(baseline, modification)
       )
     } else {
       return false;
@@ -334,6 +335,25 @@ export class CompareService {
       return false;
     }
   }
+
+  isSpecifiedFanEfficiencyDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanSetup.fanSpecified != modification.fanSetup.fanSpecified) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
 
   //Fan Field Data
   checkFanFieldDataDifferent(baseline?: FSAT, modification?: FSAT) {

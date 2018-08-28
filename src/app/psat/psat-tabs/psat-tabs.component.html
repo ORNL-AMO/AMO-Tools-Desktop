@@ -33,7 +33,7 @@
   </div>
 
   <nav *ngIf="currentTab == 'modify-conditions'" class="hide-print w-100">
-    <app-modify-conditions-tabs></app-modify-conditions-tabs>
+    <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
   </nav>
 </div>
 

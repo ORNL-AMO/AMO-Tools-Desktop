@@ -1,30 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class OpeningLossesService {
 
-  deleteLossIndex: BehaviorSubject<number>;
-  // addLossBaselineMonitor: BehaviorSubject<any>;
-  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
-    this.deleteLossIndex = new BehaviorSubject<number>(null);
-    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
-
-  setDelete(num: number) {
-    this.deleteLossIndex.next(num);
-  }
-  // addLoss(bool: boolean) {
-  //   if (bool) {
-  //     this.addLossModificationMonitor.next(true);
-  //   } else {
-  //     this.addLossBaselineMonitor.next(true);
-  //   }
-  // }
 
   initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
@@ -38,7 +20,7 @@ export class OpeningLossesService {
       'ambientTemp': ['', Validators.required],
       'percentTimeOpen': ['', Validators.required],
       'emissivity': [0.9, Validators.required],
-      'name': ['Loss #'+lossNum]
+      'name': ['Loss #' + lossNum]
     })
   }
 
@@ -118,4 +100,108 @@ export class OpeningLossesService {
       viewFactor: form.controls.viewFactor.value
     };
   }
+
+  checkWarnings(loss: OpeningLoss): OpeningLossWarnings {
+    return {
+      temperatureWarning: this.checkTemperature(loss),
+      emissivityWarning: this.checkEmissivity(loss),
+      timeOpenWarning: this.checkTimeOpen(loss),
+      numOpeningsWarning: this.checkNumOpenings(loss),
+      thicknessWarning: this.checkWallThickness(loss),
+      lengthWarning: this.checkLength(loss),
+      heightWarning: this.checkHeight(loss),
+      viewFactorWarning: this.checkViewFactor(loss)
+    }
+  }
+
+  checkLength(loss: OpeningLoss): string {
+    if (loss.lengthOfOpening <= 0 && loss.openingType == 'Round') {
+      return 'Opening Diameter must be greater than 0';
+    } else if (loss.lengthOfOpening <= 0 && loss.openingType == 'Rectangular (or Square)') {
+      return 'Opening Length must be greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkHeight(loss: OpeningLoss): string {
+    if (loss.heightOfOpening < 0) {
+      return 'Opening Height must be greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkWallThickness(loss: OpeningLoss): string {
+    if (loss.thickness < 0) {
+      return "Furnace Wall Thickness must be greater than or equal to 0";
+    } else {
+      return null;
+    }
+  }
+
+  checkNumOpenings(loss: OpeningLoss): string {
+    if (loss.numberOfOpenings < 0) {
+      return "Number of Openings must be positive";
+    } else {
+      return null;
+    }
+  }
+
+  checkViewFactor(loss: OpeningLoss): string {
+    if (loss.viewFactor < 0) {
+      return "View Factor must be positive";
+    } else {
+      return null;
+    }
+  }
+
+  checkTemperature(loss: OpeningLoss): string {
+    if (loss.ambientTemperature > loss.insideTemperature) {
+      return 'Ambient Temperature cannot be greater than Average Zone Temperature'
+    } else {
+      return null;
+    }
+  }
+  checkEmissivity(loss: OpeningLoss): string {
+    if (loss.emissivity > 1) {
+      return 'Surface emissivity must be less than 1';
+    } else if (loss.emissivity < 0) {
+      return 'Surface emissivity must be positive';
+    } else {
+      return null;
+    }
+  }
+
+  checkTimeOpen(loss: OpeningLoss): string {
+    if (loss.percentTimeOpen > 100) {
+      return 'Time open must be less than 100%';
+    } else if (loss.percentTimeOpen < 0) {
+      return 'Time must be greater positive';
+    } else {
+      return null;
+    }
+  }
+
+  checkWarningsExist(warnings: OpeningLossWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+}
+
+
+export interface OpeningLossWarnings {
+  temperatureWarning: string;
+  emissivityWarning: string;
+  timeOpenWarning: string;
+  numOpeningsWarning: string;
+  thicknessWarning: string;
+  lengthWarning: string;
+  heightWarning: string;
+  viewFactorWarning: string;
 }

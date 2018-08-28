@@ -9,9 +9,7 @@ export class EnergyInputCompareService {
   baselineEnergyInput: EnergyInputEAF[];
   modifiedEnergyInput: EnergyInputEAF[];
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;

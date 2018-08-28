@@ -22,8 +22,8 @@ export class ExploreCoolingFormComponent implements OnInit {
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
 
-  baselineLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string }>;
-  modifiedLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string }>;
+  baselineLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string, name: string }>;
+  modifiedLosses: Array<{ loss: LiquidCoolingLoss | GasCoolingLoss, type: string, name: string }>;
   showCooling: boolean = false;
   showFlowRate: Array<boolean>;
   showTemp: Array<boolean>;
@@ -64,14 +64,14 @@ export class ExploreCoolingFormComponent implements OnInit {
       this.tempError1.push(null);
       this.tempError2.push(null);
       if (loss.coolingLossType == 'Liquid') {
-        this.baselineLosses.push({ loss: loss.liquidCoolingLoss, type: 'Liquid' });
+        this.baselineLosses.push({ loss: loss.liquidCoolingLoss, type: 'Liquid', name: loss.name });
       } else if (loss.coolingLossType == 'Gas') {
-        this.baselineLosses.push({ loss: loss.gasCoolingLoss, type: 'Gas' });
+        this.baselineLosses.push({ loss: loss.gasCoolingLoss, type: 'Gas', name: loss.name });
       }
       if (this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].coolingLossType == 'Liquid') {
-        this.modifiedLosses.push({ loss: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].liquidCoolingLoss, type: 'Liquid' })
+        this.modifiedLosses.push({ loss: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].liquidCoolingLoss, type: 'Liquid', name: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].name })
       } else if (this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].coolingLossType == 'Gas') {
-        this.modifiedLosses.push({ loss: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].gasCoolingLoss, type: 'Gas' });
+        this.modifiedLosses.push({ loss: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].gasCoolingLoss, type: 'Gas', name: this.phast.modifications[this.exploreModIndex].phast.losses.coolingLosses[index].name });
       }
       let check: boolean = (this.baselineLosses[index].loss.flowRate != this.modifiedLosses[index].loss.flowRate);
       if (!this.showCooling && check) {
@@ -91,6 +91,7 @@ export class ExploreCoolingFormComponent implements OnInit {
         this.showCooling = check;
       }
       this.showTemp.push(check);
+      index++
     })
   }
 

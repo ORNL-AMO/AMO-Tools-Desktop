@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { FlashTankInput, FlashTankOutput } from '../../../shared/models/steam';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,6 +14,13 @@ import { FlashTankService } from './flash-tank.service';
 export class FlashTankComponent implements OnInit {
   @Input()
   settings: Settings;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
 
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -32,6 +39,17 @@ export class FlashTankComponent implements OnInit {
     this.getForm();
     this.input = this.flashTankService.getObjFromForm(this.flashTankForm);
     this.calculate(this.flashTankForm);
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setTab(str: string) {

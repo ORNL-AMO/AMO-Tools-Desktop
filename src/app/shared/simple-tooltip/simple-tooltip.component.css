@@ -1,6 +1,9 @@
 .tooltip-box {
     /* top: initial; */
-    position: relative;
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    
     background-color: rgba(85,85,85,0);
     color: #fff;
     padding: 10px;
