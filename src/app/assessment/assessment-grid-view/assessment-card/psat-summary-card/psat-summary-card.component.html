@@ -87,7 +87,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" *ngIf="showReport">
+            <div class="modal-body scroll-item" *ngIf="showReport">
                 <app-psat-report [assessment]="assessment" [settings]="settings" [psat]="assessment.psat" [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
             </div>
         </div>

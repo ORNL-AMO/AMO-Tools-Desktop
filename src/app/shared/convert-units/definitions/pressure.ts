@@ -18,8 +18,8 @@ export const pressure = {
     },
     kPag: {
       name: {
-        singular: 'Kilopascal - guage'
-        , plural: 'Kilopascals - guage',
+        singular: 'Kilopascal - gauge'
+        , plural: 'Kilopascals - gauge',
         display: '(kPag)'
       }
       , to_anchor: 1
@@ -51,12 +51,12 @@ export const pressure = {
     },
     barg: {
       name: {
-        singular: 'Bar - guage'
-        , plural: 'Bar - guage',
+        singular: 'Bar - gauge'
+        , plural: 'Bar - gauge',
         display: '(barg)'
       }
       , to_anchor: 100
-      , anchor_shift: -1.01325
+      , anchor_shift: -101.325
     }
     , torr: {
       name: {
@@ -126,8 +126,8 @@ export const pressure = {
     },
     psig: {
       name: {
-        singular: 'Pound per Square Inch - guage'
-        , plural: 'Pounds per Square Inch - guage',
+        singular: 'Pound per Square Inch - gauge'
+        , plural: 'Pounds per Square Inch - gauge',
         display: '(psig)'
       }
       , to_anchor: 1 / 1000
