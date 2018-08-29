@@ -5,6 +5,7 @@ import { CompareService } from '../compare.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
 import { Modification } from '../../shared/models/psat';
+import { PsatTabService } from '../psat-tab.service';
 
 @Component({
   selector: 'app-modification-list',
@@ -27,11 +28,11 @@ export class ModificationListComponent implements OnInit {
   deleteArr: Array<boolean>;
   asssessmentTab: string;
   assessmentTabSubscription: Subscription;
-  constructor(private compareService: CompareService, private psatService: PsatService) { }
+  constructor(private compareService: CompareService, private psatService: PsatService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
     this.initDropdown();
-    this.assessmentTabSubscription = this.psatService.secondaryTab.subscribe(val => {
+    this.assessmentTabSubscription = this.psatTabService.secondaryTab.subscribe(val => {
       this.asssessmentTab = val;
     })
   }
@@ -54,12 +55,7 @@ export class ModificationListComponent implements OnInit {
     }
   }
   goToModification(index: number, componentStr: string) {
-    // let tabs = this.lossesService.lossesTabs;
-    // let selectedTab = _.find(tabs, (tab) => {
-    //   return tab.componentStr == componentStr;
-    // })
-    // this.lossesService.lossesTab.next(selectedTab.step);
-    this.psatService.modifyConditionsTab.next(componentStr);
+    this.psatTabService.modifyConditionsTab.next(componentStr);
     this.selectModification(index, true);
   }
   selectModificationBadge(modifiction: PSAT, index: number) {

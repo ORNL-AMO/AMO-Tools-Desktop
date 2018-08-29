@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Notes } from '../../../shared/models/psat';
-import { PsatService } from '../../psat.service';
 import { Subscription } from 'rxjs';
+import { PsatTabService } from '../../psat-tab.service';
 @Component({
   selector: 'app-modify-conditions-notes',
   templateUrl: './modify-conditions-notes.component.html',
@@ -15,10 +15,10 @@ export class ModifyConditionsNotesComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   tabSub: Subscription;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatTabService: PsatTabService) { }
 
   ngOnInit() {
-    this.tabSub = this.psatService.modifyConditionsTab.subscribe(val => {
+    this.tabSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.currentTab = val;
     })
   }

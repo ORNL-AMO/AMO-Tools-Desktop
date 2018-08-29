@@ -76,6 +76,13 @@ export class FsatWarningService {
   }
 
   checkRatedPower(fsat: FSAT, settings: Settings) {
+    let motorPowerStr: string;
+    if (fsat.fieldData.loadEstimatedMethod == 0) {
+      motorPowerStr = 'Motor Power';
+    } else {
+      motorPowerStr = 'Motor Current';
+    }
+
     let tmpVal = fsat.fanMotor.motorRatedPower;
     if (fsat.fieldData.motorPower && tmpVal) {
       let val, compare;
@@ -88,7 +95,7 @@ export class FsatWarningService {
       }
       val = val * 1.5;
       if (val < compare) {
-        return 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+        return 'The Field Data ' + motorPowerStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
       } else {
         return null;
       }
@@ -314,6 +321,16 @@ export class FsatWarningService {
     } else {
       return null;
     }
+  }
+
+  checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | FanFluidWarnings | { fanEfficiencyError: string, fanSpeedError: string }): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
   }
 }
 

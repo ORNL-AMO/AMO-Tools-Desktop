@@ -9,6 +9,7 @@ import { FanFieldDataService } from '../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../fan-setup/fan-setup.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
+import { FanFluidWarnings, FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -18,6 +19,20 @@ import { Settings } from '../../shared/models/settings';
 export class FsatTabsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  fsat: FSAT;
+
+
+  settingsClassStatus: Array<string> = [];
+  fanClassStatus: Array<string> = [];
+  fluidClassStatus: Array<string> = [];
+  motorClassStatus: Array<string> = [];
+  fieldDataClassStatus: Array<string> = [];
+  fluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  fanBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+
   mainTab: string;
   stepTab: string;
   assessmentTab: string;
@@ -29,25 +44,17 @@ export class FsatTabsComponent implements OnInit {
   calcTab: string;
   calcTabSub: Subscription;
 
-  fanDisabled: boolean;
-  motorDisabled: boolean;
-  fieldDataDisabled: boolean;
   updateDataSub: Subscription;
-
-  settingsValid: boolean = true;
-  fluidValid: boolean;
-  fanValid: boolean;
-  motorValid: boolean;
-  fieldDataValid: boolean;
-
   modifyConditionsTabSub: Subscription;
   modifyConditionsTab: string;
+
   constructor(private fsatService: FsatService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private fsatFluidService: FsatFluidService,
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private modifyConditionsService: ModifyConditionsService) { }
+    private modifyConditionsService: ModifyConditionsService,
+    private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
@@ -55,7 +62,11 @@ export class FsatTabsComponent implements OnInit {
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.checkValid();
+      this.checkSettingsStatus();
+      this.checkFanStatus();
+      this.checkFluidStatus();
+      this.checkMotorStatus();
+      this.checkFieldDataSatus();
     })
 
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
@@ -68,7 +79,11 @@ export class FsatTabsComponent implements OnInit {
     })
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
-      this.checkValid();
+      this.checkSettingsStatus();
+      this.checkFanStatus();
+      this.checkFluidStatus();
+      this.checkMotorStatus();
+      this.checkFieldDataSatus();
     })
 
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
@@ -90,16 +105,19 @@ export class FsatTabsComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
+    let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup);
+    let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     if (str == 'fan-setup') {
-      if (!this.fanDisabled) {
+      if (fluidValid) {
         this.fsatService.stepTab.next(str);
       }
     } else if (str == 'fan-motor') {
-      if (!this.motorDisabled) {
+      if (fluidValid && fanValid) {
         this.fsatService.stepTab.next(str);
       }
     } else if (str == 'fan-field-data') {
-      if (!this.fieldDataDisabled) {
+      if (fluidValid && fanValid && motorValid) {
         this.fsatService.stepTab.next(str);
       }
     } else {
@@ -115,41 +133,112 @@ export class FsatTabsComponent implements OnInit {
     this.fsatService.openModificationModal.next(true);
   }
 
-  checkValid() {
-    let baseline: FSAT = this.compareService.baselineFSAT;
-    this.checkFluidValid(baseline);
-    this.checkFanValid(baseline);
-    this.checkMotorValid(baseline);
-    this.checkFieldDataValid(baseline);
-    this.checkDisabled(baseline);
-  }
 
-  checkDisabled(fsat: FSAT) {
-    let baseline: FSAT = this.compareService.baselineFSAT;
-    if (baseline) {
-      this.fanDisabled = !this.fluidValid;
-      this.motorDisabled = !this.fluidValid || !this.fanValid;
-      this.fieldDataDisabled = !this.fluidValid || !this.fanValid && !this.motorValid;
+  checkSettingsStatus() {
+    if (this.stepTab == 'system-basics') {
+      this.settingsClassStatus = ['active', 'success'];
+    } else {
+      this.settingsClassStatus = ['success'];
     }
   }
 
-  checkFluidValid(fsat: FSAT) {
-    this.fluidValid = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity);
+  checkFluidStatus() {
+    let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
+    let fanFluidWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.fsat.baseGasDensity, this.settings);
+    let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(fanFluidWarnings);
+    if (!fluidValid) {
+      this.fluidClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.fluidClassStatus = ['input-error'];
+    } else {
+      this.fluidClassStatus = ['success'];
+    }
+    if (this.stepTab == 'fsat-fluid') {
+      this.fluidClassStatus.push('active');
+    }
   }
 
-  checkFanValid(fsat: FSAT) {
-    this.fanValid = this.fanSetupService.isFanSetupValid(fsat.fanSetup);
+  checkFanStatus() {
+    let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup);
+    let warnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup);
+    let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(warnings);
+    if (!fluidValid) {
+      this.fanClassStatus = ['disabled'];
+    } else if (!fanValid) {
+      this.fanClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.fanClassStatus = ['input-error'];
+    } else {
+      this.fanClassStatus = ['success'];
+    }
+    if (this.stepTab == 'fan-setup') {
+      this.fanClassStatus.push('active');
+    }
   }
 
-  checkMotorValid(fsat: FSAT) {
-    this.motorValid = this.fanMotorService.isFanMotorValid(fsat.fanMotor);
+  checkMotorStatus() {
+    let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup);
+    let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
+    let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
+    let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(motorWarnings);
+    if (!fluidValid || !fanValid) {
+      this.motorClassStatus = ['disabled'];
+    } else if (!motorValid) {
+      this.motorClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.motorClassStatus = ['input-error'];
+    } else {
+      this.motorClassStatus = ['success'];
+    }
+    if (this.stepTab == 'motor') {
+      this.motorClassStatus.push('active');
+    }
   }
 
-  checkFieldDataValid(fsat: FSAT) {
-    this.fieldDataValid = this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
+  checkFieldDataSatus() {
+    let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup);
+    let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
+    let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this.fsat.fieldData);
+    let fieldDataWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
+    let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(fieldDataWarnings);
+    if (!fluidValid || !motorValid || !fanValid) {
+      this.fieldDataClassStatus = ['disabled'];
+    } else if (!fieldDataValid) {
+      this.fieldDataClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.fieldDataClassStatus = ['input-error'];
+    } else {
+      this.fieldDataClassStatus = ['success'];
+    }
+    if (this.stepTab == 'fan-field-data') {
+      this.fieldDataClassStatus.push('active');
+    }
   }
 
-  changeCalcTab(str: string){
+  changeCalcTab(str: string) {
     this.fsatService.calculatorTab.next(str);
+  }
+
+  showTooltip(badge: { display: boolean, hover: boolean }) {
+    badge.hover = true;
+    setTimeout(() => {
+      this.checkHover(badge);
+    }, 1000);
+  }
+
+  hideTooltip(badge: { display: boolean, hover: boolean }) {
+    badge.hover = false;
+    badge.display = false;
+  }
+
+  checkHover(badge: { display: boolean, hover: boolean }) {
+    if (badge.hover) {
+      badge.display = true;
+    } else {
+      badge.display = false;
+    }
   }
 }
