@@ -1,8 +1,28 @@
-label{
+label {
     font-size: small;
 }
 
-.form-section{
+.form-section {
     padding-bottom: .25rem;
     border-bottom: 1px dashed;
+}
+
+.custom-pipe-form-container {
+    padding-bottom: 10px;
+}
+
+.btn-delete-field {
+    color: #dc3545;
+    margin-left: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: white;
+    box-sizing: border-box;
+    transition: all .2s ease-in-out;
+}
+
+.btn-delete-field:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #dc3545;
 }
