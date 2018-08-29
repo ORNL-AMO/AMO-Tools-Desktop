@@ -23,11 +23,9 @@ export class ExhaustGasTabComponent implements OnInit {
   displayTooltip: boolean;
 
   numLosses: number = 0;
-  inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private exhaustGasService: ExhaustGasService, private exhaustGasCompareService: ExhaustGasCompareService, private cd: ChangeDetectorRef) { }
 
@@ -39,17 +37,10 @@ export class ExhaustGasTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.exhaustGasCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -57,8 +48,6 @@ export class ExhaustGasTabComponent implements OnInit {
     let badgeStr: Array<string> = ['success'];
     if(this.missingData){
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
-      badgeStr = ['input-error'];
     }else if(this.isDifferent && !this.inSetup){
       badgeStr = ['loss-different'];
     }

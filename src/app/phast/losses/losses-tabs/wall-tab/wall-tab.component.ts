@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { WallLossesService } from '../../wall-losses/wall-losses.service';
+import { WallLossesService, WallLossWarnings } from '../../wall-losses/wall-losses.service';
 import { WallLossCompareService } from '../../wall-losses/wall-loss-compare.service';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { Subscription } from 'rxjs';
@@ -25,7 +25,6 @@ export class WallTabComponent implements OnInit {
   missingData: boolean;
   isDifferent: boolean;
   badgeClass: Array<string>;
-  compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private cd: ChangeDetectorRef) { }
 
@@ -33,21 +32,16 @@ export class WallTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.wallLossCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -71,23 +65,34 @@ export class WallTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.wallLossCompareService.baselineWallLosses) {
       this.wallLossCompareService.baselineWallLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
     if (this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
       this.wallLossCompareService.modifiedWallLosses.forEach(loss => {
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 

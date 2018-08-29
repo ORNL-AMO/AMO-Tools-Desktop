@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -8,6 +7,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
+import { FixtureLossesService } from '../fixture-losses.service';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -36,22 +37,21 @@ export class FixtureLossesFormComponent implements OnInit {
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
-  specificHeatError: string = null;
-  feedRateError: string = null;
-  firstChange: boolean = true;
+  specificHeatWarning: string = null;
+  feedRateWarning: string = null;
   materials: Array<any>;
   showModal: boolean = false;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if(changes.baselineSelected){
+      if(!changes.baselineSelected.firstChange){
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
 
@@ -60,16 +60,15 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkWarnings();
   }
 
   disableForm() {
     this.lossesForm.controls.materialName.disable();
-    // this.lossesForm.disable();
   }
 
   enableForm() {
     this.lossesForm.controls.materialName.enable();
-    // this.lossesForm.enable();
   }
 
   focusField(str: string) {
@@ -88,7 +87,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.lossesForm.patchValue({
       specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
     })
-    this.checkInputError();
+    this.save();
   }
   checkSpecificHeat() {
     if (this.lossesForm.controls.materialName.value) {
@@ -109,29 +108,17 @@ export class FixtureLossesFormComponent implements OnInit {
       return false;
     }
   }
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.specificHeat.value < 0) {
-      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
-    } else {
-      this.specificHeatError = null;
-    }
-    if (this.lossesForm.controls.feedRate.value < 0) {
-      this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
-    } else {
-      this.feedRateError = null;
-    }
-    if (this.specificHeatError || this.feedRateError) {
-      this.inputError.emit(true);
-      this.fixtureLossesCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.fixtureLossesCompareService.inputError.next(false);
-    }
+  
+  checkWarnings(){
+    let fixtureLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(this.lossesForm);
+    let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(fixtureLoss);
+    this.specificHeatWarning = tmpWarnings.specificHeatWarning;
+    this.feedRateWarning = tmpWarnings.feedRateWarning;
+    let hasWarning: boolean = ((this.feedRateWarning !== null) || (this.specificHeatWarning !== null));
+    this.inputError.emit(hasWarning);
   }
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

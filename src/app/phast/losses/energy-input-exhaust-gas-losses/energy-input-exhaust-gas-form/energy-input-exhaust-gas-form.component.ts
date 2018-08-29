@@ -1,13 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { EnergyInputExhaustGasCompareService } from '../energy-input-exhaust-gas-compare.service';
-import { FormControl, Validators } from '@angular/forms'
-import * as _ from 'lodash';
-//used for other loss monitoring
 import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
-import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
@@ -35,79 +31,24 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  
 
-  combustionTempError: string = null;
-  heatError: string = null;
+
+  combustionTempWarning: string = null;
+  heatWarning: string = null;
   firstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private phastService: PhastService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
+  constructor(private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService) { }
 
   ngOnInit() {
-    this.checkHeat(true);
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
+    this.checkWarnings();
   }
 
-  ngAfterViewInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-  }
-
-  checkHeat(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.settings.unitsOfMeasure === 'Imperial') {
-      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 40) {
-        this.heatError = 'Exhaust Gas Temperature cannot be less than 40 ';
-      } else {
-        this.heatError = null;
-      }
-    }
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 4) {
-        this.heatError = 'Exhaust Gas Temperature cannot be less than 4 ';
-      } else {
-        this.heatError = null;
-      }
-    }
-
-    if (this.exhaustGasForm.controls.combustionAirTemp.value >= this.exhaustGasForm.controls.exhaustGasTemp.value) {
-      this.combustionTempError = 'Combustion air temperature must be less than exhaust gas temperature';
-    }
-    else {
-      this.combustionTempError = null;
-    }
-
-    if (this.combustionTempError || this.heatError) {
-      this.inputError.emit(true);
-      this.energyInputExhaustGasCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.energyInputExhaustGasCompareService.inputError.next(false);
-    }
-  }
-
-  disableForm() {
-    // this.exhaustGasForm.disable();
-  }
-
-  enableForm() {
-    // this.exhaustGasForm.enable();
+  checkWarnings() {
+    let tmpExhaustGas: EnergyInputExhaustGasLoss = this.energyInputExhaustGasService.getLossFromForm(this.exhaustGasForm);
+    let tmpWarnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(tmpExhaustGas, this.settings);
+    this.combustionTempWarning = tmpWarnings.combustionTempWarning;
+    this.heatWarning = tmpWarnings.heatWarning;
+    let hasWarning: boolean = ((this.heatWarning !== null) || (this.combustionTempWarning !== null));
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
@@ -117,10 +58,12 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+
   canCompare() {
     if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses && this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       return true;

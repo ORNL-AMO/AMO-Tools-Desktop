@@ -76,7 +76,7 @@ export class CoolingLossesService {
   }
 
   initGasFormFromLoss(loss: CoolingLoss): FormGroup {
-    
+
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat, Validators.required],
       'gasFlow': [loss.gasCoolingLoss.flowRate, Validators.required],
@@ -99,10 +99,94 @@ export class CoolingLossesService {
         finalTemperature: form.controls.outletTemp.value,
         specificHeat: form.controls.avgSpecificHeat.value,
         correctionFactor: form.controls.correctionFactor.value,
-        gasDensity: form.controls.gasDensity.value
+        gasDensity: form.controls.gasDensity.value,
+        outletTemperature: form.controls.outletTemp.value
       }
     }
     return tmpLoss;
   }
 
+  checkWarningsExist(warnings: GasCoolingWarnings | LiquidCoolingWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+  //Both
+  checkSpecificHeat(loss: GasCoolingLoss | LiquidCoolingLoss): string {
+    if (loss.specificHeat < 0) {
+      return 'Specific Heat must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkGasFlow(loss: GasCoolingLoss | LiquidCoolingLoss): string {
+    if (loss.flowRate < 0) {
+      return 'Gas Flow must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+  checkInletTemp(loss: GasCoolingLoss | LiquidCoolingLoss): string {
+    if (loss.initialTemperature > loss.outletTemperature) {
+      return 'Inlet temperature is greater than outlet temperature'
+    } else {
+      return null;
+    }
+  }
+
+  //liquid
+  checkLiquidWarnings(loss: LiquidCoolingLoss): LiquidCoolingWarnings {
+    return {
+      specificHeatWarning: this.checkSpecificHeat(loss),
+      temperatureWarning: this.checkInletTemp(loss),
+      densityLiquidWarning: this.checkLiquidDensity(loss),
+      liquidFlowWarning: this.checkGasFlow(loss)
+    }
+  }
+
+  checkLiquidDensity(loss: LiquidCoolingLoss): string {
+    if (loss.density < 0) {
+      return 'Density must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+
+  //gas
+  checkGasWarnings(loss: GasCoolingLoss): GasCoolingWarnings {
+    return {
+      specificHeatWarning: this.checkSpecificHeat(loss),
+      gasFlowWarning: this.checkGasFlow(loss),
+      gasDensityWarning: this.checkGasDensity(loss),
+      temperatureWarning: this.checkInletTemp(loss)
+    }
+  }
+
+  checkGasDensity(loss: GasCoolingLoss): string {
+    if (loss.gasDensity < 0) {
+      return 'Gas Density must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+}
+
+export interface GasCoolingWarnings {
+  specificHeatWarning: string;
+  gasFlowWarning: string;
+  gasDensityWarning: string;
+  temperatureWarning: string;
+}
+
+export interface LiquidCoolingWarnings {
+  specificHeatWarning: string;
+  temperatureWarning: string;
+  densityLiquidWarning: string;
+  liquidFlowWarning: string;
 }

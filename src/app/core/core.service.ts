@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { DirectoryDbRef } from '../shared/models/directory';
+import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
 declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
@@ -59,7 +59,7 @@ export class CoreService {
 
   createDirectory(): Promise<any> {
     return new Promise((resolve, reject) => {
-      let tmpDirectory: DirectoryDbRef = {
+      let tmpDirectory: Directory = {
         name: 'All Assessments',
         createdDate: new Date(),
         modifiedDate: new Date(),
@@ -69,6 +69,7 @@ export class CoreService {
         results => {
           tmpDirectory.parentDirectoryId = results;
           tmpDirectory.name = 'Examples';
+          tmpDirectory.isExample = true;
           this.indexedDbService.addDirectory(tmpDirectory).then(() => {
             resolve(true);
           })

@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { Directory } from '../../shared/models/directory';
-import { Calculator } from '../../shared/models/calculators';
 import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { AssessmentService } from '../assessment.service';
 
 
 @Component({
@@ -19,8 +20,6 @@ export class AssessmentDashboardComponent implements OnInit {
   deleteDataSignal = new EventEmitter<boolean>();
   @Output('deleteCheckedItems')
   deleteCheckedItems = new EventEmitter<boolean>();
-  @Output('resetDataEmit')
-  resetDataEmit = new EventEmitter<boolean>();
   @Output('emitNewDir')
   emitNewDir = new EventEmitter<boolean>();
   @Output('genReport')
@@ -39,9 +38,15 @@ export class AssessmentDashboardComponent implements OnInit {
   view: string;
   isFirstChange: boolean = true;
 
-  constructor() { }
+  constructor(private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    if (this.settingsDbService.globalSettings) {
+      if (!this.settingsDbService.globalSettings.disableDashboardTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('dashboard-tutorial');
+      }
+    }
     if (!this.view) {
       this.view = 'grid';
     }
@@ -79,27 +84,23 @@ export class AssessmentDashboardComponent implements OnInit {
     this.deleteCheckedItems.emit(true);
   }
 
-  resetData() {
-    this.resetDataEmit.emit(true);
-  }
-
   selectAllItems(bool: boolean) {
     this.isChecked = bool;
   }
 
-  newDir(){
+  newDir() {
     this.emitNewDir.emit(true);
   }
 
-  emitGenReport(){
+  emitGenReport() {
     this.genReport.emit(true);
   }
 
-  emitExport(){
+  emitExport() {
     this.exportEmit.emit(true);
   }
 
-  emitImport(){
+  emitImport() {
     this.importEmit.emit(true);
   }
 

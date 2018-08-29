@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -10,9 +9,7 @@ export class WallLossCompareService {
   //selected modification wall losses
   modifiedWallLosses: WallLoss[];
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

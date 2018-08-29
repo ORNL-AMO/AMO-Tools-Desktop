@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -7,9 +6,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 export class FlueGasCompareService {
   baselineFlueGasLoss: FlueGas[];
   modifiedFlueGasLoss: FlueGas[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses() {

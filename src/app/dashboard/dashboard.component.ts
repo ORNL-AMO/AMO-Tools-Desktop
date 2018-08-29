@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -7,7 +7,7 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
@@ -43,7 +43,6 @@ export class DashboardComponent implements OnInit {
   newDirEventToggle: boolean = false;
   dashboardView: string = 'landing-screen';
   goCalcHome: boolean = false;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
@@ -73,6 +72,7 @@ export class DashboardComponent implements OnInit {
   workingDirectorySub: Subscription;
   selectedTool: string;
   selectedToolSub: Subscription;
+  sidebarDataSub: Subscription;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
@@ -89,29 +89,22 @@ export class DashboardComponent implements OnInit {
     this.createAssessmentSub = this.assessmentService.createAssessment.subscribe(val => {
       this.createAssessment = val;
     })
-    if (!this.settingsDbService.globalSettings.disableTutorial) {
-      this.dontShowSub = this.settingsService.setDontShow.subscribe(val => {
-        if (this.settingsDbService.globalSettings) {
-          this.settingsDbService.globalSettings.disableTutorial = val;
-          this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-            this.settingsDbService.setAll();
-          });
-        }
-      })
-    }
+
+    //this.initializeTutorials();
+
     this.exportAllSub = this.exportService.exportAllClick.subscribe(val => {
       if (val) {
         this.exportAll();
       }
     })
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(viewStr => {
-      if(viewStr){
+      if (viewStr) {
         this.dashboardView = viewStr;
       }
     })
 
     this.workingDirectorySub = this.assessmentService.workingDirectoryId.subscribe(id => {
-      if(id){
+      if (id) {
         let directory: Directory = this.directoryDbService.getById(id);
         this.changeWorkingDirectory(directory)
       }
@@ -119,6 +112,10 @@ export class DashboardComponent implements OnInit {
 
     this.selectedToolSub = this.calculatorService.selectedTool.subscribe(toolStr => {
       this.selectedTool = toolStr;
+    })
+
+    this.sidebarDataSub = this.assessmentService.updateSidebarData.subscribe(val => {
+      this.newDir();
     })
   }
 
@@ -130,6 +127,7 @@ export class DashboardComponent implements OnInit {
     this.workingDirectorySub.unsubscribe();
     this.dashboardViewSub.unsubscribe();
     this.selectedToolSub.unsubscribe();
+    this.sidebarDataSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -143,6 +141,7 @@ export class DashboardComponent implements OnInit {
       this.suiteDbService.initCustomDbMaterials();
     }
   }
+
   getWorkingDirectoryData() {
     // this.updateDbData();
     this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
@@ -158,7 +157,7 @@ export class DashboardComponent implements OnInit {
       this.workingDirectory.calculators.push(tmpCalc);
       this.calcDataExists = false;
     }
-    this.changeDetectorRef.detectChanges();    
+    this.changeDetectorRef.detectChanges();
   }
 
   addCalculatorData(calcualtorData: Calculator) {
@@ -185,8 +184,8 @@ export class DashboardComponent implements OnInit {
     this.workingDirectory = this.allDirectories;
     if (!this.tutorialShown) {
       if (this.settingsDbService.globalSettings) {
-        if (!this.settingsDbService.globalSettings.disableTutorial) {
-          this.assessmentService.openingTutorial.next('landing-screen');
+        if (!this.assessmentService.tutorialShown && !this.settingsDbService.globalSettings.disableTutorial) {
+          this.assessmentService.showTutorial.next('landing-screen');
           this.tutorialShown = true;
         }
       }
@@ -210,14 +209,14 @@ export class DashboardComponent implements OnInit {
   }
 
   showPreAssessmentModal(calcIndex: number) {
-    if(calcIndex != undefined){
+    if (calcIndex != undefined) {
       this.selectedCalcIndex = calcIndex;
-    }else{
+    } else {
       let calcualtorData: Calculator = {
         directoryId: this.workingDirectory.id
       }
       this.workingDirectory.calculators.push(calcualtorData);
-      this.selectedCalcIndex = this.workingDirectory.calculators.length-1;
+      this.selectedCalcIndex = this.workingDirectory.calculators.length - 1;
       this.calcDataExists = false;
     }
     this.showPreAssessment = true;
@@ -267,18 +266,6 @@ export class DashboardComponent implements OnInit {
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 
-  showDeleteModal() {
-    this.deleting = false;
-    this.deleteModal.show();
-  }
-
-  hideDeleteModal() {
-    this.deleteModal.hide();
-    this.deleteModal.onHidden.subscribe(() => {
-      this.deleting = false;
-    })
-  }
-
   showDeleteItemsModal() {
     if (this.checkSelected()) {
       this.deleteItemsModal.show();
@@ -319,36 +306,6 @@ export class DashboardComponent implements OnInit {
     this.isImportView = false;
   }
 
-  deleteData() {
-    this.deleting = true;
-    this.indexedDbService.deleteDb().then(
-      results => {
-        this.suiteDbService.startup();
-        this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
-          this.coreService.createDirectory().then(() => {
-            this.coreService.createDirectorySettings().then(() => {
-              this.coreService.createExamples().then(() => {
-                this.setAllDbData();
-              });
-            });
-          });
-        });
-      });
-  }
-  setAllDbData() {
-    this.directoryDbService.setAll().then(() => {
-      this.assessmentDbService.setAll().then(() => {
-        this.settingsDbService.setAll().then(() => {
-          this.calculatorDbService.setAll().then(() => {
-            this.assessmentService.tutorialShown = false;
-            this.tutorialShown = false;
-            this.initData();
-            this.hideDeleteModal();
-          })
-        })
-      })
-    })
-  }
   checkSelected() {
     let tmpArray = new Array();
     let tmpArray2 = new Array();

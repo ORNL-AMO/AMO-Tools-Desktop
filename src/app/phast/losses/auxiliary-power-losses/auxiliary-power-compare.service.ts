@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -8,9 +7,7 @@ export class AuxiliaryPowerCompareService {
 
   baselineAuxLosses: AuxiliaryPowerLoss[];
   modifiedAuxLosses: AuxiliaryPowerLoss[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;

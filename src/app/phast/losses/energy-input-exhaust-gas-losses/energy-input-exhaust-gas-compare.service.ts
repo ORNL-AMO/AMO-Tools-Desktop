@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -7,10 +6,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 export class EnergyInputExhaustGasCompareService {
   baselineEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
   modifiedEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
-
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;

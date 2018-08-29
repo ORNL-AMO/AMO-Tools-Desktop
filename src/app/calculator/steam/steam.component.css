@@ -23,3 +23,12 @@ img {
 .fa-hourglass-half:hover{
   cursor: pointer;
 }
+
+
+.flash-tank, .header-steam{
+  width: 55%;
+}
+
+.prv, .steam-turbine{
+  width: 45%;
+}

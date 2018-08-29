@@ -154,6 +154,7 @@ export class PsatComponent implements OnInit {
             this.psatTabService.secondaryTab.next('explore-opportunities');
           }
         }
+        this.checkTutorials();
         this.getContainerHeight();
       })
       this.secondaryTabSub = this.psatTabService.secondaryTab.subscribe(val => {
@@ -195,8 +196,6 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.psatTabService.secondaryTab.next('explore-opportunities');
-    this.psatTabService.mainTab.next('system-setup');
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
     if (this.addNewSub) this.addNewSub.unsubscribe();
@@ -206,6 +205,8 @@ export class PsatComponent implements OnInit {
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
+    this.psatTabService.secondaryTab.next('explore-opportunities');
+    this.psatTabService.mainTab.next('system-setup');
   }
 
   ngAfterViewInit() {
@@ -225,6 +226,26 @@ export class PsatComponent implements OnInit {
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
+    }
+  }
+
+  checkTutorials() {
+    console.log('check')
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disablePsatSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-system-setup');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disablePsatAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disablePsatReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('psat-report-tutorial');
+      }
     }
   }
 

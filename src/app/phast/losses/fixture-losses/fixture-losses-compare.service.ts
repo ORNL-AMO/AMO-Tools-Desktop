@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FixtureLoss } from "../../../shared/models/phast/losses/fixtureLoss";
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -8,9 +7,7 @@ export class FixtureLossesCompareService {
 
   baselineFixtureLosses: FixtureLoss[];
   modifiedFixtureLosses: FixtureLoss[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

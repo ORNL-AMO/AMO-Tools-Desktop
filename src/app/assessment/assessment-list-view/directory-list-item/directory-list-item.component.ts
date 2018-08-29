@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { AssessmentService } from '../../assessment.service';
 
 @Component({
   selector: 'app-directory-list-item',
@@ -25,7 +26,7 @@ export class DirectoryListItemComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal') public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     if (this.isChecked) {
@@ -87,6 +88,7 @@ export class DirectoryListItemComponent implements OnInit {
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       });
     })

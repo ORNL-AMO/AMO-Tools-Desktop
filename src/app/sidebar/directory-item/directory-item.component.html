@@ -15,7 +15,7 @@
         </ul>
       </li>
       <app-directory-item *ngFor="let directory of directory.subDirectory" [directory]="directory" [selectedDirectoryId]="selectedDirectoryId"
-        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView"></app-directory-item>
+        (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
     </ul>
   </li>
 </ul>

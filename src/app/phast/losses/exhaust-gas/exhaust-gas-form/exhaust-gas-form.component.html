@@ -2,9 +2,9 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="offGasTemp">Off (Exhaust) Gas Temp</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareOffGasTemp(), 'invalid': exhaustGasForm.controls.offGasTemp.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareOffGasTemp(), 'invalid': exhaustGasForm.controls.offGasTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'offGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="offGasTemp" id="offGasTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="save()" (focus)="focusField('offGasTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -13,25 +13,25 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="CO">CO</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareCO(), 'invalid': exhaustGasForm.controls.CO.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCO(), 'invalid': exhaustGasForm.controls.CO.invalid}">
         <input [readonly]="!baselineSelected" name="{{'CO_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="CO" id="CO" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('CO')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('CO')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
     <div class="form-group">
       <label class="small" for="H2">H2</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareH2(), 'invalid': exhaustGasForm.controls.H2.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareH2(), 'invalid': exhaustGasForm.controls.H2.invalid}">
         <input [readonly]="!baselineSelected" name="{{'H2_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="H2" id="H2" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('H2')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('H2')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
     <div class="form-group">
       <label class="small" for="combustibleGases">Combustible Gas as CH4</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareCombustibleGases(), 'invalid': exhaustGasForm.controls.combustibleGases.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareCombustibleGases(), 'invalid': exhaustGasForm.controls.combustibleGases.invalid}">
         <input [readonly]="!baselineSelected" name="{{'combustibleGases_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="combustibleGases"
-          id="combustibleGases" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustibleGases')" (blur)="focusOut()">
+          id="combustibleGases" onfocus="this.select();" (input)="save()" (focus)="focusField('combustibleGases')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -39,18 +39,18 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="vfr">Total Volumetric Flow Rate</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareVfr(), 'invalid': exhaustGasForm.controls.vfr.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareVfr(), 'invalid': exhaustGasForm.controls.vfr.invalid}">
         <input [readonly]="!baselineSelected" name="{{'vfr_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="vfr" id="vfr" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('vfr')" (blur)="focusOut()">
+          (input)="save()" (focus)="focusField('vfr')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
       </div>
     </div>
     <div class="form-group">
       <label class="small" for="dustLoading">Dust Loading</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareDustLoading(), 'invalid': exhaustGasForm.controls.dustLoading.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareDustLoading(), 'invalid': exhaustGasForm.controls.dustLoading.invalid}">
         <input [readonly]="!baselineSelected" name="{{'dustLoading_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="dustLoading" id="dustLoading"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('dustLoading')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="save()" (focus)="focusField('dustLoading')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
       </div>

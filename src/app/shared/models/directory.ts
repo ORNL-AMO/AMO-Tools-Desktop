@@ -11,7 +11,7 @@ export interface Directory {
   id?: number,
   parentDirectoryId?: number,
   selected?: boolean,
-
+  isExample?: boolean
 }
 
 
