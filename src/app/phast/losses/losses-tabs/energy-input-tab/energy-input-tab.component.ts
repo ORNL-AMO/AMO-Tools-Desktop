@@ -24,7 +24,7 @@ export class EnergyInputTabComponent implements OnInit {
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   enInput1Done: boolean;
   compareSubscription: Subscription;
   lossSubscription: Subscription;

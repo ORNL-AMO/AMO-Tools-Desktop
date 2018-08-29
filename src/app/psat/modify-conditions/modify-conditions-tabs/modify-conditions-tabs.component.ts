@@ -23,9 +23,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
   displayFieldDataTooltip: boolean;
   fieldDataBadgeHover: boolean;
 
-  pumpFluidBadgeClass: Array<string>;
-  motorBadgeClass: Array<string>;
-  fieldDataBadgeClass: Array<string>;
+  pumpFluidBadgeClass: Array<string> = [];
+  motorBadgeClass: Array<string> = [];
+  fieldDataBadgeClass: Array<string> = [];
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;

@@ -25,7 +25,7 @@ export class ExhaustGasTabComponent implements OnInit {
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private exhaustGasService: ExhaustGasService, private exhaustGasCompareService: ExhaustGasCompareService, private cd: ChangeDetectorRef) { }
 

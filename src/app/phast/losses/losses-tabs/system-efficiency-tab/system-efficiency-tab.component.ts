@@ -22,7 +22,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   efficiencyDone: boolean;
   lossSubscription: Subscription;
 

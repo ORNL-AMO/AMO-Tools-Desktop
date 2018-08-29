@@ -16,7 +16,6 @@ import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
-import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
@@ -37,7 +36,6 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent,
     ExportableTableComponent,
     TabsTooltipComponent
@@ -50,7 +48,6 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent,
     ExportableTableComponent,
     TabsTooltipComponent

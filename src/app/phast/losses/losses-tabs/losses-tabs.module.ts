@@ -18,13 +18,14 @@ import { SlagTabComponent } from './slag-tab/slag-tab.component';
 import { WallTabComponent } from './wall-tab/wall-tab.component';
 import { OperationsTabComponent } from './operations-tab/operations-tab.component';
 import { ExhaustGasTabComponent } from './exhaust-gas-tab/exhaust-gas-tab.component';
-import { LossesTabsTooltipComponent } from './losses-tabs-tooltip/losses-tabs-tooltip.component';
+import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
-  declarations: [LossesTabsComponent, ChargeMaterialTabComponent, AtmosphereTabComponent, AuxiliaryPowerTabComponent, CoolingTabComponent, EnergyInputTabComponent, EnergyInputExhaustGasTabComponent, ExtendedSurfaceTabComponent, FixtureTabComponent, FlueGasTabComponent, GasLeakageTabComponent, SystemEfficiencyTabComponent, OpeningTabComponent, OtherTabComponent, SlagTabComponent, WallTabComponent, OperationsTabComponent, ExhaustGasTabComponent, LossesTabsTooltipComponent],
+  declarations: [LossesTabsComponent, ChargeMaterialTabComponent, AtmosphereTabComponent, AuxiliaryPowerTabComponent, CoolingTabComponent, EnergyInputTabComponent, EnergyInputExhaustGasTabComponent, ExtendedSurfaceTabComponent, FixtureTabComponent, FlueGasTabComponent, GasLeakageTabComponent, SystemEfficiencyTabComponent, OpeningTabComponent, OtherTabComponent, SlagTabComponent, WallTabComponent, OperationsTabComponent, ExhaustGasTabComponent],
   exports: [LossesTabsComponent]
 })
 export class LossesTabsModule { }
