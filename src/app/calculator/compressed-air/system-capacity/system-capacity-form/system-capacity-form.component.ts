@@ -57,18 +57,13 @@ export class SystemCapacityFormComponent implements OnInit {
   deleteCustomPipe(i: number) {
     if (i == this.inputs.customPipes.length - 1) {
       this.inputs.customPipes.pop();
-      // console.log('this.outputs.customPipes = ');
-      // console.log(this.outputs.customPipes);
-      // this.outputs.customPipes.pop();
     }
     else {
       let tempCustomPipes = this.inputs.customPipes;
       this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
-      // this.outputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
       for (let j = 0; j < tempCustomPipes.length; j++) {
         if (j != i) {
           this.inputs.customPipes.push(tempCustomPipes[j]);
-          // this.outputs.customPipes.push(tempCustomPipes[j]);
         }
       }
     }

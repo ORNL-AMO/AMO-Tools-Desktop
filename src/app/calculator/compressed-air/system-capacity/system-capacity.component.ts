@@ -76,11 +76,7 @@ export class SystemCapacityComponent implements OnInit {
   }
 
   getTotalPipeVolume() {
-    console.log('outputs before StandaloneService = ');
-    console.log(this.outputs);
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
-    console.log('outputs after StandaloneService = ');
-    console.log(this.outputs);
     let customPipeVolume: number = 0;
     if (this.inputs.customPipes && this.inputs.customPipes.length > 0) {
       customPipeVolume = this.getCustomPipeVolume();
