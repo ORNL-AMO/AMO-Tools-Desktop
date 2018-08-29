@@ -24,7 +24,7 @@ export class PsatTabsComponent implements OnInit {
   fieldDataClassStatus: Array<string> = [];
   pumpFluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
   motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
-  fieldDataBage: { display: boolean, hover: boolean } = { display: false, hover: false }
+  fieldDataBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
 
   stepTab: String;
   currentTab: string;

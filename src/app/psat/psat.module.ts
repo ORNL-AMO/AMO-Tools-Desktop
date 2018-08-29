@@ -45,7 +45,6 @@ import { PsatReportSankeyComponent } from './psat-report/psat-report-sankey/psat
 import { PsatReportGraphsComponent } from './psat-report/psat-report-graphs/psat-report-graphs.component';
 import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar-chart/psat-bar-chart.component';
 import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs/psat-report-graphs-print/psat-report-graphs-print.component';
-import { PsatTabsTooltipComponent } from './psat-tabs-tooltip/psat-tabs-tooltip.component';
 import { PsatWarningService } from './psat-warning.service';
 import { PsatTabService } from './psat-tab.service';
 
@@ -70,8 +69,7 @@ import { PsatTabService } from './psat-tab.service';
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
     PsatBarChartComponent,
-    PsatReportGraphsPrintComponent,
-    PsatTabsTooltipComponent
+    PsatReportGraphsPrintComponent
   ],
   exports: [
     PsatReportComponent

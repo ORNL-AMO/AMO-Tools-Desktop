@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhastTabsTooltipComponent } from './phast-tabs-tooltip.component';
+import { TabsTooltipComponent } from './tabs-tooltip.component';
 
-describe('PhastTabsTooltipComponent', () => {
-  let component: PhastTabsTooltipComponent;
-  let fixture: ComponentFixture<PhastTabsTooltipComponent>;
+describe('TabsTooltipComponent', () => {
+  let component: TabsTooltipComponent;
+  let fixture: ComponentFixture<TabsTooltipComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhastTabsTooltipComponent ]
+      declarations: [ TabsTooltipComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PhastTabsTooltipComponent);
+    fixture = TestBed.createComponent(TabsTooltipComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -19,6 +19,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
+import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { ExportableTableComponent } from './exportable-table/exportable-table.co
     PhonePipe,
     ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent,
-    ExportableTableComponent
+    ExportableTableComponent,
+    TabsTooltipComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -50,7 +52,8 @@ import { ExportableTableComponent } from './exportable-table/exportable-table.co
     PhonePipe,
     ModifyConditionsTabsTooltipComponent,
     SimpleTooltipComponent,
-    ExportableTableComponent
+    ExportableTableComponent,
+    TabsTooltipComponent
   ],
   providers: [
     ValidationService,

@@ -1,7 +1,7 @@
 <div #content class="fsat-container d-flex flex-column fsat" *ngIf="assessment && settings">
   <div #header class="w-100 hide-print sticky-top">
     <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
-    <app-fsat-tabs [settings]="settings"></app-fsat-tabs>
+    <app-fsat-tabs [settings]="settings" [fsat]="_fsat"></app-fsat-tabs>
   </div>
 
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">

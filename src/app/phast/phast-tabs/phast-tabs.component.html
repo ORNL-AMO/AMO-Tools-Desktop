@@ -9,8 +9,8 @@
         <span *ngIf="tab.step == 1 || tab.step == 2" (mouseenter)="showTooltip(tab.step)" (mouseleave)="hideTooltip(tab.step)" class="step-number">{{tab.step}}</span>
         <span *ngIf="tab.step > 2" class="step-number">{{tab.step}}</span>
         {{tab.tabName}}</a>
-      <app-phast-tabs-tooltip *ngIf="tab.step == 1" [badgeClass]="tab1Status" [reveal]="display1" [display]="badge1Hover"></app-phast-tabs-tooltip>
-      <app-phast-tabs-tooltip *ngIf="tab.step == 2" [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-phast-tabs-tooltip>
+      <app-tabs-tooltip *ngIf="tab.step == 1" [badgeClass]="tab1Status" [reveal]="display1" [display]="badge1Hover"></app-tabs-tooltip>
+      <app-tabs-tooltip *ngIf="tab.step == 2" [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-tabs-tooltip>
     </li>
   </ul>
 </nav>
