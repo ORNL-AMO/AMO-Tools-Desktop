@@ -21,8 +21,6 @@ export class SystemBasicsComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   settings: Settings;
-  @Input()
-  isAssessmentSettings: boolean;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
   @Input()

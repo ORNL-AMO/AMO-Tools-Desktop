@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-import { PSAT, PsatInputs, Modification } from '../shared/models/psat';
+import { PSAT, Modification } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
@@ -48,28 +48,17 @@ export class PsatComponent implements OnInit {
 
   tabIndex: number = 0;
 
-  psat: PSAT;
+
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: PSAT;
   psat2: PSAT;
 
-  subTabIndex: number = 0;
-
-  isValid: boolean;
-
   _psat: PSAT;
-  fieldDataReady: boolean = false;
-  motorReady: boolean = false;
-  // subTab: string = 'system-basics';
   settings: Settings;
-  isAssessmentSettings: boolean = false;
   isModalOpen: boolean = false;
-  viewingReport: boolean = false;
-  tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
   calcTab: string;
-  saveContinue: boolean = false;
   modificationIndex: number = 0;
   selectedModSubscription: Subscription;
   addNewSub: Subscription;
@@ -122,7 +111,6 @@ export class PsatComponent implements OnInit {
           this._psat.modifications = new Array();
           this.modificationExists = false;
         }
-        this.isValid = true;
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
@@ -252,7 +240,6 @@ export class PsatComponent implements OnInit {
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
       this.settings = tmpSettings;
-      this.isAssessmentSettings = true;
     } else {
       //if no settings found for assessment, check directory settings
       this.getParentDirectorySettings(this.assessment.directoryId);
@@ -282,18 +269,6 @@ export class PsatComponent implements OnInit {
       let tmpDir: Directory = this.directoryDbService.getById(parentId);
       this.getParentDirectorySettings(tmpDir.parentDirectoryId);
     }
-  }
-
-  valid() {
-    this.isValid = !this.isValid
-  }
-
-  setValid() {
-    this.isValid = true;
-  }
-
-  setInvalid() {
-    this.isValid = false;
   }
 
   continue() {
