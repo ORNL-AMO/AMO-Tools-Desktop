@@ -2,8 +2,8 @@
   <form>
     <div class="form-section">
       <div class="form-group">
-        <label class="bold">Pipe Size (ft.)</label>
-        <label class="bold text-center">Pipe Length</label>
+        <label class="bold">Pipe Size (in.)</label>
+        <label class="bold text-center">Pipe Length (ft.)</label>
       </div>
       <div class="form-group">
         <label for="oneHalf">
@@ -120,6 +120,46 @@
         </div>
       </div>
     </div>
+
+    <div class="form-section pt-1">
+      <label class="bold">Custom Pipes</label>
+      <div class="custom-pipe-form-container" *ngFor="let customPipe of inputs.customPipes; let i = index">
+
+        <div class="form-group">
+          <label for="{{'pipe_size_' + i}}">Pipe {{i + 1}} Size (in.)</label>
+          <div class="input-group">
+            <input name="{{'pipe_size_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeSize"
+              id="{{'pipe_size_' + i}}" (input)="emitChange()" onfocus="this.select();">
+            <span class="input-group-addon units">in</span>
+            <span class="input-group-addon">
+              <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{'pipe_length_' + i}}">Pipe {{i + 1}} Length (ft.)</label>
+          <div class="input-group">
+            <input name="{{'pipe_length_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeLength"
+              id="{{'pipe_length_' + i}}" (input)="emitChange()" onfocus="this.select();">
+            <span class="input-group-addon units">ft</span>
+            <span class="input-group-addon">
+              <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
+            </span>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="row">
+        <div class="col-md-auto mx-auto">
+          <a class="click-link small" (click)="addCustomPipe()">Add Custom Pipe</a>
+        </div>
+      </div>
+    </div>
+
+
+
     <div class="form-section pt-1">
       <label class="bold">Enter the Receiver Capacities</label>
       <div class="form-group" *ngFor="let capacity of inputs.receiverCapacities; let index=index; trackBy:trackByFn">
@@ -129,7 +169,7 @@
             id="{{'capacity_'+index}}" (input)="emitChange()" onfocus="this.select();">
           <span class="input-group-addon units">gal</span>
           <span class="input-group-addon">
-            <a class="click-link" (click)="removeCapacity(index)"> &times;</a>
+            <div class="btn-delete-field" (click)="removeCapacity(index)"> &times;</div>
           </span>
         </div>
       </div>

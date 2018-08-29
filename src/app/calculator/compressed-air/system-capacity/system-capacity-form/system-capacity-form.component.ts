@@ -20,6 +20,7 @@ export class SystemCapacityFormComponent implements OnInit {
   }
 
   emitChange() {
+
     this.calculate.emit(this.inputs);
   }
 
@@ -36,6 +37,42 @@ export class SystemCapacityFormComponent implements OnInit {
   //function used by *ngFor with data binding
   trackByFn(index: any, item: any) {
     return index;
+  }
+
+  addCustomPipe() {
+    let customPipe = {
+      pipeSize: 0,
+      pipeLength: 0
+    };
+    if (!this.inputs.customPipes) {
+      this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+    }
+    if (!this.outputs.customPipes) {
+      this.outputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+    }
+    this.inputs.customPipes.push(customPipe);
+    this.outputs.customPipes.push(customPipe);
+  }
+
+  deleteCustomPipe(i: number) {
+    if (i == this.inputs.customPipes.length - 1) {
+      this.inputs.customPipes.pop();
+      // console.log('this.outputs.customPipes = ');
+      // console.log(this.outputs.customPipes);
+      // this.outputs.customPipes.pop();
+    }
+    else {
+      let tempCustomPipes = this.inputs.customPipes;
+      this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+      // this.outputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+      for (let j = 0; j < tempCustomPipes.length; j++) {
+        if (j != i) {
+          this.inputs.customPipes.push(tempCustomPipes[j]);
+          // this.outputs.customPipes.push(tempCustomPipes[j]);
+        }
+      }
+    }
+    this.emitChange();
   }
 
 }

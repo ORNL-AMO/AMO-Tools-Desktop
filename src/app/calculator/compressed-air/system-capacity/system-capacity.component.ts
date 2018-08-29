@@ -26,6 +26,7 @@ export class SystemCapacityComponent implements OnInit {
   ngOnInit() {
     this.inputs = {
       receiverCapacities: new Array<number>(),
+      customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -39,9 +40,12 @@ export class SystemCapacityComponent implements OnInit {
       five: 0,
       six: 0,
     };
+
     this.inputs.receiverCapacities.push(0);
+    
     this.outputs = {
       receiverCapacities: new Array<number>(),
+      customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
       oneHalf: 0,
       threeFourths: 0,
       one: 0,
@@ -70,8 +74,32 @@ export class SystemCapacityComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   getTotalPipeVolume() {
+    console.log('outputs before StandaloneService = ');
+    console.log(this.outputs);
     this.outputs = StandaloneService.airSystemCapacity(this.inputs);
+    console.log('outputs after StandaloneService = ');
+    console.log(this.outputs);
+    let customPipeVolume: number = 0;
+    if (this.inputs.customPipes && this.inputs.customPipes.length > 0) {
+      customPipeVolume = this.getCustomPipeVolume();
+    }
+    this.outputs.totalPipeVolume += customPipeVolume;
+    this.outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
     return this.outputs.totalPipeVolume;
+  }
+
+  getCustomPipeVolume(): number {
+    let volume: number = 0;
+    for (let i = 0; i < this.inputs.customPipes.length; i++) {
+      volume += this.calculatePipeVolume(this.inputs.customPipes[i].pipeSize, this.inputs.customPipes[i].pipeLength);
+    }
+    return volume;
+  }
+
+  calculatePipeVolume(diameter: number, length: number): number {
+    let volume: number = Math.pow((diameter / 24), 2) * Math.PI * length;
+    return volume;
   }
 }
