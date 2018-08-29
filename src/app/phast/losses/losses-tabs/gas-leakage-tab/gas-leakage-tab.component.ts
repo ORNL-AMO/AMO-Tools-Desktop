@@ -26,7 +26,7 @@ export class GasLeakageTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private gasLeakageLossesService: GasLeakageLossesService, private gasLeakageCompareService: GasLeakageCompareService, private cd: ChangeDetectorRef) { }
 

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LossesTabsTooltipComponent } from './losses-tabs-tooltip.component';
+import { TabsTooltipComponent } from './tabs-tooltip.component';
 
-describe('LossesTabsTooltipComponent', () => {
-  let component: LossesTabsTooltipComponent;
-  let fixture: ComponentFixture<LossesTabsTooltipComponent>;
+describe('TabsTooltipComponent', () => {
+  let component: TabsTooltipComponent;
+  let fixture: ComponentFixture<TabsTooltipComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LossesTabsTooltipComponent ]
+      declarations: [ TabsTooltipComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LossesTabsTooltipComponent);
+    fixture = TestBed.createComponent(TabsTooltipComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
