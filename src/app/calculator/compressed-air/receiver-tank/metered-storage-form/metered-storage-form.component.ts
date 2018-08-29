@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
 
 @Component({
   selector: 'app-metered-storage-form',
@@ -11,21 +12,15 @@ export class MeteredStorageFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   
-  inputs: ReceiverTankMeteredStorage = {
-    method: 2,
-    lengthOfDemand: 0,
-    airFlowRequirement: 0,
-    atmosphericPressure: 14.7,
-    initialTankPressure: 0,
-    finalTankPressure: 0,
-    meteredControl: 0,
-  };
+  inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.meteredStorageInputs;
+    this.getTotalReceiverVolume();
   }
 
   getTotalReceiverVolume() {

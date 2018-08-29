@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ReceiverTankGeneral } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
 
 @Component({
   selector: 'app-general-method-form',
@@ -11,17 +12,14 @@ export class GeneralMethodFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  inputs: ReceiverTankGeneral = {
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    method: 0,
-    atmosphericPressure: 14.7,
-  };
+  inputs: ReceiverTankGeneral;
   finalTankPressure: number;
 
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.generalMethodInputs;
+    this.getStorage();
   }
 
   getStorage() {

@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PneumaticValve } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
 
 @Component({
   selector: 'app-flow-factor',
@@ -20,14 +21,11 @@ export class FlowFactorComponent implements OnInit {
   valveFlowFactor: number = 0;
   userFlowRate: boolean = false;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
-    this.inputs = {
-      inletPressure: 0,
-      outletPressure: 0,
-      flowRate: 0
-    };
+    this.inputs = this.compressedAirService.pnuematicValveInputs;
+    this.getValveFlowFactor();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -51,7 +49,12 @@ export class FlowFactorComponent implements OnInit {
     if (!this.userFlowRate) {
       this.getFlowRate();
     }
-    this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
+    let val: number = StandaloneService.pneumaticValve(this.inputs);
+    if (isNaN(val) == false) {
+      this.valveFlowFactor = val;
+    } else {
+      this.valveFlowFactor = 0;
+    }
   }
 
   changeField(str: string) {

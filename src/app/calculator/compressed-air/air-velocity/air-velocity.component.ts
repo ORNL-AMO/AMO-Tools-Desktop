@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
+import { StandaloneService } from "../../standalone.service";
+import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
 
 @Component({
   selector: 'app-air-velocity',
@@ -21,30 +22,11 @@ export class AirVelocityComponent implements OnInit {
   inputs: AirVelocityInput;
   outputs: PipeSizes;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
-    this.inputs = {
-      airFlow: 0,
-      pipePressure: 0,
-      atmosphericPressure: 0,
-    };
-    this.outputs = {
-      oneHalf: 0,
-      threeFourths: 0,
-      one: 0,
-      oneAndOneFourth: 0,
-      oneAndOneHalf: 0,
-      two: 0,
-      twoAndOneHalf: 0,
-      three: 0,
-      threeAndOneHalf: 0,
-      four: 0,
-      five: 0,
-      six: 0,
-    };
-    // this.getAirVelocity();
-    // console.log(this.airVelocityOutput);
+    this.inputs = this.compressedAirService.airVelocityInputs;    
+    this.getAirVelocity(this.inputs);
   }
   ngAfterViewInit() {
     setTimeout(() => {

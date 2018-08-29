@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { CompressedAirService } from '../compressed-air.service';
 
 
 @Component({
@@ -35,15 +36,18 @@ export class ReceiverTankComponent implements OnInit {
       value: 3
     }
   ];
-  method: number = 0;
+  method: number;
 
   currentField: string = 'default';
   currentForm: string;
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
-
+    this.method = this.compressedAirService.recieverTankMethod;
+  }
+  ngOnDestroy(){
+    this.compressedAirService.recieverTankMethod = this.method;
   }
   changeField(str: string, formStr: string) {
     this.currentField = str;

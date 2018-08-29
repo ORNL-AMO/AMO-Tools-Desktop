@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import {StandaloneService} from "../../standalone.service";
 import {  PneumaticAirRequirementInput, PneumaticAirRequirementOutput} from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
 
 @Component({
   selector: 'app-pneumatic-air',
@@ -20,23 +21,11 @@ export class PneumaticAirComponent implements OnInit {
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
-    this.inputs = {
-      pistonType: 0,
-      cylinderDiameter: 0,
-      cylinderStroke: 0,
-      pistonRodDiameter: 0,
-      airPressure: 0,
-      cyclesPerMinute: 0
-    };
-
-    this.outputs = {
-      airRequirementPneumaticCylinder: 0,
-      volumeAirIntakePiston: 0,
-      compressionRatio: 0
-    };
+    this.inputs = this.compressedAirService.pneumaticAirinputs;
+    this.calculatePneumaticAirRequirement(this.inputs);
   }
   ngAfterViewInit() {
     setTimeout(() => {
