@@ -1,49 +1,25 @@
 <div #content class="psat-container psat d-flex flex-column" *ngIf="assessment && settings">
   <div #header class="w-100 hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-    <!--system-setup-->
-    <!-- <nav class="hide-print" *ngIf="mainTab == 'system-setup'">
-      <div class="d-flex tabs psat subtabs progress-tabs flex-wrap">
-        <div class="fixed-tab-size success" [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')">
-            <span class="step-number">1</span> Assessment Settings</a>
-        </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid', 'input-error': tab2Status == 'input-error', 'missing-data': tab2Status == 'missing-data', 'success': tab2Status == 'success'}">
-          <a (click)="changeSubTab('pump-fluid')">
-            <span (mouseenter)="showTooltip(2)" (mouseleave)="hideTooltip(2)" class="step-number">2</span> Pump &amp; Fluid</a>
-          <app-psat-tabs-tooltip [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-psat-tabs-tooltip>
-        </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid(), 'input-error': tab3Status == 'input-error', 'missing-data': tab3Status == 'missing-data', 'success': tab3Status == 'success' }">
-          <a (click)="changeSubTab('motor')">
-            <span (mouseenter)="showTooltip(3)" (mouseleave)="hideTooltip(3)" class="step-number">3</span> Motor</a>
-          <app-psat-tabs-tooltip [badgeClass]="tab3Status" [reveal]="display3" [display]="badge3Hover"></app-psat-tabs-tooltip>
-        </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor(), 'input-error': tab4Status == 'input-error', 'missing-data': tab4Status == 'missing-data', 'success': tab4Status == 'success'}">
-          <a (click)="changeSubTab('field-data')">
-            <span (mouseenter)="showTooltip(4)" (mouseleave)="hideTooltip(4)" class="step-number">4</span> Field Data</a>
-          <app-psat-tabs-tooltip [badgeClass]="tab4Status" [reveal]="display4" [display]="badge4Hover"></app-psat-tabs-tooltip>
-        </div>
-      </div>
-    </nav> -->
-    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
-      <app-psat-tabs [settings]="settings"></app-psat-tabs>
+    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'system-setup'">
+      <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
     </div>
   </div>
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-      <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [assessment]="assessment" [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings"
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment" [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings"
         (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
-      <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
+      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
         [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-      <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
+      <app-motor *ngIf="stepTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
         [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
-      <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
+      <app-field-data *ngIf="stepTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [(psat)]="_psat" (saved)="save()"
         [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
         [assessment]="assessment"></app-field-data>
     </div>
-    <div class="w-50" [ngClass]="{'pl-0': stepTab == 'fan-field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [containerHeight]="containerHeight"
-        [showResults]="subTab == 'field-data'"></app-help-panel>
+    <div class="w-50" [ngClass]="{'pl-0': stepTab == 'field-data'}">
+      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
+        [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>
 
@@ -98,7 +74,7 @@
   <!--end report-->
   <!--footer-->
   <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
-    <div class="pull-left" *ngIf="subTab != 'system-basics' || mainTab == 'assessment'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">

@@ -1,20 +1,20 @@
 <nav class="hide-print" *ngIf="mainTab == 'system-setup'">
   <div class="d-flex tabs psat subtabs progress-tabs flex-wrap">
-    <div class="fixed-tab-size success" [ngClass]="{'active': subTab == 'system-basics'}">
+    <div class="fixed-tab-size" [ngClass]="settingsClassStatus">
       <a (click)="changeSubTab('system-basics')">
         <span class="step-number">1</span> Assessment Settings</a>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid', 'input-error': tab2Status == 'input-error', 'missing-data': tab2Status == 'missing-data', 'success': tab2Status == 'success'}">
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'pump-fluid', 'input-error': tab2Status == 'input-error', 'missing-data': tab2Status == 'missing-data', 'success': tab2Status == 'success'}">
       <a (click)="changeSubTab('pump-fluid')">
         <span (mouseenter)="showTooltip(2)" (mouseleave)="hideTooltip(2)" class="step-number">2</span> Pump &amp; Fluid</a>
       <app-psat-tabs-tooltip [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-psat-tabs-tooltip>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid(), 'input-error': tab3Status == 'input-error', 'missing-data': tab3Status == 'missing-data', 'success': tab3Status == 'success' }">
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'motor', 'disabled': checkPumpFluid(), 'input-error': tab3Status == 'input-error', 'missing-data': tab3Status == 'missing-data', 'success': tab3Status == 'success' }">
       <a (click)="changeSubTab('motor')">
         <span (mouseenter)="showTooltip(3)" (mouseleave)="hideTooltip(3)" class="step-number">3</span> Motor</a>
       <app-psat-tabs-tooltip [badgeClass]="tab3Status" [reveal]="display3" [display]="badge3Hover"></app-psat-tabs-tooltip>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor(), 'input-error': tab4Status == 'input-error', 'missing-data': tab4Status == 'missing-data', 'success': tab4Status == 'success'}">
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'field-data', 'disabled': checkMotor(), 'input-error': tab4Status == 'input-error', 'missing-data': tab4Status == 'missing-data', 'success': tab4Status == 'success'}">
       <a (click)="changeSubTab('field-data')">
         <span (mouseenter)="showTooltip(4)" (mouseleave)="hideTooltip(4)" class="step-number">4</span> Field Data</a>
       <app-psat-tabs-tooltip [badgeClass]="tab4Status" [reveal]="display4" [display]="badge4Hover"></app-psat-tabs-tooltip>
@@ -22,7 +22,7 @@
   </div>
 </nav>
 
-<div class="navbar assessment-bar" *ngIf="mainTab != 'calculators'">
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="d-flex tabs subtabs psat mr-auto">
     <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
       <a (click)="changeTab('explore-opportunities')">Explore Opportunities

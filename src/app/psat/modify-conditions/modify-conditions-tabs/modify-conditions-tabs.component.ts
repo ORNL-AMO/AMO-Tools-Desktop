@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PsatWarningService, FieldDataWarnings, MotorWarnings } from '../../psat-warning.service';
 import { Settings } from '../../../shared/models/settings';
+import { PsatTabService } from '../../psat-tab.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -28,14 +29,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;
-  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService) { }
+  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
       this.setBadgeClass();
     })
 
-    this.modTabSub = this.psatService.modifyConditionsTab.subscribe(val => {
+    this.modTabSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
 
@@ -181,7 +182,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   tabChange(str: string) {
-    this.psatService.modifyConditionsTab.next(str);
+    this.psatTabService.modifyConditionsTab.next(str);
   }
 
   showTooltip(badge: string) {

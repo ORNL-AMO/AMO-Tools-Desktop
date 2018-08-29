@@ -15,20 +15,10 @@ export class PsatService {
     flaMax: 0
   };
 
-  mainTab: BehaviorSubject<string>;
-  secondaryTab: BehaviorSubject<string>;
-  calcTab: BehaviorSubject<string>;
   baseline: PSAT;
   getResults: BehaviorSubject<boolean>;
-  modifyConditionsTab: BehaviorSubject<string>;
-  stepTab: BehaviorSubject<string>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve');
     this.getResults = new BehaviorSubject<boolean>(true);
-    this.modifyConditionsTab = new BehaviorSubject<string>('field-data');
-    this.stepTab = new BehaviorSubject<string>('system-basics');
   }
 
   test() {

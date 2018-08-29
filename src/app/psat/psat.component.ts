@@ -19,6 +19,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { PsatTabService } from './psat-tab.service';
 
 @Component({
   selector: 'app-psat',
@@ -47,25 +48,20 @@ export class PsatComponent implements OnInit {
 
   tabIndex: number = 0;
 
-  subTabs: Array<string> = [
-    'system-basics',
-    'pump-fluid',
-    'motor',
-    'field-data'
-  ];
 
-  tab1Status: string;
-  tab2Status: string;
-  tab3Status: string;
-  tab4Status: string;
-  badge1Hover: boolean;
-  badge2Hover: boolean;
-  badge3Hover: boolean;
-  badge4Hover: boolean;
-  display1: boolean;
-  display2: boolean;
-  display3: boolean;
-  display4: boolean;
+
+  // tab1Status: string;
+  // tab2Status: string;
+  // tab3Status: string;
+  // tab4Status: string;
+  // badge1Hover: boolean;
+  // badge2Hover: boolean;
+  // badge3Hover: boolean;
+  // badge4Hover: boolean;
+  // display1: boolean;
+  // display2: boolean;
+  // display3: boolean;
+  // display4: boolean;
 
   psat: PSAT;
   psatOptions: Array<any>;
@@ -98,7 +94,7 @@ export class PsatComponent implements OnInit {
   calcTabSub: Subscription;
   openModSub: Subscription;
   showAdd: boolean;
-  stepTabSubscription:Subscription;
+  stepTabSubscription: Subscription;
   stepTab: string;
   constructor(
     private location: Location,
@@ -113,7 +109,8 @@ export class PsatComponent implements OnInit {
     private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
-    private assessmentDbService: AssessmentDbService) {
+    private assessmentDbService: AssessmentDbService,
+    private psatTabService: PsatTabService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -121,19 +118,6 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tab1Status = '';
-    this.tab2Status = '';
-    this.tab3Status = '';
-    this.tab4Status = '';
-    this.badge1Hover = false;
-    this.badge2Hover = false;
-    this.badge3Hover = false;
-    this.badge4Hover = false;
-    this.display1 = false;
-    this.display2 = false;
-    this.display3 = false;
-    this.display4 = false;
-
     //this.psatService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
@@ -158,26 +142,26 @@ export class PsatComponent implements OnInit {
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
-        this.psatService.mainTab.next(tmpTab);
+        this.psatTabService.mainTab.next(tmpTab);
       }
-      this.mainTabSub = this.psatService.mainTab.subscribe(val => {
+      this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
         this.mainTab = val;
         if (this.mainTab == 'diagram') {
-          this.psatService.secondaryTab.next('system-curve');
+          this.psatTabService.secondaryTab.next('system-curve');
         }
         else if (this.mainTab == 'assessment') {
           if (this.currentTab != 'explore-opportunities' && this.currentTab != 'modify-conditions') {
-            this.psatService.secondaryTab.next('explore-opportunities');
+            this.psatTabService.secondaryTab.next('explore-opportunities');
           }
         }
         this.getContainerHeight();
       })
-      this.secondaryTabSub = this.psatService.secondaryTab.subscribe(val => {
+      this.secondaryTabSub = this.psatTabService.secondaryTab.subscribe(val => {
         this.currentTab = val;
         this.getContainerHeight();
       })
 
-      this.calcTabSub = this.psatService.calcTab.subscribe(val => {
+      this.calcTabSub = this.psatTabService.calcTab.subscribe(val => {
         this.calcTab = val;
       })
 
@@ -204,15 +188,15 @@ export class PsatComponent implements OnInit {
         }
       })
 
-      this.stepTabSubscription = this.psatService.stepTab.subscribe(val => {
+      this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
         this.stepTab = val;
       })
     })
   }
 
   ngOnDestroy() {
-    this.psatService.secondaryTab.next('explore-opportunities');
-    this.psatService.mainTab.next('system-setup');
+    this.psatTabService.secondaryTab.next('explore-opportunities');
+    this.psatTabService.mainTab.next('system-setup');
     this.compareService.baselinePSAT = undefined;
     this.compareService.modifiedPSAT = undefined;
     if (this.addNewSub) this.addNewSub.unsubscribe();
@@ -230,14 +214,6 @@ export class PsatComponent implements OnInit {
     }, 100);
   }
 
-  // setCompareVal() {
-  //   this.compareService.baselinePSAT = this._psat;
-  //   if (this._psat.modifications) {
-  //     if (this._psat.modifications) {
-  //       this.compareService.modifiedPSAT = this._psat.modifications[this.modificationIndex].psat;
-  //     }
-  //   }
-  // }
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
@@ -265,30 +241,30 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  validateSettings() {
-    if (this.settings === undefined) {
-      return 'input-error';
-    }
-    if (this.settings.flowMeasurement === undefined || this.settings.flowMeasurement == '') {
-      return 'missing-data';
-    }
-    if (this.settings.language === undefined || this.settings.language == '') {
-      return 'missing-data';
-    }
-    if (this.settings.powerMeasurement === undefined || this.settings.powerMeasurement == '') {
-      return 'missing-data';
-    }
-    if (this.settings.pressureMeasurement === undefined || this.settings.pressureMeasurement == '') {
-      return 'missing-data';
-    }
-    if (this.settings.temperatureMeasurement === undefined || this.settings.pressureMeasurement == '') {
-      return 'missing-data';
-    }
-    if (this.settings.distanceMeasurement === undefined || this.settings.distanceMeasurement == '') {
-      return 'missing-data';
-    }
-    return 'success';
-  }
+  // validateSettings() {
+  //   if (this.settings === undefined) {
+  //     return 'input-error';
+  //   }
+  //   if (this.settings.flowMeasurement === undefined || this.settings.flowMeasurement == '') {
+  //     return 'missing-data';
+  //   }
+  //   if (this.settings.language === undefined || this.settings.language == '') {
+  //     return 'missing-data';
+  //   }
+  //   if (this.settings.powerMeasurement === undefined || this.settings.powerMeasurement == '') {
+  //     return 'missing-data';
+  //   }
+  //   if (this.settings.pressureMeasurement === undefined || this.settings.pressureMeasurement == '') {
+  //     return 'missing-data';
+  //   }
+  //   if (this.settings.temperatureMeasurement === undefined || this.settings.pressureMeasurement == '') {
+  //     return 'missing-data';
+  //   }
+  //   if (this.settings.distanceMeasurement === undefined || this.settings.distanceMeasurement == '') {
+  //     return 'missing-data';
+  //   }
+  //   return 'success';
+  // }
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -300,7 +276,7 @@ export class PsatComponent implements OnInit {
       //if no settings found for assessment, check directory settings
       this.getParentDirectorySettings(this.assessment.directoryId);
     }
-    this.tab1Status = this.validateSettings();
+    // this.tab1Status = this.validateSettings();
   }
 
   getParentDirectorySettings(parentId: number) {
@@ -327,20 +303,20 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  checkPumpFluid() {
-    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-    let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
-    return !tmpBool;
-  }
+  // checkPumpFluid() {
+  //   let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+  //   let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
+  //   return !tmpBool;
+  // }
 
-  checkMotor() {
-    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-    //check both steps
-    let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
-    let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
-    let test = tmpBoolMotor && tmpBoolPump;
-    return !test;
-  }
+  // checkMotor() {
+  //   let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+  //   //check both steps
+  //   let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
+  //   let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
+  //   let test = tmpBoolMotor && tmpBoolPump;
+  //   return !test;
+  // }
 
   valid() {
     this.isValid = !this.isValid
@@ -354,56 +330,44 @@ export class PsatComponent implements OnInit {
     this.isValid = false;
   }
 
-  changeSubTab(str: string) {
-    if (str == 'motor') {
-      let tmpBool = this.checkPumpFluid();
-      if (!tmpBool == true) {
-        this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
-        this.subTab = this.subTabs[this.subTabIndex];
-      }
-    } else if (str == 'field-data') {
-      let tmpBool = this.checkMotor();
-      if (!tmpBool == true) {
-        this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
-        this.subTab = this.subTabs[this.subTabIndex];
-      }
-    } else {
-      this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
-      this.subTab = this.subTabs[this.subTabIndex];
-    }
-    this.getContainerHeight();
-  }
+  // changeSubTab(str: string) {
+  //   if (str == 'motor') {
+  //     let tmpBool = this.checkPumpFluid();
+  //     if (!tmpBool == true) {
+  //       this.psatTabService.stepTab.next(str);
+  //     }
+  //   } else if (str == 'field-data') {
+  //     let tmpBool = this.checkMotor();
+  //     if (!tmpBool == true) {
+  //       this.psatTabService.stepTab.next(str);
+  //     }
+  //   } else {
+  //     this.psatTabService.stepTab.next(str);
+  //   }
+  //   this.getContainerHeight();
+  // }
 
   continue() {
-    if (this.subTab == 'field-data') {
-      this.psatService.mainTab.next('assessment');
-    } else {
-      this.subTabIndex++;
-      this.subTab = this.subTabs[this.subTabIndex];
-    }
+    this.psatTabService.continue();
     this.getContainerHeight();
   }
 
   back() {
-    if (this.mainTab == 'assessment') {
-      this.psatService.mainTab.next('system-setup')
-    } else {
-      this.subTabIndex--;
-      this.subTab = this.subTabs[this.subTabIndex];
-    }
+    this.psatTabService.back();
+    this.getContainerHeight();
   }
 
   getCanContinue() {
-    if (this.subTab == 'system-basics') {
+    if (this.stepTab == 'system-basics') {
       return true;
     }
-    else if (this.subTab == 'pump-fluid') {
+    else if (this.stepTab == 'pump-fluid') {
       let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
       return this.psatService.isPumpFluidFormValid(tmpForm);
-    } else if (this.subTab == 'motor') {
+    } else if (this.stepTab == 'motor') {
       let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
       return this.psatService.isMotorFormValid(tmpForm);
-    } else if (this.subTab == 'field-data') {
+    } else if (this.stepTab == 'field-data') {
       let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
       return this.psatService.isFieldDataFormValid(tmpForm);
     }
@@ -416,27 +380,27 @@ export class PsatComponent implements OnInit {
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
 
-    if (!this.psatService.isPumpFluidFormValid(tmpForm)) {
-      this.tab2Status = 'missing-data';
-      this.tab3Status = 'input-error';
-      this.tab4Status = 'input-error';
-    }
-    else {
-      this.tab2Status = 'success';
-      if (!this.psatService.isMotorFormValid(tmpForm)) {
-        this.tab3Status = 'missing-data';
-        this.tab4Status = 'input-error';
-      }
-      else {
-        this.tab3Status = 'success';
-        if (!this.psatService.isFieldDataFormValid(tmpForm)) {
-          this.tab4Status = 'missing-data';
-        }
-        else {
-          this.tab4Status = 'success';
-        }
-      }
-    }
+    // if (!this.psatService.isPumpFluidFormValid(tmpForm)) {
+    //   this.tab2Status = 'missing-data';
+    //   this.tab3Status = 'input-error';
+    //   this.tab4Status = 'input-error';
+    // }
+    // else {
+    //   this.tab2Status = 'success';
+    //   if (!this.psatService.isMotorFormValid(tmpForm)) {
+    //     this.tab3Status = 'missing-data';
+    //     this.tab4Status = 'input-error';
+    //   }
+    //   else {
+    //     this.tab3Status = 'success';
+    //     if (!this.psatService.isFieldDataFormValid(tmpForm)) {
+    //       this.tab4Status = 'missing-data';
+    //     }
+    //     else {
+    //       this.tab4Status = 'success';
+    //     }
+    //   }
+    // }
 
     if (
       (this.psatService.isPumpFluidFormValid(tmpForm) &&
@@ -444,10 +408,7 @@ export class PsatComponent implements OnInit {
         this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
     ) {
       this._psat.setupDone = true;
-
-      //debug
       this.initSankeyList();
-
     } else {
       this._psat.setupDone = false;
     }
@@ -491,7 +452,7 @@ export class PsatComponent implements OnInit {
     this.toastyService.success(toastOptions);
   }
   goToReport() {
-    this.psatService.mainTab.next('report');
+    this.psatTabService.mainTab.next('report');
   }
 
   modalOpen() {
@@ -544,77 +505,77 @@ export class PsatComponent implements OnInit {
     this.saveNewMod(tmpModification)
   }
 
-  showTooltip(num: number) {
-    if (num == 1) {
-      this.badge1Hover = true;
-    }
-    else if (num == 2) {
-      this.badge2Hover = true;
-    }
-    else if (num == 3) {
-      this.badge3Hover = true;
-    }
-    else if (num == 4) {
-      this.badge4Hover = true;
-    }
+  // showTooltip(num: number) {
+  //   if (num == 1) {
+  //     this.badge1Hover = true;
+  //   }
+  //   else if (num == 2) {
+  //     this.badge2Hover = true;
+  //   }
+  //   else if (num == 3) {
+  //     this.badge3Hover = true;
+  //   }
+  //   else if (num == 4) {
+  //     this.badge4Hover = true;
+  //   }
 
-    setTimeout(() => {
-      this.checkHover(num);
-    }, 1000);
-  }
+  //   setTimeout(() => {
+  //     this.checkHover(num);
+  //   }, 1000);
+  // }
 
-  hideTooltip(num: number) {
-    if (num == 1) {
-      this.badge1Hover = false;
-      this.display1 = false;
-    }
-    else if (num == 2) {
-      this.badge2Hover = false;
-      this.display2 = false;
-    }
-    else if (num == 3) {
-      this.badge3Hover = false;
-      this.display3 = false;
-    }
-    else if (num == 4) {
-      this.badge4Hover = false;
-      this.display4 = false;
-    }
-  }
+  // hideTooltip(num: number) {
+  //   if (num == 1) {
+  //     this.badge1Hover = false;
+  //     this.display1 = false;
+  //   }
+  //   else if (num == 2) {
+  //     this.badge2Hover = false;
+  //     this.display2 = false;
+  //   }
+  //   else if (num == 3) {
+  //     this.badge3Hover = false;
+  //     this.display3 = false;
+  //   }
+  //   else if (num == 4) {
+  //     this.badge4Hover = false;
+  //     this.display4 = false;
+  //   }
+  // }
 
-  checkHover(num: number) {
-    if (num == 1) {
-      if (this.badge1Hover) {
-        this.display1 = true;
-      }
-      else {
-        this.display1 = false;
-      }
-    }
-    else if (num == 2) {
-      if (this.badge2Hover) {
-        this.display2 = true;
-      }
-      else {
-        this.display2 = false;
-      }
-    }
-    else if (num == 3) {
-      if (this.badge3Hover) {
-        this.display3 = true;
-      }
-      else {
-        this.display3 = false;
-      }
-    }
-    else if (num == 4) {
-      if (this.badge4Hover) {
-        this.display4 = true;
-      }
-      else {
-        this.display4 = false;
-      }
-    }
-  }
+  // checkHover(num: number) {
+  //   if (num == 1) {
+  //     if (this.badge1Hover) {
+  //       this.display1 = true;
+  //     }
+  //     else {
+  //       this.display1 = false;
+  //     }
+  //   }
+  //   else if (num == 2) {
+  //     if (this.badge2Hover) {
+  //       this.display2 = true;
+  //     }
+  //     else {
+  //       this.display2 = false;
+  //     }
+  //   }
+  //   else if (num == 3) {
+  //     if (this.badge3Hover) {
+  //       this.display3 = true;
+  //     }
+  //     else {
+  //       this.display3 = false;
+  //     }
+  //   }
+  //   else if (num == 4) {
+  //     if (this.badge4Hover) {
+  //       this.display4 = true;
+  //     }
+  //     else {
+  //       this.display4 = false;
+  //     }
+  //   }
+  // }
 
 }
