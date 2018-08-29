@@ -68,11 +68,12 @@
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Current' && baseline">
       <label for="motorAmps">Motor Current</label>
-      <div class="input-group" [ngClass]="{'invalid': psatForm.controls.motorAmps.invalid}">
+      <div class="input-group" [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
         <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
           (input)="save()" (focus)="focusField('motorPower')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.ratedPowerError !== null">{{fieldDataWarnings.ratedPowerError}}</span>
     </div>
 
     <div class="form-group" *ngIf="baseline">

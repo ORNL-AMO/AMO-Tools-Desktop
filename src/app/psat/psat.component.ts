@@ -48,21 +48,6 @@ export class PsatComponent implements OnInit {
 
   tabIndex: number = 0;
 
-
-
-  // tab1Status: string;
-  // tab2Status: string;
-  // tab3Status: string;
-  // tab4Status: string;
-  // badge1Hover: boolean;
-  // badge2Hover: boolean;
-  // badge3Hover: boolean;
-  // badge4Hover: boolean;
-  // display1: boolean;
-  // display2: boolean;
-  // display3: boolean;
-  // display4: boolean;
-
   psat: PSAT;
   psatOptions: Array<any>;
   psatOptionsLength: number;
@@ -230,7 +215,6 @@ export class PsatComponent implements OnInit {
   }
 
   checkTutorials() {
-    console.log('check')
     if (this.mainTab == 'system-setup') {
       if (!this.settingsDbService.globalSettings.disablePsatSetupTutorial) {
         this.assessmentService.tutorialShown = false;
@@ -262,30 +246,6 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  // validateSettings() {
-  //   if (this.settings === undefined) {
-  //     return 'input-error';
-  //   }
-  //   if (this.settings.flowMeasurement === undefined || this.settings.flowMeasurement == '') {
-  //     return 'missing-data';
-  //   }
-  //   if (this.settings.language === undefined || this.settings.language == '') {
-  //     return 'missing-data';
-  //   }
-  //   if (this.settings.powerMeasurement === undefined || this.settings.powerMeasurement == '') {
-  //     return 'missing-data';
-  //   }
-  //   if (this.settings.pressureMeasurement === undefined || this.settings.pressureMeasurement == '') {
-  //     return 'missing-data';
-  //   }
-  //   if (this.settings.temperatureMeasurement === undefined || this.settings.pressureMeasurement == '') {
-  //     return 'missing-data';
-  //   }
-  //   if (this.settings.distanceMeasurement === undefined || this.settings.distanceMeasurement == '') {
-  //     return 'missing-data';
-  //   }
-  //   return 'success';
-  // }
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -324,21 +284,6 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  // checkPumpFluid() {
-  //   let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-  //   let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
-  //   return !tmpBool;
-  // }
-
-  // checkMotor() {
-  //   let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-  //   //check both steps
-  //   let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
-  //   let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
-  //   let test = tmpBoolMotor && tmpBoolPump;
-  //   return !test;
-  // }
-
   valid() {
     this.isValid = !this.isValid
   }
@@ -351,31 +296,12 @@ export class PsatComponent implements OnInit {
     this.isValid = false;
   }
 
-  // changeSubTab(str: string) {
-  //   if (str == 'motor') {
-  //     let tmpBool = this.checkPumpFluid();
-  //     if (!tmpBool == true) {
-  //       this.psatTabService.stepTab.next(str);
-  //     }
-  //   } else if (str == 'field-data') {
-  //     let tmpBool = this.checkMotor();
-  //     if (!tmpBool == true) {
-  //       this.psatTabService.stepTab.next(str);
-  //     }
-  //   } else {
-  //     this.psatTabService.stepTab.next(str);
-  //   }
-  //   this.getContainerHeight();
-  // }
-
   continue() {
     this.psatTabService.continue();
-    this.getContainerHeight();
   }
 
   back() {
     this.psatTabService.back();
-    this.getContainerHeight();
   }
 
   getCanContinue() {
@@ -400,29 +326,6 @@ export class PsatComponent implements OnInit {
 
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-
-    // if (!this.psatService.isPumpFluidFormValid(tmpForm)) {
-    //   this.tab2Status = 'missing-data';
-    //   this.tab3Status = 'input-error';
-    //   this.tab4Status = 'input-error';
-    // }
-    // else {
-    //   this.tab2Status = 'success';
-    //   if (!this.psatService.isMotorFormValid(tmpForm)) {
-    //     this.tab3Status = 'missing-data';
-    //     this.tab4Status = 'input-error';
-    //   }
-    //   else {
-    //     this.tab3Status = 'success';
-    //     if (!this.psatService.isFieldDataFormValid(tmpForm)) {
-    //       this.tab4Status = 'missing-data';
-    //     }
-    //     else {
-    //       this.tab4Status = 'success';
-    //     }
-    //   }
-    // }
-
     if (
       (this.psatService.isPumpFluidFormValid(tmpForm) &&
         this.psatService.isMotorFormValid(tmpForm) &&
@@ -525,78 +428,4 @@ export class PsatComponent implements OnInit {
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     this.saveNewMod(tmpModification)
   }
-
-  // showTooltip(num: number) {
-  //   if (num == 1) {
-  //     this.badge1Hover = true;
-  //   }
-  //   else if (num == 2) {
-  //     this.badge2Hover = true;
-  //   }
-  //   else if (num == 3) {
-  //     this.badge3Hover = true;
-  //   }
-  //   else if (num == 4) {
-  //     this.badge4Hover = true;
-  //   }
-
-  //   setTimeout(() => {
-  //     this.checkHover(num);
-  //   }, 1000);
-  // }
-
-  // hideTooltip(num: number) {
-  //   if (num == 1) {
-  //     this.badge1Hover = false;
-  //     this.display1 = false;
-  //   }
-  //   else if (num == 2) {
-  //     this.badge2Hover = false;
-  //     this.display2 = false;
-  //   }
-  //   else if (num == 3) {
-  //     this.badge3Hover = false;
-  //     this.display3 = false;
-  //   }
-  //   else if (num == 4) {
-  //     this.badge4Hover = false;
-  //     this.display4 = false;
-  //   }
-  // }
-
-  // checkHover(num: number) {
-  //   if (num == 1) {
-  //     if (this.badge1Hover) {
-  //       this.display1 = true;
-  //     }
-  //     else {
-  //       this.display1 = false;
-  //     }
-  //   }
-  //   else if (num == 2) {
-  //     if (this.badge2Hover) {
-  //       this.display2 = true;
-  //     }
-  //     else {
-  //       this.display2 = false;
-  //     }
-  //   }
-  //   else if (num == 3) {
-  //     if (this.badge3Hover) {
-  //       this.display3 = true;
-  //     }
-  //     else {
-  //       this.display3 = false;
-  //     }
-  //   }
-  //   else if (num == 4) {
-  //     if (this.badge4Hover) {
-  //       this.display4 = true;
-  //     }
-  //     else {
-  //       this.display4 = false;
-  //     }
-  //   }
-  // }
-
 }

@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { Settings } from '../../shared/models/settings';
 import { PsatTabService } from '../psat-tab.service';
-import { PsatWarningService } from '../psat-warning.service';
+import { PsatWarningService, PumpFluidWarnings, MotorWarnings, FieldDataWarnings } from '../psat-warning.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-psat-tabs',
   templateUrl: './psat-tabs.component.html',
@@ -17,6 +18,15 @@ export class PsatTabsComponent implements OnInit {
   @Input()
   psat: PSAT;
 
+  settingsClassStatus: Array<string> = [];
+  pumpFluidClassStatus: Array<string> = [];
+  motorClassStatus: Array<string> = [];
+  fieldDataClassStatus: Array<string> = [];
+  pumpFluidBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
+  motorBadge: { display: boolean, hover: boolean } = { display: false, hover: false }
+  fieldDataBage: { display: boolean, hover: boolean } = { display: false, hover: false }
+
+  stepTab: String;
   currentTab: string;
   calcTab: string;
   mainTab: string;
@@ -26,12 +36,8 @@ export class PsatTabsComponent implements OnInit {
   calcSub: Subscription;
   mainSub: Subscription;
   getResultsSub: Subscription;
-  stepTab: String;
   stepTabSub: Subscription;
-  settingsClassStatus: Array<string>;
-  pumpFluidClassStatus: Array<string>;
-  motorClassStatus: Array<string>;
-  fieldDataClassStatus: Array<string>;
+
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -51,14 +57,20 @@ export class PsatTabsComponent implements OnInit {
 
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       this.checkSettingsStatus();
+      this.checkPumpFluidStatus();
+      this.checkMotorStatus();
+      this.checkFieldDataSatus();
     })
     this.stepTabSub = this.psatTabService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
+      this.checkPumpFluidStatus();
+      this.checkMotorStatus();
+      this.checkFieldDataSatus();
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.secondarySub.unsubscribe();
     this.calcSub.unsubscribe();
     this.mainSub.unsubscribe();
@@ -77,19 +89,22 @@ export class PsatTabsComponent implements OnInit {
     this.compareService.openModificationModal.next(true);
   }
 
-  checkPumpFluid() {
-    let tmpForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
+  checkPumpFluid(): boolean {
+    let tmpForm: FormGroup = this.psatService.getFormFromPsat(this.psat.inputs);
+    let tmpBool: boolean = this.psatService.isPumpFluidFormValid(tmpForm);
     return !tmpBool;
   }
 
   checkMotor() {
-    let tmpForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    //check both steps
-    let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
-    let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
-    let test = tmpBoolMotor && tmpBoolPump;
-    return !test;
+    let tmpForm: FormGroup = this.psatService.getFormFromPsat(this.psat.inputs);
+    let tmpBoolMotor: boolean = this.psatService.isMotorFormValid(tmpForm);
+    return !tmpBoolMotor;
+  }
+
+  checkFieldData(): boolean {
+    let tmpForm: FormGroup = this.psatService.getFormFromPsat(this.psat.inputs);
+    let tmpBoolFieldData: boolean = this.psatService.isFieldDataFormValid(tmpForm);
+    return !tmpBoolFieldData;
   }
 
   changeSubTab(str: string) {
@@ -108,48 +123,86 @@ export class PsatTabsComponent implements OnInit {
     }
   }
 
-  showTooltip(){
-
-  }
-  
-  hideTooltip(){
-
-  }
-
-  checkSettingsStatus(){
-    if(this.stepTab == 'system-basics'){
-      this.settingsClassStatus = ['active'];
-    }else {
+  checkSettingsStatus() {
+    if (this.stepTab == 'system-basics') {
+      this.settingsClassStatus = ['active', 'success'];
+    } else {
       this.settingsClassStatus = ['success'];
     }
   }
 
-  checkPumpFluidStatus(){
-    let pumpFluidValid: boolean = this.checkPumpFluid();
-    let pumpFluidWarnings: { rpmError: string, temperatureError: string, pumpEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
-    let checkWarnings: boolean = this.psatWarningService;
-    if(!pumpFluidValid){
+  checkPumpFluidStatus() {
+    let pumpFluidInvalid: boolean = this.checkPumpFluid();
+    let pumpFluidWarnings: PumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(pumpFluidWarnings);
+    if (pumpFluidInvalid) {
       this.pumpFluidClassStatus = ['missing-data'];
-    }else if(this.stepTab == 'pump-fluid'){
-      this.pumpFluidClassStatus = ['active'];
-    }else{
-
+    } else if (checkWarnings) {
+      this.pumpFluidClassStatus = ['input-error'];
+    } else {
+      this.pumpFluidClassStatus = ['success'];
+    }
+    if (this.stepTab == 'pump-fluid') {
+      this.pumpFluidClassStatus.push('active');
     }
   }
 
-  checkMotorStatus(){
-    if(this.stepTab == 'motor'){
-      this.motorClassStatus = ['active'];
-    }else{
-
+  checkMotorStatus() {
+    let pumpFluidInvalid: boolean = this.checkPumpFluid();
+    let motorInvalid: boolean = this.checkMotor();
+    let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(motorWarnings);
+    if (pumpFluidInvalid) {
+      this.motorClassStatus = ['disabled'];
+    } else if (motorInvalid) {
+      this.motorClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.motorClassStatus = ['input-error'];
+    } else {
+      this.motorClassStatus = ['success'];
+    }
+    if (this.stepTab == 'motor') {
+      this.motorClassStatus.push('active');
     }
   }
 
-  checkFieldDataSatus(){
-    if(this.stepTab == 'field-data'){
-      this.fieldDataClassStatus = ['active'];
-    }else{
+  checkFieldDataSatus() {
+    let pumpFluidInvalid: boolean = this.checkPumpFluid();
+    let motorInvalid: boolean = this.checkMotor();
+    let fieldDataInvalid: boolean = this.checkFieldData();
+    let fieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, true);
+    let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(fieldDataWarnings);
+    if (pumpFluidInvalid || motorInvalid) {
+      this.fieldDataClassStatus = ['disabled'];
+    } else if (fieldDataInvalid) {
+      this.fieldDataClassStatus = ['missing-data'];
+    } else if (checkWarnings) {
+      this.fieldDataClassStatus = ['input-error'];
+    } else {
+      this.fieldDataClassStatus = ['success'];
+    }
+    if (this.stepTab == 'field-data') {
+      this.fieldDataClassStatus.push('active');
+    }
+  }
 
+  showTooltip(badge: { display: boolean, hover: boolean }) {
+    badge.hover = true;
+    setTimeout(() => {
+      this.checkHover(badge);
+    }, 1000);
+  }
+
+  hideTooltip(badge: { display: boolean, hover: boolean }) {
+    badge.hover = false;
+    badge.display = false;
+  }
+
+  checkHover(badge: { display: boolean, hover: boolean }) {
+    if (badge.hover) {
+      badge.display = true;
+    } else {
+      badge.display = false;
     }
   }
 }

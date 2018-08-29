@@ -4,20 +4,20 @@
       <a (click)="changeSubTab('system-basics')">
         <span class="step-number">1</span> Assessment Settings</a>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'pump-fluid', 'input-error': tab2Status == 'input-error', 'missing-data': tab2Status == 'missing-data', 'success': tab2Status == 'success'}">
+    <div class="fixed-tab-size" [ngClass]="pumpFluidClassStatus">
       <a (click)="changeSubTab('pump-fluid')">
-        <span (mouseenter)="showTooltip(2)" (mouseleave)="hideTooltip(2)" class="step-number">2</span> Pump &amp; Fluid</a>
-      <app-psat-tabs-tooltip [badgeClass]="tab2Status" [reveal]="display2" [display]="badge2Hover"></app-psat-tabs-tooltip>
+        <span (mouseenter)="showTooltip(pumpFluidBadge)" (mouseleave)="hideTooltip(pumpFluidBadge)" class="step-number">2</span> Pump &amp; Fluid</a>
+      <app-psat-tabs-tooltip [badgeClass]="pumpFluidClassStatus[0]" [reveal]="pumpFluidBadge.display" [display]="pumpFluidBadge.hover"></app-psat-tabs-tooltip>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'motor', 'disabled': checkPumpFluid(), 'input-error': tab3Status == 'input-error', 'missing-data': tab3Status == 'missing-data', 'success': tab3Status == 'success' }">
+    <div class="fixed-tab-size" [ngClass]="motorClassStatus">
       <a (click)="changeSubTab('motor')">
-        <span (mouseenter)="showTooltip(3)" (mouseleave)="hideTooltip(3)" class="step-number">3</span> Motor</a>
-      <app-psat-tabs-tooltip [badgeClass]="tab3Status" [reveal]="display3" [display]="badge3Hover"></app-psat-tabs-tooltip>
+        <span (mouseenter)="showTooltip(motorBadge)" (mouseleave)="hideTooltip(motorBadge)" class="step-number">3</span> Motor</a>
+      <app-psat-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover"></app-psat-tabs-tooltip>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'field-data', 'disabled': checkMotor(), 'input-error': tab4Status == 'input-error', 'missing-data': tab4Status == 'missing-data', 'success': tab4Status == 'success'}">
+    <div class="fixed-tab-size" [ngClass]="fieldDataClassStatus">
       <a (click)="changeSubTab('field-data')">
-        <span (mouseenter)="showTooltip(4)" (mouseleave)="hideTooltip(4)" class="step-number">4</span> Field Data</a>
-      <app-psat-tabs-tooltip [badgeClass]="tab4Status" [reveal]="display4" [display]="badge4Hover"></app-psat-tabs-tooltip>
+        <span (mouseenter)="showTooltip(fieldDataBage)" (mouseleave)="hideTooltip(fieldDataBage)" class="step-number">4</span> Field Data</a>
+      <app-psat-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBage.display" [display]="fieldDataBage.hover"></app-psat-tabs-tooltip>
     </div>
   </div>
 </nav>
