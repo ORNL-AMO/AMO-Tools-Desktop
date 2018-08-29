@@ -720,11 +720,19 @@ export class PsatService {
   }
 
   getFormFromPsat(psatInputs: PsatInputs): FormGroup {
+    let motorAmpsValidators: Array<Validators> = new Array<Validators>();
+    let motorKwValidators: Array<Validators> = new Array<Validators>();
     if (!psatInputs.fixed_speed) {
       psatInputs.fixed_speed = 0;
     }
     if (!psatInputs.margin) {
       psatInputs.margin = 0;
+    }
+
+    if(psatInputs.load_estimation_method == 0){
+      motorKwValidators = [Validators.required];
+    }else{
+      motorAmpsValidators = [Validators.required];
     }
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
     let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
@@ -754,13 +762,13 @@ export class PsatService {
       'flowRate': [psatInputs.flow_rate, Validators.required],
       'head': [psatInputs.head, Validators.required],
       'loadEstimatedMethod': [loadEstMethod, Validators.required],
-      'motorKW': [psatInputs.motor_field_power],
-      'motorAmps': [psatInputs.motor_field_current],
+      'motorKW': [psatInputs.motor_field_power, motorKwValidators],
+      'motorAmps': [psatInputs.motor_field_current, motorAmpsValidators],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
       'optimizeCalculation': [psatInputs.optimize_calculation],
       'implementationCosts': [psatInputs.implementationCosts],
       'fluidType': [psatInputs.fluidType],
-      'fluidTemperature': [psatInputs.fluidTemperature]
+      'fluidTemperature': [psatInputs.fluidTemperature, Validators.required]
     })
   }
 
@@ -813,7 +821,8 @@ export class PsatService {
       form.controls.pumpRPM.status == 'VALID' &&
       form.controls.drive.status == 'VALID' &&
       form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID'
+      form.controls.stages.status == 'VALID' && 
+      form.controls.fluidTemperature.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom
       if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
@@ -861,7 +870,9 @@ export class PsatService {
       form.controls.head.status == 'VALID' &&
       form.controls.loadEstimatedMethod.status == 'VALID' &&
       form.controls.measuredVoltage.status == 'VALID' &&
-      form.controls.costKwHr.status == 'VALID'
+      form.controls.costKwHr.status == 'VALID' &&
+      form.controls.motorKW.status == 'VALID' &&
+      form.controls.motorAmps.status == 'VALID'
     ) {
       //TODO check motorAMPS or motorKW
       return true

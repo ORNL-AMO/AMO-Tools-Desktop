@@ -56,6 +56,7 @@ export class PsatTabsComponent implements OnInit {
     })
 
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
+      console.log(this.psat);
       this.checkSettingsStatus();
       this.checkPumpFluidStatus();
       this.checkMotorStatus();

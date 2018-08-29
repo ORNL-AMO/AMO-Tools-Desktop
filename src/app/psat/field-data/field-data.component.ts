@@ -1,13 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 @Component({
@@ -141,6 +140,30 @@ export class FieldDataComponent implements OnInit {
   checkWarnings(){
     this.fieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, this.baseline);
   }
+
+  changeLoadMethod(){
+    let motorAmpsValidators: Array<ValidatorFn> = new Array();
+    let motorKWValidators: Array<ValidatorFn> = new Array();
+    
+    if(this.psatForm.controls.loadEstimatedMethod.value == 'Power'){
+      motorKWValidators = [Validators.required];
+    }else{
+      motorAmpsValidators = [Validators.required];
+    }
+    this.psatForm.controls.motorAmps.setValidators(motorAmpsValidators);
+    this.psatForm.controls.motorAmps.reset(this.psatForm.controls.motorAmps.value);
+    if (this.psatForm.controls.motorAmps.value) {
+      this.psatForm.controls.motorAmps.markAsDirty();
+    }
+
+    this.psatForm.controls.motorKW.setValidators(motorKWValidators);
+    this.psatForm.controls.motorKW.reset(this.psatForm.controls.motorKW.value);
+    if (this.psatForm.controls.motorKW.value) {
+      this.psatForm.controls.motorKW.markAsDirty();
+    }
+    this.save();
+  }
+
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
