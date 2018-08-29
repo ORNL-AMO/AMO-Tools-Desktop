@@ -4,9 +4,8 @@
     <div class="input-group">
       <input name="airDemand" class="form-control" type="number" step="any" [(ngModel)]="inputs.airDemand" id="airDemand" (input)="getStorage()"
         onfocus="this.select();" (focus)="changeField('airDemand')">
-      <span class="input-group-addon units">ft
-        <sup>3</sup>
-      </span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft<sup>3</sup></span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
     </div>
   </div>
   <div class="form-group">
@@ -14,7 +13,8 @@
     <div class="input-group">
       <input name="allowablePressureDrop" class="form-control" type="number" step="any" [(ngModel)]="inputs.allowablePressureDrop"
         id="allowablePressureDrop" (input)="getStorage()" onfocus="this.select();" (focus)="changeField('allowablePressureDrop')">
-      <span class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
   <div class="form-group">
@@ -22,7 +22,8 @@
     <div class="input-group">
       <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
         id="atmosphericPressure" (input)="getStorage()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
-      <span class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
 </div>
@@ -31,7 +32,9 @@
     <label class="bold">Required Storage</label>
     <div class="text-center small">
       <span *ngIf="finalTankPressure">
-        <strong>{{finalTankPressure | number:'1.0-2'}} gal</strong>
+        <strong>{{finalTankPressure | number:'1.0-2'}} </strong>
+        <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</strong>
+        <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
       </span>
       <span *ngIf="!finalTankPressure">
         <strong>&mdash; &mdash;</strong>

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-flow-factor-form [inputs]="inputs" (setUser)="setUserFlowRate($event)" (calculate)="getValveFlowFactor()" [(userFlowRate)]="userFlowRate"
+      <app-flow-factor-form [settings]="settings" [inputs]="inputs" (setUser)="setUserFlowRate($event)" (calculate)="getValveFlowFactor()" [(userFlowRate)]="userFlowRate"
         [valveFlowFactor]="valveFlowFactor" (emitChangeField)="changeField($event)"></app-flow-factor-form>
     </div>
   </div>

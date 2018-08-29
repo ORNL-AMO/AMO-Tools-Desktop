@@ -22,15 +22,15 @@
             </div>
           </div>
           <div class="form-section pt-1">
-            <app-general-method-form *ngIf="method == 0" (emitChangeField)="changeField($event, 'general-method')"></app-general-method-form>
-            <app-dedicated-storage-form *ngIf="method == 1" (emitChangeField)="changeField($event, 'dedicated-storage')"></app-dedicated-storage-form>
-            <app-metered-storage-form *ngIf="method == 2" (emitChangeField)="changeField($event, 'metered-storage')"></app-metered-storage-form>
-            <app-delay-method-form *ngIf="method == 3" (emitChangeField)="changeField($event, 'delay-method')"></app-delay-method-form>
+            <app-general-method-form *ngIf="method == 0" [settings]="settings" (emitChangeField)="changeField($event, 'general-method')"></app-general-method-form>
+            <app-dedicated-storage-form *ngIf="method == 1" [settings]="settings" (emitChangeField)="changeField($event, 'dedicated-storage')"></app-dedicated-storage-form>
+            <app-metered-storage-form *ngIf="method == 2" [settings]="settings" (emitChangeField)="changeField($event, 'metered-storage')"></app-metered-storage-form>
+            <app-delay-method-form *ngIf="method == 3" [settings]="settings" (emitChangeField)="changeField($event, 'delay-method')"></app-delay-method-form>
           </div>
         </form>
       </div>
       <div class="group-label pt-3">Usable Air Capacity Calculations</div>
-      <app-air-capacity-form (emitChangeField)="changeField($event, 'air-capacity')"></app-air-capacity-form>
+      <app-air-capacity-form [settings]="settings" (emitChangeField)="changeField($event, 'air-capacity')"></app-air-capacity-form>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -46,9 +46,9 @@
         <h5>
           Reciever Tank Help
           <br>
-          <small class="text-muted"> The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line
-            pulsations or frequent loading and unloading of the compressor. There are four methods to calculate the required
-            size of the receiver tank.
+          <small class="text-muted"> The receiver tank is used to store a supply of compressed air and assure a steady supply
+            without excessive line pulsations or frequent loading and unloading of the compressor. There are four methods
+            to calculate the required size of the receiver tank.
           </small>
         </h5>
         <hr class="my-1 hr-spacer">

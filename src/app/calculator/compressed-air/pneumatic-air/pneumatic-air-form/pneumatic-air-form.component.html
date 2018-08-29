@@ -16,7 +16,8 @@
         <div class="input-group">
           <input name="cylinderDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderDiameter" id="cylinderDiameter"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('cylinderDiameter')">
-          <span class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
         </div>
       </div>
       <div class="form-group">
@@ -24,7 +25,8 @@
         <div class="input-group">
           <input name="cylinderStroke" class="form-control" type="number" step="any" [(ngModel)]="inputs.cylinderStroke" id="cylinderStroke"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('cylinderStroke')">
-          <span class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
         </div>
       </div>
       <div class="form-group" *ngIf="inputs.pistonType == 1">
@@ -32,7 +34,8 @@
         <div class="input-group">
           <input name="pistonRodDiameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.pistonRodDiameter" id="pistonRodDiameter"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pistonRodDiameter')">
-          <span class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
         </div>
       </div>
       <div class="form-group">
@@ -40,7 +43,8 @@
         <div class="input-group">
           <input name="airPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressure" id="airPressure"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airPressure')">
-          <span class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
       <div class="form-group">
@@ -56,15 +60,17 @@
       <div class="form-group">
         <label class="bold">Air Requirement Pneumatic Cylinder</label>
         <div class="text-center small">
-          <strong>{{outputs.airRequirementPneumaticCylinder | number:'1.0-2'}} ft</strong>
+          <strong>{{outputs.airRequirementPneumaticCylinder | number:'1.0-2'}} </strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m</strong>
         </div>
       </div>
       <div class="form-group">
         <label class="bold">Volume of Air Intake</label>
         <div class="text-center small">
-          <strong>{{outputs.volumeAirIntakePiston | number:'1.0-2'}} ft
-            <sup>2</sup>
-          </strong>
+          <strong>{{outputs.volumeAirIntakePiston | number:'1.0-2'}} </strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
         </div>
       </div>
       <div class="form-group">

@@ -1,6 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PneumaticValve } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-flow-factor',
@@ -8,6 +9,9 @@ import { PneumaticValve } from "../../../shared/models/standalone";
   styleUrls: ['./flow-factor.component.css']
 })
 export class FlowFactorComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
