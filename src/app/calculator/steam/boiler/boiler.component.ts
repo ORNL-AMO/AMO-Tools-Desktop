@@ -34,7 +34,7 @@ export class BoilerComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.calculate(this.boilerForm);
   }
   ngAfterViewInit() {
@@ -42,7 +42,10 @@ export class BoilerComponent implements OnInit {
       this.resizeTabs();
     }, 50);
   }
-  
+
+  ngOnDestroy(){
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -55,12 +58,17 @@ export class BoilerComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.boilerForm = this.boilerService.initForm(this.settings);
+  initForm() {
+    if (this.boilerService.boilerInput) {
+      this.boilerForm = this.boilerService.getFormFromObj(this.boilerService.boilerInput, this.settings);
+    } else {
+      this.boilerForm = this.boilerService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.boilerService.getObjFromForm(form);
+    this.boilerService.boilerInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.boiler(this.input, this.settings);
     } else {

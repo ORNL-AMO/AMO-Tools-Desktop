@@ -52,9 +52,11 @@ export class Fsat203Component implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    // this.fsatService.test();
-    this.inputs = this.fsat203Service.getDefaultData();
-    this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    this.inputs = this.fsat203Service.inputData;
+    if (this.inputs == undefined) {
+      this.inputs = this.fsat203Service.getDefaultData();
+      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    }
     this.checkBasics();
     this.checkGasDensity();
     this.checkPlane('1');
@@ -70,6 +72,10 @@ export class Fsat203Component implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.fsat203Service.inputData = this.inputs;
   }
 
   resizeTabs() {

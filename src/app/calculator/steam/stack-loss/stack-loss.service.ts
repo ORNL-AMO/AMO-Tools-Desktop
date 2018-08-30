@@ -4,12 +4,15 @@ import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/
 
 @Injectable()
 export class StackLossService {
+  stackLossInput: FlueGas = {
+    flueGasType: undefined,
+    flueGasByVolume: undefined,
+    flueGasByMass: undefined
+  };
   constructor(private formBuilder: FormBuilder) {
   }
 
-
   initFormVolume(): FormGroup {
-
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
@@ -56,14 +59,14 @@ export class StackLossService {
     })
   }
 
-  initByVolumeFormFromLoss(loss: FlueGas, ): FormGroup {
+  initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, Validators.required],
-      'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, Validators.required],
-      'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, Validators.required],
+      'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, [Validators.required, Validators.min(0)]],
+      'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
+      'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [loss.flueGasByVolume.fuelTemperature],
       'CH4': [loss.flueGasByVolume.CH4, Validators.required],
       'C2H6': [loss.flueGasByVolume.C2H6, Validators.required],
@@ -85,13 +88,13 @@ export class StackLossService {
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByMass.oxygenCalculationMethod, Validators.required],
-      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, Validators.required],
-      'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, Validators.required],
-      'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, Validators.required],
+      'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, [Validators.required, Validators.min(0)]],
+      'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, [Validators.required, Validators.min(0), Validators.max(21)]],
+      'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, [Validators.required, Validators.min(0), Validators.max(100)]],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature],
-      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, Validators.required],
+      'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, [Validators.required, Validators.min(0), Validators.max(100)]],
       'ashDischargeTemperature': [loss.flueGasByMass.ashDischargeTemperature, Validators.required],
-      'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, Validators.required],
+      'unburnedCarbonInAsh': [loss.flueGasByMass.unburnedCarbonInAsh, [Validators.required, Validators.min(0), Validators.max(100)]],
       'carbon': [loss.flueGasByMass.carbon, Validators.required],
       'hydrogen': [loss.flueGasByMass.hydrogen, Validators.required],
       'sulphur': [loss.flueGasByMass.sulphur, Validators.required],

@@ -34,7 +34,7 @@ export class DeaeratorComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.deaeratorService.getObjFromForm(this.deaeratorForm);
     this.calculate(this.deaeratorForm);
   }
@@ -43,7 +43,7 @@ export class DeaeratorComponent implements OnInit {
       this.resizeTabs();
     }, 50);
   }
-  
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -56,12 +56,17 @@ export class DeaeratorComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+  initForm() {
+    if (this.deaeratorService.deaeratorInput) {
+      this.deaeratorForm = this.deaeratorService.getFormFromObj(this.deaeratorService.deaeratorInput, this.settings);
+    } else {
+      this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
+    this.deaeratorService.deaeratorInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.deaerator(this.input, this.settings);
     } else {

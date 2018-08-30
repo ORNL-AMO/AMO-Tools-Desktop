@@ -39,7 +39,7 @@ export class TurbineComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.turbineService.getObjFromForm(this.turbineForm);
     this.calculate(this.turbineForm);
   }
@@ -48,7 +48,7 @@ export class TurbineComponent implements OnInit {
       this.resizeTabs();
     }, 50);
   }
-  
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -62,13 +62,17 @@ export class TurbineComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.turbineForm = this.turbineService.initForm(this.settings);
+  initForm() {
+    if (this.turbineService.turbineInput) {
+      this.turbineForm = this.turbineService.getFormFromObj(this.turbineService.turbineInput, this.settings);
+    } else {
+      this.turbineForm = this.turbineService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.turbineService.getObjFromForm(form);
-
+    this.turbineService.turbineInput = this.input;
     if (this.input.inletPressure < this.input.outletSteamPressure) {
       this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure."
     }

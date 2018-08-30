@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesInput, SaturatedPropertiesOutput } from "../../../../shared/models/steam";
@@ -25,7 +25,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
 
 
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setValidators();
@@ -35,12 +35,13 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 0){
       this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
       this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators()
-      this.saturatedPropertiesForm.controls.saturatedTemperature.reset();
+      this.saturatedPropertiesForm.controls.saturatedTemperature.reset(this.saturatedPropertiesForm.controls.saturatedTemperature.value);
     }else if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 1){
       this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
       this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators()
-      this.saturatedPropertiesForm.controls.saturatedPressure.reset();
+      this.saturatedPropertiesForm.controls.saturatedPressure.reset(this.saturatedPropertiesForm.controls.saturatedPressure.value);
     }
+    this.cd.detectChanges();
   }
 
   calculate() {

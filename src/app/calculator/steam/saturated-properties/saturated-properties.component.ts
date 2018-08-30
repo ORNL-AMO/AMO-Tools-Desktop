@@ -59,7 +59,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     }
     this.ranges = this.getRanges();
     this.saturatedPropertiesOutput = this.getEmptyResults();
-    this.getForm();
+    this.initForm();
     this.calculate(this.saturatedPropertiesForm);
   }
 
@@ -76,12 +76,21 @@ export class SaturatedPropertiesComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  getForm() {
-    this.saturatedPropertiesForm = this.formBuilder.group({
-      'pressureOrTemperature': [0, Validators.required],
-      'saturatedPressure': ['', Validators.required],
-      'saturatedTemperature': ['']
-    });
+  initForm() {
+    if(this.steamService.saturatedPropertiesInputs){
+      this.saturatedPropertiesForm = this.formBuilder.group({
+        'pressureOrTemperature': [this.steamService.saturatedPropertiesInputs.pressureOrTemperature, Validators.required],
+        'saturatedPressure': [this.steamService.saturatedPropertiesInputs.inputs.saturatedPressure, Validators.required],
+        'saturatedTemperature': [this.steamService.saturatedPropertiesInputs.inputs.saturatedTemperature]
+      });
+    }else{
+      this.saturatedPropertiesForm = this.formBuilder.group({
+        'pressureOrTemperature': [0, Validators.required],
+        'saturatedPressure': ['', Validators.required],
+        'saturatedTemperature': ['']
+      });
+    }
+
   }
 
   setTab(str: string) {
@@ -115,6 +124,13 @@ export class SaturatedPropertiesComponent implements OnInit {
       saturatedPressure: form.controls.saturatedPressure.value,
     }
     this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
+    this.steamService.saturatedPropertiesInputs = {
+      pressureOrTemperature: this.pressureOrTemperature,
+      inputs: {
+        saturatedTemperature: form.controls.saturatedTemperature.value,
+        saturatedPressure: form.controls.saturatedPressure.value
+      }
+    }
     if (form.status == 'VALID') {
       this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
       this.plotReady = true;
