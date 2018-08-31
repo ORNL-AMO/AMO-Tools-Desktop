@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReceiverTankDedicatedStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-dedicated-storage-form',
@@ -9,6 +10,8 @@ import { StandaloneService } from '../../../standalone.service';
 })
 
 export class DedicatedStorageFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 

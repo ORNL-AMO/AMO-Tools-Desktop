@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-metered-storage-form',
@@ -8,6 +9,8 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./metered-storage-form.component.css']
 })
 export class MeteredStorageFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   

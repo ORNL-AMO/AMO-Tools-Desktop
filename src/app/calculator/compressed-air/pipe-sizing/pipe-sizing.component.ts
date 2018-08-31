@@ -1,6 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-pipe-sizing',
@@ -8,7 +9,8 @@ import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standa
   styleUrls: ['./pipe-sizing.component.css']
 })
 export class PipeSizingComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

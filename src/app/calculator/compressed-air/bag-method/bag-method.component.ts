@@ -1,6 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-bag-method',
@@ -8,6 +9,8 @@ import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalo
   styleUrls: ['./bag-method.component.css']
 })
 export class BagMethodComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

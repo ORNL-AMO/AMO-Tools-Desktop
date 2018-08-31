@@ -24,21 +24,26 @@
             <div class="form-group">
               <label class="bold">Total Flow Rate</label>
               <div class="text-center small">
-                <strong>{{outputs.flowRate | number: '1.0-2'}} SCFM</strong>
+                <strong>{{outputs.flowRate | number: '1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
               </div>
             </div>
             <div class="form-group">
               <label class="bold">Total Annual Compressed Air Leakage</label>
               <div class="text-center small">
-                <strong>{{outputs.annualConsumption | number:'1.0-2'}} SCF</strong>
+                <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
+                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
               </div>
             </div>
           </div>
         </form>
       </div>
 
-      <app-bag-method-form *ngFor="let input of inputsArray; let i = index" [index]="i" [inputs]="input" [outputs]="outputsArray[i]"
-        (calculate)="calculateAnnualConsumption($event)" (deleteLeakage)="deleteLeakage($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
+      <app-bag-method-form *ngFor="let input of inputsArray; let i = index" [settings]="settings" [index]="i" [inputs]="input"
+        [outputs]="outputsArray[i]" (calculate)="calculateAnnualConsumption($event)" (deleteLeakage)="deleteLeakage($event)"
+        (emitChangeField)="changeField($event)"></app-bag-method-form>
 
       <div class="pt-1">
         <a class="click-link pull-left small" (click)="addLeakage()">Add New Leak +</a>

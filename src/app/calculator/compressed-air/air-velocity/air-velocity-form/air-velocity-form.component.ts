@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AirVelocityInput, PipeSizes } from "../../../../shared/models/standalone";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-air-velocity-form',
@@ -7,6 +8,8 @@ import { AirVelocityInput, PipeSizes } from "../../../../shared/models/standalon
   styleUrls: ['./air-velocity-form.component.css']
 })
 export class AirVelocityFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   inputs: AirVelocityInput;
   @Input()

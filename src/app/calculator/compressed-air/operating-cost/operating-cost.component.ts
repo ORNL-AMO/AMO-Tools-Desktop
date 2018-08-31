@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-operating-cost',
@@ -8,6 +9,9 @@ import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/
   styleUrls: ['./operating-cost.component.css']
 })
 export class OperatingCostComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])

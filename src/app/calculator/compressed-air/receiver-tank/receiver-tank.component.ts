@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 
 @Component({
@@ -7,6 +8,8 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular
   styleUrls: ['./receiver-tank.component.css']
 })
 export class ReceiverTankComponent implements OnInit {
+  @Input()
+  settings: Settings;
   
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

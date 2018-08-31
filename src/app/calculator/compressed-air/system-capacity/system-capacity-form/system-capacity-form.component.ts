@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../shared/models/standalone";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-system-capacity-form',
@@ -7,7 +8,8 @@ import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../../sha
   styleUrls: ['./system-capacity-form.component.css']
 })
 export class SystemCapacityFormComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   @Input()
   inputs: AirSystemCapacityInput;
   @Input()

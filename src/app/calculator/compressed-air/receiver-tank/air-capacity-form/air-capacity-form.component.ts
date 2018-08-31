@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CalculateUsableCapacity } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-air-capacity-form',
@@ -8,6 +9,8 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./air-capacity-form.component.css']
 })
 export class AirCapacityFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
