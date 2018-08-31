@@ -7,8 +7,8 @@ import { PercentLoadEstimationGraphComponent } from './percent-load-estimation-g
 import { PercentLoadEstimationComponent } from "./percent-load-estimation.component";
 import { SlipMethodFormComponent } from './slip-method-form/slip-method-form.component';
 import { FieldMeasurementFormComponent } from './field-measurement-form/field-measurement-form.component';
-import { FieldMeasurementService } from './field-measurement.service';
 import { FieldMeasurementTableComponent } from './field-measurement-table/field-measurement-table.component';
+import { PercentLoadEstimationService } from './percent-load-estimation.service';
 
 @NgModule({
   imports: [
@@ -28,7 +28,7 @@ import { FieldMeasurementTableComponent } from './field-measurement-table/field-
     PercentLoadEstimationComponent
   ],
   providers: [
-    FieldMeasurementService
+    PercentLoadEstimationService
   ]
 })
 export class PercentLoadEstimationModule { }

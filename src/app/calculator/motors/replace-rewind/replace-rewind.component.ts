@@ -20,17 +20,7 @@ export class ReplaceRewindComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   settings: Settings;
-  inputs: ReplaceRewindData = {
-    operatingHours: 6000,
-    motorSize: 350,
-    load: 75,
-    electricityCost: 0.08,
-    currentEfficiency: 94.4,
-    rewindEfficiencyLoss: 0.5,
-    costOfRewind: 8384,
-    newEfficiency: 95.7,
-    purchaseCost: 33163,
-  };
+  inputs: ReplaceRewindData;
   results: ReplaceRewindResults = {
     differentialCost: 0,
     rewoundEnergyUse: 0,
@@ -45,6 +35,7 @@ export class ReplaceRewindComponent implements OnInit {
   constructor(private replaceRewindService: ReplaceRewindService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.inputs = this.replaceRewindService.replaceRewindData;
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

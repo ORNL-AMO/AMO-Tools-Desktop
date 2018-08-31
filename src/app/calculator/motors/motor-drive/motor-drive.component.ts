@@ -37,6 +37,9 @@ export class MotorDriveComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    if(this.motorDriveService.motorDriveData){
+      this.motorDriveData = this.motorDriveService.motorDriveData;
+    }
     this.calculate(this.motorDriveData);
   }
 
@@ -54,6 +57,7 @@ export class MotorDriveComponent implements OnInit {
 
   calculate(data: MotorDriveInputs) {
     this.motorDriveData = data;
+    this.motorDriveService.motorDriveData = this.motorDriveData;
     this.outputData = this.motorDriveService.getResults(data);
   }
 

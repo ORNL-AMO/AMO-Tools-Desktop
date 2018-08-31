@@ -3,7 +3,17 @@ import { ReplaceRewindData, ReplaceRewindResults } from './replace-rewind.compon
 
 @Injectable()
 export class ReplaceRewindService {
-
+  replaceRewindData: ReplaceRewindData = {
+    operatingHours: 6000,
+    motorSize: 350,
+    load: 75,
+    electricityCost: 0.08,
+    currentEfficiency: 94.4,
+    rewindEfficiencyLoss: 0.5,
+    costOfRewind: 8384,
+    newEfficiency: 95.7,
+    purchaseCost: 33163,
+  };
   constructor() { }
 
   getResults(inputs: ReplaceRewindData): ReplaceRewindResults {
@@ -24,7 +34,7 @@ export class ReplaceRewindService {
     results.newEnergyCost = this.getNewEnergyCost(inputs, results);
     results.annualEnergySavings = this.getAnnualEnergySavings(results);
     results.costSavings = this.getCostSavings(results);
-    results.simplePayback = this.getSimplePayback(results);   
+    results.simplePayback = this.getSimplePayback(results);
     return results;
   }
   getDifferentialCost(inputs: ReplaceRewindData): number {
@@ -50,7 +60,7 @@ export class ReplaceRewindService {
   }
   getSimplePayback(results: ReplaceRewindResults): number {
     return results.differentialCost / results.costSavings;
-  } 
+  }
 
   //may want to add percent savings as a result. talk to kristina first
 }
