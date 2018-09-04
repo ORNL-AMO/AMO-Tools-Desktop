@@ -33,10 +33,10 @@ export class NemaEnergyEfficiencyService {
   initFormFromObj(obj: NemaInputs): FormGroup {
     return this.formBuilder.group({
       frequency: [obj.frequency, [Validators.required]],
-      horsePower: [obj.frequency, [Validators.required]],
-      efficiencyClass: [obj.frequency, [Validators.required]],
-      motorRPM: [obj.frequency, [Validators.required]],
-      efficiency: [obj.frequency, [Validators.min(1), Validators.max(100)]]
+      horsePower: [obj.horsePower, [Validators.required]],
+      efficiencyClass: [obj.efficiencyClass, [Validators.required]],
+      motorRPM: [obj.motorRPM, [Validators.required]],
+      efficiency: [obj.efficiency, [Validators.min(1), Validators.max(100)]]
     })
   }
 

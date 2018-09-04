@@ -22,7 +22,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   headerHeight: number;
   tabSelect: string = 'results';
   toggleCalculate = false;
-  loadEstimationMethod: number = 0;
+  loadEstimationMethod: number;
   percentLoadEstimation: number;
 
   slipMethodData: SlipMethod;
@@ -40,12 +40,19 @@ export class PercentLoadEstimationComponent implements OnInit {
     }
     this.fieldMeasurementData = this.percentLoadEstimationService.fieldMeasurementInputs;
     this.slipMethodData = this.percentLoadEstimationService.slipMethodInputs;
+    this.loadEstimationMethod = this.percentLoadEstimationService.loadEstimationMethod;
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
   }
 
   resizeTabs() {

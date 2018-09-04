@@ -18,6 +18,7 @@ export class PercentLoadEstimationService {
     ratedCurrent: 0,
     powerFactor: 0
   };
+  loadEstimationMethod: number = 0;
   constructor() { }
   getResults(data: FieldMeasurementInputs): FieldMeasurementOutputs {
     let outputs: FieldMeasurementOutputs = {
