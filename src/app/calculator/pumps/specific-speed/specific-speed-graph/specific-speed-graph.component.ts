@@ -93,13 +93,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.isGridToggled = false;
 
     //init for exportable table
-    if(!this.specificSpeedService.keyColors && !this.inPsat){
+    //if(!this.specificSpeedService.keyColors && !this.inPsat){
       this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
       this.rowData = new Array<Array<string>>();
-    }else{
-      this.rowData = this.specificSpeedService.rowData;
-      this.keyColors = this.specificSpeedService.keyColors;
-    }
+    // }else{
+    //   this.rowData = this.specificSpeedService.rowData;
+    //   this.keyColors = this.specificSpeedService.keyColors;
+    // }
     this.columnTitles = new Array<string>();
     this.initColumnTitles();
   }
@@ -124,10 +124,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    if(!this.inPsat){
-      this.specificSpeedService.keyColors = this.keyColors;
-      this.specificSpeedService.rowData = this.rowData;
-    }
+    // if(!this.inPsat){
+    //   this.specificSpeedService.keyColors = this.keyColors;
+    //   this.specificSpeedService.rowData = this.rowData;
+    // }
   }
 
   initColumnTitles() {

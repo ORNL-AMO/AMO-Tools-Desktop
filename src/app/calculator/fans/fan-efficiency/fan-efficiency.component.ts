@@ -19,7 +19,14 @@ export class FanEfficiencyComponent implements OnInit {
   @Input()
   inAssessment: boolean;
 
-  inputs: FanEfficiencyInputs;
+  inputs: FanEfficiencyInputs = {
+    fanType: undefined,
+    fanSpeed: undefined,
+    flowRate: undefined,
+    inletPressure: undefined,
+    outletPressure: undefined,
+    compressibility: undefined
+  };;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -35,7 +42,7 @@ export class FanEfficiencyComponent implements OnInit {
   fanEfficiency: number = 0;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanService: FanService) { }
   ngOnInit() {
-    if (this.inAssessment && this.fsat && this.fsat.fanSetup.fanType != 12) {
+    if (this.inAssessment && this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
       this.inputs.fanType = this.fsat.fanSetup.fanType;
       this.inputs.fanSpeed = this.fsat.fanSetup.fanSpeed;
       this.inputs.flowRate = this.fsat.fieldData.flowRate;

@@ -50,7 +50,7 @@
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="_fsat.setupDone" [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [settings]="settings"></app-nema-energy-efficiency>
-    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment"></app-pump-curve>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings" [assessment]="assessment" [fsat]="_fsat"></app-pump-curve>
   </div>
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
     <div class="p-1 mx-auto">
