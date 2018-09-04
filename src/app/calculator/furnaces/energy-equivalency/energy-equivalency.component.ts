@@ -4,6 +4,7 @@ import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { EnergyEquivalencyService } from './energy-equivalency.service';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -23,38 +24,37 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   headerHeight: number;
 
-  energyEquivalencyElectric: EnergyEquivalencyElectric = {
-    fuelFiredEfficiency: 60,
-    electricallyHeatedEfficiency: 90,
-    fuelFiredHeatInput: 10
-  };
-  energyEquivalencyFuel: EnergyEquivalencyFuel = {
-    electricallyHeatedEfficiency: 90,
-    fuelFiredEfficiency: 60,
-    electricalHeatInput: 1800
-  };
+  energyEquivalencyElectric: EnergyEquivalencyElectric;
+  energyEquivalencyFuel: EnergyEquivalencyFuel;
 
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
 
   currentField: string = 'default';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      this.initDefaultValues(this.settings);
-      this.calculateElectric();
-      this.calculateFuel();
-    } else {
-      this.initDefaultValues(this.settings);
-      this.calculateElectric();
-      this.calculateFuel();
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+
+    if(this.energyEquivalencyService.energyEquivalencyElectric){
+      this.energyEquivalencyElectric = this.energyEquivalencyService.energyEquivalencyElectric;
+    }else{
+      this.energyEquivalencyElectric = this.energyEquivalencyService.initEquivalencyElectric(this.settings);
+    }
+
+    if(this.energyEquivalencyService.energyEquivalencyFuel){
+      this.energyEquivalencyFuel = this.energyEquivalencyService.energyEquivalencyFuel;
+    }else{
+      this.energyEquivalencyFuel = this.energyEquivalencyService.initEquivalencyFuel();
+    }
+    this.calculateElectric();
+    this.calculateFuel();
   }
 
   ngAfterViewInit() {
@@ -63,26 +63,14 @@ export class EnergyEquivalencyComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy(){
+    this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
+    this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-    }
-  }
-
-  initDefaultValues(settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
-      this.energyEquivalencyElectric = {
-        fuelFiredEfficiency: 60,
-        electricallyHeatedEfficiency: 90,
-        fuelFiredHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2)
-      };
-    }
-    else {
-      this.energyEquivalencyElectric = {
-        fuelFiredEfficiency: 60,
-        electricallyHeatedEfficiency: 90,
-        fuelFiredHeatInput: 10
-      };
     }
   }
 
