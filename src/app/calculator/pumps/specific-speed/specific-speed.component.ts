@@ -6,6 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { SpecificSpeedService } from './specific-speed.service';
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -34,39 +35,41 @@ export class SpecificSpeedComponent implements OnInit {
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     if (!this.psat) {
-      this.speedForm = this.psatService.initForm();
-      this.speedForm.patchValue({
-        pumpType: this.psatService.getPumpStyleFromEnum(0),
-        pumpRPM: 1780,
-        flowRate: 2000,
-        head: 277
-      })
+      if (!this.specificSpeedService.speedForm) {
+        this.speedForm = this.psatService.initForm();
+        this.speedForm.patchValue({
+          pumpType: this.psatService.getPumpStyleFromEnum(0),
+          pumpRPM: 1780,
+          flowRate: 2000,
+          head: 277
+        })
+        if (this.settings.flowMeasurement != 'gpm') {
+          let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
+          this.speedForm.patchValue({
+            flowRate: this.psatService.roundVal(tmpVal, 2)
+          })
+        }
+        if (this.settings.distanceMeasurement != 'ft') {
+          let tmpVal = this.convertUnitsService.value(this.speedForm.controls.head.value).from('ft').to(this.settings.distanceMeasurement);
+          this.speedForm.patchValue({
+            head: this.psatService.roundVal(tmpVal, 2)
+          })
+        }
+      } else {
+        this.speedForm = this.specificSpeedService.speedForm;
+      }
     } else {
       this.speedForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
 
     //get settings if standalone
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-      //convert defaults if standalone without default system settings
-      if (this.settings.flowMeasurement != 'gpm') {
-        let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
-        this.speedForm.patchValue({
-          flowRate: this.psatService.roundVal(tmpVal, 2)
-        })
-      }
-      if (this.settings.distanceMeasurement != 'ft') {
-        let tmpVal = this.convertUnitsService.value(this.speedForm.controls.head.value).from('ft').to(this.settings.distanceMeasurement);
-
-        this.speedForm.patchValue({
-          head: this.psatService.roundVal(tmpVal, 2)
-        })
-      }
-    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -76,6 +79,10 @@ export class SpecificSpeedComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.specificSpeedService.speedForm = this.speedForm;
   }
 
   resizeTabs() {

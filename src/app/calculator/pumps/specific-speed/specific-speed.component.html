@@ -28,7 +28,7 @@
     <div class="d-flex mr-2 ml-2">
       <app-specific-speed-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-specific-speed-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="specificSpeedGraph">
-        <app-specific-speed-graph class="w-100" [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
+        <app-specific-speed-graph class="w-100" [inPsat]="inPsat" [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
       </div>
     </div>
   </div>

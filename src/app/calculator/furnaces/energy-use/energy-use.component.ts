@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EnergyUseService } from './energy-use.service';
 
@@ -35,7 +34,7 @@ export class EnergyUseComponent implements OnInit {
   currentField: string = 'default';
   tabSelect: string = 'results';
 
-  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {

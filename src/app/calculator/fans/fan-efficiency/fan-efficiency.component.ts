@@ -19,14 +19,7 @@ export class FanEfficiencyComponent implements OnInit {
   @Input()
   inAssessment: boolean;
 
-  inputs: FanEfficiencyInputs = {
-    fanType: undefined,
-    fanSpeed: undefined,
-    flowRate: undefined,
-    inletPressure: undefined,
-    outletPressure: undefined,
-    compressibility: undefined
-  };
+  inputs: FanEfficiencyInputs;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -65,6 +58,12 @@ export class FanEfficiencyComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    if(!this.inAssessment){
+      this.fanService.fanEfficiencyInputs = this.inputs;
+    }
   }
 
   resizeTabs() {

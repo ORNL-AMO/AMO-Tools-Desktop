@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../shared/models/phast/energyEquivalency';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { EnergyEquivalencyService } from './energy-equivalency.service';
 
@@ -32,7 +31,7 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   currentField: string = 'default';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {

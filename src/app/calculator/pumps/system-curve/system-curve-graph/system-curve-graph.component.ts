@@ -35,6 +35,8 @@ export class SystemCurveGraphComponent implements OnInit {
   settings: Settings;
   @Input()
   isFan: boolean;
+  @Input()
+  inAssessment: boolean;
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -113,8 +115,17 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //init for exportable table
     this.columnTitles = new Array<string>();
-    this.rowData = new Array<Array<string>>();
-    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    if (this.isFan && this.systemCurveService.fanTableData && !this.inAssessment) {
+      this.rowData = this.systemCurveService.fanTableData;
+      this.keyColors = this.systemCurveService.fanKeyColors;
+    } else if (!this.isFan && this.systemCurveService.pumpTableData && !this.inAssessment) {
+      this.rowData = this.systemCurveService.pumpTableData;
+      this.keyColors = this.systemCurveService.pumpKeyColors
+    }
+    else {
+      this.rowData = new Array<Array<string>>();
+      this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    }
     this.initColumnTitles();
   }
 
@@ -122,6 +133,16 @@ export class SystemCurveGraphComponent implements OnInit {
     setTimeout(() => {
       this.resizeGraph();
     }, 100)
+  }
+
+  ngOnDestroy() {
+    if (this.isFan) {
+      this.systemCurveService.fanTableData = this.rowData;
+      this.systemCurveService.fanKeyColors = this.keyColors;
+    } else {
+      this.systemCurveService.pumpTableData = this.rowData;
+      this.systemCurveService.pumpKeyColors = this.keyColors;
+    }
   }
 
   initColumnTitles() {
@@ -136,7 +157,7 @@ export class SystemCurveGraphComponent implements OnInit {
       powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
       headOrPressure = 'Head'
     }
-      this.columnTitles = ['Flow Rate (' + flowMeasurement + ')', headOrPressure + ' (' + distanceMeasurement + ')', 'Fluid Power (' + powerMeasurement + ')'];
+    this.columnTitles = ['Flow Rate (' + flowMeasurement + ')', headOrPressure + ' (' + distanceMeasurement + ')', 'Fluid Power (' + powerMeasurement + ')'];
   }
 
   // ========== export/gridline tooltip functions ==========

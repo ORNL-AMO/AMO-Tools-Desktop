@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@
 import { O2Enrichment, O2EnrichmentOutput } from '../../../shared/models/phast/o2Enrichment';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { O2EnrichmentService } from './o2-enrichment.service';
 
@@ -37,7 +36,7 @@ export class O2EnrichmentComponent implements OnInit {
   lines = [];
   tabSelect: string = 'results';
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService, private o2EnrichmentService: O2EnrichmentService) { }
+  constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService) { }
 
   ngOnInit() {
     if (!this.settings) {

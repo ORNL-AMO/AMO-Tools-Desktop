@@ -55,6 +55,9 @@ export class SystemCurveComponent implements OnInit {
   constructor(private systemCurveService: SystemCurveService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     //in assesssment
     if (this.inAssessment) {
       if (this.isFan) {
@@ -83,7 +86,7 @@ export class SystemCurveComponent implements OnInit {
           })
           this.showForm = true;
         }
-      } 
+      }
       else {
         this.initializeCalculator();
         this.initDefault();
@@ -97,19 +100,26 @@ export class SystemCurveComponent implements OnInit {
     }
     //stand alone
     else {
-      this.initDefault();
-      //get system settings if using stand alone calculator
-      if (!this.settings) {
-        this.settings = this.settingsDbService.globalSettings;
-        if (!this.isFan) {
-          this.convertPumpDefaults(this.settings);
-        } else {
-          this.convertFanDefaults(this.settings);
-        }
-        this.showForm = true;
-      } else {
-        this.showForm = true;
+      if (!this.isFan && !this.systemCurveService.pumpPointOne) {
+        this.initDefault();
+        this.convertPumpDefaults(this.settings);
+      } else if (this.isFan && !this.systemCurveService.fanPointOne) {
+        this.initDefault();
+        this.convertFanDefaults(this.settings);
+      } else if (!this.isFan && this.systemCurveService.pumpPointOne) {
+        this.pointOne = this.systemCurveService.pumpPointOne;
+        this.pointTwo = this.systemCurveService.pumpPointTwo;
+        this.curveConstants = this.systemCurveService.pumpCurveConstants;
+        this.staticHead = this.systemCurveService.pumpStaticHead;
+        this.lossCoefficient = this.systemCurveService.pumpLossCoefficient;
+      } else if (this.isFan && this.systemCurveService.fanPointOne) {
+        this.pointOne = this.systemCurveService.fanPointOne;
+        this.pointTwo = this.systemCurveService.fanPointTwo;
+        this.curveConstants = this.systemCurveService.fanCurveConstants;
+        this.staticHead = this.systemCurveService.fanStaticHead;
+        this.lossCoefficient = this.systemCurveService.fanLossCoefficient;
       }
+      this.showForm = true;
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -121,6 +131,23 @@ export class SystemCurveComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
+
+  ngOnDestroy() {
+    if (!this.isFan && !this.inAssessment) {
+      this.systemCurveService.pumpPointOne = this.pointOne;
+      this.systemCurveService.pumpPointTwo = this.pointTwo;
+      this.systemCurveService.pumpCurveConstants = this.curveConstants;
+      this.systemCurveService.pumpStaticHead = this.staticHead;
+      this.systemCurveService.pumpLossCoefficient = this.lossCoefficient;
+    } else if (this.isFan && !this.inAssessment) {
+      this.systemCurveService.fanPointOne = this.pointOne;
+      this.systemCurveService.fanPointTwo = this.pointTwo;
+      this.systemCurveService.fanCurveConstants = this.curveConstants;
+      this.systemCurveService.fanStaticHead = this.staticHead;
+      this.systemCurveService.fanLossCoefficient = this.lossCoefficient;
+    }
+  }
+
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {

@@ -4,6 +4,7 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SpecificSpeedService } from '../specific-speed.service';
 
 var tableEfficiencyCorrection: number;
 var tableSpecificSpeed: number;
@@ -16,6 +17,8 @@ var tableSpecificSpeed: number;
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   speedForm: FormGroup;
+  @Input()
+  inPsat: boolean;
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -77,7 +80,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
   // efficiencyCorrection: number = 0;
-  constructor(private psatService: PsatService, private svgToPngService: SvgToPngService) { }
+  constructor(private psatService: PsatService, private svgToPngService: SvgToPngService, private specificSpeedService: SpecificSpeedService) { }
 
   ngOnInit() {
     this.deleteCount = 0;
@@ -90,9 +93,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.isGridToggled = false;
 
     //init for exportable table
+    if(!this.specificSpeedService.keyColors && !this.inPsat){
+      this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+      this.rowData = new Array<Array<string>>();
+    }else{
+      this.rowData = this.specificSpeedService.rowData;
+      this.keyColors = this.specificSpeedService.keyColors;
+    }
     this.columnTitles = new Array<string>();
-    this.rowData = new Array<Array<string>>();
-    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
     this.initColumnTitles();
   }
 
@@ -112,6 +120,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
       }
     } else {
       this.firstChange = false;
+    }
+  }
+
+  ngOnDestroy(){
+    if(!this.inPsat){
+      this.specificSpeedService.keyColors = this.keyColors;
+      this.specificSpeedService.rowData = this.rowData;
     }
   }
 
