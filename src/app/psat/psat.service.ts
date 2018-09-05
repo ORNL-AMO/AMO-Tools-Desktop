@@ -57,8 +57,17 @@ export class PsatService {
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+    
+    // console.log('resultsExisting()');
+    // console.log('psatInputs = ');
+    // console.log(psatInputs);
+
     //call results existing
     let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
+
+    // console.log('tmpResults = ');
+    // console.log(tmpResults);
+
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -616,6 +625,8 @@ export class PsatService {
       driveEnum = 2;
     } else if (drive == 'Synchronous Belt Drive') {
       driveEnum = 3;
+    } else if (drive == 'Specified Efficiency') {
+      driveEnum = 4;
     }
     return driveEnum;
   }
@@ -629,6 +640,8 @@ export class PsatService {
       drive = 'Notched V-Belt Drive';
     } else if (num == 3) {
       drive = 'Synchronous Belt Drive';
+    } else if (num == 4) {
+      drive = 'Specified Efficiency';
     }
     return drive;
   }
@@ -694,6 +707,7 @@ export class PsatService {
       'specifiedPumpEfficiency': [''],
       'pumpRPM': ['', Validators.required],
       'drive': ['', Validators.required],
+      'specifiedDriveEfficiency': [''],
       'viscosity': ['', Validators.required],
       'gravity': ['', Validators.required],
       'stages': ['', Validators.required],
@@ -729,9 +743,9 @@ export class PsatService {
       psatInputs.margin = 0;
     }
 
-    if(psatInputs.load_estimation_method == 0){
+    if (psatInputs.load_estimation_method == 0) {
       motorKwValidators = [Validators.required];
-    }else{
+    } else {
       motorAmpsValidators = [Validators.required];
     }
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
@@ -745,6 +759,7 @@ export class PsatService {
       'specifiedPumpEfficiency': [psatInputs.pump_specified],
       'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
       'drive': [drive, Validators.required],
+      'specifiedDriveEfficiency': [psatInputs.specifiedDriveEfficiency],
       'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
       'gravity': [psatInputs.specific_gravity, Validators.required],
       'stages': [psatInputs.stages, Validators.required],
@@ -786,6 +801,7 @@ export class PsatService {
       pump_specified: form.controls.specifiedPumpEfficiency.value,
       pump_rated_speed: form.controls.pumpRPM.value,
       drive: driveEnum,
+      specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value,
       kinematic_viscosity: form.controls.viscosity.value,
       specific_gravity: form.controls.gravity.value,
       stages: form.controls.stages.value,
@@ -821,7 +837,7 @@ export class PsatService {
       form.controls.pumpRPM.status == 'VALID' &&
       form.controls.drive.status == 'VALID' &&
       form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID' && 
+      form.controls.stages.status == 'VALID' &&
       form.controls.fluidTemperature.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom

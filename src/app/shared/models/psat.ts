@@ -14,6 +14,7 @@ export interface PsatInputs {
   pump_specified?: number,
   pump_rated_speed?: number,
   drive?: number,
+  specifiedDriveEfficiency?: number,
   kinematic_viscosity?: number,
   specific_gravity?: number,
   stages?: number,

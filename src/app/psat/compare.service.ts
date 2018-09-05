@@ -45,6 +45,7 @@ export class CompareService {
         this.isPumpStyleDifferent(baseline, modification) ||
         this.isPumpRpmDifferent(baseline, modification) ||
         this.isDriveDifferent(baseline, modification) ||
+        this.isSpecifiedDriveEfficiencyDifferent(baseline, modification) ||
         this.isKinematicViscosityDifferent(baseline, modification) ||
         this.isSpecificGravityDifferent(baseline, modification) ||
         this.isFluidTempDifferent(baseline, modification) ||
@@ -165,6 +166,35 @@ export class CompareService {
         return true;
       } else {
         return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedDriveEfficiencyDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.drive == 4) {
+        if (modification.inputs.drive == 4) {
+          if (baseline.inputs.specifiedDriveEfficiency != modification.inputs.specifiedDriveEfficiency) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      } else {
+        if (modification.inputs.drive == 4) {
+          return true;
+        } else {
+          return false;
+        }
       }
     } else {
       return false;

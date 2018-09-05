@@ -18,7 +18,8 @@ export const drives: Array<string> = [
     'Direct Drive',
     'V-Belt Drive',
     'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
+    'Synchronous Belt Drive',
+    'Specified Efficiency'
 ];
 
 export const fluidProperties = {
