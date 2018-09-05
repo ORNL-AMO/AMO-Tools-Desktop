@@ -2,7 +2,7 @@
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
-        <img src="assets/images/performance.png" class="ico-size4">
+        <img src="assets/images/calculator-icons/motor-icons/performance.png" class="ico-size4">
       </div>
       <div class="pl-2">
         <h3>Motor Performance Calculator</h3>
@@ -33,52 +33,3 @@
     </div>
   </div>
 </div>
-
-
-<!-- 
-
-
-
-
-</div>
-<div class="col">
-  <h3>Motor Performance Calculator</h3>
-</div>
-</div>
-<div class="row">
-  <div class="col-12">
-    <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()" (changeField)="changeField($event)"></app-motor-performance-form>
-  </div>
-</div>
-</div>
-<div class="col-6 align-top">
-  <div class="help-panel">
-    <div class="row">
-      <ul class="tabs primary tab-row">
-        <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-          <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Graph</a>
-        </li>
-        <!--
-              --
-        <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-          <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-    </div>
-    <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-      <div class="col-11" id="motorPerformanceGraph">
-        <app-motor-performance-graph *ngIf="tabSelect == 'results'" [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
-      </div>
-    </div>
-    <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-      <div class="col-11">
-        <div class="calc-help">
-          <app-motor-performance-help [currentField]="currentField"></app-motor-performance-help>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-</div> -->

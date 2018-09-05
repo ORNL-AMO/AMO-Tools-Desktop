@@ -2,7 +2,7 @@
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
-        <img src="assets/images/power-factor-correction-icon.png" class="ico-size4">
+        <img src="assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png" class="ico-size4">
       </div>
       <div class="pl-2">
         <h3>Power Factor Correction Calculator</h3>
@@ -33,61 +33,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-<!-- 
-<div class="modify-conditions panel-container row general">
-  <div class="col-12">
-    <div class="row align-items-top  calculator-panel">
-      <div class="modification panel-column col-6 align-top">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/power-factor-correction-icon.png" class="ico-size4">
-          </div>
-          <div class="col">
-            <h3>Power Factor Correction Calculator</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
- <app-power-factor-correction-form [data]="inputData" (changeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-power-factor-correction-form>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="row">
-            <ul class="tabs primary tab-row">
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
-              </li>
-              <!--
-              --
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-              </li>
-            </ul>
-          </div>
-          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11" id="motorPerformanceGraph">
-              <app-power-factor-correction-results [results]="results"></app-power-factor-correction-results>
-            </div>
-          </div>
-          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-            <div class="col-11">
-              <div class="calc-help">
-                <app-power-factor-correction-help [currentField]="currentField"></app-power-factor-correction-help>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
