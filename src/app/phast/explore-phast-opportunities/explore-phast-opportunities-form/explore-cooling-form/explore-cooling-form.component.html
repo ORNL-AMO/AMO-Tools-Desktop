@@ -141,8 +141,8 @@
           <label for="modifiedOutletTemp">Modified Outlet Temperature</label>
           <div class="input-group">
             <input name="{{'outletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'outletTempMod_'+index}}"
-              onfocus="this.select();" (input)="checkTemp(2, modifiedLosses[index], index)" (focus)="focusField('finalTemperature')"
-              (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.finalTemperature">
+              onfocus="this.select();" (input)="checkTemp(2, modifiedLosses[index], index)" (focus)="focusField('outletTemperature')"
+              (blur)="focusOut()" [(ngModel)]="modifiedLosses[index].loss.outletTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>

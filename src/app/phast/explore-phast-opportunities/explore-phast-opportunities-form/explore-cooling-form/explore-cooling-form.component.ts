@@ -93,6 +93,7 @@ export class ExploreCoolingFormComponent implements OnInit {
       this.showTemp.push(check);
       index++
     })
+    console.log(this.modifiedLosses);
   }
 
   toggleCooling() {

@@ -1,0 +1,1182 @@
+{
+    "directories": [],
+    "assessments": [
+        {
+            "assessment": {
+                "name": "Electric Arc Furnace",
+                "createdDate": "2018-08-14T19:44:21.270Z",
+                "modifiedDate": "2018-08-29T19:17:22.171Z",
+                "type": "PHAST",
+                "appVersion": "0.3.0-beta",
+                "phast": {
+                    "name": null,
+                    "systemEfficiency": 90,
+                    "operatingHours": {
+                        "weeksPerYear": 52,
+                        "daysPerWeek": 7,
+                        "shiftsPerDay": 3,
+                        "hoursPerShift": 8,
+                        "hoursPerYear": 8736
+                    },
+                    "operatingCosts": {
+                        "electricityCost": 0.066,
+                        "steamCost": 4.69,
+                        "fuelCost": 3.99
+                    },
+                    "modifications": [
+                        {
+                            "phast": {
+                                "losses": {
+                                    "energyInputEAF": [
+                                        {
+                                            "naturalGasHeatInput": 6.976,
+                                            "flowRateInput": "",
+                                            "coalCarbonInjection": 3632.9999,
+                                            "coalHeatingValue": 9000,
+                                            "electrodeUse": 2065,
+                                            "electrodeHeatingValue": 12000,
+                                            "otherFuels": 0,
+                                            "electricityInput": 0,
+                                            "name": "Loss #1"
+                                        }
+                                    ],
+                                    "coolingLosses": [
+                                        {
+                                            "name": "Loss #1",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 650,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 99.5,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1238.9235477666664
+                                        },
+                                        {
+                                            "name": "Loss #2",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1550,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 94.3,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1772.6136914199988
+                                        },
+                                        {
+                                            "name": "Loss #3",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1060,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.8,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 823.700886550666
+                                        },
+                                        {
+                                            "name": "Loss #4",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1010,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.0999,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 681.1880240146656
+                                        },
+                                        {
+                                            "name": "Loss #5",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 88.1001,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 131.95635419999996
+                                        }
+                                    ],
+                                    "chargeMaterials": [
+                                        {
+                                            "name": "Material #1",
+                                            "solidChargeMaterial": {
+                                                "materialId": 35,
+                                                "thermicReactionType": 0,
+                                                "specificHeatSolid": 0.14,
+                                                "latentHeat": 117.15,
+                                                "specificHeatLiquid": 0.16,
+                                                "meltingPoint": 2550,
+                                                "chargeFeedRate": 150118.0001,
+                                                "waterContentCharged": 0,
+                                                "waterContentDischarged": 0,
+                                                "initialTemperature": 60.0001,
+                                                "dischargeTemperature": 3065,
+                                                "waterVaporDischargeTemperature": 0,
+                                                "chargeMelted": 100,
+                                                "chargeReacted": 0,
+                                                "reactionHeat": 0,
+                                                "additionalHeat": 0,
+                                                "heatRequired": 25668436.6312
+                                            },
+                                            "chargeMaterialType": "Solid"
+                                        }
+                                    ],
+                                    "slagLosses": [
+                                        {
+                                            "weight": 15000,
+                                            "inletTemperature": 60.0001,
+                                            "outletTemperature": 3150,
+                                            "specificHeat": 0.25,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 14159004
+                                        }
+                                    ],
+                                    "wallLosses": [
+                                        {
+                                            "surfaceArea": 114.0005,
+                                            "ambientTemperature": 60.0001,
+                                            "surfaceTemperature": 399.9999,
+                                            "windVelocity": 0,
+                                            "surfaceEmissivity": 0.2,
+                                            "surfaceShape": 1,
+                                            "conditionFactor": 1.016,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 55248.238846307526
+                                        }
+                                    ],
+                                    "exhaustGasEAF": [],
+                                    "otherLosses": [
+                                        {
+                                            "description": "Off gas loss",
+                                            "heatLoss": 10150
+                                        }
+                                    ]
+                                },
+                                "name": "Reduce Slag",
+                                "operatingCosts": {
+                                    "electricityCost": 0.066,
+                                    "steamCost": 4.69,
+                                    "fuelCost": 3.99
+                                },
+                                "operatingHours": {
+                                    "weeksPerYear": 52,
+                                    "daysPerWeek": 7,
+                                    "shiftsPerDay": 3,
+                                    "hoursPerShift": 8,
+                                    "hoursPerYear": 8736
+                                },
+                                "systemEfficiency": 90
+                            },
+                            "notes": {
+                                "chargeNotes": "",
+                                "wallNotes": "",
+                                "atmosphereNotes": "",
+                                "fixtureNotes": "",
+                                "openingNotes": "",
+                                "coolingNotes": "",
+                                "flueGasNotes": "",
+                                "otherNotes": "",
+                                "leakageNotes": "",
+                                "extendedNotes": "",
+                                "slagNotes": "",
+                                "auxiliaryPowerNotes": "",
+                                "exhaustGasNotes": "",
+                                "energyInputExhaustGasNotes": "",
+                                "operationsNotes": ""
+                            },
+                            "exploreOpportunities": false
+                        },
+                        {
+                            "phast": {
+                                "losses": {
+                                    "energyInputEAF": [
+                                        {
+                                            "naturalGasHeatInput": 6.976,
+                                            "flowRateInput": "",
+                                            "coalCarbonInjection": 3632.9999,
+                                            "coalHeatingValue": 9000,
+                                            "electrodeUse": 2065,
+                                            "electrodeHeatingValue": 12000,
+                                            "otherFuels": 0,
+                                            "electricityInput": 0,
+                                            "name": "Loss #1"
+                                        }
+                                    ],
+                                    "coolingLosses": [
+                                        {
+                                            "name": "Loss #1",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 650,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 99.5,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1238.9235477666664
+                                        },
+                                        {
+                                            "name": "Loss #2",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1550,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 94.3,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1772.6136914199988
+                                        },
+                                        {
+                                            "name": "Loss #3",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1060,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.8,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 823.700886550666
+                                        },
+                                        {
+                                            "name": "Loss #4",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1010,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.0999,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 681.1880240146656
+                                        },
+                                        {
+                                            "name": "Loss #5",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 88.1001,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 131.95635419999996
+                                        }
+                                    ],
+                                    "chargeMaterials": [
+                                        {
+                                            "name": "Material #1",
+                                            "solidChargeMaterial": {
+                                                "materialId": 35,
+                                                "thermicReactionType": 0,
+                                                "specificHeatSolid": 0.14,
+                                                "latentHeat": 117.15,
+                                                "specificHeatLiquid": 0.16,
+                                                "meltingPoint": 2550,
+                                                "chargeFeedRate": 150118.0001,
+                                                "waterContentCharged": 0,
+                                                "waterContentDischarged": 0,
+                                                "initialTemperature": 450,
+                                                "dischargeTemperature": 3065,
+                                                "waterVaporDischargeTemperature": 0,
+                                                "chargeMelted": 100,
+                                                "chargeReacted": 0,
+                                                "reactionHeat": 0,
+                                                "additionalHeat": 0,
+                                                "heatRequired": 25668436.6312
+                                            },
+                                            "chargeMaterialType": "Solid"
+                                        }
+                                    ],
+                                    "slagLosses": [
+                                        {
+                                            "weight": 18014,
+                                            "inletTemperature": 60.0001,
+                                            "outletTemperature": 3150,
+                                            "specificHeat": 0.25,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 14159004
+                                        }
+                                    ],
+                                    "wallLosses": [
+                                        {
+                                            "surfaceArea": 114.0005,
+                                            "ambientTemperature": 60.0001,
+                                            "surfaceTemperature": 399.9999,
+                                            "windVelocity": 0,
+                                            "surfaceEmissivity": 0.2,
+                                            "surfaceShape": 1,
+                                            "conditionFactor": 1.016,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 55248.238846307526
+                                        }
+                                    ],
+                                    "exhaustGasEAF": [],
+                                    "otherLosses": [
+                                        {
+                                            "description": "Off gas loss",
+                                            "heatLoss": 10150
+                                        }
+                                    ]
+                                },
+                                "name": "Preheat Steel",
+                                "operatingCosts": {
+                                    "electricityCost": 0.066,
+                                    "steamCost": 4.69,
+                                    "fuelCost": 3.99
+                                },
+                                "operatingHours": {
+                                    "weeksPerYear": 52,
+                                    "daysPerWeek": 7,
+                                    "shiftsPerDay": 3,
+                                    "hoursPerShift": 8,
+                                    "hoursPerYear": 8736
+                                },
+                                "systemEfficiency": 90
+                            },
+                            "notes": {
+                                "chargeNotes": "",
+                                "wallNotes": "",
+                                "atmosphereNotes": "",
+                                "fixtureNotes": "",
+                                "openingNotes": "",
+                                "coolingNotes": "",
+                                "flueGasNotes": "",
+                                "otherNotes": "",
+                                "leakageNotes": "",
+                                "extendedNotes": "",
+                                "slagNotes": "",
+                                "auxiliaryPowerNotes": "",
+                                "exhaustGasNotes": "",
+                                "energyInputExhaustGasNotes": "",
+                                "operationsNotes": ""
+                            },
+                            "exploreOpportunities": false
+                        },
+                        {
+                            "phast": {
+                                "losses": {
+                                    "energyInputEAF": [
+                                        {
+                                            "naturalGasHeatInput": 6.976,
+                                            "flowRateInput": "",
+                                            "coalCarbonInjection": 3632.9999,
+                                            "coalHeatingValue": 9000,
+                                            "electrodeUse": 2065,
+                                            "electrodeHeatingValue": 12000,
+                                            "otherFuels": 0,
+                                            "electricityInput": 0,
+                                            "name": "Loss #1"
+                                        }
+                                    ],
+                                    "coolingLosses": [
+                                        {
+                                            "name": "Loss #1",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 0,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 99.5,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 0
+                                        },
+                                        {
+                                            "name": "Loss #2",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1550,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 96,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 2158.9266799524994
+                                        },
+                                        {
+                                            "name": "Loss #3",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 0,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.8,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 0
+                                        },
+                                        {
+                                            "name": "Loss #4",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1010,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 93,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 962.5367506885
+                                        },
+                                        {
+                                            "name": "Loss #5",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 90,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 307.89446709
+                                        }
+                                    ],
+                                    "chargeMaterials": [
+                                        {
+                                            "name": "Material #1",
+                                            "solidChargeMaterial": {
+                                                "materialId": 35,
+                                                "thermicReactionType": 0,
+                                                "specificHeatSolid": 0.14,
+                                                "latentHeat": 117.15,
+                                                "specificHeatLiquid": 0.16,
+                                                "meltingPoint": 2550,
+                                                "chargeFeedRate": 150118.0001,
+                                                "waterContentCharged": 0,
+                                                "waterContentDischarged": 0,
+                                                "initialTemperature": 60.0001,
+                                                "dischargeTemperature": 3065,
+                                                "waterVaporDischargeTemperature": 0,
+                                                "chargeMelted": 100,
+                                                "chargeReacted": 0,
+                                                "reactionHeat": 0,
+                                                "additionalHeat": 0,
+                                                "heatRequired": 25668436.6312
+                                            },
+                                            "chargeMaterialType": "Solid"
+                                        }
+                                    ],
+                                    "slagLosses": [
+                                        {
+                                            "weight": 18014,
+                                            "inletTemperature": 60.0001,
+                                            "outletTemperature": 3150,
+                                            "specificHeat": 0.25,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 14159004
+                                        }
+                                    ],
+                                    "wallLosses": [
+                                        {
+                                            "surfaceArea": 114.0005,
+                                            "ambientTemperature": 60.0001,
+                                            "surfaceTemperature": 399.9999,
+                                            "windVelocity": 0,
+                                            "surfaceEmissivity": 0.2,
+                                            "surfaceShape": 1,
+                                            "conditionFactor": 1.016,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 55248.238846307526
+                                        }
+                                    ],
+                                    "exhaustGasEAF": [],
+                                    "otherLosses": [
+                                        {
+                                            "description": "Off gas loss",
+                                            "heatLoss": 10150
+                                        }
+                                    ]
+                                },
+                                "name": "Cooling",
+                                "operatingCosts": {
+                                    "electricityCost": 0.066,
+                                    "steamCost": 4.69,
+                                    "fuelCost": 3.99
+                                },
+                                "operatingHours": {
+                                    "weeksPerYear": 52,
+                                    "daysPerWeek": 7,
+                                    "shiftsPerDay": 3,
+                                    "hoursPerShift": 8,
+                                    "hoursPerYear": 8736
+                                },
+                                "systemEfficiency": 90
+                            },
+                            "notes": {
+                                "chargeNotes": "",
+                                "wallNotes": "",
+                                "atmosphereNotes": "",
+                                "fixtureNotes": "",
+                                "openingNotes": "",
+                                "coolingNotes": "",
+                                "flueGasNotes": "",
+                                "otherNotes": "",
+                                "leakageNotes": "",
+                                "extendedNotes": "",
+                                "slagNotes": "",
+                                "auxiliaryPowerNotes": "",
+                                "exhaustGasNotes": "",
+                                "energyInputExhaustGasNotes": "",
+                                "operationsNotes": ""
+                            },
+                            "exploreOpportunities": false
+                        },
+                        {
+                            "phast": {
+                                "losses": {
+                                    "energyInputEAF": [
+                                        {
+                                            "naturalGasHeatInput": 6.976,
+                                            "flowRateInput": "",
+                                            "coalCarbonInjection": 3632.9999,
+                                            "coalHeatingValue": 9000,
+                                            "electrodeUse": 2065,
+                                            "electrodeHeatingValue": 12000,
+                                            "otherFuels": 0,
+                                            "electricityInput": 10000,
+                                            "name": "Loss #1"
+                                        }
+                                    ],
+                                    "coolingLosses": [
+                                        {
+                                            "name": "Loss #1",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 650,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 99.5,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1238.9235477666664
+                                        },
+                                        {
+                                            "name": "Loss #2",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1550,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 94.3,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1772.6136914199988
+                                        },
+                                        {
+                                            "name": "Loss #3",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1060,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.8,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 823.700886550666
+                                        },
+                                        {
+                                            "name": "Loss #4",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1010,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.0999,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 681.1880240146656
+                                        },
+                                        {
+                                            "name": "Loss #5",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 88.1001,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 131.95635419999996
+                                        }
+                                    ],
+                                    "chargeMaterials": [
+                                        {
+                                            "name": "Material #1",
+                                            "solidChargeMaterial": {
+                                                "materialId": 35,
+                                                "thermicReactionType": 0,
+                                                "specificHeatSolid": 0.14,
+                                                "latentHeat": 117.15,
+                                                "specificHeatLiquid": 0.16,
+                                                "meltingPoint": 2550,
+                                                "chargeFeedRate": 150118.0001,
+                                                "waterContentCharged": 0,
+                                                "waterContentDischarged": 0,
+                                                "initialTemperature": 60.0001,
+                                                "dischargeTemperature": 3065,
+                                                "waterVaporDischargeTemperature": 0,
+                                                "chargeMelted": 100,
+                                                "chargeReacted": 0,
+                                                "reactionHeat": 0,
+                                                "additionalHeat": 0,
+                                                "heatRequired": 25668436.6312
+                                            },
+                                            "chargeMaterialType": "Solid"
+                                        }
+                                    ],
+                                    "slagLosses": [
+                                        {
+                                            "weight": 18014,
+                                            "inletTemperature": 60.0001,
+                                            "outletTemperature": 3150,
+                                            "specificHeat": 0.25,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 14159004
+                                        }
+                                    ],
+                                    "wallLosses": [
+                                        {
+                                            "surfaceArea": 114.0005,
+                                            "ambientTemperature": 60.0001,
+                                            "surfaceTemperature": 399.9999,
+                                            "windVelocity": 0,
+                                            "surfaceEmissivity": 0.2,
+                                            "surfaceShape": 1,
+                                            "conditionFactor": 1.016,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 55248.238846307526
+                                        }
+                                    ],
+                                    "exhaustGasEAF": [],
+                                    "otherLosses": [
+                                        {
+                                            "description": "Off gas loss",
+                                            "heatLoss": 10150
+                                        }
+                                    ]
+                                },
+                                "name": "test energy input",
+                                "operatingCosts": {
+                                    "electricityCost": 0.066,
+                                    "steamCost": 4.69,
+                                    "fuelCost": 3.99
+                                },
+                                "operatingHours": {
+                                    "weeksPerYear": 52,
+                                    "daysPerWeek": 7,
+                                    "shiftsPerDay": 3,
+                                    "hoursPerShift": 8,
+                                    "hoursPerYear": 8736
+                                },
+                                "systemEfficiency": 90
+                            },
+                            "notes": {
+                                "chargeNotes": "",
+                                "wallNotes": "",
+                                "atmosphereNotes": "",
+                                "fixtureNotes": "",
+                                "openingNotes": "",
+                                "coolingNotes": "",
+                                "flueGasNotes": "",
+                                "otherNotes": "",
+                                "leakageNotes": "",
+                                "extendedNotes": "",
+                                "slagNotes": "",
+                                "auxiliaryPowerNotes": "",
+                                "exhaustGasNotes": "",
+                                "energyInputExhaustGasNotes": "",
+                                "operationsNotes": ""
+                            }
+                        },
+                        {
+                            "phast": {
+                                "losses": {
+                                    "energyInputEAF": [
+                                        {
+                                            "naturalGasHeatInput": 6.976,
+                                            "flowRateInput": "",
+                                            "coalCarbonInjection": 3632.9999,
+                                            "coalHeatingValue": 9000,
+                                            "electrodeUse": 2065,
+                                            "electrodeHeatingValue": 12000,
+                                            "otherFuels": 0,
+                                            "electricityInput": 0,
+                                            "name": "Loss #1"
+                                        }
+                                    ],
+                                    "coolingLosses": [
+                                        {
+                                            "name": "Loss #1",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 99.5,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1238.9235477666664
+                                        },
+                                        {
+                                            "name": "Loss #2",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1550,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 94.3,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 1772.6136914199988
+                                        },
+                                        {
+                                            "name": "Loss #3",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1060,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.8,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 823.700886550666
+                                        },
+                                        {
+                                            "name": "Loss #4",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 1010,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 91.0999,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 681.1880240146656
+                                        },
+                                        {
+                                            "name": "Loss #5",
+                                            "coolingMedium": "Water",
+                                            "liquidCoolingLoss": {
+                                                "flowRate": 600,
+                                                "density": 8.3379,
+                                                "initialTemperature": 86.5,
+                                                "outletTemperature": 88.1001,
+                                                "specificHeat": 1,
+                                                "correctionFactor": 1
+                                            },
+                                            "coolingLossType": "Liquid",
+                                            "heatLoss": 131.95635419999996
+                                        }
+                                    ],
+                                    "chargeMaterials": [
+                                        {
+                                            "name": "Material #1",
+                                            "solidChargeMaterial": {
+                                                "materialId": 35,
+                                                "thermicReactionType": 0,
+                                                "specificHeatSolid": 0.14,
+                                                "latentHeat": 117.15,
+                                                "specificHeatLiquid": 0.16,
+                                                "meltingPoint": 2550,
+                                                "chargeFeedRate": 150118.0001,
+                                                "waterContentCharged": 0,
+                                                "waterContentDischarged": 0,
+                                                "initialTemperature": 60.0001,
+                                                "dischargeTemperature": 3065,
+                                                "waterVaporDischargeTemperature": 0,
+                                                "chargeMelted": 100,
+                                                "chargeReacted": 0,
+                                                "reactionHeat": 0,
+                                                "additionalHeat": 0,
+                                                "heatRequired": 25668436.6312
+                                            },
+                                            "chargeMaterialType": "Solid"
+                                        }
+                                    ],
+                                    "slagLosses": [
+                                        {
+                                            "weight": 18014,
+                                            "inletTemperature": 60.0001,
+                                            "outletTemperature": 3150,
+                                            "specificHeat": 0.25,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 14159004
+                                        }
+                                    ],
+                                    "wallLosses": [
+                                        {
+                                            "surfaceArea": 114.0005,
+                                            "ambientTemperature": 60.0001,
+                                            "surfaceTemperature": 399.9999,
+                                            "windVelocity": 0,
+                                            "surfaceEmissivity": 0.2,
+                                            "surfaceShape": 1,
+                                            "conditionFactor": 1.016,
+                                            "correctionFactor": 1,
+                                            "name": "Loss #1",
+                                            "heatLoss": 55248.238846307526
+                                        }
+                                    ],
+                                    "exhaustGasEAF": [],
+                                    "otherLosses": [
+                                        {
+                                            "description": "Off gas loss",
+                                            "heatLoss": 10150
+                                        }
+                                    ]
+                                },
+                                "name": "Scenario 5",
+                                "operatingCosts": {
+                                    "electricityCost": 0.066,
+                                    "steamCost": 4.69,
+                                    "fuelCost": 3.99
+                                },
+                                "operatingHours": {
+                                    "weeksPerYear": 52,
+                                    "daysPerWeek": 7,
+                                    "shiftsPerDay": 3,
+                                    "hoursPerShift": 8,
+                                    "hoursPerYear": 8736
+                                },
+                                "systemEfficiency": 90
+                            },
+                            "notes": {
+                                "chargeNotes": "",
+                                "wallNotes": "",
+                                "atmosphereNotes": "",
+                                "fixtureNotes": "",
+                                "openingNotes": "",
+                                "coolingNotes": "",
+                                "flueGasNotes": "",
+                                "otherNotes": "",
+                                "leakageNotes": "",
+                                "extendedNotes": "",
+                                "slagNotes": "",
+                                "auxiliaryPowerNotes": "",
+                                "exhaustGasNotes": "",
+                                "energyInputExhaustGasNotes": "",
+                                "operationsNotes": ""
+                            },
+                            "exploreOpportunities": true
+                        }
+                    ],
+                    "setupDone": true,
+                    "losses": {
+                        "energyInputEAF": [
+                            {
+                                "naturalGasHeatInput": 6.976,
+                                "flowRateInput": "",
+                                "coalCarbonInjection": 3632.9999,
+                                "coalHeatingValue": 9000,
+                                "electrodeUse": 2065,
+                                "electrodeHeatingValue": 12000,
+                                "otherFuels": 0,
+                                "electricityInput": 0,
+                                "name": "Loss #1"
+                            }
+                        ],
+                        "coolingLosses": [
+                            {
+                                "name": "Loss #1",
+                                "coolingMedium": "Water",
+                                "liquidCoolingLoss": {
+                                    "flowRate": 650,
+                                    "density": 8.3379,
+                                    "initialTemperature": 86.5,
+                                    "outletTemperature": 99.5,
+                                    "specificHeat": 1,
+                                    "correctionFactor": 1
+                                },
+                                "coolingLossType": "Liquid",
+                                "heatLoss": 1238.9235477666664
+                            },
+                            {
+                                "name": "Loss #2",
+                                "coolingMedium": "Water",
+                                "liquidCoolingLoss": {
+                                    "flowRate": 1550,
+                                    "density": 8.3379,
+                                    "initialTemperature": 86.5,
+                                    "outletTemperature": 94.3,
+                                    "specificHeat": 1,
+                                    "correctionFactor": 1
+                                },
+                                "coolingLossType": "Liquid",
+                                "heatLoss": 1772.6136914199988
+                            },
+                            {
+                                "name": "Loss #3",
+                                "coolingMedium": "Water",
+                                "liquidCoolingLoss": {
+                                    "flowRate": 1060,
+                                    "density": 8.3379,
+                                    "initialTemperature": 86.5,
+                                    "outletTemperature": 91.8,
+                                    "specificHeat": 1,
+                                    "correctionFactor": 1
+                                },
+                                "coolingLossType": "Liquid",
+                                "heatLoss": 823.700886550666
+                            },
+                            {
+                                "name": "Loss #4",
+                                "coolingMedium": "Water",
+                                "liquidCoolingLoss": {
+                                    "flowRate": 1010,
+                                    "density": 8.3379,
+                                    "initialTemperature": 86.5,
+                                    "outletTemperature": 91.0999,
+                                    "specificHeat": 1,
+                                    "correctionFactor": 1
+                                },
+                                "coolingLossType": "Liquid",
+                                "heatLoss": 681.1880240146656
+                            },
+                            {
+                                "name": "Loss #5",
+                                "coolingMedium": "Water",
+                                "liquidCoolingLoss": {
+                                    "flowRate": 600,
+                                    "density": 8.3379,
+                                    "initialTemperature": 86.5,
+                                    "outletTemperature": 88.1001,
+                                    "specificHeat": 1,
+                                    "correctionFactor": 1
+                                },
+                                "coolingLossType": "Liquid",
+                                "heatLoss": 131.95635419999996
+                            }
+                        ],
+                        "chargeMaterials": [
+                            {
+                                "name": "Material #1",
+                                "solidChargeMaterial": {
+                                    "materialId": 35,
+                                    "thermicReactionType": 0,
+                                    "specificHeatSolid": 0.14,
+                                    "latentHeat": 117.15,
+                                    "specificHeatLiquid": 0.16,
+                                    "meltingPoint": 2550,
+                                    "chargeFeedRate": 150118.0001,
+                                    "waterContentCharged": 0,
+                                    "waterContentDischarged": 0,
+                                    "initialTemperature": 60.0001,
+                                    "dischargeTemperature": 3065,
+                                    "waterVaporDischargeTemperature": 0,
+                                    "chargeMelted": 100,
+                                    "chargeReacted": 0,
+                                    "reactionHeat": 0,
+                                    "additionalHeat": 0,
+                                    "heatRequired": 25668436.6312
+                                },
+                                "chargeMaterialType": "Solid"
+                            }
+                        ],
+                        "slagLosses": [
+                            {
+                                "weight": 18014,
+                                "inletTemperature": 60.0001,
+                                "outletTemperature": 3150,
+                                "specificHeat": 0.25,
+                                "correctionFactor": 1,
+                                "name": "Loss #1",
+                                "heatLoss": 14159004
+                            }
+                        ],
+                        "wallLosses": [
+                            {
+                                "surfaceArea": 114.0005,
+                                "ambientTemperature": 60.0001,
+                                "surfaceTemperature": 399.9999,
+                                "windVelocity": 0,
+                                "surfaceEmissivity": 0.2,
+                                "surfaceShape": 1,
+                                "conditionFactor": 1.016,
+                                "correctionFactor": 1,
+                                "name": "Loss #1",
+                                "heatLoss": 55248.238846307526
+                            }
+                        ],
+                        "exhaustGasEAF": [],
+                        "otherLosses": [
+                            {
+                                "description": "Off gas loss",
+                                "heatLoss": 10150
+                            }
+                        ]
+                    },
+                    "disableSetupDialog": true,
+                    "designedEnergy": {
+                        "zones": [
+                            {
+                                "name": "Zone #1",
+                                "designedEnergyElectricity": {
+                                    "kwRating": 41000,
+                                    "percentCapacityUsed": 100,
+                                    "percentOperatingHours": 100
+                                },
+                                "designedEnergyFuel": {
+                                    "fuelType": 0,
+                                    "percentCapacityUsed": 93,
+                                    "totalBurnerCapacity": 7,
+                                    "percentOperatingHours": 100
+                                },
+                                "designedEnergySteam": {
+                                    "totalHeat": 0,
+                                    "steamFlow": 0,
+                                    "percentCapacityUsed": 0,
+                                    "percentOperatingHours": 0
+                                }
+                            }
+                        ],
+                        "fuel": true,
+                        "steam": false,
+                        "electricity": true
+                    },
+                    "meteredEnergy": {
+                        "meteredEnergyElectricity": {
+                            "electricityCollectionTime": 0,
+                            "electricityUsed": 0,
+                            "auxElectricityUsed": 0,
+                            "auxElectricityCollectionTime": 0
+                        },
+                        "meteredEnergyFuel": {
+                            "fuelDescription": "gas",
+                            "fuelType": 0,
+                            "heatingValue": 0,
+                            "collectionTime": 0,
+                            "electricityUsed": 0,
+                            "electricityCollectionTime": 0,
+                            "fuelEnergy": 0
+                        },
+                        "meteredEnergySteam": {
+                            "totalHeatSteam": 0,
+                            "flowRate": 0,
+                            "collectionTime": 0,
+                            "electricityUsed": 0,
+                            "electricityCollectionTime": 0
+                        },
+                        "fuel": false,
+                        "steam": false,
+                        "electricity": true
+                    }
+                },
+                "directoryId": 3,
+                "selected": true,
+                "id": 4
+            },
+            "settings": {
+                "language": "English",
+                "currency": "$ - US Dollar",
+                "unitsOfMeasure": "Imperial",
+                "distanceMeasurement": "ft",
+                "flowMeasurement": "gpm",
+                "powerMeasurement": "hp",
+                "pressureMeasurement": "psi",
+                "steamPressureMeasurement": "psi",
+                "steamTemperatureMeasurement": "F",
+                "steamSpecificEnthalpyMeasurement": "btuLb",
+                "steamSpecificEntropyMeasurement": "btulbF",
+                "steamSpecificVolumeMeasurement": "ft3lb",
+                "steamMassFlowMeasurement": "klb",
+                "steamPowerMeasurement": "MMBtu",
+                "currentMeasurement": null,
+                "viscosityMeasurement": null,
+                "voltageMeasurement": null,
+                "energySourceType": "Electricity",
+                "furnaceType": "Electric Arc Furnace (EAF)",
+                "energyResultUnit": "kWh",
+                "customFurnaceName": null,
+                "temperatureMeasurement": "F",
+                "appVersion": "0.3.0-beta",
+                "fanCurveType": null,
+                "fanConvertedConditions": null,
+                "phastRollupUnit": "MMBtu",
+                "phastRollupFuelUnit": "MMBtu",
+                "phastRollupElectricityUnit": "MMBtu",
+                "phastRollupSteamUnit": "MMBtu",
+                "defaultPanelTab": "help",
+                "fuelCost": 3.99,
+                "steamCost": 4.69,
+                "electricityCost": 0.066,
+                "densityMeasurement": "lbscf",
+                "fanFlowRate": "ft3/min",
+                "fanPressureMeasurement": "inH2o",
+                "fanBarometricPressure": "inHg",
+                "fanSpecificHeatGas": "btulbF",
+                "fanPowerMeasurement": "hp",
+                "fanTemperatureMeasurement": "F",
+                "steamEnergyMeasurement": "MMBtu",
+                "assessmentId": 4,
+                "modifiedDate": "2018-08-14T20:33:41.086Z",
+                "id": 7
+            }
+        }
+    ],
+    "calculators": [],
+    "origin": "AMO-TOOLS-DESKTOP"
+}
