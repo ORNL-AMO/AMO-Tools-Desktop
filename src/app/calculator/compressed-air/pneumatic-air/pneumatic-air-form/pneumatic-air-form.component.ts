@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../../../../shared/models/standalone";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-pneumatic-air-form',
@@ -7,7 +8,8 @@ import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../
   styleUrls: ['./pneumatic-air-form.component.css']
 })
 export class PneumaticAirFormComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   @Input()
   inputs: PneumaticAirRequirementInput;
   @Input()

@@ -24,7 +24,7 @@ export class ExtendedSurfaceTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private cd: ChangeDetectorRef ) { }
 

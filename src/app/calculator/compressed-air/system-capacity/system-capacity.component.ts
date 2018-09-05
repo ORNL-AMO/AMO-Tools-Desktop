@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-system-capacity',
@@ -8,6 +9,8 @@ import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../shared
   styleUrls: ['./system-capacity.component.css']
 })
 export class SystemCapacityComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

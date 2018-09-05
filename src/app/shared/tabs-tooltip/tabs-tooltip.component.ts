@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-psat-tabs-tooltip',
-  templateUrl: './psat-tabs-tooltip.component.html',
-  styleUrls: ['./psat-tabs-tooltip.component.css']
+  selector: 'app-tabs-tooltip',
+  templateUrl: './tabs-tooltip.component.html',
+  styleUrls: ['./tabs-tooltip.component.css']
 })
-export class PsatTabsTooltipComponent implements OnInit {
+export class TabsTooltipComponent implements OnInit {
   @Input()
   badgeClass: string;
   @Input()
@@ -28,8 +28,11 @@ export class PsatTabsTooltipComponent implements OnInit {
     }
   }
 
+
   setMessage() {
-    if (this.badgeClass == 'input-error') {
+    if (this.badgeClass == 'loss-different') {
+      this.message = "different from baseline";
+    }else if (this.badgeClass == 'input-error') {
       this.message = "input error";
     }
     else if (this.badgeClass == 'missing-data') {

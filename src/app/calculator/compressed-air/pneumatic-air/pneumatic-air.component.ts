@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {  PneumaticAirRequirementInput, PneumaticAirRequirementOutput} from "../../../shared/models/standalone";
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../../../shared/models/standalone";
 import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-pneumatic-air',
@@ -9,6 +10,9 @@ import { CompressedAirService } from '../compressed-air.service';
   styleUrls: ['./pneumatic-air.component.css']
 })
 export class PneumaticAirComponent implements OnInit {
+  @Input()
+  settings: Settings;
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -43,7 +47,7 @@ export class PneumaticAirComponent implements OnInit {
   }
 
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
 }

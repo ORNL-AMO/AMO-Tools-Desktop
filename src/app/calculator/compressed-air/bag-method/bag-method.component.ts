@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
 import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-bag-method',
@@ -9,6 +10,8 @@ import { CompressedAirService } from '../compressed-air.service';
   styleUrls: ['./bag-method.component.css']
 })
 export class BagMethodComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

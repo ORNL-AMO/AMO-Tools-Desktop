@@ -123,26 +123,26 @@
 
 
 <div class="stand-alone-calc" *ngIf="selectedTool == 'bag-method'">
-  <app-bag-method></app-bag-method>
+  <app-bag-method [settings]="settings"></app-bag-method>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'flow-factor'">
-  <app-flow-factor></app-flow-factor>
+  <app-flow-factor [settings]="settings"></app-flow-factor>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'pneumatic-air'">
-  <app-pneumatic-air></app-pneumatic-air>
+  <app-pneumatic-air [settings]="settings"></app-pneumatic-air>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'receiver-tank'">
-  <app-receiver-tank></app-receiver-tank>
+  <app-receiver-tank [settings]="settings"></app-receiver-tank>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'pipe-sizing'">
-  <app-pipe-sizing></app-pipe-sizing>
+  <app-pipe-sizing [settings]="settings"></app-pipe-sizing>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'air-velocity'">
-  <app-air-velocity></app-air-velocity>
+  <app-air-velocity [settings]="settings"></app-air-velocity>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'system-capacity'">
-  <app-system-capacity></app-system-capacity>
+  <app-system-capacity [settings]="settings"></app-system-capacity>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'operation-cost'">
-  <app-operating-cost></app-operating-cost>
+  <app-operating-cost [settings]="settings"></app-operating-cost>
 </div>

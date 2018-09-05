@@ -4,20 +4,20 @@
       <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
       </span>
     </a>
-    <app-modify-conditions-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-modify-conditions-tabs-tooltip>
+    <app-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-tabs-tooltip>
   </div>
   <div class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'motor'}">
     <a class="nav-link small" (click)="tabChange('motor')">Motor
       <span (mouseenter)="showTooltip('motor')" (mouseleave)="hideTooltip('motor')" class="badge gray-badge" [ngClass]="motorBadgeClass">
       </span>
     </a>
-    <app-modify-conditions-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-modify-conditions-tabs-tooltip>
+    <app-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-tabs-tooltip>
   </div>
   <div class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'field-data'}">
     <a class="nav-link small" (click)="tabChange('field-data')"> Field Data
       <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
       </span>
     </a>
-    <app-modify-conditions-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-modify-conditions-tabs-tooltip>
+    <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
   </div>
 </div>

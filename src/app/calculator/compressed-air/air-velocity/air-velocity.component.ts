@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
 import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-air-velocity',
@@ -9,6 +10,9 @@ import { CompressedAirService } from '../compressed-air.service';
   styleUrls: ['./air-velocity.component.css']
 })
 export class AirVelocityComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])

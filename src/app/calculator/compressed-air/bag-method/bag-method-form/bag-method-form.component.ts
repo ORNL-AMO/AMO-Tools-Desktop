@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { BagMethodInput, BagMethodOutput } from '../../../../shared/models/standalone';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-bag-method-form',
@@ -7,6 +8,8 @@ import { BagMethodInput, BagMethodOutput } from '../../../../shared/models/stand
   styleUrls: ['./bag-method-form.component.css']
 })
 export class BagMethodFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   inputs: BagMethodInput;
   @Input()
@@ -24,6 +27,7 @@ export class BagMethodFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('settings.unitsOfMeasure = ' + this.settings.unitsOfMeasure);
 
   }
 

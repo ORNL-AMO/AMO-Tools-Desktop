@@ -17,7 +17,7 @@ export class PsatWarningService {
     let costError = this.checkCost(psat);
     let opFractionError = this.checkOpFraction(psat);
     let ratedPowerError = null;
-    if (baseline && psat.inputs.load_estimation_method == 0) {
+    if (baseline) {
       ratedPowerError = this.checkRatedPower(psat);
     }
     let marginError = this.checkMargin(psat);
@@ -177,7 +177,7 @@ export class PsatWarningService {
     let flaError = this.checkFLA(psat, settings);
     let ratedPowerError = this.checkMotorRatedPower(psat, settings);
     let efficiencyError = null;
-    if(psat.inputs.efficiency_class == 3){
+    if (psat.inputs.efficiency_class == 3) {
       efficiencyError = this.checkEfficiency(psat);
     }
     return {
@@ -232,10 +232,13 @@ export class PsatWarningService {
 
   checkMotorRatedPower(psat: PSAT, settings: Settings) {
     let motorFieldPower;
+    let inputTypeStr: string;
     if (psat.inputs.load_estimation_method == 0) {
       motorFieldPower = psat.inputs.motor_field_power;
+      inputTypeStr = 'Field Data Motor Power';
     } else {
       motorFieldPower = psat.inputs.motor_field_current;
+      inputTypeStr = 'Field Data Motor Current';
     }
     if (motorFieldPower && psat.inputs.motor_rated_power) {
       let val, compare;
@@ -248,7 +251,7 @@ export class PsatWarningService {
       }
       val = val * 1.5;
       if (compare > val) {
-        return 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+        return 'The ' + inputTypeStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
       } else {
         return null;
       }
@@ -307,11 +310,11 @@ export class PsatWarningService {
 
 
   //Pump Fluid
-  checkPumpFluidWarnings(psat: PSAT, settings: Settings): { rpmError: string, temperatureError: string, pumpEfficiencyError: string } {
+  checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
     let rpmError = this.checkPumpRpm(psat);
     let temperatureError = this.checkTemperatureError(psat, settings);
     let pumpEfficiencyError = null;
-    if(psat.inputs.pump_style == 11){
+    if (psat.inputs.pump_style == 11) {
       pumpEfficiencyError = this.checkPumpEfficiency(psat);
     }
     return {
@@ -390,6 +393,16 @@ export class PsatWarningService {
     }
   }
 
+  checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+
 }
 
 export interface FieldDataWarnings {
@@ -408,4 +421,10 @@ export interface MotorWarnings {
   flaError: string;
   efficiencyError: string;
   ratedPowerError: string;
+}
+
+export interface PumpFluidWarnings {
+  rpmError: string,
+  temperatureError: string,
+  pumpEfficiencyError: string
 }

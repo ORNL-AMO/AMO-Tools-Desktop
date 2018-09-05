@@ -25,7 +25,7 @@ export class AtmosphereTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereLossesService: AtmosphereLossesService, private cd: ChangeDetectorRef) { }
 

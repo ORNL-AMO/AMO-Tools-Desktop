@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-pipe-sizing-form [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePipeSize($event)" (emitChangeField)="setField($event)"></app-pipe-sizing-form>
+      <app-pipe-sizing-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePipeSize($event)" (emitChangeField)="setField($event)"></app-pipe-sizing-form>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
