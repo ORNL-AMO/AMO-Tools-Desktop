@@ -7,6 +7,7 @@ import { SteamService } from '../steam.service';
 
 @Injectable()
 export class DeaeratorService {
+  deaeratorInput: DeaeratorInput;
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 

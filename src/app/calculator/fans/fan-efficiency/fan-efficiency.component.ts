@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FsatService } from '../../../fsat/fsat.service';
+import { FanService } from '../fan.service';
 
 @Component({
   selector: 'app-fan-efficiency',
@@ -25,7 +26,7 @@ export class FanEfficiencyComponent implements OnInit {
     inletPressure: undefined,
     outletPressure: undefined,
     compressibility: undefined
-  };
+  };;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -39,15 +40,17 @@ export class FanEfficiencyComponent implements OnInit {
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
-  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService) { }
+  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanService: FanService) { }
   ngOnInit() {
-    if (this.inAssessment && this.fsat && this.fsat.fanSetup.fanType != 12) {
+    if (this.inAssessment && this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
       this.inputs.fanType = this.fsat.fanSetup.fanType;
       this.inputs.fanSpeed = this.fsat.fanSetup.fanSpeed;
       this.inputs.flowRate = this.fsat.fieldData.flowRate;
       this.inputs.inletPressure = this.fsat.fieldData.inletPressure;
       this.inputs.outletPressure = this.fsat.fieldData.outletPressure;
       this.inputs.compressibility = this.fsat.fieldData.compressibilityFactor;
+    }else{
+      this.inputs = this.fanService.fanEfficiencyInputs;
     }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -62,6 +65,12 @@ export class FanEfficiencyComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    if(!this.inAssessment){
+      this.fanService.fanEfficiencyInputs = this.inputs;
+    }
   }
 
   resizeTabs() {

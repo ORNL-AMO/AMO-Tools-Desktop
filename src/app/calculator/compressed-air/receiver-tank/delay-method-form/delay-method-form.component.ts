@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ReceiverTankBridgingCompressor } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -13,20 +14,15 @@ export class DelayMethodFormComponent implements OnInit {
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  inputs: ReceiverTankBridgingCompressor = {
-    method: 3,
-    distanceToCompressorRoom: 0,
-    speedOfAir: 0,
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    atmosphericPressure: 14.7
-  };;
+  inputs: ReceiverTankBridgingCompressor;
   totalReceiverVolume: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.bridgeCompressorInputs;
+    this.getTotalReceiverVolume();
   }
 
   getTotalReceiverVolume() {

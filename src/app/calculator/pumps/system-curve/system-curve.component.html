@@ -30,7 +30,7 @@
       <app-system-curve-help *ngIf="tabSelect == 'help'" [isFan]="isFan"></app-system-curve-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4 p-3" *ngIf="tabSelect == 'results'" id="systemCurveGraph">
         <app-system-curve-graph class="w-100" [isFan]="isFan" [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead"
-          [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+          [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants" [inAssessment]="inAssessment"></app-system-curve-graph>
       </div>
     </div>
   </div>

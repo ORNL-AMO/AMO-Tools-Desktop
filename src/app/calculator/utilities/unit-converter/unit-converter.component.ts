@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
+import { UnitConverterService } from './unit-converter.service';
 
 @Component({
   selector: 'app-unit-converter',
@@ -132,16 +133,61 @@ export class UnitConverterComponent implements OnInit {
     }
   ]
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private unitConverterService: UnitConverterService) { }
 
   ngOnInit() {
-    this.getMeasures();
+    this.initMeasures();
   }
 
+  ngOnDestroy() {
+    this.unitConverterService.value1 = this.value1;
+    this.unitConverterService.from = this.from;
+    this.unitConverterService.to = this.to;
+    this.unitConverterService.measure = this.measure;
+  }
+
+  initMeasures() {
+    if (this.unitConverterService.value1) {
+      this.value1 = this.unitConverterService.value1;
+    } else {
+      this.value1 = 1
+    }
+    if (this.unitConverterService.from) {
+      this.from = this.unitConverterService.from;
+    } else {
+      this.from = null;
+    }
+    if (this.unitConverterService.to) {
+      this.to = this.unitConverterService.to;
+    } else {
+      this.to = null;
+    }
+    if (this.unitConverterService.measure) {
+      this.measure = this.unitConverterService.measure;
+    }
+    this.possibilities = new Array();
+    let tmpList = this.convertUnitsService.possibilities(this.measure);
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit),
+        displayUnit: this.getUnitDisplay(unit)
+      }
+      this.possibilities.push(tmpPossibility);
+    })
+    if (!this.to) {
+      this.to = this.possibilities[1].unit;
+    }
+    if (!this.from) {
+      this.from = this.possibilities[0].unit;
+    }
+    if (!this.value1) {
+      this.value1 = 1;
+    }
+    this.getValue2();
+  }
 
   getMeasures() {
-    this.from = null;
-    this.to = null;
     if (this.measure) {
       this.possibilities = new Array();
       let tmpList = this.convertUnitsService.possibilities(this.measure);

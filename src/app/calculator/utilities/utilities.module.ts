@@ -15,6 +15,7 @@ import { CashFlowDiagramComponent } from './cash-flow/cash-flow-diagram/cash-flo
 import { CashFlowService } from './cash-flow/cash-flow.service';
 import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
 import { PowerFactorCorrectionModule } from './power-factor-correction/power-factor-correction.module';
+import { UnitConverterService } from './unit-converter/unit-converter.service';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { PowerFactorCorrectionModule } from './power-factor-correction/power-fac
     ],
     providers: [
         CashFlowService,
+        UnitConverterService
     ]
 
 })

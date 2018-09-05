@@ -36,7 +36,7 @@ export class HeatLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.heatLossService.getObjFromForm(this.heatLossForm);
     this.calculate(this.heatLossForm);
   }
@@ -54,8 +54,12 @@ export class HeatLossComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.heatLossForm = this.heatLossService.initForm(this.settings);
+  initForm() {
+    if(this.heatLossService.heatLossInput){
+      this.heatLossForm = this.heatLossService.getFormFromObj(this.heatLossService.heatLossInput, this.settings);
+    }else{
+      this.heatLossForm = this.heatLossService.initForm(this.settings);
+    }
   }
 
   resizeTabs() {
@@ -66,6 +70,7 @@ export class HeatLossComponent implements OnInit {
 
   calculate(form: FormGroup) {
     this.input = this.heatLossService.getObjFromForm(form);
+    this.heatLossService.heatLossInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.heatLoss(this.input, this.settings);
     } else {

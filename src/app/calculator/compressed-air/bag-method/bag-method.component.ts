@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -21,7 +22,7 @@ export class BagMethodComponent implements OnInit {
 
   headerHeight: number;
 
-  inputs: BagMethodInput;
+  //inputs: BagMethodInput;
   outputs: BagMethodOutput;
 
   inputsArray: Array<BagMethodInput>;
@@ -30,30 +31,31 @@ export class BagMethodComponent implements OnInit {
   totalOperatingTime: number;
 
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
-    this.inputs = {
-      operatingTime: 0,
-      bagFillTime: 0,
-      heightOfBag: 0,
-      diameterOfBag: 0,
-      numberOfUnits: 0
-    };
-
+    this.inputsArray = this.compressedAirService.bagMethodInputs.inputsArray;
+    this.totalOperatingTime = this.compressedAirService.bagMethodInputs.operatingHours;
+    if(this.inputsArray.length == 0){
+      this.initBagMethodArrays();
+    }
     this.outputs = {
       flowRate: 0,
       annualConsumption: 0
     };
 
-    this.totalOperatingTime = 0;
-    this.initBagMethodArrays();
+
+    this.calculateAnnualConsumption();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.compressedAirService.bagMethodInputs.operatingHours = this.totalOperatingTime;
   }
 
   initBagMethodArrays() {
@@ -64,16 +66,7 @@ export class BagMethodComponent implements OnInit {
       diameterOfBag: 0,
       numberOfUnits: 0
     };
-
-    let output: BagMethodOutput = {
-      flowRate: 0,
-      annualConsumption: 0
-    }
-
-    this.inputsArray = new Array<BagMethodInput>();
     this.inputsArray.push(input);
-    this.outputsArray = new Array<BagMethodOutput>();
-    this.outputsArray.push(output);
   }
 
   resizeTabs() {
@@ -88,11 +81,12 @@ export class BagMethodComponent implements OnInit {
     }
     this.outputs.flowRate = 0;
     this.outputs.annualConsumption = 0;
+    this.outputsArray = new Array<BagMethodOutput>();
     for (let i = 0; i < this.inputsArray.length; i++) {
-      this.inputsArray[i].operatingTime = this.totalOperatingTime;
+      this.inputsArray[i].operatingTime = JSON.parse(JSON.stringify(this.totalOperatingTime));
       let outputs = StandaloneService.bagMethod(this.inputsArray[i]);
       outputs.annualConsumption = this.totalOperatingTime * outputs.flowRate * 60;
-      this.outputsArray[i] = outputs;
+      this.outputsArray.push(outputs);
       this.outputs.flowRate += outputs.flowRate;
       this.outputs.annualConsumption += outputs.annualConsumption;
     }
@@ -100,7 +94,7 @@ export class BagMethodComponent implements OnInit {
 
   addLeakage() {
     let input: BagMethodInput = {
-      operatingTime: this.totalOperatingTime,
+      operatingTime:  JSON.parse(JSON.stringify(this.totalOperatingTime)),
       bagFillTime: 0,
       heightOfBag: 0,
       diameterOfBag: 0,

@@ -7,7 +7,8 @@ import { SteamService } from '../steam.service';
 
 @Injectable()
 export class BoilerService {
-
+  
+  boilerInput: BoilerInput;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {

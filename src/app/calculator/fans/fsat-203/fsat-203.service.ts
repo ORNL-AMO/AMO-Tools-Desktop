@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class Fsat203Service {
 
+  inputData: Fan203Inputs;
   planeShape: BehaviorSubject<string>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.planeShape = new BehaviorSubject<string>(undefined);

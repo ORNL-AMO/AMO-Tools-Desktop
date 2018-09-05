@@ -14,6 +14,7 @@ import { SystemCurveService } from '../system-curve/system-curve.service';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pump-curve',
@@ -82,6 +83,8 @@ export class PumpCurveComponent implements OnInit {
   pumpFormExists: boolean = false;
   showSystemCurveForm: boolean = false;
   focusedForm: string = 'pump-curve';
+  calcMethodSubscription: Subscription;
+  regEquationSubscription: Subscription;
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
@@ -126,14 +129,10 @@ export class PumpCurveComponent implements OnInit {
           })
           this.showSystemCurveForm = true;
         }
-
-
       }
       else {
         this.initForm();
         this.subscribe();
-
-
         //system curve merge
         this.initializeCalculator();
         this.initDefault();
@@ -143,30 +142,12 @@ export class PumpCurveComponent implements OnInit {
           systemLossExponent: this.calculator.systemCurve.systemLossExponent
         })
         this.showSystemCurveForm = true;
-
       }
-    }
-    else {
+    } else {
       this.initForm();
       this.subscribe();
-
-      //system curve merge
-      this.initDefault();
-      //get system settings if using stand alone calculator
-      if (!this.settings) {
-        this.settings = this.settingsDbService.globalSettings;
-        if (!this.isFan) {
-          this.convertPumpDefaults(this.settings);
-        } else {
-          this.convertFanDefaults(this.settings);
-        }
-        this.showSystemCurveForm = true;
-      } else {
-        this.showSystemCurveForm = true;
-      }
-
+      this.showSystemCurveForm = true;
     }
-
     if (this.isFan) {
       this.currentField = 'fanMaxFlow';
     }
@@ -186,7 +167,44 @@ export class PumpCurveComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.pumpCurveService.calcMethod.next('Equation')
+    // this.pumpCurveService.calcMethod.next('Equation')
+    if (!this.inAssessment && !this.isFan) {
+      this.pumpCurveService.pumpCurveData = this.pumpCurveForm;
+      this.pumpCurveService.pumpCurveConstants = this.curveConstants;
+      this.pumpCurveService.pumpPointOne = this.pointOne;
+      this.pumpCurveService.pumpPointTwo = this.pointTwo;
+    } else if (!this.inAssessment && this.isFan) {
+      this.pumpCurveService.fanCurveData = this.pumpCurveForm;
+      this.pumpCurveService.fanCurveConstants = this.curveConstants;
+      this.pumpCurveService.fanPointOne = this.pointOne;
+      this.pumpCurveService.fanPointTwo = this.pointTwo;
+    }
+    this.calcMethodSubscription.unsubscribe();
+    this.regEquationSubscription.unsubscribe();
+  }
+
+  initForm() {
+    if (this.pumpCurveService.pumpCurveData && !this.inAssessment && !this.isFan) {
+      this.pumpCurveForm = this.pumpCurveService.pumpCurveData;
+      this.curveConstants = this.pumpCurveService.pumpCurveConstants;
+      this.pointOne = this.pumpCurveService.pumpPointOne;
+      this.pointTwo = this.pumpCurveService.pumpPointTwo;
+    }
+    else if (this.pumpCurveService.pumpCurveData && !this.inAssessment && this.isFan) {
+      this.pumpCurveForm = this.pumpCurveService.fanCurveData;
+      this.curveConstants = this.pumpCurveService.fanCurveConstants;
+      this.pointOne = this.pumpCurveService.fanPointOne;
+      this.pointTwo = this.pumpCurveService.fanPointTwo;
+    }
+    else {
+      this.pumpCurveForm = this.pumpCurveService.initForm();
+      this.initDefault();
+      if (!this.isFan) {
+        this.convertPumpDefaults(this.settings);
+      } else {
+        this.convertFanDefaults(this.settings);
+      }
+    }
   }
 
   subscribe() {
@@ -198,11 +216,11 @@ export class PumpCurveComponent implements OnInit {
       headOrPressure = 'Head'
     }
 
-    this.pumpCurveService.calcMethod.subscribe(val => {
+    this.calcMethodSubscription = this.pumpCurveService.calcMethod.subscribe(val => {
       this.selectedFormView = val;
     })
 
-    this.pumpCurveService.regEquation.subscribe(val => {
+    this.regEquationSubscription = this.pumpCurveService.regEquation.subscribe(val => {
       if (val) {
         this.regEquation = val;
         for (let i = 0; i < this.pumpCurveForm.dataOrder; i++) {
@@ -245,44 +263,7 @@ export class PumpCurveComponent implements OnInit {
     this.currentField = str;
     this.focusedForm = formStr;
   }
-  initForm() {
-    this.pumpCurveForm = {
-      dataRows: new Array<PumpCurveDataRow>(
-        { flow: 0, head: 355 },
-        { flow: 100, head: 351 },
-        // { flow: 200, head: 343.6188 },
-        // { flow: 300, head: 335.9542 },
-        // { flow: 400, head: 324.9089 },
-        // { flow: 480, head: 314.7216 },
-        // { flow: 560, head: 304.5332 },
-        { flow: 630, head: 294 },
-        // { flow: 690, head: 284.1775 },
-        // { flow: 800, head: 264.6842 },
-        // { flow: 900, head: 241.8114 },
-        // { flow: 970, head: 222.3425 },
-        { flow: 1020, head: 202 }
-      ),
-      maxFlow: 1020,
-      dataOrder: 3,
-      baselineMeasurement: 1,
-      modifiedMeasurement: 1,
-      exploreLine: 0,
-      exploreFlow: 0,
-      exploreHead: 0,
-      explorePumpEfficiency: 0,
-      headOrder: 3,
-      headConstant: 356.96,
-      headFlow: -0.0686,
-      headFlow2: 0.000005,
-      headFlow3: -0.00000008,
-      headFlow4: 0,
-      headFlow5: 0,
-      headFlow6: 0,
-      pumpEfficiencyOrder: 3,
-      pumpEfficiencyConstant: 0,
-      measurementOption: 'Diameter'
-    }
-  }
+
 
   calculate() {
     if (this.pumpCurveForm.modifiedMeasurement != this.pumpCurveForm.baselineMeasurement) {

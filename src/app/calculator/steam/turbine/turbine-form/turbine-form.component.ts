@@ -89,18 +89,23 @@ export class TurbineFormComponent implements OnInit {
   setValidators() {
     let inletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.turbineForm.controls.inletQuantity.value);
     let outletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, this.turbineForm.controls.outletQuantity.value);
-    this.turbineForm.controls.inletQuantityValue.setValue(0);
     this.turbineForm.controls.inletQuantityValue.setValidators([Validators.required, Validators.min(inletQuantityMinMax.min), Validators.max(inletQuantityMinMax.max)]);
     if (this.turbineForm.controls.solveFor.value == 1) {
-      this.turbineForm.controls.outletQuantityValue.setValue(0);
       this.turbineForm.controls.outletQuantityValue.setValidators([Validators.required, Validators.min(outletQuantityMinMax.min), Validators.max(outletQuantityMinMax.max)]);
       this.turbineForm.controls.isentropicEfficiency.clearValidators();
-      this.turbineForm.controls.isentropicEfficiency.reset();
+      this.turbineForm.controls.isentropicEfficiency.reset(this.turbineForm.controls.isentropicEfficiency.value);
     } else {
       this.turbineForm.controls.outletQuantityValue.clearValidators();
-      this.turbineForm.controls.outletQuantityValue.reset();
+      this.turbineForm.controls.outletQuantityValue.reset(this.turbineForm.controls.outletQuantityValue.value);
       this.turbineForm.controls.isentropicEfficiency.setValidators([Validators.required, Validators.min(20), Validators.max(100)])
     }
+    if (!this.turbineForm.controls.inletQuantityValue.value) {
+      this.turbineForm.controls.inletQuantityValue.setValue(0);
+    }
+    if(!this.turbineForm.controls.outletQuantityValue.value){
+      this.turbineForm.controls.outletQuantityValue.setValue(0);
+    }
+
     this.calculate();
   }
 }

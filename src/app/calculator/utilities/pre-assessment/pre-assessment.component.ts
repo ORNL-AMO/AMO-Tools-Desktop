@@ -9,6 +9,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { Calculator } from '../../../shared/models/calculators';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { PreAssessmentService } from './pre-assessment.service';
 
 @Component({
   selector: 'app-pre-assessment',
@@ -24,6 +25,8 @@ export class PreAssessmentComponent implements OnInit {
   inModal: boolean;
   @Input()
   calculator: Calculator;
+  @Input()
+  inAssessment: boolean;
 
   showName: boolean = false;
 
@@ -50,7 +53,7 @@ export class PreAssessmentComponent implements OnInit {
   toggleCalculate: boolean = false;
   contentHeight: number = 0;
   type: string = 'furnace';
-  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
+  constructor(private preAssessmentService: PreAssessmentService, private convertPhastService: ConvertPhastService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -65,7 +68,13 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-      this.getHeight();
+    this.getHeight();
+  }
+
+  ngOnDestroy() {
+    if (!this.inModal && !this.inAssessment){
+      this.preAssessmentService.standaloneInputData = this.preAssessments;
+    }
   }
 
   getHeight() {
@@ -82,13 +91,17 @@ export class PreAssessmentComponent implements OnInit {
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
-      this.preAssessments = new Array<PreAssessment>();
-      this.addPreAssessment();
+      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData) {
+        this.preAssessments = this.preAssessmentService.standaloneInputData;
+      } else {
+        this.preAssessments = new Array<PreAssessment>();
+        this.addPreAssessment();
+      }
     } else {
-      if(!this.calculator.name){
+      if (!this.calculator.name) {
         this.showName = true;
       }
-      if(!this.calculator.type){
+      if (!this.calculator.type) {
         this.calculator.type = 'furnace';
       }
       this.type = this.calculator.type;
@@ -110,10 +123,10 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  setType(str: string){
+  setType(str: string) {
     this.calculator.type = str;
     this.type = str;
-    if(this.type == 'pump'){
+    if (this.type == 'pump') {
       this.calculator.preAssessments.length == 1;
       this.calculator.preAssessments[0].settings.energySourceType = 'Electricity';
     }
@@ -121,20 +134,17 @@ export class PreAssessmentComponent implements OnInit {
 
   setCurrentField(str: string) {
     this.currentField = str;
-    //console.log(this.currentField);
   }
 
   setEnergySourceType(str: string) {
     if (str != this.currentEnergySourceType) {
       this.currentEnergySourceType = str;
-     // this.currentField = '';
     }
   }
 
   setAssessmentType(str: string) {
     if (str != this.currentAssessmentType) {
       this.currentAssessmentType = str;
-     // this.currentField = ''
     }
   }
 
@@ -216,8 +226,7 @@ export class PreAssessmentComponent implements OnInit {
     });
   }
 
-
-  setName(){
+  setName() {
     this.showName = false;
   }
 }

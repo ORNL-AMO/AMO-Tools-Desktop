@@ -1,11 +1,25 @@
 import { Injectable } from '@angular/core';
-import { FieldMeasurementInputs, FieldMeasurementOutputs } from './percent-load-estimation.component';
 
 @Injectable()
-export class FieldMeasurementService {
-
+export class PercentLoadEstimationService {
+  slipMethodInputs: SlipMethod = {
+    synchronousSpeed: 0,
+    measuredSpeed: 0,
+    nameplateFullLoadSpeed: 0
+  };
+  fieldMeasurementInputs: FieldMeasurementInputs = {
+    phase1Voltage: 0,
+    phase1Amps: 0,
+    phase2Voltage: 0,
+    phase2Amps: 0,
+    phase3Voltage: 0,
+    phase3Amps: 0,
+    ratedVoltage: 0,
+    ratedCurrent: 0,
+    powerFactor: 0
+  };
+  loadEstimationMethod: number = 0;
   constructor() { }
-
   getResults(data: FieldMeasurementInputs): FieldMeasurementOutputs {
     let outputs: FieldMeasurementOutputs = {
       averageVoltage: this.averageVoltage(data),
@@ -57,4 +71,32 @@ export class FieldMeasurementService {
     let avgVoltage: number = this.averageVoltage(data);
     return (deviation / avgVoltage) * 100;
   }
+}
+
+export interface SlipMethod {
+  synchronousSpeed: number,
+  measuredSpeed: number,
+  nameplateFullLoadSpeed: number
+}
+
+
+export interface FieldMeasurementInputs {
+  phase1Voltage: number,
+  phase1Amps: number,
+  phase2Voltage: number,
+  phase2Amps: number,
+  phase3Voltage: number,
+  phase3Amps: number,
+  ratedVoltage: number,
+  ratedCurrent: number,
+  powerFactor: number
+}
+
+export interface FieldMeasurementOutputs {
+  averageVoltage: number,
+  averageCurrent: number,
+  inputPower: number,
+  percentLoad: number,
+  maxVoltageDeviation: number,
+  voltageUnbalance: number
 }

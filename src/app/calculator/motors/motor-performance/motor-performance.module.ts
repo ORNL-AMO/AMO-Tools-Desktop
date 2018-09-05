@@ -7,6 +7,7 @@ import { MotorPerformanceFormComponent } from './motor-performance-form/motor-pe
 import { MotorPerformanceComponent } from './motor-performance.component';
 import { MotorPerformanceHelpComponent } from './motor-performance-help/motor-performance-help.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { MotorPerformanceService } from './motor-performance.service';
 
 @NgModule({
   imports: [
@@ -23,6 +24,9 @@ import { SharedModule } from '../../../shared/shared.module';
   ],
   exports: [
     MotorPerformanceComponent
+  ],
+  providers:[
+    MotorPerformanceService
   ]
 })
 export class MotorPerformanceModule { }

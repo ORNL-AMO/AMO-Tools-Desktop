@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -24,21 +25,12 @@ export class PipeSizingComponent implements OnInit {
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
-    this.inputs = {
-      airFlow: 0,
-      airlinePressure: 0,
-      designVelocity: 20,
-      atmosphericPressure: 14.7
-    };
-
-    this.outputs = {
-      crossSectionalArea: 0,
-      pipeDiameter: 0
-    };
+    this.inputs = this.compressedAirService.pipeSizingInput;
+    this.calculatePipeSize(this.inputs);
   }
   ngAfterViewInit() {
     setTimeout(() => {

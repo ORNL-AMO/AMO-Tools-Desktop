@@ -7,8 +7,22 @@ import { FSAT } from '../../../shared/models/fans';
 @Injectable()
 export class SystemCurveService {
 
+  pumpPointOne: { form: FormGroup, fluidPower: number };
+  pumpPointTwo: { form: FormGroup, fluidPower: number };
+  pumpCurveConstants: { form: FormGroup };
+  pumpStaticHead: number;
+  pumpLossCoefficient: number;
+  // pumpTableData: Array<Array<string>>;
+  // pumpKeyColors: Array<{ borderColor: string, fillColor: string }>;
+  fanPointOne: { form: FormGroup, fluidPower: number };
+  fanPointTwo: { form: FormGroup, fluidPower: number };
+  fanCurveConstants: { form: FormGroup };
+  fanStaticHead: number;
+  fanLossCoefficient: number;
+  // fanTableData: Array<Array<string>>;
+  // fanKeyColors: Array<{ borderColor: string, fillColor: string }>;
   constructor(private psatService: PsatService, private formBuilder: FormBuilder) { }
-  
+
   getLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
     //from PSAT/curve.html -> k = (h2-h1)/(Math.pow(f2,C)-Math.pow(f1,C))
     return (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent));

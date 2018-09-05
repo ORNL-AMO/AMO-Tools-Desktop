@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular
 import { StandaloneService } from '../../standalone.service';
 import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CombinedHeatPowerService } from './combined-heat-power.service';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -45,11 +46,14 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+    if(this.combinedHeatPowerService.inputData){
+      this.inputs = this.combinedHeatPowerService.inputData;
     }
   }
 
@@ -57,6 +61,10 @@ export class CombinedHeatPowerComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.combinedHeatPowerService.inputData = this.inputs;
   }
 
   resizeTabs() {

@@ -28,20 +28,13 @@ export class ReplaceExistingComponent implements OnInit {
     costSavings: 0,
     simplePayback: 0
   };
-  inputs: ReplaceExistingData = {
-    operatingHours: 5200,
-    motorSize: 150,
-    existingEfficiency: 92,
-    load: 75,
-    electricityCost: 0.12,
-    newEfficiency: 96,
-    purchaseCost: 13000
-  };
+  inputs: ReplaceExistingData;
 
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    this.inputs = this.replaceExistingService.replaceExistingData;
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

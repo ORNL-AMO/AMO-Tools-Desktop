@@ -42,7 +42,7 @@ export class StackLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
   }
 
   ngAfterViewInit() {
@@ -64,11 +64,44 @@ export class StackLossComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
+  initForm() {
+    if (this.stackLossService.stackLossInput) {
+      if (this.stackLossService.stackLossInput.flueGasType) {
+        this.method = this.stackLossService.stackLossInput.flueGasType;
+        if (this.method == 'volume') {
+          this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
+        } else if (this.method == 'mass') {
+          this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
+        }
+      } else {
+        if (this.method == 'volume') {
+          this.stackLossForm = this.stackLossService.initFormVolume();
+        } else if (this.method == 'mass') {
+          this.stackLossForm = this.stackLossService.initFormMass();
+        }
+      }
+    } else {
+      if (this.method == 'volume') {
+        this.stackLossForm = this.stackLossService.initFormVolume();
+      } else if (this.method == 'mass') {
+        this.stackLossForm = this.stackLossService.initFormMass();
+      }
+    }
+  }
+
+  getForm(){
     if (this.method == 'volume') {
-      this.stackLossForm = this.stackLossService.initFormVolume();
+      if(this.stackLossService.stackLossInput.flueGasByVolume){
+        this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
+      }else{      
+        this.stackLossForm = this.stackLossService.initFormVolume();
+      }
     } else if (this.method == 'mass') {
-      this.stackLossForm = this.stackLossService.initFormMass();
+      if(this.stackLossService.stackLossInput.flueGasByMass){
+        this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
+      }else{      
+        this.stackLossForm = this.stackLossService.initFormMass();
+      }
     }
   }
 
@@ -76,17 +109,26 @@ export class StackLossComponent implements OnInit {
     form.patchValue({
       fuelTemperature: this.stackLossForm.controls.combustionAirTemperature.value
     })
-    console.log(form);
-    if (this.method == "volume" && form.status == 'VALID') {
+    if (this.method == "volume") {
       this.flueGasByVolume = this.stackLossService.buildByVolumeLossFromForm(form);
-      const availableHeat = this.phastService.flueGasByVolume(this.flueGasByVolume, this.settings);
-      this.stackLossPercent = (1-availableHeat)*100;
-    } else if (this.method == "mass" && form.status == 'VALID') {
+      this.stackLossService.stackLossInput.flueGasType = this.method;
+      this.stackLossService.stackLossInput.flueGasByVolume = this.flueGasByVolume;
+      if (form.status == 'VALID') {
+        const availableHeat = this.phastService.flueGasByVolume(this.flueGasByVolume, this.settings);
+        this.stackLossPercent = (1 - availableHeat) * 100;
+      } else {
+        this.stackLossPercent = 0;
+      }
+    } else if (this.method == "mass") {
       this.flueGasByMass = this.stackLossService.buildByMassLossFromForm(form);
-      const availableHeat = this.phastService.flueGasByMass(this.flueGasByMass, this.settings);
-      this.stackLossPercent = (1-availableHeat)*100;
-    }else{
-      this.stackLossPercent = 0;
+      this.stackLossService.stackLossInput.flueGasType = this.method;
+      this.stackLossService.stackLossInput.flueGasByMass = this.flueGasByMass;
+      if (form.status == 'VALID') {
+        const availableHeat = this.phastService.flueGasByMass(this.flueGasByMass, this.settings);
+        this.stackLossPercent = (1 - availableHeat) * 100;
+      } else {
+        this.stackLossPercent = 0;
+      }
     }
   }
 }

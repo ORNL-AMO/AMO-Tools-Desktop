@@ -3,7 +3,7 @@ import { MotorDriveInputs, MotorDriveOutputs } from './motor-drive.component';
 
 @Injectable()
 export class MotorDriveService {
-
+  motorDriveData: MotorDriveInputs
   constructor() { }
 
   getResults(data: MotorDriveInputs): MotorDriveOutputs {

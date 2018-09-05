@@ -3,7 +3,15 @@ import { ReplaceExistingData, ReplaceExistingResults } from './replace-existing.
 
 @Injectable()
 export class ReplaceExistingService {
-
+  replaceExistingData: ReplaceExistingData = {
+    operatingHours: 5200,
+    motorSize: 150,
+    existingEfficiency: 92,
+    load: 75,
+    electricityCost: 0.12,
+    newEfficiency: 96,
+    purchaseCost: 13000
+  };
   constructor() { }
 
   getResults(inputs: ReplaceExistingData): ReplaceExistingResults {

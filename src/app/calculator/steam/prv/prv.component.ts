@@ -42,17 +42,17 @@ export class PrvComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm, this.isSuperHeating);
     this.calculate(this.inletForm, this.feedwaterForm)
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
   }
-  
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -66,9 +66,15 @@ export class PrvComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.inletForm = this.prvService.initInletForm(this.settings);
-    this.feedwaterForm = this.prvService.initFeedwaterForm(this.settings);
+  initForm() {
+    if (this.prvService.prvInput) {
+      this.inletForm = this.prvService.getInletFormFromObj(this.prvService.prvInput, this.settings);
+      this.feedwaterForm = this.prvService.getFeedwaterFormFromObj(this.prvService.prvInput, this.settings);
+      this.isSuperHeating = this.prvService.isSuperHeating;
+    } else {
+      this.inletForm = this.prvService.initInletForm(this.settings);
+      this.feedwaterForm = this.prvService.initFeedwaterForm(this.settings);
+    }
   }
 
   setFeedwaterForm(form: FormGroup) {
@@ -82,8 +88,10 @@ export class PrvComponent implements OnInit {
   }
 
   calculate(inletForm: FormGroup, feedwaterForm: FormGroup) {
+    this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
+    this.prvService.prvInput = this.input;
+    this.prvService.isSuperHeating = this.isSuperHeating;
     if (this.isSuperHeating) {
-      this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
       if ((inletForm.status == 'VALID') && (feedwaterForm.status == 'VALID')) {
         this.results = this.steamService.prvWithDesuperheating(this.input, this.settings);
         this.checkWarning(this.results, this.input);
@@ -91,7 +99,6 @@ export class PrvComponent implements OnInit {
         this.results = this.getEmptyResults();
       }
     } else {
-      this.input = this.prvService.getObjFromForm(inletForm, feedwaterForm, this.isSuperHeating);
       if (inletForm.status == 'VALID') {
         this.results = this.steamService.prvWithoutDesuperheating(this.input, this.settings);
       } else {
@@ -109,7 +116,7 @@ export class PrvComponent implements OnInit {
       let desuperheatingTemp = this.convertUnitsService.value(input.desuperheatingTemp - 273.15).from('C').to(this.settings.steamTemperatureMeasurement);
       if (desuperheatingTemp > results.inletTemperature) {
         this.warning = "Outlet specific enthalpy associated with set desuperheating temperature is greater than inlet specific enthalpy. Desuperheating canceled.";
-      } 
+      }
       else {
         this.warning = null;
       }

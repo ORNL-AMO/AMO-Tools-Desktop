@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CalculateUsableCapacity } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -14,18 +15,16 @@ export class AirCapacityFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  inputs: CalculateUsableCapacity = {
-    tankSize: 0,
-    airPressureIn: 0,
-    airPressureOut: 0,
-  };
+  inputs: CalculateUsableCapacity;
   airCapacity: number;
   tankCubicFoot: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.airCapacityInputs;
+    this.getAirCapacity();
   }
 
   getAirCapacity() {

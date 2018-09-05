@@ -71,11 +71,19 @@ export class SteamPropertiesComponent implements OnInit {
 
   getForm(quantityValue: number) {
     this.ranges = this.getRanges(quantityValue);
-    this.steamPropertiesForm = this.formBuilder.group({
-      'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
-      'thermodynamicQuantity': [quantityValue, Validators.required],
-      'quantityValue': ['', [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
-    });
+    if (this.steamService.steamPropertiesInput) {
+      this.steamPropertiesForm = this.formBuilder.group({
+        'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
+        'thermodynamicQuantity': [this.steamService.steamPropertiesInput.thermodynamicQuantity, Validators.required],
+        'quantityValue': [this.steamService.steamPropertiesInput.quantityValue, [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
+      });
+    } else {
+      this.steamPropertiesForm = this.formBuilder.group({
+        'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
+        'thermodynamicQuantity': [quantityValue, Validators.required],
+        'quantityValue': ['', [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
+      });
+    }
   }
 
   updateForm(quantityValue: number) {
@@ -85,7 +93,7 @@ export class SteamPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
-  }  
+  }
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -120,6 +128,7 @@ export class SteamPropertiesComponent implements OnInit {
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
       pressure: form.controls.pressure.value
     }
+    this.steamService.steamPropertiesInput = input;
     if (form.status == 'VALID') {
       this.steamPropertiesOutput = this.steamService.steamProperties(input, this.settings);
       this.plotReady = true;
