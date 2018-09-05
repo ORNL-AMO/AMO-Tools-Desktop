@@ -25,7 +25,7 @@ export class PneumaticAirComponent implements OnInit {
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.pneumaticAirinputs;
@@ -43,7 +43,7 @@ export class PneumaticAirComponent implements OnInit {
     }
   }
   calculatePneumaticAirRequirement(inputs: PneumaticAirRequirementInput) {
-    this.outputs = StandaloneService.pneumaticAirRequirement(inputs);
+    this.outputs = this.standaloneService.pneumaticAirRequirement(inputs);
   }
 
 

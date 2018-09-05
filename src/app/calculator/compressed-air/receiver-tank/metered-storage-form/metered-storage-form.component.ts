@@ -18,7 +18,7 @@ export class MeteredStorageFormComponent implements OnInit {
   inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -27,7 +27,7 @@ export class MeteredStorageFormComponent implements OnInit {
   }
 
   getTotalReceiverVolume() {
-    this.totalReceiverVolume = StandaloneService.receiverTankSizeMeteredStorage(this.inputs);
+    this.totalReceiverVolume = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
   }
 
   changeField(str: string){

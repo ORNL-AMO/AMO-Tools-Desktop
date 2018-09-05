@@ -18,7 +18,7 @@ export class GeneralMethodFormComponent implements OnInit {
   inputs: ReceiverTankGeneral;
   finalTankPressure: number;
 
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standAloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.generalMethodInputs;
@@ -26,7 +26,7 @@ export class GeneralMethodFormComponent implements OnInit {
   }
 
   getStorage() {
-    this.finalTankPressure = StandaloneService.receiverTankSizeGeneral(this.inputs);
+    this.finalTankPressure = this.standAloneService.receiverTankSizeGeneral(this.inputs, this.settings);
   }
 
   changeField(str: string) {

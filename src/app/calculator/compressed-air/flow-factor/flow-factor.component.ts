@@ -25,7 +25,7 @@ export class FlowFactorComponent implements OnInit {
   valveFlowFactor: number = 0;
   userFlowRate: boolean = false;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.pnuematicValveInputs;
@@ -46,14 +46,14 @@ export class FlowFactorComponent implements OnInit {
     this.userFlowRate = bool;
   }
   getFlowRate() {
-    this.inputs.flowRate = StandaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
+    this.inputs.flowRate = this.standaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
   }
 
   getValveFlowFactor() {
     if (!this.userFlowRate) {
       this.getFlowRate();
     }
-    let val: number = StandaloneService.pneumaticValve(this.inputs);
+    let val: number = this.standaloneService.pneumaticValve(this.inputs);
     if (isNaN(val) == false) {
       this.valveFlowFactor = val;
     } else {

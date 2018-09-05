@@ -25,7 +25,7 @@ export class PipeSizingComponent implements OnInit {
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class PipeSizingComponent implements OnInit {
   }
 
   calculatePipeSize(inputs: PipeSizingInput) {
-    this.outputs = StandaloneService.pipeSizing(inputs);
+    this.outputs = this.standaloneService.pipeSizing(inputs);
   }
 
   setField(str: string) {

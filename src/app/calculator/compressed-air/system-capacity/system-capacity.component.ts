@@ -24,7 +24,7 @@ export class SystemCapacityComponent implements OnInit {
   inputs: AirSystemCapacityInput;
   outputs: AirSystemCapacityOutput;
 
-  constructor() { }
+  constructor(private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = {
@@ -79,7 +79,7 @@ export class SystemCapacityComponent implements OnInit {
   }
 
   getTotalPipeVolume() {
-    this.outputs = StandaloneService.airSystemCapacity(this.inputs);
+    this.outputs = this.standaloneService.airSystemCapacity(this.inputs);
     let customPipeVolume: number = 0;
     if (this.inputs.customPipes && this.inputs.customPipes.length > 0) {
       customPipeVolume = this.getCustomPipeVolume();

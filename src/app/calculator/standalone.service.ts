@@ -6,23 +6,28 @@ import {
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity
 } from '../shared/models/standalone';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 
 @Injectable()
 export class StandaloneService {
+
+
+  constructor(private convertUnitsService: ConvertUnitsService) { }
   // for use with PneumaticAirRequirement
-  static getPistonType(pistonType: string) {
+  getPistonType(pistonType: string) {
     if (pistonType === 'Single Acting') {
       return 0;
     }
     return 1; // Double Acting
   }
 
-  static pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
+  pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
     return standaloneAddon.pneumaticAirRequirement(input);
   }
 
-  static getReceiverTankCalculationMethod(method: string) {
+  getReceiverTankCalculationMethod(method: string) {
     if (method === 'General') {
       return 0;
     } else if (method === 'Dedicated Storage') {
@@ -33,58 +38,128 @@ export class StandaloneService {
     return 3; // Metered Storage
   }
 
-  static receiverTankSizeGeneral(input: ReceiverTankGeneral): number {
-    return standaloneAddon.receiverTank(input);
+  receiverTankSizeGeneral(input: ReceiverTankGeneral, settings: Settings): number {
+    let inputCpy: ReceiverTankGeneral = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure == 'Metric') {
+      //metric:m3 imperial:ft3
+      inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
+      //metric:psi imperial:kpa
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('psi').to('kPa');
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('psi').to('kPa');
+      let requiredStorage: number = standaloneAddon.receiverTank(inputCpy);
+      //result required storage (gal)
+      requiredStorage = this.convertUnitsService.value(requiredStorage).from('m3').to('gal');
+      return requiredStorage;
+    } else {
+      return standaloneAddon.receiverTank(inputCpy);
+    }
   }
 
-  static receiverTankSizeDedicatedStorage(input: ReceiverTankDedicatedStorage): number {
-    return standaloneAddon.receiverTank(input);
+  receiverTankSizeDedicatedStorage(input: ReceiverTankDedicatedStorage, settings: Settings): number {
+    let inputCpy: ReceiverTankDedicatedStorage = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure == 'Metric') {
+      //metric:m3 imperial:ft3
+      inputCpy.airFlowRequirement = this.convertUnitsService.value(inputCpy.airFlowRequirement).from('m3').to('ft3');
+      //metric:kPa imperial: psi
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPa').to('psi');
+      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
+      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
+      //metric:m3 imperial:gal
+      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
+      return calcVolume;
+    } else {
+      return standaloneAddon.receiverTank(inputCpy);
+    }
   }
 
-  static receiverTankSizeBridgingCompressor(input: ReceiverTankBridgingCompressor): number {
-    return standaloneAddon.receiverTank(input);
+  receiverTankSizeBridgingCompressor(input: ReceiverTankBridgingCompressor, settings: Settings): number {
+    let inputCpy: ReceiverTankBridgingCompressor = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure == 'Metric') {
+      //metric: m imperial: ft 
+      inputCpy.distanceToCompressorRoom = this.convertUnitsService.value(inputCpy.distanceToCompressorRoom).from('m').to('ft');
+      inputCpy.speedOfAir = this.convertUnitsService.value(inputCpy.speedOfAir).from('m').to('ft');
+      // metric: m3 imperial:scfm (ft3)
+      inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
+      //metric:kPa imperial: psi
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPa').to('psi');
+      //metric: m3 imperial: gal
+      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
+      return calcVolume;
+    } else {
+      return standaloneAddon.receiverTank(inputCpy);
+    }
   }
 
-  static receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage): number {
-    return standaloneAddon.receiverTank(input);
+  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): number {
+    let inputCpy: ReceiverTankMeteredStorage = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure == 'Metric') {
+      //metric: m imperial: ft 
+      inputCpy.airFlowRequirement = this.convertUnitsService.value(inputCpy.airFlowRequirement).from('m3').to('ft3');
+      inputCpy.meteredControl = this.convertUnitsService.value(inputCpy.meteredControl).from('m3').to('ft3');
+      //metric:kPa imperial: psi
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPa').to('psi');
+      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
+      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
+      //metric: m3 imperial: gal
+      let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
+      calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
+      return calcVolume;
+    } else {
+      return standaloneAddon.receiverTank(inputCpy);
+    }
   }
 
-  static operatingCost(input: OperatingCostInput): OperatingCostOutput {
+  operatingCost(input: OperatingCostInput): OperatingCostOutput {
     return standaloneAddon.operatingCost(input);
   }
 
-  static airSystemCapacity(input: AirSystemCapacityInput): AirSystemCapacityOutput {
+  airSystemCapacity(input: AirSystemCapacityInput): AirSystemCapacityOutput {
     return standaloneAddon.airSystemCapacity(input);
   }
 
-  static airVelocity(input: AirVelocityInput): PipeSizes {
+  airVelocity(input: AirVelocityInput): PipeSizes {
     return standaloneAddon.airVelocity(input);
   }
 
-  static pipeSizing(input: PipeSizingInput): PipeSizingOutput {
+  pipeSizing(input: PipeSizingInput): PipeSizingOutput {
     return standaloneAddon.pipeSizing(input);
   }
 
   // calculate flow rate
-  static pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number): number {
-    return standaloneAddon.pneumaticValve({inletPressure: inletPressure, outletPressure: outletPressure}).flowRate;
+  pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number): number {
+    return standaloneAddon.pneumaticValve({ inletPressure: inletPressure, outletPressure: outletPressure }).flowRate;
   }
 
   // calculate flow coefficient
-  static pneumaticValve(input: PneumaticValve): number {
+  pneumaticValve(input: PneumaticValve): number {
     return standaloneAddon.pneumaticValve(input).flowCoefficient;
   }
 
-  static bagMethod(input: BagMethodInput): BagMethodOutput {
+  bagMethod(input: BagMethodInput): BagMethodOutput {
     return standaloneAddon.bagMethod(input);
   }
 
-  static CHPcalculator(inputs: CombinedHeatPower): CombinedHeatPowerOutput {
+  CHPcalculator(inputs: CombinedHeatPower): CombinedHeatPowerOutput {
     return standaloneAddon.CHPcalculator(inputs);
   }
 
-  static  usableAirCapacity(input: CalculateUsableCapacity): number {
-    return standaloneAddon.usableAirCapacity(input);
+  usableAirCapacity(input: CalculateUsableCapacity, settings: Settings): number {
+    let inputCpy: CalculateUsableCapacity = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure == 'Metric') {
+      //metric: m3 imperial: gal
+      inputCpy.tankSize = this.convertUnitsService.value(inputCpy.tankSize).from('m3').to('gal');
+      //metric:kPa imperial: psi
+      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psi');
+      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psi');
+      //metric: m3 imperial: ft3
+      let calcTankCapacity: number = standaloneAddon.usableAirCapacity(inputCpy);
+      calcTankCapacity = this.convertUnitsService.value(calcTankCapacity).from('ft3').to('m3');
+      return calcTankCapacity;
+    } else {
+      return standaloneAddon.usableAirCapacity(inputCpy);
+    }
   }
-  constructor() { }
 }
