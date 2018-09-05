@@ -31,12 +31,19 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   ngOnInit() {
     this.calculate(this.inputData);
+    if(this.powerFactorCorrectionService.inputData){
+      this.inputData = this.powerFactorCorrectionService.inputData;
+    }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
   resizeTabs() {

@@ -96,7 +96,7 @@
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
     <app-o2-enrichment *ngIf="calcTab == 'o2-enrichment'" [settings]="settings"></app-o2-enrichment>
-    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight"></app-pre-assessment>
+    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight" [inAssessment]="true"></app-pre-assessment>
   </div>
   <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
