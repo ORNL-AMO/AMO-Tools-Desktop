@@ -49,11 +49,11 @@ export class SystemCapacityFormComponent implements OnInit {
     if (!this.inputs.customPipes) {
       this.inputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
     }
-    if (!this.outputs.customPipes) {
-      this.outputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
-    }
+    // if (!this.outputs.customPipes) {
+    //   this.outputs.customPipes = new Array<{ pipeSize: number, pipeLength: number }>();
+    // }
     this.inputs.customPipes.push(customPipe);
-    this.outputs.customPipes.push(customPipe);
+    // this.outputs.customPipes.push(customPipe);
   }
 
   deleteCustomPipe(i: number) {

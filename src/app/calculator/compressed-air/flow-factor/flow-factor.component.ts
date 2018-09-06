@@ -46,14 +46,14 @@ export class FlowFactorComponent implements OnInit {
     this.userFlowRate = bool;
   }
   getFlowRate() {
-    this.inputs.flowRate = this.standaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
+    this.inputs.flowRate = this.standaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure, this.settings);
   }
 
   getValveFlowFactor() {
     if (!this.userFlowRate) {
       this.getFlowRate();
     }
-    let val: number = this.standaloneService.pneumaticValve(this.inputs);
+    let val: number = this.standaloneService.pneumaticValve(this.inputs, this.settings);
     if (isNaN(val) == false) {
       this.valveFlowFactor = val;
     } else {

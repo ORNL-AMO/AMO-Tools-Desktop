@@ -44,7 +44,7 @@ export class AirVelocityComponent implements OnInit {
     }
   }
   getAirVelocity (inputs: AirVelocityInput) {
-    this.outputs = this.standaloneService.airVelocity(inputs);
+    this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
   }
 
   setField(str: string){

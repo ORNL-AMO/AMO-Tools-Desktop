@@ -43,7 +43,7 @@ export class PneumaticAirComponent implements OnInit {
     }
   }
   calculatePneumaticAirRequirement(inputs: PneumaticAirRequirementInput) {
-    this.outputs = this.standaloneService.pneumaticAirRequirement(inputs);
+    this.outputs = this.standaloneService.pneumaticAirRequirement(inputs, this.settings);
   }
 
 

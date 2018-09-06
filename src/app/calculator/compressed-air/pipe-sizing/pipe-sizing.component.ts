@@ -45,7 +45,7 @@ export class PipeSizingComponent implements OnInit {
   }
 
   calculatePipeSize(inputs: PipeSizingInput) {
-    this.outputs = this.standaloneService.pipeSizing(inputs);
+    this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
   }
 
   setField(str: string) {

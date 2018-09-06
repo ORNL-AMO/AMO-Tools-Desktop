@@ -45,7 +45,7 @@ export class OperatingCostComponent implements OnInit {
   }
   
   calculateOperationCost(inputs: OperatingCostInput) {
-    this.outputs = this.standaloneService.operatingCost(inputs);
+    this.outputs = this.standaloneService.operatingCost(inputs, this.settings);
   }
 
   setField(str: string) {
