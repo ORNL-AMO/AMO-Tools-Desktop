@@ -3,6 +3,7 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidChargeMaterial, LiquidChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LossTab } from '../../../tabs';
+import { ChargeMaterialService } from '../../../losses/charge-material/charge-material.service';
 
 @Component({
   selector: 'app-explore-charge-materials-form',
@@ -26,10 +27,9 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   materials: Array<ExploreMaterial>;
   showMaterial: boolean = false;
   showTemp: Array<boolean>;
-  showFeedRate: Array<boolean>;
-  feedRateError1: Array<string>;
-  feedRateError2: Array<string>;
-  constructor() { }
+  baselineWarnings: Array<string>;
+  modificationWarnings: Array<string>;
+  constructor(private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnInit() {
     this.initData();
@@ -43,15 +43,16 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       }
     }
   }
-  initData(){
+  initData() {
     this.showTemp = new Array();
-    this.showFeedRate = new Array();
     this.materials = new Array<ExploreMaterial>();
-    this.feedRateError1 = new Array<string>();
-    this.feedRateError2 = new Array<string>();
+    this.baselineWarnings = new Array<string>();
+    this.modificationWarnings = new Array<string>();
     let index = 0;
     this.showMaterial = false;
     this.phast.losses.chargeMaterials.forEach(material => {
+      this.baselineWarnings.push(null);
+      this.modificationWarnings.push(null);
       let tmpBaseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       let tmpModified: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       if (material.chargeMaterialType == 'Solid') {
@@ -59,26 +60,23 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       } else if (material.chargeMaterialType == 'Liquid') {
         tmpBaseline = material.liquidChargeMaterial;
       } else if (material.chargeMaterialType == 'Gas') {
-        tmpBaseline = this.checkGasFeedRate(material.gasChargeMaterial);
+        tmpBaseline = material.gasChargeMaterial;
       }
       if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Solid') {
         tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].solidChargeMaterial;
       } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Liquid') {
         tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].liquidChargeMaterial;
       } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Gas') {
-        tmpModified = this.checkGasFeedRate(this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].gasChargeMaterial);
+        tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].gasChargeMaterial;
       }
       let checkTemp: boolean = this.checkVal(tmpBaseline.initialTemperature, tmpModified.initialTemperature);
-      let checkFeedRate: boolean = this.checkVal(tmpBaseline.chargeFeedRate, tmpModified.chargeFeedRate);
-
-      let testVal = checkTemp || checkFeedRate;
+      this.checkBaselineWarnings(tmpBaseline, index);
+      this.checkModificationWarning(tmpModified, index);
+      let testVal = checkTemp;
       if (!this.showMaterial && testVal) {
         this.showMaterial = true;
       }
-      this.showFeedRate.push(checkFeedRate);
       this.showTemp.push(checkTemp);
-      this.feedRateError1.push(null);
-      this.feedRateError2.push(null);
       this.materials
       this.materials.push({
         baseline: tmpBaseline,
@@ -90,16 +88,6 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     })
   }
 
-
-
-  checkGasFeedRate(gasChargeMaterial: GasChargeMaterial) {
-    if (gasChargeMaterial.feedRate != gasChargeMaterial.chargeFeedRate) {
-      gasChargeMaterial.chargeFeedRate = gasChargeMaterial.feedRate;
-    }
-    return gasChargeMaterial;
-  }
-
-
   checkVal(val1: number, val2: number): boolean {
     if (val1 != val2) {
       return true;
@@ -108,47 +96,30 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     }
   }
 
-  checkFeedRateError(num: number, material: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial, index: number) {
-    material.feedRate = material.chargeFeedRate;
-    if (material.chargeFeedRate < 0) {
-      if (num == 1) {
-        this.feedRateError1[index] = 'Feed Reed must be greater than 0';
-      } else if (num == 2) {
-        this.feedRateError2[index] = 'Feed Rate must be greater than 0';
-      }
-    } else {
-      if (num == 1) {
-        this.feedRateError1[index] = null;
-      } else if (num == 2) {
-        this.feedRateError2[index] = null;
-      }
-    }
+  checkBaselineWarnings(material: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial, index: number) {
+    this.baselineWarnings[index] = this.chargeMaterialService.checkInitialTemp(material);
     this.calculate();
   }
 
-  toggleFeedRate(index: number, material: ExploreMaterial) {
-    if(this.showFeedRate[index] == false){
-      material.modification.chargeFeedRate = material.baseline.chargeFeedRate;
-      material.modification.feedRate = material.modification.chargeFeedRate;
-      material.baseline.feedRate = material.baseline.chargeFeedRate;
-      this.calculate();
-    }
+  checkModificationWarning(material: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial, index: number) {
+    this.modificationWarnings[index] = this.chargeMaterialService.checkInitialTemp(material);
+    this.calculate();
   }
 
+
   toggleInitialTemp(index: number, material: ExploreMaterial) {
-    if(this.showTemp[index] == false){
+    if (this.showTemp[index] == false) {
       material.modification.initialTemperature = material.baseline.initialTemperature;
+      this.modificationWarnings[index] = this.baselineWarnings[index];
       this.calculate();
     }
   }
 
   toggleMaterials() {
-    if(this.showMaterial == false){
+    if (this.showMaterial == false) {
       let index = 0;
       this.materials.forEach(material => {
         this.showTemp[index] = false;
-        this.showFeedRate[index] = false;
-        this.toggleFeedRate(index, material);
         this.toggleInitialTemp(index, material);
         index++;
       });
@@ -159,17 +130,17 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
-    this.changeTab.emit( {
+    this.changeTab.emit({
       tabName: 'Charge Material',
       step: 1,
       next: 2,
       componentStr: 'charge-material',
-      showAdd: true  
-  });
+      showAdd: true
+    });
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {
