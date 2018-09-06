@@ -19,7 +19,7 @@ export class DedicatedStorageFormComponent implements OnInit {
   inputs: ReceiverTankDedicatedStorage;
   receiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -28,7 +28,7 @@ export class DedicatedStorageFormComponent implements OnInit {
   }
 
   getReceiverVolume() {
-    this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
+    this.receiverVolume = this.standaloneService.receiverTankSizeDedicatedStorage(this.inputs, this.settings);
   }
   changeField(str: string) {
     this.emitChangeField.emit(str);

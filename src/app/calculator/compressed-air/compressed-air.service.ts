@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage } from '../../shared/models/standalone';
+import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
 
 @Injectable()
 export class CompressedAirService {
@@ -91,5 +91,21 @@ export class CompressedAirService {
     meteredControl: 0,
   };
   recieverTankMethod: number = 0;
+  systeCapacityInputs: AirSystemCapacityInput = {
+    receiverCapacities: [0],
+    customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
+    oneHalf: 0,
+    threeFourths: 0,
+    one: 0,
+    oneAndOneFourth: 0,
+    oneAndOneHalf: 0,
+    two: 0,
+    twoAndOneHalf: 0,
+    three: 0,
+    threeAndOneHalf: 0,
+    four: 0,
+    five: 0,
+    six: 0,
+  };
   constructor() { }
 }

@@ -25,7 +25,7 @@ export class OperatingCostComponent implements OnInit {
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.operatingCostInput;
@@ -45,7 +45,7 @@ export class OperatingCostComponent implements OnInit {
   }
   
   calculateOperationCost(inputs: OperatingCostInput) {
-    this.outputs = StandaloneService.operatingCost(inputs);
+    this.outputs = this.standaloneService.operatingCost(inputs, this.settings);
   }
 
   setField(str: string) {

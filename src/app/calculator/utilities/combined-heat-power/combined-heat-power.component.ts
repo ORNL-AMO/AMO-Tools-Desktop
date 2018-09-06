@@ -46,7 +46,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService) { }
+  constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -82,7 +82,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   calculate() {
-    this.results = StandaloneService.CHPcalculator(this.inputs);
+    this.results = this.standaloneService.CHPcalculator(this.inputs);
   }
 
 }

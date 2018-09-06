@@ -17,7 +17,7 @@ export class DelayMethodFormComponent implements OnInit {
   inputs: ReceiverTankBridgingCompressor;
   totalReceiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -26,7 +26,7 @@ export class DelayMethodFormComponent implements OnInit {
   }
 
   getTotalReceiverVolume() {
-    this.totalReceiverVolume = StandaloneService.receiverTankSizeBridgingCompressor(this.inputs);
+    this.totalReceiverVolume = this.standaloneService.receiverTankSizeBridgingCompressor(this.inputs, this.settings);
   }
   changeField(str: string) {
     this.emitChangeField.emit(str);
