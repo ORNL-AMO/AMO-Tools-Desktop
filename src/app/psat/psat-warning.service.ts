@@ -18,7 +18,7 @@ export class PsatWarningService {
     let opFractionError = this.checkOpFraction(psat);
     let ratedPowerError = null;
     if (baseline) {
-      ratedPowerError = this.checkRatedPower(psat);
+      ratedPowerError = this.checkRatedPower(psat, settings);
     }
     let marginError = this.checkMargin(psat);
     let headError = this.checkHead(psat);
@@ -119,13 +119,14 @@ export class PsatWarningService {
     }
   }
 
-  checkRatedPower(psat: PSAT) {
+  checkRatedPower(psat: PSAT, settings: Settings) {
     let tmpVal: number;
     if (psat.inputs.load_estimation_method == 0) {
       tmpVal = psat.inputs.motor_field_power;
     } else {
       tmpVal = psat.inputs.motor_field_current;
     }
+
     if (psat.inputs.motor_rated_power && tmpVal) {
       let val, compare;
       val = tmpVal;
@@ -240,23 +241,32 @@ export class PsatWarningService {
       motorFieldPower = psat.inputs.motor_field_current;
       inputTypeStr = 'Field Data Motor Current';
     }
-    if (motorFieldPower && psat.inputs.motor_rated_power) {
-      let val, compare;
-      if (settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
-      } else {
-        val = psat.inputs.motor_rated_power;
-        compare = motorFieldPower;
-      }
-      val = val * 1.5;
-      if (compare > val) {
-        return 'The ' + inputTypeStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
+
+    let min: number = 5;
+    let max: number = 10000;
+    if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
+      return 'Rated motor power is too small.';
+    } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
+      return 'Rated motor power is too large.';
+    } else {
+      if (motorFieldPower && psat.inputs.motor_rated_power) {
+        let val, compare;
+        if (settings.powerMeasurement == 'hp') {
+          val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
+          compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+        } else {
+          val = psat.inputs.motor_rated_power;
+          compare = motorFieldPower;
+        }
+        val = val * 1.5;
+        if (compare > val) {
+          return 'The ' + inputTypeStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
+        } else {
+          return null;
+        }
       } else {
         return null;
       }
-    } else {
-      return null;
     }
   }
 
