@@ -21,23 +21,23 @@
           <label class="small" for="{{'avgSurfaceTemp_'+lossIndex}}">Baseline Surface Temperature</label>
           <div class="input-group">
             <input name="{{'avgSurfaceTemp_'+lossIndex}}" disabled="true" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
-              id="{{'avgSurfaceTemp_'+lossIndex}}" onfocus="this.select();" (input)="checkSurfaceTemp(1, loss.surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
+              id="{{'avgSurfaceTemp_'+lossIndex}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('avgSurfaceTemp')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="surfaceTempError1[index] !== null">{{surfaceTempError1[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].surfaceTempWarning !== null">{{baselineWarnings[index].surfaceTempWarning}}</span>
         </div>
         <div class="form-group">
           <label class="small" for="{{'avgSurfaceTempMod_'+lossIndex}}">Modification Surface Temperature</label>
           <div class="input-group">
             <input name="{{'avgSurfaceTempMod_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature"
-              id="{{'avgSurfaceTempMod_'+lossIndex}}" onfocus="this.select();" (input)="checkSurfaceTemp(2, phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
+              id="{{'avgSurfaceTempMod_'+lossIndex}}" onfocus="this.select();" (input)="checkModificationWarnings(index)" (focus)="focusField('avgSurfaceTemp')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="surfaceTempError2[index] !== null">{{surfaceTempError2[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].surfaceTempWarning !== null">{{modificationWarnings[index].surfaceTempWarning}}</span>
         </div>
       </form>
     </li>
