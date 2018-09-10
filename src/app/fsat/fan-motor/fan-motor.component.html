@@ -16,10 +16,15 @@
 
     <div class="form-group">
       <label for="motorRatedPower">Rated Motor Power</label>
-      <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower"
+      <!-- <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower"
         (change)="save()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
-      </select>
+      </select> -->
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
+        <input type="number" name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" (focus)="focusField('motorRatedPower')"
+          (input)="save()" formControlName="motorRatedPower">
+        <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
+      </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null">{{warnings.ratedPowerError}}</span>
     </div>
 
