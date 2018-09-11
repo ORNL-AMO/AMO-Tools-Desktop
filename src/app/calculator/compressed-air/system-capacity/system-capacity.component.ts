@@ -26,7 +26,8 @@ export class SystemCapacityComponent implements OnInit {
   outputs: AirSystemCapacityOutput = {
     totalPipeVolume: 0,
     totalReceiverVolume: 0,
-    totalCapacityOfCompressedAirSystem: 0
+    totalCapacityOfCompressedAirSystem: 0,
+    receiverCapacities: [0],
   };
 
   constructor(private standaloneService: StandaloneService, private compressedAirService: CompressedAirService) { }

@@ -27,8 +27,6 @@ export class BagMethodFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('settings.unitsOfMeasure = ' + this.settings.unitsOfMeasure);
-
   }
 
   emitChange() {
