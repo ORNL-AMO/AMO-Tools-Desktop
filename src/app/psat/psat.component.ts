@@ -180,6 +180,7 @@ export class PsatComponent implements OnInit {
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.stepTab.next('system-basics');
   }
 
   ngAfterViewInit() {
