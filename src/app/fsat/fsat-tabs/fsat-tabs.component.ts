@@ -192,7 +192,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.motorClassStatus = ['success'];
     }
-    if (this.stepTab == 'motor') {
+    if (this.stepTab == 'fan-motor') {
       this.motorClassStatus.push('active');
     }
   }
