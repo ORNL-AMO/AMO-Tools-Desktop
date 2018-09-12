@@ -128,23 +128,6 @@ export class ExploreCoolingFormComponent implements OnInit {
     }
   }
 
-  // checkFlowRate(num: number, flowRate: number, index: number) {
-  //   if (flowRate < 0) {
-  //     if (num == 1) {
-  //       this.flowError1[index] = 'Flow rate must be equal or greater than 0';
-  //     } else if (num == 2) {
-  //       this.flowError2[index] = 'Flow rate must be equal or greater than 0';
-  //     }
-  //   } else {
-  //     if (num == 1) {
-  //       this.flowError1[index] = null;
-  //     } else if (num == 2) {
-  //       this.flowError2[index] = null;
-  //     }
-  //   }
-  //   this.calculate();
-  // }
-
   toggleTemp(index: number, obj: { loss: LiquidCoolingLoss | GasCoolingLoss, type: string }) {
     if (this.showTemp[index] == false) {
       if (obj.type == this.modifiedLosses[index].type) {
@@ -158,44 +141,6 @@ export class ExploreCoolingFormComponent implements OnInit {
       }
     }
   }
-
-  // checkTemp(num: number, obj: { loss: LiquidCoolingLoss | GasCoolingLoss, type: string }, index: number) {
-  //   if (obj.type == this.modifiedLosses[index].type) {
-  //     if (obj.type == 'Liquid') {
-  //       if (obj.loss.initialTemperature > this.modifiedLosses[index].loss.outletTemperature) {
-  //         if (num == 1) {
-  //           this.tempError1[index] = 'Inlet temperature greater the outlet temperature.';
-  //         } else if (num == 2) {
-  //           this.tempError2[index] = 'Inlet temperature greater the outlet temperature.';
-  //         }
-  //       } else {
-  //         this.noTempError(num, index);
-  //       }
-  //     } else if (obj.type == 'Gas') {
-  //       if (obj.loss.initialTemperature > this.modifiedLosses[index].loss.finalTemperature) {
-  //         if (num == 1) {
-  //           this.tempError1[index] = 'Inlet temperature greater the outlet temperature.';
-  //         } else if (num == 2) {
-  //           this.tempError2[index] = 'Inlet temperature greater the outlet temperature.';
-  //         }
-  //       } else {
-  //         this.noTempError(num, index);
-  //       }
-  //     }
-  //   }
-  //   else {
-  //     this.noTempError(num, index);
-  //   }
-  //   this.calculate();
-  // }
-
-  // noTempError(num: number, index: number) {
-  //   if (num == 1) {
-  //     this.tempError1[index] = null;
-  //   } else if (num == 2) {
-  //     this.tempError2[index] = null;
-  //   }
-  // }
 
   checkBaselineWarning(obj: { loss: LiquidCoolingLoss | GasCoolingLoss, type: string }, index: number) {
     let tmpWarnings: { flowWarning: string, tempWarning: string };
@@ -216,7 +161,6 @@ export class ExploreCoolingFormComponent implements OnInit {
       tmpWarnings = this.getLiquidWarnings(obj.loss);
     }
     this.modificationWarnings[index] = tmpWarnings;
-    console.log(this.modificationWarnings);
     this.calculate();
   }
 
