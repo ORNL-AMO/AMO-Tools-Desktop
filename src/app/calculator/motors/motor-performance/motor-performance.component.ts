@@ -1,10 +1,13 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { MotorPerformanceService } from './motor-performance.service';
+import { MotorPerformanceService, MotorPerformanceInputs } from './motor-performance.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-motor-performance',
@@ -17,7 +20,9 @@ export class MotorPerformanceComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  inPsat: boolean;
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -30,13 +35,19 @@ export class MotorPerformanceComponent implements OnInit {
 
   currentField: string;
   performanceForm: FormGroup;
-
+  calculator: Calculator;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService) { }
+  calcExists: boolean;
+  saving: boolean;
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.initForm();
+    if(this.inAssessment){
+      this.getCalculator();
+    }else{
+      this.initForm();
+    }
     //use system settings for standalone calculator
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -50,6 +61,8 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+
+
   }
 
   ngAfterViewInit() {
@@ -67,26 +80,77 @@ export class MotorPerformanceComponent implements OnInit {
   calculate() {
     if (!this.psat) {
       this.motorPerformanceService.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
-      console.log(this.motorPerformanceService.motorPerformanceInputs);
+    } else if (this.inAssessment && this.calcExists) {
+      this.calculator.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
+      this.saveCalculator();
     }
     this.toggleCalculate = !this.toggleCalculate;
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
 
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    console.log(this.calculator)
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.motorPerformanceInputs) {
+        this.performanceForm = this.motorPerformanceService.initFormFromObj(this.calculator.motorPerformanceInputs)
+      } else {
+        this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+        let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
+        this.calculator.motorPerformanceInputs = tmpMotorPerformanceInputs;
+        this.saveCalculator();
+      }
+    } else {
+      this.calculator = this.initCalculator();
+      this.saveCalculator();
+    }
+  }
+
+  initCalculator(): Calculator {
+    this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+    let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      motorPerformanceInputs: tmpMotorPerformanceInputs
+    }
+    return tmpCalculator;
+  }
 
   initForm() {
-    if (this.psat) {
-      this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
-    } else if (this.motorPerformanceService.motorPerformanceInputs) {
+    if (this.motorPerformanceService.motorPerformanceInputs) {
       this.performanceForm = this.motorPerformanceService.initFormFromObj(this.motorPerformanceService.motorPerformanceInputs);
     } else {
       this.performanceForm = this.motorPerformanceService.initForm();
     }
+  }
 
+  saveCalculator(){
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          console.log('updated')
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          console.log('saved')
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          })
+        });
+      }
+    }
   }
 }

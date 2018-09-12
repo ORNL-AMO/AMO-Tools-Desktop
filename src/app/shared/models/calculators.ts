@@ -1,5 +1,6 @@
 import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
-import { FormGroup } from "@angular/forms";
+import { MotorPerformanceInputs } from "../../calculator/motors/motor-performance/motor-performance.service";
+import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.service";
 
 export interface Calculator {
     directoryId?: number,
@@ -13,6 +14,10 @@ export interface Calculator {
     headToolType?: string,
     systemCurve?: SystemCurve,
     pumpCurveForm?: PumpCurveForm,
+    motorPerformanceInputs?: MotorPerformanceInputs
+    nemaInputs?: NemaInputs,
+    specificSpeedInputs?: SpecificSpeedInputs,
+    
     selected?: boolean
 }
 
@@ -30,7 +35,7 @@ export interface HeadToolSuction {
 }
 
 
-export interface HeadTool{
+export interface HeadTool {
     specificGravity: number,
     flowRate: number,
     suctionPipeDiameter: number,
@@ -79,10 +84,16 @@ export interface PumpCurveForm {
     pumpEfficiencyOrder?: number,
     pumpEfficiencyConstant?: number,
     maxFlow?: number
-  }
-  
-  export interface PumpCurveDataRow {
+}
+
+export interface PumpCurveDataRow {
     head: number,
     flow: number
-  }
-  
+}
+
+export interface SpecificSpeedInputs {
+    pumpType: number,
+    pumpRPM: number,
+    flowRate: number,
+    head: number
+}
