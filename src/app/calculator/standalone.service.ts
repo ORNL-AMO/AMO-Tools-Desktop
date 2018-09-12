@@ -60,12 +60,12 @@ export class StandaloneService {
     if (settings.unitsOfMeasure == 'Metric') {
       //metric:m3 imperial:ft3
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
-      //metric:psi imperial:kpa
-      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('psi').to('kPa');
-      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('psi').to('kPa');
+      //metric:kpa imperial:psi
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPa').to('psi');
       let requiredStorage: number = standaloneAddon.receiverTank(inputCpy);
-      //result required storage (gal)
-      requiredStorage = this.convertUnitsService.value(requiredStorage).from('m3').to('gal');
+      //metric:m3 imperial:gal
+      requiredStorage = this.convertUnitsService.value(requiredStorage).from('gal').to('m3');
       return requiredStorage;
     } else {
       return standaloneAddon.receiverTank(inputCpy);
@@ -131,9 +131,8 @@ export class StandaloneService {
 
   operatingCost(input: OperatingCostInput, settings: Settings): OperatingCostOutput {
     let inputCpy: OperatingCostInput = JSON.parse(JSON.stringify(input));
-
     if (settings.unitsOfMeasure == 'Metric') {
-      inputCpy.bhpUnloaded = this.convertUnitsService.value(inputCpy.bhpUnloaded).from('kW').to('hp');
+      inputCpy.motorBhp = this.convertUnitsService.value(inputCpy.motorBhp).from('kW').to('hp');
     }
     return standaloneAddon.operatingCost(inputCpy);
   }
@@ -154,34 +153,33 @@ export class StandaloneService {
         pipe.pipeLength = this.convertUnitsService.value(pipe.pipeLength).from('m').to('ft');
         customPipeVolume += this.calculatePipeVolume(pipe.pipeSize, pipe.pipeLength);
       })
-      let customRecieverVolume: number = 0;
-      inputCpy.receiverCapacities.forEach((reciever: number) => {
-        customRecieverVolume += this.convertUnitsService.value(reciever).from('m3').to('gal');
-      })
+      let tmpCapacities: Array<number> = new Array<number>();
+      inputCpy.receiverCapacities.forEach(
+        reciever => {
+          tmpCapacities.push(this.convertUnitsService.value(reciever).from('m3').to('gal')
+          )
+        })
+      inputCpy.receiverCapacities = tmpCapacities;
       //add custom volumes to calculated result
       let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
+      
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
-      outputs.totalReceiverVolume += customRecieverVolume;
+      //outputs.totalReceiverVolume += customRecieverVolume;
       //convert result
-      outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('gal').to('m3');
+      outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('m3');
       outputs.totalPipeVolume = this.convertUnitsService.value(outputs.totalPipeVolume).from('ft3').to('m3');
       outputs.totalCapacityOfCompressedAirSystem = this.convertUnitsService.value(outputs.totalCapacityOfCompressedAirSystem).from('ft3').to('m3');
       return outputs;
-    }else{
+    } else {
       let customPipeVolume: number = 0;
       inputCpy.customPipes.forEach((pipe: { pipeSize: number, pipeLength: number }) => {
         customPipeVolume += this.calculatePipeVolume(pipe.pipeSize, pipe.pipeLength);
       })
-      let customRecieverVolume: number = 0;
-      inputCpy.receiverCapacities.forEach((reciever: number) => {
-        customRecieverVolume += reciever
-      })
       //add custom volumes to calculated result
       let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
-      outputs.totalReceiverVolume += customRecieverVolume;
       return outputs;
     }
   }
@@ -219,15 +217,15 @@ export class StandaloneService {
       inputCpy.airlinePressure = this.convertUnitsService.value(inputCpy.airlinePressure).from('kPa').to('psi');
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPa').to('psi');
       //metric: m imperial: ft
-      inputCpy.designVelocity = this.convertUnitsService.value(inputCpy.airFlow).from('m').to('ft');
-      let outputs: PipeSizingOutput = standaloneAddon.pipeSizing(input);
+      inputCpy.designVelocity = this.convertUnitsService.value(inputCpy.designVelocity).from('m').to('ft');
+      let outputs: PipeSizingOutput = standaloneAddon.pipeSizing(inputCpy);
       //metric: cm2 imperial: in2
       outputs.crossSectionalArea = this.convertUnitsService.value(outputs.crossSectionalArea).from('in2').to('cm2');
       //metric: cm imperial: in
       outputs.pipeDiameter = this.convertUnitsService.value(outputs.pipeDiameter).from('in').to('cm');
       return outputs;
     } else {
-      return standaloneAddon.pipeSizing(input);
+      return standaloneAddon.pipeSizing(inputCpy);
     }
   }
 
@@ -238,7 +236,7 @@ export class StandaloneService {
     if (settings.unitsOfMeasure == 'Metric') {
       inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPa').to('psi');
       outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPa').to('psi');
-      let flowRate: number = standaloneAddon.pneumaticValve({ inletPressure: inletPressure, outletPressure: outletPressure }).flowRate;
+      let flowRate: number = standaloneAddon.pneumaticValve({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
       flowRate = this.convertUnitsService.value(flowRate).from('ft3').to('m3');
       return flowRate;
     } else {
@@ -267,10 +265,10 @@ export class StandaloneService {
       //metric: cm imperial: in
       inputCpy.heightOfBag = this.convertUnitsService.value(inputCpy.heightOfBag).from('cm').to('in');
       inputCpy.diameterOfBag = this.convertUnitsService.value(inputCpy.diameterOfBag).from('cm').to('in');
-      let results: BagMethodOutput = standaloneAddon.bagMethod(input);
+      let results: BagMethodOutput = standaloneAddon.bagMethod(inputCpy);
       //metric: m3 imperial: ft3
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
-      results.annualConsumption = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
+      results.annualConsumption = this.convertUnitsService.value(results.annualConsumption).from('ft3').to('m3');
       return results;
     } else {
       return standaloneAddon.bagMethod(inputCpy);
