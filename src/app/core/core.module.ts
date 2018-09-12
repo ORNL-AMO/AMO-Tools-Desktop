@@ -55,6 +55,7 @@ import { PsatReportTutorialComponent } from '../tutorials/psat-report-tutorial/p
 import { PhastSetupTutorialComponent } from '../tutorials/phast-setup-tutorial/phast-setup-tutorial.component';
 import { PhastAssessmentTutorialComponent } from '../tutorials/phast-assessment-tutorial/phast-assessment-tutorial.component';
 import { PhastReportTutorialComponent } from '../tutorials/phast-report-tutorial/phast-report-tutorial.component';
+import { FsatTutorialComponent } from '../tutorials/fsat-tutorial/fsat-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { PhastReportTutorialComponent } from '../tutorials/phast-report-tutorial
     PsatReportTutorialComponent,
     PhastSetupTutorialComponent,
     PhastAssessmentTutorialComponent,
-    PhastReportTutorialComponent
+    PhastReportTutorialComponent,
+    FsatTutorialComponent
   ],
   imports: [
     CommonModule,

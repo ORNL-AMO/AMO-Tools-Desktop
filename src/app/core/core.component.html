@@ -13,7 +13,8 @@
         <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-assessment-tutorial>
         <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
         
-        
+        <app-fsat-tutorial *ngIf="tutorialType == 'fsat-tutorial'" (closeTutorial)="closeTutorial()"></app-fsat-tutorial>
+
         <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
 
     </div>
