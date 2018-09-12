@@ -106,7 +106,6 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
     this.calculate();
   }
 
-
   toggleInitialTemp(index: number, material: ExploreMaterial) {
     if (this.showTemp[index] == false) {
       material.modification.initialTemperature = material.baseline.initialTemperature;
