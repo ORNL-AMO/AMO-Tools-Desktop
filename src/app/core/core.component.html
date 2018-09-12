@@ -14,7 +14,10 @@
         <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
         
         <app-fsat-tutorial *ngIf="tutorialType == 'fsat-tutorial'" (closeTutorial)="closeTutorial()"></app-fsat-tutorial>
-
+        <app-fsat-system-setup *ngIf="tutorialType == 'fsat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-system-setup>
+        <app-fsat-assessment-tutorial *ngIf="tutorialType == 'fsat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-assessment-tutorial>
+        <app-fsat-report-tutorial *ngIf="tutorialType == 'fsat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-report-tutorial>
+        
         <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
 
     </div>
