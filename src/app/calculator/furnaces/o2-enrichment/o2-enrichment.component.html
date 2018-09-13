@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions phast">
+<div class="d-flex h-100 modify-conditions phast standalone-calculator">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" (calculate)="calculate()"
+      <app-o2-enrichment-form [o2Form]="o2Form" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()"
         (changeFieldEmit)="changeField($event)" [settings]="settings"></app-o2-enrichment-form>
     </div>
   </div>

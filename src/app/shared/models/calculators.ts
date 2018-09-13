@@ -1,6 +1,7 @@
 import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
 import { MotorPerformanceInputs } from "../../calculator/motors/motor-performance/motor-performance.service";
 import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.service";
+import { O2Enrichment } from "./phast/o2Enrichment";
 
 export interface Calculator {
     directoryId?: number,
@@ -17,7 +18,7 @@ export interface Calculator {
     motorPerformanceInputs?: MotorPerformanceInputs
     nemaInputs?: NemaInputs,
     specificSpeedInputs?: SpecificSpeedInputs,
-    
+    o2Enrichment?: O2Enrichment,
     selected?: boolean
 }
 
