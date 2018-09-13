@@ -43,9 +43,9 @@ export class MotorPerformanceComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    if(this.inAssessment){
+    if (this.inAssessment) {
       this.getCalculator();
-    }else{
+    } else {
       this.initForm();
     }
     //use system settings for standalone calculator
@@ -61,8 +61,6 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
-
   }
 
   ngAfterViewInit() {
@@ -97,7 +95,6 @@ export class MotorPerformanceComponent implements OnInit {
 
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    console.log(this.calculator)
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.motorPerformanceInputs) {
@@ -132,18 +129,16 @@ export class MotorPerformanceComponent implements OnInit {
     }
   }
 
-  saveCalculator(){
+  saveCalculator() {
     if (!this.saving || this.calcExists) {
       if (this.calcExists) {
         this.indexedDbService.putCalculator(this.calculator).then(() => {
-          console.log('updated')
           this.calculatorDbService.setAll();
         });
       } else {
         this.saving = true;
         this.calculator.assessmentId = this.assessment.id;
         this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          console.log('saved')
           this.calculatorDbService.setAll().then(() => {
             this.calculator.id = result;
             this.calcExists = true;

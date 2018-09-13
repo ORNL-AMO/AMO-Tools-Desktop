@@ -2,7 +2,7 @@
   <form [formGroup]="nemaForm">
     <div class="form-group">
       <label for="frequency">Line Frequency</label>
-      <select class="form-control" id="frequency" formControlName="frequency" autofocus (focus)="focusField('frequency')">
+      <select class="form-control" id="frequency" formControlName="frequency" autofocus (focus)="focusField('frequency')" (change)="calculate()">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
     </div>
@@ -14,7 +14,7 @@
       </select> -->
       <div class="input-group calc-addon-group">
         <input name="horsePower" type="number" min="0" step="any" class="form-control" id="horsePower" formControlName="horsePower"
-           onfocus="this.select();" (focus)="focusField('horsePower')">
+           onfocus="this.select();" (focus)="focusField('horsePower')" (input)="calculate()">
         <span class="units">{{settings.powerMeasurement}}</span>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <label for="motorRPM">Motor RPM</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="1" step="10" class="form-control addon-input" id="motorRPM" formControlName="motorRPM" onfocus="this.select();"
-          (focus)="focusField('motorRPM')">
+          (focus)="focusField('motorRPM')" (input)="calculate()">
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="subtractNum('motorRPM')">
             <i class="fa fa-minus"></i>
@@ -51,11 +51,11 @@
       <label for="efficiency">Efficiency</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"
-          onfocus="this.select();" (focus)="focusField('efficiencyClass')">
+          onfocus="this.select();" (focus)="focusField('efficiencyClass')" (input)="calculate()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="nemaForm.controls.efficiency.invalid && !nemaForm.controls.efficiency.pristine">
-          <span *ngIf="nemaForm.controls.efficiency.required">Value required</span>
+        <span *ngIf="nemaForm.controls.efficiency.errors.required">Value required</span>
         <span *ngIf="nemaForm.controls.efficiency.errors.max">Value can't be greater than {{nemaForm.controls.efficiency.errors.max.max}} %.</span>
         <span *ngIf="nemaForm.controls.efficiency.errors.min">Value can't be less than {{nemaForm.controls.efficiency.errors.min.min}} %.</span>
       </span>
