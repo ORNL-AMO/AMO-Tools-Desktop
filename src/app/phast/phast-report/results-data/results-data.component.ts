@@ -29,7 +29,9 @@ export class ResultsDataComponent implements OnInit {
   modification: Modification;
   @Input()
   inReport: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   baseLineResults: PhastResults;
   modificationResults: Array<PhastResults>;
   phastMods: Array<Modification>;
