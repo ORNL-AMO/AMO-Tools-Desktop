@@ -116,7 +116,7 @@ export class O2EnrichmentComponent implements OnInit {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
       this.calcExists = true;
-      if (this.calculator.nemaInputs) {
+      if (this.calculator.o2Enrichment) {
         this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.calculator.o2Enrichment)
       } else {
         this.o2Form = this.o2EnrichmentService.initForm(this.settings);
