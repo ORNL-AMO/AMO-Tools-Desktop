@@ -4,6 +4,7 @@ import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-
 import { O2Enrichment } from "./phast/o2Enrichment";
 import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
+import { FlowCalculations } from "./phast/flowCalculations";
 
 export interface Calculator {
     directoryId?: number,
@@ -25,7 +26,8 @@ export interface Calculator {
     energyEquivalencyInputs?: {
         energyEquivalencyFuel: EnergyEquivalencyFuel,
         energyEquivalencyElectric: EnergyEquivalencyElectric
-    }
+    },
+    flowCalculations?: FlowCalculations,
     selected?: boolean
 }
 
