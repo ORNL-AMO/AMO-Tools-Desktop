@@ -1,10 +1,14 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FsatService } from '../../../fsat/fsat.service';
-import { FanService } from '../fan.service';
+import { FanEfficiencyService, FanEfficiencyInputs } from './fan-efficiency.service';
+import { FormGroup } from '@angular/forms';
+import { Calculator } from '../../../shared/models/calculators';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
   selector: 'app-fan-efficiency',
@@ -17,16 +21,11 @@ export class FanEfficiencyComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
+  assessment: Assessment;
+  @Input()
   inAssessment: boolean;
 
-  inputs: FanEfficiencyInputs = {
-    fanType: undefined,
-    fanSpeed: undefined,
-    flowRate: undefined,
-    inletPressure: undefined,
-    outletPressure: undefined,
-    compressibility: undefined
-  };;
+  fanEfficiencyInputs: FanEfficiencyInputs;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -35,23 +34,25 @@ export class FanEfficiencyComponent implements OnInit {
     this.resizeTabs();
   }
 
+  fanEfficiencyForm: FormGroup;
   headerHeight: number;
   currentField: string;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
-  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanService: FanService) { }
-  ngOnInit() {
-    if (this.inAssessment && this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
-      this.inputs.fanType = this.fsat.fanSetup.fanType;
-      this.inputs.fanSpeed = this.fsat.fanSetup.fanSpeed;
-      this.inputs.flowRate = this.fsat.fieldData.flowRate;
-      this.inputs.inletPressure = this.fsat.fieldData.inletPressure;
-      this.inputs.outletPressure = this.fsat.fieldData.outletPressure;
-      this.inputs.compressibility = this.fsat.fieldData.compressibilityFactor;
-    }else{
-      this.inputs = this.fanService.fanEfficiencyInputs;
+  calcExists: boolean;
+  saving: boolean;
+  calculator: Calculator;
+  constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
+    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+  
+    ngOnInit() {
+    if (this.inAssessment) {
+      this.getCalculator();
+    } else {
+      this.initForm();
     }
+
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -67,11 +68,6 @@ export class FanEfficiencyComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
-    if(!this.inAssessment){
-      this.fanService.fanEfficiencyInputs = this.inputs;
-    }
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader) {
@@ -82,12 +78,19 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   calculate() {
-    if (this.checkInputs() == 'VALID') {
-      this.fanEfficiency = this.fsatService.optimalFanEfficiency(this.inputs, this.settings);
+    let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
+    if (!this.inAssessment) {
+      this.fanEfficiencyService.fanEfficiencyInputs = tmpFanEfficiencyInputs;
+    } else if (this.inAssessment && this.calcExists) {
+      this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
+      this.saveCalculator();
+    }
+
+    if (this.fanEfficiencyForm.status == 'VALID') {
+      this.fanEfficiency = this.fsatService.optimalFanEfficiency(tmpFanEfficiencyInputs, this.settings);
     } else {
       this.fanEfficiency = 0;
     }
-
     this.toggleCalculate = !this.toggleCalculate;
   }
 
@@ -99,26 +102,67 @@ export class FanEfficiencyComponent implements OnInit {
     this.currentField = str;
   }
 
-  checkInputs() {
-    if (this.inputs.fanType != undefined &&
-      this.inputs.fanSpeed != undefined &&
-      this.inputs.flowRate != undefined &&
-      this.inputs.inletPressure != undefined &&
-      this.inputs.outletPressure != undefined &&
-      this.inputs.compressibility != undefined
-    ) {
-      return 'VALID';
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.fanEfficiencyInputs) {
+        this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.calculator.fanEfficiencyInputs)
+      } else {
+        if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
+          this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromFsat(this.fsat);
+        } else {
+          this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
+        }
+        let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
+        this.calculator.fanEfficiencyInputs = tmpFanEfficiencyInputs;
+        this.saveCalculator();
+      }
     } else {
-      return 'INVALID';
+      this.calculator = this.initCalculator();
+      this.saveCalculator();
     }
   }
-}
 
-export interface FanEfficiencyInputs {
-  fanType: number,
-  fanSpeed: number,
-  flowRate: number,
-  inletPressure: number,
-  outletPressure: number,
-  compressibility: number
+  initCalculator(): Calculator {
+    if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
+      this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromFsat(this.fsat);
+    } else {
+      this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
+    }
+    let tmpFanEfficiencyInputs: FanEfficiencyInputs = this.fanEfficiencyService.getObjFromForm(this.fanEfficiencyForm);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      fanEfficiencyInputs: tmpFanEfficiencyInputs
+    }
+    return tmpCalculator;
+  }
+
+  initForm() {
+    if (this.fanEfficiencyService.fanEfficiencyInputs) {
+      this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.fanEfficiencyService.fanEfficiencyInputs);
+    } else {
+      this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
+    }
+  }
+
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          })
+        });
+      }
+    }
+  }
 }

@@ -73,7 +73,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       if (this.calculator.nemaInputs) {
         this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.calculator.nemaInputs)
       } else {
-        this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+        if (this.psat) {
+          this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+        } else {
+          this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+        }
         let tmpNemaInputs: NemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
         this.calculator.nemaInputs = tmpNemaInputs;
         this.saveCalculator();
@@ -85,7 +89,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+    if (this.psat) {
+      this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+    } else {
+      this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    }
     let tmpNemaInputs: NemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
@@ -159,7 +167,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.tefcValue = 0;
     }
 
-    if (!this.psat) {
+    if (!this.psat && !this.inAssessment) {
       this.nemaEnergyEfficiencyService.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);

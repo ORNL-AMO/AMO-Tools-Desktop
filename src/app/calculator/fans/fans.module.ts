@@ -6,7 +6,6 @@ import { FansComponent } from './fans.component';
 import { SystemCurveModule } from '../pumps/system-curve/system-curve.module';
 import { PumpCurveModule } from '../pumps/pump-curve/pump-curve.module';
 import { FanEfficiencyModule } from './fan-efficiency/fan-efficiency.module';
-import { FanService } from './fan.service';
 
 @NgModule({
   imports: [
@@ -20,6 +19,6 @@ import { FanService } from './fan.service';
   ],
   declarations: [FansComponent],
   exports: [FansComponent],
-  providers: [FanService]
+  providers: []
 })
 export class FansModule { }

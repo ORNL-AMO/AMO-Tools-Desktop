@@ -76,7 +76,7 @@ export class MotorPerformanceComponent implements OnInit {
   }
 
   calculate() {
-    if (!this.psat) {
+    if (!this.psat && !this.inAssessment) {
       this.motorPerformanceService.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.motorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
@@ -100,7 +100,11 @@ export class MotorPerformanceComponent implements OnInit {
       if (this.calculator.motorPerformanceInputs) {
         this.performanceForm = this.motorPerformanceService.initFormFromObj(this.calculator.motorPerformanceInputs)
       } else {
-        this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+        if (this.psat) {
+          this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+        } else {
+          this.performanceForm = this.motorPerformanceService.initForm();
+        }
         let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
         this.calculator.motorPerformanceInputs = tmpMotorPerformanceInputs;
         this.saveCalculator();
@@ -112,7 +116,11 @@ export class MotorPerformanceComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+    if (this.psat) {
+      this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+    } else {
+      this.performanceForm = this.motorPerformanceService.initForm();
+    }
     let tmpMotorPerformanceInputs: MotorPerformanceInputs = this.motorPerformanceService.getObjFromForm(this.performanceForm);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,

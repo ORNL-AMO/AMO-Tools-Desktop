@@ -5,6 +5,7 @@ import { O2Enrichment } from "./phast/o2Enrichment";
 import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
 import { FlowCalculations } from "./phast/flowCalculations";
+import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 
 export interface Calculator {
     directoryId?: number,
@@ -28,6 +29,7 @@ export interface Calculator {
         energyEquivalencyElectric: EnergyEquivalencyElectric
     },
     flowCalculations?: FlowCalculations,
+    fanEfficiencyInputs?: FanEfficiencyInputs
     selected?: boolean
 }
 
