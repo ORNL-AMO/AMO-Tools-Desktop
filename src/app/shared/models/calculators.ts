@@ -6,6 +6,7 @@ import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
+import { Fan203Inputs } from "./fans";
 
 export interface Calculator {
     directoryId?: number,
@@ -29,7 +30,8 @@ export interface Calculator {
         energyEquivalencyElectric: EnergyEquivalencyElectric
     },
     flowCalculations?: FlowCalculations,
-    fanEfficiencyInputs?: FanEfficiencyInputs
+    fanEfficiencyInputs?: FanEfficiencyInputs,
+    fan203Inputs?: Fan203Inputs,
     selected?: boolean
 }
 

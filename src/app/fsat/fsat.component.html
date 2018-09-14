@@ -43,9 +43,8 @@
     <app-fsat-diagram></app-fsat-diagram>
   </div>
 
-
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings"></app-fsat-203>
+    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-fsat-203>
     <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone"
       [settings]="settings" [assessment]="assessment"></app-system-curve>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment" [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
