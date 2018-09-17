@@ -5,6 +5,7 @@ import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
+import { SSMT } from '../shared/models/ssmt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -57,6 +58,9 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
+    }else if(assessment.type == 'SSMT'){
+      this.router.navigateByUrl('/ssmt/' + assessment.id);
+
     }
   }
 
@@ -301,5 +305,12 @@ export class AssessmentService {
       }
     }
     return newFsat;
+  }
+
+  getNewSsmt():SSMT{
+    return {
+      name: '',
+      setupDone: false
+    }
   }
 }

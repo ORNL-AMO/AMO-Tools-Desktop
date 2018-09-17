@@ -1,0 +1,64 @@
+.pill-row{
+    height: 100%;
+}
+
+
+
+.img-icon{
+    width: 40px;
+}
+
+.furnace-name{
+    font-weight: 400;
+    font-size: 16px;
+    color: rgba(255,255,255,.75);
+}
+
+.img-col{
+    padding-right: 0px;
+}
+
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+
+.nav-link.disabled {
+    color: #ABB2B9;
+}
+
+.home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}
+
+.home-nav-item{
+    /* color: black;
+    border-color: black !important; */
+}
+
+.nav-link{
+    padding: 6px;
+    font-size: medium;
+    /* color: #000; */
+}
+
+.nav-link:not(.disabled):hover{
+    cursor: pointer;
+    background-color: #808B96;
+}
+.nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
+.nav-link.active{
+    /* background: #fff; */
+    font-weight: bold;
+    /* color: black; */
+  }
+
+.nav-item{
+    margin: .1rem;
+}

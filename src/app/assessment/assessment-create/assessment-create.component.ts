@@ -42,7 +42,6 @@ export class AssessmentCreateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
-    private modelService: ModelService,
     private router: Router,
     private indexedDbService: IndexedDbService,
     private settingsDbService: SettingsDbService,
@@ -102,6 +101,7 @@ export class AssessmentCreateComponent implements OnInit {
       this.hideCreateModal(true);
       this.createModal.onHidden.subscribe(() => {
         this.assessmentService.tab = 'system-setup';
+        //psat
         if (this.newAssessmentForm.controls.assessmentType.value == 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
@@ -119,6 +119,7 @@ export class AssessmentCreateComponent implements OnInit {
             })
           })
         }
+        //phast
         else if (this.newAssessmentForm.controls.assessmentType.value == 'Furnace') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
@@ -138,7 +139,9 @@ export class AssessmentCreateComponent implements OnInit {
               this.router.navigateByUrl('/phast/' + tmpAssessment.id);
             });
           });
-        } else if (this.newAssessmentForm.controls.assessmentType.value == 'Fan') {
+        } 
+        //fsat
+        else if (this.newAssessmentForm.controls.assessmentType.value == 'Fan') {
           let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           tmpAssessment.directoryId = this.directory.id;
@@ -163,6 +166,35 @@ export class AssessmentCreateComponent implements OnInit {
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
                 this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/fsat/' + tmpAssessment.id)
+              });
+            })
+          });
+        }
+        //ssmt
+        else if (this.newAssessmentForm.controls.assessmentType.value == 'Steam') {
+          let tmpAssessment = this.assessmentService.getNewAssessment('SSMT');
+          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+          tmpAssessment.directoryId = this.directory.id;
+          tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
+          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+              tmpAssessment = assessment;
+              if (this.directory.assessments) {
+                this.directory.assessments.push(tmpAssessment);
+              } else {
+                this.directory.assessments = new Array();
+                this.directory.assessments.push(tmpAssessment);
+              }
+              let tmpDirRef: DirectoryDbRef = {
+                name: this.directory.name,
+                id: this.directory.id,
+                parentDirectoryId: this.directory.parentDirectoryId,
+                createdDate: this.directory.createdDate,
+                modifiedDate: this.directory.modifiedDate
+              }
+              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+                this.assessmentService.createAssessment.next(false);
+                this.router.navigateByUrl('/ssmt/' + tmpAssessment.id)
               });
             })
           });

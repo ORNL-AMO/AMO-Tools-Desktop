@@ -1299,6 +1299,10 @@ Banner
     background: #FFE400;
   }
 
+  .banner.ssmt{
+    background:#607D8B;
+  }
+
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;
