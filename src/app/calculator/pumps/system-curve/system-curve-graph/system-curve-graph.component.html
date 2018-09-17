@@ -40,40 +40,13 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="!expanded && tableData.length > 0">
-    <div class="col-12">
-      <table class="table-hover table-striped graph-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Point</th>
-            <th *ngIf="isFan">Flow Rate ({{settings.fanFlowRate}})</th>
-            <th *ngIf="!isFan">Flow Rate ({{settings.flowMeasurement}})</th>
-            <th *ngIf="isFan">Pressure ({{this.settings.fanPressureMeasurement}})</th>
-            <th *ngIf="!isFan">Head ({{getDisplayUnit(settings.distanceMeasurement)}})</th>
-            <th>Fluid Power ({{settings.powerMeasurement}})</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr (mouseenter)="highlightPoint(i)" (mouseleave)="unhighlightPoint(i)" *ngFor="let data of tableData; let i=index;">
-            <td>
-              <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
-            </td>
-            <td>{{i + 1}}</td>
-            <td>{{data.flowRate}}</td>
-            <td>{{data.distance}}</td>
-            <td>{{data.fluidPower}}</td>
-            <td class="delete-row" (click)="deleteFromTable(i)">Delete</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="d-flex w-100 justify-content-center pl-2 pr-2" *ngIf="!expanded && rowData.length > 0">
-      <app-exportable-table class="exportable-table-container" [settings]="settings" [columnTitles]="columnTitles"
-        [rowData]="rowData" [keyColors]="keyColors" (highlightPoint)="highlightPoint($event)" (unhighlightPoint)="unhighlightPoint($event)"
-        (deleteFromTable)="deleteFromTable($event)"></app-exportable-table>
-    </div>
 
 
+  <div class="d-flex w-100 justify-content-center pl-2 pr-2" *ngIf="!expanded && rowData.length > 0">
+    <app-exportable-table class="exportable-table-container" [settings]="settings" [columnTitles]="columnTitles"
+      [rowData]="rowData" [keyColors]="keyColors" (highlightPoint)="highlightPoint($event)" (unhighlightPoint)="unhighlightPoint($event)"
+      (deleteFromTable)="deleteFromTable($event)"></app-exportable-table>
   </div>
+
+
+</div>

@@ -195,7 +195,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.resizeGraph();
     }, 100);
   }
-  
+
   initColumnTitles() {
     this.columnTitles = ['Motor Shaft Load (%)', 'Current (%)', 'Power Factor (%)', 'Efficiency (%)'];
 
@@ -1035,6 +1035,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
       efficiency: this.efficiency.toString()
     };
     this.tableData.push(dataPiece);
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    let data = [this.motorShaftLoad.toString(), this.current.toString(), this.powerFactor.toString(), this.efficiency.toString()];
+    this.rowData.push(data);
   }
 
   //dynamic table
@@ -1046,6 +1053,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focusDCurrent = new Array<{ x: number, y: number }>();
     this.focusDPower = new Array<{ x: number, y: number }>();
     this.focusDEfficiency = new Array<{ x: number, y: number }>();
+    this.rowData = new Array<Array<string>>();
     this.deleteCount = 0;
   }
 
