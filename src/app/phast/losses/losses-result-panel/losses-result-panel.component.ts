@@ -30,6 +30,9 @@ export class LossesResultPanelComponent implements OnInit {
   containerHeight: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  modificationIndex: number;
+
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
