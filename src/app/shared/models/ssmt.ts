@@ -13,5 +13,11 @@ export interface SSMT {
     setupDone?: boolean,
     operatingHours?: OperatingHours,
     operatingCosts?: OperatingCosts,
-    equipmentNotes?: string
+    equipmentNotes?: string,
+    generalSteamOperations?: GeneralSteamOperations
+}
+
+export interface GeneralSteamOperations {
+    sitePowerImport: number,
+    makeUpWaterTemperature: number
 }

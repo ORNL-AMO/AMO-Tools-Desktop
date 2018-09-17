@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { SSMT } from '../../shared/models/ssmt';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-operations',
@@ -6,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./operations.component.css']
 })
 export class OperationsComponent implements OnInit {
+  @Input()
+  ssmt: SSMT;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 

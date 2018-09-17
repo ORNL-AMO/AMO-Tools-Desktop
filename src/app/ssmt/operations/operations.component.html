@@ -1,3 +1,14 @@
-<p>
-  operations works!
-</p>
+<div class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>Operating Conditions</h3>
+  </div>
+  <div class="p-2">
+    <app-operating-hours [operatingHours]="ssmt.operatingHours"></app-operating-hours>
+  </div>
+  <div class="p-2">
+    <app-operating-costs [operatingCosts]="ssmt.operatingCosts" [settings]="settings"></app-operating-costs>
+  </div>
+  <div class="p-2">
+    <app-general-operations [generalSteamOperations]="ssmt.generalSteamOperations" [settings]="settings"></app-general-operations>
+  </div>
+</div>

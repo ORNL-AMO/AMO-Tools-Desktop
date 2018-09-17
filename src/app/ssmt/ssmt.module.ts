@@ -5,7 +5,6 @@ import { SsmtBannerComponent } from './ssmt-banner/ssmt-banner.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SsmtTabsComponent } from './ssmt-tabs/ssmt-tabs.component';
 import { SsmtService } from './ssmt.service';
-import { OperationsComponent } from './operations/operations.component';
 import { BoilerComponent } from './boiler/boiler.component';
 import { HeaderComponent } from './header/header.component';
 import { TurbineComponent } from './turbine/turbine.component';
@@ -13,15 +12,17 @@ import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { SettingsModule } from '../settings/settings.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
+import { OperationsModule } from './operations/operations.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SettingsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OperationsModule
   ],
-  declarations: [SsmtComponent, SsmtBannerComponent, SystemBasicsComponent, SsmtTabsComponent, OperationsComponent, BoilerComponent, HeaderComponent, TurbineComponent, HelpPanelComponent, SystemBasicsHelpComponent],
+  declarations: [SsmtComponent, SsmtBannerComponent, SystemBasicsComponent, SsmtTabsComponent, BoilerComponent, HeaderComponent, TurbineComponent, HelpPanelComponent, SystemBasicsHelpComponent],
   providers: [SsmtService]
 })
 export class SsmtModule { }

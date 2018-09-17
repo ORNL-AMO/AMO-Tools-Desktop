@@ -320,8 +320,12 @@ export class AssessmentService {
       },
       operatingCosts: {
         fuelCost: 8.00,
-        steamCost: 10.00,
+        makeUpWaterCosts: 10.00,
         electricityCost: .080
+      },
+      generalSteamOperations:{
+        sitePowerImport: 0,
+        makeUpWaterTemperature: 0
       },
       implementationCosts: 0.0,
       equipmentNotes: ''
