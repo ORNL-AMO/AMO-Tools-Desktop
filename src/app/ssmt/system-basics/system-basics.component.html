@@ -10,4 +10,23 @@
     <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()" [inPsat]="true"></app-application-settings>
     <app-steam-settings [(settingsForm)]="settingsForm" (save)="save()"></app-steam-settings>
   </div>
+  <div class="p-4">
+    <form>
+      <div class="form-group">
+        <label class="group-label w-100">Equipment Notes</label>
+        <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges(true)" [(ngModel)]="ssmt.equipmentNotes"
+          placeholder="Add additional information for your equipment"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="p-4">
+    <form>
+      <div class="form-group">
+        <label class="group-label w-100">
+          Operating Conditions at time of Assessment</label>
+        <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges(true)" [(ngModel)]="ssmt.operatingHours.operatingConditions"
+          placeholder="Add note for operating conditions"></textarea>
+      </div>
+    </form>
+  </div>
 </div>

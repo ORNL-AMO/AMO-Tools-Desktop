@@ -1,4 +1,4 @@
-<div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment">
+<div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment && settings">
   <div #header class="w-100 hide-print sticky-top">
     <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
     <app-ssmt-tabs></app-ssmt-tabs>
@@ -6,7 +6,7 @@
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-      (emitSave)="saveSettings($event)"></app-system-basics>
+      (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
       <div *ngIf="stepTab == 'steam-model'">
         <app-operations *ngIf="modelTab == 'operations'"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'"></app-boiler>

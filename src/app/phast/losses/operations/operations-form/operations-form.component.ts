@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
 import { FormGroup } from '@angular/forms';
-import { OperatingHours } from '../../../../shared/models/phast/phast';
 import { OperationsService, OperationsWarnings } from '../operations.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-operations-form',
   templateUrl: './operations-form.component.html',

@@ -9,6 +9,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
+import { SSMT } from '../shared/models/ssmt';
 
 @Component({
   selector: 'app-ssmt',
@@ -24,8 +25,8 @@ export class SsmtComponent implements OnInit {
     this.getContainerHeight();
   }
   containerHeight: number;
-
   assessment: Assessment;
+  _ssmt: SSMT;
   mainTab: string;
   mainTabSubscription: Subscription;
   stepTab: string;
@@ -49,7 +50,7 @@ export class SsmtComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
-        
+        this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         this.getSettings();
       });
     });

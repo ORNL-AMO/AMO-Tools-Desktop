@@ -3,6 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
+import { SSMT } from '../../shared/models/ssmt';
 
 @Component({
   selector: 'app-system-basics',
@@ -16,8 +17,10 @@ export class SystemBasicsComponent implements OnInit {
   assessment: Assessment;
   @Output('emitSave')
   emitSave = new EventEmitter<Settings>();
+  @Input()
+  ssmt: SSMT;
 
-  settingsForm: FormGroup; 
+  settingsForm: FormGroup;
   oldSettings: Settings;
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
@@ -57,5 +60,9 @@ export class SystemBasicsComponent implements OnInit {
     // this.emitSaveFsat.emit(this.assessment.fsat);
     // this.dataUpdated = true;
     // this.showUpdateData = false;
+  }
+
+  saveChanges(){
+    //TODO: save ssmt assessment changes
   }
 }
