@@ -81,7 +81,10 @@ Tabs
     border-bottom:   #A569BD groove 3px;
   }
 
-
+  .ssmt .tabs.primary .active a {
+    border: none;
+    border-bottom: #607D8B solid 3px;
+  }
 
   .fixed-tab-size{
     min-width: 200px;
@@ -127,6 +130,10 @@ Tabs
 
   .tabs.subtabs.fsat {
    border-bottom: #FFE400 solid 3px; 
+  }
+
+  .tabs.subtabs.ssmt {
+    border-bottom: #607D8B solid 3px;
   }
   
     .tabs.subtabs.progress-tabs a {
@@ -187,6 +194,10 @@ Tabs
       }
       .tabs.subtabs.psat .active .step-number {
         background: #2980b9;
+      }
+
+      .tabs.subtabs.ssmt .active .step-number {
+        background: #607D8B;
       }
 
       .tabs.subtabs.fsat .active .step-number{

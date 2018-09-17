@@ -1,0 +1,89 @@
+<nav class="hide-print w-100" *ngIf="mainTab == 'system-setup'">
+  <div class="d-flex tabs subtabs progress-tabs ssmt flex-wrap">
+    <div class="fixed-tab-size" [ngClass]="settingsStatus">
+      <a (click)="changeStepTab('system-basics')">
+        <span class="step-number">1</span> Assessment Settings</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="steamModelStatus">
+      <a (click)="changeStepTab('steam-model')">
+        <span class="step-number">2</span>Steam Model</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover"></app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="auxEquipmentStatus">
+      <a (click)="changeStepTab('aux-equipment')">
+        <span class="step-number">3</span>Aux Equipment</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fanClassStatus[0]" [reveal]="fanBadge.display" [display]="fanBadge.hover"></app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="designedEnergyStatus">
+      <a (click)="changeStepTab('designed-energy')">
+        <span class="step-number">4</span>Designed Energy Use</a>
+      <!-- <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover"></app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="meteredEnergyStatus">
+      <a (click)="changeStepTab('metered-energy')">
+        <span class="step-number">5</span>Metered Energy</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display" [display]="fieldDataBadge.hover"></app-tabs-tooltip> -->
+    </div>
+  </div>
+</nav>
+<ul class="tabs subtabs ssmt" *ngIf="stepTab == 'steam-model'">
+  <li [ngClass]="{'active': modelTab == 'operations'}">
+    <a class="nav-link small" (click)="changeModelTab('operations')">
+      Operations
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'boiler'}">
+    <a class="nav-link small" (click)="changeModelTab('boiler')">
+      Boiler
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'header'}">
+    <a class="nav-link small" (click)="changeModelTab('header')">
+      Header
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'turbine'}">
+    <a class="nav-link small" (click)="changeModelTab('turbine')">
+      Turbine
+    </a>
+  </li>
+</ul>
+
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
+  <div class="d-flex tabs subtabs ssmt mr-auto">
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+      <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+        <br>
+        <span class="help-text ssmt-view">Novice View</span>
+      </a>
+    </div>
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+        <br>
+        <span class="help-text ssmt-view">Expert View</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- <div class="d-flex align-items-center tabs subtabs ssmt ml-auto" [ngClass]="{'br-color-white': selectedModification}">
+      <div class="mod-name active border-right" *ngIf="selectedModification">
+        <a>{{selectedModification.name}}
+          <br>
+          <span class="help-text ssmt-view">Selected Scenario</span>
+        </a>
+      </div>
+      <div class="mod-name border-right" *ngIf="!selectedModification">
+        <a>&mdash; &mdash;
+          <br>
+          <span class="help-text fsat-view">Selected Scenario</span>
+        </a>
+      </div>
+      <div class="pl-2 pr-2">
+        <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
+      </div>
+    </div> -->
+
+  <nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions'">
+    <!-- <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs> -->
+  </nav>
+</div>

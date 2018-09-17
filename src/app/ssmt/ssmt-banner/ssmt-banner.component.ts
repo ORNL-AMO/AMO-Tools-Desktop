@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { SsmtService } from '../ssmt.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -13,20 +15,25 @@ export class SsmtBannerComponent implements OnInit {
   assessment: Assessment;
 
   mainTab: string;
-  constructor(private router: Router, private assessmentService: AssessmentService) { }
+  mainTabSub: Subscription;
+  constructor(private router: Router, private assessmentService: AssessmentService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    // this.fsatService.mainTab.subscribe(val => {
-    //   this.mainTab = val;
-    // })
+    this.mainTabSub =  this.ssmtService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.mainTabSub.unsubscribe();
   }
 
   changeTab(str: string) {
-    // if (str == 'system-setup' || str == 'calculators') {
-    //   this.fsatService.mainTab.next(str);
-    // } else if (this.assessment.fsat.setupDone) {
-    //   this.fsatService.mainTab.next(str);
-    // }
+    if (str == 'system-setup' || str == 'calculators') {
+      this.ssmtService.mainTab.next(str);
+    } else if (this.assessment.fsat.setupDone) {
+      this.ssmtService.mainTab.next(str);
+    }
   }
 
   goHome() {
