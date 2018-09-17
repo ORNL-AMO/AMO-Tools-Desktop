@@ -1,3 +1,13 @@
-<p>
-  system-basics works!
-</p>
+<div class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>{{assessment.name}} Settings</h3>
+    <br>
+    <a class="no-data-link" *ngIf="showUpdateData" (click)="updateData()">Your units have changed! Click here to update
+      your data to reflect these changes!</a>
+    <span class="data-updated" *ngIf="dataUpdated">Data Updated!</span>
+  </div>
+  <div class="p-4">
+    <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()" [inPsat]="true"></app-application-settings>
+    <app-steam-settings [(settingsForm)]="settingsForm" (save)="save()"></app-steam-settings>
+  </div>
+</div>

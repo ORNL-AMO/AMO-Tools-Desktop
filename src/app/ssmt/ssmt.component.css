@@ -1,0 +1,21 @@
+.ssmt-container{
+    height: 100vh;
+}
+
+.modal-open {
+    z-index: initial !important;
+}
+
+.list-modal{
+    top: .5rem;
+    max-width: 95%;
+    height: 90%;
+}
+
+.list-modal .modal-content{
+    height: 100%;
+}
+
+.list-modal .modal-body{
+    max-height: 80vh;
+}

@@ -10,12 +10,18 @@ import { BoilerComponent } from './boiler/boiler.component';
 import { HeaderComponent } from './header/header.component';
 import { TurbineComponent } from './turbine/turbine.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { SettingsModule } from '../settings/settings.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SettingsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  declarations: [SsmtComponent, SsmtBannerComponent, SystemBasicsComponent, SsmtTabsComponent, OperationsComponent, BoilerComponent, HeaderComponent, TurbineComponent, HelpPanelComponent],
+  declarations: [SsmtComponent, SsmtBannerComponent, SystemBasicsComponent, SsmtTabsComponent, OperationsComponent, BoilerComponent, HeaderComponent, TurbineComponent, HelpPanelComponent, SystemBasicsHelpComponent],
   providers: [SsmtService]
 })
 export class SsmtModule { }

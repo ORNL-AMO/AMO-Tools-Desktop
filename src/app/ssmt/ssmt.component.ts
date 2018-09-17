@@ -4,6 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
+import { Settings } from '../shared/models/settings';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { SettingsService } from '../settings/settings.service';
+import { Directory } from '../shared/models/directory';
+import { DirectoryDbService } from '../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -27,11 +32,15 @@ export class SsmtComponent implements OnInit {
   stepTabSubscription: Subscription;
   modelTabSubscription: Subscription;
   modelTab: string;
-
+  isAssessmentSettings: boolean;
+  settings: Settings;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
-    private ssmtService: SsmtService
+    private ssmtService: SsmtService,
+    private settingsDbService: SettingsDbService,
+    private settingsService: SettingsService,
+    private directoryDbService: DirectoryDbService
   ) { }
 
   ngOnInit() {
@@ -40,43 +49,99 @@ export class SsmtComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        
+        this.getSettings();
       });
     });
     this.subscribeTabs();
   }
   
-  ngOnDestory(){
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.getContainerHeight();  
+    },100)
+  }
+
+  ngOnDestory() {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
   }
 
-
-  subscribeTabs(){
+  subscribeTabs() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     })
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
       this.stepTab = val;
+      this.getContainerHeight();
     })
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
+      this.getContainerHeight();
     })
   }
+  
+  saveSettings(newSettings: Settings) {
+    this.settings = newSettings;
+    //TODO:implement saving settings
+    if (this.isAssessmentSettings) {
+      this.indexedDbService.putSettings(this.settings).then(() => {
+        this.settingsDbService.setAll().then(() => {
+        });
+      })
+    }
+  }
 
-  back(){
+
+  getSettings() {
+    let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    if (tmpSettings) {
+      this.settings = tmpSettings;
+      this.isAssessmentSettings = true;
+    } else {
+      //if no settings found for assessment, check directory settings
+      this.getParentDirectorySettings(this.assessment.directoryId);
+    }
+  }
+
+  getParentDirectorySettings(parentId: number) {
+    let dirSettings: Settings = this.settingsDbService.getByDirectoryId(parentId);
+    if (dirSettings) {
+      let settingsForm = this.settingsService.getFormFromSettings(dirSettings);
+      let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
+      tmpSettings.assessmentId = this.assessment.id;
+      //create settings for assessment
+      this.indexedDbService.addSettings(tmpSettings).then(
+        results => {
+          this.settingsDbService.setAll().then(() => {
+            // this.addToast('Settings Saved');
+            this.getSettings();
+          })
+        })
+    }
+    else {
+      //if no settings for directory check parent directory
+      let tmpDir: Directory = this.directoryDbService.getById(parentId);
+      this.getParentDirectorySettings(tmpDir.parentDirectoryId);
+    }
+  }
+  back() {
 
   }
 
-  goToReport(){
+  goToReport() {
 
   }
 
-  continue(){
+  continue() {
 
   }
 
-  getCanContinue(){
+  getCanContinue() {
     return false;
   }
 

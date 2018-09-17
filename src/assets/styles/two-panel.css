@@ -111,6 +111,11 @@
    border-bottom: #2C3E50 solid 2px;
 }
 
+.ssmt .header{
+    border-bottom: #607D8B solid 2px;
+ }
+  
+
 .general .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #145A32;
     transition: all .5s ease-in-out;
@@ -210,6 +215,10 @@
 
 .phast .group-label{
     border-bottom: #BF3D00 groove 2px;
+}
+
+.ssmt .group-label{
+    border-bottom: #607D8B groove 2px;
 }
 
 
@@ -382,5 +391,10 @@
 
     .fsat .scroll-item::-webkit-scrollbar-thumb{
         background-color: #FFE400;
+        outline: 1px solid slategrey;
+    }
+
+    .ssmt .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #607D8B;
         outline: 1px solid slategrey;
     }

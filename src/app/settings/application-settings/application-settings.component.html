@@ -34,11 +34,11 @@
             <input type="radio" name="unitsOfMeasure" id="Imperial" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial</label>
         </div>
         <div class="d-flex">
-          <label class="w-100" for="Imperial">
+          <label class="w-100" for="Metric">
             <input type="radio" name="unitsOfMeasure" id="Metric" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric</label>
         </div>
         <div class="d-flex" *ngIf="inPsat">
-          <label class="w-100" for="Imperial">
+          <label class="w-100" for="Custom">
             <input type="radio" name="unitsOfMeasure" id="Custom" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom</label>
         </div>
       </div>
