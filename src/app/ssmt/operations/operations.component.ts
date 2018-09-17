@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SSMT } from '../../shared/models/ssmt';
 import { Settings } from '../../shared/models/settings';
 
@@ -12,10 +12,14 @@ export class OperationsComponent implements OnInit {
   ssmt: SSMT;
   @Input()
   settings: Settings;
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
+  
   constructor() { }
 
   ngOnInit() {
   }
-
+  save(){
+    this.emitSave.emit(true);
+  }
 }

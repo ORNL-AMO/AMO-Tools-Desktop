@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SSMT } from '../../../shared/models/ssmt';
 import { OperatingHours } from '../../../shared/models/operations';
 
@@ -10,6 +10,8 @@ import { OperatingHours } from '../../../shared/models/operations';
 export class OperatingHoursComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   timeError: string = null;
   weeksPerYearError: string = null;
   daysPerWeekError: string = null;
@@ -32,6 +34,10 @@ export class OperatingHoursComponent implements OnInit {
     } else if (!this.operatingHours.hoursPerYear) {
       this.calculatHrsPerYear();
     }
+  }
+
+  save(){
+    this.emitSave.emit(true);
   }
 
   calculatHrsPerYear() {
@@ -62,7 +68,6 @@ export class OperatingHoursComponent implements OnInit {
       this.hoursPerShiftError = null;
     }
 
-    // this.startSavePolling();
     this.operatingHours.isCalculated = true;
     this.operatingHours.hoursPerYear = this.operatingHours.hoursPerShift * this.operatingHours.shiftsPerDay * this.operatingHours.daysPerWeek * this.operatingHours.weeksPerYear;
     if(this.operatingHours.hoursPerYear > 8760){
@@ -70,13 +75,13 @@ export class OperatingHoursComponent implements OnInit {
     }else{
       this.hoursPerYearError = null;
     }
-
+    this.save();
     // this.operatingHours.hoursPerYear = this.operatingHours.hoursPerYear.toFixed(0);
   }
 
   setNotCalculated() {
-    // this.startSavePolling();
     this.operatingHours.isCalculated = false;
+    this.save();
   }
 
   addShift() {

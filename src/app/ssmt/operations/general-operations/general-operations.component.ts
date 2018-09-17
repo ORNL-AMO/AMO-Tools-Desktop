@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GeneralSteamOperations } from '../../../shared/models/ssmt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -12,13 +12,14 @@ export class GeneralOperationsComponent implements OnInit {
   generalSteamOperations: GeneralSteamOperations;
   @Input()
   settings: Settings;
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
   }
 
   save(){
-    
+    this.emitSave.emit(true);
   }
 }

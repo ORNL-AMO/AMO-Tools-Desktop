@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingCosts } from '../../../shared/models/operations';
 import { Settings } from 'electron';
 
@@ -12,9 +12,14 @@ export  class OperatingCostsComponent implements OnInit {
   operatingCosts: OperatingCosts;
   @Input()
   settings: Settings;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
   }
 
+  save(){
+    this.emitSave.emit(true);
+  }
 }

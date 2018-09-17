@@ -10,6 +10,7 @@ import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { SSMT } from '../shared/models/ssmt';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -41,7 +42,8 @@ export class SsmtComponent implements OnInit {
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
     private settingsService: SettingsService,
-    private directoryDbService: DirectoryDbService
+    private directoryDbService: DirectoryDbService,
+    private assessmentDbService: AssessmentDbService
   ) { }
 
   ngOnInit() {
@@ -86,7 +88,6 @@ export class SsmtComponent implements OnInit {
   
   saveSettings(newSettings: Settings) {
     this.settings = newSettings;
-    //TODO:implement saving settings
     if (this.isAssessmentSettings) {
       this.indexedDbService.putSettings(this.settings).then(() => {
         this.settingsDbService.setAll().then(() => {
@@ -94,7 +95,6 @@ export class SsmtComponent implements OnInit {
       })
     }
   }
-
 
   getSettings() {
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -119,7 +119,6 @@ export class SsmtComponent implements OnInit {
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
           this.settingsDbService.setAll().then(() => {
-            // this.addToast('Settings Saved');
             this.getSettings();
           })
         })
@@ -130,6 +129,17 @@ export class SsmtComponent implements OnInit {
       this.getParentDirectorySettings(tmpDir.parentDirectoryId);
     }
   }
+
+  save(){
+    this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
+    this.indexedDbService.putAssessment(this.assessment).then(results => {
+      this.assessmentDbService.setAll().then(() => {
+        console.log('saved');
+        // this.fsatService.updateData.next(true);
+      })
+    })
+  }
+
   back() {
 
   }
