@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
+      <app-energy-use-form [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
         (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
     </div>
   </div>
@@ -77,103 +77,3 @@
     </div>
   </div>
 </div>
-
-
-<!-- 
-
-<div class="modify-conditions panel-container row phast" *ngIf="settings">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/flow.png" class="ico-size2">
-          </div>
-          <div class="col">
-            <h3>Flow and Energy Used Calculator</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-              (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="row">
-            <ul class="tabs primary tab-row">
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
-              </li>
-              <!--
-              --
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-              </li>
-            </ul>
-          </div>
-          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11">
-              <div class="output-summary energy-use-summary">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <th>Flow</th>
-
-                      <td>
-                        {{flowCalculationResults.flow | number:'2.0-0'}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          Scfh
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          Nm
-                          <sup>3</sup>/hr
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Total Flow</th>
-
-                      <td>
-                        {{flowCalculationResults.totalFlow | number:'2.0-0'}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          Scf
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          Nm
-                          <sup>3</sup>
-
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Energy Use</th>
-                      <td>
-                        {{flowCalculationResults.heatInput | number:'2.0-0'}}
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          MMBtu
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          GJ
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-            <div class="col-11">
-              <div class="calc-help">
-                <app-energy-use-help [currentField]="currentField"></app-energy-use-help>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

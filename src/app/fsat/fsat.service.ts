@@ -9,7 +9,7 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.component';
+import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 
 
 declare var fanAddon: any;

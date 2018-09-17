@@ -223,6 +223,7 @@ export class PsatComponent implements OnInit {
   }
 
   initSankeyList() {
+    console.log('init sankey list');
     this.psatOptions = new Array<any>();
     this.psatOptions.push({ name: 'Baseline', psat: this._psat });
     this.psat1 = this.psatOptions[0];

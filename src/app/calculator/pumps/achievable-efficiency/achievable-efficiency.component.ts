@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
