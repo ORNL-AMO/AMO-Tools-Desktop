@@ -17,6 +17,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
+import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
     ModelService,
     ConvertUnitsService,
     UpdateDataService,
-    SvgToPngService
+    SvgToPngService,
+    LineChartHelperService
   ]
 })
 
