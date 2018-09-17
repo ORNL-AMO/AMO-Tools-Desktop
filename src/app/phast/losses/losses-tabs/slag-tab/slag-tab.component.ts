@@ -24,8 +24,7 @@ export class SlagTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
-  compareSubscription: Subscription;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private slagService: SlagService, private slagCompareService: SlagCompareService, private cd: ChangeDetectorRef) { }
 
@@ -37,17 +36,10 @@ export class SlagTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.slagCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 

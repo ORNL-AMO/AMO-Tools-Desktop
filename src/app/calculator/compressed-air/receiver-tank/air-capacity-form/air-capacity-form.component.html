@@ -1,52 +1,61 @@
-<div class="form-section">
-  <div class="form-group">
-    <label for="tankSize">Receiver Tank Size</label>
-    <div class="input-group">
-      <input name="tankSize" class="form-control" type="number" step="any" [(ngModel)]="inputs.tankSize" id="tankSize" (input)="getAirCapacity()"
-        onfocus="this.select();" (focus)="changeField('tankSize')">
-      <span class="input-group-addon units">gal</span>
+<div class="tab-content">
+  <form>
+    <div class="form-section">
+      <div class="form-group">
+        <label for="tankSize">Receiver Tank Size</label>
+        <div class="input-group">
+          <input name="tankSize" class="form-control" type="number" step="any" [(ngModel)]="inputs.tankSize" id="tankSize" (input)="getAirCapacity()"
+            onfocus="this.select();" (focus)="changeField('tankSize')">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="airPressureIn">Air Pressure In</label>
+        <div class="input-group">
+          <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
+            (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="airPressureOut">Air Pressure Out</label>
+        <div class="input-group">
+          <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
+            (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="airPressureIn">Air Pressure In</label>
-    <div class="input-group">
-      <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
-        (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
-      <span class="input-group-addon units">psi</span>
+    <div class="form-section">
+      <div class="form-group">
+        <label class="bold">Tank Volume</label>
+        <div class="text-center small">
+          <span *ngIf="tankCubicFoot">
+            <strong>{{tankCubicFoot | number:'1.0-2'}} </strong>
+            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
+          </span>
+          <span *ngIf="!tankCubicFoot">
+            <strong>&mdash; &mdash;</strong>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="bold">Air Capacity</label>
+        <div class="text-center small">
+          <span *ngIf="airCapacity">
+            <strong>{{airCapacity | number:'1.0-2'}} </strong>
+            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
+          </span>
+          <span *ngIf="!airCapacity">
+            <strong>&mdash; &mdash;</strong>
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="airPressureOut">Air Pressure Out</label>
-    <div class="input-group">
-      <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
-        (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
-      <span class="input-group-addon units">psi</span>
-    </div>
-  </div>
-</div>
-<div class="form-section">
-  <div class="form-group">
-    <label class="bold">Tank Cubic Foot</label>
-    <div class="text-center small">
-      <span *ngIf="tankCubicFoot">
-        <strong>{{tankCubicFoot | number:'1.0-2'}} ft
-          <sup>2</sup>
-        </strong>
-      </span>
-      <span *ngIf="!tankCubicFoot">
-        <strong>&mdash; &mdash;</strong>
-      </span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="bold">Air Capacity</label>
-    <div class="text-center small">
-      <span *ngIf="airCapacity">
-        <strong>{{airCapacity | number:'1.0-2'}}</strong>
-      </span>
-      <span *ngIf="!airCapacity">
-        <strong>&mdash; &mdash;</strong>
-      </span>
-    </div>
-  </div>
+  </form>
 </div>

@@ -1,53 +1,39 @@
-<div class="output-summary">
-  <div class="summary-table">
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td>
-            Existing Apparent Power
-          </td>
-          <td>
-            {{results.existingApparentPower | number:'1.2-2'}} kVA
-          </td>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Existing Apparent Power</td>
+      <td class="text-center w-50">
+        {{results.existingApparentPower | number:'1.2-2'}} kVA
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Existing Reactive Power</td>
+      <td class="text-center w-50">
 
-        </tr>
-        <tr>
-          <td>
-            Existing Reactive Power
-          </td>
-          <td>
-            {{results.existingReactivePower | number:'1.2-2'}} kVAR
-          </td>
+        {{results.existingReactivePower | number:'1.2-2'}} kVAR
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Proposed Apparent Power</td>
+      <td class="text-center w-50">
 
-        </tr>
-        <tr>
-          <td>
-            Proposed Apparent Power
-          </td>
-          <td>
-            {{results.proposedApparentPower | number:'1.2-2'}} kVA
-          </td>
+        {{results.proposedApparentPower | number:'1.2-2'}} kVA
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">
+        Proposed Reactive Power
+      </td>
+      <td class="text-center w-50">
 
-        </tr>
-        <tr>
-          <td>
-            Proposed Reactive Power
-          </td>
-          <td>
-            {{results.proposedReactivePower | number:'1.2-2'}} kVAR
-          </td>
-
-        </tr>
-        <tr>
-          <td>
-            Capacitance Power Required
-          </td>
-          <td>
-            {{results.capacitancePowerRequired | number:'1.2-2'}} kVAR
-          </td>
-
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        {{results.proposedReactivePower | number:'1.2-2'}} kVAR
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50"> Capacitance Power Required</td>
+      <td class="text-center w-50">
+        {{results.capacitancePowerRequired | number:'1.2-2'}} kVAR
+      </td>
+    </tr>
+  </tbody>
+</table>

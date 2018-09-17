@@ -1,11 +1,4 @@
-#gridToggle{
-  position: absolute;
-  z-index: 9999;
-
-  left: 30px
-}
-
-.grid .tick { 
+.grid .tick {
   stroke: lightgrey;
   opacity: 0.7;
 }
@@ -14,36 +7,25 @@
   stroke-width: 0;
 }
 
-
-.key-color {
-  border-radius: 12px;
-  padding: 8px;
-  box-sizing: border-box;
-  width: 5px;
-  height: 5px;
-  margin: auto;
+tr>td, tr>th {
+  text-align: center;
 }
 
-tr > td,
-tr > th{
-    text-align: center;
-}
-
-tr > td {
-    vertical-align: middle;
+tr>td {
+  vertical-align: middle;
 }
 
 .graph-table {
-  width: 100%;
   text-align: center;
 }
 
 .expanded-chart {
-  padding: 10px;
+  padding: 5px;
 }
 
 .graph-table td, .graph-table th {
   font-size: 14px;
+  padding: 3px;
 }
 
 .graph-table tr {
@@ -84,4 +66,13 @@ tr > td {
 .delete-row:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.key-color {
+  border-radius: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+  width: 5px;
+  height: 5px;
+  margin: auto;
 }

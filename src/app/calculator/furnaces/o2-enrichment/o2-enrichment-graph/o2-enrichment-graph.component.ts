@@ -109,19 +109,16 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.isGridToggled = false;
 
-    this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
+    this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-secondary")
       .on("click", () => {
         this.plotLine();
-      });
-
-    d3.select('app-o2-enrichment').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
       });
   }
 
   ngAfterViewInit() {
-    this.resizeGraph();
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -239,9 +236,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-
-    d3.select("app-o2-enrichment").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     this.makeGraph();
     this.onChanges();
   }

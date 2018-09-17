@@ -23,7 +23,7 @@
   </div>
   <div class="d-flex stripe my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="table-text">Pump efficiency (%))</span>
+      <span class="table-text">Pump efficiency (%)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="table-text">{{baselineResults.pump_efficiency | number:'2.0-1'}}</span>
@@ -123,7 +123,7 @@
       <span class="bold table-text">Annual Energy (MWh)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold  table-text">{{modificationResults.annual_energy | number:'2.0-0'}}</span>
+      <span class="bold  table-text">{{baselineResults.annual_energy | number:'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1" *ngIf="!inSetup">
       <span class="bold table-text" *ngIf="modificationResults.annual_energy" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy | number:'2.0-0'}}</span>

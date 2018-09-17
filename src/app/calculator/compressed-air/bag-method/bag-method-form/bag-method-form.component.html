@@ -1,53 +1,68 @@
-<form>
+<div class="tab-content">
+  <form>
 
-  <div class="form-section">
-    <div class="form-group">
-      <label for="fillTime">Bag Fill Time</label>
-      <div class="input-group">
-        <input name="fillTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.bagFillTime" id="fillTime" (input)="emitChange()"
-          onfocus="this.select();" (focus)="changeField('fillTime')">
-        <span class="input-group-addon units">s</span>
+    <div class="row pt-1">
+      <div class="col-12 text-center">
+        <label class="bold">Leak {{index + 1}}</label>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="height">Height of Bag</label>
-      <div class="input-group">
-        <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.heightOfBag" id="height" (input)="emitChange()"
-          onfocus="this.select();" (focus)="changeField('height')">
-        <span class="input-group-addon units">in</span>
+    <div class="form-section pt-1">
+
+      <div class="form-group">
+        <label for="fillTime">Bag Fill Time</label>
+        <div class="input-group">
+          <input name="fillTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.bagFillTime" id="fillTime" (input)="emitChange()"
+            onfocus="this.select();" (focus)="changeField('fillTime')">
+          <span class="input-group-addon units">s</span>
+        </div>
       </div>
+
+      <div class="form-group">
+        <label for="height">Height of Bag</label>
+        <div class="input-group">
+          <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.heightOfBag" id="height" (input)="emitChange()"
+            onfocus="this.select();" (focus)="changeField('height')">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="diameter">Diameter of Bag</label>
+        <div class="input-group">
+          <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameterOfBag" id="diameter" (input)="emitChange()"
+            onfocus="this.select();" (focus)="changeField('diameter')">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="bold">Flow Rate</label>
+        <div class="text-center small">
+          <strong>{{outputs.flowRate | number:'1.0-2'}} </strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="bold">Annual Consumption</label>
+        <div class="text-center small">
+          <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
+          <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
+        </div>
+      </div>
+
     </div>
-    <div class="form-group">
-      <label for="diameter">Diameter of Bag</label>
-      <div class="input-group">
-        <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameterOfBag" id="diameter" (input)="emitChange()"
-          onfocus="this.select();" (focus)="changeField('diameter')">
-        <span class="input-group-addon units">in</span>
+
+    <div class="row btn-delete-leak-container">
+      <div class="col-12 text-center">
+        <span class="small btn-delete-leak" (click)="emitDeleteLeakage()">Delete Leak</span>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="bold">Flow Rate</label>
-      <div class="text-center small">
-        <strong>{{outputs.flowRate | number:'1.0-2'}} SCFM</strong>
-      </div>
-    </div>
-  </div>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="operatingHours">Operating Time</label>
-      <div class="input-group">
-        <input name="operatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.operatingTime" id="operatingHours"
-          (input)="emitChange()" onfocus="this.select();" (focus)="changeField('operatingHours')">
-        <span class="input-group-addon units">hrs/yr</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="bold">Annual Compressed Air Leakage</label>
-      <div class="text-center small">
-        <strong>{{outputs.annualConsumption | number:'1.0-2'}} SCF</strong>
-      </div>
-    </div>
-  </div>
-</form>
+  </form>
+</div>

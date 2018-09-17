@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
+import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -7,7 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./receiver-tank.component.css']
 })
 export class ReceiverTankComponent implements OnInit {
-  methods: Array<any> = [
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+  
+  methods: Array<{name: string, value: number}> = [
     {
       name: 'General',
       value: 0
@@ -25,16 +38,47 @@ export class ReceiverTankComponent implements OnInit {
       value: 3
     }
   ];
-  method: number = 0;
+  method: number;
 
   currentField: string = 'default';
-  constructor() {
+  currentForm: string;
+  constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
-
+    this.method = this.compressedAirService.recieverTankMethod;
   }
-  changeField(str: string) {
+  ngOnDestroy(){
+    this.compressedAirService.recieverTankMethod = this.method;
+  }
+  changeField(str: string, formStr: string) {
     this.currentField = str;
+    this.currentForm = formStr;
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+
+  setCurrentForm(){
+    if(this.method == 0){
+      this.currentForm = 'general-method';
+    }else if(this.method == 1){
+      this.currentForm = 'dedicated-storage';
+    }else if(this.method == 2){
+      this.currentForm = 'metered-storage';
+    }else if(this.method == 3){
+      this.currentForm = 'delay-method';
+    }else{
+      this.currentForm = 'air-capacity';
+    }
   }
 }

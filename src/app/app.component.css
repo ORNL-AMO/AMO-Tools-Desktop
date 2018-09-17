@@ -311,7 +311,6 @@ select.form-control:not([size]):not([multiple]) {
  }
 
  .calc-addon-group{
-          width: 50%;
      min-width: 150px;
  }
  .incrementor .units{
@@ -709,12 +708,7 @@ Assessments: List View
       background-size: 15px;
       padding-left: 22px;
     }
-    .list-row.psat .assessment-name a {
-      background-image: url('../assets/images/ico-psat-diagram-small.png');
-    }
-    .list-row.phast .assessment-name a {
-      background-image: url('../assets/images/ico-phast-diagram-small.png');
-    }
+
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -974,14 +968,6 @@ Sidebar
 .sidebar-group li.sub-directory > span {
   padding: 0;
 }
-  /* .sidebar-group .assessments .psat .sidebar-icon  {
-    background-image: url('../assets/images/ico-psat-diagram-small.png');
-  }
-  .sidebar-group .assessments .phast .sidebar-icon {
-    background-image: url('../assets/images/ico-phast-diagram-small.png');
-  } */
-
-
 
 /*
 Content Container
@@ -1117,7 +1103,7 @@ Calculators
 
 .ico-size2 {
   height: 55px;
-  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(255, 0, 22, 0.42));
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
   /*background-color: rgba(41, 128, 185, 0);*/
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
@@ -1803,8 +1789,8 @@ Toasty Overrides ================================= */
 
 .expanded-chart {
   position: fixed;
-  top: 80px;
-  bottom: 80px;
+  top: 75px;
+  bottom: 75px;
   left: 20px;
   right: 20px;
   width: auto;
@@ -1814,10 +1800,23 @@ Toasty Overrides ================================= */
   box-shadow: 0px 0px 20px #000;
 }
 
+.graph-btn-container {
+  display: inline-block;
+  padding: 5px;
+}
+
+.fa-bar-chart {
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
 
 /* chart download icon */
 .fa-download {
-  position: absolute;
+  position: relative;
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
@@ -1827,7 +1826,6 @@ Toasty Overrides ================================= */
 }
 
 .fa-expand {
-  position: absolute;
   opacity: 0.6;
   padding: 5px;
   border-radius: 2px;
@@ -1837,57 +1835,19 @@ Toasty Overrides ================================= */
 }
 
 .fa-compress {
-  /* position: absolute; */
   color: rgba(255, 0, 0, 1);
   background-color: rgba(255, 0, 0, 0.1);
-  /* opacity: 0.6; */
   padding: 5px;
   border-radius: 2px;
-  /* background-color: #dcdcdc; */
   border: 1px solid transparent;
   transition: ease-in-out 0.2s all;
 }
 
-.percent-chart-btn {
-  left: -15%;
-  top: 105%;
+.fa-bar-chart:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
 }
-
-.percent-chart-table-btn {
-  left: 0;
-  top: 5px;
-}
-
-.pie-chart-btn {
-  left: 30px;
-  bottom: 5px;
-}
-
-.bar-chart-btn {
-  left: -10px;
-  bottom: 10px;
-}
-
-.rollup-bar-chart-btn {
-  bottom: 10px;
-}
-
-
-#gridToggle .fa-download {
-  left: 55px;
-}
-
-#gridToggle .fa-expand {
-  left: 94px;
-  top: 0px;
-}
-
-#gridToggle .fa-compress {
-  left: 94px;
-  top: 0px;
-}
-
-
 
 .fa-download:hover {
   cursor: pointer;
@@ -1909,13 +1869,46 @@ Toasty Overrides ================================= */
   background-color: rgba(255, 0, 0, 1);
 }
 
-/* .chart-container .fa-download:hover,
-#gridToggle .fa-download:hover {
-  cursor: pointer;
-  opacity: 1;
-  border-color: #212529;
-} */
+/* modal checklist style */
+.bold-bottom-divider {
+  border-bottom: 2px solid #888;
+}
 
+.bottom-divider {
+  border-bottom: 1px solid #bbb;
+}
+
+.toggle-btn:hover {
+  cursor: pointer;
+}
+
+.pad-top-10 {
+  padding-top: 10px;
+}
+
+.percent-chart-table-btn {
+  left: 0;
+  /* top: 5px; */
+}
+
+.pie-chart-btn {
+  left: 30px;
+  bottom: 5px;
+}
+
+.bar-chart-btn {
+  left: -10px;
+  bottom: 10px;
+}
+
+.rollup-bar-chart-btn {
+  bottom: 10px;
+}
+
+
+.exportable-table-container {
+  width: 100%;
+}
 
 .show-print{
   display: none;

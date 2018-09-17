@@ -1,75 +1,74 @@
-<div class="help-header" *ngIf="!inPreAssessment">
+<div class="p-2 pt-3 d-flex flex-column help-info" *ngIf="!inPreAssessment">
+  <h5>
+    Metered Energy Help
+    <br>
+    <small class="text-muted">
+      Enter data about the energy of processing heating equipment based on metered steam use. This allows the user to compare PHAST
+      calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
+      metered steam energy used by the measurement period (hours/days/weeks).
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Metered Energy Help</h3>
-  <p>Enter data about the energy of processing heating equipment based on metered steam use. This allows the user to compare
-    PHAST calculations to the meter data of the equipment. This method calculates total energy used by a furnace by multiplying
-    metered steam energy used by the measurement period (hours/days/weeks).</p>
+
+  <div class="my-2" *ngIf="currentField == 'totalHeatSteam'">
+    <h6>
+      Heat Content of Steam
+      <br>
+      <small class="text-muted">
+        Total heat contained in steam. This can be calculated with the steam properties tool, based on the temperature and pressure
+        of the steam.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Steam Flow During Data Collection
+      <br>
+      <small class="text-muted">
+        Metered flow rate of steam, as measured during the collection period.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'collectionTime'">
+    <h6>
+      Steam Collection Time
+      <br>
+      <small class="text-muted">
+        Time period over which steam meter data was collected.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricityUsed'">
+    <h6>
+      Electicity Used During Calcuation
+      <br>
+      <small class="text-muted">
+        Metered electricity used by auxiliary equipment during collection period.
+      </small>
+    </h6>
+  </div>
+
+  
+  <div class="my-2" *ngIf="currentField == 'electricityCollectionTime'">
+    <h6>
+      Collection Time (Aux. Equipment)
+      <br>
+      <small class="text-muted">
+        Time period over which auxiliary electricity meter data was collected.
+      </small>
+    </h6>
+  </div>
+
+
+</div>
+
   <!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
   </p>-->
-
-</div>
-
-
-<div class="help-content">
-
-  <div class="card" *ngIf="currentField == 'totalHeatSteam'">
-    <div class="card-header">
-      Heat Content of Steam
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Total heat contained in steam. This can be calculated with the steam properties tool, based on the temperature and pressure of the steam.
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'flowRate'">
-    <div class="card-header">
-      Steam Flow during Data Collection
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Metered flow rate of steam, as measured during the collection period
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'collectionTime'">
-    <div class="card-header">
-      Steam Collection Time
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Time period over which steam meter data was collected
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electricityUsed'">
-    <div class="card-header">
-      Electicity Used During Calcuation
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-         Metered electricity used by auxiliary equipment during collection period
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electricityCollectionTime'">
-    <div class="card-header">
-      Collection Time (Aux. Equipment)
-    </div>
-    <div class="card-header">
-      <strong><u>Description:</u></strong>
-      <p>
-        Time period over which auxiliary electricity meter data was collected
-      </p>
-    </div>
-  </div>
-</div>

@@ -15,24 +15,24 @@ export class SteamPropertiesTableComponent implements OnInit {
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
 
   rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
-  pressureUnits: string;
-  tempUnits: string;
-  enthalpyUnits: string;
-  entropyUnits: string;
-  volumeUnits: string;
 
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
-    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+    if (this.steamService.steamPropertiesData) {
+      this.rowData = this.steamService.steamPropertiesData;
+    }else{
+      this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+    }
   }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && !changes.data.firstChange) {
       this.addRow();
     }
   }
-
+  ngOnDestroy(){
+    this.steamService.steamPropertiesData = this.rowData;
+  }
   addRow() {
     if (this.data !== null) {
       this.rowData.push(this.data);

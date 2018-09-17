@@ -66,3 +66,17 @@
 .red{
     color: red;
 }
+
+/* .skyline{
+	position: relative;
+	bottom: 0;
+	opacity: .75;
+} */
+
+.skyline{
+    background-image: url('../../assets/images/industrial-skyline.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center; 
+    background-size: 100%;
+}

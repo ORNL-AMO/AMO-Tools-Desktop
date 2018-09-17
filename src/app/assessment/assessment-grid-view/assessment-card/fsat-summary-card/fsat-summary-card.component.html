@@ -7,7 +7,7 @@
       Annual Energy Use:
     </td>
     <td>
-      {{fsatResults.annualEnergy | number:'2.0-0'}} kWh
+      {{fsatResults.annualEnergy | number:'2.0-0'}} MWh
     </td>
   </tr>
   <tr>
@@ -36,7 +36,7 @@
       Max Energy Savings:
     </td>
     <td>
-      {{maxEnergySavings | number:'2.0-0'}} kWh
+      {{maxEnergySavings | number:'2.0-0'}} MWh
     </td>
   </tr>
   <tr *ngIf="maxCostSavings">
@@ -87,7 +87,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" *ngIf="showReport">
+      <div class="modal-body scroll-item" *ngIf="showReport">
         <app-fsat-report [assessment]="assessment" [settings]="settings" [fsat]="assessment.fsat" [inRollup]="false" [inFsat]="true"
           [quickReport]="true"></app-fsat-report>
       </div>

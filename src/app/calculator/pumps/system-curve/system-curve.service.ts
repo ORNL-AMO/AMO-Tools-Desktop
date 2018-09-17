@@ -9,6 +9,20 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 @Injectable()
 export class SystemCurveService {
 
+  pumpPointOne: { form: FormGroup, fluidPower: number };
+  pumpPointTwo: { form: FormGroup, fluidPower: number };
+  pumpCurveConstants: { form: FormGroup };
+  pumpStaticHead: number;
+  pumpLossCoefficient: number;
+  // pumpTableData: Array<Array<string>>;
+  // pumpKeyColors: Array<{ borderColor: string, fillColor: string }>;
+  fanPointOne: { form: FormGroup, fluidPower: number };
+  fanPointTwo: { form: FormGroup, fluidPower: number };
+  fanCurveConstants: { form: FormGroup };
+  fanStaticHead: number;
+  fanLossCoefficient: number;
+  // fanTableData: Array<Array<string>>;
+  // fanKeyColors: Array<{ borderColor: string, fillColor: string }>;
   constructor(private psatService: PsatService, private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   getLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {

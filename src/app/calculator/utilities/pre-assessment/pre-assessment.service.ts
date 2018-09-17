@@ -9,15 +9,12 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class PreAssessmentService {
 
-  //unitOfMeasurement: string;
+  standaloneInputData: Array<PreAssessment>;
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
 
   getResults(preAssessments: Array<PreAssessment>, settings: Settings, resultType: string): Array<{ name: string, percent: number, value: number, color: string, energyCost: number }> {
-
-    // this.unitOfMeasurement = unitOfMeasurement;
     let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
-
     //calculation logic to get results (in pre-assessment.component.ts)
     preAssessments.forEach(assessment => {
       if (assessment.type == 'Metered') {

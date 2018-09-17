@@ -15,18 +15,10 @@ export class PsatService {
     flaMax: 0
   };
 
-  mainTab: BehaviorSubject<string>;
-  secondaryTab: BehaviorSubject<string>;
-  calcTab: BehaviorSubject<string>;
   baseline: PSAT;
   getResults: BehaviorSubject<boolean>;
-  modifyConditionsTab: BehaviorSubject<string>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve');
     this.getResults = new BehaviorSubject<boolean>(true);
-    this.modifyConditionsTab = new BehaviorSubject<string>('field-data');
   }
 
   test() {
@@ -47,7 +39,7 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
-    if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
+    if (settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature) {
       psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     return psatInputs;
@@ -658,7 +650,7 @@ export class PsatService {
     }
     else if (num == 1) {
       fixedSpeed = 'No';
-    }else{
+    } else {
       fixedSpeed = 'Yes';
     }
     return fixedSpeed;
@@ -708,7 +700,7 @@ export class PsatService {
       'fixedSpeed': ['Yes', Validators.required],
       'frequency': ['', Validators.required],
       'horsePower': ['', Validators.required],
-      'motorRPM': ['', Validators.required],
+      'motorRPM': ['', [Validators.required, Validators.min(1)]],
       'efficiencyClass': ['', Validators.required],
       'efficiency': [''],
       'motorVoltage': ['', Validators.required],
@@ -724,14 +716,23 @@ export class PsatService {
       'measuredVoltage': ['', Validators.required],
       'optimizeCalculation': [''],
       'implementationCosts': ['']
-    })}
+    })
+  }
 
   getFormFromPsat(psatInputs: PsatInputs): FormGroup {
+    let motorAmpsValidators: Array<Validators> = new Array<Validators>();
+    let motorKwValidators: Array<Validators> = new Array<Validators>();
     if (!psatInputs.fixed_speed) {
       psatInputs.fixed_speed = 0;
     }
     if (!psatInputs.margin) {
       psatInputs.margin = 0;
+    }
+
+    if(psatInputs.load_estimation_method == 0){
+      motorKwValidators = [Validators.required];
+    }else{
+      motorAmpsValidators = [Validators.required];
     }
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
     let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
@@ -750,7 +751,7 @@ export class PsatService {
       'fixedSpeed': [fixedSpeed, Validators.required],
       'frequency': [lineFreq, Validators.required],
       'horsePower': [psatInputs.motor_rated_power, Validators.required],
-      'motorRPM': [psatInputs.motor_rated_speed, (Validators.required, Validators.min(1))],
+      'motorRPM': [psatInputs.motor_rated_speed, [Validators.required, Validators.min(1)]],
       'efficiencyClass': [effClass, Validators.required],
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
@@ -761,13 +762,13 @@ export class PsatService {
       'flowRate': [psatInputs.flow_rate, Validators.required],
       'head': [psatInputs.head, Validators.required],
       'loadEstimatedMethod': [loadEstMethod, Validators.required],
-      'motorKW': [psatInputs.motor_field_power],
-      'motorAmps': [psatInputs.motor_field_current],
+      'motorKW': [psatInputs.motor_field_power, motorKwValidators],
+      'motorAmps': [psatInputs.motor_field_current, motorAmpsValidators],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
       'optimizeCalculation': [psatInputs.optimize_calculation],
       'implementationCosts': [psatInputs.implementationCosts],
       'fluidType': [psatInputs.fluidType],
-      'fluidTemperature': [psatInputs.fluidTemperature]
+      'fluidTemperature': [psatInputs.fluidTemperature, Validators.required]
     })
   }
 
@@ -820,7 +821,8 @@ export class PsatService {
       form.controls.pumpRPM.status == 'VALID' &&
       form.controls.drive.status == 'VALID' &&
       form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID'
+      form.controls.stages.status == 'VALID' && 
+      form.controls.fluidTemperature.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom
       if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
@@ -868,7 +870,9 @@ export class PsatService {
       form.controls.head.status == 'VALID' &&
       form.controls.loadEstimatedMethod.status == 'VALID' &&
       form.controls.measuredVoltage.status == 'VALID' &&
-      form.controls.costKwHr.status == 'VALID'
+      form.controls.costKwHr.status == 'VALID' &&
+      form.controls.motorKW.status == 'VALID' &&
+      form.controls.motorAmps.status == 'VALID'
     ) {
       //TODO check motorAMPS or motorKW
       return true
@@ -877,146 +881,4 @@ export class PsatService {
       return false;
     }
   }
-
-  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
-    let tmpFlowRate;
-    let response = {
-      valid: null,
-      message: null
-    };
-    //convert
-    if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
-    } else {
-      tmpFlowRate = flowRate;
-    }
-    //get min max
-    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
-    //check in range
-    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
-      response.valid = true;
-      return response;
-    } else if (tmpFlowRate < flowRateRange.min) {
-      response.valid = false;
-      response.message = 'Flow Rate too Small for Selected Pump Style';
-      return response;
-    } else if (tmpFlowRate > flowRateRange.max) {
-      response.valid = false;
-      response.message = 'Flow Rate too Large for Selected Pump Style';
-      return response;
-    } else {
-      return response;
-    }
-  }
-
-  getFlowRateMinMax(pumpStyle: number) {
-    //min/max values from Daryl
-    let flowRate = {
-      min: 1,
-      max: 10000000000000000000
-    }
-    if (pumpStyle == 0) {
-      flowRate.min = 100;
-      flowRate.max = 20000;
-      return flowRate;
-    }
-    else if (pumpStyle == 1 || pumpStyle == 3) {
-      flowRate.min = 100;
-      flowRate.max = 22500;
-      return flowRate;
-    } else if (pumpStyle == 2 || pumpStyle == 4) {
-      flowRate.min = 400;
-      flowRate.max = 22000;
-      return flowRate;
-    } else if (pumpStyle == 5) {
-      flowRate.min = 100;
-      flowRate.max = 4000;
-      return flowRate;
-    } else if (pumpStyle == 6) {
-      flowRate.min = 100;
-      flowRate.max = 5000;
-      return flowRate;
-    } else if (pumpStyle == 10) {
-      flowRate.min = 5000;
-      flowRate.max = 100000;
-      return flowRate;
-    } else if (pumpStyle == 8) {
-      flowRate.min = 200;
-      flowRate.max = 100000;
-      return flowRate;
-    } else if (pumpStyle == 7 || pumpStyle == 9) {
-      flowRate.min = 200;
-      flowRate.max = 40000;
-      return flowRate;
-    } else {
-      return flowRate;
-    }
-  }
-
-  checkMotorRpm(lineFreqEnum: number, motorRPM: number, effClass: number) {
-    let response = {
-      valid: null,
-      message: null
-    };
-    let range = this.getMotorRpmMinMax(lineFreqEnum, effClass);
-      if (motorRPM >= range.min && motorRPM <= range.max) {
-        response.valid = true;
-        return response;
-      } else if (motorRPM < range.min) {
-        response.valid = false;
-        response.message = 'Motor RPM too small for selected efficiency class';
-        return response;
-      } else if (motorRPM > range.max) {
-        response.valid = false;
-        response.message = 'Motor RPM too large for selected efficiency class';
-        return response;
-      } else {
-        return response;
-      }
-  }
-
-  getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {
-    let rpmRange = {
-      min: 1,
-      max: 3600
-    }
-    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1 )) { // if 60Hz and Standard or Energy Efficiency
-      rpmRange.min = 540;
-      rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && (effClass == 0 ||  effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
-      rpmRange.min = 450;
-      rpmRange.max = 3300;
-    } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
-      rpmRange.min = 1080;
-      rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
-      rpmRange.min = 900;
-      rpmRange.max = 3000;
-    }
-    return rpmRange;
-  }
-
-  checkMotorVoltage(voltage: number) {
-    let response = {
-      valid: null,
-      message: null
-    };
-
-    if (voltage >= 208 && voltage <= 15180) {
-      response.valid = true;
-      return response;
-    } else if (voltage < 208) {
-      response.valid = false;
-      response.message = "Voltage value is too small."
-      return response;
-    } else if (voltage > 15180) {
-      response.valid = false;
-      response.message = "Voltage value is too large";
-    } else {
-      return response;
-    }
-  }
-
-
-
 }

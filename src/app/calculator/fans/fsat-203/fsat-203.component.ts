@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { FanRatedInfo, Fan203Inputs, BaseGasDensity, Plane, Fan203Results, FanShaftPower, PlaneData, PlaneResults } from '../../../shared/models/fans';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Fsat203Service } from './fsat-203.service';
@@ -7,6 +7,9 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
   selector: 'app-fsat-203',
@@ -16,7 +19,19 @@ import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 export class Fsat203Component implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
 
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
   tabSelect: string = 'results';
   inputs: Fan203Inputs;
   basicsDone: boolean = false;
@@ -36,15 +51,23 @@ export class Fsat203Component implements OnInit {
   planeResults: PlaneResults;
   currentField: string;
   currentPlane: string = 'plane-info';
-  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService, private convertFsatService: ConvertFsatService) { }
+  calcExists: boolean;
+  saving: boolean;
+  calculator: Calculator;
+  constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService, private convertFsatService: ConvertFsatService,
+    private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
+
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    // this.fsatService.test();
-    this.inputs = this.fsat203Service.getDefaultData();
-    this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+
+    if (this.inAssessment) {
+      this.getCalculator();
+    } else {
+      this.initForm();
+    }
     this.checkBasics();
     this.checkGasDensity();
     this.checkPlane('1');
@@ -56,6 +79,17 @@ export class Fsat203Component implements OnInit {
     this.checkShaftPower();
     this.calculate();
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -65,9 +99,6 @@ export class Fsat203Component implements OnInit {
     if (this.planeDataDone && this.basicsDone && this.gasDone && this.shaftPowerDone) {
       this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
       this.results = this.fsatService.fan203(this.inputs, this.settings);
-      // this.results.fanEfficiencyStaticPressure = this.results.fanEfficiencyStaticPressure;
-      // this.results.fanEfficiencyStaticPressureRise = this.results.fanEfficiencyStaticPressureRise;
-      // this.results.fanEfficiencyTotalPressure = this.results.fanEfficiencyTotalPressure;
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,
@@ -80,6 +111,13 @@ export class Fsat203Component implements OnInit {
         powerCorrected: 0,
         kpc: 0
       }
+    }
+
+    if (!this.inAssessment) {
+      this.fsat203Service.inputData = this.inputs;
+    } else if (this.inAssessment && this.calcExists) {
+      this.calculator.fan203Inputs =  this.inputs;
+      this.saveCalculator();
     }
   }
 
@@ -153,21 +191,21 @@ export class Fsat203Component implements OnInit {
 
   checkPlane(planeNumber: string) {
     if (planeNumber == '1') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanInletFlange, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanInletFlange, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane1Done = true;
       } else {
         this.plane1Done = false;
       }
     } else if (planeNumber == '2') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanEvaseOrOutletFlange, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanEvaseOrOutletFlange, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane2Done = true;
       } else {
         this.plane2Done = false;
       }
     } else if (planeNumber == '3a') {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FlowTraverse, this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FlowTraverse, this.settings, planeNumber);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.FlowTraverse);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -176,14 +214,14 @@ export class Fsat203Component implements OnInit {
         this.plane3aDone = false;
       }
     } else if (planeNumber == '4') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.InletMstPlane, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.InletMstPlane, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane4Done = true;
       } else {
         this.plane4Done = false;
       }
     } else if (planeNumber == '5') {
-      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.OutletMstPlane, this.settings);
+      let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.OutletMstPlane, this.settings, planeNumber);
       if (tmpForm.status == 'VALID') {
         this.plane5Done = true;
       } else {
@@ -211,7 +249,10 @@ export class Fsat203Component implements OnInit {
     } else if (event.planeNumber == '5') {
       this.inputs.PlaneData.OutletMstPlane = event.plane;
       this.checkPlane('5');
+    } else if (event.planeNumber == '3b' || event.planeNumber == '3c') {
+      this.saveAddlTraversePlane(event);
     }
+
     this.calculate();
   }
 
@@ -231,7 +272,7 @@ export class Fsat203Component implements OnInit {
 
   checkTraversePlanes() {
     if (this.inputs.PlaneData.AddlTraversePlanes.length > 0) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0], this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -243,7 +284,7 @@ export class Fsat203Component implements OnInit {
       this.plane3bDone = true;
     }
     if (this.inputs.PlaneData.AddlTraversePlanes.length > 1) {
-      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1], this.settings);
+      let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1], this.settings, '3c');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1]);
       //todo: logic for checking readings valid
       if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
@@ -279,7 +320,7 @@ export class Fsat203Component implements OnInit {
     this.currentField = str;
   }
 
-  changePlane(str: string){
+  changePlane(str: string) {
     this.currentPlane = str;
   }
 
@@ -302,6 +343,64 @@ export class Fsat203Component implements OnInit {
         [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
         [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
       ]
+    }
+  }
+
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.fan203Inputs) {
+        this.inputs = this.calculator.fan203Inputs;
+      } else {
+        let tmpFans203Inputs: Fan203Inputs = this.fsat203Service.getDefaultData();
+        tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+        this.calculator.fan203Inputs = tmpFans203Inputs;
+        this.inputs = this.calculator.fan203Inputs;
+        this.saveCalculator();
+      }
+    } else {
+      this.calculator = this.initCalculator();
+      this.inputs = this.calculator.fan203Inputs;
+      this.saveCalculator();
+    }
+  }
+
+  initCalculator(): Calculator {
+    let tmpFans203Inputs: Fan203Inputs = this.fsat203Service.getDefaultData();
+    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      fan203Inputs: tmpFans203Inputs
+    }
+    return tmpCalculator;
+  }
+
+  initForm() {
+    this.inputs = this.fsat203Service.inputData;
+    if (this.inputs == undefined) {
+      this.inputs = this.fsat203Service.getDefaultData();
+      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    }
+  }
+
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          })
+        });
+      }
     }
   }
 }

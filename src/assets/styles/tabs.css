@@ -33,7 +33,7 @@ Tabs
     color: #0F0F0F;
   }
   
-  .steam-calculator .tabs.primary a {
+  .standalone-calculator .tabs.primary a {
     background: #c8c8c8;
   }
 
@@ -76,6 +76,10 @@ Tabs
     border-bottom: #2C3E50 groove 3px;
   }
 
+  .compressed-air .tabs.primary .active a {
+    border: none;
+    border-bottom:   #A569BD groove 3px;
+  }
 
 
 

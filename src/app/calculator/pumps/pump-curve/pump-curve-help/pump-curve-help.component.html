@@ -1,474 +1,634 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5 *ngIf="!isFan">
+    Pump Curve Help
+    <br>
+    <small class="text-muted">Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow, pump speed and impeller
+      diameter.
+    </small>
+  </h5>
+  <h5 *ngIf="isFan">
+    Fan Curve Help
+    <br>
+    <small class="text-muted">Use fan curve calculator to develop a fan curve and explore the effects of changes in head, flow, fan speed and impeller
+      diameter.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <div class="calc-help" style="margin-top: 0px;">
-    <!--<div class="help-header">
-      <h3>Pump Curve Help</h3>
-      <p>DESCRIPTION</p>
-      <p class="text-muted">
-      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
-    </p>
-    </div>-->
-    <div class="help-content">
-      <div class="card" *ngIf="currentField == 'maxFlow'">
-        <div class="card-header">
-          Max Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            The max flow rate in the pump curve graph
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong> gpm </strong>or <strong>m<sup>3</sup>/min</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="help-content">
-        <div class="card" *ngIf="currentField == 'fanMaxFlow'">
-          <div class="card-header">
-            Max Flow
-          </div>
-          <div class="card-block">
-            <label><u><strong>Description</strong></u></label>
-            <p>
-              The max flow rate in the fan curve graph
-            </p>
-            <label><u><strong>Input</strong></u></label>
-            <p>
-              Units: <strong> ft<sup>3</sup>/min </strong> or <strong>m<sup>3</sup>/s</strong>
-            </p>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="card" *ngIf="currentField == 'headOrder'">
-        <div class="card-header">
-          Head Order
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to,<br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
-            3.
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureOrder'">
-        <div class="card-header">
-          Head Order
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to,<br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
-            3.
-          </p>
-        </div>
-      </div>
-
-
-      <div class="card" *ngIf="currentField == 'dataOrder'">
-        <div class="card-header">
-          Head Order
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to,<br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> has an order of
-            3.
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanDataOrder'">
-        <div class="card-header">
-          Head Order
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised
-            to,<br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*
-            (Flow)<sup>3</sup> has an order of
-            3.
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headConstant'">
-        <div class="card-header">
-          Constant
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient (constant) associated with flow to the zeroth power <br> Head = <u>C<sub>0</sub></u> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureConstant'">
-        <div class="card-header">
-          Constant
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient (constant) associated with flow to the zeroth power <br> Pressure = <u>C<sub>0</sub></u> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow'">
-        <div class="card-header">
-          Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the first power <br> Head = C<sub>0</sub> + <u>C<sub>1</sub></u>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow'">
-        <div class="card-header">
-          Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the first power <br> Pressure = C<sub>0</sub> + <u>C<sub>1</sub></u>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow2'">
-        <div class="card-header">
-          Flow<sup>2</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the second power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + <u>C<sub>2</sub></u>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow2'">
-        <div class="card-header">
-          Flow<sup>2</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the second power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + <u>C<sub>2</sub></u>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow3'">
-        <div class="card-header">
-          Flow<sup>3</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the third power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + <u>C<sub>3</sub></u>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow3'">
-        <div class="card-header">
-          Flow<sup>3</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the third power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + <u>C<sub>3</sub></u>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow4'">
-        <div class="card-header">
-          Flow<sup>4</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the fourth power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + <u>C<sub>4</sub></u>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow4'">
-        <div class="card-header">
-          Flow<sup>4</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the fourth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + <u>C<sub>4</sub></u>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow5'">
-        <div class="card-header">
-          Flow<sup>5</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the fifth power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + <u>C<sub>5</sub></u>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow5'">
-        <div class="card-header">
-          Flow<sup>5</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the fifth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + <u>C<sub>5</sub></u>*(Flow)<sup>5</sup>            + C<sub>6</sub>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'headFlow6'">
-        <div class="card-header">
-          Flow<sup>6</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the sixth power <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + <u>C<sub>6</sub></u>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressureFlow6'">
-        <div class="card-header">
-          Flow<sup>6</sup>
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Coefficient associated with flow to the sixth power <br> Pressure = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup>            + <u>C<sub>6</sub></u>*(Flow)<sup>6</sup>
-        </div>
-      </div>
-
-
-      <div class="card" *ngIf="currentField == 'baselineMeasurement'">
-        <div class="card-header">
-          Baseline condition
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            The diameter/speed of the system in the original pump curve
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units:<br> Diameter: <strong>in</strong> or <strong>m</strong><br>Speed: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanBaselineMeasurement'">
-        <div class="card-header">
-          Baseline condition
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            The diameter/speed of the system in the original fan curve
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units:<br> Diameter: <strong>ft</strong> or <strong>m</strong><br>Speed: <strong>rpm</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'measurementOption'">
-        <div class="card-header">
-          Diameter/Speed
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanMeasurementOption'">
-        <div class="card-header">
-          Diameter/Speed
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Allows the user to make a new fan curve by simulating a change in impeller diameter or fan speed
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'modifiedMeasurement'">
-        <div class="card-header">
-          Modified Condition
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            The diameter/speed of the system in the modified pump curve
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units:<br> Diameter: <strong>in</strong> or <strong>m</strong><br>Speed: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanModifiedMeasurement'">
-        <div class="card-header">
-          Modified Condition
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            The diameter/speed of the system in the modified fan curve
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units:<br> Diameter: <strong>ft</strong> or <strong>m</strong><br>Speed: <strong>rpm</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'exploreFlow'">
-        <div class="card-header">
-          Explore Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Enter a flow rate to determine the corresponding head.
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanExploreFlow'">
-        <div class="card-header">
-          Explore Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Enter a flow rate to determine the corresponding pressure.
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>ft<sup>3</sup>/min</strong> or <strong>m<sup>3</sup>/s</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'exploreHead'">
-        <div class="card-header">
-          Explore Head
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Enter a head value to determine the corresponding flow rate.
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>ft</strong> or <strong>m</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'explorePressure'">
-        <div class="card-header">
-          Explore Pressure
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            Enter a pressure value to determine the corresponding flow rate.
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>in H<sub>2</sub>O</strong> or <strong>Pa</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'head'">
-        <div class="card-header">
-          Head
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            A data point on the pump curve graph associated with the head in the adjacent field
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>ft</strong> or <strong>m</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'pressure'">
-        <div class="card-header">
-          Pressure
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            A data point on the fan curve graph associated with the pressure in the adjacent field
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>in H<sub>2</sub>O</strong> or <strong>m<sup>3</sup>/s</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'flow'">
-        <div class="card-header">
-          Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            A data point on the pump curve graph associated with the flow in the adjacent field
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>gpm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="card" *ngIf="currentField == 'fanFlow'">
-        <div class="card-header">
-          Flow
-        </div>
-        <div class="card-block">
-          <label><u><strong>Description</strong></u></label>
-          <p>
-            A data point on the fan curve graph associated with the flow in the adjacent field
-          </p>
-          <label><u><strong>Input</strong></u></label>
-          <p>
-            Units: <strong>ft<sup>3</sup>/min</strong> or <strong>Pa</strong><br> Minimum Value Allowed: <strong>0</strong>
-          </p>
-        </div>
-      </div>
-
-
-    </div>
+  <div class="my-2" *ngIf="currentField == 'maxFlow'">
+    <h6>
+      Max Flow
+      <br>
+      <small class="text-muted">
+        The max flow rate in the pump curve graph.
+        <hr>
+      </small>
+    </h6>
   </div>
+
+  <div class="my-2" *ngIf="currentField == 'fanMaxFlow'">
+    <h6>
+      Max Flow
+      <br>
+      <small class="text-muted">
+        The max flow rate in the fan curve graph.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headOrder'">
+    <h6>
+      Head Order
+      <br>
+      <small class="text-muted">
+        Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> has an order of 3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'pressureOrder'">
+    <h6>
+      Head Order
+      <br>
+      <small class="text-muted">
+        Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> has an order of 3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'dataOrder'">
+    <h6>
+      Head Order
+      <br>
+      <small class="text-muted">
+        Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> has an order of 3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fanDataOrder'">
+    <h6>
+      Pressure Order
+      <br>
+      <small class="text-muted">
+        Order of the polynomial used to find pressure as a function of flow rate the highest power flow is raised to.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>* (Flow)
+        <sup>3</sup> has an order of 3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headConstant'">
+    <h6>
+      Constant
+      <br>
+      <small class="text-muted">
+        Coefficient (constant) associated with flow to the zeroth power.
+        <br> Head =
+        <u>C
+          <sub>0</sub>
+        </u> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'pressureConstant'">
+    <h6>
+      Constant
+      <br>
+      <small class="text-muted">
+        Coefficient (constant) associated with flow to the zeroth power.
+        <br> Pressure =
+        <u>C
+          <sub>0</sub>
+        </u> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headFlow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the first power.
+        <br> Head = C
+        <sub>0</sub> +
+        <u>C
+          <sub>1</sub>
+        </u>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureFlow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the first power.
+        <br> Pressure = C
+        <sub>0</sub> +
+        <u>C
+          <sub>1</sub>
+        </u>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'headFlow2'">
+    <h6>
+      Flow
+      <sup>2</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the second power.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow +
+        <u>C
+          <sub>2</sub>
+        </u>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'pressureFlow2'">
+    <h6>
+      Flow
+      <sup>2</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the second power.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow +
+        <u>C
+          <sub>2</sub>
+        </u>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headFlow3'">
+    <h6>
+      Flow
+      <sup>3</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the third power.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> +
+        <u>C
+          <sub>3</sub>
+        </u>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureFlow3'">
+    <h6>
+      Flow
+      <sup>3</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the third power.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> +
+        <u>C
+          <sub>3</sub>
+        </u>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headFlow4'">
+    <h6>
+      Flow
+      <sup>4</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fourth power.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> +
+        <u>C
+          <sub>4</sub>
+        </u>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureFlow4'">
+    <h6>
+      Flow
+      <sup>4</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fourth power.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> +
+        <u>C
+          <sub>4</sub>
+        </u>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headFlow5'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fifth power.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> +
+        <u>C
+          <sub>5</sub>
+        </u>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureFlow5'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fifth power.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> +
+        <u>C
+          <sub>5</sub>
+        </u>*(Flow)
+        <sup>5</sup> + C
+        <sub>6</sub>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'headFlow6'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the sixth power.
+        <br> Head = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> +
+        <u>C
+          <sub>6</sub>
+        </u>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressureFlow6'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the sixth power.
+        <br> Pressure = C
+        <sub>0</sub> + C
+        <sub>1</sub>* Flow + C
+        <sub>2</sub>*(Flow)
+        <sup>2</sup> + C
+        <sub>3</sub>*(Flow)
+        <sup>3</sup> + C
+        <sub>4</sub>*(Flow)
+        <sup>4</sup> + C
+        <sub>5</sub>*(Flow)
+        <sup>5</sup> +
+        <u>C
+          <sub>6</sub>
+        </u>*(Flow)
+        <sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'baselineMeasurement'">
+    <h6>
+      Baseline condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the original pump curve.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fanBaselineMeasurement'">
+    <h6>
+      Baseline condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the original fan curve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'measurementOption'">
+    <h6>
+      Diameter/Speed
+      <br>
+      <small class="text-muted">
+        Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'modifiedMeasurement'">
+    <h6>
+      Modified Condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the modified pump curve.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fanModifiedMeasurement'">
+    <h6>
+      Modified Condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the modified fan curve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'exploreFlow'">
+    <h6>
+      Explore Flow
+      <br>
+      <small class="text-muted">
+        Enter a flow rate to determine the corresponding head.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fanExploreFlow'">
+    <h6>
+      Explore Flow
+      <br>
+      <small class="text-muted">
+        Enter a flow rate to determine the corresponding pressure.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'exploreHead'">
+    <h6>
+      Explore Head
+      <br>
+      <small class="text-muted">
+        Enter a head value to determine the corresponding flow rate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'explorePressure'">
+    <h6>
+      Explore Pressure
+      <br>
+      <small class="text-muted">
+        Enter a pressure value to determine the corresponding flow rate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'head'">
+    <h6>
+      Head
+      <br>
+      <small class="text-muted">
+        A data point on the pump curve graph associated with the head in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Pressure
+      <br>
+      <small class="text-muted">
+        A data point on the fan curve graph associated with the pressure in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Pressure
+      <br>
+      <small class="text-muted">
+        A data point on the fan curve graph associated with the pressure in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'flow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        A data point on the pump curve graph associated with the flow in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fanFlow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        A data point on the fan curve graph associated with the flow in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

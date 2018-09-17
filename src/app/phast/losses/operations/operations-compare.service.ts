@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { OperatingHours, OperatingCosts, PHAST } from '../../../shared/models/phast/phast';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class OperationsCompareService {
@@ -8,9 +7,7 @@ export class OperationsCompareService {
   baseline: PHAST;
   modification: PHAST;
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

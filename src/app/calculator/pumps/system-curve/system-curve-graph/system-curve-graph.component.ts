@@ -10,6 +10,9 @@ import { LineChartHelperService } from '../../../../shared/line-chart-helper/lin
 import { FormGroup } from '@angular/forms';
 
 var headOrPressure: string;
+var flowMeasurement: string;
+var distanceMeasurement: string;
+var powerMeasurement: string;
 
 @Component({
   selector: 'app-system-curve-graph',
@@ -31,6 +34,8 @@ export class SystemCurveGraphComponent implements OnInit {
   settings: Settings;
   @Input()
   isFan: boolean;
+  @Input()
+  inAssessment: boolean;
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -86,6 +91,12 @@ export class SystemCurveGraphComponent implements OnInit {
 
   isFirstChange: boolean = true;
   expanded: boolean = false;
+
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -105,10 +116,51 @@ export class SystemCurveGraphComponent implements OnInit {
     this.isGridToggled = false;
     this.initTooltipData();
 
-    d3.select('app-system-curve').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    // if (this.isFan && this.systemCurveService.fanTableData && !this.inAssessment) {
+    //   this.rowData = this.systemCurveService.fanTableData;
+    //   this.keyColors = this.systemCurveService.fanKeyColors;
+    // } else if (!this.isFan && this.systemCurveService.pumpTableData && !this.inAssessment) {
+    //   this.rowData = this.systemCurveService.pumpTableData;
+    //   this.keyColors = this.systemCurveService.pumpKeyColors
+    // }
+    // else {
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    //}
+    this.initColumnTitles();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
+  }
+
+  ngOnDestroy() {
+    // if (this.isFan) {
+    //   this.systemCurveService.fanTableData = this.rowData;
+    //   this.systemCurveService.fanKeyColors = this.keyColors;
+    // } else {
+    //   this.systemCurveService.pumpTableData = this.rowData;
+    //   this.systemCurveService.pumpKeyColors = this.keyColors;
+    // }
+  }
+
+  initColumnTitles() {
+    if (this.isFan) {
+      flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
+      distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
+      headOrPressure = 'Pressure';
+    } else {
+      flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
+      distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
+      headOrPressure = 'Head'
+    }
+    this.columnTitles = ['Flow Rate (' + flowMeasurement + ')', headOrPressure + ' (' + distanceMeasurement + ')', 'Fluid Power (' + powerMeasurement + ')'];
   }
 
   initTooltipData() {
@@ -210,9 +262,7 @@ export class SystemCurveGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
@@ -314,7 +364,6 @@ export class SystemCurveGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    d3.select("app-system-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
     this.makeGraph();
   }
 
@@ -426,7 +475,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
     let dArray: Array<any> = this.lineChartHelperService.getDArray();
     this.d = dArray[0];
@@ -443,6 +492,14 @@ export class SystemCurveGraphComponent implements OnInit {
       fluidPower: format(this.d.fluidPower).toString()
     }
     this.tableData.push(dataPiece);
+
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    let data = [format(this.d.x).toString(), format(this.d.y).toString(), format(this.d.fluidPower).toString()];
+    this.rowData.push(data);
   }
 
   //dynamic table
@@ -451,6 +508,8 @@ export class SystemCurveGraphComponent implements OnInit {
     this.tablePoints = new Array<d3.Selection<any>>();
     this.focusD = new Array<{ x: number, y: number, fluidPower: number }>();
     this.deleteCount = 0;
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
   }
 
   //dynamic table
@@ -466,6 +525,8 @@ export class SystemCurveGraphComponent implements OnInit {
       this.tableData[j] = this.tableData[j + 1];
       this.tablePoints[j] = this.tablePoints[j + 1];
       this.focusD[j] = this.focusD[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
     if (i != this.tableData.length - 1) {
       this.deleteCount += 1;
@@ -473,6 +534,8 @@ export class SystemCurveGraphComponent implements OnInit {
     this.tableData.pop();
     this.tablePoints.pop();
     this.focusD.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 

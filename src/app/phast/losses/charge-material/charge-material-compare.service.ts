@@ -8,9 +8,7 @@ export class ChargeMaterialCompareService {
 
   baselineMaterials: ChargeMaterial[];
   modifiedMaterials: ChargeMaterial[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllMaterials() {

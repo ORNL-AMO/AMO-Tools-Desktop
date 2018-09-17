@@ -38,11 +38,11 @@ export class PumpCurveFormComponent implements OnInit {
     'Speed'
   ]
 
+  modWarning: string = null;
 
   constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() { 
-    console.log('isFan = ' + this.isFan);
   }
 
   focusField(str: string) {
@@ -58,7 +58,10 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true);
+    this.checkWarnings();
+    if (this.modWarning == null) {
+      this.emitCalculate.emit(true);
+    }
   }
 
   setView() {
@@ -116,6 +119,16 @@ export class PumpCurveFormComponent implements OnInit {
       dispUnit = dispUnit.replace('(', '');
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
+    }
+  }
+
+
+  checkWarnings() {
+    if (this.pumpCurveForm.modifiedMeasurement < (this.pumpCurveForm.baselineMeasurement * .5) || this.pumpCurveForm.modifiedMeasurement > (this.pumpCurveForm.baselineMeasurement * 1.5)) {
+      this.modWarning = "Modified value must be within +/-50% of the baseline value.";
+    }
+    else {
+      this.modWarning = null;
     }
   }
 

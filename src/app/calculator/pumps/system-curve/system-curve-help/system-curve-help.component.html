@@ -1,0 +1,73 @@
+<div class="p-4 pt-2 d-flex flex-column help-info" *ngIf="!isFan">
+  <h5>
+    System Curve Help
+    <br>
+    <small class="text-muted">
+      A system-head curve is a graphical representation of the relationship between flow and hydraulic losses in a given piping
+      system. Since hydraulic losses are functions of rate of flow, size and length of pipe, and size, number and type of
+      fittings, each system has its own characteristic curve and specific values.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2">
+    <h6>
+      Curve basis
+      <br>
+      <small class="text-muted">
+        H = H
+        <sub>s</sub> + K'Q
+        <sup>C</sup> where
+        <br> H = Total Head
+        <br> H
+        <sub>s</sub> = Static Head
+        <br> K' = Loss coefficient
+        <br> Q = Flow rate
+        <br> C = dynamic/friction loss exponent
+        <hr> Note 1: K' here applies to the volumetric flow rate,
+        <u>not</u> the velocity head.
+        <hr> Note 2: This simple system method does not apply to complex distribution systems where flow is delivered to multiple
+        elevation or pressure systems.
+        <hr> Note 3: The specific gravity does not affect the system head curve, but does affect the fluid power, which is directly
+        proportional to the specific gravity.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>
+
+<div class="p-4 pt-2 d-flex flex-column help-info" *ngIf="isFan">
+  <h5>
+    System Curve Help
+    <br>
+    <small class="text-muted">
+      A system resistance curve is a graphical representation of the relationship between flow and pressure losses in a given fan
+      system. Some pressure losses are functions of rate of flow, size and length of duct, and size, number and type of fittings,
+      each system has its own characteristic curve and specific values.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2">
+    <h6>
+      Curve basis
+      <br>
+      <small class="text-muted">
+        <u>If so:</u>
+        <br>P = P
+        <sub>s</sub> + K'Q
+        <sup>C</sup>
+        <br>P = total pressure
+        <br>Ps = Static Pressure
+        <br>K’ = Loss Coefficient
+        <br>Q = Flow Rate
+        <br>C = dynamic/friction loss exponent
+        <hr> Note 1: K' here applies to the volumetric flow rate,
+        <u>not</u> the velocity pressure.
+        <hr> Note 2: This simple system method does not apply to complex distribution systems where flow is delivered to multiple
+        elevation or pressure systems.
+        <hr> Note 3: The compressibility factor does not affect the system resistance curve, but does affect the fluid power,
+        which is directly proportional to the compressibility factor.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

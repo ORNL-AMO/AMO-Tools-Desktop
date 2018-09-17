@@ -29,6 +29,7 @@ export class PsatBarChartComponent implements OnInit {
   psat2Values: Array<number>;
   @Input()
   chartContainerWidth: number;
+
   chartContainerHeight: number;
 
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -70,9 +71,11 @@ export class PsatBarChartComponent implements OnInit {
       this.chartContainerWidth = 950;
       this.chartContainerHeight = 370;
     }
-    this.setBarLabels();
-    this.prepBarData();
-    this.initChart();
+    setTimeout(() => {
+      this.setBarLabels();
+      this.prepBarData();
+      this.initChart();
+    }, 50)
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -170,8 +173,6 @@ export class PsatBarChartComponent implements OnInit {
     else {
       yAxisLabel = "Power (" + unit + ")";
     }
-
-
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
@@ -246,7 +247,7 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-      // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
       d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.9rem");
     }
     else {

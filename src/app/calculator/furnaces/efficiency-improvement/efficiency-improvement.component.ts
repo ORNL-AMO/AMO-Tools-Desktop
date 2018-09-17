@@ -2,8 +2,12 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { EfficiencyImprovementService } from './efficiency-improvement.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -13,6 +17,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 export class EfficiencyImprovementComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -23,31 +31,32 @@ export class EfficiencyImprovementComponent implements OnInit {
 
   headerHeight: number;
 
-  efficiencyImprovementInputs: EfficiencyImprovementInputs = {
-    currentFlueGasOxygen: 6,
-    newFlueGasOxygen: 2,
-    currentFlueGasTemp: 80,
-    currentCombustionAirTemp: 80,
-    newCombustionAirTemp: 750,
-    currentEnergyInput: 10,
-    newFlueGasTemp: 1600
-  }
+  efficiencyImprovementInputs: EfficiencyImprovementInputs;
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
 
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
+
+  calcExists: boolean;
+  saving: boolean;
+  calculator: Calculator;
+
+  constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      this.initDefaultValues(this.settings);
-      this.calculate();
-    } else {
-      this.initDefaultValues(this.settings);
-      this.calculate();
     }
 
+    if (this.inAssessment) {
+      this.getCalculator();
+    } else {
+      this.initForm();
+    }
+
+
+    this.calculate();
   }
 
   ngAfterViewInit() {
@@ -62,36 +71,71 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
   }
 
-  initDefaultValues(settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
-      this.efficiencyImprovementInputs = {
-        currentFlueGasOxygen: 6,
-        newFlueGasOxygen: 2,
-        currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
-        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
-        newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
-        currentEnergyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2),
-        newFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2)
-      }
-    }
-    else {
-      this.efficiencyImprovementInputs = {
-        currentFlueGasOxygen: 6,
-        newFlueGasOxygen: 2,
-        currentFlueGasTemp: 80,
-        currentCombustionAirTemp: 80,
-        newCombustionAirTemp: 750,
-        currentEnergyInput: 10,
-        newFlueGasTemp: 1600
-      }
-    }
-  }
-
   calculate() {
+    if (!this.inAssessment) {
+      this.efficiencyImprovementService.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
+    } else if (this.inAssessment && this.calcExists) {
+      this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
+      this.saveCalculator();
+    }
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs, this.settings);
   }
 
   setCurrentField(str: string) {
     this.currentField = str;
+  }
+
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.efficiencyImprovementInputs) {
+        this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
+      } else {
+        this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+        this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
+        this.saveCalculator();
+      }
+    } else {
+      this.calculator = this.initCalculator();
+      this.saveCalculator();
+    }
+  }
+
+  initCalculator(): Calculator {
+    let tmpEfficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      efficiencyImprovementInputs: tmpEfficiencyImprovementInputs
+    }
+    return tmpCalculator;
+  }
+
+  initForm() {
+    if (this.efficiencyImprovementService.efficiencyImprovementInputs) {
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.efficiencyImprovementInputs;
+    } else {
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+    }
+  }
+
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          })
+        });
+      }
+    }
   }
 }

@@ -18,26 +18,26 @@
       </div>
       <form *ngIf="showFeedRate[index]">
         <div class="form-group">
-          <label for="baselineCost">Baseline Feed Rate</label>
+          <label for="{{'feedRate_'+index}}">Baseline Feed Rate</label>
           <div class="input-group">
             <input name="{{'feedRate_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.feedRate"
-              id="{{feedRate_+index}}" onfocus="this.select();" (input)="checkFeedRate(1, loss.feedRate, index)" (focus)="focusField('feedRate')"
+              id="{{feedRate_+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('feedRate')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="feedRateError1[index] !== null">{{feedRateError1[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].feedRateWarning !== null">{{baselineWarnings[index].feedRateWarning}}</span>
         </div>
         <div class="form-group">
-          <label for="baselineCost">Modification Feed Rate</label>
+          <label for="{{feedRateMod_+index}}">Modification Feed Rate</label>
           <div class="input-group">
             <input name="{{'feedRateMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{feedRateMod_+index}}"
-              onfocus="this.select();" (input)="checkFeedRate(2, phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate, index)"
+              onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('feedRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="feedRateError2[index] !== null">{{feedRateError2[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].feedRateWarning !== null">{{modificationWarnings[index].feedRateWarning}}</span>
         </div>
       </form>
     </li>

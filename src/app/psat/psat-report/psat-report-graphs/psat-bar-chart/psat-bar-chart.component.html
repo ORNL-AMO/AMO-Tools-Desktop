@@ -11,7 +11,7 @@
 
     </div>
     <div>
-      <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
+      <span class="fa fa-download hide-print" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
       <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
         [adjustTop]="320" [adjustPercent]="false"></app-simple-tooltip>
     </div>

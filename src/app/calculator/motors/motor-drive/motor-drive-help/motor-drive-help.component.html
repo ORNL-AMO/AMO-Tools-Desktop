@@ -1,75 +1,72 @@
-<div class="card">
-  <div class="card-header">
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
     Motor Drive Comparison Help
-  </div>
-  <div class="card-block small">
-    <p>
-      Adjust operating conditions to compare energy use and energy costs of different motor drive types.<br><br>
-      Approximately one-third of the electric motors in the industrial and commercial sectors use belt drives most of which are V-belts, which can have a peak efficiency of 95% or more at the time of installation. Efficiency is dependent on pulley size, pulley wear, V-belt alignment, transmitted torque,  and under or oversizing belts for load requirements. Efficiency can deteriorate by as much as 5% over time if slippage occurs because the belt is not periodically retensioned, which requires downtime.<br><br>
-      A notched belt has grooves or notches that run perpendicular to the belt’s length, which reduces the bending resistance of the belt. They run cooler, last longer, and are about 2% more efficient than standard V-belts.<br><br>
-      Synchronous belts are toothed and require the installation of mating grooved sprockets. These belts operate with a consistent efficiency of 98% and maintain their efficiency over a wide load range. On critical drives, a synchronous belt, which requires no retensioning, not only improves energy efficiency but also eliminates downtime.<br><br>
-    </p>
-  </div>
-</div>
+    <br>
+    <small class="text-muted">
+      Adjust operating conditions to compare energy use and energy costs of different motor drive types.
+      <br>
+      <br> Approximately one-third of the electric motors in the industrial and commercial sectors use belt drives most of which
+      are V-belts, which can have a peak efficiency of 95% or more at the time of installation. Efficiency is dependent on
+      pulley size, pulley wear, V-belt alignment, transmitted torque, and under or oversizing belts for load requirements.
+      Efficiency can deteriorate by as much as 5% over time if slippage occurs because the belt is not periodically retensioned,
+      which requires downtime.
+      <br>
+      <br> A notched belt has grooves or notches that run perpendicular to the belt’s length, which reduces the bending resistance
+      of the belt. They run cooler, last longer, and are about 2% more efficient than standard V-belts.
+      <br>
+      <br> Synchronous belts are toothed and require the installation of mating grooved sprockets. These belts operate with a
+      consistent efficiency of 98% and maintain their efficiency over a wide load range. On critical drives, a synchronous
+      belt, which requires no retensioning, not only improves energy efficiency but also eliminates downtime.
+      <br>
+      <br>
 
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'motorPower'">
+    <h6>
+      Motor Power
+      <br>
+      <small class="text-muted">
+        The power rating of equipment is the highest power input allowed to flow through the motor.
+        <hr>
+      </small>
+    </h6>
+  </div>
 
-<div class="card" *ngIf="currentField == 'motorPower'">
-  <div class="card-header">
-    Motor Power
+  <div class="my-2" *ngIf="currentField == 'annualOperatingHours'">
+    <h6>
+      Annual Operating Hours
+      <br>
+      <small class="text-muted">
+        Number of hours of operation in a year.
+        <hr>
+      </small>
+    </h6>
   </div>
-  <div class="card-block small">
-    <label>
-      <u>
-        <strong>Description</strong>
-      </u>
-    </label>
-    <p>
-      The power rating of equipment is the highest power input allowed to flow through the motor.
-    </p>
+
+  <div class="my-2" *ngIf="currentField == 'averageMotorLoad'">
+    <h6>
+      Average Motor Load
+      <br>
+      <small class="text-muted">
+        Also called load factor, defined as the ratio between actual load and rated load. Maximum efficiency is usually near 75%
+        of rated load. Overloaded motors can overheat and lose efficiency. Underloaded motors, those loaded below 50% of
+        rated load, are inefficient and exhibit low power factor. Surveys of installed motors indicate that a large portion
+        of motors in use are improperly loaded.
+        <hr>
+      </small>
+    </h6>
   </div>
-</div>
-<div class="card" *ngIf="currentField == 'annualOperatingHours'">
-  <div class="card-header">
-    Annual Operating Hours
-  </div>
-  <div class="card-block small">
-    <label>
-      <u>
-        <strong>Description</strong>
-      </u>
-    </label>
-    <p>
-      Number of hours of operation in a year.
-    </p>
-  </div>
-</div>
-<div class="card" *ngIf="currentField == 'averageMotorLoad'">
-  <div class="card-header">
-    Average Motor Load
-  </div>
-  <div class="card-block small">
-    <label>
-      <u>
-        <strong>Description</strong>
-      </u>
-    </label>
-    <p>
-      Also called load factor, defined as the ratio between actual load and rated load. Maximum efficiency is usually near 75% of rated load. Overloaded motors can overheat and lose efficiency. Underloaded motors, those loaded below 50% of rated load, are inefficient and exhibit low power factor. Surveys of installed motors indicate that a large portion of motors in use are improperly loaded.
-    </p>
-  </div>
-</div>
-<div class="card" *ngIf="currentField == 'electricityCost'">
-  <div class="card-header">
-    Electricity Cost
-  </div>
-  <div class="card-block small">
-    <label>
-      <u>
-        <strong>Description</strong>
-      </u>
-    </label>
-    <p>
-      Cost of electricity per kilowatt hour.
-    </p>
+
+  <div class="my-2" *ngIf="currentField == 'electricityCost'">
+    <h6>
+      Electricity Cost
+      <br>
+      <small class="text-muted">
+        Cost of electricity per kilowatt hour.
+        <hr>
+      </small>
+    </h6>
   </div>
 </div>

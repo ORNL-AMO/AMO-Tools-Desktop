@@ -18,6 +18,7 @@ import { FanEfficiencyModule } from './fan-efficiency/fan-efficiency.module';
     FanEfficiencyModule
   ],
   declarations: [FansComponent],
-  exports: [FansComponent]
+  exports: [FansComponent],
+  providers: []
 })
 export class FansModule { }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -15,11 +15,21 @@ export class TurbineComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
+
   tabSelect: string = 'results';
   currentField: string = 'default';
   turbineForm: FormGroup;
   input: TurbineInput;
   results: TurbineOutput;
+
+  warning: string;
+
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private turbineService: TurbineService) { }
 
   ngOnInit() {
@@ -29,9 +39,20 @@ export class TurbineComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.turbineService.getObjFromForm(this.turbineForm);
     this.calculate(this.turbineForm);
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   setTab(str: string) {
@@ -41,13 +62,24 @@ export class TurbineComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.turbineForm = this.turbineService.initForm(this.settings);
+  initForm() {
+    if (this.turbineService.turbineInput) {
+      this.turbineForm = this.turbineService.getFormFromObj(this.turbineService.turbineInput, this.settings);
+    } else {
+      this.turbineForm = this.turbineService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.turbineService.getObjFromForm(form);
-    // console.log(form);
+    this.turbineService.turbineInput = this.input;
+    if (this.input.inletPressure < this.input.outletSteamPressure) {
+      this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure."
+    }
+    else {
+      this.warning = null;
+    }
+
     if (form.status == 'VALID') {
       this.results = this.steamService.turbine(this.input, this.settings);
     } else {

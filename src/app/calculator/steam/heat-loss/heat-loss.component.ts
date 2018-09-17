@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -15,6 +15,13 @@ export class HeatLossComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
+
   tabSelect: string = 'results';
   currentField: string = 'default';
   heatLossForm: FormGroup;
@@ -29,9 +36,15 @@ export class HeatLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.heatLossService.getObjFromForm(this.heatLossForm);
     this.calculate(this.heatLossForm);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
   }
 
   setTab(str: string) {
@@ -41,12 +54,23 @@ export class HeatLossComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.heatLossForm = this.heatLossService.initForm(this.settings);
+  initForm() {
+    if(this.heatLossService.heatLossInput){
+      this.heatLossForm = this.heatLossService.getFormFromObj(this.heatLossService.heatLossInput, this.settings);
+    }else{
+      this.heatLossForm = this.heatLossService.initForm(this.settings);
+    }
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.heatLossService.getObjFromForm(form);
+    this.heatLossService.heatLossInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.heatLoss(this.input, this.settings);
     } else {

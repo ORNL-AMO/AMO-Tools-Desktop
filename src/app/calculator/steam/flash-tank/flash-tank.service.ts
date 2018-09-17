@@ -7,6 +7,8 @@ import { SteamService } from '../steam.service';
 
 @Injectable()
 export class FlashTankService {
+  flashTankInput: FlashTankInput;
+
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {
@@ -45,7 +47,7 @@ export class FlashTankService {
   }
 
   getRangeValues(settings: Settings, thermodynamicQuantity: number): FlashTankRanges {
-    let quantityMinMax: {min: number, max: number} = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: FlashTankRanges = {
       inletWaterPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       inletWaterPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),

@@ -31,11 +31,11 @@
               <label for="materialName">Material Name</label>
               <div class="input-group" *ngIf="!editExistingMaterial">
                 <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-                />
+                  (focus)="focusField('substance')" />
               </div>
               <div class="input-group" *ngIf="editExistingMaterial">
                 <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkEditMaterialName()"
-                />
+                  (focus)="focusField('substance')" />
               </div>
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
@@ -118,8 +118,10 @@
 
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
-      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()"
+        [disabled]="!isValidMaterialName">Submit</button>
+      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()"
+        [disabled]="!isValidMaterialName">Submit</button>
       <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
     </div>
   </div>

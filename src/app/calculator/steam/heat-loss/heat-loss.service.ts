@@ -7,6 +7,7 @@ import { SteamService } from '../steam.service';
 
 @Injectable()
 export class HeatLossService {
+  heatLossInput: HeatLossInput;
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 

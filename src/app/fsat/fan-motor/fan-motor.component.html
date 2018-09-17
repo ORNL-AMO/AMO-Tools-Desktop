@@ -9,57 +9,62 @@
     <div class="form-group">
       <label for="lineFrequency">Line Frequency</label>
       <select name="lineFrequency" class="form-control number-input-field" id="lineFrequency" formControlName="lineFrequency" (change)="changeLineFreq()"
-        (focus)="focusField('lineFrequency')" [ngClass]="{'indicate-different': isLineFrequencyDifferent()}">
+        (focus)="focusField('lineFrequency')" [ngClass]="{'indicate-different': isLineFrequencyDifferent(), 'invalid': fanMotorForm.controls.lineFrequency.invalid}">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="motorRatedPower">Rated Motor Power</label>
-      <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower"
-        (change)="checkRatedPower()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent()}">
+      <!-- <select name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" formControlName="motorRatedPower"
+        (change)="save()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
-      </select>
-      <span class="alert-warning pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
+      </select> -->
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
+        <input type="number" name="motorRatedPower" class="form-control number-input-field" id="motorRatedPower" (focus)="focusField('motorRatedPower')"
+          (input)="save()" formControlName="motorRatedPower">
+        <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null">{{warnings.ratedPowerError}}</span>
     </div>
 
     <div class="form-group">
       <label for="motorRpm">Motor RPM</label>
-      <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent()}">
-        <input type="number" step="10" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="checkMotorRpm()"
+      <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null, 'invalid': fanMotorForm.controls.motorRpm.invalid}">
+        <input type="number" step="10" class="form-control number-input-field" id="motorRpm" formControlName="motorRpm" (input)="save()"
           (focus)="focusField('motorRPM')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">rpm</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.rpmError !== null">{{warnings.rpmError}}</span>
     </div>
 
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
+        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent(), 'invalid': fanMotorForm.controls.efficiencyClass.invalid}">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="fanMotorForm.controls.efficiencyClass.value == 3">
       <label for="specifiedEfficiency">Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(),'error': warnings.efficiencyError !== null, 'invalid': fanMotorForm.controls.specifiedEfficiency.invalid}">
         <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control" id="specifiedEfficiency" formControlName="specifiedEfficiency"
-          (input)="checkEfficiency()" (focus)="focusField('specifiedEfficiency')" onfocus="this.select();" [readonly]="!selected">
+          (input)="save()" (focus)="focusField('specifiedEfficiency')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.efficiencyError !== null">{{warnings.efficiencyError}}</span>
     </div>
 
     <div class="form-group">
       <label for="motorRatedVoltage">Rated Voltage</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null, 'invalid': fanMotorForm.controls.motorRatedVoltage.invalid}">
         <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorRatedVoltage"
-          formControlName="motorRatedVoltage" (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();"
+          formControlName="motorRatedVoltage" (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();"
           [readonly]="!selected">
         <span class="input-group-addon units">V</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null">{{warnings.voltageError}}</span>
     </div>
 
     <div class="form-group">
@@ -67,12 +72,12 @@
         Full-Load Amps
         <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null, 'invalid': fanMotorForm.controls.fullLoadAmps.invalid}">
         <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
-          (input)="checkFLA()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();" [readonly]="!selected">
+          (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">A</span>
       </div>
-      <span class="alert-warning small pull-right" *ngIf="flaError !== null">{{flaError}}</span>
+      <span class="alert-warning small pull-right" *ngIf="warnings.flaError !== null">{{warnings.flaError}}</span>
     </div>
   </div>
 </form>

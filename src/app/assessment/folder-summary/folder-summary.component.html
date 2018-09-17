@@ -1,7 +1,6 @@
-
 <div class="row">
   <div class="col-12">
-      <app-folder-contact-info [directory]="directory"></app-folder-contact-info>
+    <app-folder-contact-info [directory]="directory"></app-folder-contact-info>
   </div>
 </div>
 
@@ -22,7 +21,7 @@
             <tr>
               <td>Pumps</td>
               <td>{{numPsats}}</td>
-              <td>{{psatEnergyUsed | sigFigs:'6'}} kWh</td>
+              <td>{{psatEnergyUsed | sigFigs:'6'}} MWh</td>
               <td>{{psatEnergyCost | currency}}</td>
             </tr>
             <tr>
@@ -30,6 +29,12 @@
               <td>{{numPhasts}}</td>
               <td>{{phastEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
               <td>{{phastEnergyCost | currency}}</td>
+            </tr>
+            <tr>
+              <td>Fans</td>
+              <td>{{numFsats}}</td>
+              <td>{{fsatEnergyUsed | sigFigs:'6'}} MWh</td>
+              <td>{{fsatEnergyCost | currency}}</td>
             </tr>
             <tr>
               <td class="bold">Total</td>
@@ -81,8 +86,8 @@
     <div class="modal-content" *ngIf="settingsForm">
       <div class="modal-body tab-content">
         <app-application-settings [settingsForm]="settingsForm"></app-application-settings>
-        <p class="help-text">Modifying these settings will not effect existing assessments.<br>
-          New assessments in this folder will inherit these settings.</p>
+        <p class="help-text">Modifying these settings will not effect existing assessments.
+          <br> New assessments in this folder will inherit these settings.</p>
       </div>
       <div class="modal-footer justify-content-center">
         <button class="btn btn-primary save-btn" (click)="hideSettingsModal(true)">Save to Folder</button>

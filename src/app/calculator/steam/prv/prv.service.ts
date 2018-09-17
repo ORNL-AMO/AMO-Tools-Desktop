@@ -7,6 +7,8 @@ import { SteamService } from '../steam.service';
 
 @Injectable()
 export class PrvService {
+  prvInput: PrvInput;
+  isSuperHeating: boolean;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initInletForm(settings: Settings): FormGroup {
@@ -48,7 +50,7 @@ export class PrvService {
     let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, inputObj.thermodynamicQuantity);
     let tmpForm: FormGroup = this.formBuilder.group({
       feedwaterPressure: [inputObj.feedwaterPressure, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
-      feedwaterThermodynamicQuantity: [inputObj.feedwaterThermodynamicQuantity],
+      feedwaterThermodynamicQuantity: [inputObj.feedwaterThermodynamicQuantity || 2],
       feedwaterQuantityValue: [inputObj.feedwaterQuantityValue, [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
       desuperheatingTemp: [inputObj.desuperheatingTemp, [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
     })

@@ -14,4 +14,5 @@ export class FanMotorHelpComponent implements OnInit {
   ngOnInit() {
   }
 
+
 }

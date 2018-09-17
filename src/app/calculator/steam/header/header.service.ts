@@ -7,6 +7,7 @@ import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam';
 
 @Injectable()
 export class HeaderService {
+  headerInput: HeaderInput;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initHeaderForm(settings: Settings): FormGroup {

@@ -22,10 +22,9 @@ export class EnergyInputTabComponent implements OnInit {
   displayTooltip: boolean;
 
   numLosses: number = 0;
-  inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   enInput1Done: boolean;
   compareSubscription: Subscription;
   lossSubscription: Subscription;
@@ -40,17 +39,10 @@ export class EnergyInputTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.energyInputCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -58,8 +50,6 @@ export class EnergyInputTabComponent implements OnInit {
     let badgeStr: Array<string> = ['success'];
     if (this.missingData || !this.enInput1Done) {
       badgeStr = ['missing-data'];
-    } else if (this.inputError) {
-      badgeStr = ['input-error'];
     } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }

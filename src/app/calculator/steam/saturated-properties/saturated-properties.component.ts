@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SettingsService } from "../../../settings/settings.service";
 import { Settings } from "../../../shared/models/settings";
@@ -19,6 +19,18 @@ export class SaturatedPropertiesComponent implements OnInit {
   chartContainerHeight: number;
   chartContainerWidth: number;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getChartHeight();
+    this.getChartWidth();
+    this.resizeTabs();
+  }
+
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  headerHeight: number;
+
+  ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
   saturatedPropertiesForm: FormGroup;
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
   pressureOrTemperature: number;
@@ -34,11 +46,6 @@ export class SaturatedPropertiesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
-    this.saturatedPropertiesForm = this.formBuilder.group({
-      'pressureOrTemperature': [0, Validators.required],
-      'saturatedPressure': [0, Validators.required],
-      'saturatedTemperature': [0, Validators.required]
-    });
 
     this.graphToggleForm = this.formBuilder.group({
       'graphToggle': [0, Validators.required]
@@ -50,8 +57,88 @@ export class SaturatedPropertiesComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.ranges = this.getRanges();
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+  }
 
-    this.saturatedPropertiesOutput = {
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.resizeTabs();
+      this.changeDetectorRef.detectChanges();
+    }, 100)
+  }
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+  initForm() {
+    if(this.steamService.saturatedPropertiesInputs){
+      this.saturatedPropertiesForm = this.formBuilder.group({
+        'pressureOrTemperature': [this.steamService.saturatedPropertiesInputs.pressureOrTemperature, Validators.required],
+        'saturatedPressure': [this.steamService.saturatedPropertiesInputs.inputs.saturatedPressure, Validators.required],
+        'saturatedTemperature': [this.steamService.saturatedPropertiesInputs.inputs.saturatedTemperature]
+      });
+    }else{
+      this.saturatedPropertiesForm = this.formBuilder.group({
+        'pressureOrTemperature': [0, Validators.required],
+        'saturatedPressure': ['', Validators.required],
+        'saturatedTemperature': ['']
+      });
+    }
+
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  setField(str: string) {
+    this.currentField = str;
+  }
+
+  getChartWidth() {
+    if (this.lineChartContainer) {
+      this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
+    }
+    else {
+      this.chartContainerWidth = 600;
+    }
+  }
+
+  getChartHeight() {
+    if (this.lineChartContainer) {
+      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .7;
+    }
+    else {
+      this.chartContainerHeight = 800;
+    }
+  }
+  calculate(form: FormGroup) {
+    let input: SaturatedPropertiesInput = {
+      saturatedTemperature: form.controls.saturatedTemperature.value,
+      saturatedPressure: form.controls.saturatedPressure.value,
+    }
+    this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
+    this.steamService.saturatedPropertiesInputs = {
+      pressureOrTemperature: this.pressureOrTemperature,
+      inputs: {
+        saturatedTemperature: form.controls.saturatedTemperature.value,
+        saturatedPressure: form.controls.saturatedPressure.value
+      }
+    }
+    if (form.status == 'VALID') {
+      this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+      this.plotReady = true;
+    }
+  }
+
+  getEmptyResults(): SaturatedPropertiesOutput {
+    return {
       saturatedPressure: 0,
       saturatedTemperature: 0,
       liquidEnthalpy: 0,
@@ -64,53 +151,6 @@ export class SaturatedPropertiesComponent implements OnInit {
       gasVolume: 0,
       evaporationVolume: 0
     };
-  }
-
-  ngAfterViewInit() {
-    this.changeDetectorRef.detectChanges();
-  }
-
-  setTab(str: string) {
-    this.tabSelect = str;
-  }
-
-  setField(str: string) {
-    this.currentField = str;
-  }
-
-  getChartWidth(): number {
-    if (this.lineChartContainer) {
-      this.chartContainerWidth = this.lineChartContainer.nativeElement.clientWidth * .9;
-      return this.chartContainerWidth;
-    }
-    else {
-      return 600;
-    }
-  }
-
-  getChartHeight(): number {
-    if (this.lineChartContainer) {
-      this.chartContainerHeight = this.lineChartContainer.nativeElement.clientHeight * .7;
-      return this.chartContainerHeight;
-    }
-    else {
-      return 800;
-    }
-  }
-
-  setPressureOrTemperature(val: number) {
-    this.pressureOrTemperature = val;
-    if (val == 1) {
-      this.setField('temp');
-    }
-    else {
-      this.setField('pressure');
-    }
-  }
-
-  calculate(input: SaturatedPropertiesInput) {
-    this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
-    this.plotReady = true;
   }
 
   addRow() {
@@ -131,5 +171,28 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   toggleGraph() {
     this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
+  }
+
+  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
+    let minTemp: number, maxTemp: number, minPressure: number, maxPressure: number;
+    if (this.settings.steamTemperatureMeasurement == 'F') {
+      minTemp = 32;
+      maxTemp = 705.1;
+    } else {
+      minTemp = 0;
+      maxTemp = 373.9;
+    }
+
+    if (this.settings.steamPressureMeasurement == 'psi') {
+      minPressure = 0.2;
+      maxPressure = 3200.1;
+    } else if (this.settings.steamPressureMeasurement == 'kPa') {
+      minPressure = 1;
+      maxPressure = 22064;
+    } else if (this.settings.steamPressureMeasurement == 'bar') {
+      minPressure = 0.01;
+      maxPressure = 220.64;
+    }
+    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure }
   }
 }

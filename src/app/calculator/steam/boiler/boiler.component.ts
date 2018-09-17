@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { BoilerInput, BoilerOutput } from '../../../shared/models/steam';
@@ -14,7 +14,11 @@ import { BoilerService } from './boiler.service';
 export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
@@ -30,10 +34,23 @@ export class BoilerComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.calculate(this.boilerForm);
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
 
+  ngOnDestroy(){
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -41,12 +58,17 @@ export class BoilerComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.boilerForm = this.boilerService.initForm(this.settings);
+  initForm() {
+    if (this.boilerService.boilerInput) {
+      this.boilerForm = this.boilerService.getFormFromObj(this.boilerService.boilerInput, this.settings);
+    } else {
+      this.boilerForm = this.boilerService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.boilerService.getObjFromForm(form);
+    this.boilerService.boilerInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.boiler(this.input, this.settings);
     } else {

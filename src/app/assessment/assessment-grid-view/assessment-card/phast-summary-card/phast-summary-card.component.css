@@ -32,3 +32,8 @@ a:not([href]):not([tabindex]):hover {
   .no-card-data{
     text-align: center;
   }
+
+  .modal-body{
+    max-height: 85vh;
+    overflow: auto;
+  }

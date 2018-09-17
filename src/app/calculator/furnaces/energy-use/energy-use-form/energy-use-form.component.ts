@@ -16,8 +16,6 @@ export class EnergyUseFormComponent implements OnInit {
   flowCalculationResults: FlowCalculationsOutput;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  @Input()
-  inPhast: boolean;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()

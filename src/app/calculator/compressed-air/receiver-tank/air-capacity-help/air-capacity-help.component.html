@@ -1,36 +1,43 @@
- <div class="card">
-    <div class="card-header">
-      Description
-    </div>
-    <div class="card-block small d-flex flex-column">
-      <p>This calculator computes the quantity of compressed air that is actually available for use. When air receivers
-        are installed, the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy
-        storage. Hence this calculator proves useful in such a context.</p>
-    </div>
-  <div class="help-content">
-    <div class="card" *ngIf="currentField == 'tankSize'">
-      <div class="card-header">
-        Receiver Tank Size
-      </div>
-      <div class="card-block">
-        <p>Quantity of air receiver tank could hold.</p>
-      </div>
-    </div>
-    <div class="card" *ngIf="currentField == 'airPressureIn'">
-      <div class="card-header">
-        Inlet Pressure
-      </div>
-      <div class="card-block">
-        <p>Pressure of air entering the Tank in psi.</p>
-      </div>
-    </div>
-    <div class="card" *ngIf="currentField == 'airPressureOut'">
-      <div class="card-header">
-        Outlet Pressure
-      </div>
-      <div class="card-block">
-        <p>Pressure of air leaving the Tank in psi.</p>
-      </div>
-    </div>
-  </div>
+<div class="my-2">
+  <h6>
+    Air Capacity
+    <br>
+    <small class="text-muted">
+      This calculator computes the quantity of compressed air that is actually available for use. When air receivers are installed,
+      the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy storage. Hence this
+      calculator proves useful in such a context.
+      <hr>
+    </small>
+  </h6>
+</div>
+
+<div class="my-2" *ngIf="currentField == 'tankSize'">
+  <h6>
+    Receiver Tank Size
+    <br>
+    <small class="text-muted">
+      Quantity of air receiver tank could hold.
+      <hr>
+    </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'airPressureIn'">
+  <h6>
+    Inlet Pressure
+    <br>
+    <small class="text-muted">
+      Pressure of air entering the Tank in psi.
+      <hr>
+    </small>
+  </h6>
+</div>
+<div class="my-2" *ngIf="currentField == 'airPressureOut'">
+  <h6>
+    Outlet Pressure
+    <br>
+    <small class="text-muted">
+      Pressure of air leaving the Tank in psi.
+      <hr>
+    </small>
+  </h6>
 </div>

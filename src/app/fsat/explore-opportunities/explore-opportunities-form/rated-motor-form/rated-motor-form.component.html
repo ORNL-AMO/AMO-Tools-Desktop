@@ -1,87 +1,97 @@
 <div class="checkbox">
-    <label class="group-label" for="general2"><input type ="checkbox" id="general2" value="true" (focus)="focusField('motorRatedPower')" (change)="toggleRatedMotorData()"  [(ngModel)]="showRatedMotorData" />
-                            Adjust Rated Motor Data
-                        </label>
-  </div>
-  <ul *ngIf="showRatedMotorData">
-    <li>
-      <div class="checkbox">
-        <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="true" (change)="toggleMotorRatedPower()" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
-                                    Modify Rated Motor Power
-                                </label>
-      </div>
-      <form *ngIf="showRatedMotorPower">
-        <div class="form-group">
-          <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
-          <select name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
-            (change)="checkRatedPower(1)" [(ngModel)]="fsat.fanMotor.motorRatedPower">
-                                        <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-                                    </select>
-          <span class="alert-danger pull-right small" *ngIf="ratedPowerError1 !== null">{{ratedPowerError1}}</span>
+  <label class="group-label" for="general2"><input type="checkbox" id="general2" value="true" (focus)="focusField('motorRatedPower')"
+      (change)="toggleRatedMotorData()" [(ngModel)]="showRatedMotorData" /> Adjust Rated Motor Data
+  </label>
+</div>
+<ul *ngIf="showRatedMotorData">
+  <li>
+    <div class="checkbox">
+      <label for="modifyMotorRatedPower"><input type="checkbox" id="modifyMotorRatedPower" value="true" (change)="toggleMotorRatedPower()"
+          (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower" /> Modify Rated Motor Power
+      </label>
+    </div>
+    <form *ngIf="showRatedMotorPower">
+      <div class="form-group">
+        <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
+        <div class="input-group">
+          <input type="number" name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower"
+            (focus)="focusField('motorRatedPower')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
+          <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
+        </div>
 
-        </div>
-        <div class="form-group">
-          <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
-          <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
-            (change)="checkRatedPower(2)" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.motorRatedPower"
+        <!-- <select name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower"
+          (focus)="focusField('motorRatedPower')" (change)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
+          <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+        </select> -->
+        <span class="alert-warning pull-right small" *ngIf="baselineWarnings.ratedPowerError !== null">{{baselineWarnings.ratedPowerError}}</span>
+
+      </div>
+      <div class="form-group">
+        <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
+        <div class="input-group">
+          <input type="number" name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower"
+            (focus)="focusField('motorRatedPower')" (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.motorRatedPower"
             [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
-                                        <option  *ngFor="let option2 of options2" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
-                                    </select>
-          <span class="alert-danger pull-right small" *ngIf="ratedPowerError2 !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{ratedPowerError2}}</span>
+          <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
         </div>
-      </form>
-    </li>
-    <li>
-      <div class="checkbox">
-        <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="true" (change)="toggleEfficiencyClass()" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
-                                    Modify Efficiency Class
-                                </label>
+        <!-- <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
+          (change)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.motorRatedPower" [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
+          <option *ngFor="let option2 of options2" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
+        </select> -->
+        <span class="alert-warning pull-right small" *ngIf="modificationWarnings.ratedPowerError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.ratedPowerError}}</span>
       </div>
-      <form *ngIf="showEfficiencyClass">
-        <div class="form-group">
-          <label for="oldEfficiencyClass">Baseline Efficiency Class</label>
-          <select name="oldEfficiencyClass" [disabled]="true" class="form-control select-input-field" (change)="setEfficiencyClasses()" id="oldEfficiencyClass"
-            (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.fanMotor.efficiencyClass">
-                                          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
-                                    </select>
-        </div>
-        <div class="form-group">
-          <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
-          <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
-            (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass" [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
-                                          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
-                                    </select>
-        </div>
-      </form>
-    </li>
-    <li *ngIf="(fsat.fanMotor.efficiencyClass == 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass == 3) && showEfficiencyClass">
-      <div class="checkbox">
-        <label for="modifyMotorEfficiency"><input type="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
-                                    Modify Motor Specified Efficiency
-                                </label>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyEfficiencyClass"><input type="checkbox" id="modifyEfficiencyClass" value="true" (change)="toggleEfficiencyClass()"
+          (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass" /> Modify Efficiency Class
+      </label>
+    </div>
+    <form *ngIf="showEfficiencyClass">
+      <div class="form-group">
+        <label for="oldEfficiencyClass">Baseline Efficiency Class</label>
+        <select name="oldEfficiencyClass" [disabled]="true" class="form-control select-input-field" (change)="setEfficiencyClasses()"
+          id="oldEfficiencyClass" (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.fanMotor.efficiencyClass">
+          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
+        </select>
       </div>
-      <form *ngIf="showMotorEfficiency">
-        <div class="form-group">
-          <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
-          <div class="input-group">
-            <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency"
-              class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(fsat.fanMotor.efficiency, 1)"
-              [(ngModel)]="fsat.fanMotor.efficiency" />
-            <span class="input-group-addon units">(%)</span>
-          </div>
-          <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
+      <div class="form-group">
+        <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
+        <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
+          (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass"
+          [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
+          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
+        </select>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="(fsat.fanMotor.efficiencyClass == 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass == 3) && showEfficiencyClass">
+    <div class="checkbox">
+      <label for="modifyMotorEfficiency"><input type="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()"
+          (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency" /> Modify Motor Specified Efficiency
+      </label>
+    </div>
+    <form *ngIf="showMotorEfficiency">
+      <div class="form-group">
+        <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
+        <div class="input-group">
+          <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency" class="form-control"
+            (focus)="focusField('motorEfficiency')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.specifiedEfficiency" />
+          <span class="input-group-addon units">(%)</span>
         </div>
-        <div class="form-group">
-          <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
-          <div class="input-group">
-            <input name="modificationMotorEfficiency" [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass != 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.optimize"
-              type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
-              [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiency" (input)="checkEfficiency(fsat.modifications[exploreModIndex].fsat.fanMotor.efficiency, 2)"
-            />
-            <span class="input-group-addon units">(%)</span>
-          </div>
-          <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{efficiencyError2}}</span>
+        <span class="alert-warning pull-right small" *ngIf="baselineWarnings.efficiencyError !== null">{{baselineWarnings.efficiencyError}}</span>
+      </div>
+      <div class="form-group">
+        <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
+        <div class="input-group">
+          <input name="modificationMotorEfficiency" [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass != 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.optimize"
+            type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+            [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.specifiedEfficiency" (input)="calculate()" />
+          <span class="input-group-addon units">(%)</span>
         </div>
-      </form>
-    </li>
-  </ul>
+        <span class="alert-warning pull-right small" *ngIf="modificationWarnings.efficiencyError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.efficiencyError}}</span>
+      </div>
+    </form>
+  </li>
+</ul>

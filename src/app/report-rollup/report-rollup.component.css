@@ -215,3 +215,11 @@ font-size: 150px;
     padding-right: 2rem;
     padding-top: 1rem;
 }
+
+.skyline{
+    background-image: url('../../assets/images/industrial-skyline.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center; 
+    background-size: 100%;
+}

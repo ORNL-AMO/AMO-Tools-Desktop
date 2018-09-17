@@ -32,18 +32,21 @@ export class CashFlowComponent implements OnInit {
   tabSelect: string = 'results';
 
   constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService) {
-
   }
 
   ngOnInit() {
-    this.cashFlowForm = {
-      lifeYears: 10,
-      energySavings: 1000,
-      salvageInput: 3000,
-      installationCost: 10000,
-      operationCost: 500,
-      fuelCost: 500,
-      junkCost: 500
+    if (!this.cashFlowService.inputData) {
+      this.cashFlowForm = {
+        lifeYears: 10,
+        energySavings: 1000,
+        salvageInput: 3000,
+        installationCost: 10000,
+        operationCost: 500,
+        fuelCost: 500,
+        junkCost: 500
+      }
+    } else {
+      this.cashFlowForm = this.cashFlowService.inputData;
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -54,6 +57,10 @@ export class CashFlowComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.cashFlowService.inputData = this.cashFlowForm;
   }
 
   resizeTabs() {
@@ -69,7 +76,6 @@ export class CashFlowComponent implements OnInit {
   setField(str: string) {
     this.currentField = str;
   }
-
 
   calculate() {
     // Benefits/Cost Ratio

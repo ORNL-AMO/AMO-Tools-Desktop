@@ -32,9 +32,6 @@ export class DirectoryCardComponent implements OnInit {
 
   ngOnInit() {
     this.populateDirectories(this.directory);
-    // this.directory.assessments = tmpDirectory.assessments;
-    // this.directory.subDirectory = tmpDirectory.subDirectory;
-    // this.directory.collapsed = tmpDirectory.collapsed;
     this.directory.selected = false;
   }
 
@@ -56,10 +53,6 @@ export class DirectoryCardComponent implements OnInit {
     directory.assessments = this.assessmentDbService.getByDirectoryId(directory.id);
     directory.subDirectory = this.directoryDbService.getSubDirectoriesById(directory.id);
   }
-
-  // setDelete() {
-  //   this.directory.selected = this.isChecked;
-  // }
 
   goToAssessment(assessment: Assessment) {
     this.assessmentService.goToAssessment(assessment);
@@ -102,6 +95,7 @@ export class DirectoryCardComponent implements OnInit {
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       })
     })

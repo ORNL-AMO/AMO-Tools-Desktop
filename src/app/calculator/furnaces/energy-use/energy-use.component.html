@@ -1,92 +1,77 @@
-<div class="modify-conditions panel-container row phast" *ngIf="settings">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top">
-        <div #leftPanelHeader class="row header">
-          <div class="col-md-auto ico-col">
-            <img src="assets/images/flow.png" class="ico-size2">
-          </div>
-          <div class="col">
-            <h3>Flow and Energy Used Calculator</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-              (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
-          </div>
-        </div>
+<div class="d-flex h-100 modify-conditions phast">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/calculator-icons/furnace-icons/flow.png" class="ico-size2">
       </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="row">
-            <ul class="tabs primary tab-row">
-              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('results')">Results</a>
-              </li><!--
-              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
-                <a [ngStyle]="{'height.px': headerHeight}" (click)="setTab('help')">Help</a>
-              </li>
-            </ul>
-          </div>
-          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-            <div class="col-11">
-              <div class="output-summary energy-use-summary">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <th>Flow</th>
-
-                      <td>
-                        <strong>{{flowCalculationResults.flow | number:'2.0-0'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong> Scfh</strong>
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong> Nm
-                            <sup>3</sup>/hr</strong>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Total Flow</th>
-
-                      <td>
-                        <strong>{{flowCalculationResults.totalFlow | number:'2.0-0'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong> Scf</strong>
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong> Nm
-                            <sup>3</sup>
-                          </strong>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Energy Use</th>
-                      <td>
-                        <strong>{{flowCalculationResults.heatInput | number:'2.0-0'}}</strong>
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-                          <strong> MMBtu</strong>
-                        </span>
-                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-                          <strong> GJ</strong>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-            <div class="col-11">
-              <div class="calc-help">
-                <app-energy-use-help [currentField]="currentField"></app-energy-use-help>
-              </div>
-            </div>
-          </div>
+      <div class="pl-2">
+        <h3>Flow and Energy Used Calculator</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-energy-use-form [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
+        (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <app-energy-use-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-energy-use-help>
+      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
+        <div class="w-75">
+          <label class="group-label">Result Data</label>
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <td class="bold w-50">Flow</td>
+                <td class="text-center w-50"> {{flowCalculationResults.flow | number:'2.0-0'}}
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    Scfh
+                  </span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    Nm
+                    <sup>3</sup>/hr
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="bold w-50">Total Flow</td>
+                <td class="text-center w-50">
+                  {{flowCalculationResults.totalFlow | number:'2.0-0'}}
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    Scf
+                  </span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    Nm
+                    <sup>3</sup>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="bold w-50">Energy Use</td>
+                <td class="text-center w-50">
+                  {{flowCalculationResults.heatInput | number:'2.0-0'}}
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+                    MMBtu
+                  </span>
+                  <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+                    GJ
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

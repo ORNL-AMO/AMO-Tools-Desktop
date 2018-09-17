@@ -1,7 +1,25 @@
 <!-- <div #coreContainer> -->
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
-        <app-opening-tutorial (closeTutorial)="closeTutorial()"></app-opening-tutorial>
+        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()"></app-opening-tutorial>
+        
+        <app-psat-report-tutorial *ngIf="tutorialType == 'psat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-report-tutorial>
+        <app-psat-tutorial *ngIf="tutorialType == 'psat-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-tutorial>
+        <app-psat-assessment-tutorial *ngIf="tutorialType == 'psat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-assessment-tutorial>
+        <app-psat-system-setup *ngIf="tutorialType == 'psat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-system-setup>
+        
+        <app-phast-tutorial *ngIf="tutorialType == 'phast-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-tutorial>
+        <app-phast-setup-tutorial *ngIf="tutorialType == 'phast-setup-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-setup-tutorial>
+        <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-assessment-tutorial>
+        <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
+        
+        <app-fsat-tutorial *ngIf="tutorialType == 'fsat-tutorial'" (closeTutorial)="closeTutorial()"></app-fsat-tutorial>
+        <app-fsat-system-setup *ngIf="tutorialType == 'fsat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-system-setup>
+        <app-fsat-assessment-tutorial *ngIf="tutorialType == 'fsat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-assessment-tutorial>
+        <app-fsat-report-tutorial *ngIf="tutorialType == 'fsat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-report-tutorial>
+        
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
+
     </div>
 
     <router-outlet></router-outlet>

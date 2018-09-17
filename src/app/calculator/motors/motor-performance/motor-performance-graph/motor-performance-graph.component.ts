@@ -119,6 +119,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   constructor(private psatService: PsatService, private lineChartHelperService: LineChartHelperService, private svgToPngService: SvgToPngService) { }
 
+
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   ngOnInit() {
     this.graphColors = graphColors;
     this.tableData = new Array<{ borderColor: string, fillColor: string, motorShaftLoad: string, current: string, powerFactor: string, efficiency: string }>();
@@ -139,11 +145,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.isGridToggled = false;
 
-    d3.select('app-motor-performance').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
-
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -183,6 +189,16 @@ export class MotorPerformanceGraphComponent implements OnInit {
       unit: "%",
       formatX: false
     });
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+  
+  initColumnTitles() {
+    this.columnTitles = ['Motor Shaft Load (%)', 'Current (%)', 'Power Factor (%)', 'Efficiency (%)'];
+
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -263,15 +279,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
+
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
     let curveGraph = this.ngChartContainer.nativeElement;
-
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
       this.canvasWidth = curveGraph.clientWidth;
@@ -289,7 +302,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
+
+    // d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
+
     this.makeGraph();
   }
 
@@ -353,22 +368,11 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.performanceForm.controls.frequency.status == 'VALID' &&
-      this.performanceForm.controls.horsePower.status == 'VALID' &&
-      this.performanceForm.controls.motorRPM.status == 'VALID' &&
-      this.performanceForm.controls.efficiencyClass.status == 'VALID' &&
-      this.performanceForm.controls.motorVoltage.status == 'VALID' &&
-      this.performanceForm.controls.fullLoadAmps.status == 'VALID'
-    ) {
-      if (this.performanceForm.controls.efficiencyClass.value != '' || this.performanceForm.controls.efficiencyClass.value != undefined) {
-        if (
-          this.performanceForm.controls.efficiency.status == 'VALID'
-        ) {
-          return true;
-        }
-      } else {
-        return true;
-      }
+    if (this.performanceForm.status == 'VALID') {
+      return true
+    }
+    else {
+      return false;
     }
   }
 
@@ -957,7 +961,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
     let dArray: Array<any> = this.lineChartHelperService.getDArray();
     this.dCurrent = dArray[0];
@@ -1049,7 +1053,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   replaceFocusPoints() {
     this.svg.selectAll('.tablePoint').remove();
 
-    for (let i = 0; i < this.tableData.length; i++) {
+    for (let i = 0; i < this.rowData.length; i++) {
 
       let tableFocusCurrent: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointCurrent-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDCurrent[i].x), this.y(this.focusDCurrent[i].y));
       // let tableFocusCurrent = this.svg.append("g")
@@ -1108,6 +1112,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.focusDCurrent[j] = this.focusDCurrent[j + 1];
       this.focusDEfficiency[j] = this.focusDEfficiency[j + 1];
       this.focusDPower[j] = this.focusDPower[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
     if (i != this.tableData.length - 1) {
       this.deleteCount += 1;
@@ -1119,6 +1125,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focusDCurrent.pop();
     this.focusDEfficiency.pop();
     this.focusDPower.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 

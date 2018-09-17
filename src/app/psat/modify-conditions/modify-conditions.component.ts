@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
-import * as _ from 'lodash';
-import { PsatService } from '../psat.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
+import { PsatTabService } from '../psat-tab.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -39,15 +38,15 @@ export class ModifyConditionsComponent implements OnInit {
   showNotes: boolean = false;
   isModalOpen: boolean = false;
   modifyConditionsSub: Subscription;
-  constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
+  constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
-      this.psatService.modifyConditionsTab.next(tmpTab);
+      this.psatTabService.modifyConditionsTab.next(tmpTab);
     }
 
-    this.modifyConditionsSub = this.psatService.modifyConditionsTab.subscribe(val => {
+    this.modifyConditionsSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
   }

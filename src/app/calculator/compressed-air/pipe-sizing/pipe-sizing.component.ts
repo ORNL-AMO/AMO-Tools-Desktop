@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-pipe-sizing',
@@ -8,28 +10,42 @@ import { PipeSizingInput, PipeSizingOutput } from "../../../shared/models/standa
   styleUrls: ['./pipe-sizing.component.css']
 })
 export class PipeSizingComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
-    this.inputs = {
-      airFlow: 0,
-      airlinePressure: 0,
-      designVelocity: 20,
-      atmosphericPressure: 14.7
-    };
+    this.inputs = this.compressedAirService.pipeSizingInput;
+    this.calculatePipeSize(this.inputs);
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
 
-    this.outputs = {
-      crossSectionalArea: 0,
-      pipeDiameter: 0
-    };
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
   }
 
   calculatePipeSize(inputs: PipeSizingInput) {
-    this.outputs = StandaloneService.pipeSizing(inputs);
+    this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
   }
 
   setField(str: string) {

@@ -62,22 +62,20 @@ export class FsatSankeyComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService, private fsatService: FsatService) { }
 
   ngOnInit() {
-    if (this.location != "sankey-diagram" && this.location != "explore-opportunities-sankey") {
-      if (this.location == 'baseline') {
-        this.location = this.assessmentName + '-baseline';
-      }
-      else {
-        this.location = this.assessmentName + '-modification';
-      }
 
-      if (this.printView) {
-        this.location = this.location + '-' + this.modIndex;
+    if (!this.printView) {
+      if (this.location != "sankey-diagram" && this.location != "explore-opportunities-sankey") {
+        if (this.location == 'baseline') {
+          this.location = this.assessmentName + '-baseline';
+        }
+        else {
+          this.location = this.assessmentName + '-modification';
+        }
       }
-
-      this.location = this.location.replace(/ /g, "");
-      this.location = this.location.replace(/[\])}[{(]/g, '');
-      this.location = this.location.replace(/#/g, "");
     }
+    this.location = this.location.replace(/ /g, "");
+    this.location = this.location.replace(/[\])}[{(]/g, '');
+    this.location = this.location.replace(/#/g, "");
 
   }
 
@@ -89,7 +87,7 @@ export class FsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
-        if (this.location != "sankey-diagram") {
+        if (this.location != "sankey-diagram" && !this.printView) {
           if (this.isBaseline) {
             this.location = this.assessmentName + '-baseline';
           }

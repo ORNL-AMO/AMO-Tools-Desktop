@@ -5,6 +5,7 @@ import { Modification, PsatInputs } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { PsatTabService } from '../psat-tab.service';
 @Component({
   selector: 'app-help-panel',
   templateUrl: './help-panel.component.html',
@@ -44,9 +45,12 @@ export class HelpPanelComponent implements OnInit {
   getResultsSub: Subscription;
   helpHeight: number;
   modificationName: string;
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
+
+
+
     this.getResultsSub = this.psatService.getResults.subscribe(val => {
       if (val) {
         this.getResults();
@@ -60,12 +64,13 @@ export class HelpPanelComponent implements OnInit {
       }
     }
 
-    this.psatService.modifyConditionsTab.subscribe(val => {
+    this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.currentTab = val;
     })
+
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.getResultsSub.unsubscribe();
   }
   ngAfterViewInit() {

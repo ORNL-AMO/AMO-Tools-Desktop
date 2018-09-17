@@ -40,4 +40,11 @@ export class DirectoryDbService {
     let subDirectories: Array<Directory> = _.filter(this.allDirectories, (subDir) => { return subDir.parentDirectoryId == id });
     return subDirectories;
   }
+
+  getExample(): Directory {
+    let example: Directory = _.find(JSON.parse(JSON.stringify(this.allDirectories)), (directory: Directory) => {
+      return (directory.isExample == true);
+    });
+    return example;
+  }
 }

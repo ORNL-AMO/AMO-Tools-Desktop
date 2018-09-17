@@ -1,44 +1,50 @@
-<div #ngChartContainer class="panel-chart-container" id="panelChartContainer" [ngClass]="{'expanded-chart': expanded}">
+<div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
 
   <div *ngIf="expanded" class="row">
-    <div class="col-12" id="compress-chart">
-      <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
-      <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
-        [adjustLeft]="15" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+    <div class="col-12">
+      <div class="graph-btn-container">
+        <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+          [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
+      </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-6">
-      <small>Benefits / Cost </small>
-    </div>
-    <div class="col-6 text-center">
-      <small>{{cashFlowResults.results | currency:'USD':'symbol':'2.2-2'}}</small>
+  <div class="d-flex w-100 justify-content-center">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Benefits / Cost</td>
+          <td class="text-center w-50">{{cashFlowResults.results | currency:'USD':'symbol':'2.2-2'}}
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Simple Payback Period</td>
+          <td class="text-center w-50">{{cashFlowResults.payback}} months
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex w-100 justify-content-center align-items-center" [ngClass]="{'h-100': !expanded, 'h-90': expanded}">
+    <div class="row m-0">
+      <div class="col-12 p-0">
+        <div #ngChart></div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Simple Payback Period </small>
-    </div>
-    <div class="col-6 text-center">
-      <small>{{cashFlowResults.payback}} months</small>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 text-center">
-      <div #ngChart></div>
-    </div>
-  </div>
-  <div id="gridToggle" class="col-md-12">
-    <div>
+
+  <div class="col-md-12">
+    <div class="graph-btn-container">
       <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
-      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
-        [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="20"
+        [adjustPercent]="false"></app-simple-tooltip>
     </div>
-    <div>
+    <div class="graph-btn-container">
       <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
       <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-        [adjustLeft]="94" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+        [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
     </div>
   </div>
 </div>

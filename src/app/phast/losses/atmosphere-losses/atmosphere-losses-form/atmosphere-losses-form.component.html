@@ -5,66 +5,66 @@
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a>
       </label>
       <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="atmosphereGas" formControlName="atmosphereGas" (change)="setProperties()"
-        (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareAtmosphereGas(), 'invalid': atmosphereLossForm.controls.atmosphereGas.status == 'INVALID'}">
+        (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareAtmosphereGas(), 'invalid': atmosphereLossForm.controls.atmosphereGas.invalid}">
         <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label class="small" for="specificHeat">Specific heat of gas</label>
-      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeat(), 'error': specificHeatError !== null, 'invalid': atmosphereLossForm.controls.specificHeat.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different-db': checkSpecificHeat(), 'error': warnings.specificHeatWarning !== null, 'invalid': atmosphereLossForm.controls.specificHeat.invalid}">
         <input [readonly]="!baselineSelected" name="{{'specificHeat_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
-          formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('specificHeat')"
+          formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="save()" (focus)="focusField('specificHeat')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(SCF-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(Nm
           <sup>3</sup>-&#8451;)</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="specificHeatError !== null">{{specificHeatError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatWarning !== null">{{warnings.specificHeatWarning}}</span>
     </div>
 
 
     <div class="form-group">
       <label class="small" for="inletTemp">Inlet temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareInletTemperature(), 'error': temperatureError !== null, 'invalid': atmosphereLossForm.controls.inletTemp.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareInletTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': atmosphereLossForm.controls.inletTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemp"
-          id="inletTemp" onfocus="this.select();" (input)="checkTempError()" (focus)="focusField('inletTemp')" (blur)="focusOut()">
+          id="inletTemp" onfocus="this.select();" (input)="save()" (focus)="focusField('inletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="outletTemp">Outlet temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareOutletTemperature(), 'error': temperatureError !== null, 'invalid': atmosphereLossForm.controls.outletTemp.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareOutletTemperature(), 'error': warnings.temperatureWarning !== null, 'invalid': atmosphereLossForm.controls.outletTemp.invalid}">
         <input [readonly]="!baselineSelected" name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemp"
-          id="outletTemp" onfocus="this.select();" (input)="checkTempError()" (focus)="focusField('outletTemp')" (blur)="focusOut()">
+          id="outletTemp" onfocus="this.select();" (input)="save()" (focus)="focusField('outletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.temperatureWarning !== null">{{warnings.temperatureWarning}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="flowRate">Flow Rate</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareFlowRate(), 'error': flowRateError !== null, 'invalid': atmosphereLossForm.controls.flowRate.status == 'INVALID'}">
+      <div class="input-group" [ngClass]="{'indicate-different': compareFlowRate(), 'error': warnings.flowRateWarning !== null, 'invalid': atmosphereLossForm.controls.flowRate.invalid}">
         <input [readonly]="!baselineSelected" name="{{'flowRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
-          formControlName="flowRate" id="flowRate" onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('flowRate')"
+          formControlName="flowRate" id="flowRate" onfocus="this.select();" (input)="save()" (focus)="focusField('flowRate')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
           <sup>3</sup>
         </span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateWarning !== null">{{warnings.flowRateWarning}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input [readonly]="!baselineSelected" name="{{'correctionFactor_'+lossIndex}}" type="number" min="0" step="any" class="form-control"
-        formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')"
-        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': atmosphereLossForm.controls.correctionFactor.status == 'INVALID'}">
+        formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="save()" (focus)="focusField('correctionFactor')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareCorrectionFactor(), 'invalid': atmosphereLossForm.controls.correctionFactor.invalid}">
     </div>
   </div>
 </form>

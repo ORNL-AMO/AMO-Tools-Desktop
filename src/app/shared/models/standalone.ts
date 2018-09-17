@@ -1,26 +1,26 @@
 export interface CombinedHeatPower {
-    annualOperatingHours: number,
-    annualElectricityConsumption: number,
-    annualThermalDemand: number,
-    boilerThermalFuelCosts: number,
-    avgElectricityCosts: number,
-    option: number,
-    boilerThermalFuelCostsCHPcase: number,
-    CHPfuelCosts: number,
-    percentAvgkWhElectricCostAvoidedOrStandbyRate: number,
-    displacedThermalEfficiency: number,
-    chpAvailability: number,
-    thermalUtilization: number
+  annualOperatingHours: number,
+  annualElectricityConsumption: number,
+  annualThermalDemand: number,
+  boilerThermalFuelCosts: number,
+  avgElectricityCosts: number,
+  option: number,
+  boilerThermalFuelCostsCHPcase: number,
+  CHPfuelCosts: number,
+  percentAvgkWhElectricCostAvoidedOrStandbyRate: number,
+  displacedThermalEfficiency: number,
+  chpAvailability: number,
+  thermalUtilization: number
 }
 
 export interface CombinedHeatPowerOutput {
-    annualOperationSavings: number,
-    totalInstalledCostsPayback: number,
-    simplePayback: number,
-    fuelCosts: number,
-    thermalCredit: number,
-    incrementalOandM: number,
-    totalOperatingCosts: number
+  annualOperationSavings: number,
+  totalInstalledCostsPayback: number,
+  simplePayback: number,
+  fuelCosts: number,
+  thermalCredit: number,
+  incrementalOandM: number,
+  totalOperatingCosts: number
 }
 
 export interface PneumaticAirRequirementInput {
@@ -99,13 +99,15 @@ export interface PipeSizes {
 }
 
 export interface AirSystemCapacityInput extends PipeSizes {
-  receiverCapacities: Array<Number>;
+  receiverCapacities: Array<number>;
+  customPipes: Array<{ pipeSize: number, pipeLength: number }>;
 }
 
-export interface AirSystemCapacityOutput extends AirSystemCapacityInput {
+export interface AirSystemCapacityOutput {
   totalPipeVolume: number;
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;
+  receiverCapacities: Array<number>;
 }
 
 export interface AirVelocityInput {

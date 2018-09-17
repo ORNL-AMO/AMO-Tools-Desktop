@@ -7,7 +7,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/leakage-loss-estimator.png" class="calc-img" (click)="showTool('bag-method')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png" class="calc-img" (click)="showTool('bag-method')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -20,7 +20,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/pneumatic-valve-flow-factor.png" class="calc-img" (click)="showTool('flow-factor')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-valve-flow-factor.png" class="calc-img" (click)="showTool('flow-factor')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -34,7 +34,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/pneumatic-air-requirement.png" class="calc-img" (click)="showTool('pneumatic-air')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png" class="calc-img" (click)="showTool('pneumatic-air')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -49,7 +49,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/receiver-tank-calculation.png" class="calc-img" (click)="showTool('receiver-tank')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png" class="calc-img" (click)="showTool('receiver-tank')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -64,7 +64,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/pipe-sizing.png" class="calc-img" (click)="showTool('pipe-sizing')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/pipe-sizing.png" class="calc-img" (click)="showTool('pipe-sizing')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -78,7 +78,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/velocity-in-piping.png" class="calc-img" (click)="showTool('air-velocity')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/velocity-in-piping.png" class="calc-img" (click)="showTool('air-velocity')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -91,7 +91,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/air-system-capacity.png" class="calc-img" (click)="showTool('system-capacity')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png" class="calc-img" (click)="showTool('system-capacity')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -106,7 +106,7 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/operation-cost.png" class="calc-img" (click)="showTool('operation-cost')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/operation-cost.png" class="calc-img" (click)="showTool('operation-cost')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -123,26 +123,26 @@
 
 
 <div class="stand-alone-calc" *ngIf="selectedTool == 'bag-method'">
-  <app-bag-method></app-bag-method>
+  <app-bag-method [settings]="settings"></app-bag-method>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'flow-factor'">
-  <app-flow-factor></app-flow-factor>
+  <app-flow-factor [settings]="settings"></app-flow-factor>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'pneumatic-air'">
-  <app-pneumatic-air></app-pneumatic-air>
+  <app-pneumatic-air [settings]="settings"></app-pneumatic-air>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'receiver-tank'">
-  <app-receiver-tank></app-receiver-tank>
+  <app-receiver-tank [settings]="settings"></app-receiver-tank>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'pipe-sizing'">
-  <app-pipe-sizing></app-pipe-sizing>
+  <app-pipe-sizing [settings]="settings"></app-pipe-sizing>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'air-velocity'">
-  <app-air-velocity></app-air-velocity>
+  <app-air-velocity [settings]="settings"></app-air-velocity>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'system-capacity'">
-  <app-system-capacity></app-system-capacity>
+  <app-system-capacity [settings]="settings"></app-system-capacity>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'operation-cost'">
-  <app-operating-cost></app-operating-cost>
+  <app-operating-cost [settings]="settings"></app-operating-cost>
 </div>

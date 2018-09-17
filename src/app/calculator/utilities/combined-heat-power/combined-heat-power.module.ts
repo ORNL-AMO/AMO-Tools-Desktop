@@ -5,6 +5,7 @@ import { CombinedHeatPowerComponent } from './combined-heat-power.component';
 import { CombinedHeatPowerFormComponent } from './combined-heat-power-form/combined-heat-power-form.component';
 import { CombinedHeatPowerHelpComponent } from './combined-heat-power-help/combined-heat-power-help.component';
 import { CombinedHeatPowerResultsComponent } from './combined-heat-power-results/combined-heat-power-results.component';
+import { CombinedHeatPowerService } from './combined-heat-power.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +20,9 @@ import { CombinedHeatPowerResultsComponent } from './combined-heat-power-results
   ],
   exports: [
     CombinedHeatPowerComponent
+  ],
+  providers: [
+    CombinedHeatPowerService
   ]
 })
 export class CombinedHeatPowerModule { }

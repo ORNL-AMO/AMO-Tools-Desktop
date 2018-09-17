@@ -31,32 +31,19 @@ export class SpecificSpeedFormComponent implements OnInit {
     // When user selects below they need a way to provide the optimal efficiency
     //'Specified Optimal Efficiency'
   ];
-  tmpPumpType: string;
-  tmpPumpRpm: number;
-  tmpFlowRate: number;
-  tmpHead: number;
+
   constructor() { }
 
   ngOnInit() {
-    if (this.speedForm) {
-      this.tmpPumpType = this.speedForm.controls.pumpType.value;
-      this.tmpPumpRpm = this.speedForm.controls.pumpRPM.value;
-      this.tmpFlowRate = this.speedForm.controls.flowRate.value;
-      this.tmpHead = this.speedForm.controls.head.value;
-    }
+
   }
 
 
 
   emitCalculate() {
-    this.speedForm.patchValue({
-      pumpType: this.tmpPumpType,
-      pumpRPM: this.tmpPumpRpm,
-      flowRate: this.tmpFlowRate,
-      head: this.tmpHead
-    })
     this.calculate.emit(true);
   }
+
   focusField(str: string) {
     this.changeField.emit(str);
   }

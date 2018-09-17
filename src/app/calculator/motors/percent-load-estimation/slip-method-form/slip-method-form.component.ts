@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { SlipMethod } from '../percent-load-estimation.component';
+import { SlipMethod } from '../percent-load-estimation.service';
+
 
 @Component({
   selector: 'app-slip-method-form',

@@ -3,6 +3,7 @@ import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings";
 
 export const MockPsat: Assessment = {
+    isExample: true,
     name: "Example Pump",
     type: "PSAT",
     psat: {
@@ -98,7 +99,7 @@ export const MockPsat: Assessment = {
                         motor_rated_power: 200,
                         motor_rated_speed: 1780,
                         efficiency_class: 0,
-                        efficiency: 95,
+                        efficiency: 93,
                         motor_rated_voltage: 460,
                         load_estimation_method: 0,
                         motor_rated_fla: 228.57,
@@ -111,7 +112,7 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: false,
+                        optimize_calculation: true,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 68
@@ -140,7 +141,7 @@ export const MockPsat: Assessment = {
                         motor_rated_power: 200,
                         motor_rated_speed: 1780,
                         efficiency_class: 0,
-                        efficiency: 95,
+                        efficiency: 93,
                         motor_rated_voltage: 460,
                         load_estimation_method: 0,
                         motor_rated_fla: 228.57,
@@ -187,7 +188,7 @@ export const MockPsat: Assessment = {
                         motor_rated_power: 200,
                         motor_rated_speed: 1780,
                         efficiency_class: 0,
-                        efficiency: 95,
+                        efficiency: 93,
                         motor_rated_voltage: 460,
                         load_estimation_method: 0,
                         motor_rated_fla: 225,

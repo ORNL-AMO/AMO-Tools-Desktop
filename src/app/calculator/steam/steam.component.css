@@ -13,3 +13,22 @@ a:not([href]):not([tabindex]){
 img {
   cursor: pointer;
 }
+
+
+.fa-hourglass-half{
+  font-size: xx-large;
+}
+
+
+.fa-hourglass-half:hover{
+  cursor: pointer;
+}
+
+
+.flash-tank, .header-steam{
+  width: 55%;
+}
+
+.prv, .steam-turbine{
+  width: 45%;
+}

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PneumaticValve } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-flow-factor',
@@ -8,33 +10,55 @@ import { PneumaticValve } from "../../../shared/models/standalone";
   styleUrls: ['./flow-factor.component.css']
 })
 export class FlowFactorComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  headerHeight: number;
 
   inputs: PneumaticValve;
   valveFlowFactor: number = 0;
   userFlowRate: boolean = false;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
-    this.inputs = {
-      inletPressure: 0,
-      outletPressure: 0,
-      flowRate: 0
-    };
+    this.inputs = this.compressedAirService.pnuematicValveInputs;
+    this.getValveFlowFactor();
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setUserFlowRate(bool: boolean) {
     this.userFlowRate = bool;
   }
   getFlowRate() {
-    this.inputs.flowRate = StandaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure);
+    this.inputs.flowRate = this.standaloneService.pneumaticValveCalculateFlowRate(this.inputs.inletPressure, this.inputs.outletPressure, this.settings);
   }
 
   getValveFlowFactor() {
     if (!this.userFlowRate) {
       this.getFlowRate();
     }
-    this.valveFlowFactor = StandaloneService.pneumaticValve(this.inputs);
+    let val: number = this.standaloneService.pneumaticValve(this.inputs, this.settings);
+    if (isNaN(val) == false) {
+      this.valveFlowFactor = val;
+    } else {
+      this.valveFlowFactor = 0;
+    }
   }
 
   changeField(str: string) {

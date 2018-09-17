@@ -5,11 +5,13 @@
       <thead>
         <tr>
           <th>Drive Type</th>
+          <th>Drive Efficiency</th>
           <th>Annual Energy Use</th>
           <th>Annual Energy Cost</th>
         </tr>
         <tr>
           <th></th>
+          <th>(%)</th>
           <th>(MWh/yr)</th>
           <th>($k/yr)</th>
         </tr>
@@ -18,6 +20,9 @@
         <tr>
           <td>
             V Belt Drive
+          </td>
+          <td>
+            93
           </td>
           <td>
             {{results.vBeltResults.annualEnergyUse | number:'1.0-0'}}
@@ -31,6 +36,9 @@
             Notched V Belt Drive
           </td>
           <td>
+            95
+          </td>
+          <td>
             {{results.notchedResults.annualEnergyUse | number:'1.0-0'}}
           </td>
           <td>
@@ -40,6 +48,9 @@
         <tr>
           <td>
             Synchronous Belt Drive
+          </td>
+          <td>
+            98
           </td>
           <td>
             {{results.synchronousBeltDrive.annualEnergyUse | number:'1.0-0'}}

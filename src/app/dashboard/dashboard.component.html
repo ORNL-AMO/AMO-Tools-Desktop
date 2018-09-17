@@ -2,43 +2,43 @@
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
 
         <div class="col-2 sidebar-bg p-0" [ngClass]="{'modal-open': isModalOpen}">
-            <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
-                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)" (openModal)="openModal($event)">
+            <app-sidebar *ngIf="allDirectories" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle" [workingDirectory]="getWorkingDirectory()"
+                [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)" (openModal)="openModal($event)">
             </app-sidebar>
         </div>
 
-        <div class="col-10 pb-4" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+        <div class="col-10 pb-4 skyline" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
+                (deleteCheckedItems)="showDeleteItemsModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
                 (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal($event)"
                 [directorySettings]="workingDirectorySettings">
             </app-assessment-dashboard>
 
         </div>
 
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'calculator'">
+        <div class="col-10 pl-0 pr-0 dashboard-scroll scroll-item" [ngClass]="{'skyline': selectedTool == 'none'}" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator></app-calculator>
         </div>
-        <div class="col-10 dashboard-scroll pb-4 scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
+        <div class="col-10 pb-4 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen [directory]="allDirectories"></app-landing-screen>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'tutorials'">
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'tutorials'">
             <app-tutorials></app-tutorials>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'about-page'">
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'about-page'">
             <app-about-page></app-about-page>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'contact'">
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'contact'">
             <app-contact-page></app-contact-page>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'acknowledgments-page'">
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'acknowledgments-page'">
             <app-acknowledgments-page></app-acknowledgments-page>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'settings'">
-            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="getWorkingDirectoryData()"></app-assessment-settings>
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'settings'">
+            <app-assessment-settings [directory]="allDirectories" (emitUpdateDirectory)="getData()"></app-assessment-settings>
         </div>
-        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'custom-materials'">
+        <div class="col-10 dashboard-scroll scroll-item skyline" *ngIf="allDirectories && dashboardView == 'custom-materials'">
             <app-custom-materials [settings]="workingDirectorySettings"></app-custom-materials>
         </div>
     </div>
@@ -46,47 +46,6 @@
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
     <app-report-rollup (emitCloseReport)="closeReport()"></app-report-rollup>
-</div>
-
-<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
-    [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md create-assessment-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Delete Data</h3>
-                <button class="close" aria-label="Close" (click)="hideDeleteModal()">
-                    <span *ngIf="!deleting" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div *ngIf="!deleting" class="row">
-                    <div class="col-12">
-                        All of your data will be deleted and your database will be reset to the initial state.
-                        <span class="red">This cannot be undone!</span>
-                    </div>
-                </div>
-                <hr>
-                <div *ngIf="!deleting" class="row">
-                    <div class="col-12">
-                        <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
-                        <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
-                    </div>
-                </div>
-                <div class="row justify-content-center" *ngIf="deleting">
-                    <div class="col-10">
-                        <div class="main-content" style="text-align: center;">
-                            <div class="spinner">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
-                            </div>
-                            <h1>Resetting Data...</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" [settings]="workingDirectorySettings"
@@ -126,7 +85,9 @@
                 <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
-                        <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected Items</button>
+                        <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected
+                            Items
+                        </button>
                     </div>
                 </div>
             </div>
@@ -195,15 +156,15 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div> -->
-            <div class="modal-body tab-content" *ngIf="showPreAssessment">
+            <div class="modal-body pr-0 pl-0 tab-content" *ngIf="showPreAssessment">
                 <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectory.calculators[selectedCalcIndex]" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
             <div class="modal-footer justify-content-center">
-                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[selectedCalcIndex])">Save to Folder</button>
+                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectory.calculators[selectedCalcIndex])">Save
+                    to Folder</button>
                 <button class="btn btn-secondary save-btn" (click)="hidePreAssessmentModal()">Cancel</button>
             </div>
         </div>
     </div>
 </div>
-
 <ng2-toasty></ng2-toasty>

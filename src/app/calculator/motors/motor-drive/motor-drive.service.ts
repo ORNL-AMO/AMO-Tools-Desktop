@@ -3,7 +3,7 @@ import { MotorDriveInputs, MotorDriveOutputs } from './motor-drive.component';
 
 @Injectable()
 export class MotorDriveService {
-
+  motorDriveData: MotorDriveInputs
   constructor() { }
 
   getResults(data: MotorDriveInputs): MotorDriveOutputs {
@@ -34,7 +34,7 @@ export class MotorDriveService {
   }
 
   getEnergy(data: MotorDriveInputs): number {
-    return (data.motorPower * .746 * data.annualOperatingHours * data.averageMotorLoad);
+    return (data.motorPower * .746 * data.annualOperatingHours * (data.averageMotorLoad/100));
   }
 
   getVBeltEnergyUse(data: number): number {

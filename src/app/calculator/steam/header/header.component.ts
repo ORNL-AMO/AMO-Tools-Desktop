@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { HeaderOutput, HeaderInput, HeaderInputObj } from '../../../shared/models/steam';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,7 +14,12 @@ import { Settings } from '../../../shared/models/settings';
 export class HeaderComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   headerPressureForm: FormGroup;
@@ -33,9 +38,19 @@ export class HeaderComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForms();
+    this.initForms();
+    this.calculate();
   }
-
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -46,10 +61,18 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  getForms() {
+  initForms() {
     this.inletForms = new Array<FormGroup>();
-    this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
-    this.getInletForms();
+    if (this.headerService.headerInput) {
+      this.headerService.headerInput.inlets.forEach(inlet => {
+        let tmpForm: FormGroup = this.headerService.getInletFormFromObj(inlet, this.settings);
+        this.inletForms.push(tmpForm);
+      })
+      this.headerPressureForm = this.headerService.getHeaderFormFromObj(this.headerService.headerInput, this.settings);
+    } else {
+      this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.getInletForms();
+    }
   }
 
   getInletForms() {
@@ -73,6 +96,7 @@ export class HeaderComponent implements OnInit {
 
   calculate() {
     this.input = this.headerService.getObjFromForm(this.headerPressureForm, this.inletForms);
+    this.headerService.headerInput = this.input;
     if (this.headerPressureForm.status == 'VALID') {
       let formTest: boolean = true;
       this.inletForms.forEach(form => {

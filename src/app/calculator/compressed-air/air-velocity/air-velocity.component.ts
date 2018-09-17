@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
+import { Component, OnInit, ElementRef, HostListener, ViewChild, Input } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-air-velocity',
@@ -8,38 +10,41 @@ import {AirVelocityInput, PipeSizes} from "../../../shared/models/standalone";
   styleUrls: ['./air-velocity.component.css']
 })
 export class AirVelocityComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
+
 
   inputs: AirVelocityInput;
   outputs: PipeSizes;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
-    this.inputs = {
-      airFlow: 0,
-      pipePressure: 0,
-      atmosphericPressure: 0,
-    };
-    this.outputs = {
-      oneHalf: 0,
-      threeFourths: 0,
-      one: 0,
-      oneAndOneFourth: 0,
-      oneAndOneHalf: 0,
-      two: 0,
-      twoAndOneHalf: 0,
-      three: 0,
-      threeAndOneHalf: 0,
-      four: 0,
-      five: 0,
-      six: 0,
-    };
-    // this.getAirVelocity();
-    // console.log(this.airVelocityOutput);
+    this.inputs = this.compressedAirService.airVelocityInputs;    
+    this.getAirVelocity(this.inputs);
   }
-  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   getAirVelocity (inputs: AirVelocityInput) {
-    this.outputs = StandaloneService.airVelocity(inputs);
+    this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
   }
 
   setField(str: string){

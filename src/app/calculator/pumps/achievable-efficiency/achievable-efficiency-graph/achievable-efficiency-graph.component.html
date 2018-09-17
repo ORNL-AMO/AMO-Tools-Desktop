@@ -1,72 +1,43 @@
-<div #ngChartContainer class="panel-chart-container" id="panelChartContainer" [ngClass]="{'expanded-chart': expanded}">
+<div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
+
   <div *ngIf="expanded" class="row">
-    <div class="col-12" id="compress-chart">
-      <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
-      <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
-        [adjustLeft]="15" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col-12">
-      <div #ngChart (click)="buildTable()" class="clickable-graph"></div>
+      <div class="graph-btn-container">
+        <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
+          [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
+      </div>
     </div>
   </div>
 
-  <div id="gridToggle" class="col-md-12">
-    <div>
+  <div class="d-flex w-100 h-100 justify-content-center align-items-center" [ngClass]="{'h-100': !expanded, 'h-90': expanded}">
+    <div class="row m-0">
+      <div class="col-12 p-0">
+        <div #ngChart (click)="buildTable()" class="clickable-graph"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="graph-btn-container">
       <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
-      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="55"
-        [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="20"
+        [adjustPercent]="false"></app-simple-tooltip>
     </div>
-    <div>
-      <button id="gridToggleBtn" class="btn" type="button">
-        <span class="fa fa-bar-chart" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
-      </button>
+    <div class="graph-btn-container">
+      <span class="fa fa-bar-chart" (click)="toggleGrid()" (mouseenter)="initTooltip('btnGridLines')" (mouseleave)="hideTooltip('btnGridLines')"></span>
       <app-simple-tooltip [message]="'Toggle graph grid lines'" [hover]="hoverBtnGridLines" [display]="displayGridLinesTooltip"
-        [adjustLeft]="15" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+        [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
     </div>
-    <div>
+    <div class="graph-btn-container">
       <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
       <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
-        [adjustLeft]="94" [adjustTop]="35" [adjustPercent]="false"></app-simple-tooltip>
+        [adjustLeft]="101" [adjustPercent]="false"></app-simple-tooltip>
     </div>
   </div>
+</div>
 
-
-  <!-- table will be populated when graph is clicked -->
-  <div class="row table-export-container" *ngIf="!expanded && tableData.length > 0">
-    <div class="col-12 btn-container">
-      <!-- <button class="btn-export">
-            Export Table
-          </button> -->
-    </div>
-  </div>
-  <div class="row" *ngIf="!expanded && tableData.length > 0">
-    <div class="col-12">
-      <table class="table-hover table-striped graph-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Point</th>
-            <th>Flow Rate ({{settings.flowMeasurement}})</th>
-            <th>Max Efficiency (%)</th>
-            <th>Avg. Efficiency (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr (mouseenter)="highlightPoint(i)" (mouseleave)="unhighlightPoint(i)" *ngFor="let data of tableData; let i=index;">
-            <td>
-              <div class="key-color" [ngStyle]="{'border': '3px solid ' + data.borderColor, 'background-color': data.fillColor}"></div>
-            </td>
-            <td>{{i + 1}}</td>
-            <td>{{data.flowRate}}</td>
-            <td>{{data.maxEfficiency}}</td>
-            <td>{{data.averageEfficiency}}</td>
-            <td class="delete-row" (click)="deleteFromTable(i)">Delete</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="d-flex w-100 justify-content-center pl-2 pr-2" *ngIf="!expanded && rowData.length > 0">
+  <app-exportable-table class="exportable-table-container" [settings]="settings" [columnTitles]="columnTitles" [rowData]="rowData"
+    [keyColors]="keyColors" (highlightPoint)="highlightPoint($event)" (unhighlightPoint)="unhighlightPoint($event)" (deleteFromTable)="deleteFromTable($event)"></app-exportable-table>
 </div>

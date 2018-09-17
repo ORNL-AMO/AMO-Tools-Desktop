@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class StackLossHelpComponent implements OnInit {
   @Input()
   currentField: string;
+
   constructor() { }
 
   ngOnInit() {

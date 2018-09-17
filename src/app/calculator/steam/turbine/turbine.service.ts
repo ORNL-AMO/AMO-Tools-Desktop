@@ -6,6 +6,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { SteamService } from '../steam.service';
 @Injectable()
 export class TurbineService {
+  turbineInput: TurbineInput;
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
@@ -22,13 +23,14 @@ export class TurbineService {
       massFlowOrPowerOut: ['', [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: ['', [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
       outletQuantity: [0],
-      outletQuantityValue: ['', [ Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
+      outletQuantityValue: ['', [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
     })
     return tmpForm;
   }
 
   getFormFromObj(inputObj: TurbineInput, settings: Settings): FormGroup {
     let ranges: TurbineRanges = this.getRangeValues(settings, inputObj.inletQuantity, inputObj.outletQuantity);
+    console.log(inputObj.inletQuantityValue);
     let tmpForm: FormGroup = this.formBuilder.group({
       solveFor: [inputObj.solveFor, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],

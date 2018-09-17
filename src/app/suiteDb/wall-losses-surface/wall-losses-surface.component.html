@@ -30,7 +30,7 @@
               <label class="small" for="surface">Surface Name</label>
               <div class="input-group" *ngIf="!editExistingMaterial">
                 <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkMaterialName()"
-                />
+                  (focus)="focusField('substance')" />
               </div>
               <div class="input-group" *ngIf="editExistingMaterial">
                 <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkEditMaterialName()"

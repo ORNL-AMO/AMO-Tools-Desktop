@@ -7,6 +7,7 @@ import { HeadToolFormComponent } from './head-tool-form/head-tool-form.component
 import { HeadToolHelpComponent } from './head-tool-help/head-tool-help.component';
 import { HeadToolResultsComponent } from './head-tool-results/head-tool-results.component';
 import { HeadToolSuctionFormComponent } from './head-tool-suction-form/head-tool-suction-form.component';
+import { HeadToolService } from './head-tool.service';
 
 
 @NgModule({
@@ -25,6 +26,9 @@ import { HeadToolSuctionFormComponent } from './head-tool-suction-form/head-tool
   ],
   exports: [
     HeadToolComponent
+  ],
+  providers: [
+    HeadToolService
   ]
 })
 export class HeadToolModule { }

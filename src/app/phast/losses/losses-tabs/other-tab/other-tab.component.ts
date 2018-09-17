@@ -25,7 +25,7 @@ export class OtherTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   compareSubscription: Subscription;
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private otherLossesService: OtherLossesService, private otherLossesCompareService: OtherLossesCompareService, private cd: ChangeDetectorRef) { }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -15,15 +16,17 @@ import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkmark.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
-import { ModifyConditionsTabsTooltipComponent } from './modify-conditions-tabs-tooltip/modify-conditions-tabs-tooltip.component';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
+import { ExportableTableComponent } from './exportable-table/exportable-table.component';
+import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ClipboardModule
     // ChartsModule
   ],
   declarations: [
@@ -34,8 +37,9 @@ import { LineChartHelperService } from './line-chart-helper/line-chart-helper.se
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent,
-    SimpleTooltipComponent
+    SimpleTooltipComponent,
+    ExportableTableComponent,
+    TabsTooltipComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -45,8 +49,9 @@ import { LineChartHelperService } from './line-chart-helper/line-chart-helper.se
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    ModifyConditionsTabsTooltipComponent,
-    SimpleTooltipComponent
+    SimpleTooltipComponent,
+    ExportableTableComponent,
+    TabsTooltipComponent
   ],
   providers: [
     ValidationService,

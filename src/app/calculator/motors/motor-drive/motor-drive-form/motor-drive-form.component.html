@@ -10,7 +10,7 @@
   <div class="form-group">
     <label for="annualOperatingHours">Annual Operating Hours</label>
     <div class="input-group calc-addon-group">
-      <input name="annualOperatingHours" type="number" min="0" step="any" max="100" class="form-control" id="annualOperatingHours"
+      <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control" id="annualOperatingHours"
         [(ngModel)]="data.annualOperatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
       <span class="units">hrs/yr</span>
     </div>
@@ -30,7 +30,7 @@
   <div class="form-group">
     <label for="electricityCost">Electricity Cost</label>
     <div class="input-group calc-addon-group">
-      <input name="electricityCost" type="number" min="0" step="any" max="100" class="form-control" id="electricityCost"
+      <input name="electricityCost" type="number" min="0" step="any" class="form-control" id="electricityCost"
         [(ngModel)]="data.electricityCost" (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
       <span class="units">$/kWh</span>
     </div>

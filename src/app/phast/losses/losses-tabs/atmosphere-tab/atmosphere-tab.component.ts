@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { AtmosphereLossesCompareService } from '../../atmosphere-losses/atmosphere-losses-compare.service';
-import { AtmosphereLossesService } from '../../atmosphere-losses/atmosphere-losses.service';
+import { AtmosphereLossesService, AtmosphereLossWarnings } from '../../atmosphere-losses/atmosphere-losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
@@ -25,8 +25,7 @@ export class AtmosphereTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
-  compareSubscription: Subscription;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private atmosphereLossesService: AtmosphereLossesService, private cd: ChangeDetectorRef) { }
 
@@ -34,21 +33,16 @@ export class AtmosphereTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
     })
-
-    this.compareSubscription = this.atmosphereLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -73,25 +67,41 @@ export class AtmosphereTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
       this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
+        //missingData
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
         }
+        //warnings
+        let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
+        }
+
       })
     }
     if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
       this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
+        //missingData
         if (this.checkLossValid(loss) == false) {
-          testVal = true;
+          missingData = true;
+        }
+        //warnings
+        let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning == true) {
+          hasWarning = tmpHasWarning;
         }
       })
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
-
 
   checkLossValid(loss: AtmosphereLoss) {
     let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);

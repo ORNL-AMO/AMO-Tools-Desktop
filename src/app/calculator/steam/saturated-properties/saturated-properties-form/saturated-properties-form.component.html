@@ -4,7 +4,8 @@
     <div class="form-group">
       <label for="pressureOrTemperature">Pressure or Temperature</label>
       <div class="input-group calc-addon-group">
-        <select name="pressureOrTemperature" class="form-control" formControlName="pressureOrTemperature" id="pressureOrTemperature" (change)="calculate()" autofocus>
+        <select (focus)="changeField('pressureOrTemperature')" name="pressureOrTemperature" class="form-control" formControlName="pressureOrTemperature"
+          id="pressureOrTemperature" (change)="setValidators()" autofocus>
           <option [ngValue]="0">Saturated Pressure</option>
           <option [ngValue]="1">Saturated Temperature</option>
         </select>
@@ -14,126 +15,174 @@
     <div class="form-group" *ngIf="saturatedPropertiesForm.controls.pressureOrTemperature.value == 0">
       <label for="saturatedPressure">Saturated Pressure</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="calculate()">
-        <span class= "input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
-        <span class="alert-danger pull-right small" *ngIf="pressureError !== null">{{pressureError}}</span>
+        <input (focus)="changeField('saturatedPressure')" type="number" step="1" class="form-control" formControlName="saturatedPressure"
+          id="saturatedPressure" onfocus="this.select();" (input)="calculate()">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="saturatedPropertiesForm.controls.saturatedPressure.invalid && !saturatedPropertiesForm.controls.saturatedPressure.pristine">
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedPressure.errors.required">Value Required</span>
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedPressure.errors.max">Value can't be greater than {{saturatedPropertiesForm.controls.saturatedPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedPressure.errors.min">Value can't be less than {{saturatedPropertiesForm.controls.saturatedPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
     </div>
 
     <div class="form-group" *ngIf="saturatedPropertiesForm.controls.pressureOrTemperature.value == 1">
       <label for="saturatedTemperature">Saturated Temperature</label>
       <div class="input-group calc-addon-group">
-        <input type="number" step="1" class="form-control" formControlName="saturatedTemperature" id="saturatedTemperature" onfocus="this.select();" (input)="calculate()">
-        <span class= "input-group-addon units"  [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
-        <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+        <input (focus)="changeField('saturatedTemperature')" type="number" step="1" class="form-control" formControlName="saturatedTemperature"
+          id="saturatedTemperature" onfocus="this.select();" (input)="calculate()">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="saturatedPropertiesForm.controls.saturatedTemperature.invalid && !saturatedPropertiesForm.controls.saturatedTemperature.pristine">
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedTemperature.errors.required">Value Required</span>
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedTemperature.errors.max">Value can't be greater than {{saturatedPropertiesForm.controls.saturatedTemperature.errors.max.max}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>.</span>
+        <span *ngIf="saturatedPropertiesForm.controls.saturatedTemperature.errors.min">Value can't be less than {{saturatedPropertiesForm.controls.saturatedTemperature.errors.min.min}}
+          <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>.</span>
+      </span>
     </div>
   </form>
 </div>
 
 <div class="form-section">
   <div class="form-group">
-    <label class="small"><strong>Pressure</strong></label>
-    <div class="small text-center"><strong>{{output.saturatedPressure | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamPressureMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Pressure</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedPressure | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamPressureMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Temperature</strong></label>
-    <div class="small text-center"><strong>{{output.saturatedTemperature | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Temperature</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.saturatedTemperature | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Liquid Specific Enthalpy</strong></label>
-    <div class="small text-center"><strong>{{output.liquidEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+    <label class="small">
+      <strong>Liquid Specific Enthalpy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEnthalpy | number:'1.1-4'}} {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Liquid Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.liquidEntropy | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Liquid Specific Entropy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidEntropy | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Liquid Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.liquidVolume | number:'1.1-4'}}
-      <!-- <span><strong>m3/kg</strong></span> -->
-      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Liquid Specific Volume</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.liquidVolume | number:'1.1-4'}}
+        <!-- <span><strong>m3/kg</strong></span> -->
+        <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
 
   <div class="form-group">
-    <label class="small"><strong>Gas Specific Enthalpy</strong></label>
-    <div class="small text-center"><strong>{{output.gasEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+    <label class="small">
+      <strong>Gas Specific Enthalpy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEnthalpy | number:'1.1-4'}} {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Gas Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.gasEntropy | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Gas Specific Entropy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasEntropy | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Gas Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.gasVolume | number:'1.1-4'}}
-      <span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Gas Specific Volume</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.gasVolume | number:'1.1-4'}}
+        <span [innerHTML]="getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
 
   <div class="form-group">
-    <label class="small"><strong>Evaporation Specific Enthalpy</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationEnthalpy | number:'1.1-4'}}</strong>
-      <span><strong> {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong></span>
+    <label class="small">
+      <strong>Evaporation Specific Enthalpy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEnthalpy | number:'1.1-4'}} {{getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)}}</strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Evaporation Specific Entropy</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationEntropy | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Evaporation Specific Entropy</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationEntropy | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
   <div class="form-group">
-    <label class="small"><strong>Evaporation Specific Volume</strong></label>
-    <div class="small text-center"><strong>{{output.evaporationVolume | number:'1.1-4'}}
-      <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
-    </strong>
+    <label class="small">
+      <strong>Evaporation Specific Volume</strong>
+    </label>
+    <div class="small text-center">
+      <strong *ngIf="saturatedPropertiesForm.status == 'VALID'">{{output.evaporationVolume | number:'1.1-4'}}
+        <span [innerHTML]=" getDisplayUnit(settings.steamSpecificVolumeMeasurement)"></span>
+      </strong>
+      <strong *ngIf="saturatedPropertiesForm.status == 'INVALID'">
+        &mdash;
+      </strong>
     </div>
   </div>
 </div>
-
-<!--<div>-->
-  <!--&lt;!&ndash;<col>&ndash;&gt;-->
-  <!--<colgroup span="3"></colgroup>-->
-  <!--<table class="output-summary">-->
-    <!--<tr>-->
-      <!--<th rowspan="2">Pressure</th>-->
-      <!--<th rowspan="2">Temperature</th>-->
-      <!--<th colspan="3">Specific Enthalpy</th>-->
-      <!--<th colspan="3">Specific Entropy</th>-->
-      <!--<th colspan="3">Specific Volume</th>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td colspan="2"></td>-->
-      <!--<th scope="col">liquid</th>-->
-      <!--<th scope="col">gas</th>-->
-      <!--<th scope="col">evaporation</th>-->
-      <!--<th scope="col">liquid</th>-->
-      <!--<th scope="col">gas</th>-->
-      <!--<th scope="col">evaporation</th>-->
-      <!--<th scope="col">liquid</th>-->
-      <!--<th scope="col">gas</th>-->
-      <!--<th scope="col">evaporation</th>-->
-    <!--</tr>-->
-  <!--</table>-->
-<!--</div>-->
-

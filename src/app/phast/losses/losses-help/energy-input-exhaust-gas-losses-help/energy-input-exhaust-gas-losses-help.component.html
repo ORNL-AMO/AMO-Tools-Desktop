@@ -1,115 +1,150 @@
-<div class="help-header">
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Exhaust Gas Help
+    <br>
+    <small class="text-muted">
+      Enter measured data to calculate your system's annual savings potential.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-  <h3>Exhaust Gas Help</h3>
-  <p>Enter exhaust gas data</p>
-  <!--<p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
-  </p>-->
+
+  <!-- All -->
+  <div class="my-2" *ngIf="currentField == 'totalHeatInput'">
+    <h6>
+      Total Heat Input
+      <br>
+      <small class="text-muted">
+        Give value of total heat input to the heating system (furnace/oven) from all sources of heat supplied.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricalPowerInput'">
+    <h6>
+      Electrical Power Input
+      <br>
+      <small class="text-muted">
+        Measured power input from the power meter.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span>kW</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'excessAir'">
+    <h6>
+      Excess Air
+      <br>
+      <small class="text-muted">
+        Excess air used for combustion. This can be estimated by measuring fuel and air supply or use 20% if it is not known, For
+        some infrared ovens it could 100% or higher.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'combustionAirTemp'">
+    <h6>
+      Combustion Air Temperature
+      <br>
+      <small class="text-muted">
+        Combustion air temperature at the burner.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'exhaustGasTemp'">
+    <h6>
+      Exhaust Gas Temperature
+      <br>
+      <small class="text-muted">
+        Exhaust gas temperature from the oven or furnace.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      Savings Suggestions
+      <br>
+      <small class="text-muted">
+        Control air-fuel ratios for burners
+        <br> Use Preheated air where possible
+        <br> Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turn down
+        <br> Replace excess air burners by ratio type burners. Consider process requirements (i.e. make up air) to evaluate benefits
+        of ratio type burners
+        <br> Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down
+        <br> Minimize volume by controlling make up air and air leaks in the oven
+        <br> Use preheated combustion air
+        <br> Reduce exhaust gas temperature by using one or more heat recovery methods
+      </small>
+    </h6>
+  </div>
+
 
 </div>
 
 
-<div class="help-content">
-  <!-- All -->
-  <div class="card" *ngIf="currentField == 'totalHeatInput'">
-    <div class="card-header">
-      Total Heat Input
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Give value of total heat input to the heating system (furnace/oven) from all sources of heat supplied
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>MMBtu/hr</strong> or <strong>GJ/hr</strong><br> Minimum Value: <strong>0</strong>
-      </p>
-    </div>
-  </div>
+  <!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
+  </p>-->
 
-  <div class="card" *ngIf="currentField == 'electricalPowerInput'">
-    <div class="card-header">
-      Electrical Power Input
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Measured power input from the power meter.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>kW</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
 
-  <div class="card" *ngIf="currentField == 'excessAir'">
-    <div class="card-header">
-      Excess Air
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Excess air used for combustion. This can be estimated by measuring fuel and air supply or use 20%
-        if it is not known, For some infrared ovens it could 100% or higher.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
 
-  <div class="card" *ngIf="currentField == 'combustionAirTemp'">
-    <div class="card-header">
-      Combustion Air Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Combustion air temperature at the burner.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'exhaustGasTemp'">
-    <div class="card-header">
-      Exhaust Gas Temperature
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Exhaust gas temperature from the oven or furnace.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'default'">
-    <div class="card-header">
-      Savings Suggestions
-    </div>
-    <div class="card-block">
-      <!-- <label><u><strong>Description</strong></u></label> -->
-      <ul>
-        <li class="help-general">Control air-fuel ratios for burners</li>
-        <li class="help-general">Use Preheated air where possible</li>
-        <li class="help-general">Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turn down</li>
-        <li class="help-general">Replace excess air burners by ratio type burners.  Consider process requirements (i.e. make up air) to evaluate benefits of ratio type burners</li>
-        <li class="help-general">Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down</li>
-        <li class="help-general">Minimize volume by controlling make up air and air leaks in the oven</li>
-        <li class="help-general">Use preheated combustion air</li>
-        <li class="help-general">Reduce exhaust gas temperature by using one or more heat recovery methods</li>
-      </ul>
-    </div>
-  </div>
 
   <!--<div class="card" *ngIf="currentField == 'availableHeat'">
     <div class="card-header">
@@ -127,17 +162,16 @@
   </div>-->
 
   <!--<div class="card" *ngIf="currentField == 'otherLoss'">-->
-    <!--<div class="card-header">-->
-      <!--Other Losses-->
-    <!--</div>-->
-    <!--<div class="card-block">-->
-      <!--<label><u><strong>Description</strong></u></label>-->
-      <!--<p>DESCRITION HERE</p>-->
-      <!--<label><u><strong>Input</strong></u></label>-->
-      <!--<p>-->
-        <!--Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:-->
-        <!--<strong>MIN HERE</strong><br>-->
-      <!--</p>-->
-    <!--</div>-->
+  <!--<div class="card-header">-->
+  <!--Other Losses-->
   <!--</div>-->
-</div>
+  <!--<div class="card-block">-->
+  <!--<label><u><strong>Description</strong></u></label>-->
+  <!--<p>DESCRITION HERE</p>-->
+  <!--<label><u><strong>Input</strong></u></label>-->
+  <!--<p>-->
+  <!--Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:-->
+  <!--<strong>MIN HERE</strong><br>-->
+  <!--</p>-->
+  <!--</div>-->
+  <!--</div>-->

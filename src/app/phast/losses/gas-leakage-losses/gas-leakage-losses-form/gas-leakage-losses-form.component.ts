@@ -2,6 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { GasLeakageLossesService, LeakageWarnings } from '../gas-leakage-losses.service';
+import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 
 @Component({
   selector: 'app-gas-leakage-losses-form',
@@ -28,80 +30,30 @@ export class GasLeakageLossesFormComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
-  openingAreaError: string = null;
-  specificGravityError: string = null;
-  draftPressureError: string = null;
-  firstChange: boolean = true;
-  temperatureError: string = null;
-  constructor(private gasLeakageCompareService: GasLeakageCompareService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
+  warnings: LeakageWarnings;
+  constructor(private gasLeakageCompareService: GasLeakageCompareService, private gasLeakageLossesService: GasLeakageLossesService) { }
 
   ngOnInit() {
-    this.checkInputError(true);
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
+    this.checkWarnings();
   }
+
   focusOut() {
     this.changeField.emit('default');
   }
-  disableForm() {
-    // this.lossesForm.disable();
-  }
 
-  enableForm() {
-    // this.lossesForm.enable();
-  }
-
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.openingArea.value < 0) {
-      this.openingAreaError = 'Opening Area must be equal or greater than 0';
-    } else {
-      this.openingAreaError = null;
-    }
-    if (this.lossesForm.controls.specificGravity.value < 0) {
-      this.specificGravityError = 'Specific Density of Flue Gases must be equal or greater than 0';
-    } else {
-      this.specificGravityError = null;
-    }
-    if (this.lossesForm.controls.draftPressure.value < 0) {
-      this.draftPressureError = 'Draft Pressure must be equal or greater than 0';
-    } else {
-      this.draftPressureError = null;
-    }
-    if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
-      this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
-    } else {
-      this.temperatureError = null;
-    }
-    if(this.openingAreaError || this.specificGravityError || this.draftPressureError || this.temperatureError){
-      this.inputError.emit(true);
-      this.gasLeakageCompareService.inputError.next(true);
-    }else{
-      this.inputError.emit(false);
-      this.gasLeakageCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpLoss: LeakageLoss = this.gasLeakageLossesService.initLossFromForm(this.lossesForm);
+    this.warnings = this.gasLeakageLossesService.checkLeakageWarnings(tmpLoss);
+    let hasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

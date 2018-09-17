@@ -10,18 +10,18 @@
       <label for="{{'operatingFraction_'+idString}}">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
         id="{{'operatingFraction_'+idString}}" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
-        [readonly]="!selected" [ngClass]="{'indicate-different': isOperatingFractionDifferent()}">
-      <span class="alert-warning pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
+        [readonly]="!selected" [ngClass]="{'indicate-different': isOperatingFractionDifferent(),'error': warnings.opFractionError !== null, 'invalid': fieldDataForm.controls.operatingFraction.invalid}">
+      <span class="alert-warning pull-right small" *ngIf="warnings.opFractionError !== null">{{warnings.opFractionError}}</span>
     </div>
 
     <div class="form-group">
       <label for="{{'cost_'+idString}}">Cost</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null, 'invalid': fieldDataForm.controls.cost.invalid}">
         <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="{{'cost_'+idString}}"
           (input)="save()" (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="costError !== null">{{costError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.costError !== null">{{warnings.costError}}</span>
     </div>
 
     <div class="form-group">
@@ -29,7 +29,7 @@
         Inlet Pressure
         <a class="form-text small click-link" (click)="showInletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Inlet Pressure</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isInletPressureDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid}">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="{{'inletPressure_'+idString}}"
           (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
@@ -41,24 +41,24 @@
         Outlet Pressure
         <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate Outlet Pressure</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null, 'invalid': fieldDataForm.controls.outletPressure.invalid}">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure" id="{{'outletPressure_'+idString}}"
           (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="outletPressureError !== null">{{outletPressureError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null">{{warnings.outletPressureError}}</span>
     </div>
     <div class="form-group">
       <label for="{{'flowRate_'+idString}}">Flow Rate
         <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate Flow Rate and Pressures</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': warnings.flowRateError !== null, 'invalid': fieldDataForm.controls.flowRate.invalid}">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}"
           (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
         <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
       </div>
-      <span class="alert-warning pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateError !== null">{{warnings.flowRateError}}</span>
     </div>
 
     <div class="form-group" *ngIf="baseline">
@@ -72,29 +72,29 @@
     <div class="form-group" *ngIf="baseline">
       <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">Motor Power</label>
       <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">Motor Current</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'error': warnings.ratedPowerError !== null, 'invalid': fieldDataForm.controls.motorPower.invalid}">
         <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="{{'motorPower_'+idString}}"
           (input)="save()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">kW</span>
         <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">A</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null">{{warnings.ratedPowerError}}</span>
     </div>
     <div class="form-group" *ngIf="baseline">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
-      <div class="input-group">
+      <div class="input-group" [ngClass]="{'error': warnings.voltageError !== null, 'invalid': fieldDataForm.controls.measuredVoltage.invalid}">
         <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="{{'measuredVoltage_'+idString}}"
           (input)="save()" (focus)="focusField('measuredVoltage')" onfocus="this.select();" [readonly]="!selected">
         <span class="units">V</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null">{{warnings.voltageError}}</span>
     </div>
     <div class="form-group">
       <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
       <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
         id="{{'specificHeatRatio_'+idString}}" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();"
-        [readonly]="!selected" [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent()}">
-      <span class="alert-warning pull-right small" *ngIf="specificHeatRatioError !== null">{{specificHeatRatioError}}</span>
+        [readonly]="!selected" [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'error': warnings.specificHeatRatioError !== null, 'invalid': fieldDataForm.controls.specificHeatRatio.invalid}">
+      <span class="alert-warning pull-right small" *ngIf="warnings.specificHeatRatioError !== null">{{warnings.specificHeatRatioError}}</span>
     </div>
 
     <div class="form-group">
@@ -103,8 +103,8 @@
       </label>
       <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
         id="{{'compressibilityFactor_'+idString}}" (input)="save()" (focus)="focusField('compressibilityFactor')" onfocus="this.select();"
-        [readonly]="!selected" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent()}">
-      <span class="alert-warning pull-right small" *ngIf="compressibilityFactorError !== null">{{compressibilityFactorError}}</span>
+        [readonly]="!selected" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent(), 'error': warnings.compressibilityFactorError !== null, 'invalid': fieldDataForm.controls.compressibilityFactor.invalid}">
+      <span class="alert-warning pull-right small" *ngIf="warnings.compressibilityFactorError !== null">{{warnings.compressibilityFactorError}}</span>
     </div>
   </div>
 </form>

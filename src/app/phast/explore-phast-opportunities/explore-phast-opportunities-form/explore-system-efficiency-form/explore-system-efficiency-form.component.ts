@@ -29,9 +29,9 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   ngOnInit() {
     this.initEfficiency();
   }
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.exploreModIndex){
-      if(!changes.exploreModIndex.isFirstChange()){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
         this.initEfficiency();
       }
     }
@@ -39,13 +39,13 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   initEfficiency() {
     if (this.phast.systemEfficiency != this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
       this.showEfficiencyData = true;
-    }else{
+    } else {
       this.showEfficiencyData = false;
     }
   }
 
   toggleEfficiency() {
-    if(this.showEfficiencyData == false){
+    if (this.showEfficiencyData == false) {
       this.phast.modifications[this.exploreModIndex].phast.systemEfficiency = this.phast.systemEfficiency;
       this.calculate();
     }
@@ -56,7 +56,7 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
     this.changeTab.emit({
       tabName: 'Heat System Efficiency',
       step: 1,
-      componentStr: 'heat-system-efficiency' 
+      componentStr: 'heat-system-efficiency'
     })
   }
 
@@ -65,6 +65,6 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 }

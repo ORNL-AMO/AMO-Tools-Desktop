@@ -2,3 +2,8 @@
     padding-top: 10px;
     text-align: center
 }
+
+.form-section{
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}

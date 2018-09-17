@@ -7,9 +7,7 @@ export class GasLeakageCompareService {
   baselineLeakageLoss: LeakageLoss[];
   modifiedLeakageLoss: LeakageLoss[];
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {

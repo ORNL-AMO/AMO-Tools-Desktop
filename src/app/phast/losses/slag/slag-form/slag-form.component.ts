@@ -31,29 +31,6 @@ export class SlagFormComponent implements OnInit {
   constructor(private slagCompareService: SlagCompareService) { }
 
   ngOnInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
-
-  disableForm() {
-    // this.slagLossForm.disable();
-  }
-
-  enableForm() {
-    // this.slagLossForm.enable();
   }
 
   focusField(str: string) {
@@ -63,7 +40,7 @@ export class SlagFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

@@ -13,7 +13,7 @@
     </div>
     <div class="col-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}" *ngIf="modExists">
       <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"
-        [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab" [containerHeight]="containerHeight"></app-losses-result-panel>
+        [modification]="phast.modifications[exploreModIndex]" [modificationIndex]="exploreModIndex" [lossesTab]="lossTab" [containerHeight]="containerHeight"></app-losses-result-panel>
     </div>
     <!--!modExists-->
     <div class="no-data panel-column col-6 scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="!modExists">

@@ -101,6 +101,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   avgData: any;
   maxData: any;
+
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
   constructor(private psatService: PsatService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
@@ -115,10 +120,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
     this.initTooltipData();
 
-    d3.select('app-achievable-efficiency').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
 
@@ -132,6 +138,16 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100)
+  }
+
+  initColumnTitles() {
+    this.columnTitles = ['Flow Rate (' + this.settings.flowMeasurement + ')', 'Max Efficiency (%)', 'Avg. Efficiency (%)'];
   }
 
   initTooltipData() {
@@ -232,10 +248,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
   // ========== end tooltip functions ==========
-
-  ngAfterViewInit() {
-    this.resizeGraph();
-  }
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
@@ -385,7 +397,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   //dynamic table
   buildTable() {
-    let i = this.tableData.length + this.deleteCount;
+    let i = this.rowData.length + this.deleteCount;
     let borderColorIndex = Math.floor(i / this.graphColors.length);
     let dArray: Array<{ x: number, y: number }> = this.lineChartHelperService.getDArray();
     this.maxD = dArray[0];
@@ -407,8 +419,15 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       flowRate: flowRate.toString(),
       averageEfficiency: avgEfficiency.toString(),
       maxEfficiency: maxEfficiency.toString()
-    };
+    }
     this.tableData.push(dataPiece);
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    let data = [tableFlowRate.toString(), tableMaxEfficiency.toString(), tableAverageEfficiency.toString()];
+    this.rowData.push(data);
   }
   //dynamic table
   resetTableData() {
@@ -418,6 +437,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.focusDMax = new Array<{ x: number, y: number }>();
     this.focusDAvg = new Array<{ x: number, y: number }>();
     this.deleteCount = 0;
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
   }
   //dynamic table
   replaceFocusPoints() {
@@ -434,9 +455,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       this.tablePointsAvg[j] = this.tablePointsAvg[j + 1];
       this.focusDMax[j] = this.focusDMax[j + 1];
       this.focusDAvg[j] = this.focusDAvg[j + 1];
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
     }
 
-    if (i != this.tableData.length - 1) {
+    if (i != this.rowData.length - 1) {
       this.deleteCount += 1;
     }
     this.tableData.pop();
@@ -444,6 +467,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.tablePointsAvg.pop();
     this.focusDMax.pop();
     this.focusDAvg.pop();
+    this.rowData.pop();
+    this.keyColors.pop();
     this.replaceFocusPoints();
   }
 

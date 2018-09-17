@@ -1,134 +1,227 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Energy Input Help
+    <br>
+    <small class="text-muted">
+      The data entered on this page does not directly impact the calculations by PHAST for the total gross heat of the system.
+      This page is intended as a comparison to the PHAST calculation.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
 
-<div class="help-header">
 
-  <h3>Energy Input Help</h3>
-  <p>
-    The data entered on this page does not directly impact the calculations by PHAST for the total gross heat of the system.
-    This page is intended as a comparison to the PHAST calculation.
-  </p>
+  <div class="my-2" *ngIf="currentField == 'naturalGasHeatInput'">
+    <h6>
+      Natural Gas Heat Input
+      <br>
+      <small class="text-muted">
+        Total heat input to the heating system (furnace/oven) from all sources of heat supplied. They may include natural gas, carbon,
+        fuel oil etc. as applicable. Can be calculated using "Calculate using flow rate" button. Note that for batch furnaces
+        the total heat input should be corrected for cycle time to obtain per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'coalCarbonInjection'">
+    <h6>
+      Coal Carbon Injection
+      <br>
+      <small class="text-muted">
+        Mass (weight) of coal or carbon injection on a per hour basis. Note that for batch furnaces the total carbon injection should
+        be corrected for cycle time to obtain per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lbs/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'coalHeatingValue'">
+    <h6>
+      Coal Heating Value
+      <br>
+      <small class="text-muted">
+        Heating value for the coal or carbon injected.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electrodeUse'">
+    <h6>
+      Electrode Use
+      <br>
+      <small class="text-muted">
+        Mass (weight) of electrode use on a per hour basis. Note that for batch furnaces the electrode use should be corrected for
+        cycle time to obtain per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">lbs/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kg/hr</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electrodeHeatingValue'">
+    <h6>
+      Electrode Heating Value
+      <br>
+      <small class="text-muted">
+        Heating value for the electrode material - graphite.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'otherFuels'">
+    <h6>
+      Other Fuels
+      <br>
+      <small class="text-muted">
+        Heat supplied from other sources, if any. Note that for batch furnaces the total weight should be corrected for cycle time
+        to obtain per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'electricityInput'">
+    <h6>
+      Electricity Input
+      <br>
+      <small class="text-muted">
+        Electricity Input into system. Note that for batch furnaces the electricity input should be corrected for cycle time to obtain
+        per hour value.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+            </td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+</div>
+
+
   <!-- <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
   </p> -->
-
-</div>
-
-
-<div class="help-content">
-
-
-  <div class="card" *ngIf="currentField == 'naturalGasHeatInput'">
-    <div class="card-header">
-      Natural Gas Heat Input
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Total heat input to the heating system (furnace/oven) from all sources of heat supplied. They may include natural gas,
-        carbon, fuel oil etc. as applicable. Can be calculated using "Calculate using flow rate" button.
-        Note that for batch furnaces the total heat input should be corrected for cycle time to obtain per hour value
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>MM Btu/hr</strong> or <strong>GJ/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'coalCarbonInjection'">
-    <div class="card-header">
-      Coal Carbon Injection
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Mass (weight) of coal or carbon injection on a per hour basis. Note that for batch furnaces the total carbon injection
-        should be corrected for cycle time to obtain per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>lbs/hr</strong> or <strong>kg/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'coalHeatingValue'">
-    <div class="card-header">
-      Coal Carbon Injection
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Heating value for the coal or carbon injected.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Btu/lb</strong> or <strong>kg/lb</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electrodeUse'">
-    <div class="card-header">
-      Electrode Use
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Mass (weight) of electrode use on a per hour basis. Note that for batch furnaces the electrode use should be corrected for cycle time to obtain per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>lbs/hr</strong> or <strong>kg/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electrodeHeatingValue'">
-    <div class="card-header">
-      Electrode Heating Value
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Heating value for the electrode material - graphite.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>Btu/lb</strong> or <strong>kg/lb</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'otherFuels'">
-    <div class="card-header">
-      Other fuels
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Heat supplied from other sources, if any. Note that for batch furnaces the total weight should be corrected for cycle time to obtain per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>mm Btu/hr</strong> or <strong>GJ/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'electricityInput'">
-    <div class="card-header">
-      Electricity Input
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Electricity Input into system. Note that for batch furnaces the electricity input should be corrected for cycle time to obtain per hour value.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>kWh/hr</strong><br> Minimum Value: <strong>0</strong><br>
-      </p>
-    </div>
-  </div>
-
-</div>

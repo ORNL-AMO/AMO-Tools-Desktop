@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CalculateUsableCapacity } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-air-capacity-form',
@@ -8,30 +11,34 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./air-capacity-form.component.css']
 })
 export class AirCapacityFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  inputs: CalculateUsableCapacity = {
-    tankSize: 0,
-    airPressureIn: 0,
-    airPressureOut: 0,
-  };
+  inputs: CalculateUsableCapacity;
   airCapacity: number;
   tankCubicFoot: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService, private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.airCapacityInputs;
+    this.getAirCapacity();
   }
 
   getAirCapacity() {
-    this.airCapacity = StandaloneService.usableAirCapacity(this.inputs);
+    this.airCapacity = this.standaloneService.usableAirCapacity(this.inputs, this.settings);
     this.getTankSize();
   }
 
   getTankSize() {
-    this.tankCubicFoot = this.inputs.tankSize / 7.48;
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.tankCubicFoot = this.inputs.tankSize;
+    }else{
+      this.tankCubicFoot = this.convertUnitsService.value(this.inputs.tankSize).from('gal').to('ft3');
+    }
   }
 
   changeField(str: string){

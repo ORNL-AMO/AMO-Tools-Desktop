@@ -15,7 +15,7 @@
       (input)="save()" (focus)="focusField('pitotTubeCoefficient')" onfocus="this.select();">
     <span class="alert-danger pull-right small" *ngIf="pitotDataForm.controls.pitotTubeCoefficient.invalid && !pitotDataForm.controls.pitotTubeCoefficient.pristine">
       <span *ngIf="pitotDataForm.controls.pitotTubeCoefficient.errors.required">Value Required</span>
-      <span *ngIf="pitotDataForm.controls.pitotTubeCoefficient.errors.max">Value can't be greater than {{shaftPowerForm.controls.pitotTubeCoefficient.errors.max.max}}.</span>
+      <span *ngIf="pitotDataForm.controls.pitotTubeCoefficient.errors.max">Value can't be greater than {{pitotDataForm.controls.pitotTubeCoefficient.errors.max.max}}.</span>
     </span>
   </div>
   <div class="form-group">
@@ -24,8 +24,8 @@
       (input)="save()" (focus)="focusField('numTraverseHoles')" onfocus="this.select();">
     <span class="alert-danger pull-right small" *ngIf="pitotDataForm.controls.numTraverseHoles.invalid && !pitotDataForm.controls.numTraverseHoles.pristine">
       <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.required">Value Required</span>
-      <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.max">Value can't be greater than {{shaftPowerForm.controls.numTraverseHoles.errors.max.max}}.</span>
-      <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.min">Value can't be less than {{shaftPowerForm.controls.numTraverseHoles.errors.min.min}}.</span>
+      <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.max">Value can't be greater than {{pitotDataForm.controls.numTraverseHoles.errors.max.max}}.</span>
+      <span *ngIf="pitotDataForm.controls.numTraverseHoles.errors.min">Value can't be less than {{pitotDataForm.controls.numTraverseHoles.errors.min.min}}.</span>
     </span>
   </div>
   <div class="form-group">
@@ -33,14 +33,12 @@
     <input name="numInsertionPoints" type="number" step="any" class="form-control" formControlName="numInsertionPoints" id="numInsertionPoints"
       (input)="save()" (focus)="focusField('numInsertionPoints')" onfocus="this.select();">
     <span class="alert-danger pull-right small" *ngIf="pitotDataForm.controls.numInsertionPoints.invalid && !pitotDataForm.controls.numInsertionPoints.pristine">
-      <span *ngIf="pitotDataForm.controls.numInsertionPoints.errors.max">Value can't be greater than {{shaftPowerForm.controls.numInsertionPoints.errors.max.max}}.</span>
-      <span *ngIf="pitotDataForm.controls.numInsertionPoints.errors.min">Value can't be less than {{shaftPowerForm.controls.numInsertionPoints.errors.min.min}}.</span>
+      <span *ngIf="pitotDataForm.controls.numInsertionPoints.errors.max">Value can't be greater than {{pitotDataForm.controls.numInsertionPoints.errors.max.max}}.</span>
+      <span *ngIf="pitotDataForm.controls.numInsertionPoints.errors.min">Value can't be less than {{pitotDataForm.controls.numInsertionPoints.errors.min.min}}.</span>
     </span>
   </div>
 </form>
 
-<div class="row continue-btn-row justify-content-center">
-  <div class="col text-center">
-    <button class="btn btn-primary continue-btn" [disabled]="pitotDataForm.status == 'INVALID'" (click)="showDataToggle()">Add Differential Pressure Readings</button>
-  </div>
+<div class="d-flex w-100 continue-btn-row justify-content-center">
+  <button class="btn btn-primary continue-btn" [disabled]="pitotDataForm.status == 'INVALID'" (click)="showDataToggle()">Add Differential Pressure Readings</button>
 </div>

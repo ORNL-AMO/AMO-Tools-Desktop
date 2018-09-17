@@ -59,7 +59,7 @@
       <br>
       <small class="text-muted">
         Description: The operating or nameplate speed at which the fan is running at. Used along with the measure/required flow rate,
-        head, and number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency
+        pressure, and number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency
         penalty associated with the fan application, when using the optimization capability.
         <hr>
       </small>
@@ -74,12 +74,12 @@
           </tr>
           <tr>
             <td class="text-center">Direct Drive</td>
-            <td class="text-center">540</td>
-            <td class="text-center">3960</td>
+            <td class="text-center">540 rpm</td>
+            <td class="text-center">3960 rpm</td>
           </tr>
           <tr>
             <td class="text-center">Belt Drives</td>
-            <td class="text-center">1</td>
+            <td class="text-center">1 rpm</td>
             <td class="text-center">&mdash; &mdash;</td>
           </tr>
         </tbody>
@@ -92,12 +92,17 @@
       Drive
       <br>
       <small class="text-muted">
-        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven. There
+        This drop-down selection menu allows the user to define whether the fan is direct driven by the motor or belt-driven. There
         are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt drives
         are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient belts.
         <hr> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if
         adjustable frequency drives are used.
-        <hr>
-        Options include: <u>Direct Drive</u>, <u>V-Belt Drive</u>, <u>Notched V-Belt</u>, or <u>Synchronous Drive</u>
+        <hr> Options include:
+        <u>Direct Drive</u>,
+        <u>V-Belt Drive</u>,
+        <u>Notched V-Belt</u>, or
+        <u>Synchronous Drive</u>
       </small>
     </h6>
+  </div>
+</div>

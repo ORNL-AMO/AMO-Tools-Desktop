@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {OperatingCostInput, OperatingCostOutput} from "../../../shared/models/standalone";
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/standalone";
+import { CompressedAirService } from '../compressed-air.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-operating-cost',
@@ -8,38 +10,45 @@ import {OperatingCostInput, OperatingCostOutput} from "../../../shared/models/st
   styleUrls: ['./operating-cost.component.css']
 })
 export class OperatingCostComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+
+  headerHeight: number;
 
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
-  isLoad: boolean;
   currentField: string = 'default';
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
-    this.inputs = {
-      motorBhp: 0,
-      bhpUnloaded: 0,
-      annualOperatingHours: 0,
-      runTimeLoaded: 0,
-      runTimeUnloaded: 0,
-      efficiencyLoaded: 0,
-      efficiencyUnloaded: 0,
-      costOfElectricity: 0,
-
-    };
-
-    this.outputs = {
-      runTimeUnloaded: 0,
-      costForLoaded: 0,
-      costForUnloaded: 0,
-      totalAnnualCost: 0,
-    };
+    this.inputs = this.compressedAirService.operatingCostInput;
+    this.calculateOperationCost(this.inputs);
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+  
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
+  
   calculateOperationCost(inputs: OperatingCostInput) {
-    this.outputs = StandaloneService.operatingCost(inputs);
+    this.outputs = this.standaloneService.operatingCost(inputs, this.settings);
   }
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
 }

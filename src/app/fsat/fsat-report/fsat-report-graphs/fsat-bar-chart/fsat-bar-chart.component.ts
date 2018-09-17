@@ -14,6 +14,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class FsatBarChartComponent implements OnInit {
   @Input()
+  graphColors: Array<string>;
+  @Input()
   settings: Settings;
   @Input()
   printView: boolean;
@@ -45,9 +47,9 @@ export class FsatBarChartComponent implements OnInit {
   barData2: Array<any>;
   chartData: Array<any>;
 
-  graphColors: Array<string>;
+  // graphColors: Array<string>;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;

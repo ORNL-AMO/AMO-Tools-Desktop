@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -14,7 +14,12 @@ import { DeaeratorService } from './deaerator.service';
 export class DeaeratorComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeTabs();
+  }
+  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  headerHeight: number;
   tabSelect: string = 'results';
   currentField: string = 'default';
   deaeratorForm: FormGroup;
@@ -29,11 +34,21 @@ export class DeaeratorComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.getForm();
+    this.initForm();
     this.input = this.deaeratorService.getObjFromForm(this.deaeratorForm);
     this.calculate(this.deaeratorForm);
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 50);
+  }
 
+  resizeTabs() {
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+    }
+  }
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -41,12 +56,17 @@ export class DeaeratorComponent implements OnInit {
     this.currentField = str;
   }
 
-  getForm() {
-    this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+  initForm() {
+    if (this.deaeratorService.deaeratorInput) {
+      this.deaeratorForm = this.deaeratorService.getFormFromObj(this.deaeratorService.deaeratorInput, this.settings);
+    } else {
+      this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+    }
   }
 
   calculate(form: FormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
+    this.deaeratorService.deaeratorInput = this.input;
     if (form.status == 'VALID') {
       this.results = this.steamService.deaerator(this.input, this.settings);
     } else {
