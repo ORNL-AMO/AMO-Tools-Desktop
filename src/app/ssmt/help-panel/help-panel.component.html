@@ -23,7 +23,7 @@
 
     <div *ngIf="tabSelect == 'notes' && !inSetup">
         <div *ngIf="ssmt">
-            <!-- <app-modify-conditions-notes [(notes)]="fsat.notes" [currentTab]="stepTab" (emitSave)="save()"></app-modify-conditions-notes> -->
+            <app-modify-conditions-notes [(notes)]="ssmt.modifications[modificationIndex].ssmt.notes" [currentTab]="stepTab" (emitSave)="save()"></app-modify-conditions-notes>
         </div>
         <div class="col-11 mx-auto pt-1" *ngIf="!ssmt">
             You must add a modification to take notes on it.

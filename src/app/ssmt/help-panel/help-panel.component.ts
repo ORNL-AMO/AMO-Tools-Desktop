@@ -62,4 +62,8 @@ export class HelpPanelComponent implements OnInit {
       this.helpHeight = this.containerHeight - tabHeight;
     }
   }
+
+  save(){
+    
+  }
 }

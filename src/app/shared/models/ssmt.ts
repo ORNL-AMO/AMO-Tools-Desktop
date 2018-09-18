@@ -3,7 +3,7 @@ import { OperatingHours, OperatingCosts } from "./operations";
 export interface SSMT {
     name?: string,
     selected?: boolean,
-    // notes: Notes,
+    notes?: Notes,
     implementationCosts?: number,
     setupDone?: boolean,
     operatingHours?: OperatingHours,
@@ -20,6 +20,12 @@ export interface GeneralSteamOperations {
 
 export interface Modification {
     ssmt?: SSMT,
-    // notes?: Notes,
     exploreOpportunities?: boolean
+}
+
+export interface Notes {
+    operationsNotes?: string,
+    boilerNotes?: string,
+    turbineNotes?: string,
+    headerNotes?: string
 }

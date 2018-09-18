@@ -21,6 +21,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
+import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-notes/modify-conditions-notes.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { ModificationListComponent } from './modification-list/modification-list
     ModifyConditionsComponent,
     ModifyConditionsTabsComponent,
     AddModificationComponent,
-    ModificationListComponent
+    ModificationListComponent,
+    ModifyConditionsNotesComponent
   ],
   providers: [
     SsmtService,

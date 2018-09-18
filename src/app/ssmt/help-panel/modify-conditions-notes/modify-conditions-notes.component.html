@@ -1,0 +1,15 @@
+<div class="note-form" *ngIf="currentTab == 'operations'">
+  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.operationsNotes" placeholder="Add note for operations modification"></textarea>
+</div>
+
+<div class="note-form" *ngIf="currentTab == 'header'">
+  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.headerNotes" placeholder="Add note for header modification"></textarea>
+</div>
+
+<div class="note-form" *ngIf="currentTab == 'turbine'">
+  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.turbineNotes" placeholder="Add note for turbine modification"></textarea>
+</div>
+
+<div class="note-form" *ngIf="currentTab == 'boiler'">
+  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.boilerNotes" placeholder="Add note for boiler modification"></textarea>
+</div>
