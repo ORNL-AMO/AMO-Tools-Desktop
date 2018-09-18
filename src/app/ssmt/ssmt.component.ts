@@ -9,9 +9,11 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT } from '../shared/models/ssmt';
+import { SSMT, Modification } from '../shared/models/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-
+import { ModalDirective } from 'ngx-bootstrap';
+import { CompareService } from './compare.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
@@ -25,6 +27,8 @@ export class SsmtComponent implements OnInit {
   onResize(event) {
     this.getContainerHeight();
   }
+  @ViewChild('addNewModal') public addNewModal: ModalDirective;
+
   containerHeight: number;
   assessment: Assessment;
   _ssmt: SSMT;
@@ -38,6 +42,13 @@ export class SsmtComponent implements OnInit {
   assessmentTab: string;
   isAssessmentSettings: boolean;
   settings: Settings;
+  modificationExists: boolean;
+  modificationIndex: number;
+
+  addNewModificationSubscription: Subscription;
+  showAddModal: boolean;
+  selectedModSubscription: Subscription;
+  isModalOpen: boolean;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -45,7 +56,8 @@ export class SsmtComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private settingsService: SettingsService,
     private directoryDbService: DirectoryDbService,
-    private assessmentDbService: AssessmentDbService
+    private assessmentDbService: AssessmentDbService,
+    private compareService: CompareService
   ) { }
 
   ngOnInit() {
@@ -55,16 +67,47 @@ export class SsmtComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
+        if (this._ssmt.modifications) {
+          if (this._ssmt.modifications.length != 0) {
+            this.modificationExists = true;
+            this.modificationIndex = 0;
+            this.compareService.setCompareVals(this._ssmt, 0);
+          } else {
+            this.modificationExists = false;
+            this.compareService.setCompareVals(this._ssmt);
+          }
+        } else {
+          this._ssmt.modifications = new Array<Modification>();
+          this.modificationExists = false;
+          this.compareService.setCompareVals(this._ssmt);
+        }
         this.getSettings();
       });
     });
     this.subscribeTabs();
+
+    this.addNewModificationSubscription = this.ssmtService.openNewModificationModal.subscribe(val => {
+      this.showAddModal = val;
+      if (val) {
+        this.showAddNewModal();
+      }
+    })
+
+    this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
+      if (mod && this._ssmt) {
+        this.modificationIndex = _.findIndex(this._ssmt.modifications, (val) => {
+          return val.ssmt.name == mod.name
+        })
+      } else {
+        this.modificationIndex = undefined;
+      }
+    })
   }
-  
-  ngAfterViewInit(){
+
+  ngAfterViewInit() {
     setTimeout(() => {
-      this.getContainerHeight();  
-    },100)
+      this.getContainerHeight();
+    }, 100)
   }
 
   ngOnDestory() {
@@ -72,6 +115,7 @@ export class SsmtComponent implements OnInit {
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
     this.assessmentTabSubscription.unsubscribe();
+    this.selectedModSubscription.unsubscribe();
   }
 
   subscribeTabs() {
@@ -91,7 +135,7 @@ export class SsmtComponent implements OnInit {
       this.assessmentTab = val;
     })
   }
-  
+
   saveSettings(newSettings: Settings) {
     this.settings = newSettings;
     if (this.isAssessmentSettings) {
@@ -136,7 +180,16 @@ export class SsmtComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
+    if (this._ssmt.modifications) {
+      if (this._ssmt.modifications.length == 0) {
+        this.modificationExists = false;
+      } else {
+        this.modificationExists = true;
+      }
+    } else {
+      this.modificationExists = false;
+    }
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
@@ -144,6 +197,10 @@ export class SsmtComponent implements OnInit {
         // this.fsatService.updateData.next(true);
       })
     })
+  }
+
+  saveSsmt() {
+
   }
 
   back() {
@@ -160,6 +217,23 @@ export class SsmtComponent implements OnInit {
 
   getCanContinue() {
     return false;
+  }
+
+  showAddNewModal() {
+    this.isModalOpen = true;
+    this.addNewModal.show();
+  }
+  closeAddNewModal() {
+    this.isModalOpen = false;
+    this.ssmtService.openNewModificationModal.next(false);
+    this.addNewModal.hide();
+  }
+
+  saveNewMod(modification: Modification) {
+    this._ssmt.modifications.push(modification);
+    this.compareService.setCompareVals(this._ssmt, this._ssmt.modifications.length - 1);
+    this.save();
+    this.closeAddNewModal();
   }
 
   getContainerHeight() {

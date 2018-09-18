@@ -61,7 +61,6 @@ export class FsatComponent implements OnInit {
   mainTabSub: Subscription;
   stepTabSub: Subscription;
   assessmentTabSub: Subscription;
-  //TODO: Add Modification logic
   modificationExists: boolean;
   modificationIndex: number;
   selectedModSubscription: Subscription;

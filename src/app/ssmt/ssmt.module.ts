@@ -17,6 +17,9 @@ import { OperationsHelpComponent } from './help-panel/operations-help/operations
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { AddModificationComponent } from './add-modification/add-modification.component';
+import { CompareService } from './compare.service';
 
 @NgModule({
   imports: [
@@ -25,22 +28,27 @@ import { ModifyConditionsTabsComponent } from './modify-conditions/modify-condit
     FormsModule,
     ReactiveFormsModule,
     OperationsModule,
-    ExploreOpportunitiesModule
+    ExploreOpportunitiesModule,
+    ModalModule
   ],
   declarations: [
-    SsmtComponent, 
-    SsmtBannerComponent, 
-    SystemBasicsComponent, 
-    SsmtTabsComponent, 
-    BoilerComponent, 
-    HeaderComponent, 
-    TurbineComponent, 
-    HelpPanelComponent, 
-    SystemBasicsHelpComponent, 
+    SsmtComponent,
+    SsmtBannerComponent,
+    SystemBasicsComponent,
+    SsmtTabsComponent,
+    BoilerComponent,
+    HeaderComponent,
+    TurbineComponent,
+    HelpPanelComponent,
+    SystemBasicsHelpComponent,
     OperationsHelpComponent,
     ModifyConditionsComponent,
-    ModifyConditionsTabsComponent
+    ModifyConditionsTabsComponent,
+    AddModificationComponent
   ],
-  providers: [SsmtService]
+  providers: [
+    SsmtService,
+    CompareService
+  ]
 })
 export class SsmtModule { }

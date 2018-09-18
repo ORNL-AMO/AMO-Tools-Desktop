@@ -112,7 +112,7 @@
 }
 
 .ssmt .header{
-    border-bottom: #607D8B solid 2px;
+    border-bottom: #F39C12 solid 2px;
  }
   
 
@@ -218,7 +218,7 @@
 }
 
 .ssmt .group-label{
-    border-bottom: #607D8B groove 2px;
+    border-bottom: #F39C12 groove 2px;
 }
 
 
@@ -395,6 +395,6 @@
     }
 
     .ssmt .scroll-item::-webkit-scrollbar-thumb{
-        background-color: #607D8B;
+        background-color: #F39C12;
         outline: 1px solid slategrey;
     }

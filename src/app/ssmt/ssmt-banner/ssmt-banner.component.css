@@ -35,14 +35,14 @@
 }
 
 .home-nav-item{
-    /* color: black;
-    border-color: black !important; */
+    color: black;
+    border-color: black !important; 
 }
 
 .nav-link{
     padding: 6px;
     font-size: medium;
-    /* color: #000; */
+    color: #000; 
 }
 
 .nav-link:not(.disabled):hover{
@@ -54,9 +54,9 @@
     color: initial;
 }
 .nav-link.active{
-    /* background: #fff; */
+    background: #fff;
     font-weight: bold;
-    /* color: black; */
+    color: black;
   }
 
 .nav-item{

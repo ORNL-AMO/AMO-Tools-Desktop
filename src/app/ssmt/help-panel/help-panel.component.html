@@ -15,11 +15,9 @@
     <div class="header">
         <h3>Help</h3>
     </div>
-    <div class="pr-1 pl-2" *ngIf="stepTab == 'system-basics'">
-        <app-system-basics-help></app-system-basics-help>
-    </div>
-    <div class="pr-1 pl-2" *ngIf="stepTab == 'steam-model'">
-        <app-operations-help *ngIf="modelTab == 'operations'"></app-operations-help>
+    <div class="pr-1 pl-2">
+        <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+        <app-operations-help *ngIf="stepTab == 'operations'"></app-operations-help>
     </div>
 
     <!--

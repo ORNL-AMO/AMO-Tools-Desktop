@@ -19,10 +19,10 @@ export class SsmtTabsComponent implements OnInit {
   modelTabSubscription: Subscription;
 
   settingsStatus: Array<string> = [];
-  steamModelStatus: Array<string> = [];
-  auxEquipmentStatus: Array<string> = [];
-  designedEnergyStatus: Array<string> = [];
-  meteredEnergyStatus: Array<string> = [];
+  operationsTabStatus: Array<string> = [];
+  boilerTabStatus: Array<string> = [];
+  headerTabStatus: Array<string> = [];
+  turbineTabStatus: Array<string> = [];
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
@@ -63,18 +63,18 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   checkStepTabStatus(){
-    this.checkSteamModelStatus();
+    this.checkOperationsStatus();
     this.checkSettingsStatus();
-    this.checkAuxEquipmentStatus();
-    this.checkDesignedEnergyStatus();
-    this.checkMeteredEnergyStatus();
+    this.checkBoilerStatus();
+    this.checkHeaderStatus();
+    this.checkTurbineStatus();
   }
 
-  checkSteamModelStatus(){
-    if(this.stepTab == 'steam-model'){
-      this.steamModelStatus = ['active'];
+  checkOperationsStatus(){
+    if(this.stepTab == 'operations'){
+      this.operationsTabStatus = ['active'];
     }else{
-      this.steamModelStatus = [];
+      this.operationsTabStatus = [];
     }
   }
 
@@ -86,27 +86,27 @@ export class SsmtTabsComponent implements OnInit {
     }
   }
 
-  checkAuxEquipmentStatus(){
-    if(this.stepTab == 'aux-equipment'){
-      this.auxEquipmentStatus = ['active'];
+  checkBoilerStatus(){
+    if(this.stepTab == 'boiler'){
+      this.boilerTabStatus = ['active'];
     }else{
-      this.auxEquipmentStatus = [];
+      this.boilerTabStatus = [];
     }
   }
 
-  checkDesignedEnergyStatus(){
-    if(this.stepTab == 'designed-energy'){
-      this.designedEnergyStatus = ['active'];
+  checkHeaderStatus(){
+    if(this.stepTab == 'header'){
+      this.headerTabStatus = ['active'];
     }else{
-      this.designedEnergyStatus = [];
+      this.headerTabStatus = [];
     }
   }
 
-  checkMeteredEnergyStatus(){
-    if(this.stepTab == 'metered-energy'){
-      this.meteredEnergyStatus = ['active'];
+  checkTurbineStatus(){
+    if(this.stepTab == 'turbine'){
+      this.turbineTabStatus = ['active'];
     }else{
-      this.meteredEnergyStatus = [];
+      this.turbineTabStatus = [];
     }
   }
 }
