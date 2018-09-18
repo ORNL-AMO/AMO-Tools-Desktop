@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
+import { SSMT } from '../../shared/models/ssmt';
 
 @Component({
   selector: 'app-help-panel',
@@ -13,25 +14,52 @@ export class HelpPanelComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  ssmt: SSMT;
+  @Input()
+  containerHeight: number;
+  @Input()
+  modificationIndex: number;
 
+  @ViewChild('resultTabs') resultTabs: ElementRef;
   stepTab: string;
   stepTabSubscription: Subscription;
-  modelTab: string;
-  modelTabSubscription: Subscription;
-  
+  tabSelect: string = 'help';
+  helpHeight: number;
+
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
-      this.stepTab = val;
-    })
-    this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
-      this.modelTab = val;
-    })
+    if (this.inSetup) {
+      this.stepTabSubscription = this.ssmtService.stepTab.subscribe(tab => {
+        this.stepTab = tab;
+      })
+    }
+    else {
+      this.stepTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
+        this.stepTab = val;
+      })
+    }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
   }
 
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
-    this.modelTabSubscription.unsubscribe();
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight && this.resultTabs) {
+      let tabHeight = this.resultTabs.nativeElement.clientHeight;
+      this.helpHeight = this.containerHeight - tabHeight;
+    }
   }
 }
