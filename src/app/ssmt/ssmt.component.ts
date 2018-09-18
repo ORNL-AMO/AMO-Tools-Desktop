@@ -34,6 +34,8 @@ export class SsmtComponent implements OnInit {
   stepTabSubscription: Subscription;
   modelTabSubscription: Subscription;
   modelTab: string;
+  assessmentTabSubscription: Subscription;
+  assessmentTab: string;
   isAssessmentSettings: boolean;
   settings: Settings;
   constructor(
@@ -69,6 +71,7 @@ export class SsmtComponent implements OnInit {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
+    this.assessmentTabSubscription.unsubscribe();
   }
 
   subscribeTabs() {
@@ -83,6 +86,9 @@ export class SsmtComponent implements OnInit {
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
       this.getContainerHeight();
+    })
+    this.assessmentTabSubscription = this.ssmtService.assessmentTab.subscribe(val => {
+      this.assessmentTab = val;
     })
   }
   

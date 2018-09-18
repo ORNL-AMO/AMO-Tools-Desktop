@@ -26,28 +26,6 @@
     </div>
   </div>
 </nav>
-<ul class="tabs subtabs ssmt" *ngIf="stepTab == 'steam-model'">
-  <li [ngClass]="{'active': modelTab == 'operations'}">
-    <a class="nav-link small" (click)="changeModelTab('operations')">
-      Operations
-    </a>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'boiler'}">
-    <a class="nav-link small" (click)="changeModelTab('boiler')">
-      Boiler
-    </a>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'header'}">
-    <a class="nav-link small" (click)="changeModelTab('header')">
-      Header
-    </a>
-  </li>
-  <li [ngClass]="{'active': modelTab == 'turbine'}">
-    <a class="nav-link small" (click)="changeModelTab('turbine')">
-      Turbine
-    </a>
-  </li>
-</ul>
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="d-flex tabs subtabs ssmt mr-auto">
@@ -82,8 +60,8 @@
         <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add Scenarios</button>
       </div>
     </div> -->
-
-  <nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions'">
-    <!-- <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs> -->
-  </nav>
 </div>
+
+<nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions' && mainTab =='assessment' || stepTab == 'steam-model' && mainTab == 'system-setup'">
+  <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
+</nav>

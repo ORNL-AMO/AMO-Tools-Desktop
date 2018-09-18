@@ -18,6 +18,7 @@ export class HelpPanelComponent implements OnInit {
   stepTabSubscription: Subscription;
   modelTab: string;
   modelTabSubscription: Subscription;
+  
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {

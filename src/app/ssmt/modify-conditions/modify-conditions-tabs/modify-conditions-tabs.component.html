@@ -1,0 +1,22 @@
+<ul class="tabs subtabs ssmt">
+  <li [ngClass]="{'active': modelTab == 'operations'}">
+    <a class="nav-link small" (click)="changeModelTab('operations')">
+      Operations
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'boiler'}">
+    <a class="nav-link small" (click)="changeModelTab('boiler')">
+      Boiler
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'header'}">
+    <a class="nav-link small" (click)="changeModelTab('header')">
+      Header
+    </a>
+  </li>
+  <li [ngClass]="{'active': modelTab == 'turbine'}">
+    <a class="nav-link small" (click)="changeModelTab('turbine')">
+      Turbine
+    </a>
+  </li>
+</ul>

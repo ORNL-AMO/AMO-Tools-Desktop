@@ -13,6 +13,10 @@ import { SettingsModule } from '../settings/settings.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
 import { OperationsModule } from './operations/operations.module';
+import { OperationsHelpComponent } from './help-panel/operations-help/operations-help.component';
+import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
+import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
+import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 
 @NgModule({
   imports: [
@@ -20,9 +24,23 @@ import { OperationsModule } from './operations/operations.module';
     SettingsModule,
     FormsModule,
     ReactiveFormsModule,
-    OperationsModule
+    OperationsModule,
+    ExploreOpportunitiesModule
   ],
-  declarations: [SsmtComponent, SsmtBannerComponent, SystemBasicsComponent, SsmtTabsComponent, BoilerComponent, HeaderComponent, TurbineComponent, HelpPanelComponent, SystemBasicsHelpComponent],
+  declarations: [
+    SsmtComponent, 
+    SsmtBannerComponent, 
+    SystemBasicsComponent, 
+    SsmtTabsComponent, 
+    BoilerComponent, 
+    HeaderComponent, 
+    TurbineComponent, 
+    HelpPanelComponent, 
+    SystemBasicsHelpComponent, 
+    OperationsHelpComponent,
+    ModifyConditionsComponent,
+    ModifyConditionsTabsComponent
+  ],
   providers: [SsmtService]
 })
 export class SsmtModule { }

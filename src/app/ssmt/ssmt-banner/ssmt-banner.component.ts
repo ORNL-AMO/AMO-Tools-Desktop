@@ -29,11 +29,13 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
-      this.ssmtService.mainTab.next(str);
-    } else if (this.assessment.fsat.setupDone) {
-      this.ssmtService.mainTab.next(str);
-    }
+    // if (str == 'system-setup' || str == 'calculators') {
+    //   this.ssmtService.mainTab.next(str);
+    // } else if (this.assessment.ssmt.setupDone) {
+    //   this.ssmtService.mainTab.next(str);
+    // }
+    this.ssmtService.mainTab.next(str);
+
   }
 
   goHome() {

@@ -6,7 +6,7 @@
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-      (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
+        (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
       <div *ngIf="stepTab == 'steam-model'">
         <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'"></app-boiler>
@@ -36,6 +36,8 @@
             <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment"
               [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)"
               [containerHeight]="containerHeight"></app-modify-conditions> -->
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'"></app-modify-conditions>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'"></app-explore-opportunities>
   </div>
 
   <!--report-->

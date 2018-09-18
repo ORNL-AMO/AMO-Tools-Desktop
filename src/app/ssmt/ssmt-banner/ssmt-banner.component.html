@@ -19,16 +19,16 @@
         <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">System Setup</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.ssmt.setupDone}" (click)="changeTab('assessment')">Assessment</a>
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')">Assessment</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.ssmt.setupDone}" (click)="changeTab('diagram')">Diagram</a>
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.ssmt.setupDone}" (click)="changeTab('report')">Report</a>
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">Report</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.ssmt.setupDone}" (click)="changeTab('sankey')">Sankey</a>
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey'}" (click)="changeTab('sankey')">Sankey</a>
       </div>
       <div class="nav-item">
         <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}" (click)="changeTab('calculators')">Calculators</a>
