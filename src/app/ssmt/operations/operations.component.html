@@ -1,14 +1,14 @@
 <div class="d-flex flex-column">
-  <div class="header mr-2 ml-2">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
     <h3>Operating Conditions</h3>
   </div>
   <div class="pl-2 pr-2 pt-2">
-    <app-operating-hours [(operatingHours)]="ssmt.operatingHours" (emitSave)="save()"></app-operating-hours>
+    <app-operating-hours [(operatingHours)]="ssmt.operatingHours" [selected]="selected" (emitSave)="save()"></app-operating-hours>
   </div>
   <div class="pl-2 pr-2 pt-2">
-    <app-operating-costs [(operatingCosts)]="ssmt.operatingCosts" [settings]="settings" (emitSave)="save()"></app-operating-costs>
+    <app-operating-costs [(operatingCosts)]="ssmt.operatingCosts" [selected]="selected" [settings]="settings" (emitSave)="save()"></app-operating-costs>
   </div>
   <div class="pl-2 pr-2 pt-2">
-    <app-general-operations [(generalSteamOperations)]="ssmt.generalSteamOperations" [settings]="settings" (emitSave)="save()"></app-general-operations>
+    <app-general-operations [(generalSteamOperations)]="ssmt.generalSteamOperations" [selected]="selected" [settings]="settings" (emitSave)="save()"></app-general-operations>
   </div>
 </div>

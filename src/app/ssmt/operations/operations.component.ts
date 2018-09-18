@@ -14,7 +14,10 @@ export class OperationsComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  
+  @Input()
+  selected: boolean;
+  @Input()
+  inSetup: boolean;
   constructor() { }
 
   ngOnInit() {

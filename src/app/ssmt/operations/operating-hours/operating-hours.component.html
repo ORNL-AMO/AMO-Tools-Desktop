@@ -11,7 +11,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input name="weeksPerYear" type="number" step="1" min="0" max="52" class="form-control" id="weeksPerYear"
-          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.weeksPerYear">
+          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.weeksPerYear" [disabled]="!selected">
       </div>
       <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span>
     </div>
@@ -25,7 +25,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()"
-          [(ngModel)]="operatingHours.daysPerWeek">
+          [(ngModel)]="operatingHours.daysPerWeek" [disabled]="!selected">
       </div>
       <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span>
     </div>
@@ -39,7 +39,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
-          [(ngModel)]="operatingHours.shiftsPerDay">
+          [(ngModel)]="operatingHours.shiftsPerDay" [disabled]="!selected">
       </div>
       <span class="alert-warning pull-right small" *ngIf="shiftsPerDayError !== null">{{shiftsPerDayError}}</span>
     </div>
@@ -53,7 +53,7 @@
           <i class="fa fa-plus"></i>
         </button>
         <input name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerShift"
-          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.hoursPerShift">
+          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.hoursPerShift" [disabled]="!selected">
       </div>
     </div>
     <span class="alert-warning pull-right small" *ngIf="hoursPerShiftError !== null">{{hoursPerShiftError}}</span>
@@ -63,7 +63,7 @@
     <div class="form-group">
       <label for="hoursPerYear">Hours / Year</label>
       <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()"
-        [(ngModel)]="operatingHours.hoursPerYear">
+        [(ngModel)]="operatingHours.hoursPerYear" [disabled]="!selected">
     </div>
     <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
   </div>

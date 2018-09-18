@@ -6,7 +6,7 @@
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="save()"></app-operations>
+      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="save()" [selected]="baselineSelected"></app-operations>
 
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
       <!-- <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [settings]="settings" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
@@ -29,7 +29,7 @@
         <h3>{{assessment.ssmt.modifications[modificationIndex].ssmt.name}}</h3>
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt.modifications[modificationIndex].ssmt"
-        [settings]="settings" (emitSave)="save()"></app-operations>
+        [settings]="settings" (emitSave)="save()" [selected]="modifiedSelected"></app-operations>
 
 
       <!-- Forms -->

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SSMT } from '../../../shared/models/ssmt';
 import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
@@ -12,6 +11,9 @@ export class OperatingHoursComponent implements OnInit {
   operatingHours: OperatingHours;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  selected: boolean;
+
   timeError: string = null;
   weeksPerYearError: string = null;
   daysPerWeekError: string = null;

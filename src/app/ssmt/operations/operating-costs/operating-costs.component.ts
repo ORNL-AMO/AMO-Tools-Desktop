@@ -13,7 +13,9 @@ export  class OperatingCostsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<boolean>();  
+  @Input()
+  selected: boolean;
   constructor() { }
 
   ngOnInit() {

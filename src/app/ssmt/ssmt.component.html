@@ -7,7 +7,7 @@
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
-      <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()"></app-operations>
+      <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()" [selected]="true" [inSetup]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'"></app-boiler>
       <app-header *ngIf="stepTab == 'header'"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'"></app-turbine>
