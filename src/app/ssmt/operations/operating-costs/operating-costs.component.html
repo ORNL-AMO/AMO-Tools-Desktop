@@ -4,8 +4,7 @@
     <label for="fuelCost">Fuel</label>
     <div class="input-group">
       <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="save()" [(ngModel)]="operatingCosts.fuelCost" [disabled]="!selected">
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+      <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
     </div>
   </div>
   <div class="form-group">
@@ -22,7 +21,7 @@
     <div class="input-group">
       <input name="makeUpWaterCost" type="number" step="any" class="form-control" id="makeUpWaterCost" (input)="save()"
         [(ngModel)]="operatingCosts.makeUpWaterCost" [disabled]="!selected">
-      <span class="units input-group-addon">$/gal</span>
+      <span class="units input-group-addon">$/{{settings.steamVolumeMeasurement}}</span>
       <!-- <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span> -->
     </div>
   </div>

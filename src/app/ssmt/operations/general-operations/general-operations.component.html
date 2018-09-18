@@ -5,8 +5,7 @@
     <div class="input-group">
       <input name="sitePowerImport" type="number" step="any" class="form-control" id="sitePowerImport" (input)="save()"
         [(ngModel)]="generalSteamOperations.sitePowerImport" [disabled]="!selected">
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
+        <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
     </div>
   </div>
   <div class="form-group">
@@ -14,7 +13,9 @@
     <div class="input-group">
       <input name="makeUpWaterTemperature" type="number" step="any" class="form-control" id="makeUpWaterTemperature"
         (input)="save()" [(ngModel)]="generalSteamOperations.makeUpWaterTemperature" [disabled]="!selected">
-      <span class="units input-group-addon">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+
     </div>
   </div>
 </div>
