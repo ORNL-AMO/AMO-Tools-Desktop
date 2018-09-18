@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../ssmt.service';
+import { SSMT } from '../../shared/models/ssmt';
+import { Settings } from '../../shared/models/settings';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-ssmt-tabs',
@@ -8,6 +11,11 @@ import { SsmtService } from '../ssmt.service';
   styleUrls: ['./ssmt-tabs.component.css']
 })
 export class SsmtTabsComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  @Input()
+  ssmt: SSMT;
+
 
   mainTab:string;
   mainTabSubscription: Subscription;
@@ -23,7 +31,10 @@ export class SsmtTabsComponent implements OnInit {
   boilerTabStatus: Array<string> = [];
   headerTabStatus: Array<string> = [];
   turbineTabStatus: Array<string> = [];
-  constructor(private ssmtService: SsmtService) { }
+
+  modSubscription: Subscription;
+  selectedModification: SSMT;
+  constructor(private ssmtService: SsmtService, private compareService: CompareService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
@@ -41,6 +52,11 @@ export class SsmtTabsComponent implements OnInit {
       this.modelTab = val;
       this.checkStepTabStatus();
     })
+
+    this.modSubscription = this.compareService.selectedModification.subscribe(val => {
+      this.selectedModification = val;
+      this.cd.detectChanges();
+    })
   }
 
   ngOnDestroy(){
@@ -48,6 +64,7 @@ export class SsmtTabsComponent implements OnInit {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
+    this.modSubscription.unsubscribe();
   }
 
   changeAssessmentTab(str: string){
@@ -108,5 +125,9 @@ export class SsmtTabsComponent implements OnInit {
     }else{
       this.turbineTabStatus = [];
     }
+  }
+
+  selectModification(){
+    this.ssmtService.openModificationSelectModal.next(true);
   }
 }

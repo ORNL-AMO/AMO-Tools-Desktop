@@ -53,6 +53,12 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.ssmt .btn-primary{
+    background-color: #F39C12;
+    border-color: #F39C12;
+    color: black;
+}
+
 .fan-block i{
     color:#FFE400
   }

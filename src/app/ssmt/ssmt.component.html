@@ -101,3 +101,21 @@
     </div>
   </div>
 </div>
+
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_ssmt && _ssmt.modifications">
+  <div class="modal-dialog modal-lg list-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Scenario</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [ssmt]="_ssmt" (save)="save()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ export class SsmtService {
   currentField: BehaviorSubject<string>;
   openNewModificationModal: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
+  openModificationSelectModal: BehaviorSubject<boolean>;
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
@@ -18,5 +19,6 @@ export class SsmtService {
     this.currentField = new BehaviorSubject<string>('default');
     this.openNewModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.openModificationSelectModal = new BehaviorSubject<boolean>(false);
   }
 }

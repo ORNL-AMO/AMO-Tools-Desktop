@@ -28,6 +28,7 @@ export class SsmtComponent implements OnInit {
     this.getContainerHeight();
   }
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
+  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
 
   containerHeight: number;
   assessment: Assessment;
@@ -46,6 +47,7 @@ export class SsmtComponent implements OnInit {
   modificationIndex: number;
 
   addNewModificationSubscription: Subscription;
+  openModificationSelectSubscription: Subscription;
   showAddModal: boolean;
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
@@ -102,6 +104,12 @@ export class SsmtComponent implements OnInit {
         this.modificationIndex = undefined;
       }
     })
+
+    this.openModificationSelectSubscription = this.ssmtService.openModificationSelectModal.subscribe(val => {
+      if (val) {
+        this.selectModificationModal()
+      }
+    })
   }
 
   ngAfterViewInit() {
@@ -116,6 +124,7 @@ export class SsmtComponent implements OnInit {
     this.modelTabSubscription.unsubscribe();
     this.assessmentTabSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
+    this.openModificationSelectSubscription.unsubscribe();
   }
 
   subscribeTabs() {
@@ -234,6 +243,16 @@ export class SsmtComponent implements OnInit {
     this.compareService.setCompareVals(this._ssmt, this._ssmt.modifications.length - 1);
     this.save();
     this.closeAddNewModal();
+  }
+  selectModificationModal() {
+    this.isModalOpen = true;
+    this.changeModificationModal.show();
+  }
+  closeSelectModification() {
+    this.isModalOpen = false;
+    this.ssmtService.openModificationSelectModal.next(false);
+    this.changeModificationModal.hide();
+    // this.fsatService.updateData.next(true);
   }
 
   getContainerHeight() {
