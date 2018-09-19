@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
 import { Boiler } from '../../shared/models/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-boiler',
@@ -23,6 +24,9 @@ export class BoilerComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<Boiler>();
 
+  @ViewChild('materialModal') public materialModal: ModalDirective;
+
+
   fuelOptions: Array<string> = [
     'Natural Gas',
     'Coal',
@@ -32,7 +36,7 @@ export class BoilerComponent implements OnInit {
 
   boilerForm: FormGroup;
   options: any;
-
+  showModal: boolean;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
@@ -91,5 +95,28 @@ export class BoilerComponent implements OnInit {
 
   focusOut() {
     this.ssmtService.currentField.next('default');
+  }
+  
+  showMaterialModal() {
+    this.showModal = true;
+    this.ssmtService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    // if (event) {
+    //   this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    //   let newMaterial = this.options.filter(material => { return material.substance == event.substance });
+    //   if (newMaterial.length != 0) {
+    //     this.flueGasLossForm.patchValue({
+    //       gasTypeId: newMaterial[0].id
+    //     })
+    //     this.setProperties();
+    //   }
+    // }
+    this.materialModal.hide();
+    this.setFuelTypes();
+    this.showModal = false;
+    this.ssmtService.modalOpen.next(this.showModal);
   }
 }

@@ -60,6 +60,7 @@ export class SsmtComponent implements OnInit {
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
   stepTabIndex: number;
+  modalOpenSubscription: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -119,6 +120,10 @@ export class SsmtComponent implements OnInit {
         this.selectModificationModal()
       }
     })
+
+    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
   }
 
   ngAfterViewInit() {
@@ -134,6 +139,7 @@ export class SsmtComponent implements OnInit {
     this.assessmentTabSubscription.unsubscribe();
     this.selectedModSubscription.unsubscribe();
     this.openModificationSelectSubscription.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
   }
 
   subscribeTabs() {

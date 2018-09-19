@@ -24,6 +24,7 @@ import { ModificationListComponent } from './modification-list/modification-list
 import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-notes/modify-conditions-notes.component';
 import { BoilerService } from './boiler/boiler.service';
 import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.component';
+import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.compon
     ReactiveFormsModule,
     OperationsModule,
     ExploreOpportunitiesModule,
-    ModalModule
+    ModalModule,
+    SuiteDbModule
   ],
   declarations: [
     SsmtComponent,
