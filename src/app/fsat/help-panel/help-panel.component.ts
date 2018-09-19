@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from './help-panel.service';
 import { Subscription } from 'rxjs';
@@ -23,6 +23,8 @@ export class HelpPanelComponent implements OnInit {
   modificationIndex: number;
   @Input()
   containerHeight: number;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
   currentField: string;
@@ -80,4 +82,7 @@ export class HelpPanelComponent implements OnInit {
     this.tabSelect = str;
   }
 
+  save(){
+    this.emitSave.emit(true);
+  }
 }

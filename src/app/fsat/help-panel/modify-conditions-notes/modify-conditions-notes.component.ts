@@ -11,12 +11,16 @@ export class ModifyConditionsNotesComponent implements OnInit {
   notes: Notes;
   @Input()
   currentTab: string;
-  @Output()
-  save = new EventEmitter<boolean>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   
   constructor() { }
 
   ngOnInit() {
+  }
+
+  save(){
+    this.emitSave.emit(true);
   }
 
 }
