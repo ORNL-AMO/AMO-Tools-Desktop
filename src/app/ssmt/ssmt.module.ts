@@ -22,6 +22,8 @@ import { AddModificationComponent } from './add-modification/add-modification.co
 import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-notes/modify-conditions-notes.component';
+import { BoilerService } from './boiler/boiler.service';
+import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.component';
 
 @NgModule({
   imports: [
@@ -48,11 +50,13 @@ import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-n
     ModifyConditionsTabsComponent,
     AddModificationComponent,
     ModificationListComponent,
-    ModifyConditionsNotesComponent
+    ModifyConditionsNotesComponent,
+    BoilerHelpComponent
   ],
   providers: [
     SsmtService,
-    CompareService
+    CompareService,
+    BoilerService
   ]
 })
 export class SsmtModule { }

@@ -6,46 +6,23 @@
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="save()"
+      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="saveAssessment()"
         [selected]="baselineSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"></app-boiler>
-      <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
-      <!-- <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [settings]="settings" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
-          [modificationIndex]="modificationIndex" (emitSave)="saveBaselineGasDensity($event)"></app-fsat-fluid>
-        <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="baselineSelected" [fanSetup]="assessment.fsat.fanSetup"
-          [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanSetup($event)"></app-fan-setup>
-        <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="baselineSelected" [fanMotor]="assessment.fsat.fanMotor"
-          [modificationIndex]="modificationIndex" (emitSave)="saveBaselineFanMotor($event)" [fieldData]="assessment.fsat.fieldData" [fsat]="assessment.fsat"></app-fan-motor>
-        <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="baselineSelected" [fieldData]="assessment.fsat.fieldData"
-          [modificationIndex]="modificationIndex" [baseline]="true" (emitSave)="saveBaselineFieldData($event)" [fsat]="assessment.fsat"></app-fan-field-data> -->
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boiler]="assessment.ssmt.boiler"
+        (emitSave)="saveBaselineBoiler($event)"></app-boiler>
     </div>
-
 
     <!-- Modifications Start -->
     <div *ngIf="modificationExists" class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
-
       <!-- Modification Header -->
       <div class="header mr-2 ml-2">
         <h3>{{assessment.ssmt.modifications[modificationIndex].ssmt.name}}</h3>
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt.modifications[modificationIndex].ssmt"
-        [settings]="settings" (emitSave)="save()" [selected]="modifiedSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"></app-boiler>
-
-      <!-- Forms -->
-      <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->
-      <!-- <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [settings]="settings" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].fsat.baseGasDensity"
-          [modificationIndex]="modificationIndex" (emitSave)="saveModGasDensity($event)"></app-fsat-fluid>
-        <app-fan-setup *ngIf="modifyConditionsTab == 'fan-setup'" [settings]="settings" [selected]="modifiedSelected" [fanSetup]="assessment.fsat.modifications[modificationIndex].fsat.fanSetup"
-          [modificationIndex]="modificationIndex" (emitSave)="saveModFanSetup($event)"></app-fan-setup>
-        <app-fan-motor *ngIf="modifyConditionsTab == 'fan-motor'" [settings]="settings" [selected]="modifiedSelected" [fanMotor]="assessment.fsat.modifications[modificationIndex].fsat.fanMotor"
-          [modificationIndex]="modificationIndex" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
-          (emitSave)="saveModFanMotor($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-motor>
-        <app-fan-field-data *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected" [fieldData]="assessment.fsat.modifications[modificationIndex].fsat.fieldData"
-          [modificationIndex]="modificationIndex" (emitSave)="saveModFieldData($event)" [fsat]="assessment.fsat.modifications[modificationIndex].fsat"></app-fan-field-data>
-        <app-modify-field-data-form *ngIf="modifyConditionsTab == 'fan-field-data'" [settings]="settings" [selected]="modifiedSelected"
-          [fsat]="assessment.fsat.modifications[modificationIndex].fsat" [modificationIndex]="modificationIndex" (emitSave)="saveModExtra($event)"></app-modify-field-data-form> -->
+        [settings]="settings" (emitSave)="saveAssessment()" [selected]="modifiedSelected"></app-operations>
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings" [boiler]="assessment.ssmt.modifications[modificationIndex].ssmt.boiler"
+        (emitSave)="saveModBoiler($event)"></app-boiler>
     </div>
     <!-- No content message -->
     <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">

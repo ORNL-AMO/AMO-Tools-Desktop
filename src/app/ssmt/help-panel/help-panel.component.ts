@@ -27,6 +27,8 @@ export class HelpPanelComponent implements OnInit {
   tabSelect: string = 'help';
   helpHeight: number;
 
+  currentFieldSubscription: Subscription;
+  currentField: string;
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
@@ -40,6 +42,10 @@ export class HelpPanelComponent implements OnInit {
         this.stepTab = val;
       })
     }
+
+    this.currentFieldSubscription = this.ssmtService.currentField.subscribe(val => {
+      this.currentField = val;
+    })
   }
 
   ngAfterViewInit() {
@@ -50,6 +56,7 @@ export class HelpPanelComponent implements OnInit {
 
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
+    this.currentFieldSubscription.unsubscribe();
   }
 
   setTab(str: string) {

@@ -2,13 +2,15 @@
   <div *ngIf="inSetup" class="header mr-2 ml-2">
     <h3>Operating Conditions</h3>
   </div>
-  <div class="pl-2 pr-2 pt-2">
+  <div class="p-3">
     <app-operating-hours [(operatingHours)]="ssmt.operatingHours" [selected]="selected" (emitSave)="save()"></app-operating-hours>
-  </div>
-  <div class="pl-2 pr-2 pt-2">
-    <app-operating-costs [(operatingCosts)]="ssmt.operatingCosts" [selected]="selected" [settings]="settings" (emitSave)="save()"></app-operating-costs>
-  </div>
-  <div class="pl-2 pr-2 pt-2">
-    <app-general-operations [(generalSteamOperations)]="ssmt.generalSteamOperations" [selected]="selected" [settings]="settings" (emitSave)="save()"></app-general-operations>
+    <div class="pt-2">
+      <app-operating-costs [(operatingCosts)]="ssmt.operatingCosts" [selected]="selected" [settings]="settings"
+        (emitSave)="save()"></app-operating-costs>
+    </div>
+    <div class="pt-2">
+      <app-general-operations [(generalSteamOperations)]="ssmt.generalSteamOperations" [selected]="selected" [settings]="settings"
+        (emitSave)="save()"></app-general-operations>
+    </div>
   </div>
 </div>

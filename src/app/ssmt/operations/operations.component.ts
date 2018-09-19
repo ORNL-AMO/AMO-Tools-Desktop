@@ -21,7 +21,9 @@ export class OperationsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  
   }
+
   save(){
     this.emitSave.emit(true);
   }

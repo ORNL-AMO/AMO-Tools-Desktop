@@ -8,7 +8,7 @@
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()" [selected]="true" [inSetup]="true"></app-operations>
-      <app-boiler *ngIf="stepTab == 'boiler'" [selected]="true" [inSetup]="true" [settings]="settings"></app-boiler>
+      <app-boiler *ngIf="stepTab == 'boiler'" [boiler]="_ssmt.boiler" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveBoiler($event)"></app-boiler>
       <app-header *ngIf="stepTab == 'header'"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'"></app-turbine>
       <!--  <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"

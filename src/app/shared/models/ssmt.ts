@@ -10,7 +10,8 @@ export interface SSMT {
     operatingCosts?: OperatingCosts,
     equipmentNotes?: string,
     generalSteamOperations?: GeneralSteamOperations,
-    modifications?: Array<Modification>
+    modifications?: Array<Modification>,
+    boiler?: Boiler
 }
 
 export interface GeneralSteamOperations {
@@ -28,4 +29,18 @@ export interface Notes {
     boilerNotes?: string,
     turbineNotes?: string,
     headerNotes?: string
+}
+
+
+export interface Boiler {
+    fuelType: number,
+    fuel: number,
+    combustionEfficiency: number,
+    blowdownRate: number,
+    blowdownFlashed: number,
+    preheatMakeupWater: number,
+    steamTemperature: number,
+    deaeratorVentRate: number,
+    deaeratorPressure: number,
+    approachTemperature: number
 }

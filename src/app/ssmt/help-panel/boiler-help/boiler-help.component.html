@@ -1,0 +1,120 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Boiler Help
+    <br>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>      
+      <small class="text-muted">
+        NEEDED boiler description
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'fuelType'">
+    <h6>
+      Fuel Type
+      <br>
+      <small class="text-muted">
+        NEEDED
+        <hr>
+      </small>
+    </h6>
+    <!-- <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Minimum</th>
+              <th class="w-50 text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">0</td>
+              <td class="w-50 text-center">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div> -->
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuel'">
+    <h6>
+      Fuel
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'combustionEfficiency'">
+    <h6>
+      Boiler Combustion Efficiency
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'blowdownRate'">
+    <h6>
+      Blowdown Rate
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'blowdownFlashed'">
+    <h6>
+      Is the blowdown flashed?
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'preheatMakeupWater'">
+    <h6>
+      Preheat Make-up Water
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'approachTemperature'">
+    <h6>
+      Approach Temperature
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'steamTemperature'">
+    <h6>
+      Steam Temperature
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'deaeratorVentRate'">
+    <h6>
+      Deaerator Vent Rate
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'deaeratorPressure'">
+    <h6>
+      Deaerator Pressure
+      <br>
+      <small class="text-muted">
+        NEEDED
+      </small>
+    </h6>
+  </div>
+</div>

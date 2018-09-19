@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT, Boiler } from '../../shared/models/ssmt';
 import { Assessment } from '../../shared/models/assessment';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
@@ -23,7 +23,7 @@ export class ModifyConditionsComponent implements OnInit {
   emitSaveAssessment = new EventEmitter<SSMT>();
   @Input()
   containerHeight: number;
-  
+    
   modelTab: string;
   modelTabSub: Subscription;
   baselineSelected: boolean = false;
@@ -69,10 +69,10 @@ export class ModifyConditionsComponent implements OnInit {
     this.emitSaveAssessment.emit(this.assessment.ssmt);
   }
 
-  // saveBaselineGasDensity(newGasDensity: BaseGasDensity) {
-  //   this.assessment.fsat.baseGasDensity = newGasDensity;
-  //   this.saveAssessment();
-  // }
+  saveBaselineBoiler(newBoiler: Boiler) {
+    this.assessment.ssmt.boiler = newBoiler;
+    this.saveAssessment();
+  }
 
   // saveBaselineFanSetup(newSetup: FanSetup) {
   //   this.assessment.fsat.fanSetup = newSetup;
@@ -89,10 +89,10 @@ export class ModifyConditionsComponent implements OnInit {
   //   this.saveAssessment();
   // }
 
-  // saveModGasDensity(newGasDensity: BaseGasDensity) {
-  //   this.assessment.fsat.modifications[this.modificationIndex].fsat.baseGasDensity = newGasDensity;
-  //   this.saveAssessment();
-  // }
+  saveModBoiler(newBoiler: Boiler) {
+    this.assessment.ssmt.modifications[this.modificationIndex].ssmt.boiler = newBoiler;
+    this.saveAssessment();
+  }
 
   // saveModFanSetup(newSetup: FanSetup) {
   //   this.assessment.fsat.modifications[this.modificationIndex].fsat.fanSetup = newSetup;
