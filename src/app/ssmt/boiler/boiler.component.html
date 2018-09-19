@@ -1,3 +1,81 @@
-<p>
-  boiler works!
-</p>
+<div class="d-flex flex-column">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
+    <h3>Boiler Details</h3>
+  </div>
+  <div class="pl-2 pr-2 pt-2">
+
+    <form>
+      <div class="form-group">
+        <label for="combustionEfficiency">Boiler Combustion Efficiency</label>
+        <div class="input-group">
+          <input name="combustionEfficiency" type="number" step="any" class="form-control" id="combustionEfficiency"
+            (input)="save()" [disabled]="!selected">
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="fuelType">Fuel Type
+          <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Fuel</a> -->
+        </label>
+        <select name="fuelType" class="form-control" id="fuelType" (change)="save()" (focus)="focusField('fuelType')"
+          (blur)="focusOut()">
+          <option *ngFor="let option of fuelOptions" [ngValue]="option">{{option}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="blowdownRate">Blowdown Rate</label>
+        <div class="input-group">
+          <input name="blowdownRate" type="number" step="any" class="form-control" id="blowdownRate" (input)="save()"
+            [disabled]="!selected">
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small" for="blowdownFlashed">Is the blowdown flashed?</label>
+        <select name="blowdownFlashed" class="form-control" id="blowdownFlashed" (change)="save()" (focus)="focusField('blowdownFlashed')"
+          (blur)="focusOut()">
+          <option [ngValue]="'yes'">Yes</option>
+          <option [ngValue]="'no'">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="small" for="preheatMakeupWater">Preheat Make-up Water with Blowdown</label>
+        <select name="preheatMakeupWater" class="form-control" id="preheatMakeupWater" (change)="save()" (focus)="focusField('preheatMakeupWater')"
+          (blur)="focusOut()">
+          <option [ngValue]="'yes'">Yes</option>
+          <option [ngValue]="'no'">No</option>
+        </select>
+      </div>
+
+      <!--TODO: add form field for approach temperature if preheatMakeupWater == 'yes'-->
+      <div class="form-group">
+        <label for="steamTemperature">Steam Temperature</label>
+        <div class="input-group">
+          <input name="steamTemperature" type="number" step="any" class="form-control" id="steamTemperature" (input)="save()"
+            [disabled]="!selected">
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="deaeratorVentRate">Deaerator Vent Rate</label>
+        <div class="input-group">
+          <input name="deaeratorVentRate" type="number" step="any" class="form-control" id="deaeratorVentRate" (input)="save()"
+            [disabled]="!selected">
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="deaeratorPressure">Deaerator Pressure</label>
+        <div class="input-group">
+          <input name="deaeratorPressure" type="number" step="any" class="form-control" id="deaeratorPressure" (input)="save()"
+            [disabled]="!selected">
+          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<div class="list-row d-flex w-100" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+<div class="list-row d-flex w-100" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT'}">
   <div class="d-flex">
     <div class="p-1">
       <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />

@@ -21,6 +21,10 @@
     border-bottom: #FFE400 groove 2px;
     border-image: linear-gradient(to right, #F0F3F4, #FFE400) 50 / 2;
   }
+  .ssmt .summary-card-header{
+    border-bottom: #F39C12 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #F39C12) 50 / 2;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;
@@ -70,6 +74,11 @@
 .fsat .dropdown-toggle,
 .fsat .btn-primary{
   background-color: #FFE400;
+}
+
+.ssmt .dropdown-toggle,
+.ssmt .btn-primary{
+  background-color: #F39C12;
 }
 
 .dropdown-menu.shown{

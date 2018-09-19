@@ -30,6 +30,14 @@ export class SsmtComponent implements OnInit {
   @ViewChild('addNewModal') public addNewModal: ModalDirective;
   @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
 
+  stepTabs: Array<string> = [
+    'system-basics',
+    'operations',
+    'boiler',
+    'header',
+    'turbine'
+  ]
+
   containerHeight: number;
   assessment: Assessment;
   _ssmt: SSMT;
@@ -51,6 +59,7 @@ export class SsmtComponent implements OnInit {
   showAddModal: boolean;
   selectedModSubscription: Subscription;
   isModalOpen: boolean;
+  stepTabIndex: number;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -134,6 +143,8 @@ export class SsmtComponent implements OnInit {
     })
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
       this.stepTab = val;
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+
       this.getContainerHeight();
     })
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
@@ -142,6 +153,7 @@ export class SsmtComponent implements OnInit {
     })
     this.assessmentTabSubscription = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
+      this.getContainerHeight();
     })
   }
 
@@ -213,19 +225,33 @@ export class SsmtComponent implements OnInit {
   }
 
   back() {
-
+    if (this.mainTab == 'system-setup') {
+      if (this.stepTab != 'system-basics') {
+        let assessmentTabIndex: number = this.stepTabIndex - 1;
+        let nextTab: string = this.stepTabs[assessmentTabIndex];
+        this.ssmtService.stepTab.next(nextTab);
+      }
+    } else if (this.mainTab == 'assessment') {
+      this.ssmtService.mainTab.next('system-setup');
+    }
   }
 
   goToReport() {
-
+    this.ssmtService.mainTab.next('report');
   }
 
   continue() {
-
+    if (this.stepTab == 'turbine') {
+      this.ssmtService.mainTab.next('assessment');
+    } else {
+      let assessmentTabIndex: number = this.stepTabIndex + 1;
+      let nextTab: string = this.stepTabs[assessmentTabIndex];
+      this.ssmtService.stepTab.next(nextTab);
+    }
   }
 
   getCanContinue() {
-    return false;
+    return true;
   }
 
   showAddNewModal() {

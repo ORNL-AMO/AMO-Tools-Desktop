@@ -6,8 +6,9 @@
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="save()" [selected]="baselineSelected"></app-operations>
-
+      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="save()"
+        [selected]="baselineSelected"></app-operations>
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"></app-boiler>
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"></app-fsat-info> -->
       <!-- <app-fsat-fluid *ngIf="modifyConditionsTab == 'fsat-fluid'" [settings]="settings" [selected]="baselineSelected" [baseGasDensity]="assessment.fsat.baseGasDensity"
           [modificationIndex]="modificationIndex" (emitSave)="saveBaselineGasDensity($event)"></app-fsat-fluid>
@@ -30,7 +31,7 @@
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt.modifications[modificationIndex].ssmt"
         [settings]="settings" (emitSave)="save()" [selected]="modifiedSelected"></app-operations>
-
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"></app-boiler>
 
       <!-- Forms -->
       <!-- <app-fsat-info *ngIf="modifyConditionsTab == 'fsat-info'" [selected]="modifiedSelected" [baseGasDensity]="assessment.fsat.modifications[modificationIndex].baseGasDensity"></app-fsat-info> -->

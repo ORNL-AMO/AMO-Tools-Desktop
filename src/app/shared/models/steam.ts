@@ -1,3 +1,5 @@
+//USED FOR STANDALONE STEAM CALCS
+//ssmt.ts has models for SSMT assessments
 export interface SteamPropertiesInput {
   thermodynamicQuantity: number;
   pressure: number;

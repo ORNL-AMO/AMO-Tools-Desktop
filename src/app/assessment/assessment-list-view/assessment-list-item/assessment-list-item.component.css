@@ -56,7 +56,10 @@ a:not([href]):not([tabindex]){
   border-bottom: #FFE400 groove 6px;
   border-image: linear-gradient(to right,#F0F3F4, #FFE400) 80 / 2;
 }
-
+.list-row.ssmt{
+  border-bottom: #F39C12 groove 6px;
+  border-image: linear-gradient(to right,#F0F3F4, #F39C12) 80 / 2;
+}
 .dropdown-menu.shown{
   display: grid;
   padding: 0px;
@@ -89,6 +92,11 @@ background-color: #BF3D00;
 .fsat .dropdown-toggle,
 .fsat .btn-primary{
 background-color: #FFE400;
+}
+
+.ssmt .dropdown-toggle,
+.ssmt .btn-primary{
+background-color: #F39C12;
 }
 
 .dropdown-menu.shown{
