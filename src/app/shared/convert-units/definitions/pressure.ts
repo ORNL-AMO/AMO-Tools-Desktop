@@ -16,14 +16,14 @@ export const pressure = {
       }
       , to_anchor: 1
     },
-    kPag: {
+    kPaa: {
       name: {
-        singular: 'Kilopascal - gauge'
-        , plural: 'Kilopascals - gauge',
-        display: '(kPag)'
+        singular: 'Kilopascal - absolute'
+        , plural: 'Kilopascals - absolute',
+        display: '(kPaa)'
       }
       , to_anchor: 1
-      , anchor_shift: -101.325
+      , anchor_shift: 101.325
     }
     , MPa: {
       name: {
@@ -49,14 +49,14 @@ export const pressure = {
       }
       , to_anchor: 100
     },
-    barg: {
+    bara: {
       name: {
-        singular: 'Bar - gauge'
-        , plural: 'Bar - gauge',
-        display: '(barg)'
+        singular: 'Bar - absolute'
+        , plural: 'Bar - absolute',
+        display: '(bara)'
       }
       , to_anchor: 100
-      , anchor_shift: -101.325
+      , anchor_shift: 101.325
     }
     , torr: {
       name: {
@@ -124,14 +124,14 @@ export const pressure = {
       }
       , to_anchor: 1 / 1000
     },
-    psig: {
+    psia: {
       name: {
-        singular: 'Pound per Square Inch - gauge'
-        , plural: 'Pounds per Square Inch - gauge',
-        display: '(psig)'
+        singular: 'Pound per Square Inch - absolute'
+        , plural: 'Pounds per Square Inch - absolute',
+        display: '(psia)'
       }
       , to_anchor: 1 / 1000
-      , anchor_shift: -14.696 / 1000
+      , anchor_shift: 14.696 / 1000
     }
     , ksi: {
       name: {

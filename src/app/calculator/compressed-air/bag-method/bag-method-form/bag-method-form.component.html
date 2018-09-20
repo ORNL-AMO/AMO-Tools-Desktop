@@ -23,7 +23,7 @@
         <div class="input-group">
           <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.heightOfBag" id="height" (input)="emitChange()"
             onfocus="this.select();" (focus)="changeField('height')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <div class="input-group">
           <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameterOfBag" id="diameter" (input)="emitChange()"
             onfocus="this.select();" (focus)="changeField('diameter')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
         </div>
       </div>
@@ -42,7 +42,7 @@
         <label class="bold">Flow Rate</label>
         <div class="text-center small">
           <strong>{{outputs.flowRate | number:'1.0-2'}} </strong>
-          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</strong>
+          <strong *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</strong>
           <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</strong>
         </div>
       </div>
@@ -51,7 +51,7 @@
         <label class="bold">Annual Consumption</label>
         <div class="text-center small">
           <strong>{{outputs.annualConsumption | number:'1.0-2'}} </strong>
-          <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</strong>
+          <strong *ngIf="settings.unitsOfMeasure != 'Metric'">SCF</strong>
           <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></strong>
         </div>
       </div>
