@@ -13,5 +13,5 @@ export interface OperatingCosts {
     fuelCost?: number,
     steamCost?: number,
     electricityCost?: number,
-    makeUpWaterCosts?: number
+    makeUpWaterCost?: number
   }

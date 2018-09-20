@@ -3,7 +3,8 @@
   <div class="form-group">
     <label for="fuelCost">Fuel</label>
     <div class="input-group">
-      <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="save()" [(ngModel)]="operatingCosts.fuelCost" [disabled]="!selected">
+      <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="save()" [(ngModel)]="operatingCosts.fuelCost"
+        [disabled]="!selected" [ngClass]="{'indicate-different': isFuelCostDifferent()}">
       <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
     </div>
   </div>
@@ -11,7 +12,7 @@
     <label for="electricityCost">Electricity</label>
     <div class="input-group">
       <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="save()"
-        [(ngModel)]="operatingCosts.electricityCost" [disabled]="!selected">
+        [(ngModel)]="operatingCosts.electricityCost" [disabled]="!selected" [ngClass]="{'indicate-different': isElectricityCostDifferent()}">
       <span class="units input-group-addon">$/kWh</span>
     </div>
   </div>
@@ -20,9 +21,8 @@
     </label>
     <div class="input-group">
       <input name="makeUpWaterCost" type="number" step="any" class="form-control" id="makeUpWaterCost" (input)="save()"
-        [(ngModel)]="operatingCosts.makeUpWaterCost" [disabled]="!selected">
+        [(ngModel)]="operatingCosts.makeUpWaterCost" [disabled]="!selected" [ngClass]="{'indicate-different': isMakeUpWaterCostsDifferent()}">
       <span class="units input-group-addon">$/{{settings.steamVolumeMeasurement}}</span>
-      <!-- <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span> -->
     </div>
   </div>
 </div>

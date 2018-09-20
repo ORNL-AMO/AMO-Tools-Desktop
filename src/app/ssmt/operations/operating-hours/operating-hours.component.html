@@ -59,11 +59,11 @@
     <span class="alert-warning pull-right small" *ngIf="hoursPerShiftError !== null">{{hoursPerShiftError}}</span>
     <span class="alert-warning pull-right small" *ngIf="timeError !== null">{{timeError}}</span>
   </div>
-  <div class="form-section">
+  <div class="form-section pt-2 pb-2">
     <div class="form-group">
       <label for="hoursPerYear">Hours / Year</label>
       <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()"
-        [(ngModel)]="operatingHours.hoursPerYear" [disabled]="!selected">
+        [(ngModel)]="operatingHours.hoursPerYear" [disabled]="!selected" [ngClass]="{'indicate-different': isHoursPerYearDifferent()}">
     </div>
     <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
   </div>

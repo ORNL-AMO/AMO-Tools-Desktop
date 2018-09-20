@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingHours } from '../../../shared/models/operations';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-operating-hours',
@@ -13,6 +14,8 @@ export class OperatingHoursComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
+  @Input()
+  inSetup: boolean;
 
   timeError: string = null;
   weeksPerYearError: string = null;
@@ -20,7 +23,7 @@ export class OperatingHoursComponent implements OnInit {
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
   hoursPerYearError: string = null;
-  constructor() { }
+  constructor(private compareService: CompareService) { }
 
   ngOnInit() {
     if (!this.operatingHours) {
@@ -123,4 +126,19 @@ export class OperatingHoursComponent implements OnInit {
     this.calculatHrsPerYear();
   }
 
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isHoursPerYearDifferent(){
+    if (this.canCompare()) {
+      return this.compareService.isHoursPerYearDifferent();
+    } else {
+      return false;
+    }
+  }
 }

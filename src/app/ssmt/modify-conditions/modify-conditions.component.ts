@@ -14,7 +14,7 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  assessment: Assessment;
+  ssmt: SSMT;
   @Input()
   modificationIndex: number;
   @Input()
@@ -66,11 +66,11 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   saveAssessment() {
-    this.emitSaveAssessment.emit(this.assessment.ssmt);
+    this.emitSaveAssessment.emit(this.ssmt);
   }
 
   saveBaselineBoiler(newBoiler: Boiler) {
-    this.assessment.ssmt.boiler = newBoiler;
+    this.ssmt.boiler = newBoiler;
     this.saveAssessment();
   }
 
@@ -90,7 +90,7 @@ export class ModifyConditionsComponent implements OnInit {
   // }
 
   saveModBoiler(newBoiler: Boiler) {
-    this.assessment.ssmt.modifications[this.modificationIndex].ssmt.boiler = newBoiler;
+    this.ssmt.modifications[this.modificationIndex].ssmt.boiler = newBoiler;
     this.saveAssessment();
   }
 

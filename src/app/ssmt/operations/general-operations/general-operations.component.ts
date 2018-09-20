@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GeneralSteamOperations } from '../../../shared/models/ssmt';
 import { Settings } from '../../../shared/models/settings';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-general-operations',
@@ -16,12 +17,37 @@ export class GeneralOperationsComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
-  constructor() { }
+  @Input()
+  inSetup: boolean;
+  constructor(private compareService: CompareService) { }
 
   ngOnInit() {
   }
 
   save(){
     this.emitSave.emit(true);
+  }
+
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isSitePowerImportDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSitePowerImportDifferent();
+    } else {
+      return false;
+    }
+  }
+  isMakeUpWaterTemperatureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isMakeUpWaterTemperatureDifferent();
+    } else {
+      return false;
+    }
   }
 }

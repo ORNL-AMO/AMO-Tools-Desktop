@@ -217,6 +217,7 @@ export class SsmtComponent implements OnInit {
     } else {
       this.modificationExists = false;
     }
+    this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {

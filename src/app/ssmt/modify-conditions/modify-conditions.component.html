@@ -6,9 +6,9 @@
       <div class="header mr-2 ml-2">
         <h3>Baseline</h3>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt" [settings]="settings" (emitSave)="saveAssessment()"
+      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="saveAssessment()"
         [selected]="baselineSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boiler]="assessment.ssmt.boiler"
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boiler]="ssmt.boiler"
         (emitSave)="saveBaselineBoiler($event)"></app-boiler>
     </div>
 
@@ -17,11 +17,11 @@
       [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
       <!-- Modification Header -->
       <div class="header mr-2 ml-2">
-        <h3>{{assessment.ssmt.modifications[modificationIndex].ssmt.name}}</h3>
+        <h3>{{ssmt.modifications[modificationIndex].ssmt.name}}</h3>
       </div>
-      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="assessment.ssmt.modifications[modificationIndex].ssmt"
+      <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="ssmt.modifications[modificationIndex].ssmt"
         [settings]="settings" (emitSave)="saveAssessment()" [selected]="modifiedSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings" [boiler]="assessment.ssmt.modifications[modificationIndex].ssmt.boiler"
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings" [boiler]="ssmt.modifications[modificationIndex].ssmt.boiler"
         (emitSave)="saveModBoiler($event)"></app-boiler>
     </div>
     <!-- No content message -->
@@ -42,7 +42,7 @@
 
   <!-- Help Panel -->
   <div class="col-4 p-0 help-panel">
-    <app-help-panel *ngIf="modificationExists" [ssmt]="assessment.ssmt" [settings]="settings" [modificationIndex]="modificationIndex"
+    <app-help-panel *ngIf="modificationExists" [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"
       [containerHeight]="containerHeight"></app-help-panel>
     <div *ngIf="!modificationExists">
       <div class="header mr-2 ml-2">
