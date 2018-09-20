@@ -112,6 +112,7 @@ export class PsatComponent implements OnInit {
           this.modificationExists = false;
         }
         this.getSettings();
+        this.initSankeyList();
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
@@ -223,7 +224,6 @@ export class PsatComponent implements OnInit {
   }
 
   initSankeyList() {
-    console.log('init sankey list');
     this.psatOptions = new Array<any>();
     this.psatOptions.push({ name: 'Baseline', psat: this._psat });
     this.psat1 = this.psatOptions[0];
@@ -235,7 +235,6 @@ export class PsatComponent implements OnInit {
       this.psatOptionsLength = this.psatOptions.length;
     }
   }
-
 
   getSettings(update?: boolean) {
     //get assessment settings
