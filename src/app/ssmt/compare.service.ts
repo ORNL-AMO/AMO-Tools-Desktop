@@ -159,4 +159,186 @@ export class CompareService {
       return false;
     }
   }
+
+  //boiler
+  // fuelType
+  isFuelTypeDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.fuelType != modification.boiler.fuelType) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // fuel
+  isFuelDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.fuel != modification.boiler.fuel || baseline.boiler.fuelType != modification.boiler.fuelType) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // combustionEfficiency
+  isCombustionEfficiencyDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.combustionEfficiency != modification.boiler.combustionEfficiency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // blowdownRate
+  isBlowdownRateDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.blowdownRate != modification.boiler.blowdownRate) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // blowdownFlashed
+  isBlowdownFlashedDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.blowdownFlashed != modification.boiler.blowdownFlashed) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // preheatMakeupWater
+  isPreheatMakeupWaterDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.preheatMakeupWater != modification.boiler.preheatMakeupWater) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // steamTemperature
+  isSteamTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.steamTemperature != modification.boiler.steamTemperature) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // deaeratorVentRate
+  isDeaeratorVentRateDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.deaeratorVentRate != modification.boiler.deaeratorVentRate) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // deaeratorPressure
+  isDeaeratorPressureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.deaeratorPressure != modification.boiler.deaeratorPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  // approachTemperature
+  isApproachTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boiler.approachTemperature != modification.boiler.approachTemperature) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 }

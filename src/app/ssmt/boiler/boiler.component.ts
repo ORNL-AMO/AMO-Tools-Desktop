@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-boiler',
@@ -37,7 +38,8 @@ export class BoilerComponent implements OnInit {
   boilerForm: FormGroup;
   options: any;
   showModal: boolean;
-  constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService) { }
+  constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
+    private compareService: CompareService) { }
 
   ngOnInit() {
     if (this.boiler) {
@@ -96,7 +98,7 @@ export class BoilerComponent implements OnInit {
   focusOut() {
     this.ssmtService.currentField.next('default');
   }
-  
+
   showMaterialModal() {
     this.showModal = true;
     this.ssmtService.modalOpen.next(this.showModal);
@@ -118,5 +120,83 @@ export class BoilerComponent implements OnInit {
     this.setFuelTypes();
     this.showModal = false;
     this.ssmtService.modalOpen.next(this.showModal);
+  }
+
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  isFuelTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFuelTypeDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFuelDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isFuelDifferent();
+    } else {
+      return false;
+    }
+  }
+  isBlowdownRateDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isBlowdownRateDifferent();
+    } else {
+      return false;
+    }
+  }
+  isBlowdownFlashedDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isBlowdownFlashedDifferent();
+    } else {
+      return false;
+    }
+  }
+  isPreheatMakeupWaterDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isPreheatMakeupWaterDifferent();
+    } else {
+      return false;
+    }
+  }
+  isApproachTemperatureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isApproachTemperatureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSteamTemperatureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSteamTemperatureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isDeaeratorVentRateDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDeaeratorVentRateDifferent();
+    } else {
+      return false;
+    }
+  }
+  isDeaeratorPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isDeaeratorPressureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isCombustionEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCombustionEfficiencyDifferent();
+    } else {
+      return false;
+    }
   }
 }

@@ -8,7 +8,7 @@
       <div class="form-group">
         <label for="fuelType">Fuel Type</label>
         <select name="fuelType" class="form-control" id="fuelType" (change)="setFuelTypes()" (focus)="focusField('fuelType')"
-          (blur)="focusOut()" formControlName="fuelType">
+          (blur)="focusOut()" formControlName="fuelType" [ngClass]="{'indicate-different': isFuelTypeDifferent()}">
           <option [ngValue]="0">Solid/Liquid</option>
           <option [ngValue]="1">Gas</option>
         </select>
@@ -20,7 +20,7 @@
             New Fuel</a>
         </label>
         <select name="fuel" class="form-control" id="fuel" (change)="save()" (focus)="focusField('fuel')" (blur)="focusOut()"
-          formControlName="fuel">
+          formControlName="fuel" [ngClass]="{'indicate-different': isFuelDifferent()}">
           <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
         </select>
       </div>
@@ -30,7 +30,7 @@
         <div class="input-group">
           <input name="combustionEfficiency" type="number" step="any" class="form-control" id="combustionEfficiency"
             (input)="save()" [readonly]="!selected" formControlName="combustionEfficiency" (focus)="focusField('combustionEfficiency')"
-            (blur)="focusOut()">
+            (blur)="focusOut()" [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
       </div>
@@ -39,7 +39,8 @@
         <label for="blowdownRate">Blowdown Rate</label>
         <div class="input-group">
           <input name="blowdownRate" type="number" step="any" class="form-control" id="blowdownRate" (input)="save()"
-            [readonly]="!selected" formControlName="blowdownRate" (focus)="focusField('blowdownRate')" (blur)="focusOut()">
+            [readonly]="!selected" formControlName="blowdownRate" (focus)="focusField('blowdownRate')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isBlowdownRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
       </div>
@@ -47,7 +48,7 @@
       <div class="form-group">
         <label for="blowdownFlashed">Is the blowdown flashed?</label>
         <select name="blowdownFlashed" class="form-control" id="blowdownFlashed" (change)="save()" (focus)="focusField('blowdownFlashed')"
-          (blur)="focusOut()" formControlName="blowdownFlashed">
+          (blur)="focusOut()" formControlName="blowdownFlashed" [ngClass]="{'indicate-different': isBlowdownFlashedDifferent()}">
           <option [ngValue]="1">Yes</option>
           <option [ngValue]="0">No</option>
         </select>
@@ -56,7 +57,7 @@
       <div class="form-group">
         <label for="preheatMakeupWater">Preheat Make-up Water with Blowdown</label>
         <select name="preheatMakeupWater" class="form-control" id="preheatMakeupWater" (change)="save()" (focus)="focusField('preheatMakeupWater')"
-          (blur)="focusOut()" formControlName="preheatMakeupWater">
+          (blur)="focusOut()" formControlName="preheatMakeupWater" [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
           <option [ngValue]="1">Yes</option>
           <option [ngValue]="0">No</option>
         </select>
@@ -67,7 +68,7 @@
         <div class="input-group">
           <input name="approachTemperature" type="number" step="any" class="form-control" id="approachTemperature"
             (input)="save()" [readonly]="!selected" formControlName="approachTemperature" (focus)="focusField('approachTemperature')"
-            (blur)="focusOut()">
+            (blur)="focusOut()" [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
         </div>
@@ -78,7 +79,8 @@
         <label for="steamTemperature">Steam Temperature</label>
         <div class="input-group">
           <input name="steamTemperature" type="number" step="any" class="form-control" id="steamTemperature" (input)="save()"
-            [readonly]="!selected" formControlName="steamTemperature" (focus)="focusField('steamTemperature')" (blur)="focusOut()">
+            [readonly]="!selected" formControlName="steamTemperature" (focus)="focusField('steamTemperature')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}">
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
         </div>
@@ -88,7 +90,8 @@
         <label for="deaeratorVentRate">Deaerator Vent Rate</label>
         <div class="input-group">
           <input name="deaeratorVentRate" type="number" step="any" class="form-control" id="deaeratorVentRate" (input)="save()"
-            [readonly]="!selected" formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')" (blur)="focusOut()">
+            [readonly]="!selected" formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
       </div>
@@ -97,7 +100,8 @@
         <label for="deaeratorPressure">Deaerator Pressure</label>
         <div class="input-group">
           <input name="deaeratorPressure" type="number" step="any" class="form-control" id="deaeratorPressure" (input)="save()"
-            [readonly]="!selected" formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()">
+            [readonly]="!selected" formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
           <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
         </div>
       </div>
