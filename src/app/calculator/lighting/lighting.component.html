@@ -1,0 +1,31 @@
+<div *ngIf="selectedTool == 'none'">
+
+  <div class="d-flex lighting">
+    <div class="col-10 mx-auto">
+      <div class="content-container calculator-list">
+        <h2 class="mb-1">Lighting Calculators</h2>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <!-- <img class="calc-img" src="assets/images/calculator-icons/motor-icons/nema.png" (click)="showTool('lighting-replacement')"> -->
+              <span class="fa fa-lightbulb-o" (click)="showTool('lighting-replacement')"></span>
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('lighting-replacement')">Lighting Replacement</a>
+            <p>
+              Calculate the energy savings, cost savings, and payback period for replacing an existing motor with a
+              higher efficiency motor.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'lighting-replacement'">
+  <app-lighting-replacement></app-lighting-replacement>
+</div>

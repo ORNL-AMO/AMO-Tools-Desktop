@@ -1,0 +1,33 @@
+<div class="d-flex h-100 modify-conditions lighting">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <span class="fa fa-lightbulb-o"></span>
+      </div>
+      <div class="pl-2">
+        <h3>Lighting Replacement</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-lighting-replacement-form></app-lighting-replacement-form>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <!-- <app-replace-rewind-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-replace-rewind-help>
+      <app-replace-rewind-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results"></app-replace-rewind-results> -->
+    </div>
+  </div>
+</div>
