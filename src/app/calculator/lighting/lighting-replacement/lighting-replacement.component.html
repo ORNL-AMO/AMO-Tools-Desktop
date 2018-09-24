@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions lighting">
+<!-- <div class="d-flex h-100 modify-conditions lighting">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
@@ -8,8 +8,16 @@
         <h3>Lighting Replacement</h3>
       </div>
     </div>
-    <div class="d-flex flex-column m-4">
-      <app-lighting-replacement-form></app-lighting-replacement-form>
+    <div class="d-flex flex-column ml-4 mr-4 mb-4">
+      <div class="p-2">
+        <a class="click-link pull-right small" (click)="addFixture()">+Add Fixture</a>
+      </div>
+      <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
+        <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
+          <span class="fa fa-times-circle-o pull-right large" (click)="removeFixture(index)"></span></label>
+        <app-lighting-replacement-form [baselineData]="data" [modificationData]="modificationData[index]"
+          (emitCalculate)="calculate()"></app-lighting-replacement-form>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -26,8 +34,99 @@
       </div>
     </div>
     <div class="d-flex justify-content-center">
-      <!-- <app-replace-rewind-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-replace-rewind-help>
+
+    </div>
+  </div>
+</div> -->
+
+
+
+<div class="d-flex h-100 modify-conditions lighting" #contentContainer>
+  <div class="d-flex flex-column w-100 h-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 align-items-center bg-white">
+      <div class="col-md-auto">
+        <span class="fa fa-lightbulb-o"></span>
+      </div>
+      <div class="pl-2">
+        <h3>Lighting Replacement</h3>
+      </div>
+    </div>
+    <!-- Baseline -->
+    <div class="d-flex">
+      <div class="scroll-item p-0 col-8 d-flex" [ngStyle]="{'height.px': containerHeight}">
+        <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
+          <div class="header mr-2 ml-2">
+            <h3>Baseline</h3>
+          </div>
+          <div class="d-flex flex-column ml-4 mr-4 mb-4">
+            <div class="p-2">
+              <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Fixture</a>
+            </div>
+            <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
+              <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
+                <span class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"></app-lighting-replacement-form>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Modifications Start -->
+        <div *ngIf="modificationExists" class="modification w-50 panel-column" (click)="togglePanel(modifiedSelected)"
+          [ngClass]="{'disabled': modifiedSelected == false}">
+
+          <!-- Modification Header -->
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <!-- Forms -->
+          <div class="d-flex flex-column ml-4 mr-4 mb-4">
+            <div class="p-2">
+              <a class="click-link pull-right small" (click)="addModificationFixture()">+Add Fixture</a>
+            </div>
+            <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
+              <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
+                <span class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"></app-lighting-replacement-form>
+            </div>
+          </div>
+        </div>
+        <!-- No content message -->
+        <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()" [ngClass]="{'disabled': modifiedSelected == false}">
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <div class="p-3 no-data">
+            <h3>
+              Once you have set up your baseline..
+            </h3>
+            <button type="button" class="btn btn-primary">Add Modified Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Panel -->
+      <div class="col-4 p-0 help-panel">
+        <div class="d-flex flex-column mh-100 scroll-item">
+          <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+                <div>Results</div>
+              </a>
+            </div>
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+              <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                <div>Help</div>
+              </a>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <!-- <app-replace-rewind-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-replace-rewind-help>
       <app-replace-rewind-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results"></app-replace-rewind-results> -->
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

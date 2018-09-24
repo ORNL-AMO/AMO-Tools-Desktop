@@ -1,3 +1,12 @@
-.fa .fa-lightbulb-o{
+.header .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
+}
+
+
+.fa.fa-times-circle-o:hover{
+    cursor: pointer;
+}
+
+.no-data{
+    background: none;
 }

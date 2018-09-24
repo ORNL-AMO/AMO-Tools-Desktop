@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { LightingReplacementService, LightingReplacementData } from './lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement',
@@ -9,7 +10,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 })
 export class LightingReplacementComponent implements OnInit {
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-
+  @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -18,7 +19,27 @@ export class LightingReplacementComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   settings: Settings;
-  constructor(private settingsDbService: SettingsDbService) { }
+  baselineData: Array<LightingReplacementData> = [{
+    hoursPerDay: 0,
+    daysPerMonth: 0,
+    monthsPerYear: 0,
+    hoursPerYear: 0,
+    wattsPerLamp: 0,
+    lampsPerFixture: 0,
+    numberOfFixtures: 0,
+    lumensPerLamp: 0,
+    totalLighting: 0,
+    electricityUse: 0
+  }];
+  baselineElectricityUse: number;
+  modificationData: Array<LightingReplacementData> = [];
+  modificationElectricityUse: number;
+
+  baselineSelected: boolean = true;
+  modifiedSelected: boolean = false;
+  modificationExists: boolean = false;
+  containerHeight: number;
+  constructor(private settingsDbService: SettingsDbService, private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -31,9 +52,20 @@ export class LightingReplacementComponent implements OnInit {
     }, 100);
   }
 
+  togglePanel(bool: boolean) {
+    if (bool == this.baselineSelected) {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (bool == this.modifiedSelected) {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
-      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
@@ -43,5 +75,22 @@ export class LightingReplacementComponent implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  calculate() {
+    this.baselineData.forEach(data => {
+      data = this.lightingReplacementService.calculate(data);
+    })
+    this.modificationData.forEach(data => {
+      data = this.lightingReplacementService.calculate(data);
+    })
+  }
+
+  addBaselineFixture(){
+    this.baselineData.push(this.baselineData[0]);
+  }
+
+  removeBaselineFixture(index: number){
+    this.baselineData.splice(index, 1);
   }
 }
