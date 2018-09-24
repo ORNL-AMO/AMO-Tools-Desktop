@@ -63,7 +63,7 @@ export class PumpCurveComponent implements OnInit {
 
   headerHeight: number;
   pumpCurveCollapsed: string = 'open';
-  systemCurveCollapsed: string = 'open';
+  systemCurveCollapsed: string = 'closed';
 
   //system curve variables
   pointOne: { form: FormGroup, fluidPower: number };
@@ -71,6 +71,7 @@ export class PumpCurveComponent implements OnInit {
   curveConstants: { form: FormGroup };
   staticHead: number;
   lossCoefficient: number;
+  graphSystemCurve: boolean = false;
 
   pumpCurveForm: PumpCurveForm;
   toggleCalculate: boolean = false;
@@ -535,8 +536,10 @@ export class PumpCurveComponent implements OnInit {
   toggleSystemCurveCollapse() {
     if (this.systemCurveCollapsed == 'open') {
       this.systemCurveCollapsed = 'closed';
+      this.graphSystemCurve = false;
     } else {
       this.systemCurveCollapsed = 'open';
+      this.graphSystemCurve = true;
     }
   }
 

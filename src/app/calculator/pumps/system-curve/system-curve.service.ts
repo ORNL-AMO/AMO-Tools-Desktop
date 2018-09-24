@@ -111,6 +111,7 @@ export class SystemCurveService {
 
 
   getCurvePointData(settings: Settings, x: any, y: any, increment: number, isFan: boolean, staticHead: number, lossCoefficient: number, curveConstants: { form: FormGroup }): Array<{ x: number, y: number, fluidPower: number }> {
+    console.log('getCurvePointData(), increment = ' + increment);
     let powerMeasurement: string;
     if (isFan) {
       powerMeasurement = settings.fanPowerMeasurement;

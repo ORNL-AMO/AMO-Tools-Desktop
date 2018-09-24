@@ -30,8 +30,10 @@
       </div>
       <div class="d-block pt-3">
         <h5 class="group-label" (click)="toggleSystemCurveCollapse()">System Curve Data
-          <span *ngIf="systemCurveCollapsed == 'open'" class="fa fa-caret-down pull-right"></span>
-          <span *ngIf="systemCurveCollapsed == 'closed'" class="fa fa-caret-up pull-right"></span>
+          <!-- <span *ngIf="systemCurveCollapsed == 'open'" class="fa fa-caret-down pull-right"></span> -->
+          <span *ngIf="systemCurveCollapsed == 'open'" class="remove-curve fa fa-minus pull-right"></span>
+          <!-- <span *ngIf="systemCurveCollapsed == 'closed'" class="fa fa-caret-up pull-right"></span> -->
+          <span *ngIf="systemCurveCollapsed == 'closed'" class="add-curve fa fa-plus pull-right"></span>
         </h5>
         <div class="mb-3 d-block" [@collapsed]="systemCurveCollapsed">
           <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan" [settings]="settings"
@@ -60,7 +62,7 @@
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="pumpCurveGraph">
         <app-pump-curve-graph class="w-100" [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
           [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"
-          [lossCoefficient]="lossCoefficient"></app-pump-curve-graph>
+          [lossCoefficient]="lossCoefficient" [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
         <div class="d-flex pt-2 w-100 justify-content-center align-items-center">
           <p [innerHTML]="regEquation"></p>
         </div>

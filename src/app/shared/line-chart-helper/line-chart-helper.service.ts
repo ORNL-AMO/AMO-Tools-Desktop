@@ -144,7 +144,7 @@ export class LineChartHelperService {
   }
 
 
-  appendLine(svg: d3.Selection<any>, stroke: string, strokeWidth: string): d3.Selection<any> {
+  appendLine(svg: d3.Selection<any>, stroke: string, strokeWidth: string, strokePattern?: string, strokePatternSettings?: string): d3.Selection<any> {
     let line: d3.Selection<any>;
     line = svg.append("path")
       .attr("class", "line")
@@ -153,13 +153,17 @@ export class LineChartHelperService {
       .style("stroke", stroke)
       .style("display", "none")
       .style('pointer-events', 'none');
+    if (strokePattern !== null && strokePatternSettings !== null) {
+      line.attr(strokePattern, (strokePatternSettings));
+    }
     return line;
   }
 
-  drawLine(line: d3.Selection<any>, xScale: any, yScale: any, data: Array<{ x: number, y: number }>): d3.Selection<any> {
+  drawLine(line: d3.Selection<any>, xScale: any, yScale: any, data: Array<any>): d3.Selection<any> {
     var currentLi = d3.line()
       .x(function (d) { return xScale(d.x); })
       .y(function (d) { return yScale(d.y); })
+      // .curve(d3.curveCardinal);
       .curve(d3.curveNatural);
 
     line.data([data])
@@ -169,7 +173,7 @@ export class LineChartHelperService {
   }
 
 
-  appendFocus(svg: d3.Selection<any>, id: string, r?: number, stroke?: string, strokeWidth?: string, ): d3.Selection<any> {
+  appendFocus(svg: d3.Selection<any>, id: string, r?: number, stroke?: string, strokeWidth?: string): d3.Selection<any> {
     if (!r) {
       r = 6;
     }
@@ -268,9 +272,11 @@ export class LineChartHelperService {
               tooltipData[j].value = yFormat(dArray[index].y);
             }
           }
-          let detailLeft: number = Math.min(((margin.left + xScale(dArray[0].x) - (200 / 2 - 17)) - 2), width - 200);
+          // let detailLeft: number = Math.min(((margin.left + xScale(dArray[0].x) - (200 / 2 - 17)) - 2), width - 200);
+          let detailLeft: number = Math.min((margin.left + xScale(dArray[0].x) - 100), width - 200);
           let detailTop: number;
-          let pointerLeft: number = margin.left + xScale(dArray[0].x) + 5;
+          let pointerLeft: number = margin.left + xScale(dArray[0].x) - 10;
+          // let pointerLeft: number = margin.left + xScale(dArray[0].x) + 5;
           let pointerTop: number;
           for (let j = 0; j < dArray.length; j++) {
             if (j == 0) {
@@ -342,6 +348,7 @@ export class LineChartHelperService {
 
 
   appendDetailBox(ngChart: ElementRef) {
+    // d3.select("#detailBox").remove();
     let detailBox = d3.select(ngChart.nativeElement).append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
@@ -349,7 +356,7 @@ export class LineChartHelperService {
       .style("position", "absolute")
       .style("padding", "10px")
       .style("font", "12px sans-serif")
-      .style("width", "200px")
+      .style("width", "250px")
       .style("background", "#ffffff")
       .style("border", "0px")
       .style("box-shadow", "0px 0px 10px 2px grey")
@@ -374,21 +381,27 @@ export class LineChartHelperService {
   }
 
   updateDetailBox(tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>, detailBox: d3.Selection<any>, left: string, top: string) {
-    let htmlString: string = "<p><strong>";
+    detailBox.html('');
+    let htmlString: string;
     for (let i = 0; i < tooltipData.length; i++) {
+      if (i == 0) {
+        htmlString = "<p>" + "<strong>";
+      }
       htmlString = htmlString + "<div style='float:left; position: relative; top: -10px;'>"
-        + tooltipData[i].label + ": </div><div style='float:right; position: relative; top: -10px;'>"
+        + tooltipData[i].label + ": </div><div style='float: right; position: relative; top: -10px;'>"
         + tooltipData[i].value + tooltipData[i].unit + "</div>";
       if (i < tooltipData.length - 1) {
         htmlString = htmlString + "<br>";
       }
+      if (i == tooltipData.length - 1) {
+        htmlString = htmlString + "</strong>" + "</p>";
+      }
     }
-    htmlString = htmlString + "</strong></p>";
 
     detailBox
-      .html(htmlString)
       .style("left", left)
       .style("top", top)
+      .html(htmlString)
       .transition()
       .style("opacity", 1);
   }
@@ -416,8 +429,6 @@ export class LineChartHelperService {
   }
 
 
-
-
   tableFocusHelper(svg: d3.Selection<any>, id: string, fill: string, stroke: string, transX: number, transY: number): d3.Selection<any> {
     let focus: d3.Selection<any> = svg.append("g")
       .attr("class", "tablePoint")
@@ -434,7 +445,6 @@ export class LineChartHelperService {
     focus.attr("transform", "translate(" + transX + "," + transY + ")");
     return focus;
   }
-
 
   tableHighlightPointHelper(svg: d3.Selection<any>, ids: Array<string>) {
     let highlightedPoint: d3.Selection<any>;
@@ -464,8 +474,5 @@ export class LineChartHelperService {
       svg.select(ids[i]).interrupt().attr('r', 6);
     }
   }
-
-
-
 
 }

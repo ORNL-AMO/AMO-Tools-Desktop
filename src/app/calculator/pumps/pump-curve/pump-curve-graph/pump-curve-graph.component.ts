@@ -5,11 +5,13 @@ import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calcu
 import * as d3 from 'd3';
 import * as regression from 'regression';
 import * as _ from 'lodash';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SystemCurveService } from '../../system-curve/system-curve.service';
+import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
 
 var flowMeasurement: string;
 var powerMeasurement: string;
@@ -46,7 +48,11 @@ export class PumpCurveGraphComponent implements OnInit {
   staticHead: number;
   @Input()
   lossCoefficient: number;
+  @Input()
+  graphSystemCurve: boolean;
+  graphModificationCurve: boolean = false;
 
+  greatestDomain: string = "base";
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -56,24 +62,46 @@ export class PumpCurveGraphComponent implements OnInit {
   }
   exportName: string;
 
-  svg: any;
-  xAxis: any;
-  yAxis: any;
+  svg: d3.Selection<any>;
+  xAxis: d3.Selection<any>;
+  yAxis: d3.Selection<any>;
+  linePump: d3.Selection<any>;
+  linePumpMod: d3.Selection<any>;
+  lineSystem: d3.Selection<any>;
+  dPump: { x: number, y: number };
+  dPumpMod: { x: number, y: number };
+  dSystem: { x: number, y: number, fluidPower: number };
+  focusPump: d3.Selection<any>;
+  focusPumpMod: d3.Selection<any>;
+  focusSystem: d3.Selection<any>;
+  focusDPump: Array<{ x: number, y: number }>;
+  focusDPumpMod: Array<{ x: number, y: number }>;
+  focusDSystem: Array<{ x: number, y: number, fluidPower: number }>;
+  filter: d3.Selection<any>;
   x: any;
   y: any;
-  width: any;
-  height: any;
-  margin: any;
-  line: any;
-  filter: any;
-  detailBox: any;
+  width: number;
+  height: number;
+  curveChanged: boolean = false;
+  margin: { top: number, right: number, bottom: number, left: number };
+
+  detailBox: d3.Selection<any>;
+  detailBoxPointer: d3.Selection<any>;
   tooltipPointer: any;
+  tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>;
   // pointer: any;
   calcPoint: any;
   focus: any;
   focusMod: any;
   focusSystemCurve: any;
   isGridToggled: boolean;
+
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>;
+  tablePointsPump: Array<d3.Selection<any>>;
+  tablePointsPumpMod: Array<d3.Selection<any>>;
+  tablePointsSystem: Array<d3.Selection<any>>;
+  deleteCount: number = 0;
 
   firstChange: boolean = true;
 
@@ -93,27 +121,47 @@ export class PumpCurveGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-
   //dynamic table - specific to system curve graph
   flowMeasurement: string;
   distanceMeasurement: string;
   powerMeasurement: string;
-  deleteCount: number = 0;
 
   systemCurveChanged: boolean = false;
   systemCurveMaxY: number;
   maxX: any;
   maxY: any;
 
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   @Input()
   toggleCalculate: boolean;
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private systemCurveService: SystemCurveService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>();
+    // this.tablePoints = new Array<d3.Selection<any>>();
+    this.tablePointsPump = new Array<d3.Selection<any>>();
+    this.tablePointsPumpMod = new Array<d3.Selection<any>>();
+    this.tablePointsSystem = new Array<d3.Selection<any>>();
+    this.focusDPump = new Array<{ x: number, y: number }>();
+    this.focusDPumpMod = new Array<{ x: number, y: number }>();
+    this.focusDSystem = new Array<{ x: number, y: number, fluidPower: number }>();
     this.isGridToggled = false;
+
+    this.initTooltipData();
+
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.initColumnTitles();
   }
 
   ngAfterViewInit() {
@@ -122,11 +170,78 @@ export class PumpCurveGraphComponent implements OnInit {
     }, 100)
   }
 
+  initColumnTitles() {
+    if (this.isFan) {
+      flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
+      distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
+      headOrPressure = 'Pressure';
+    } else {
+      flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
+      distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
+      powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
+      headOrPressure = 'Head'
+    }
+    this.columnTitles = ['Flow Rate (' + flowMeasurement + ')', 'Base ' + headOrPressure + ' (' + distanceMeasurement + ')', 'Mod ' + headOrPressure + ' (' + distanceMeasurement + ')', 'System ' + headOrPressure + ' (' + distanceMeasurement + ')', 'Fluid Power (' + powerMeasurement + ')'];
+  }
+
+  initTooltipData() {
+    this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
+    let flowMeasurement: string;
+    let distanceMeasurement: string;
+    let headOrPressure: string;
+    let powerMeasurement: string;
+    if (this.isFan) {
+      headOrPressure = "Pressure";
+      distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
+      flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
+      powerMeasurement = this.settings.fanPowerMeasurement;
+    } else {
+      headOrPressure = "Head";
+      distanceMeasurement = this.settings.distanceMeasurement;
+      flowMeasurement = this.settings.flowMeasurement;
+      powerMeasurement = this.settings.powerMeasurement;
+    }
+    this.tooltipData.push({
+      label: "Flow",
+      value: null,
+      unit: " " + flowMeasurement,
+      formatX: true
+    });
+    this.tooltipData.push({
+      label: "Base " + headOrPressure,
+      value: null,
+      unit: " " + distanceMeasurement,
+      formatX: false
+    });
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      this.tooltipData.push({
+        label: "Mod " + headOrPressure,
+        value: null,
+        unit: " " + distanceMeasurement,
+        formatX: false
+      });
+    }
+    if (this.graphSystemCurve) {
+      this.tooltipData.push({
+        label: "Sys. Curve " + headOrPressure,
+        value: null,
+        unit: " " + distanceMeasurement,
+        formatX: false
+      });
+      this.tooltipData.push({
+        label: "Fluid Power",
+        value: null,
+        unit: " " + powerMeasurement,
+        formatX: null
+      });
+    }
+  }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
-
     if (btnType == 'btnExportChart') {
       this.hoverBtnExport = true;
     }
@@ -206,9 +321,10 @@ export class PumpCurveGraphComponent implements OnInit {
     if (!this.firstChange) {
       //pump-curve.component toggles the toggleCalculate value when calculating
       //check for changes to toggleCalculate
-      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead) {
+      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead || changes.graphSystemCurve) {
         //if changes draw new graph
         if (this.checkForm() && this.margin) {
+          this.initTooltipData();
           this.makeGraph();
           this.svg.style("display", null);
         }
@@ -270,13 +386,14 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
 
-  calculateY(formData: PumpCurveForm, flow: number) {
+  calculateY(formData: PumpCurveForm, flow: number): number {
     let result = 0;
     result = formData.headConstant + formData.headFlow * flow + formData.headFlow2 * Math.pow(flow, 2) + formData.headFlow3 * Math.pow(flow, 3) + formData.headFlow4 * Math.pow(flow, 4) + formData.headFlow5 * Math.pow(flow, 5) + formData.headFlow6 * Math.pow(flow, 6);
     return result;
   }
 
-  getData(): Array<any> {
+  getData(): Array<{ x: number, y: number }> {
+    // let data = new Array<{ x: number, y: number }>();
     let data = new Array<any>();
     if (this.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
@@ -302,22 +419,24 @@ export class PumpCurveGraphComponent implements OnInit {
         y: this.calculateY(this.pumpCurveForm, 10)
       });
       for (let i = 20; i <= this.pumpCurveForm.maxFlow + 10; i = i + 10) {
-
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
           data.push({
             x: i,
             y: yVal
-          })
+          });
         }
       }
     }
+    // data.pop();
+    // data.shift();
     return data;
   }
 
-  getModifiedData(baseline: number, modified: number): Array<any> {
+  getModifiedData(baseline: number, modified: number): Array<{ x: number, y: number }> {
     let data = new Array<any>();
-    let ratio = baseline / modified;
+    // let ratio = baseline / modified;
+    let ratio = modified / baseline;
     if (this.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
       let tmpArr = new Array<any>();
@@ -336,8 +455,8 @@ export class PumpCurveGraphComponent implements OnInit {
       }
     } else if (this.selectedFormView == 'Equation') {
       data.push({
-        x: 10,
-        y: this.calculateY(this.pumpCurveForm, 10)
+        x: 10 * ratio,
+        y: this.calculateY(this.pumpCurveForm, 10) * Math.pow(ratio, 2)
       });
       for (let i = 20; i <= this.pumpCurveForm.maxFlow + 10; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
@@ -352,583 +471,408 @@ export class PumpCurveGraphComponent implements OnInit {
     return data;
   }
 
+  // getXAxisMax(data: Array<{ x: number, y: number }>): { x: number, y: number } {
+  //   let max: { x: number, y: number };
+  //   let modifiedData = new Array<{ x: number, y: number }>();
+  //   let maxX = _.maxBy(data, (val) => { return val.x });
+  //   if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+  //     modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+  //     let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
+  //     if (maxX.x < modMaxX.x) {
+  //       maxX = modMaxX;
+  //     }
+  //   }
+  //   if (this.graphSystemCurve) {
+  //     if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.flowRate.value) {
+  //       if (this.pointOne.form.controls.flowRate.value > maxX.x) {
+  //         maxX.x = this.pointOne.form.controls.flowRate.value;
+  //         console.log('ponitOne');
+  //         console.log('data[data.length - 1] = ');
+  //         console.log(data[data.length - 1]);
+  //       }
+  //     }
+  //     else {
+  //       if (this.pointTwo.form.controls.flowRate.value > maxX.x) {
+  //         maxX.x = this.pointTwo.form.controls.flowRate.value;
+  //       }
+  //     }
+  //   }
+  //   // maxX.x = maxX.x + 200;
+  //   max = maxX;
+  //   console.log('xAxisMax = ');
+  //   console.log(max);
+  //   return max;
+  // }
 
-  makeGraph() {
-    // Data for graph
-    let data = new Array<any>();
-    data = this.getData();
+  // getYAxisMax(data: Array<{ x: number, y: number }>): { x: number, y: number } {
+  //   let max: { x: number, y: number };
+  //   let modifiedData = new Array<{ x: number, y: number }>();
+  //   let maxY = _.maxBy(data, (val) => { return val.y });
+  //   if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+  //     modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+  //     let modMaxY = _.maxBy(modifiedData, (val) => { return val.y });
+  //     if (maxY.y < modMaxY.y) {
+  //       maxY = modMaxY;
+  //     }
+  //   }
+  //   if (this.graphSystemCurve) {
+  //     if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
+  //       if (this.pointOne.form.controls.head.value > maxY.y) {
+  //         maxY.y = this.pointOne.form.controls.head.value;
+  //       }
+  //     }
+  //     else {
+  //       if (this.pointTwo.form.controls.head.value > maxY.y) {
+  //         maxY.y = this.pointTwo.form.controls.head.value;
+  //       }
+  //     }
+  //   }
+  //   // maxY.y = maxY.y + 100;
+  //   max = maxY;
+  //   console.log('yAxisMax = ');
+  //   console.log(max);
+  //   return max;
+  // }
 
-    let systemCurveData = new Array<any>();
-
-    let modifiedData = new Array<any>();
-    let maxX = _.maxBy(data, (val) => { return val.x });
-    let maxY = _.maxBy(data, (val) => { return val.y });
-
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
-      let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
-      let modMaxY = _.maxBy(modifiedData, (val) => { return val.y });
+  getXScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
+    let max: { x: number, y: number };
+    let maxX = _.maxBy(dataBaseline, (val) => { return val.x });
+    this.greatestDomain = "base";
+    if (this.graphModificationCurve) {
+      let modMaxX = _.maxBy(dataModification, (val) => { return val.x });
       if (maxX.x < modMaxX.x) {
         maxX = modMaxX;
+        this.greatestDomain = "mod";
       }
+    }
+    if (this.graphSystemCurve) {
+      if (systemPoint1Flow > systemPoint2Flow) {
+        if (systemPoint1Flow > maxX.x) {
+          maxX.x = systemPoint1Flow;
+          this.greatestDomain = "system";
+        }
+      }
+      else {
+        if (systemPoint2Flow > maxX.x) {
+          maxX.x = systemPoint2Flow;
+          this.greatestDomain = "system";
+        }
+      }
+    }
+    max = maxX;
+    return max;
+  }
+
+  getYScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
+    let max: { x: number, y: number };
+    let maxY = _.maxBy(dataBaseline, (val) => { return val.y });
+    if (this.graphModificationCurve) {
+      let modMaxY = _.maxBy(dataModification, (val) => { return val.y });
       if (maxY.y < modMaxY.y) {
         maxY = modMaxY;
       }
     }
-
-    this.maxX = maxX;
-    this.maxY = maxY;
-
-    if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
-      if (this.pointOne.form.controls.head.value > this.maxY.y) {
-        this.maxY.y = this.pointOne.form.controls.head.value;
+    if (this.graphSystemCurve) {
+      if (systemPoint1Head > systemPoint2Head) {
+        if (systemPoint1Head > maxY.y) {
+          maxY.y = systemPoint1Head;
+        }
+      }
+      else {
+        if (systemPoint2Head > maxY.y) {
+          maxY.y = systemPoint2Head;
+        }
       }
     }
-    else {
-      if (this.pointTwo.form.controls.head.value > this.maxY.y) {
-        this.maxY.y = this.pointTwo.form.controls.head.value;
-      }
-    }
-
-    if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.head.value) {
-      if (this.pointOne.form.controls.flowRate.value > this.maxX.x) {
-        this.maxX.x = this.pointOne.form.controls.flowRate.value;
-      }
-    }
-    else {
-      if (this.pointTwo.form.controls.flowRate.value > this.maxX.x) {
-        this.maxX.x = this.pointTwo.form.controls.flowRate.value;
-      }
-    }
-
-    //Remove  all previous graphs
-    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-
-    this.svg = d3.select(this.ngChart.nativeElement).append('svg')
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-
-    // filters go in defs element
-    var defs = this.svg.append("defs");
-
-    // create filter with id #drop-shadow
-    // height=130% so that the shadow is not clipped
-    this.filter = defs.append("filter")
-      .attr("id", "drop-shadow")
-      .attr("height", "130%");
-
-    // SourceAlpha refers to opacity of graphic that this filter will be applied to
-    // convolve that with a Gaussian with standard deviation 3 and store result
-    // in blur
-    this.filter.append("feGaussianBlur")
-      .attr("in", "SourceAlpha")
-      .attr("stdDeviation", 3)
-      .attr("result", "blur");
-
-    // translate output of Gaussian blur to the right and downwards with 2px
-    // store result in offsetBlur
-    this.filter.append("feOffset")
-      .attr("in", "blur")
-      .attr("dx", 0)
-      .attr("dy", 0)
-      .attr("result", "offsetBlur");
-
-    // overlay original SourceGraphic over translated blurred opacity by using
-    // feMerge filter. Order of specifying inputs is important!
-    var feMerge = this.filter.append("feMerge");
-
-    feMerge.append("feMergeNode")
-      .attr("in", "offsetBlur");
-    feMerge.append("feMergeNode")
-      .attr("in", "SourceGraphic");
-
-    this.svg.append('rect')
-      .attr("id", "graph")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .style("fill", "#F8F9F9")
-      .style("filter", "url(#drop-shadow)");
+    max = maxY;
+    return max;
+  }
 
 
-    this.x = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, this.maxX.x + 200]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([0, this.maxY.y + 100]);
-
-
-    if (this.isGridToggled) {
-      this.xAxis = d3.axisBottom()
-        .scale(this.x)
-        .ticks(3)
-        .tickFormat(d3.format("d"))
-        .tickSize(-this.height);
-
-      this.yAxis = d3.axisLeft()
-        .scale(this.y)
-        .tickSizeInner(0)
-        .tickSizeOuter(0)
-        .tickPadding(15)
-        .ticks(6)
-        .tickSize(-this.width);
-    }
-    else {
-      this.xAxis = d3.axisBottom()
-        .scale(this.x)
-        .ticks(3)
-        .tickFormat(d3.format("d"))
-        .tickSize(0);
-
-      this.yAxis = d3.axisLeft()
-        .scale(this.y)
-        .tickSizeInner(0)
-        .tickSizeOuter(0)
-        .tickPadding(15)
-        .ticks(6)
-        .tickSize(0);
-    }
-
-    this.xAxis = this.svg.append('g')
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis)
-      .style("stroke-width", ".5px")
-      .selectAll('text')
-      .style("text-anchor", "end")
-      .style("font-size", "13px")
-      .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
-
-    this.yAxis = this.svg.append('g')
-      .attr("class", "y axis")
-      .call(this.yAxis)
-      .style("stroke-width", ".5px")
-      .selectAll('text')
-      .style("font-size", "13px");
-
-    this.makeBaselineCurve(data);
+  makeGraph() {
+    //reset graphModificationCurve
+    this.graphModificationCurve = false;
+    //init arrays for baseline, mod, and system data
+    let data = new Array<{ x: number, y: number }>();
+    let dataModification = new Array<{ x: number, y: number }>();
+    let dataSystem = new Array<{ x: number, y: number, fluidPower: number }>();
+    //this array will be dummy data used to avoid visual bug with the scale-setting array
+    let dataScale = new Array<{ x: number, y: number }>();
+    //populate baseline data array
+    data = this.getData();
+    //check if difference for mod and populate mod array
     if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      this.makeModifiedCurve(modifiedData);
+      this.graphModificationCurve = true;
+      dataModification = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
     }
 
-    //System Curve merge
-    //Load data here
-    // let systemCurveData;
-    if (this.x.domain()[1] < 500) {
-      systemCurveData = this.findPointValues(this.x, this.y, (this.x.domain()[1] / 500));
+    //x and y scales are required for system curve data, need to check max x/y values from all lines
+    this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
+    this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
+
+    // this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
+    // this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
+
+    //reset and init chart area
+    this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
+    this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
+    this.svg = this.lineChartHelperService.applyFilter(this.svg);
+    this.svg = this.lineChartHelperService.appendRect(this.svg, this.width, this.height);
+    //create x and y graph scales
+    let xRange: { min: number, max: number } = {
+      min: 0,
+      max: this.width
+    };
+    let xDomain: { min: number, max: number } = {
+      min: 0,
+      max: this.maxX.x + 200
+    };
+    let yRange: { min: number, max: number } = {
+      min: this.height,
+      max: 0
+    };
+    let yDomain: { min: number, max: number } = {
+      min: 0,
+      max: this.maxY.y + (this.maxY.y * 0.1)
+    }
+    this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
+    this.y = this.lineChartHelperService.setScale("linear", yRange, yDomain);
+
+    let tickFormat = d3.format("d");
+    //create axis
+    this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 3, null, null, null, tickFormat)
+    this.yAxis = this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
+    //append axis labels
+    this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, (this.isFan ? "Flow (" + this.getDisplayUnit(this.settings.fanFlowRate) + ")" : "Flow (" + this.getDisplayUnit(this.settings.flowMeasurement) + ")"));
+    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, (this.isFan ? "Pressure (" + this.getDisplayUnit(this.settings.fanPressureMeasurement) : "Head (" + this.getDisplayUnit(this.settings.distanceMeasurement) + ")"));
+    //if system curve is active, populate data array
+    if (this.graphSystemCurve) {
+      dataSystem = this.systemCurveService.getCurvePointData(this.settings, this.x, this.y, 10, this.isFan, this.staticHead, this.lossCoefficient, this.curveConstants);
+    }
+    //append dummy curve
+    if (this.graphSystemCurve) {
+      let lineDummy = this.lineChartHelperService.appendLine(this.svg, null, "0px");
+      lineDummy = this.lineChartHelperService.drawLine(lineDummy, this.x, this.y, data);
+      data.pop();
+      if (this.graphSystemCurve && this.graphModificationCurve) {
+        dataModification.pop();
+      }
+    }
+
+    //append and draw baseline curve
+    this.linePump = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
+    this.linePump = this.lineChartHelperService.drawLine(this.linePump, this.x, this.y, data);
+
+    //if graphing modification, append and draw modification curve
+    if (this.graphModificationCurve) {
+      // dataMod = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+      this.linePumpMod = this.lineChartHelperService.appendLine(this.svg, "#3498DB", "2px");
+      this.linePumpMod = this.lineChartHelperService.drawLine(this.linePumpMod, this.x, this.y, dataModification);
+    }
+    //if graphing system curve, append and draw system curve
+    if (this.graphSystemCurve) {
+      this.lineSystem = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
+      this.lineSystem = this.lineChartHelperService.drawLine(this.lineSystem, this.x, this.y, dataSystem);
+    }
+
+    this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
+    this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
+    this.focusPump = this.lineChartHelperService.appendFocus(this.svg, "focusPump");
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      this.focusPumpMod = this.lineChartHelperService.appendFocus(this.svg, "focusPumpMod");
+    }
+    if (this.graphSystemCurve) {
+      this.focusSystem = this.lineChartHelperService.appendFocus(this.svg, "focusSystem");
+    }
+
+    let allData: Array<Array<any>> = [data];
+    let allD: Array<any> = [this.dPump];
+    let allFocus: Array<d3.Selection<any>> = [this.focusPump];
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      allData.push(dataModification);
+      allD.push(this.dPumpMod);
+      allFocus.push(this.focusPumpMod);
+    }
+    if (this.graphSystemCurve) {
+      allData.push(dataSystem);
+      allD.push(this.dSystem);
+      allFocus.push(this.focusSystem);
+    }
+    let format = d3.format(",.2f");
+    this.lineChartHelperService.mouseOverDriver(
+      this.svg,
+      this.detailBox,
+      this.detailBoxPointer,
+      this.margin,
+      allD,
+      allFocus,
+      allData,
+      this.x,
+      this.y,
+      format,
+      format,
+      this.tooltipData,
+      this.canvasWidth,
+      ["fluidPower"]
+    );
+
+    //dynamic table
+    if (!this.curveChanged) {
+      this.replaceFocusPoints();
     }
     else {
-      systemCurveData = this.findPointValues(this.x, this.y, 1);
+      this.resetTableData();
     }
-
-    this.makeSystemCurve(this.x, this.y, systemCurveData);
-
-    let flowMeasurement: string;
-    let distanceMeasurement: string;
-    let headOrPressure: string;
-
-    if (this.isFan) {
-      headOrPressure = "Pressure";
-      distanceMeasurement = this.settings.fanPressureMeasurement;
-      flowMeasurement = this.settings.fanFlowRate;
-    } else {
-      headOrPressure = "Head";
-      distanceMeasurement = this.settings.distanceMeasurement;
-      flowMeasurement = this.settings.flowMeasurement;
-    }
-
-    this.svg.append("text")
-      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .html(headOrPressure + " (" + this.getDisplayUnit(distanceMeasurement) + ")");
-
-    this.svg.append("text")
-      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .html("Flow (" + this.getDisplayUnit(flowMeasurement) + ")");
-
-    this.calcPoint = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.calcPoint.append("circle")
-      .attr("r", 6)
-      .style("fill", "none")
-      .style("stroke", "#000000")
-      .style("stroke-width", "3px");
-
-    // Define the div for the tooltip
-    this.detailBox = d3.select(this.ngChart.nativeElement).append("div")
-      .attr("id", "detailBox")
-      .attr("class", "d3-tip")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
-
-    this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
-      .attr("id", "tooltipPointer")
-      .attr("class", "tooltip-pointer")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
-
-
-    let detailBoxWidth = 160;
-    let detailBoxHeight = 170;
-
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      detailBoxWidth = 160;
-      detailBoxHeight = 270;
-    }
-
-    this.focus = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.focus.append("circle")
-      .attr("r", 8)
-      .style("fill", "none")
-      .style("stroke", "#145A32")
-      .style("stroke-width", "3px");
-
-    this.focus.append("text")
-      .attr("x", 9)
-      .attr("dy", ".35em");
-
-    this.focusSystemCurve = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.focusSystemCurve.append("circle")
-      .attr("r", 8)
-      .style("fill", "none")
-      .style("stroke", "red")
-      .style("stroke-width", "3px");
-
-
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      this.focusMod = this.svg.append("g")
-        .attr("class", "focus")
-        .style("display", "none")
-        .style('pointer-events', 'none');
-
-      this.focusMod.append("circle")
-        .attr("r", 8)
-        .style("fill", "none")
-        .style("stroke", "#3498DB")
-        .style("stroke-width", "3px");
-
-      this.focusMod.append("text")
-        .attr("x", 9)
-        .attr("dy", ".35em");
-    }
-    var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
-
-    this.svg.select('#graph')
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .attr("class", "overlay")
-      .attr("fill", "#ffffff")
-      .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-
-        this.focusSystemCurve
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .style("display", null)
-            .style("opacity", 1)
-            .style('pointer-events', 'none');
-        }
-
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        this.tooltipPointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-      })
-      .on("mousemove", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-
-        this.focusSystemCurve
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .style("display", null)
-            .style("opacity", 1)
-            .style('pointer-events', 'none');
-        }
-        
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        this.tooltipPointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        let x0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let i = bisectDate(data, x0, 1);
-        if (i >= data.length) {
-          i = data.length - 1
-        }
-        let d0 = data[i - 1];
-        let d1 = data[i];
-        let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        let xVal = this.x(d.x);
-
-        //system curve calcs
-        let systemi = bisectDate(systemCurveData, x0, 1);
-        if (systemi >= systemCurveData.length) {
-          systemi = systemCurveData.length - 1
-        }
-        let systemd0 = systemCurveData[systemi - 1];
-        let systemd1 = systemCurveData[systemi];
-        let systemd = x0 - systemd0.x > systemd1.x - x0 ? systemd1 : systemd0;
-        let systemxVal = this.x(systemd.x);
-
-        //dynamic table
-        flowVal = format(d.x);
-        distanceVal = format(d.y);
-        powerVal = format(d.fluidPower);
-
-        //dynamic table
-        if (this.isFan) {
-          flowMeasurement = this.getDisplayUnit(this.settings.fanFlowRate);
-          distanceMeasurement = this.getDisplayUnit(this.settings.fanPressureMeasurement);
-          powerMeasurement = this.getDisplayUnit(this.settings.fanPowerMeasurement);
-          headOrPressure = 'Pressure';
-        } else {
-          flowMeasurement = this.getDisplayUnit(this.settings.flowMeasurement);
-          distanceMeasurement = this.getDisplayUnit(this.settings.distanceMeasurement);
-          powerMeasurement = this.getDisplayUnit(this.settings.powerMeasurement);
-          headOrPressure = 'Head'
-        }
-        this.flowMeasurement = flowMeasurement;
-        this.distanceMeasurement = distanceMeasurement;
-        this.powerMeasurement = powerMeasurement;
-
-
-        if (isNaN(xVal) == false) {
-          if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-
-            i = bisectDate(modifiedData, x0, 1);
-            let modD0 = modifiedData[i - 1];
-            let modD1 = modifiedData[i];
-            if (modD0 && modD1) {
-
-              let modD = x0 - modD0.x > modD1.x - x0 ? modD1 : modD0;
-              xVal = this.x(modD.x);
-              if (isNaN(xVal) == false) {
-                let minBaseline = _.minBy(data, (val) => { return val.y });
-                let minMod = _.minBy(modifiedData, (val) => { return val.y });
-                let sysMod = _.minBy(systemCurveData, (val) => { return val.y });
-                this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-                this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
-                this.focusSystemCurve.attr("transform", "translate(" + this.x(systemd.x) + "," + this.y(systemd.y) + ")");
-
-                if (minMod.y < minBaseline.y) {
-                  this.detailBox
-                    .style("padding-right", "10px")
-                    .style("padding-left", "10px")
-                    .html(
-                      "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-
-                      "<strong><div>Basleline" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
-                      "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-                      "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
-
-                      "<p><strong><div>System Curve</div></strong>" +
-                      "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-                      "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
-                      "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
-
-                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-                    .style("position", "absolute")
-                    .style("width", detailBoxWidth + "px")
-                    .style("height", detailBoxHeight + "px")
-                    .style("padding-left", "10px")
-                    .style("padding-right", "10px")
-                    .style("font", "12px sans-serif")
-                    .style("background", "rgba(255, 255, 255, 0.7)")
-                    .style("border", "0px")
-                    .style("pointer-events", "none");
-
-                  this.tooltipPointer
-                    .attr("class", "tooltip-pointer")
-                    .html("<div></div>")
-                    .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-                    .style("position", "absolute")
-                    .style("width", "0px")
-                    .style("height", "0px")
-                    .style("border-left", "10px solid transparent")
-                    .style("border-right", "10px solid transparent")
-                    .style("border-bottom", "10px solid white")
-                    .style('pointer-events', 'none');
-                }
-              } else {
-
-                this.detailBox
-                  .style("padding-right", "10px")
-                  .style("padding-left", "10px")
-                  .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-
-                    "<strong><div>Baseline " + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +
-
-                    "<strong><div>Modified " + headOrPressure + ": </div></strong><div>" + format(modD.y) + " " + distanceMeasurement + "</div></p>" +
-
-                    "<p><strong><div>System Curve</div></strong>" +
-                    "<strong><div>Flow Rate: </div></strong><div>" + format(d.x) + " " + flowMeasurement + "</div>" +             //dynamic table
-                    "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +      //dynamic table
-                    "<strong><div>Fluid Power: </div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")   //dynamic table
-
-                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
-                  .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-                  .style("position", "absolute")
-                  .style("width", detailBoxWidth + "px")
-                  .style("height", detailBoxHeight + "px")
-                  .style("padding-left", "10px")
-                  .style("padding-right", "10px")
-                  .style("font", "12px sans-serif")
-                  .style("background", "rgba(255, 255, 255, 0.7)")
-                  .style("border", "0px")
-                  .style("box-shadow", "0px 0px 10px 2px grey")
-                  .style("pointer-events", "none");
-
-                this.tooltipPointer
-                  .attr("class", "tooltip-pointer")
-                  .html("<div></div>")
-                  .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
-                  .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-                  .style("position", "absolute")
-                  .style("width", "0px")
-                  .style("height", "0px")
-                  .style("border-left", "10px solid transparent")
-                  .style("border-right", "10px solid transparent")
-                  .style("border-bottom", "10px solid white")
-                  .style('pointer-events', 'none');
-              }
-
-              this.detailBox.transition()
-                .style("opacity", 1);
-
-              this.tooltipPointer.transition()
-                .style("opacity", 1);
-            }
-          }
-          else {
-            this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-            this.focusSystemCurve.attr("transform", "translate(" + this.x(d.x) + "," + this.y(systemd.y) + ")");
-
-            this.detailBox.transition()
-              .style("opacity", 1);
-
-            this.tooltipPointer.transition()
-              .style("opacity", 1);
-
-            this.detailBox
-              .style("padding-right", "10px")
-              .style("padding-left", "10px")
-              .html(
-                "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + flowMeasurement + "</div>" +
-
-                "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(d.y) + " " + distanceMeasurement + "</div></p>" +
-
-                "<p><strong><div>System Curve</div></strong>" +
-                "<strong><div>" + headOrPressure + ": </div></strong><div>" + format(systemd.y) + " " + distanceMeasurement + "</div>" +
-                "<strong><div>Fluid Power:</div></strong><div>" + format(systemd.fluidPower) + " " + powerMeasurement + "</div></p>")
-
-              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2)) + "px")
-              .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-              .style("position", "absolute")
-              .style("width", detailBoxWidth + "px")
-              .style("height", detailBoxHeight + "px")
-              .style("padding-left", "10px")
-              .style("padding-right", "10px")
-              .style("font", "12px sans-serif")
-              .style("background", "rgba(255, 255, 255, 0.7)")
-              .style("border", "0px")
-              .style("box-shadow", "0px 0px 10px 2px grey")
-              .style("pointer-events", "none");
-
-
-            this.tooltipPointer
-              .attr("class", "tooltip-pointer")
-              .html("<div></div>")
-              .style("left", (this.margin.left + this.x(d.x) - 10) + "px")
-              .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-              .style("position", "absolute")
-              .style("width", "0px")
-              .style("height", "0px")
-              .style("border-left", "10px solid transparent")
-              .style("border-right", "10px solid transparent")
-              .style("border-bottom", "10px solid white")
-              .style('pointer-events', 'none');
-          }
-        }
-      })
-      .on("mouseout", () => {
-        this.detailBox
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.tooltipPointer
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.focus
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .transition()
-            .delay(100)
-            .duration(600)
-            .style("opacity", 0);
-        }
-
-        this.focusSystemCurve
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-      });
+    this.curveChanged = false;
 
     this.addLegend();
+  }
+
+
+  //dynamic table
+  buildTable() {
+    let i = this.rowData.length + this.deleteCount;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+    let dArray: Array<any> = this.lineChartHelperService.getDArray();
+    this.dPump = dArray[0];
+    let format: any = d3.format(",.2f");
+    let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + this.tablePointsPump.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPump.x), this.y(this.dPump.y));
+    this.focusDPump.push(this.dPump);
+    this.tablePointsPump.push(tableFocusPump);
+    let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+    dataPiece = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length],
+      flowRate: format(this.dPump.x).toString(),
+      baseHeadOrPressure: format(this.dPump.y).toString(),
+      modHeadOrPressure: "&mdash;",
+      systemHeadOrPressure: "&mdash;",
+      fluidPower: "&mdash;"
+    };
+
+    if (this.graphModificationCurve) {
+      this.dPumpMod = dArray[1];
+      this.focusDPumpMod.push(this.dPumpMod);
+      let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + this.tablePointsPumpMod.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPumpMod.x), this.y(this.dPumpMod.y));
+      this.tablePointsPumpMod.push(tableFocusPumpMod);
+      dataPiece.modHeadOrPressure = format(this.dPumpMod.y).toString();
+    }
+
+    if (this.graphSystemCurve) {
+      let dArrayIndex: number;
+      if (this.graphModificationCurve) {
+        dArrayIndex = 2;
+      }
+      else {
+        dArrayIndex = 1;
+      }
+      this.dSystem = dArray[dArrayIndex];
+      this.focusDSystem.push(this.dSystem);
+      let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + this.tablePointsSystem.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dSystem.x), this.y(this.dSystem.y));
+      this.tablePointsSystem.push(tableFocusSystem);
+      dataPiece.systemHeadOrPressure = format(this.dSystem.y).toString();
+      dataPiece.fluidPower = format(this.dSystem.fluidPower).toString();
+    }
+
+    // this.dPumpMod = dArray[1];
+    // this.dSystem = dArray[2];
+    // this.tablePoints.push(tableFocus);
+    // let dataPiece = {
+    //   borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+    //   fillColor: this.graphColors[i % this.graphColors.length],
+    //   flowRate: format(this.d.x).toString(),
+    //   headOrPressure: headOrPressure,
+    //   distance: format(this.d.y).toString(),
+    //   fluidPower: format(this.d.fluidPower).toString()
+    // }
+    this.tableData.push(dataPiece);
+
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    // let data = [format(this.d.x).toString(), format(this.d.y).toString(), format(this.d.fluidPower).toString()];
+    let data = [dataPiece.flowRate, dataPiece.baseHeadOrPressure, dataPiece.modHeadOrPressure, dataPiece.systemHeadOrPressure, dataPiece.fluidPower];
+    this.rowData.push(data);
+  }
+
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>();
+    this.tablePointsPump = new Array<d3.Selection<any>>();
+    this.tablePointsPumpMod = new Array<d3.Selection<any>>();
+    this.tablePointsSystem = new Array<d3.Selection<any>>();
+    this.focusDPump = new Array<{ x: number, y: number }>();
+    this.focusDPumpMod = new Array<{ x: number, y: number }>();
+    this.focusDSystem = new Array<{ x: number, y: number, fluidPower: number }>();
+    this.rowData = new Array<Array<string>>();
+    this.deleteCount = 0;
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    this.svg.selectAll('.tablePoint').remove();
+    for (let i = 0; i < this.rowData.length; i++) {
+      let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDPump[i].x), this.y(this.focusDPump[i].y));
+      if (this.graphModificationCurve) {
+        let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDPumpMod[i].x), this.y(this.focusDPumpMod[i].y));
+      }
+      if (this.graphSystemCurve) {
+        let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDSystem[i].x), this.y(this.focusDSystem[i].y));
+      }
+    }
+  }
+
+  deleteFromTable(i: number) {
+    for (let j = i; j < this.tableData.length - 1; j++) {
+      this.tableData[j] = this.tableData[j + 1];
+      this.tablePointsPump[j] = this.tablePointsPump[j + 1];
+      this.focusDPump[j] = this.focusDPump[j + 1];
+      if (this.graphModificationCurve) {
+        this.tablePointsPumpMod[j] = this.tablePointsPumpMod[j + 1];
+        this.focusDPumpMod[j] = this.focusDPumpMod[j + 1];
+      }
+      if (this.graphSystemCurve) {
+        this.tablePointsSystem[j] = this.tablePointsSystem[j + 1];
+        this.focusDSystem[j] = this.focusDSystem[j + 1];
+      }
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
+    }
+    if (i != this.tableData.length - 1) {
+      this.deleteCount += 1;
+    }
+    this.tableData.pop();
+    this.tablePointsPump.pop();
+    this.focusDPump.pop();
+    if (this.graphModificationCurve) {
+      this.tablePointsPumpMod.pop();
+      this.focusDPumpMod.pop();
+    }
+    if (this.graphSystemCurve) {
+      this.tablePointsSystem.pop();
+      this.focusDSystem.pop();
+    }
+    this.rowData.pop();
+    this.keyColors.pop();
+    this.replaceFocusPoints();
+  }
+
+  highlightPoint(i: number) {
+    let ids: Array<string> = ["#tablePointPump-" + i];
+    if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + i); }
+    if (this.graphSystemCurve) { ids.push("#tablePointsSystem-" + i); }
+    this.lineChartHelperService.tableHighlightPointHelper(this.svg, ids);
+  }
+
+  unhighlightPoint(i: number) {
+    let ids: Array<string> = ["#tablePointPump-" + i];
+    if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + i); }
+    if (this.graphSystemCurve) { ids.push("#tablePointsSystem-" + i); }
+    this.lineChartHelperService.tableUnhighlightPointHelper(this.svg, ids);
+    this.replaceFocusPoints();
   }
 
 
@@ -1026,48 +970,6 @@ export class PumpCurveGraphComponent implements OnInit {
     }
   }
 
-  makeBaselineCurve(data) {
-    data.pop();
-    data[0].y = this.pumpCurveForm.headConstant;
-    var guideLine = d3.line()
-      .x((d) => { return this.x(d.x); })
-      .y((d) => { return this.y(d.y); })
-      .curve(d3.curveNatural);
-
-    let line = this.svg.append("path")
-      .attr("class", "line")
-      .attr("id", "avgLine")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#145A32")
-      .style('pointer-events', 'none');
-
-    line.data([data]).attr("d", guideLine);
-  }
-
-  makeModifiedCurve(data) {
-    data.pop();
-    this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement
-    let ratio = this.pumpCurveForm.baselineMeasurement / this.pumpCurveForm.modifiedMeasurement;
-    data[0].y = this.pumpCurveForm.headConstant * Math.pow(ratio, 2);
-    var guideLine = d3.line()
-      .x((d) => { return this.x(d.x); })
-      .y((d) => { return this.y(d.y); })
-      .curve(d3.curveNatural);
-
-    let line = this.svg.append("path")
-      .attr("class", "line")
-      .attr("id", "avgLine")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#3498DB")
-      .style('pointer-events', 'none');
-
-    line.data([data]).attr("d", guideLine);
-  }
-
   downloadChart() {
     if (!this.exportName) {
       if (this.isFan) {
@@ -1098,133 +1000,4 @@ export class PumpCurveGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
-
-
-
-  //system-curve graphing
-  makeSystemCurve(x, y, data) {
-
-    var line = d3.line()
-      .x(function (d) { return x(d.x); })
-      .y(function (d) { return y(d.y); })
-      .curve(d3.curveNatural);
-
-    this.svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", line)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "red")
-      .style("stroke-dasharray", ("3, 3"))
-      .style('pointer-events', 'none');
-
-    d3.select("path.domain").attr("d", "");
-
-    // d3.select("path.domain").attr("d", line);
-  }
-
-  findPointValues(x, y, increment): Array<any> {
-
-    var powerMeasurement: string;
-    if (this.isFan) {
-      powerMeasurement = this.settings.fanPowerMeasurement;
-    } else {
-      powerMeasurement = this.settings.powerMeasurement;
-    }
-
-    //Load data here
-    var data = [];
-
-    var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
-
-    if (head >= 0) {
-      let tmpFluidPower;
-      if (this.isFan) {
-        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
-      } else {
-        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, 0, this.curveConstants.form.controls.specificGravity.value);
-      }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
-        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-      }
-      data.push({
-        x: 0,
-        y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.controls.systemLossExponent.value),
-        fluidPower: tmpFluidPower
-      });
-    }
-    else {
-      data.push({
-        x: 0,
-        y: 0,
-        fluidPower: 0
-      });
-    }
-
-
-    for (var i = 0; i <= x.domain()[1]; i += increment) {
-      var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.controls.systemLossExponent.value);
-
-      if (head >= 0) {
-        let tmpFluidPower: number;
-        if (this.isFan) {
-          tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);
-        } else {
-          tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, i, this.curveConstants.form.controls.specificGravity.value);;
-        }
-        if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
-          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-        }
-        data.push({
-          x: i,
-          y: head,
-          fluidPower: tmpFluidPower
-        });
-      }
-      else {
-        data.push({
-          x: i,
-          y: 0,
-          fluidPower: 0
-        });
-      }
-    }
-
-    head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
-
-    if (head >= 0) {
-      let tmpFluidPower: number;
-      if (this.isFan) {
-        tmpFluidPower = this.systemCurveService.getFanFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);
-      } else {
-        tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.staticHead, x.domain()[1], this.curveConstants.form.controls.specificGravity.value);;
-      }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
-        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-      }
-      data.push({
-        x: x.domain()[1],
-        y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value),
-        fluidPower: tmpFluidPower
-      });
-    }
-    else {
-      data.push({
-        x: x.domain()[1],
-        y: 0,
-        fluidPower: 0
-      });
-
-    }
-
-    this.systemCurveMaxY = _.maxBy(data, 'y');
-    if (this.systemCurveMaxY > this.maxY) {
-      this.maxY = this.systemCurveMaxY;
-    }
-
-
-    return data;
-  }
 }

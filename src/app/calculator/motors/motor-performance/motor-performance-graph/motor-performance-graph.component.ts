@@ -296,13 +296,18 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
 
     if (this.canvasWidth < 400) {
-      this.margin = { top: 10, right: 10, bottom: 50, left: 150 };
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
-      this.margin = { top: 20, right: 50, bottom: 75, left: 50 };
+      if (!this.expanded) {
+        this.margin = { top: 10, right: 50, bottom: 75, left: 120 };
+
+      }
+      else {
+        this.margin = { top: 10, right: 120, bottom: 75, left: 120 };
+      }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-
+    this.height = this.canvasHeight - (this.margin.top * 2) - this.margin.bottom;
     // d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
 
     this.makeGraph();
@@ -1040,7 +1045,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       fillColor: this.graphColors[i % this.graphColors.length]
     };
     this.keyColors.push(colors);
-    let data = [this.motorShaftLoad.toString(), this.current.toString(), this.powerFactor.toString(), this.efficiency.toString()];
+    let data = [Math.floor(this.dEfficiency.x * 100).toString(), this.current.toString(), this.powerFactor.toString(), this.efficiency.toString()];
     this.rowData.push(data);
   }
 

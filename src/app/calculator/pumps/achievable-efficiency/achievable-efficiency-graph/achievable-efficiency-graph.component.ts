@@ -264,14 +264,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
 
     if (this.canvasWidth < 400) {
-      this.fontSize = '8px';
-      this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
+      this.fontSize = "8px";
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
-      this.fontSize = '11px';
-      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
+      this.fontSize = "11px";
+      if (!this.expanded) {
+        this.margin = { top: 10, right: 50, bottom: 75, left: 120 };
+
+      }
+      else {
+        this.margin = { top: 10, right: 120, bottom: 75, left: 120 };
+      }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
-    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.height = this.canvasHeight - (this.margin.top * 2) - this.margin.bottom;
     d3.select("app-achievable-efficiency").select("#gridToggle").style("top", (this.height + 100) + "px");
     this.makeGraph();
   }
