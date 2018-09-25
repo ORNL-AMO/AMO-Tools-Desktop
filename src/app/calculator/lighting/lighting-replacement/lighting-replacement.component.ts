@@ -91,7 +91,7 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   addBaselineFixture(){
-    this.baselineData.push(this.baselineData[0]);
+    this.baselineData.push(JSON.parse(JSON.stringify(this.baselineData[0])));
   }
 
   removeBaselineFixture(index: number){
@@ -106,7 +106,7 @@ export class LightingReplacementComponent implements OnInit {
 
 
   addModificationFixture(){
-    this.modificationData.push(this.modificationData[0]);
+    this.modificationData.push(JSON.parse(JSON.stringify(this.modificationData[0])));
   }
 
   removeModificationFixture(index: number){
