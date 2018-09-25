@@ -147,8 +147,8 @@
     </ul>
   </li>
 
-  <li [ngClass]="{'selected': selectedCalculatorType == 'all'}">
-    <span class="sidebar-item" (click)="chooseCalculator('lighting')">Lighting</span>
+  <li [ngClass]="{'show-border': selectedCalculatorType == 'lighting'}">
+    <span [ngClass]="{'selected': selectedCalculatorType == 'lighting'}" class="sidebar-item" (click)="chooseCalculator('lighting')">Lighting</span>
     <ul *ngIf="selectedCalculatorType == 'lighting'">
       <li [ngClass]="{'selected': selectedCalculator == 'lighting-replacement'}">
         <span class="sidebar-item" (click)="selectCalculator('lighting-replacement')">Lighting Replacement</span>

@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 @Injectable()
 export class LightingReplacementService {
 
+  baselineData: Array<LightingReplacementData>;
+  modificationData: Array<LightingReplacementData>;
   constructor() { }
 
   calculate(data: LightingReplacementData): LightingReplacementData {

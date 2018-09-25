@@ -21,8 +21,8 @@ export class LightingReplacementComponent implements OnInit {
   settings: Settings;
   baselineData: Array<LightingReplacementData> = [{
     hoursPerDay: 0,
-    daysPerMonth: 0,
-    monthsPerYear: 0,
+    daysPerMonth: 30,
+    monthsPerYear: 12,
     hoursPerYear: 0,
     wattsPerLamp: 0,
     lampsPerFixture: 0,
@@ -46,12 +46,24 @@ export class LightingReplacementComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    if(this.lightingReplacementService.baselineData){
+      this.baselineData = this.lightingReplacementService.baselineData;
+    }
+    if(this.lightingReplacementService.modificationData){
+      this.modificationData = this.lightingReplacementService.modificationData;
+      this.modificationExists = true;
+    }
     this.calculate();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy(){
+    this.lightingReplacementService.baselineData = this.baselineData;
+    this.lightingReplacementService.modificationData = this.modificationData;
   }
 
   togglePanel(bool: boolean) {
@@ -116,5 +128,9 @@ export class LightingReplacementComponent implements OnInit {
   removeModificationFixture(index: number){
     this.modificationData.splice(index, 1);
     this.calculate();
+  }
+
+  focusField(str: string){
+    this.currentField = str;
   }
 }

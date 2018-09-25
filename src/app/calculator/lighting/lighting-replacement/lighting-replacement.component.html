@@ -22,7 +22,7 @@
             <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
                 <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
-              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"></app-lighting-replacement-form>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()" (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
             <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
                 <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
-              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"></app-lighting-replacement-form>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()" (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
             </div>
           </div>
         </div>
@@ -79,8 +79,7 @@
           <div class="d-flex justify-content-center pl-2 pr-2">
             <app-lighting-replacement-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
               [modificationData]="modificationData" [baselineResults]="baselineResults" [modificationResults]="modificationResults"></app-lighting-replacement-results>
-            <!-- <app-replace-rewind-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-replace-rewind-help>
-      <app-replace-rewind-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results"></app-replace-rewind-results> -->
+            <app-lighting-replacement-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-lighting-replacement-help>
           </div>
         </div>
       </div>

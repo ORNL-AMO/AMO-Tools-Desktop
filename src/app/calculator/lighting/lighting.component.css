@@ -15,6 +15,6 @@ a:not([href]):not([tabindex]){
     padding: 1rem;
 }
 
-.fa .fa-lightbulb-o{
+.fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
 }

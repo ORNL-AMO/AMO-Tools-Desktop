@@ -11,10 +11,10 @@
       <button class="btn input-group-btn" (click)="addHourPerDay()" [disabled]="data.hoursPerDay == 24">
         <i class="fa fa-plus"></i>
       </button>
-      <input name="hoursPerDay" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerDay"
-        (input)="calculate()" [(ngModel)]="data.hoursPerDay">
+      <input name="hoursPerDay" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerDay" (input)="calculate()"
+        [(ngModel)]="data.hoursPerDay" (focus)="focusField('hoursPerDay')">
     </div>
-    <!-- <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span> -->
+    <span class="alert-danger pull-right small" *ngIf="hoursPerDayError !== null">{{hoursPerDayError}}</span>
   </div>
   <div class="form-group">
     <label for="daysPerMonth">Days / Month</label>
@@ -25,10 +25,10 @@
       <button class="btn input-group-btn" (click)="addDayPerMonth()" [disabled]="data.daysPerMonth == 31">
         <i class="fa fa-plus"></i>
       </button>
-      <input name="daysPerMonth" type="number" step="1" min="0" max="7" class="form-control" id="daysPerMonth"
-        (input)="calculate()" [(ngModel)]="data.daysPerMonth">
+      <input name="daysPerMonth" type="number" step="1" min="0" max="31" class="form-control" id="daysPerMonth" (input)="calculate()"
+        [(ngModel)]="data.daysPerMonth" (focus)="focusField('daysPerMonth')">
     </div>
-    <!-- <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span> -->
+    <span class="alert-danger pull-right small" *ngIf="daysPerMonthError !== null">{{daysPerMonthError}}</span>
   </div>
   <div class="form-group">
     <label for="monthsPerYear">Months / Year</label>
@@ -39,31 +39,37 @@
       <button class="btn input-group-btn" (click)="addMonthPerYear()" [disabled]="data.monthsPerYear == 12">
         <i class="fa fa-plus"></i>
       </button>
-      <input name="monthsPerYear" type="number" step="1" min="0" class="form-control" id="monthsPerYear"
-        (input)="calculate()" [(ngModel)]="data.monthsPerYear">
+      <input name="monthsPerYear" type="number" step="1" min="0" max="12" class="form-control" id="monthsPerYear" (input)="calculate()"
+        [(ngModel)]="data.monthsPerYear" (focus)="focusField('monthsPerYear')">
     </div>
+    <span class="alert-danger pull-right small" *ngIf="monthsPerYearError !== null">{{monthsPerYearError}}</span>
+
   </div>
 </div>
 <div class="form-section">
   <div class="form-group">
     <label for="wattsPerLamp">Watts Per Lamp</label>
     <input name="wattsPerLamp" type="number" step="any" class="form-control" id="wattsPerLamp" (input)="calculate()"
-      [(ngModel)]="data.wattsPerLamp">
+      [(ngModel)]="data.wattsPerLamp" (focus)="focusField('wattsPerLamp')">
+    <span class="alert-danger pull-right small" *ngIf="wattsPerLampError !== null">{{wattsPerLampError}}</span>
   </div>
   <div class="form-group">
     <label for="lumensPerLamp">Lumens Per Lamp</label>
     <input name="lumensPerLamp" type="number" step="any" class="form-control" id="lumensPerLamp" (input)="calculate()"
-      [(ngModel)]="data.lumensPerLamp">
+      [(ngModel)]="data.lumensPerLamp" (focus)="focusField('lumensPerLamp')">
+    <span class="alert-danger pull-right small" *ngIf="lumensPerLampError !== null">{{lumensPerLampError}}</span>
   </div>
   <div class="form-group">
     <label for="lampsPerFixture">Lamps Per Fixture</label>
-    <input name="lampsPerFixture" type="number" step="any" class="form-control" id="lampsPerFixture"
-      (input)="calculate()" [(ngModel)]="data.lampsPerFixture">
+    <input name="lampsPerFixture" type="number" step="any" class="form-control" id="lampsPerFixture" (input)="calculate()"
+      [(ngModel)]="data.lampsPerFixture" (focus)="focusField('lampsPerFixture')">
+    <span class="alert-danger pull-right small" *ngIf="lampsPerFixtureError !== null">{{lampsPerFixtureError}}</span>
   </div>
   <div class="form-group">
     <label for="numberOfFixtures">Number of Fixtures</label>
-    <input name="numberOfFixtures" type="number" step="any" class="form-control" id="numberOfFixtures"
-      (input)="calculate()" [(ngModel)]="data.numberOfFixtures">
+    <input name="numberOfFixtures" type="number" step="any" class="form-control" id="numberOfFixtures" (input)="calculate()"
+      [(ngModel)]="data.numberOfFixtures" (focus)="focusField('numberOfFixtures')">
+    <span class="alert-danger pull-right small" *ngIf="numberOfFixturesError !== null">{{numberOfFixturesError}}</span>
   </div>
 </div>
 <!-- <div class="form-section">
