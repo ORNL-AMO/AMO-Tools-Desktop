@@ -33,7 +33,16 @@ export const pressure = {
       }
       , to_anchor: 1000
     }
-    , hPa: {
+    , MPaa: {
+      name: {
+        singular: 'Megapascal - absolute'
+        , plural: 'Megapascals - absolute',
+        display: '(MPaa)'
+      }
+      , to_anchor: 1000
+      , anchor_shift: 101.325
+    }
+    ,hPa: {
       name: {
         singular: 'Hectopascal'
         , plural: 'Hectopascals',

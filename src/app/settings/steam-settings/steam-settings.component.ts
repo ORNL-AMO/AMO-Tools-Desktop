@@ -37,8 +37,13 @@ export class SteamSettingsComponent implements OnInit {
     //pressureMeasurements
     let tmpList = [
       'kPa',
+      'kPaa',
       'psi',
-      'bar'
+      'psia',
+      'bar',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
