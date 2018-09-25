@@ -31,7 +31,7 @@ export class StandaloneService {
       inputCpy.cylinderStroke = this.convertUnitsService.value(inputCpy.cylinderStroke).from('cm').to('in');
       inputCpy.pistonRodDiameter = this.convertUnitsService.value(inputCpy.pistonRodDiameter).from('cm').to('in');
       //metric: kPa imperial: psi
-      inputCpy.airPressure = this.convertUnitsService.value(inputCpy.airPressure).from('kPaa').to('psia');
+      inputCpy.airPressure = this.convertUnitsService.value(inputCpy.airPressure).from('kPa').to('psi');
       let output: PneumaticAirRequirementOutput = standaloneAddon.pneumaticAirRequirement(inputCpy);
       //metric: m imperial: ft
       output.airRequirementPneumaticCylinder = this.convertUnitsService.value(output.airRequirementPneumaticCylinder).from('ft').to('m');
@@ -60,8 +60,9 @@ export class StandaloneService {
     if (settings.unitsOfMeasure == 'Metric') {
       //metric:m3 imperial:ft3
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
+      //metric:kpa imperial:psi
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
       //metric:kpaa imperial:psia
-      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPaa').to('psia');
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       let requiredStorage: number = standaloneAddon.receiverTank(inputCpy);
       //metric:m3 imperial:gal
@@ -79,8 +80,9 @@ export class StandaloneService {
       inputCpy.airFlowRequirement = this.convertUnitsService.value(inputCpy.airFlowRequirement).from('m3').to('ft3');
       //metric:kPaa imperial: psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
-      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPaa').to('psia');
-      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPaa').to('psia');
+      //metric:kpa imperial:psi
+      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
+      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric:m3 imperial:gal
       let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
       calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
@@ -98,8 +100,9 @@ export class StandaloneService {
       inputCpy.speedOfAir = this.convertUnitsService.value(inputCpy.speedOfAir).from('m').to('ft');
       // metric: m3 imperial:scfm (ft3)
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
-      //metric:kPaa imperial: psia
-      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPaa').to('psia');
+      //metric:kPa imperial: psi
+      inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
+      //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m3 imperial: gal
       let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
@@ -118,8 +121,9 @@ export class StandaloneService {
       inputCpy.meteredControl = this.convertUnitsService.value(inputCpy.meteredControl).from('m3').to('ft3');
       //metric:kPaa imperial: psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
-      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPaa').to('psia');
-      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPaa').to('psia');
+      //metric:kpa imperial:psi
+      inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
+      inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric: m3 imperial: gal
       let calcVolume: number = standaloneAddon.receiverTank(inputCpy);
       calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
@@ -162,7 +166,7 @@ export class StandaloneService {
       inputCpy.receiverCapacities = tmpCapacities;
       //add custom volumes to calculated result
       let outputs: AirSystemCapacityOutput = standaloneAddon.airSystemCapacity(inputCpy);
-      
+
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
       //outputs.totalReceiverVolume += customRecieverVolume;
@@ -214,7 +218,8 @@ export class StandaloneService {
       //metric: m3 imperial: ft3
       inputCpy.airFlow = this.convertUnitsService.value(inputCpy.airFlow).from('m3').to('ft3');
       //metric: kPa imperial: psi
-      inputCpy.airlinePressure = this.convertUnitsService.value(inputCpy.airlinePressure).from('kPaa').to('psia');
+      inputCpy.airlinePressure = this.convertUnitsService.value(inputCpy.airlinePressure).from('kPa').to('psi');
+      //metric:kpaa imperial:psia
       inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       //metric: m imperial: ft
       inputCpy.designVelocity = this.convertUnitsService.value(inputCpy.designVelocity).from('m').to('ft');
@@ -234,8 +239,8 @@ export class StandaloneService {
     let inletPressureCpy: number = JSON.parse(JSON.stringify(inletPressure));
     let outletPressureCpy: number = JSON.parse(JSON.stringify(outletPressure));
     if (settings.unitsOfMeasure == 'Metric') {
-      inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPaa').to('psia');
-      outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPaa').to('psia');
+      inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPa').to('psi');
+      outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPa').to('psi');
       let flowRate: number = standaloneAddon.pneumaticValve({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
       flowRate = this.convertUnitsService.value(flowRate).from('ft3').to('m3');
       return flowRate;
@@ -248,8 +253,8 @@ export class StandaloneService {
   pneumaticValve(input: PneumaticValve, settings: Settings): number {
     let inputCpy: PneumaticValve = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure == 'Metric') {
-      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPaa').to('psia');
-      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPaa').to('psia');
+      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
+      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
       inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
       let flowCoefficient: number = standaloneAddon.pneumaticValve(inputCpy).flowCoefficient;
       flowCoefficient = this.convertUnitsService.value(flowCoefficient).from('ft3').to('m3');
@@ -285,8 +290,8 @@ export class StandaloneService {
       //metric: m3 imperial: gal
       inputCpy.tankSize = this.convertUnitsService.value(inputCpy.tankSize).from('m3').to('gal');
       //metric:kPa imperial: psi
-      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPaa').to('psia');
-      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPaa').to('psia');
+      inputCpy.airPressureIn = this.convertUnitsService.value(inputCpy.airPressureIn).from('kPa').to('psi');
+      inputCpy.airPressureOut = this.convertUnitsService.value(inputCpy.airPressureOut).from('kPa').to('psi');
       //metric: m3 imperial: ft3
       let calcTankCapacity: number = standaloneAddon.usableAirCapacity(inputCpy);
       calcTankCapacity = this.convertUnitsService.value(calcTankCapacity).from('ft3').to('m3');

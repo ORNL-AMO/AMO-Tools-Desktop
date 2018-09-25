@@ -31,8 +31,8 @@
     <div class="input-group">
       <input name="allowablePressureDrop" class="form-control" type="number" step="any" [(ngModel)]="inputs.allowablePressureDrop"
         id="allowablePressureDrop" (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('allowablePressureDrop')">
-      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
   <div class="form-group">

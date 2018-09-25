@@ -39,8 +39,8 @@
     <div class="input-group">
       <input name="initialTankPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.initialTankPressure"
         id="initialTankPressure" (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('initialTankPressure')">
-      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
   <div class="form-group">
@@ -48,8 +48,8 @@
     <div class="input-group">
       <input name="finalTankPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.finalTankPressure" id="finalTankPressure"
         (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('finalTankPressure')">
-      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
 </div>
