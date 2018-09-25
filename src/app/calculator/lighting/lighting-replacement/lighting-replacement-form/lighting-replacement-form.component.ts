@@ -11,6 +11,9 @@ export class LightingReplacementFormComponent implements OnInit {
   data: LightingReplacementData;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  selected: boolean;
+  
   constructor() { }
 
   ngOnInit() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { LightingReplacementService, LightingReplacementData } from './lighting-replacement.service';
+import { LightingReplacementService, LightingReplacementData, LightingReplacementResults } from './lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement',
@@ -34,7 +34,8 @@ export class LightingReplacementComponent implements OnInit {
   baselineElectricityUse: number;
   modificationData: Array<LightingReplacementData> = [];
   modificationElectricityUse: number;
-
+  baselineResults: LightingReplacementResults;
+  modificationResults: LightingReplacementResults;
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
@@ -45,6 +46,7 @@ export class LightingReplacementComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.calculate();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -81,9 +83,11 @@ export class LightingReplacementComponent implements OnInit {
     this.baselineData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
     })
+    this.baselineResults = this.lightingReplacementService.getTotals(this.baselineData);
     this.modificationData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
     })
+    this.modificationResults = this.lightingReplacementService.getTotals(this.modificationData);
   }
 
   addBaselineFixture(){
@@ -92,5 +96,20 @@ export class LightingReplacementComponent implements OnInit {
 
   removeBaselineFixture(index: number){
     this.baselineData.splice(index, 1);
+  }
+
+  addModification(){
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.modificationExists = true;
+    this.togglePanel(this.modifiedSelected);
+  }
+
+
+  addModificationFixture(){
+    this.modificationData.push(this.modificationData[0]);
+  }
+
+  removeModificationFixture(index: number){
+    this.modificationData.splice(index, 1);
   }
 }

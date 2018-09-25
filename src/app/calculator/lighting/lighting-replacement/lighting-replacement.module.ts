@@ -4,6 +4,7 @@ import { LightingReplacementComponent } from './lighting-replacement.component';
 import { LightingReplacementFormComponent } from './lighting-replacement-form/lighting-replacement-form.component';
 import { LightingReplacementService } from './lighting-replacement.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LightingReplacementResultsComponent } from './lighting-replacement-results/lighting-replacement-results.component';
 
 @NgModule({
   imports: [
@@ -11,7 +12,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [LightingReplacementComponent, LightingReplacementFormComponent],
+  declarations: [LightingReplacementComponent, LightingReplacementFormComponent, LightingReplacementResultsComponent],
   exports: [LightingReplacementComponent],
   providers: [
     LightingReplacementService
