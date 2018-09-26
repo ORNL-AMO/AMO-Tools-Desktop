@@ -9,7 +9,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, Boiler } from '../shared/models/ssmt';
+import { SSMT, Modification, BoilerData } from '../shared/models/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
@@ -227,8 +227,8 @@ export class SsmtComponent implements OnInit {
     })
   }
 
-  saveBoiler(boiler: Boiler){
-    this._ssmt.boiler = boiler;
+  saveBoiler(boilerData: BoilerData){
+    this._ssmt.boilerData = boilerData;
     this.save();
   }
 

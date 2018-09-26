@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
-import { SSMT, Boiler } from '../../shared/models/ssmt';
-import { Assessment } from '../../shared/models/assessment';
+import { SSMT, BoilerData } from '../../shared/models/ssmt';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
@@ -69,8 +68,8 @@ export class ModifyConditionsComponent implements OnInit {
     this.emitSaveAssessment.emit(this.ssmt);
   }
 
-  saveBaselineBoiler(newBoiler: Boiler) {
-    this.ssmt.boiler = newBoiler;
+  saveBaselineBoiler(newBoiler: BoilerData) {
+    this.ssmt.boilerData = newBoiler;
     this.saveAssessment();
   }
 
@@ -89,8 +88,8 @@ export class ModifyConditionsComponent implements OnInit {
   //   this.saveAssessment();
   // }
 
-  saveModBoiler(newBoiler: Boiler) {
-    this.ssmt.modifications[this.modificationIndex].ssmt.boiler = newBoiler;
+  saveModBoiler(newBoiler: BoilerData) {
+    this.ssmt.modifications[this.modificationIndex].ssmt.boilerData = newBoiler;
     this.saveAssessment();
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
-import { Boiler } from '../../shared/models/ssmt';
+import { BoilerData } from '../../shared/models/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
@@ -21,9 +21,9 @@ export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  boiler: Boiler;
+  boilerData: BoilerData;
   @Output('emitSave')
-  emitSave = new EventEmitter<Boiler>();
+  emitSave = new EventEmitter<BoilerData>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -42,8 +42,8 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService) { }
 
   ngOnInit() {
-    if (this.boiler) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boiler);
+    if (this.boilerData) {
+      this.boilerForm = this.boilerService.initFormFromObj(this.boilerData);
     } else {
       this.boilerForm = this.boilerService.initForm();
     }
@@ -87,7 +87,7 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
-    let tmpBoiler: Boiler = this.boilerService.initObjFromForm(this.boilerForm);
+    let tmpBoiler: BoilerData = this.boilerService.initObjFromForm(this.boilerForm);
     this.emitSave.emit(tmpBoiler);
   }
 

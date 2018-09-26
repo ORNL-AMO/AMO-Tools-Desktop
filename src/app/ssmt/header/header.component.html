@@ -1,3 +1,23 @@
-<p>
-  header works!
-</p>
+<div class="d-flex flex-column">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
+    <h3>Boiler Details</h3>
+  </div>
+  <div class="p-3">
+    <form>
+      <div class="form-group">
+        <label for="numberOfHeaders">Number Of Headers</label>
+        <select name="numberOfHeaders" class="form-control" id="numberOfHeaders" (change)="setNumberOfHeaders()"
+          (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerData.numberOfHeaders">
+          <option [ngValue]="1">1</option>
+          <option [ngValue]="2">2</option>
+          <option [ngValue]="3">3</option>
+          <option [ngValue]="4">4</option>
+          <option [ngValue]="5">5</option>
+        </select>
+      </div>
+    </form>
+    <div *ngFor="let form of headerForms">
+      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerData.numberOfHeaders"></app-header-form>
+    </div>
+  </div>
+</div>

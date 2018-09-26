@@ -11,8 +11,31 @@ export interface SSMT {
     equipmentNotes?: string,
     generalSteamOperations?: GeneralSteamOperations,
     modifications?: Array<Modification>,
-    boiler?: Boiler
+    boilerData?: BoilerData,
+    headerData?: HeaderData,
+    turbineData?: TurbineData
 }
+
+export interface SSMTInputs {
+    operationsData: OperationsData,
+    boilerData: BoilerData,
+    headerData: HeaderData,
+    turbineData?: TurbineData
+}
+
+export interface TurbineData {
+
+}
+
+export interface OperationsData {
+    sitePowerImport: number,
+    makeUpWaterTemperature: number,
+    operatingHoursPerYear: number,
+    fuelCosts: number,
+    electricityCosts: number,
+    makeUpWaterCosts: number,
+}
+
 
 export interface GeneralSteamOperations {
     sitePowerImport: number,
@@ -32,7 +55,7 @@ export interface Notes {
 }
 
 
-export interface Boiler {
+export interface BoilerData {
     fuelType: number,
     fuel: number,
     combustionEfficiency: number,
@@ -43,4 +66,26 @@ export interface Boiler {
     deaeratorVentRate: number,
     deaeratorPressure: number,
     approachTemperature: number
+}
+
+
+export interface HeaderData {
+    numberOfHeaders: number,
+    headers: Array<HeaderInput>
+}
+
+export interface HeaderInput {
+    pressure: number,
+    processSteamUsage: number,
+    condensationRecoveryRate: number,
+    heatLoss: number,
+    //do we want to use an index for lowest to highest pressure
+    pressureIndex: number,
+    //not for highest pressure (highest index?)
+    flashCondensateIntoHeader?: boolean,
+    desuperheatSteamIntoNextHighest?: boolean,
+    desuperheatSteamTemperature?: number,
+    //only highest pressure (highest index?)
+    condensateReturnTemperature?: number,
+    flashCondensateReturn?: boolean
 }

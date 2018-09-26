@@ -25,6 +25,8 @@ import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-n
 import { BoilerService } from './boiler/boiler.service';
 import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.component';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
+import { HeaderService } from './header/header.service';
+import { HeaderFormComponent } from './header/header-form/header-form.component';
 
 @NgModule({
   imports: [
@@ -53,12 +55,14 @@ import { SuiteDbModule } from '../suiteDb/suiteDb.module';
     AddModificationComponent,
     ModificationListComponent,
     ModifyConditionsNotesComponent,
-    BoilerHelpComponent
+    BoilerHelpComponent,
+    HeaderFormComponent
   ],
   providers: [
     SsmtService,
     CompareService,
-    BoilerService
+    BoilerService,
+    HeaderService
   ]
 })
 export class SsmtModule { }

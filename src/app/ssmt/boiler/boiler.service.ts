@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Boiler } from '../../shared/models/ssmt';
+import { BoilerData } from '../../shared/models/ssmt';
 
 @Injectable()
 export class BoilerService {
@@ -22,7 +22,7 @@ export class BoilerService {
     })
   }
 
-  initFormFromObj(obj: Boiler): FormGroup {
+  initFormFromObj(obj: BoilerData): FormGroup {
     return this.formBuilder.group({
       'fuelType': [obj.fuelType],
       'fuel': [obj.fuel],
@@ -37,7 +37,7 @@ export class BoilerService {
     })
   }
 
-  initObjFromForm(form: FormGroup): Boiler {
+  initObjFromForm(form: FormGroup): BoilerData {
     return {
       fuelType: form.controls.fuelType.value,
       fuel: form.controls.fuel.value,

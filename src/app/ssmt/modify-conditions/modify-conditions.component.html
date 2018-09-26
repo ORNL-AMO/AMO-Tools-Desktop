@@ -8,7 +8,7 @@
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="saveAssessment()"
         [selected]="baselineSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boiler]="ssmt.boiler"
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boilerData]="ssmt.boilerData"
         (emitSave)="saveBaselineBoiler($event)"></app-boiler>
     </div>
 
@@ -21,7 +21,7 @@
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="ssmt.modifications[modificationIndex].ssmt"
         [settings]="settings" (emitSave)="saveAssessment()" [selected]="modifiedSelected"></app-operations>
-      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings" [boiler]="ssmt.modifications[modificationIndex].ssmt.boiler"
+      <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings" [boilerData]="ssmt.modifications[modificationIndex].ssmt.boilerData"
         (emitSave)="saveModBoiler($event)"></app-boiler>
     </div>
     <!-- No content message -->
