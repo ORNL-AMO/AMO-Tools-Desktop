@@ -10,17 +10,7 @@
       <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()" [selected]="true" [inSetup]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerData]="_ssmt.boilerData" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveBoiler($event)"></app-boiler>
       <app-header *ngIf="stepTab == 'header'" [headerData]="_ssmt.headerData" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveHeaderData($event)"></app-header>
-      <app-turbine *ngIf="stepTab == 'turbine'"></app-turbine>
-      <!--  <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
-          (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"></app-system-basics>
-       <app-fsat-fluid *ngIf="stepTab == 'fsat-fluid'" [inSetup]="true" [selected]="true" [baseGasDensity]="_fsat.baseGasDensity"
-                (emitSave)="saveGasDensity($event)" [settings]="settings"></app-fsat-fluid>
-              <app-fan-setup *ngIf="stepTab == 'fan-setup'" [settings]="settings" [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup"
-                (emitSave)="saveFanSetup($event)"></app-fan-setup>
-              <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true" [fanMotor]="_fsat.fanMotor"
-                (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData" [fsat]="_fsat"></app-fan-motor>
-              <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true"
-                [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat"></app-fan-field-data> -->
+      <app-turbine *ngIf="stepTab == 'turbine'" [turbineData]="_ssmt.turbineData" [selected]="true" [inSetup]="true" [settings]="settings"></app-turbine>
     </div>
     <div class="w-50">
       <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
@@ -28,12 +18,6 @@
   </div>
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <!-- <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment"
-              [settings]="settings" (emitSave)="saveFsat($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex"
-              [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()" (exploreOppsToast)="setExploreOppsToast($event)"></app-explore-opportunities>
-            <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment"
-              [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="saveFsat($event)"
-              [containerHeight]="containerHeight"></app-modify-conditions> -->
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
       [containerHeight]="containerHeight"></app-modify-conditions>

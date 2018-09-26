@@ -24,8 +24,30 @@ export interface SSMTInputs {
 }
 
 export interface TurbineData {
-
+    condensingTurbine: CondensingTurbine,
+    highToLowTurbine: PressureTurbine,
+    highToMediumTurbine: PressureTurbine,
+    mediumToLowTurbine: PressureTurbine
 }
+
+export interface CondensingTurbine {
+    isentropicEfficiency: number,
+    generationEfficiency: number,
+    condenserPressure: number,
+    operationType: string,
+    operationValue: number,
+    useTurbine: boolean
+}
+
+export interface PressureTurbine {
+    isentropicEfficiency: number,
+    generationEfficiency: number,
+    operationType: string,
+    operationValue1: number,
+    operationValue2: number,
+    useTurbine: boolean
+}
+
 
 export interface OperationsData {
     sitePowerImport: number,

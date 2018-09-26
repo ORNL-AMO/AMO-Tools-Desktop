@@ -1,0 +1,63 @@
+<form [formGroup]="turbineForm">
+  <label class="group-label w-100">
+    <div class="form-group">
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()"
+        (focus)="focusField('useTurbine')">
+      Condensing Turbine
+    </div>
+  </label>
+  <div *ngIf="turbineForm.controls.useTurbine.value == true">
+    <div class="form-group">
+      <label for="isentropicEfficiency">Isentropic Efficiency</label>
+      <div class="input-group">
+        <input name="isentropicEfficiency" type="number" step="any" class="form-control" id="isentropicEfficiency"
+          (input)="save()" [readonly]="!selected" formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')"
+          (blur)="focusOut()">
+        <span class="units input-group-addon">%</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="generationEfficiency">Generation Efficiency</label>
+      <div class="input-group">
+        <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
+          (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
+          (blur)="focusOut()">
+        <span class="units input-group-addon">%</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="condenserPressure">Condenser Pressure</label>
+      <div class="input-group">
+        <input name="condenserPressure" type="number" step="any" class="form-control" id="condenserPressure" (input)="save()"
+          [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()">
+        <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="operationType">Operation Type</label>
+      <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
+        (blur)="focusOut()" formControlName="operationType">
+        <option [ngValue]="'steamFlow'">Steam Flow</option>
+        <option [ngValue]="'powerGeneration'">Power Generation</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="processSteamUsage">
+        <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow'">Fixed Flow</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration'">Fixed Power</span>
+      </label>
+      <div class="input-group">
+        <input name="operationValue" type="number" step="any" class="form-control" id="operationValue" (input)="save()"
+          [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')" (blur)="focusOut()">
+        <span class="units input-group-addon">
+          <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow'">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration'">kW</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>

@@ -27,6 +27,9 @@ import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.compon
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 import { HeaderService } from './header/header.service';
 import { HeaderFormComponent } from './header/header-form/header-form.component';
+import { TurbineService } from './turbine/turbine.service';
+import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
+import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
 
 @NgModule({
   imports: [
@@ -56,13 +59,16 @@ import { HeaderFormComponent } from './header/header-form/header-form.component'
     ModificationListComponent,
     ModifyConditionsNotesComponent,
     BoilerHelpComponent,
-    HeaderFormComponent
+    HeaderFormComponent,
+    CondensingTurbineFormComponent,
+    PressureTurbineFormComponent
   ],
   providers: [
     SsmtService,
     CompareService,
     BoilerService,
-    HeaderService
+    HeaderService,
+    TurbineService
   ]
 })
 export class SsmtModule { }
