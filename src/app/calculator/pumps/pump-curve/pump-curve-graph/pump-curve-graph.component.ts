@@ -699,10 +699,23 @@ export class PumpCurveGraphComponent implements OnInit {
 
   downloadChart() {
     if (!this.exportName) {
+      this.exportName = "";
       if (this.isFan) {
-        this.exportName = "fan-curve-graph";
+        if (this.graphPumpCurve) {
+          this.exportName = "fan-curve-";
+        }
+        if (this.graphSystemCurve) {
+          this.exportName = this.exportName + "fan-system-curve-";
+        }
+        this.exportName = this.exportName + "graph";
       } else {
-        this.exportName = "pump-curve-graph";
+        if (this.graphPumpCurve) {
+          this.exportName = "pump-curve-";
+        }
+        if (this.graphSystemCurve) {
+          this.exportName = this.exportName + "pump-system-curve-";
+        }
+        this.exportName = this.exportName + "graph";
       }
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
