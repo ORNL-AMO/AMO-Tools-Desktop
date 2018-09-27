@@ -5,7 +5,6 @@ import { repeat } from 'rxjs/operators';
 @Injectable()
 export class LineChartHelperService {
 
-  // dArray: Array<{ x: number, y: number }>;
   dArray: Array<any>;
 
   constructor() { }
@@ -163,9 +162,7 @@ export class LineChartHelperService {
     var currentLi = d3.line()
       .x(function (d) { return xScale(d.x); })
       .y(function (d) { return yScale(d.y); })
-      // .curve(d3.curveCardinal);
       .curve(d3.curveNatural);
-
     line.data([data])
       .attr("d", currentLi)
       .style("display", null);
@@ -310,13 +307,11 @@ export class LineChartHelperService {
     let defs: d3.Selection<any> = svg.append("defs");
     let filter: d3.Selection<any>;
     let feMerge: d3.Selection<any>;
-
     // create filter with id #drop-shadow
     // height=130% so that the shadow is not clipped
     filter = defs.append("filter")
       .attr("id", "drop-shadow")
       .attr("height", "130%");
-
     // SourceAlpha refers to opacity of graphic that this filter will be applied to
     // convolve that with a Gaussian with standard deviation 3 and store result
     // in blur
@@ -324,7 +319,6 @@ export class LineChartHelperService {
       .attr("in", "SourceAlpha")
       .attr("stdDeviation", 3)
       .attr("result", "blur");
-
     // translate output of Gaussian blur to the right and downwards with 2px
     // store result in offsetBlur
     filter.append("feOffset")
@@ -332,7 +326,6 @@ export class LineChartHelperService {
       .attr("dx", 0)
       .attr("dy", 0)
       .attr("result", "offsetBlur");
-
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
     feMerge = filter.append("feMerge");
@@ -341,7 +334,6 @@ export class LineChartHelperService {
       .attr("in", "offsetBlur");
     feMerge.append("feMergeNode")
       .attr("in", "SourceGraphic");
-
     return svg;
   }
 
@@ -450,7 +442,6 @@ export class LineChartHelperService {
     for (let i = 0; i < ids.length; i++) {
       highlightedPoint = svg.select(ids[i])
         .attr('r', 8);
-
       repeat();
     }
     function repeat() {
