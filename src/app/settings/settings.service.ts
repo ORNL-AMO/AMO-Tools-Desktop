@@ -28,6 +28,9 @@ export class SettingsService {
       'steamSpecificVolumeMeasurement': [''],
       'steamPowerMeasurement': [''],
       'steamMassFlowMeasurement': [''],
+      'steamVolumeMeasurement': [''],
+      'steamVolumeFlowMeasurement': [''],
+      'steamVacuumPressure': [''],
       'currentMeasurement': [''],
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
@@ -61,6 +64,9 @@ export class SettingsService {
       'steamSpecificVolumeMeasurement': [settings.steamSpecificVolumeMeasurement],
       'steamMassFlowMeasurement': [settings.steamMassFlowMeasurement],
       'steamPowerMeasurement': [settings.steamPowerMeasurement || 'MMBtu'],
+      'steamVolumeMeasurement': [settings.steamVolumeMeasurement || 'gal'],
+      'steamVolumeFlowMeasurement': [settings.steamVolumeFlowMeasurement || 'gpm'],
+      'steamVacuumPressure': [settings.steamVacuumPressure || 'psi'],
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
@@ -106,6 +112,9 @@ export class SettingsService {
       steamSpecificVolumeMeasurement: form.controls.steamSpecificVolumeMeasurement.value,
       steamMassFlowMeasurement: form.controls.steamMassFlowMeasurement.value,
       steamPowerMeasurement: form.controls.steamPowerMeasurement.value,
+      steamVolumeMeasurement: form.controls.steamVolumeMeasurement.value,
+      steamVolumeFlowMeasurement: form.controls.steamVolumeFlowMeasurement.value,
+      steamVacuumPressure: form.controls.steamVacuumPressure.value,
       currentMeasurement: form.controls.currentMeasurement.value,
       viscosityMeasurement: form.controls.viscosityMeasurement.value,
       voltageMeasurement: form.controls.voltageMeasurement.value,
@@ -153,6 +162,9 @@ export class SettingsService {
       steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
       steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
       steamPowerMeasurement: settings.steamPowerMeasurement || 'MMBtu',
+      steamVolumeMeasurement: settings.steamVolumeMeasurement || 'gal',
+      steamVolumeFlowMeasurement: settings.steamVolumeFlowMeasurement || 'gpm',
+      steamVacuumPressure: settings.steamVacuumPressure || 'psi',
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -196,6 +208,9 @@ export class SettingsService {
         steamSpecificEntropyMeasurement: 'btulbF',
         steamSpecificVolumeMeasurement: 'ft3lb',
         steamMassFlowMeasurement: 'klb',
+        steamVolumeMeasurement: 'gal',
+        steamVolumeFlowMeasurement: 'gpm',
+        steamVacuumPressure: 'psi',
         energyResultUnit: 'MMBtu',
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
@@ -227,6 +242,9 @@ export class SettingsService {
         steamSpecificEntropyMeasurement: 'kJkgK',
         steamSpecificVolumeMeasurement: 'm3kg',
         steamMassFlowMeasurement: 'tonne',
+        steamVolumeMeasurement: 'L',
+        steamVolumeFlowMeasurement: 'L/min',
+        steamVacuumPressure: 'bar',
         energyResultUnit: 'GJ',
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
@@ -238,7 +256,7 @@ export class SettingsService {
         fanBarometricPressure: 'kPa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
-        steamEnergyMeasurement: 'kWh', 
+        steamEnergyMeasurement: 'kWh',
         steamPowerMeasurement: 'MJ'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
@@ -333,6 +351,15 @@ export class SettingsService {
       if (!settings.steamEnergyMeasurement) {
         settings.steamEnergyMeasurement = 'MMBtu'
       }
+      if (!settings.steamVolumeMeasurement) {
+        settings.steamVolumeMeasurement = 'gal'
+      }
+      if (!settings.steamVolumeFlowMeasurement) {
+        settings.steamVolumeFlowMeasurement = 'gpm'
+      }
+      if (!settings.steamVacuumPressure) {
+        settings.steamVacuumPressure = 'psi'
+      }
     } else {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'C';
@@ -354,6 +381,16 @@ export class SettingsService {
       }
       if (!settings.steamEnergyMeasurement) {
         settings.steamEnergyMeasurement = 'kWh'
+      }
+
+      if (!settings.steamVolumeMeasurement) {
+        settings.steamVolumeMeasurement = 'L'
+      }
+      if (!settings.steamVolumeFlowMeasurement) {
+        settings.steamVolumeFlowMeasurement = 'L/min'
+      }
+      if (!settings.steamVacuumPressure) {
+        settings.steamVacuumPressure = 'bar'
       }
     }
     return settings;

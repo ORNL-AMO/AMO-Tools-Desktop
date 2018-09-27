@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
-import { PHAST, OperatingCosts, OperatingHours } from '../../../shared/models/phast/phast';
+import { PHAST } from '../../../shared/models/phast/phast';
+import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class OperationsService {

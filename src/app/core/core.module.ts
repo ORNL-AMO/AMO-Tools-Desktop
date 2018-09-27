@@ -59,6 +59,7 @@ import { FsatTutorialComponent } from '../tutorials/fsat-tutorial/fsat-tutorial.
 import { FsatSystemSetupComponent } from '../tutorials/fsat-system-setup/fsat-system-setup.component';
 import { FsatReportTutorialComponent } from '../tutorials/fsat-report-tutorial/fsat-report-tutorial.component';
 import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tutorial/fsat-assessment-tutorial.component';
+import { SsmtModule } from '../ssmt/ssmt.module';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tu
     ImportExportModule,
     ReportRollupModule,
     FsatModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    SsmtModule
   ],
   providers: [
     AssessmentService,
