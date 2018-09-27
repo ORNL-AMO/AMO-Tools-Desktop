@@ -66,7 +66,7 @@
   <!-- Help Panel -->
   <div class="col-4 p-0 help-panel">
     <app-help-panel *ngIf="modificationExists" [fsat]="assessment.fsat" [settings]="settings" [modificationIndex]="modificationIndex"
-      [containerHeight]="containerHeight"></app-help-panel>
+      [containerHeight]="containerHeight" (emitSave)="saveAssessment()"></app-help-panel>
     <div *ngIf="!modificationExists">
       <div class="header mr-2 ml-2">
         <h3>Help</h3>

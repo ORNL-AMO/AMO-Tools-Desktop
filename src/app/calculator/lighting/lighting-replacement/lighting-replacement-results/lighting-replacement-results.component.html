@@ -1,0 +1,94 @@
+<label class="group-label">Baseline Summary</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Operating Hours
+        <br>(hrs/yr)
+      </td>
+      <td class="bold text-center">Electricity Use
+        <br>(kWh/yr)
+      </td>
+      <td class="bold text-center">Total Lighting
+        <br>(lumens)
+      </td>
+    </tr>
+    <tr *ngFor="let data of baselineData; let index = index;">
+      <td class="bold">Fixture #{{index+1 | number:'1.0-0'}}</td>
+      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
+<table class="table table-hover table-striped" *ngIf="modificationData.length != 0">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Operating Hours
+        <br>(hrs/yr)
+      </td>
+      <td class="bold text-center">Electricity Use
+        <br>(kWh/yr)
+      </td>
+      <td class="bold text-center">Total Lighting
+        <br>(lumens)
+      </td>
+    </tr>
+    <tr *ngFor="let data of modificationData; let index = index;">
+      <td class="bold">Fixture #{{index+1 | number:'1.0-0'}}</td>
+      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label">Totals</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Operating Hours
+        <br>(hrs/yr)
+      </td>
+      <td class="bold text-center">Electricity Use
+        <br>(kWh/yr)
+      </td>
+      <td class="bold text-center">Total Lighting
+        <br>(lumens)
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Baseline</td>
+      <td class="text-center">{{baselineResults.totalOperatingHours | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{baselineResults.totalElectricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{baselineResults.totalLighting | number:'1.0-0'}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Modification</td>
+      <td class="text-center">{{modificationResults.totalOperatingHours | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{modificationResults.totalElectricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{modificationResults.totalLighting | number:'1.0-0'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-hover table-striped pt-2">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Electricity Savings</td>
+      <td class="text-center w-50">{{baselineResults.totalElectricityUse - modificationResults.totalElectricityUse | number:'1.0-0'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Change In Lighting Level</td>
+      <td class="text-center w-50">{{modificationResults.totalLighting - baselineResults.totalLighting | number:'1.0-0'}} lumens</td>
+    </tr>
+  </tbody>
+</table>

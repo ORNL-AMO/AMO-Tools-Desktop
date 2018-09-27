@@ -271,10 +271,11 @@ export class PsatWarningService {
   }
 
   checkFLA(psat: PSAT, settings: Settings) {
+    let lineFreqTest: boolean = (psat.inputs.line_frequency != undefined || psat.inputs.line_frequency != null);
     if (
       psat.inputs.motor_rated_power &&
       psat.inputs.motor_rated_speed &&
-      psat.inputs.line_frequency &&
+      lineFreqTest &&
       psat.inputs.efficiency_class &&
       psat.inputs.efficiency &&
       psat.inputs.motor_rated_voltage

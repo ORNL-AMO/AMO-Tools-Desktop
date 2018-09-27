@@ -81,6 +81,10 @@ Tabs
     border-bottom:   #A569BD groove 3px;
   }
 
+  .lighting .tabs.primary .active a {
+    border: none;
+    border-bottom:   #FFFF00 solid 3px;
+  }
 
 
   .fixed-tab-size{
