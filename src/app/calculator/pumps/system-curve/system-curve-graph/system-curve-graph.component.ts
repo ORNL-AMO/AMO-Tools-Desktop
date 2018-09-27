@@ -77,7 +77,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
   canvasWidth: number;
   canvasHeight: number;
-  fontSize: string;
+  fontSize: string = "12px";
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;

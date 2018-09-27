@@ -263,7 +263,8 @@ export class LineChartHelperService {
               dMemberCounter++;
             }
             else if (tooltipData[j].formatX) {
-              tooltipData[j].value = xFormat(dArray[0].x);
+              // tooltipData[j].value = xFormat(dArray[0].x);
+              tooltipData[j].value = xFormat(dArray[j].x);
               iExclusions++;
             }
             else {
@@ -272,11 +273,9 @@ export class LineChartHelperService {
               tooltipData[j].value = yFormat(dArray[index].y);
             }
           }
-          // let detailLeft: number = Math.min(((margin.left + xScale(dArray[0].x) - (200 / 2 - 17)) - 2), width - 200);
-          let detailLeft: number = Math.min((margin.left + xScale(dArray[0].x) - 100), width - 200);
+          let detailLeft: number = Math.min((margin.left + xScale(dArray[0].x) - 125), width - 250);
           let detailTop: number;
           let pointerLeft: number = margin.left + xScale(dArray[0].x) - 10;
-          // let pointerLeft: number = margin.left + xScale(dArray[0].x) + 5;
           let pointerTop: number;
           for (let j = 0; j < dArray.length; j++) {
             if (j == 0) {

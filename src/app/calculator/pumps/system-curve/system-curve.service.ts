@@ -111,7 +111,6 @@ export class SystemCurveService {
 
 
   getCurvePointData(settings: Settings, x: any, y: any, increment: number, isFan: boolean, staticHead: number, lossCoefficient: number, curveConstants: { form: FormGroup }): Array<{ x: number, y: number, fluidPower: number }> {
-    console.log('getCurvePointData(), increment = ' + increment);
     let powerMeasurement: string;
     if (isFan) {
       powerMeasurement = settings.fanPowerMeasurement;
@@ -149,9 +148,12 @@ export class SystemCurveService {
 
     for (var i = 0; i <= x.domain()[1]; i += increment) {
       var head = staticHead + lossCoefficient * Math.pow(i, curveConstants.form.controls.systemLossExponent.value);
-      if (head > y.domain()[1]) {
-        y.domain([0, (head + (head / 9))]);
-      }
+      // if (head > y.domain()[1]) {
+      //   console.log('head > y.domain()[1]');
+      //   console.log('setting y.domain to =');
+      //   console.log((head + (head / 9)));
+      //   y.domain([0, (head + (head / 9))]);
+      // }
       if (head >= 0) {
         let tmpFluidPower: number;
         if (isFan) {
