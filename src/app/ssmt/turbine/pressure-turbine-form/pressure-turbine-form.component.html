@@ -30,42 +30,38 @@
       <label for="operationType">Operation Type</label>
       <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
         (blur)="focusOut()" formControlName="operationType">
-        <option [ngValue]="'flowRange'">Flow Range</option>
-        <option [ngValue]="'balanceHeader'">Balance Header</option>
-        <option [ngValue]="'steamFlow'">Steam Flow</option>
-        <option [ngValue]="'powerGeneration'">Power Generation</option>
-        <option [ngValue]="'powerRange'">Power Range</option>
+        <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="turbineForm.controls.operationType.value != 'balanceHeader'">
+    <div class="form-group" *ngIf="turbineForm.controls.operationType.value != 2">
       <label for="processSteamUsage">
-        <span *ngIf="turbineForm.controls.operationType.value == 'flowRange'">Minimum Flow</span>
-        <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow'">Fixed Flow</span>
-        <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration'">Fixed Power</span>
-        <span *ngIf="turbineForm.controls.operationType.value == 'powerRange'">Minimum Power</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 3">Minimum Power</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 4">Minimum Flow</span>
       </label>
       <div class="input-group">
         <input name="operationValue1" type="number" step="any" class="form-control" id="operationValue1" (input)="save()"
           [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')" (blur)="focusOut()">
         <span class="units input-group-addon">
-          <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow' || turbineForm.controls.operationType.value == 'flowRange'">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration' || turbineForm.controls.operationType.value == 'powerRange'">kW</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
     </div>
 
-    <div class="form-group" *ngIf="turbineForm.controls.operationType.value == 'flowRange' || turbineForm.controls.operationType.value == 'powerRange'">
+    <div class="form-group" *ngIf="turbineForm.controls.operationType.value == 4 || turbineForm.controls.operationType.value == 3">
       <label for="processSteamUsage">
-        <span *ngIf="turbineForm.controls.operationType.value == 'flowRange'">Maximum Flow</span>
-        <span *ngIf="turbineForm.controls.operationType.value == 'powerRange'">Maximum Power</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 4">Maximum Flow</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 3">Maximum Power</span>
       </label>
       <div class="input-group">
         <input name="operationValue2" type="number" step="any" class="form-control" id="operationValue2" (input)="save()"
           [readonly]="!selected" formControlName="operationValue2" (focus)="focusField('operationValue2')" (blur)="focusOut()">
         <span class="units input-group-addon">
-          <span *ngIf="turbineForm.controls.operationType.value == 'flowRange'">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="turbineForm.controls.operationType.value == 'powerRange'">kW</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
     </div>

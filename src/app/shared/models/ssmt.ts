@@ -11,30 +11,64 @@ export interface SSMT {
     equipmentNotes?: string,
     generalSteamOperations?: GeneralSteamOperations,
     modifications?: Array<Modification>,
-    boilerData?: BoilerData,
-    headerData?: HeaderData,
-    turbineData?: TurbineData
+    boilerInput?: BoilerInput,
+    headerInput?: HeaderInput,
+    turbineInput?: TurbineInput
 }
 
 export interface SSMTInputs {
-    operationsData: OperationsData,
-    boilerData: BoilerData,
-    headerData: HeaderData,
-    turbineData?: TurbineData
+    operationsInput: OperationsInput,
+    boilerInput: BoilerInput,
+    headerInput: Array<Header>,
+    turbineInput: TurbineInput
 }
 
-export interface TurbineData {
+export interface TurbineInput {
     condensingTurbine: CondensingTurbine,
     highToLowTurbine: PressureTurbine,
     highToMediumTurbine: PressureTurbine,
     mediumToLowTurbine: PressureTurbine
 }
 
+export const CondensingTurbineOperationTypes: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'Steam Flow'
+    },
+    {
+        value: 1,
+        display: 'Power Generation'
+    }
+]
+
+export const PressureTurbineOperationTypes: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'Steam Flow'
+    },
+    {
+        value: 1,
+        display: 'Power Generation'
+    },
+    {
+        value: 2,
+        display: 'Balance Header'
+    },
+    {
+        value: 3,
+        display: 'Power Range'
+    },
+    {
+        value: 4,
+        display: 'Flow Range'
+    }
+]
+
 export interface CondensingTurbine {
     isentropicEfficiency: number,
     generationEfficiency: number,
     condenserPressure: number,
-    operationType: string,
+    operationType: number,
     operationValue: number,
     useTurbine: boolean
 }
@@ -42,14 +76,14 @@ export interface CondensingTurbine {
 export interface PressureTurbine {
     isentropicEfficiency: number,
     generationEfficiency: number,
-    operationType: string,
+    operationType: number,
     operationValue1: number,
     operationValue2: number,
     useTurbine: boolean
 }
 
 
-export interface OperationsData {
+export interface OperationsInput {
     sitePowerImport: number,
     makeUpWaterTemperature: number,
     operatingHoursPerYear: number,
@@ -77,13 +111,13 @@ export interface Notes {
 }
 
 
-export interface BoilerData {
+export interface BoilerInput {
     fuelType: number,
     fuel: number,
     combustionEfficiency: number,
     blowdownRate: number,
-    blowdownFlashed: number,
-    preheatMakeupWater: number,
+    blowdownFlashed: boolean,
+    preheatMakeupWater: boolean,
     steamTemperature: number,
     deaeratorVentRate: number,
     deaeratorPressure: number,
@@ -91,22 +125,25 @@ export interface BoilerData {
 }
 
 
-export interface HeaderData {
+export interface HeaderInput {
     numberOfHeaders: number,
-    headers: Array<HeaderInput>
+    headers: Array<Header>
 }
 
-export interface HeaderInput {
+export interface Header {
     pressure: number,
     processSteamUsage: number,
     condensationRecoveryRate: number,
     heatLoss: number,
+    
     //do we want to use an index for lowest to highest pressure
     pressureIndex: number,
+    
     //not for highest pressure (highest index?)
     flashCondensateIntoHeader?: boolean,
     desuperheatSteamIntoNextHighest?: boolean,
     desuperheatSteamTemperature?: number,
+    
     //only highest pressure (highest index?)
     condensateReturnTemperature?: number,
     flashCondensateReturn?: boolean

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
+import { Quantity } from '../../../shared/models/steam';
+import { CondensingTurbineOperationTypes } from '../../../shared/models/ssmt';
 
 @Component({
   selector: 'app-condensing-turbine-form',
@@ -15,9 +17,12 @@ export class CondensingTurbineFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  constructor() { }
+  turbineOptionTypes: Array<Quantity>;
+  constructor() { 
+  }
 
   ngOnInit() {
+    this.turbineOptionTypes = CondensingTurbineOperationTypes;
   }
 
   save(){

@@ -7,7 +7,7 @@
       <div class="form-group">
         <label for="numberOfHeaders">Number Of Headers</label>
         <select name="numberOfHeaders" class="form-control" id="numberOfHeaders" (change)="setNumberOfHeaders()"
-          (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerData.numberOfHeaders">
+          (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
           <option [ngValue]="1">1</option>
           <option [ngValue]="2">2</option>
           <option [ngValue]="3">3</option>
@@ -17,7 +17,7 @@
       </div>
     </form>
     <div *ngFor="let form of headerForms">
-      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerData.numberOfHeaders"></app-header-form>
+      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"></app-header-form>
     </div>
   </div>
 </div>

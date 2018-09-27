@@ -170,7 +170,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.fuelType != modification.boilerData.fuelType) {
+      if (baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -188,7 +188,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.fuel != modification.boilerData.fuel || baseline.boilerData.fuelType != modification.boilerData.fuelType) {
+      if (baseline.boilerInput.fuel != modification.boilerInput.fuel || baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -206,7 +206,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.combustionEfficiency != modification.boilerData.combustionEfficiency) {
+      if (baseline.boilerInput.combustionEfficiency != modification.boilerInput.combustionEfficiency) {
         return true;
       } else {
         return false;
@@ -224,7 +224,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.blowdownRate != modification.boilerData.blowdownRate) {
+      if (baseline.boilerInput.blowdownRate != modification.boilerInput.blowdownRate) {
         return true;
       } else {
         return false;
@@ -242,7 +242,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.blowdownFlashed != modification.boilerData.blowdownFlashed) {
+      if (baseline.boilerInput.blowdownFlashed != modification.boilerInput.blowdownFlashed) {
         return true;
       } else {
         return false;
@@ -260,7 +260,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.preheatMakeupWater != modification.boilerData.preheatMakeupWater) {
+      if (baseline.boilerInput.preheatMakeupWater != modification.boilerInput.preheatMakeupWater) {
         return true;
       } else {
         return false;
@@ -278,7 +278,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.steamTemperature != modification.boilerData.steamTemperature) {
+      if (baseline.boilerInput.steamTemperature != modification.boilerInput.steamTemperature) {
         return true;
       } else {
         return false;
@@ -296,7 +296,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.deaeratorVentRate != modification.boilerData.deaeratorVentRate) {
+      if (baseline.boilerInput.deaeratorVentRate != modification.boilerInput.deaeratorVentRate) {
         return true;
       } else {
         return false;
@@ -314,7 +314,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.deaeratorPressure != modification.boilerData.deaeratorPressure) {
+      if (baseline.boilerInput.deaeratorPressure != modification.boilerInput.deaeratorPressure) {
         return true;
       } else {
         return false;
@@ -332,7 +332,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerData.approachTemperature != modification.boilerData.approachTemperature) {
+      if (baseline.boilerInput.approachTemperature != modification.boilerInput.approachTemperature) {
         return true;
       } else {
         return false;

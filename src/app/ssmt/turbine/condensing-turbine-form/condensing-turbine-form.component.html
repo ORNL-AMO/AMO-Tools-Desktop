@@ -40,22 +40,21 @@
       <label for="operationType">Operation Type</label>
       <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
         (blur)="focusOut()" formControlName="operationType">
-        <option [ngValue]="'steamFlow'">Steam Flow</option>
-        <option [ngValue]="'powerGeneration'">Power Generation</option>
+        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="processSteamUsage">
-        <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow'">Fixed Flow</span>
-        <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration'">Fixed Power</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
       </label>
       <div class="input-group">
         <input name="operationValue" type="number" step="any" class="form-control" id="operationValue" (input)="save()"
           [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')" (blur)="focusOut()">
         <span class="units input-group-addon">
-          <span *ngIf="turbineForm.controls.operationType.value == 'steamFlow'">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="turbineForm.controls.operationType.value == 'powerGeneration'">kW</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
     </div>

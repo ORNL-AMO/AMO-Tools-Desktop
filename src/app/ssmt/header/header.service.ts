@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HeaderInput, HeaderData } from '../../shared/models/ssmt';
+import { HeaderInput, Header } from '../../shared/models/ssmt';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class HeaderService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  initHeaderDataObj(): HeaderData {
+  initHeaderDataObj(): HeaderInput {
     return {
       numberOfHeaders: 1,
       headers: [
@@ -25,7 +25,7 @@ export class HeaderService {
     }
   }
 
-  initHeaderInputObj(index: number): HeaderInput {
+  initHeaderInputObj(index: number): Header {
     return {
       pressure: undefined,
       processSteamUsage: undefined,
@@ -39,7 +39,7 @@ export class HeaderService {
     }
   }
 
-  initHighestPressureHeaderFormFromObj(obj: HeaderInput): FormGroup {
+  initHighestPressureHeaderFormFromObj(obj: Header): FormGroup {
     return this.formBuilder.group({
       pressure: [obj.pressure, Validators.required],
       processSteamUsage: [obj.processSteamUsage, Validators.required],
@@ -51,7 +51,7 @@ export class HeaderService {
     })
   }
 
-  getHighestPressureObjFromForm(form: FormGroup): HeaderInput {
+  getHighestPressureObjFromForm(form: FormGroup): Header {
     return {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,
@@ -63,7 +63,7 @@ export class HeaderService {
     }
   }
 
-  initHeaderFormFromObj(obj: HeaderInput): FormGroup {
+  initHeaderFormFromObj(obj: Header): FormGroup {
     return this.formBuilder.group({
       pressure: [obj.pressure, Validators.required],
       processSteamUsage: [obj.processSteamUsage, Validators.required],
@@ -76,7 +76,7 @@ export class HeaderService {
     })
   }
 
-  initHeaderObjFromForm(form: FormGroup): HeaderInput {
+  initHeaderObjFromForm(form: FormGroup): Header {
     return {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,

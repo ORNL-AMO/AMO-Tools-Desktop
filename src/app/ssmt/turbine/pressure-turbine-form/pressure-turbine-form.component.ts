@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
+import { Quantity } from '../../../shared/models/steam';
+import { PressureTurbineOperationTypes } from '../../../shared/models/ssmt';
 
 @Component({
   selector: 'app-pressure-turbine-form',
@@ -17,21 +19,24 @@ export class PressureTurbineFormComponent implements OnInit {
   @Input()
   turbineTitle: string;
 
-  constructor() { }
+  turbineTypeOptions: Array<Quantity>;
+  constructor() {
+  }
 
   ngOnInit() {
+    this.turbineTypeOptions = PressureTurbineOperationTypes;
   }
 
-  save(){
-
-  }
-
-  focusField(){
+  save() {
 
   }
 
-  focusOut(){
-    
+  focusField() {
+
+  }
+
+  focusOut() {
+
   }
 
 }

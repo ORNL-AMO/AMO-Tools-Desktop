@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HeaderData } from '../../shared/models/ssmt';
+import { HeaderInput, Header } from '../../shared/models/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
-import { HeaderInput } from '../../shared/models/ssmt';
 
 @Component({
   selector: 'app-header',
@@ -13,11 +12,11 @@ import { HeaderInput } from '../../shared/models/ssmt';
 })
 export class HeaderComponent implements OnInit {
   @Input()
-  headerData: HeaderData;
+  headerInput: HeaderInput;
   @Input()
   settings: Settings;
   @Output('emitSave')
-  emitSave = new EventEmitter<HeaderData>();
+  emitSave = new EventEmitter<HeaderInput>();
   @Input()
   inSetup: boolean;
   @Input()
@@ -27,8 +26,8 @@ export class HeaderComponent implements OnInit {
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    if (!this.headerData) {
-      this.headerData = this.headerService.initHeaderDataObj();
+    if (!this.headerInput) {
+      this.headerInput = this.headerService.initHeaderDataObj();
     }
     this.headerForms = new Array<FormGroup>();
     this.initForms();
@@ -46,7 +45,7 @@ export class HeaderComponent implements OnInit {
   }
 
   initForms() {
-    this.headerData.headers.forEach(header => {
+    this.headerInput.headers.forEach(header => {
       if (header.pressureIndex == 0) {
         let tmpForm: FormGroup = this.headerService.initHighestPressureHeaderFormFromObj(header);
         this.headerForms.push(tmpForm);
@@ -66,14 +65,14 @@ export class HeaderComponent implements OnInit {
   }
 
   setNumberOfHeaders() {
-    if (this.headerData.numberOfHeaders < this.headerForms.length) {
-      for (let i = this.headerForms.length; i > this.headerData.numberOfHeaders; i--) {
+    if (this.headerInput.numberOfHeaders < this.headerForms.length) {
+      for (let i = this.headerForms.length; i > this.headerInput.numberOfHeaders; i--) {
         this.headerForms.pop();
       }
-    } else if (this.headerData.numberOfHeaders > this.headerForms.length) {
-      for (let i = this.headerForms.length; i < this.headerData.numberOfHeaders; i++) {
-        let headerData: HeaderInput = this.headerService.initHeaderInputObj(this.headerForms.length);
-        let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerData);
+    } else if (this.headerInput.numberOfHeaders > this.headerForms.length) {
+      for (let i = this.headerForms.length; i < this.headerInput.numberOfHeaders; i++) {
+        let headerInput: Header = this.headerService.initHeaderInputObj(this.headerForms.length);
+        let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerInput);
         this.headerForms.push(tmpForm);
       }
     }

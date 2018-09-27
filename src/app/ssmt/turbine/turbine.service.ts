@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TurbineData, PressureTurbine, CondensingTurbine } from '../../shared/models/ssmt';
+import { TurbineInput, PressureTurbine, CondensingTurbine } from '../../shared/models/ssmt';
 
 @Injectable()
 export class TurbineService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  initTurbineDataObj(): TurbineData {
+  initTurbineInputObj(): TurbineInput {
     return {
       condensingTurbine: {
         isentropicEfficiency: undefined,
         generationEfficiency: undefined,
         condenserPressure: undefined,
-        operationType: 'steamFlow',
+        operationType: 0,
         operationValue: undefined,
         useTurbine: true
       },
@@ -27,7 +27,7 @@ export class TurbineService {
     return {
       isentropicEfficiency: undefined,
       generationEfficiency: undefined,
-      operationType: 'flowRange',
+      operationType: 0,
       operationValue1: undefined,
       operationValue2: undefined,
       useTurbine: false
