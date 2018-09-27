@@ -63,7 +63,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'furnaces'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'furnaces'}" class="sidebar-item" (click)="chooseCalculator('furnaces')">Process Heating</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'furnaces'}" class="sidebar-item" (click)="chooseCalculator('furnaces')">Process
+      Heating</span>
     <ul *ngIf="selectedCalculatorType == 'furnaces'">
       <li [ngClass]="{'selected': selectedCalculator == 'o2-enrichment'}">
         <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O
@@ -116,7 +117,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'compressed-air'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'compressed-air'}" class="sidebar-item" (click)="chooseCalculator('compressed-air')">Compressed Air</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'compressed-air'}" class="sidebar-item" (click)="chooseCalculator('compressed-air')">Compressed
+      Air</span>
     <ul *ngIf="selectedCalculatorType == 'compressed-air'">
       <li [ngClass]="{'selected': selectedCalculator == 'bag-method'}">
         <span class="sidebar-item" (click)="selectCalculator('bag-method')">Leak Loss Estimator - Bag Method</span>
@@ -144,6 +146,16 @@
       </li>
     </ul>
   </li>
+
+  <li [ngClass]="{'show-border': selectedCalculatorType == 'lighting'}">
+    <span [ngClass]="{'selected': selectedCalculatorType == 'lighting'}" class="sidebar-item" (click)="chooseCalculator('lighting')">Lighting</span>
+    <ul *ngIf="selectedCalculatorType == 'lighting'">
+      <li [ngClass]="{'selected': selectedCalculator == 'lighting-replacement'}">
+        <span class="sidebar-item" (click)="selectCalculator('lighting-replacement')">Lighting Replacement</span>
+      </li>
+    </ul>
+  </li>
+
 
   <li [ngClass]="{'show-border': selectedCalculatorType == 'utilities'}">
     <span [ngClass]="{'selected': selectedCalculatorType == 'utilities'}" class="sidebar-item" (click)="chooseCalculator('utilities')">General</span>
