@@ -29,7 +29,9 @@ import { SystemCurveModule } from '../system-curve/system-curve.module';
     PumpCurveHelpComponent,
   ],
   exports: [
-    PumpCurveComponent
+    PumpCurveComponent,
+    PumpCurveFormComponent,
+    PumpCurveHelpComponent
   ],
   providers: [
     PumpCurveService
