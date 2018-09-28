@@ -17,6 +17,7 @@ import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkm
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
+import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 
@@ -57,7 +58,8 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     ModelService,
     ConvertUnitsService,
     UpdateDataService,
-    SvgToPngService
+    SvgToPngService,
+    LineChartHelperService
   ]
 })
 
