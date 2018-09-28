@@ -48,8 +48,8 @@ export class PumpCurveService {
       ),
       maxFlow: 1020,
       dataOrder: 3,
-      baselineMeasurement: 1,
-      modifiedMeasurement: 1,
+      baselineMeasurement: 1800,
+      modifiedMeasurement: 1800,
       exploreLine: 0,
       exploreFlow: 0,
       exploreHead: 0,
@@ -64,7 +64,7 @@ export class PumpCurveService {
       headFlow6: 0,
       pumpEfficiencyOrder: 3,
       pumpEfficiencyConstant: 0,
-      measurementOption: 'Diameter'
+      measurementOption: 'Speed'
     }
   }
 
