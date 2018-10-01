@@ -13,12 +13,12 @@ export class SteamModelCalculationService {
   boilerModel: BoilerOutput;
   highPressureHeaderModel: HeaderOutputObj;
 
-  prv1Model: PrvOutput;
+  mediumToLowPressurePRV: PrvOutput;
   prv2Model: PrvOutput;
   condensingTurbineModel: TurbineOutput;
-  highPressureToLowPressureTurbine: TurbineOutput;
-  highPressureToMediumPressureTurbine: TurbineOutput;
-  mediumPressureToLowPressureTurbine: TurbineOutput;
+  highPressureToLowPressureTurbineModel: TurbineOutput;
+  highPressureToMediumPressureTurbineModel: TurbineOutput;
+  mediumPressureToLowPressureTurbineModel: TurbineOutput;
   blowdownFlashTankModel: FlashTankOutput;
   returnSteamFlashTankModel: FlashTankOutput;
   flashTank3Model: FlashTankOutput;
@@ -60,7 +60,57 @@ export class SteamModelCalculationService {
   siteTotalPowerCost: number;
   makeupWater: SteamPropertiesOutput;
   feedwater: SteamPropertiesOutput;
+
+  _additionalSteamFlow: number;
   constructor(private steamService: SteamService) { }
+
+  calculate(inputData: SSMTInputs, settings: Settings) {
+    this.initializeSteamProperties(inputData, settings);
+    this._additionalSteamFlow = this.iterateModel();
+
+  }
+
+  iterateModel(): number {
+    let additionalSteamFlow: number = this.steamToDeaerator;
+    if (additionalSteamFlow == 0) {
+      additionalSteamFlow = 1;
+    }
+    if (this._additionalSteamFlow) {
+      additionalSteamFlow = this._additionalSteamFlow;
+    }
+
+    let adjustment: number = this.convergeAdjustment(additionalSteamFlow);
+
+    return additionalSteamFlow;
+  }
+
+  convergeAdjustment(additionalSteamFlow: number): number {
+    let requirement: number = .5;
+    let adjustment: number = 1;
+    let adjustmentLast: number = 0;
+    let cc: number = 0;
+    while (
+      adjustment != 0 &&
+      (Math.abs(adjustment - adjustmentLast / adjustment) > requirement) &&
+      cc++ < 15 &&
+      Math.abs(adjustment) != Math.abs(adjustmentLast)
+    ) {
+      adjustmentLast = adjustment;
+      adjustment = this.runModel();
+      if (isNaN(adjustment)) {
+        break
+      }
+    }
+    return adjustment;
+  }
+
+  runModel(): number {
+
+    //1. Setup
+
+    //return daSteamDifference prvSteamRequirement
+    return
+  }
 
   initializeSteamProperties(inputData: SSMTInputs, settings: Settings) {
     //constants needed for this function
@@ -164,7 +214,7 @@ export class SteamModelCalculationService {
     //8d. medium pressure to low pressure turbine
     this.initializeMediumPressureToLowPressureTurbine(inputData.turbineInput.mediumToLowTurbine, mediumPressureSteam, lowPressureHeaderInput, settings);
     //php has initialize turbines next?
-      //uses turbine method to "setPowerOut", "setFlowRange", and "setPowerRange". May be unecessary given Turbine() setup
+    //uses turbine method to "setPowerOut", "setFlowRange", and "setPowerRange". May be unecessary given Turbine() setup
     //8e. balance turbines
     //TODO: Balance turbines function
 
@@ -183,6 +233,8 @@ export class SteamModelCalculationService {
       massFlow: this.boilerModel.feedwaterMassFlow,
       energyFlow: this.boilerModel.feedwaterEnergyFlow,
     }
+
+    this.balanceTurbines(inputData.turbineInput);
   }
 
   initializeBoilerModel(boilerInput: BoilerInput, highPressureHeaderInput: Header, settings: Settings) {
@@ -281,9 +333,9 @@ export class SteamModelCalculationService {
       settings
     );
     this.inititialReturnCondensate.massFlow =
-      highPressureHeaderInput.processSteamUsage + highPressureHeaderInput.condensationRecoveryRate +
-      mediumPressureHeaderInput.processSteamUsage + mediumPressureHeaderInput.condensationRecoveryRate +
-      lowPressureHeaderInput.processSteamUsage + lowPressureHeaderInput.condensationRecoveryRate;
+      highPressureHeaderInput.processSteamUsage * highPressureHeaderInput.condensationRecoveryRate +
+      mediumPressureHeaderInput.processSteamUsage * mediumPressureHeaderInput.condensationRecoveryRate +
+      lowPressureHeaderInput.processSteamUsage * lowPressureHeaderInput.condensationRecoveryRate;
   }
 
   initializeReturnSteamFlashTank(boilerInput: BoilerInput, lowPressureHeaderInput: Header, mediumPressureHeaderInput: Header, highPressureHeaderInput: Header, settings: Settings) {
@@ -293,9 +345,9 @@ export class SteamModelCalculationService {
         quantityValue: highPressureHeaderInput.condensateReturnTemperature,
         thermodynamicQuantity: 0,
         inletWaterMassFlow:
-          highPressureHeaderInput.processSteamUsage + highPressureHeaderInput.condensationRecoveryRate +
-          mediumPressureHeaderInput.processSteamUsage + mediumPressureHeaderInput.condensationRecoveryRate +
-          lowPressureHeaderInput.processSteamUsage + lowPressureHeaderInput.condensationRecoveryRate
+          highPressureHeaderInput.processSteamUsage * highPressureHeaderInput.condensationRecoveryRate +
+          mediumPressureHeaderInput.processSteamUsage * mediumPressureHeaderInput.condensationRecoveryRate +
+          lowPressureHeaderInput.processSteamUsage * lowPressureHeaderInput.condensationRecoveryRate
         ,
         tankPressure: boilerInput.deaeratorPressure
       },
@@ -379,7 +431,7 @@ export class SteamModelCalculationService {
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
     //turbine() options: Mass Flow or Power Out.. not sure how those correspond
     let massFlowOrPowerOutValue: number = 0;
-    this.highPressureToLowPressureTurbine = this.steamService.turbine(
+    this.highPressureToLowPressureTurbineModel = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: highPressureSteam.pressure,
@@ -403,7 +455,7 @@ export class SteamModelCalculationService {
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
     //turbine() options: Mass Flow or Power Out.. not sure how those correspond
     let massFlowOrPowerOutValue: number = 0;
-    this.highPressureToMediumPressureTurbine = this.steamService.turbine(
+    this.highPressureToMediumPressureTurbineModel = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: highPressureSteam.pressure,
@@ -427,7 +479,7 @@ export class SteamModelCalculationService {
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
     //turbine() options: Mass Flow or Power Out.. not sure how those correspond
     let massFlowOrPowerOutValue: number = 0;
-    this.highPressureToMediumPressureTurbine = this.steamService.turbine(
+    this.highPressureToMediumPressureTurbineModel = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: mediumPressureSteam.pressure,
@@ -445,12 +497,12 @@ export class SteamModelCalculationService {
     )
   }
 
-  calculateTotalPowerCost(operationsInput: OperationsInput){
+  calculateTotalPowerCost(operationsInput: OperationsInput) {
     //cost = electricityCosts or makeupWaterCosts or fuelCosts? 
     this.siteTotalPowerCost = operationsInput.sitePowerImport * operationsInput.operatingHoursPerYear * operationsInput.electricityCosts;
   }
 
-  initializeMakeupWater(makeupWaterTemp: number, settings: Settings){
+  initializeMakeupWater(makeupWaterTemp: number, settings: Settings) {
     this.makeupWater = this.steamService.steamProperties(
       {
         thermodynamicQuantity: 0, //temperature
@@ -461,4 +513,119 @@ export class SteamModelCalculationService {
     )
   }
 
+
+  balanceTurbines(turbineInput: TurbineInput) {
+    let highPressureToLowPressureTurbineModelFlow: number = 0;
+    let highPressureToMediumPressureTurbineModelFlow: number = 0;
+    let mediumPressureToLowPressureTurbineModelFlow: number = 0;
+
+    //balance medium pressure
+    let mediumPressureSteamNeed: number = this.mediumPressureSteamNeed;
+    let mediumPressureSteamRemaining: number = this.mediumPressureSteamNeed;
+
+    //High Pressure to Medium Pressure Turbine
+    //check we have a high to medium pressure turbine
+    if (this.highPressureToMediumPressureTurbineModel) {
+      //set minimum flow
+      //steam flow
+      if (turbineInput.highToMediumTurbine.operationType == 2) {
+        //balanced header
+        highPressureToMediumPressureTurbineModelFlow = 0;
+      }
+      //all else use operationValue1
+      else {
+        //fixed power rate
+        highPressureToMediumPressureTurbineModelFlow = turbineInput.highToMediumTurbine.operationValue1;
+      }
+      mediumPressureSteamRemaining = mediumPressureSteamNeed - highPressureToMediumPressureTurbineModelFlow;
+      if (mediumPressureSteamRemaining < 0) {
+        mediumPressureSteamRemaining = 0;
+      }
+      //handle variable load
+      if (turbineInput.highToMediumTurbine.operationType == 2 || turbineInput.highToMediumTurbine.operationType == 3 || turbineInput.highToMediumTurbine.operationType == 4) {
+        //2: high 1: low
+        let range: number = turbineInput.highToMediumTurbine.operationValue2 - turbineInput.highToMediumTurbine.operationValue1;
+        //I couldn't tell you the logic of why this is happening but this is what the php has..
+        if (mediumPressureSteamRemaining <= (range) || turbineInput.highToMediumTurbine.operationType == 2) {
+          highPressureToMediumPressureTurbineModelFlow = mediumPressureSteamRemaining + turbineInput.highToMediumTurbine.operationValue1;
+          mediumPressureSteamRemaining = 0;
+        } else {
+          highPressureToMediumPressureTurbineModelFlow = turbineInput.highToMediumTurbine.operationValue2;
+          mediumPressureSteamRemaining = mediumPressureSteamRemaining - range;
+        }
+      }
+    }
+    //TODO: update mass flow values of highPressureToMediumPressureTurbineModel
+    //this.highPressureToMediumPressureTurbineModel "set mass flow" (highPressureToMediumPressureTurbineModelFlow)
+
+
+    //High Pressure to Low Pressure Turbine
+    if (this.highPressureToLowPressureTurbineModel) {
+      if (turbineInput.highToLowTurbine.operationType == 2) {
+        highPressureToLowPressureTurbineModelFlow = 0;
+      } else {
+        highPressureToLowPressureTurbineModelFlow = turbineInput.highToLowTurbine.operationValue1;
+      }
+    }
+
+    //Medium Pressure to Low Pressure Turbine
+    if (this.mediumPressureToLowPressureTurbineModel) {
+      if (turbineInput.mediumToLowTurbine.operationType == 2) {
+        mediumPressureToLowPressureTurbineModelFlow = 0;
+      } else {
+        mediumPressureToLowPressureTurbineModelFlow = turbineInput.highToLowTurbine.operationValue1;
+      }
+    }
+
+    //steam need - (high to low pressure flow + medium to low pressure flow)
+    let lowPressureSteamRemaining: number = this.lowPressureSteamNeed - (highPressureToLowPressureTurbineModelFlow + mediumPressureToLowPressureTurbineModelFlow);
+    if (this.mediumToLowPressurePRV) {
+      //TODO: double check we are using outletMassFlow
+      //php uses desuperFluidFlow so does it need to be w/ desuperheating?
+      lowPressureSteamRemaining = lowPressureSteamRemaining - this.mediumToLowPressurePRV.outletMassFlow;
+    }
+    //TODO: subtract forced excess steam medium pressure to low pressure from lowPressureSteamRemaining
+    //lowPressureSteamRemaining = lowPressureSteamRemaining - forcedExcessSteamMediumPressureToLowPressure
+    if (lowPressureSteamRemaining < 0) {
+      lowPressureSteamRemaining = 0;
+    }
+
+    //Handle High pressure to low pressure variable load
+    if (turbineInput.highToLowTurbine.operationType == 2 || turbineInput.highToLowTurbine.operationType == 3 || turbineInput.highToLowTurbine.operationType == 4) {
+      //2: high 1: low
+      let range: number = turbineInput.highToLowTurbine.operationValue2 - turbineInput.highToLowTurbine.operationValue1;
+      //I couldn't tell you the logic of why this is happening but this is what the php has..
+      if (lowPressureSteamRemaining <= (range) || turbineInput.highToLowTurbine.operationType == 2) {
+        highPressureToLowPressureTurbineModelFlow = lowPressureSteamRemaining + turbineInput.highToLowTurbine.operationValue1;
+        lowPressureSteamRemaining = 0;
+      } else {
+        highPressureToLowPressureTurbineModelFlow = turbineInput.highToLowTurbine.operationValue2;
+        lowPressureSteamRemaining = lowPressureSteamRemaining - range;
+      }
+    }
+    //TODO: add forced excess steam medium pressure to low pressure from lowPressureSteamRemaining
+    // lowPressureSteamRemaining = lowPressureSteamRemaining + forcedExcessSteamMediumPressureToLowPressure
+    // if (lowPressureSteamRemaining < forcedExcessSteamMediumPressureToLowPressure) {
+    //   lowPressureSteamRemainging = forcedExcessSteamMediumPressureToLowPressure;
+    // }
+
+    //Handle Medium Pressure to Low
+    if (turbineInput.mediumToLowTurbine.operationType == 2 || turbineInput.mediumToLowTurbine.operationType == 3 || turbineInput.mediumToLowTurbine.operationType == 4) {
+      //2: high 1: low
+      let range: number = turbineInput.mediumToLowTurbine.operationValue2 - turbineInput.mediumToLowTurbine.operationValue1;
+      //I couldn't tell you the logic of why this is happening but this is what the php has..
+      if (lowPressureSteamRemaining <= (range) || turbineInput.mediumToLowTurbine.operationType == 2) {
+        mediumPressureToLowPressureTurbineModelFlow = lowPressureSteamRemaining + turbineInput.mediumToLowTurbine.operationValue1;
+        lowPressureSteamRemaining = 0;
+      } else {
+        mediumPressureToLowPressureTurbineModelFlow = turbineInput.mediumToLowTurbine.operationValue2;
+        lowPressureSteamRemaining = lowPressureSteamRemaining - range;
+      }
+    }
+    //TODO: update mass flow values of highPressureToLowPressureTurbineModel
+    //this.highPressureToLowPressureTurbineModel "set mass flow" (highPressureToLowPressureTurbineModelFlow)
+
+    //TODO: update mass flow values of mediumPressureToLowPressureTurbineModel
+    //this.mediumPressureToLowPressureTurbineModel "set mass flow" (mediumPressureToLowPressureTurbineModelFlow)
+  }
 }
