@@ -12,7 +12,9 @@ export interface SteamPropertiesOutput {
   specificEnthalpy: number;
   specificEntropy: number;
   quality: number;
-  specificVolume: number;
+  specificVolume?: number;
+  massFlow?: number,
+  energyFlow?: number
 }
 
 export interface SaturatedPropertiesInput {
@@ -184,6 +186,7 @@ export interface HeaderOutputObj {
   specificEnthalpy: number;
   specificEntropy: number;
   temperature: number;
+  heatLoss?: HeatLossOutput;
 }
 
 
