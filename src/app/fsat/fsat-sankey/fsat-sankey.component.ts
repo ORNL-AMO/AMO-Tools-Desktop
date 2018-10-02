@@ -375,7 +375,7 @@ export class FsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#fsat-" + location + "-linear-gradient-" + i + ")";
+        return "url(#fsat-" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -717,7 +717,7 @@ export class FsatSankeyComponent implements OnInit {
   getEndMarker(d, nodes) {
     let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#fsat-end-" + location + "-" + d.target + ")";
+      return "url(#fsat-end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -862,7 +862,7 @@ export class FsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#fsat-linear-gradient-" + i + ")"
+        return "url(#fsat-linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {
