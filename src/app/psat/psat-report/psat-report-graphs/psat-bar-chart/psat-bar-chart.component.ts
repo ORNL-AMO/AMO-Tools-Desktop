@@ -81,6 +81,7 @@ export class PsatBarChartComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.printView) {
       if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
+        this.setBarLabels();
         this.prepBarData();
         this.updateChart();
       }
@@ -255,6 +256,7 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".c3-texts").style("font-size", "20px");
       d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      d3.selectAll(".tick text").style("display", "initial");
     }
   }
 
@@ -264,6 +266,7 @@ export class PsatBarChartComponent implements OnInit {
         unload: true,
         columns: [this.barData1, this.barData2]
       });
+      d3.selectAll(".tick text").style("display", "initial");
     }
   }
 
