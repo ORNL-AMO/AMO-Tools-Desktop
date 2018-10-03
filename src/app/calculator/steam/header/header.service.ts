@@ -3,7 +3,7 @@ import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam';
+import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam/steam-inputs';
 
 @Injectable()
 export class HeaderService {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-help-panel',

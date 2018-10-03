@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService } from './boiler.service';
-import { Boiler } from '../../shared/models/ssmt';
+import { Boiler } from '../../shared/models/steam/ssmt';
 import { FormGroup } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';

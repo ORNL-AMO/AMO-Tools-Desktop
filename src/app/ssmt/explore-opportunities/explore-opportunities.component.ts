@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SsmtService } from '../ssmt.service';

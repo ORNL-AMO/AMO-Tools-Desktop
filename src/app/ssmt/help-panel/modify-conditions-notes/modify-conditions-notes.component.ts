@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Notes } from '../../../shared/models/ssmt';
+import { Notes } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-modify-conditions-notes',

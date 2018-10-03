@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import * as _ from 'lodash';
-import { SSMT, Modification } from '../../shared/models/ssmt';
+import { SSMT, Modification } from '../../shared/models/steam/ssmt';
 import { SsmtService } from '../ssmt.service';
 
 

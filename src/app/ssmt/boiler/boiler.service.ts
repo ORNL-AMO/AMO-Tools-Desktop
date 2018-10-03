@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Boiler } from '../../shared/models/ssmt';
+import { Boiler } from '../../shared/models/steam/ssmt';
 
 @Injectable()
 export class BoilerService {

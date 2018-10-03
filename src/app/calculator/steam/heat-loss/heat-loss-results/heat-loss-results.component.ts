@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HeatLossOutput } from '../../../../shared/models/steam';
+import { HeatLossOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 

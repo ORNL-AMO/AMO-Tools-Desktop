@@ -3,8 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
-import { DeaeratorInput, DeaeratorOutput } from '../../../shared/models/steam';
+import { DeaeratorInput } from '../../../shared/models/steam/steam-inputs';
 import { DeaeratorService } from './deaerator.service';
+import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-deaerator',
