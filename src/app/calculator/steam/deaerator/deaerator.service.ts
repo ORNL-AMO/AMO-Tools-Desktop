@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { DeaeratorInput } from '../../../shared/models/steam';
+import { DeaeratorInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 
 @Injectable()

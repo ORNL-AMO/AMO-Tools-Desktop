@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
-import { Quantity } from '../../../shared/models/steam';
-import { PressureTurbineOperationTypes } from '../../../shared/models/ssmt';
+import { Quantity } from '../../../shared/models/steam/steam-inputs';
+import { PressureTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-pressure-turbine-form',

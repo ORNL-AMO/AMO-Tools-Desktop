@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../ssmt.service';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 

@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { FlashTankInput, FlashTankOutput } from '../../../shared/models/steam';
+import { FlashTankInput } from '../../../shared/models/steam/steam-inputs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
 import { FlashTankService } from './flash-tank.service';
+import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-flash-tank',

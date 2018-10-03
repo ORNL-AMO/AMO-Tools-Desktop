@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TurbineInput } from '../../shared/models/ssmt';
+import { TurbineInput } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { TurbineService } from './turbine.service';

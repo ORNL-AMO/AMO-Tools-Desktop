@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HeaderInput, Header } from '../../shared/models/ssmt';
+import { HeaderInput, Header } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';

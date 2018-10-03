@@ -90,6 +90,7 @@ export interface BoilerOutput {
     specificEnthalpy: number;
     specificEntropy: number;
     quality: number;
+    specificVolume?: number;
     //SteamProperties() function call does not have these fields
     //these fields will be set during the SSMT calculation
     //and will need to be apart of objects with this type
@@ -151,6 +152,19 @@ export interface BoilerOutput {
     outletLiquidSpecificEnthalpy: number;
     outletLiquidSpecificEntropy: number;
     outletLiquidTemperature: number;
+  }
+
+  export interface HeaderOutput {
+    header: HeaderOutputObj;
+    inlet1: HeaderOutputObj;
+    inlet2: HeaderOutputObj;
+    inlet3: HeaderOutputObj;
+    inlet4: HeaderOutputObj;
+    inlet5: HeaderOutputObj;
+    inlet6: HeaderOutputObj;
+    inlet7: HeaderOutputObj;
+    inlet8: HeaderOutputObj;
+    inlet9: HeaderOutputObj;
   }
 
   export interface HeaderOutputObj {
@@ -231,5 +245,18 @@ export interface BoilerOutput {
     powerOut: number;
   }
 
+  export interface SaturatedPropertiesOutput {
+    saturatedPressure: number;
+    saturatedTemperature: number;
+    liquidEnthalpy: number;
+    gasEnthalpy: number;
+    evaporationEnthalpy: number;
+    liquidEntropy: number;
+    gasEntropy: number;
+    evaporationEntropy: number;
+    liquidVolume: number;
+    gasVolume: number;
+    evaporationVolume: number;
+  }
 
   //TODO: HeatExchange...

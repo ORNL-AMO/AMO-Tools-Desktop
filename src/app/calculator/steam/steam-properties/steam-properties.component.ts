@@ -2,8 +2,9 @@ import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Hos
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamPropertiesOutput, SteamPropertiesInput } from '../../../shared/models/steam';
+import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
+import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 
 @Component({

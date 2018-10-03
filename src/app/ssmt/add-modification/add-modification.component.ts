@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { SSMT, Modification } from '../../shared/models/ssmt';
+import { SSMT, Modification } from '../../shared/models/steam/ssmt';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 

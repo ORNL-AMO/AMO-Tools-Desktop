@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SSMT } from '../shared/models/ssmt';
+import { SSMT } from '../shared/models/steam/ssmt';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

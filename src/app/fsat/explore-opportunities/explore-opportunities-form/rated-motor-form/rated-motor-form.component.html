@@ -14,8 +14,8 @@
       <div class="form-group">
         <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
         <div class="input-group">
-          <input type="number" name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field" id="baselineMotorRatedPower"
-            (focus)="focusField('motorRatedPower')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
+          <input type="number" name="baselineMotorRatedPower" [disabled]="true" class="form-control number-input-field"
+            id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.motorRatedPower">
           <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
         </div>
 
@@ -58,8 +58,8 @@
       </div>
       <div class="form-group">
         <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
-        <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
-          (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass"
+        <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass"
+          (change)="setEfficiencyClasses()" (focus)="focusField('efficiencyClass')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass"
           [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
           <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
         </select>
@@ -69,15 +69,16 @@
   <li *ngIf="(fsat.fanMotor.efficiencyClass == 3 || fsat.modifications[exploreModIndex].fsat.fanMotor.efficiencyClass == 3) && showEfficiencyClass">
     <div class="checkbox">
       <label for="modifyMotorEfficiency"><input type="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()"
-          (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency" /> Modify Motor Specified Efficiency
+          (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency" /> Modify Motor Specified
+        Efficiency
       </label>
     </div>
     <form *ngIf="showMotorEfficiency">
       <div class="form-group">
         <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
         <div class="input-group">
-          <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency" class="form-control"
-            (focus)="focusField('motorEfficiency')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.specifiedEfficiency" />
+          <input name="baselineMotorEfficiency" [disabled]="true" type="number" step="any" id="baselineMotorEfficiency"
+            class="form-control" (focus)="focusField('motorEfficiency')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.specifiedEfficiency" />
           <span class="input-group-addon units">(%)</span>
         </div>
         <span class="alert-warning pull-right small" *ngIf="baselineWarnings.efficiencyError !== null">{{baselineWarnings.efficiencyError}}</span>
@@ -91,6 +92,38 @@
           <span class="input-group-addon units">(%)</span>
         </div>
         <span class="alert-warning pull-right small" *ngIf="modificationWarnings.efficiencyError !== null && !fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">{{modificationWarnings.efficiencyError}}</span>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyFLA"><input type="checkbox" id="modifyFLA" value="true" (change)="toggleFLA()" (focus)="focusField('fullLoadAmps')"
+          [(ngModel)]="showFLA" /> Modify Full Load Amps
+      </label>
+    </div>
+    <form *ngIf="showFLA">
+      <div class="form-group">
+        <label for="baselineFLA">Baseline Full Load Amps</label>
+        <div class="input-group">
+          <input type="number" name="baselineFLA" [disabled]="true" class="form-control number-input-field" id="baselineFLA"
+            (focus)="focusField('fullLoadAmps')" (input)="calculate()" [(ngModel)]="fsat.fanMotor.fullLoadAmps">
+          <span class="input-group-addon units">A</span>
+        </div>
+        <span class="alert-warning small pull-right" *ngIf="baselineWarnings.flaError !== null">{{baselineWarnings.flaError}}</span>
+      </div>
+      <div class="form-group">
+        <label for="modificationFLA">Modification Full Load Amps
+          <a class="form-text small click-link" *ngIf="!disableModifiedFLA()" id="flaHelp" (click)="getModificationFLA()">Estimate
+            Full-Load Amps</a>
+        </label>
+        <div class="input-group">
+          <input type="number" name="modificationFLA" class="form-control number-input-field" id="modificationFLA"
+            (focus)="focusField('fullLoadAmps')" (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanMotor.fullLoadAmps"
+            [disabled]="fsat.modifications[exploreModIndex].fsat.fanMotor.optimize">
+          <span class="input-group-addon units">A</span>
+        </div>
+        <span class="alert-warning small pull-right" *ngIf="modificationWarnings.flaError !== null">{{modificationWarnings.flaError}}</span>
+
       </div>
     </form>
   </li>

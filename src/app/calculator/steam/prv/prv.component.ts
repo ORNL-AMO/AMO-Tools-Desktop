@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { PrvInput, PrvOutput } from '../../../shared/models/steam';
+import { PrvInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PrvService } from './prv.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-prv',

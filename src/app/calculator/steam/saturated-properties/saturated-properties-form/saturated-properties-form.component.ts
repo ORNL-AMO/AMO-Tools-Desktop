@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput } from "../../../../shared/models/steam";
-import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
+import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 import { SteamService } from "../../steam.service";
 
 @Component({

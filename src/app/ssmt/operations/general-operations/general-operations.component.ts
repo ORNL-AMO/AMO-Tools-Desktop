@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { GeneralSteamOperations } from '../../../shared/models/ssmt';
+import { GeneralSteamOperations } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { CompareService } from '../../compare.service';
 

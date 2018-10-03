@@ -1,4 +1,4 @@
-import { OperatingHours, OperatingCosts } from "./operations";
+import { OperatingHours, OperatingCosts } from "../operations";
 
 export interface SSMT {
     name?: string,

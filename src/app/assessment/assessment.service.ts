@@ -5,7 +5,7 @@ import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
-import { SSMT } from '../shared/models/ssmt';
+import { SSMT } from '../shared/models/steam/ssmt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {

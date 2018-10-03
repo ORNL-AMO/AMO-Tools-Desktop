@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { BoilerInput, BoilerOutput } from '../../../shared/models/steam';
+import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
 import { BoilerService } from './boiler.service';
+import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-boiler',

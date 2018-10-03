@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { HeaderOutput, HeaderOutputObj } from '../../../../shared/models/steam';
+import { HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
 import { SteamService } from '../../steam.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
-import { SSMT, BoilerInput } from '../../shared/models/ssmt';
+import { SSMT, BoilerInput } from '../../shared/models/steam/ssmt';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 

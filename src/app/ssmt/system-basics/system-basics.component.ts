@@ -3,7 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-system-basics',

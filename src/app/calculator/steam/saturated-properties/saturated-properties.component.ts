@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SettingsService } from "../../../settings/settings.service";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SaturatedPropertiesOutput, SaturatedPropertiesInput } from '../../../shared/models/steam';
+import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
+import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-saturated-properties',
