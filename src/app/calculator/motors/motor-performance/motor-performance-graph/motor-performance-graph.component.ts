@@ -198,7 +198,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   initColumnTitles() {
     this.columnTitles = ['Motor Shaft Load (%)', 'Current (%)', 'Power Factor (%)', 'Efficiency (%)'];
-
   }
 
   // ========== export/gridline tooltip functions ==========
