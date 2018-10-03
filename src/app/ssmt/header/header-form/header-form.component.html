@@ -72,7 +72,7 @@
 
   <!--Non Highest Pressure-->
   <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0">
-    <label for="desuperheatSteamIntoNextHighest">Flash Condensate Into Header</label>
+    <label for="desuperheatSteamIntoNextHighest">Desuperheat Steam Into Next Highest Header</label>
     <select name="desuperheatSteamIntoNextHighest" class="form-control" id="desuperheatSteamIntoNextHighest" (change)="save()"
       (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest">
       <option [ngValue]=true>Yes</option>
