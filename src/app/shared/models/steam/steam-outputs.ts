@@ -34,7 +34,38 @@ export interface SSMTOutput{
     //heatExchange?: HeatExchange
     //vented steam
     ventedSteam?: SteamPropertiesOutput
-}
+
+
+    //additions may not be needed for results but used for calculations
+    steamToDeaerator: number,
+    lowPressurePRVneed: number,
+    lowPressureSteamVent: number
+
+    mediumPressureSteamNeed: number,
+    lowPressureSteamNeed: number,
+    blowdownFlashLiquid: SteamPropertiesOutput,
+    blowdownGasToLowPressure: SteamPropertiesOutput,
+    condensateReturnVent: SteamPropertiesOutput,
+    inititialReturnCondensate: SteamPropertiesOutput,
+    initialHighPressureCondensate: SteamPropertiesOutput,
+    highPressureSaturatedLiquidEnthalpy: number,
+    intitialMediumPressureCondensate: SteamPropertiesOutput,
+    mediumPressureSaturatedLiquidEnthalpy: number,
+    initialLowPressureCondensate: SteamPropertiesOutput,
+    lowPressureSaturatedLiquidEnthalpy: number,
+    highPressureToLowPressureTurbineFlow: number;
+    highPressureToMediumPressureTurbineFlow: number;
+    mediumPressureToLowPressureTurbineModelFlow: number;
+    mediumPressureSteamRemaining: number;
+    turbineCondensateSteamCooled: SteamPropertiesOutput,
+    siteTotalPowerCost: number,
+    
+    finalHighPressureCondensate: SteamPropertiesOutput,
+    finalMediumPressureCondensate: SteamPropertiesOutput,
+    finalLowPressureCondensate: SteamPropertiesOutput,
+    highPressureSteamGasToMediumPressure: SteamPropertiesOutput,
+    mediumPressureSteamGasToLowPressure: SteamPropertiesOutput
+  }
 
 export interface SSMTOperationsOutput {
     powerBalanceGeneration: number,

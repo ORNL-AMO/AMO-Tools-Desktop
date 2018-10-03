@@ -1,52 +1,49 @@
 import { Injectable } from '@angular/core';
-import { TurbineInput } from '../../shared/models/ssmt';
-import { SSMTOutput } from '../../shared/models/steam-outputs';
+import { TurbineInput } from '../../shared/models/steam/ssmt';
+import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
 
 @Injectable()
 export class BalanceTurbinesService {
-  highPressureToLowPressureTurbineFlow: number;
-  highPressureToMediumPressureTurbineFlow: number;
-  mediumPressureToLowPressureTurbineModelFlow: number;
-  mediumPressureSteamRemaining: number;
+
   constructor() { }
 
 
-  balanceTurbines(_turbineInput: TurbineInput, _ssmtOutputData: SSMTOutput, _mediumPressureSteamNeed: number, _lowPressureSteamNeed: number): SSMTOutput {
-    this.highPressureToLowPressureTurbineFlow = 0;
-    this.highPressureToMediumPressureTurbineFlow = 0;
-    this.mediumPressureToLowPressureTurbineModelFlow = 0;
+  balanceTurbines(_turbineInput: TurbineInput, _ssmtOutputData: SSMTOutput): SSMTOutput {
+    _ssmtOutputData.highPressureToLowPressureTurbineFlow = 0;
+    _ssmtOutputData.highPressureToMediumPressureTurbineFlow = 0;
+    _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow = 0;
 
     //balance medium pressure
     // let mediumPressureSteamNeed: number = this.mediumPressureSteamNeed;
-    this.mediumPressureSteamRemaining = _mediumPressureSteamNeed;
+    _ssmtOutputData.mediumPressureSteamRemaining = _ssmtOutputData.mediumPressureSteamNeed;
 
     //High Pressure to Medium Pressure Turbine
     //check we have a high to medium pressure turbine
     if (_ssmtOutputData.highPressureToMediumPressureTurbine) {
       //balance high pressure to low pressure turbine
-      _ssmtOutputData = this.balanceHighPressureToMediumPressure(_ssmtOutputData, _turbineInput, _mediumPressureSteamNeed);
+      _ssmtOutputData = this.balanceHighPressureToMediumPressure(_ssmtOutputData, _turbineInput);
     }
 
     //High Pressure to Low Pressure Turbine minimum flow
     if (_ssmtOutputData.highPressureToLowPressureTurbine) {
       if (_turbineInput.highToLowTurbine.operationType == 2) {
-        this.highPressureToLowPressureTurbineFlow = 0;
+        _ssmtOutputData.highPressureToLowPressureTurbineFlow = 0;
       } else {
-        this.highPressureToLowPressureTurbineFlow = _turbineInput.highToLowTurbine.operationValue1;
+        _ssmtOutputData.highPressureToLowPressureTurbineFlow = _turbineInput.highToLowTurbine.operationValue1;
       }
     }
 
     //Medium Pressure to Low Pressure Turbine minimum flow
     if (_ssmtOutputData.mediumPressureToLowPressureTurbine) {
       if (_turbineInput.mediumToLowTurbine.operationType == 2) {
-        this.mediumPressureToLowPressureTurbineModelFlow = 0;
+        _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow = 0;
       } else {
-        this.mediumPressureToLowPressureTurbineModelFlow = _turbineInput.highToLowTurbine.operationValue1;
+        _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow = _turbineInput.highToLowTurbine.operationValue1;
       }
     }
 
     //steam need - (high to low pressure flow + medium to low pressure flow)
-    let lowPressureSteamRemaining: number = _lowPressureSteamNeed - (this.highPressureToLowPressureTurbineFlow + this.mediumPressureToLowPressureTurbineModelFlow);
+    let lowPressureSteamRemaining: number = _ssmtOutputData.lowPressureSteamNeed - (_ssmtOutputData.highPressureToLowPressureTurbineFlow + _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow);
     if (_ssmtOutputData.mediumPressureToLowPressurePrv) {
       //TODO: double check we are using outletMassFlow
       //php uses desuperFluidFlow so does it need to be w/ desuperheating?
@@ -64,10 +61,10 @@ export class BalanceTurbinesService {
       let range: number = _turbineInput.highToLowTurbine.operationValue2 - _turbineInput.highToLowTurbine.operationValue1;
       //I couldn't tell you the logic of why this is happening but this is what the php has..
       if (lowPressureSteamRemaining <= (range) || _turbineInput.highToLowTurbine.operationType == 2) {
-        this.highPressureToLowPressureTurbineFlow = lowPressureSteamRemaining + _turbineInput.highToLowTurbine.operationValue1;
+        _ssmtOutputData.highPressureToLowPressureTurbineFlow = lowPressureSteamRemaining + _turbineInput.highToLowTurbine.operationValue1;
         lowPressureSteamRemaining = 0;
       } else {
-        this.highPressureToLowPressureTurbineFlow = _turbineInput.highToLowTurbine.operationValue2;
+        _ssmtOutputData.highPressureToLowPressureTurbineFlow = _turbineInput.highToLowTurbine.operationValue2;
         lowPressureSteamRemaining = lowPressureSteamRemaining - range;
       }
     }
@@ -83,34 +80,34 @@ export class BalanceTurbinesService {
       let range: number = _turbineInput.mediumToLowTurbine.operationValue2 - _turbineInput.mediumToLowTurbine.operationValue1;
       //I couldn't tell you the logic of why this is happening but this is what the php has..
       if (lowPressureSteamRemaining <= (range) || _turbineInput.mediumToLowTurbine.operationType == 2) {
-        this.mediumPressureToLowPressureTurbineModelFlow = lowPressureSteamRemaining + _turbineInput.mediumToLowTurbine.operationValue1;
+        _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow = lowPressureSteamRemaining + _turbineInput.mediumToLowTurbine.operationValue1;
         lowPressureSteamRemaining = 0;
       } else {
-        this.mediumPressureToLowPressureTurbineModelFlow = _turbineInput.mediumToLowTurbine.operationValue2;
+        _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow = _turbineInput.mediumToLowTurbine.operationValue2;
         lowPressureSteamRemaining = lowPressureSteamRemaining - range;
       }
     }
     //update mass flows
-    _ssmtOutputData.highPressureToLowPressureTurbine.massFlow =  this.highPressureToLowPressureTurbineFlow;
-    _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow = this.mediumPressureToLowPressureTurbineModelFlow;
+    _ssmtOutputData.highPressureToLowPressureTurbine.massFlow =  _ssmtOutputData.highPressureToLowPressureTurbineFlow;
+    _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow = _ssmtOutputData.mediumPressureToLowPressureTurbineModelFlow;
     return _ssmtOutputData;
   }
 
-  balanceHighPressureToMediumPressure(_ssmtOutputData: SSMTOutput, _turbineInput: TurbineInput, _mediumPressureSteamNeed: number): SSMTOutput {
+  balanceHighPressureToMediumPressure(_ssmtOutputData: SSMTOutput, _turbineInput: TurbineInput): SSMTOutput {
     //set minimum flow
     if (_turbineInput.highToMediumTurbine.operationType == 2) {
       //balanced header
-      this.highPressureToMediumPressureTurbineFlow = 0;
+      _ssmtOutputData.highPressureToMediumPressureTurbineFlow = 0;
     }
     //all else use operationValue1
     else {
       //fixed power rate
-      this.highPressureToMediumPressureTurbineFlow = _turbineInput.highToMediumTurbine.operationValue1;
+      _ssmtOutputData.highPressureToMediumPressureTurbineFlow = _turbineInput.highToMediumTurbine.operationValue1;
     }
 
-    this.mediumPressureSteamRemaining = _mediumPressureSteamNeed - this.highPressureToMediumPressureTurbineFlow;
-    if (this.mediumPressureSteamRemaining < 0) {
-      this.mediumPressureSteamRemaining = 0;
+    _ssmtOutputData.mediumPressureSteamRemaining = _ssmtOutputData.mediumPressureSteamNeed - _ssmtOutputData.highPressureToMediumPressureTurbineFlow;
+    if (_ssmtOutputData.mediumPressureSteamRemaining < 0) {
+      _ssmtOutputData.mediumPressureSteamRemaining = 0;
     }
 
     //handle variable load
@@ -119,16 +116,16 @@ export class BalanceTurbinesService {
       //operationValue1: low
       let range: number = _turbineInput.highToMediumTurbine.operationValue2 - _turbineInput.highToMediumTurbine.operationValue1;
       //I couldn't tell you the logic of why this is happening but this is what the php has..
-      if (this.mediumPressureSteamRemaining <= (range) || _turbineInput.highToMediumTurbine.operationType == 2) {
-        this.highPressureToMediumPressureTurbineFlow = this.mediumPressureSteamRemaining + _turbineInput.highToMediumTurbine.operationValue1;
-        this.mediumPressureSteamRemaining = 0;
+      if (_ssmtOutputData.mediumPressureSteamRemaining <= (range) || _turbineInput.highToMediumTurbine.operationType == 2) {
+        _ssmtOutputData.highPressureToMediumPressureTurbineFlow = _ssmtOutputData.mediumPressureSteamRemaining + _turbineInput.highToMediumTurbine.operationValue1;
+        _ssmtOutputData.mediumPressureSteamRemaining = 0;
       } else {
-        this.highPressureToMediumPressureTurbineFlow = _turbineInput.highToMediumTurbine.operationValue2;
-        this.mediumPressureSteamRemaining = this.mediumPressureSteamRemaining - range;
+        _ssmtOutputData.highPressureToMediumPressureTurbineFlow = _turbineInput.highToMediumTurbine.operationValue2;
+        _ssmtOutputData.mediumPressureSteamRemaining = _ssmtOutputData.mediumPressureSteamRemaining - range;
       }
     }
     //update the mass flow
-    _ssmtOutputData.highPressureToMediumPressureTurbine.massFlow = this.highPressureToMediumPressureTurbineFlow;
+    _ssmtOutputData.highPressureToMediumPressureTurbine.massFlow = _ssmtOutputData.highPressureToMediumPressureTurbineFlow;
     return _ssmtOutputData;
   }
 }
