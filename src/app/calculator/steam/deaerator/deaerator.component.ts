@@ -84,6 +84,7 @@ export class DeaeratorComponent implements OnInit {
       feedwaterSpecificEnthalpy: 0,
       feedwaterSpecificEntropy: 0,
       feedwaterTemperature: 0,
+      feedwaterVolume: 0,
       inletSteamEnergyFlow: 0,
       inletSteamMassFlow: 0,
       inletSteamPressure: 0,
@@ -104,7 +105,10 @@ export class DeaeratorComponent implements OnInit {
       ventedSteamQuality: 0,
       ventedSteamSpecificEnthalpy: 0,
       ventedSteamSpecificEntropy: 0,
-      ventedSteamTemperature: 0
+      ventedSteamTemperature: 0,
+      ventedSteamVolume: 0,
+      inletSteamVolume: 0,
+      inletWaterVolume: 0
     }
     return emptyResults;
   }
