@@ -542,6 +542,11 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     return color;
   }
 
+  deleteFromTable(i: any) {
+    console.log('deleteFromTable()');
+    console.log('i = ' + i);
+  }
+
 
   buildTable() {
     let i = this.rowData.length + this.deleteCount;
@@ -892,10 +897,11 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
 
   highlightPoint(i: any) {
-    console.log('highlightPoint()');
+    // console.log('highlightPoint()');
   }
 
   unhighlightPoint(i: any) {
-    console.log('unhighlightPoint()');
+    // console.log('unhighlightPoint()');
   }
+
 }
