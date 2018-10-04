@@ -3,8 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
-import { TurbineInput, TurbineOutput } from '../../../shared/models/steam';
+import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
 import { TurbineService } from './turbine.service';
+import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-turbine',

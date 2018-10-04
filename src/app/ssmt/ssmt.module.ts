@@ -25,6 +25,15 @@ import { ModifyConditionsNotesComponent } from './help-panel/modify-conditions-n
 import { BoilerService } from './boiler/boiler.service';
 import { BoilerHelpComponent } from './help-panel/boiler-help/boiler-help.component';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
+import { HeaderService } from './header/header.service';
+import { HeaderFormComponent } from './header/header-form/header-form.component';
+import { TurbineService } from './turbine/turbine.service';
+import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
+import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
+import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
+import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
+import { HeaderHelpComponent } from './help-panel/header-help/header-help.component';
+import { TurbineHelpComponent } from './help-panel/turbine-help/turbine-help.component';
 
 @NgModule({
   imports: [
@@ -53,12 +62,21 @@ import { SuiteDbModule } from '../suiteDb/suiteDb.module';
     AddModificationComponent,
     ModificationListComponent,
     ModifyConditionsNotesComponent,
-    BoilerHelpComponent
+    BoilerHelpComponent,
+    HeaderFormComponent,
+    CondensingTurbineFormComponent,
+    PressureTurbineFormComponent,
+    SsmtDiagramComponent,
+    SsmtSankeyComponent,
+    HeaderHelpComponent,
+    TurbineHelpComponent
   ],
   providers: [
     SsmtService,
     CompareService,
-    BoilerService
+    BoilerService,
+    HeaderService,
+    TurbineService
   ]
 })
 export class SsmtModule { }

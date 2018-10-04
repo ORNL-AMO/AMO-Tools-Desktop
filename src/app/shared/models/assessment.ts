@@ -1,7 +1,7 @@
 import { PSAT } from './psat';
 import { PHAST } from './phast/phast';
 import { FSAT } from './fans';
-import { SSMT } from './ssmt';
+import { SSMT } from './steam/ssmt';
 
 export interface Assessment {
   id?: number,

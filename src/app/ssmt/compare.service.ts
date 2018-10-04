@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SSMT } from '../shared/models/ssmt';
+import { SSMT } from '../shared/models/steam/ssmt';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -170,7 +170,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.fuelType != modification.boiler.fuelType) {
+      if (baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -188,7 +188,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.fuel != modification.boiler.fuel || baseline.boiler.fuelType != modification.boiler.fuelType) {
+      if (baseline.boilerInput.fuel != modification.boilerInput.fuel || baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -206,7 +206,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.combustionEfficiency != modification.boiler.combustionEfficiency) {
+      if (baseline.boilerInput.combustionEfficiency != modification.boilerInput.combustionEfficiency) {
         return true;
       } else {
         return false;
@@ -224,7 +224,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.blowdownRate != modification.boiler.blowdownRate) {
+      if (baseline.boilerInput.blowdownRate != modification.boilerInput.blowdownRate) {
         return true;
       } else {
         return false;
@@ -242,7 +242,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.blowdownFlashed != modification.boiler.blowdownFlashed) {
+      if (baseline.boilerInput.blowdownFlashed != modification.boilerInput.blowdownFlashed) {
         return true;
       } else {
         return false;
@@ -260,7 +260,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.preheatMakeupWater != modification.boiler.preheatMakeupWater) {
+      if (baseline.boilerInput.preheatMakeupWater != modification.boilerInput.preheatMakeupWater) {
         return true;
       } else {
         return false;
@@ -278,7 +278,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.steamTemperature != modification.boiler.steamTemperature) {
+      if (baseline.boilerInput.steamTemperature != modification.boilerInput.steamTemperature) {
         return true;
       } else {
         return false;
@@ -296,7 +296,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.deaeratorVentRate != modification.boiler.deaeratorVentRate) {
+      if (baseline.boilerInput.deaeratorVentRate != modification.boilerInput.deaeratorVentRate) {
         return true;
       } else {
         return false;
@@ -314,7 +314,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.deaeratorPressure != modification.boiler.deaeratorPressure) {
+      if (baseline.boilerInput.deaeratorPressure != modification.boilerInput.deaeratorPressure) {
         return true;
       } else {
         return false;
@@ -332,7 +332,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boiler.approachTemperature != modification.boiler.approachTemperature) {
+      if (baseline.boilerInput.approachTemperature != modification.boilerInput.approachTemperature) {
         return true;
       } else {
         return false;
@@ -341,4 +341,7 @@ export class CompareService {
       return false;
     }
   }
+
+
+  //HEADER
 }

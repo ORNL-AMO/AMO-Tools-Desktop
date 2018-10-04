@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup, Validators } from '../../../../../../node_modules/@angular/forms';
-import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam';
+import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
 
 @Component({

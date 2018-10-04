@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { SSMT } from '../../shared/models/ssmt';
+import { SSMT } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 
 @Component({

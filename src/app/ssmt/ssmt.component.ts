@@ -9,7 +9,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, Boiler } from '../shared/models/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
@@ -227,8 +227,18 @@ export class SsmtComponent implements OnInit {
     })
   }
 
-  saveBoiler(boiler: Boiler){
-    this._ssmt.boiler = boiler;
+  saveBoiler(boilerData: BoilerInput) {
+    this._ssmt.boilerInput = boilerData;
+    this.save();
+  }
+
+  saveHeaderData(headerInput: HeaderInput) {
+    this._ssmt.headerInput = headerInput;
+    this.save();
+  }
+
+  saveTurbineData(turbineData: TurbineInput){
+    this._ssmt.turbineInput = turbineData;
     this.save();
   }
 
@@ -270,6 +280,7 @@ export class SsmtComponent implements OnInit {
     this.isModalOpen = true;
     this.addNewModal.show();
   }
+
   closeAddNewModal() {
     this.isModalOpen = false;
     this.ssmtService.openNewModificationModal.next(false);
@@ -278,14 +289,16 @@ export class SsmtComponent implements OnInit {
 
   saveNewMod(modification: Modification) {
     this._ssmt.modifications.push(modification);
-    this.compareService.setCompareVals(this._ssmt, this._ssmt.modifications.length - 1);
+    this.modificationIndex = this._ssmt.modifications.length - 1;
     this.save();
     this.closeAddNewModal();
   }
+
   selectModificationModal() {
     this.isModalOpen = true;
     this.changeModificationModal.show();
   }
+  
   closeSelectModification() {
     this.isModalOpen = false;
     this.ssmtService.openModificationSelectModal.next(false);

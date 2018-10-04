@@ -1,0 +1,94 @@
+<label class="group-label">
+  {{headerLabel}}
+</label>
+<form [formGroup]="headerForm">
+  <div class="form-group">
+    <label for="pressure">Pressure</label>
+    <div class="input-group">
+      <input name="pressure" type="number" step="any" class="form-control" id="pressure" (input)="save()" [readonly]="!selected"
+        formControlName="pressure" (focus)="focusField('pressure')" (blur)="focusOut()">
+      <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="processSteamUsage">Process Steam Usage</label>
+    <div class="input-group">
+      <input name="processSteamUsage" type="number" step="any" class="form-control" id="processSteamUsage" (input)="save()"
+        [readonly]="!selected" formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')" (blur)="focusOut()">
+      <span class="units input-group-addon">{{settings.steamMassFlowMeasurement}}</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="condensationRecoveryRate">Condensate Recovery Rate</label>
+    <div class="input-group">
+      <input name="condensationRecoveryRate" type="number" step="any" class="form-control" id="condensationRecoveryRate"
+        (input)="save()" [readonly]="!selected" formControlName="condensationRecoveryRate" (focus)="focusField('condensationRecoveryRate')"
+        (blur)="focusOut()">
+      <span class="units input-group-addon">%</span>
+    </div>
+  </div>
+
+  <!--Highest Pressure-->
+  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value == 0">
+    <label for="condensateReturnTemperature">Condensate Return Temperature</label>
+    <div class="input-group">
+      <input name="condensateReturnTemperature" type="number" step="any" class="form-control" id="condensateReturnTemperature"
+        (input)="save()" [readonly]="!selected" formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
+        (blur)="focusOut()">
+      <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value == 0">
+    <label for="flashCondensateReturn">Flash Condensate Return</label>
+    <select name="flashCondensateReturn" class="form-control" id="flashCondensateReturn" (change)="save()" (focus)="focusField('flashCondensateReturn')"
+      (blur)="focusOut()" formControlName="flashCondensateReturn">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+
+  <!--Non Highest Pressure-->
+  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0">
+    <label for="flashCondensateIntoHeader">Flash Condensate Into Header</label>
+    <select name="flashCondensateIntoHeader" class="form-control" id="flashCondensateIntoHeader" (change)="save()"
+      (focus)="focusField('flashCondensateIntoHeader')" (blur)="focusOut()" formControlName="flashCondensateIntoHeader">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+
+  <!--ALL Headers-->
+  <div class="form-group">
+    <label for="heatLoss">Heat Loss</label>
+    <div class="input-group">
+      <input name="heatLoss" type="number" step="any" class="form-control" id="heatLoss" (input)="save()" [readonly]="!selected"
+        formControlName="heatLoss" (focus)="focusField('heatLoss')" (blur)="focusOut()">
+      <span class="units input-group-addon">%</span>
+    </div>
+  </div>
+
+  <!--Non Highest Pressure-->
+  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0">
+    <label for="desuperheatSteamIntoNextHighest">Desuperheat Steam Into
+      <span *ngIf="headerForm.controls.pressureIndex.value == 1">Highest Pressure</span>
+      <span *ngIf="headerForm.controls.pressureIndex.value == 2">Medium Pressure</span>
+      Header</label>
+    <select name="desuperheatSteamIntoNextHighest" class="form-control" id="desuperheatSteamIntoNextHighest" (change)="save()"
+      (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0 && headerForm.controls.desuperheatSteamTemperature.value == true">
+    <label for="desuperheatSteamTemperature">Desuperheat Temperature</label>
+    <div class="input-group">
+      <input name="desuperheatSteamTemperature" type="number" step="any" class="form-control" id="desuperheatSteamTemperature"
+        (input)="save()" [readonly]="!selected" formControlName="desuperheatSteamTemperature" (focus)="focusField('desuperheatSteamTemperature')"
+        (blur)="focusOut()">
+      <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span>
+    </div>
+  </div>
+</form>
