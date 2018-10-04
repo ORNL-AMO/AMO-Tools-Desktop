@@ -78,4 +78,19 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  save(){
+    let tmpHeadersArr: Array<Header> = new Array<Header>();
+    this.headerForms.forEach(form => {
+      let tmpHeader: Header;
+      if(form.controls.pressureIndex.value == 0){
+        tmpHeader = this.headerService.getHighestPressureObjFromForm(form);
+      }else{
+        tmpHeader = this.headerService.initHeaderObjFromForm(form);
+      }
+      tmpHeadersArr.push(tmpHeader);
+    })
+    this.headerInput.headers = tmpHeadersArr;
+    this.emitSave.emit(this.headerInput);
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
-import { SSMT, BoilerInput } from '../../shared/models/steam/ssmt';
+import { SSMT, BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
@@ -73,23 +73,18 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  // saveBaselineFanSetup(newSetup: FanSetup) {
-  //   this.assessment.fsat.fanSetup = newSetup;
-  //   this.saveAssessment();
-  // }
-
-  // saveBaselineFanMotor(newFanMotor: FanMotor) {
-  //   this.assessment.fsat.fanMotor = newFanMotor;
-  //   this.saveAssessment();
-  // }
-
-  // saveBaselineFieldData(newFieldData: FieldData) {
-  //   this.assessment.fsat.fieldData = newFieldData;
-  //   this.saveAssessment();
-  // }
+  saveBaselineHeader(newHeaderInput: HeaderInput){
+    this.ssmt.headerInput = newHeaderInput;
+    this.saveAssessment();
+  }
 
   saveModBoiler(newBoiler: BoilerInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.boilerInput = newBoiler;
+    this.saveAssessment();
+  }
+
+  saveModHeader(newHeaderInput: HeaderInput){
+    this.ssmt.modifications[this.modificationIndex].ssmt.headerInput = newHeaderInput;
     this.saveAssessment();
   }
 

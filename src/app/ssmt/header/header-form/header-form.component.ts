@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService } from '../header.service';
+import { SsmtService } from '../../ssmt.service';
 
 @Component({
   selector: 'app-header-form',
@@ -17,9 +18,10 @@ export class HeaderFormComponent implements OnInit {
   settings: Settings;
   @Input()
   numberOfHeaders: number;
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
   headerLabel: string;
-  constructor(private headerService: HeaderService) { }
+  constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.headerLabel = this.headerService.getHeaderLabel(this.headerForm.controls.pressureIndex.value, this.numberOfHeaders);
@@ -31,15 +33,15 @@ export class HeaderFormComponent implements OnInit {
     }
   }
 
-  focusField(){
-
+  focusField(str: string) {
+    this.ssmtService.currentField.next(str);
   }
 
-  focusOut(){
-
+  focusOut() {
+    this.ssmtService.currentField.next('default');
   }
 
   save(){
-
+    this.emitSave.emit(true);
   }
 }

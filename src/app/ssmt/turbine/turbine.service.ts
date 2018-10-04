@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TurbineInput, PressureTurbine, CondensingTurbine } from '../../shared/models/ssmt';
+import { TurbineInput, PressureTurbine, CondensingTurbine } from '../../shared/models/steam/ssmt';
 
 @Injectable()
 export class TurbineService {

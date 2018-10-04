@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HeaderInput, Header } from '../../shared/models/ssmt';
+import { HeaderInput, Header } from '../../shared/models/steam/ssmt';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable()
@@ -56,7 +56,7 @@ export class HeaderService {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,
       condensationRecoveryRate: form.controls.condensationRecoveryRate.value,
-      heatLoss: form.controls.presheatLossure.value,
+      heatLoss: form.controls.heatLoss.value,
       pressureIndex: form.controls.pressureIndex.value,
       condensateReturnTemperature: form.controls.condensateReturnTemperature.value,
       flashCondensateReturn: form.controls.flashCondensateReturn.value
@@ -81,7 +81,7 @@ export class HeaderService {
       pressure: form.controls.pressure.value,
       processSteamUsage: form.controls.processSteamUsage.value,
       condensationRecoveryRate: form.controls.condensationRecoveryRate.value,
-      heatLoss: form.controls.presheatLossure.value,
+      heatLoss: form.controls.heatLoss.value,
       pressureIndex: form.controls.pressureIndex.value,
       flashCondensateIntoHeader: form.controls.flashCondensateIntoHeader.value,
       desuperheatSteamIntoNextHighest: form.controls.desuperheatSteamIntoNextHighest.value,
