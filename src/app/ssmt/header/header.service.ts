@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HeaderInput, Header } from '../../shared/models/ssmt';
+import { HeaderInput, Header } from '../../shared/models/steam/ssmt';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable()

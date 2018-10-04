@@ -356,7 +356,7 @@ export class RunModelService {
   }
 
   flashMediumToLowPressureCondensate(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
-    _ssmtOutputData.mediumPressureCondesnateFlashTank = this.steamService.flashTank(
+    _ssmtOutputData.mediumPressureCondensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: _ssmtOutputData.finalMediumPressureCondensate.pressure,
         quantityValue: _ssmtOutputData.finalMediumPressureCondensate.specificEnthalpy,
@@ -367,22 +367,22 @@ export class RunModelService {
       _settings
     );
     _ssmtOutputData.mediumPressureSteamGasToLowPressure = {
-      pressure: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasPressure,
-      temperature: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasTemperature,
-      specificEnthalpy: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasSpecificEnthalpy,
-      specificEntropy: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasSpecificEntropy,
-      quality: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasQuality,
-      massFlow: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasMassFlow,
-      energyFlow: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletGasEnergyFlow
+      pressure: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasPressure,
+      temperature: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasTemperature,
+      specificEnthalpy: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasSpecificEnthalpy,
+      specificEntropy: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasSpecificEntropy,
+      quality: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasQuality,
+      massFlow: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasMassFlow,
+      energyFlow: _ssmtOutputData.mediumPressureCondensateFlashTank.outletGasEnergyFlow
     }
     _ssmtOutputData.finalHighPressureCondensate = {
-      pressure: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidPressure,
-      temperature: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidTemperature,
-      specificEnthalpy: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidSpecificEnthalpy,
-      specificEntropy: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidSpecificEntropy,
-      quality: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidQuality,
-      massFlow: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidMassFlow,
-      energyFlow: _ssmtOutputData.mediumPressureCondesnateFlashTank.outletLiquidEnergyFlow
+      pressure: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidPressure,
+      temperature: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidTemperature,
+      specificEnthalpy: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidSpecificEnthalpy,
+      specificEntropy: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidSpecificEntropy,
+      quality: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidQuality,
+      massFlow: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidMassFlow,
+      energyFlow: _ssmtOutputData.mediumPressureCondensateFlashTank.outletLiquidEnergyFlow
     }
     return _ssmtOutputData;
   }
@@ -464,7 +464,7 @@ export class RunModelService {
     //setup heat loss values
     _ssmtOutputData.lowPressureHeader = this.modelerUtilitiesService.setHeatLoss(_ssmtOutputData.lowPressureHeader, _lowPressureHeaderInput.heatLoss, _settings);
     //low pressure steam vent may come from deaerator "Vented Steam"
-    _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _ssmtOutputData.deaerator.ventedSteamMassFlow;
+    _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _ssmtOutputData.deaeratorOutput.ventedSteamMassFlow;
     return _ssmtOutputData;
   }
 
