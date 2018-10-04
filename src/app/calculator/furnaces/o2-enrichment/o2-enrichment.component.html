@@ -30,27 +30,11 @@
     <div class="d-flex mr-2 ml-2">
       <app-o2-enrichment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-o2-enrichment-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="o2EnrichmentGraph">
-        <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput"
-          [lines]="lines" [settings]="settings"></app-o2-enrichment-graph>
-        <table class="table table-bordered" style="margin-top: 50px;">
-          <thead>
-            <tr>
-              <th class="text-center small">Key</th>
-              <th class="text-center small">O
-                <sub>2</sub> in Air</th>
-              <th class="text-center small">Fuel Savings</th>
-              <th class="text-center small">Combustion Temp</th>
-              <th class="text-center small">Flue O
-                <sub>2</sub>
-              </th>
-              <th class="text-center small">Flue Temp</th>
-            </tr>
-          </thead>
-          <tbody id="lineDetails">
-          </tbody>
-        </table>
+        <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" class="w-100" [o2Enrichment]="o2Enrichment"
+          [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" [settings]="settings"></app-o2-enrichment-graph>
         <div class="alert alert-info alert-disclaimer">
-          <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the value of available
+          <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the
+          value of available
           heat calculations for oxygen enriched air case.
         </div>
       </div>
