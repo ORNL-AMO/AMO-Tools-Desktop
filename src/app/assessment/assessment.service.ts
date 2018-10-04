@@ -323,12 +323,72 @@ export class AssessmentService {
         makeUpWaterCost: 10.00,
         electricityCost: .080
       },
-      generalSteamOperations:{
+      generalSteamOperations: {
         sitePowerImport: 0,
         makeUpWaterTemperature: 0
       },
       implementationCosts: 0.0,
-      equipmentNotes: ''
+      equipmentNotes: '',
+      turbineInput: {
+        condensingTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          condenserPressure: undefined,
+          operationType: 0,
+          operationValue: undefined,
+          useTurbine: true,
+        },
+        highToLowTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        },
+        highToMediumTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        },
+        mediumToLowTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        }
+      },
+      headerInput: {
+        numberOfHeaders: 1,
+        headers: [
+          {
+            pressure: undefined,
+            processSteamUsage: undefined,
+            condensationRecoveryRate: undefined,
+            heatLoss: undefined,
+            pressureIndex: 0,
+            condensateReturnTemperature: undefined,
+            flashCondensateReturn: false
+          }
+        ]
+      },
+      boilerInput: {
+        fuelType: 1,
+        fuel: 1,
+        combustionEfficiency: undefined,
+        blowdownRate: undefined,
+        blowdownFlashed: undefined,
+        preheatMakeupWater: undefined,
+        steamTemperature: undefined,
+        deaeratorVentRate: undefined,
+        deaeratorPressure: undefined,
+        approachTemperature: undefined
+      }
     }
   }
 }

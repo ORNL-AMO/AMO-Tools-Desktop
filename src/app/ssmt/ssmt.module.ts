@@ -32,6 +32,8 @@ import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-for
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
 import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
+import { HeaderHelpComponent } from './help-panel/header-help/header-help.component';
+import { TurbineHelpComponent } from './help-panel/turbine-help/turbine-help.component';
 
 @NgModule({
   imports: [
@@ -65,7 +67,9 @@ import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
     SsmtDiagramComponent,
-    SsmtSankeyComponent
+    SsmtSankeyComponent,
+    HeaderHelpComponent,
+    TurbineHelpComponent
   ],
   providers: [
     SsmtService,

@@ -3,7 +3,7 @@
 </label>
 <form [formGroup]="headerForm">
   <div class="form-group">
-    <label for="blowdownRate">Pressure</label>
+    <label for="pressure">Pressure</label>
     <div class="input-group">
       <input name="pressure" type="number" step="any" class="form-control" id="pressure" (input)="save()" [readonly]="!selected"
         formControlName="pressure" (focus)="focusField('pressure')" (blur)="focusOut()">
