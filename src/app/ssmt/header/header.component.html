@@ -6,7 +6,7 @@
     <form>
       <div class="form-group">
         <label for="numberOfHeaders">Number Of Headers</label>
-        <select name="numberOfHeaders" class="form-control" id="numberOfHeaders" (change)="setNumberOfHeaders()"
+        <select [disabled]="!inSetup || !selected" name="numberOfHeaders" class="form-control" id="numberOfHeaders" (change)="setNumberOfHeaders()"
           (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
           <option [ngValue]="1">1</option>
           <option [ngValue]="2">2</option>

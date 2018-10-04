@@ -227,12 +227,12 @@ export class SsmtComponent implements OnInit {
     })
   }
 
-  saveBoiler(boilerData: BoilerInput){
+  saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
     this.save();
   }
 
-  saveHeaderData(headerInput: HeaderInput){
+  saveHeaderData(headerInput: HeaderInput) {
     this._ssmt.headerInput = headerInput;
     this.save();
   }
@@ -282,8 +282,10 @@ export class SsmtComponent implements OnInit {
   }
 
   saveNewMod(modification: Modification) {
+    console.log(modification);
     this._ssmt.modifications.push(modification);
-    this.compareService.setCompareVals(this._ssmt, this._ssmt.modifications.length - 1);
+    this.modificationIndex = this._ssmt.modifications.length - 1;
+
     this.save();
     this.closeAddNewModal();
   }

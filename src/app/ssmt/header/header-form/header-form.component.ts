@@ -25,11 +25,42 @@ export class HeaderFormComponent implements OnInit {
 
   ngOnInit() {
     this.headerLabel = this.headerService.getHeaderLabel(this.headerForm.controls.pressureIndex.value, this.numberOfHeaders);
+    if (this.selected == false) {
+      this.disableForm();
+    } else {
+      this.enableForm();
+    }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
       this.headerLabel = this.headerService.getHeaderLabel(this.headerForm.controls.pressureIndex.value, this.numberOfHeaders);
+    }
+
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected == false) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+  }
+
+  enableForm() {
+    if (this.headerForm.controls.pressureIndex.value == 0) {
+      this.headerForm.controls.flashCondensateReturn.enable();
+    } else {
+      this.headerForm.controls.flashCondensateIntoHeader.enable();
+      this.headerForm.controls.desuperheatSteamIntoNextHighest.enable();
+    }
+  }
+
+  disableForm() {
+    if (this.headerForm.controls.pressureIndex.value == 0) {
+      this.headerForm.controls.flashCondensateReturn.disable();
+    } else {
+      this.headerForm.controls.flashCondensateIntoHeader.disable();
+      this.headerForm.controls.desuperheatSteamIntoNextHighest.disable();
     }
   }
 
@@ -41,7 +72,7 @@ export class HeaderFormComponent implements OnInit {
     this.ssmtService.currentField.next('default');
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

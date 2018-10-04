@@ -341,4 +341,7 @@ export class CompareService {
       return false;
     }
   }
+
+
+  //HEADER
 }
