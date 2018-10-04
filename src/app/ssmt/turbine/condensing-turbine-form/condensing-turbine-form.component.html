@@ -1,8 +1,8 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()"
-        (focus)="focusField('useTurbine')">
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')"
+        [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
       Condensing Turbine
     </div>
   </label>
@@ -12,7 +12,7 @@
       <div class="input-group">
         <input name="isentropicEfficiency" type="number" step="any" class="form-control" id="isentropicEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')"
-          (blur)="focusOut()">
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
     </div>
@@ -22,7 +22,7 @@
       <div class="input-group">
         <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
-          (blur)="focusOut()">
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
     </div>
@@ -31,7 +31,8 @@
       <label for="condenserPressure">Condenser Pressure</label>
       <div class="input-group">
         <input name="condenserPressure" type="number" step="any" class="form-control" id="condenserPressure" (input)="save()"
-          [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()">
+          [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()"
+          [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
       </div>
     </div>
@@ -39,7 +40,7 @@
     <div class="form-group">
       <label for="operationType">Operation Type</label>
       <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
-        (blur)="focusOut()" formControlName="operationType">
+        (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
@@ -51,7 +52,8 @@
       </label>
       <div class="input-group">
         <input name="operationValue" type="number" step="any" class="form-control" id="operationValue" (input)="save()"
-          [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')" (blur)="focusOut()">
+          [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')" (blur)="focusOut()"
+          [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
           <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>

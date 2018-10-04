@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SSMT } from '../shared/models/steam/ssmt';
+import { SSMT, PressureTurbine } from '../shared/models/steam/ssmt';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -29,30 +29,30 @@ export class CompareService {
   }
 
   //operations
-  checkOperationsDifferent(baseline?: SSMT, modification?: SSMT): boolean{
-    if(!baseline){
+  checkOperationsDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
       baseline = this.baselineSSMT;
     }
-    if(!modification){
+    if (!modification) {
       modification = this.modifiedSSMT;
     }
 
-    if(baseline && modification){
+    if (baseline && modification) {
       return (
         this.isSitePowerImportDifferent(baseline, modification) ||
-        this.isMakeUpWaterTemperatureDifferent(baseline, modification) || 
-        this.isHoursPerYearDifferent(baseline, modification) || 
-        this.isFuelCostDifferent(baseline, modification) || 
-        this.isElectricityCostDifferent(baseline, modification) || 
+        this.isMakeUpWaterTemperatureDifferent(baseline, modification) ||
+        this.isHoursPerYearDifferent(baseline, modification) ||
+        this.isFuelCostDifferent(baseline, modification) ||
+        this.isElectricityCostDifferent(baseline, modification) ||
         this.isMakeUpWaterCostsDifferent(baseline, modification)
       )
-    }else{
+    } else {
       return false;
     }
   }
 
   // sitePowerImport
-  isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isSitePowerImportDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -70,7 +70,7 @@ export class CompareService {
     }
   }
   // makeUpWaterTemperature
-  isMakeUpWaterTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isMakeUpWaterTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -88,7 +88,7 @@ export class CompareService {
     }
   }
   // hoursPerYear
-  isHoursPerYearDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isHoursPerYearDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -106,7 +106,7 @@ export class CompareService {
     }
   }
   // fuelCost
-  isFuelCostDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isFuelCostDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -124,7 +124,7 @@ export class CompareService {
     }
   }
   // electricityCost
-  isElectricityCostDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isElectricityCostDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -142,7 +142,7 @@ export class CompareService {
     }
   }
   // makeUpWaterCost
-  isMakeUpWaterCostsDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isMakeUpWaterCostsDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -162,7 +162,7 @@ export class CompareService {
 
   //boiler
   // fuelType
-  isFuelTypeDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isFuelTypeDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -180,7 +180,7 @@ export class CompareService {
     }
   }
   // fuel
-  isFuelDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isFuelDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -198,7 +198,7 @@ export class CompareService {
     }
   }
   // combustionEfficiency
-  isCombustionEfficiencyDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isCombustionEfficiencyDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -216,7 +216,7 @@ export class CompareService {
     }
   }
   // blowdownRate
-  isBlowdownRateDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isBlowdownRateDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -234,7 +234,7 @@ export class CompareService {
     }
   }
   // blowdownFlashed
-  isBlowdownFlashedDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isBlowdownFlashedDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -252,7 +252,7 @@ export class CompareService {
     }
   }
   // preheatMakeupWater
-  isPreheatMakeupWaterDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isPreheatMakeupWaterDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -270,7 +270,7 @@ export class CompareService {
     }
   }
   // steamTemperature
-  isSteamTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isSteamTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -288,7 +288,7 @@ export class CompareService {
     }
   }
   // deaeratorVentRate
-  isDeaeratorVentRateDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isDeaeratorVentRateDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -306,7 +306,7 @@ export class CompareService {
     }
   }
   // deaeratorPressure
-  isDeaeratorPressureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isDeaeratorPressureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -324,7 +324,7 @@ export class CompareService {
     }
   }
   // approachTemperature
-  isApproachTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean{
+  isApproachTemperatureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
       baseline = this.baselineSSMT;
     }
@@ -344,4 +344,275 @@ export class CompareService {
 
 
   //HEADER
+
+  //TURBINES
+  checkTurbinesDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+
+    if (baseline && modification) {
+      return (
+        this.isCondensingTurbineDifferent() ||
+        this.isHighToMediumTurbineDifferent() ||
+        this.isHighToLowTurbineDifferent() ||
+        this.isMediumToLowTurbineDifferent()
+      )
+    } else {
+      return false;
+    }
+  }
+
+  isCondensingTurbineDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (
+        this.isIsentropicEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+        this.isGenerationEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+        this.isCondenserPressureDifferent('condensingTurbine', baseline, modification) ||
+        this.isOperationTypeDifferent('condensingTurbine', baseline, modification) ||
+        this.isOperationValueDifferent(baseline, modification) ||
+        this.isUseTurbineDifferent('condensingTurbine', baseline, modification)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isHighToMediumTurbineDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (this.isPressureTurbineDifferent('highToMediumTurbine', baseline, modification)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isHighToLowTurbineDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (this.isPressureTurbineDifferent('highToLowTurbine', baseline, modification)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isMediumToLowTurbineDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (this.isPressureTurbineDifferent('mediumToLowTurbine', baseline, modification)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  
+  isPressureTurbineDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT) {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (
+        this.isIsentropicEfficiencyDifferent(turbineTypeString, baseline, modification) ||
+        this.isGenerationEfficiencyDifferent(turbineTypeString, baseline, modification) ||
+        this.isOperationTypeDifferent(turbineTypeString, baseline, modification) ||
+        this.isOperationValue1Different(turbineTypeString, baseline, modification) ||
+        this.isOperationValue2Different(turbineTypeString, baseline, modification) ||
+        this.isUseTurbineDifferent(turbineTypeString, baseline, modification)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isIsentropicEfficiencyDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].isentropicEfficiency != modification.turbineInput[turbineTypeString].isentropicEfficiency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isGenerationEfficiencyDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].generationEfficiency != modification.turbineInput[turbineTypeString].generationEfficiency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isCondenserPressureDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].condenserPressure != modification.turbineInput[turbineTypeString].condenserPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isOperationTypeDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].operationType != modification.turbineInput[turbineTypeString].operationType) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isOperationValueDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput.condensingTurbine.operationValue != modification.turbineInput.condensingTurbine.operationValue) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isUseTurbineDifferent(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].useTurbine != modification.turbineInput[turbineTypeString].useTurbine) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isOperationValue1Different(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].operationValue1 != modification.turbineInput[turbineTypeString].operationValue1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  isOperationValue2Different(turbineTypeString: string, baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.turbineInput[turbineTypeString].operationValue2 != modification.turbineInput[turbineTypeString].operationValue2) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
 }

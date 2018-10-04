@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
 import { CondensingTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-condensing-turbine-form',
@@ -19,8 +20,11 @@ export class CondensingTurbineFormComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
+
   turbineOptionTypes: Array<Quantity>;
-  constructor(private ssmtService: SsmtService) {
+  constructor(private ssmtService: SsmtService, private compareService: CompareService) {
   }
 
   ngOnInit() {
@@ -60,5 +64,56 @@ export class CondensingTurbineFormComponent implements OnInit {
 
   focusOut() {
     this.ssmtService.currentField.next('default');
+  }
+
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  isIsentropicEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isIsentropicEfficiencyDifferent('condensingTurbine');
+    } else {
+      return false;
+    }
+  }
+
+  isGenerationEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isGenerationEfficiencyDifferent('condensingTurbine');
+    } else {
+      return false;
+    }
+  }
+  isCondenserPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isCondenserPressureDifferent('condensingTurbine');
+    } else {
+      return false;
+    }
+  }
+  isOperationTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperationTypeDifferent('condensingTurbine');
+    } else {
+      return false;
+    }
+  }
+  isOperationValueDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperationValueDifferent();
+    } else {
+      return false;
+    }
+  }
+  isUseTurbineDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isUseTurbineDifferent('condensingTurbine');
+    } else {
+      return false;
+    }
   }
 }

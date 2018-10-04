@@ -1,8 +1,11 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')">
-      {{turbineTitle}}
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')"
+        [ngClass]="{'indicate-different': isUseTurbineDifferent()}" (change)="save()">
+      <span *ngIf="pressureTurbineString == 'highToLowTurbine'">High Pressure to Low Pressure</span>
+      <span *ngIf="pressureTurbineString == 'highToMediumTurbine'">High Pressure to Medium Pressure</span>
+      <span *ngIf="pressureTurbineString == 'mediumToLowTurbine'">Medium Pressure to Low Pressure</span>
     </div>
   </label>
   <div *ngIf="turbineForm.controls.useTurbine.value == true">
@@ -11,7 +14,7 @@
       <div class="input-group">
         <input name="isentropicEfficiency" type="number" step="any" class="form-control" id="isentropicEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')"
-          (blur)="focusOut()">
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
     </div>
@@ -21,7 +24,7 @@
       <div class="input-group">
         <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
-          (blur)="focusOut()">
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
     </div>
@@ -29,7 +32,7 @@
     <div class="form-group">
       <label for="operationType">Operation Type</label>
       <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
-        (blur)="focusOut()" formControlName="operationType">
+        (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
@@ -43,7 +46,8 @@
       </label>
       <div class="input-group">
         <input name="operationValue1" type="number" step="any" class="form-control" id="operationValue1" (input)="save()"
-          [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')" (blur)="focusOut()">
+          [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')" (blur)="focusOut()"
+          [ngClass]="{'indicate-different': isOperationValue1Different()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4">{{settings.steamMassFlowMeasurement}}</span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>
@@ -58,7 +62,8 @@
       </label>
       <div class="input-group">
         <input name="operationValue2" type="number" step="any" class="form-control" id="operationValue2" (input)="save()"
-          [readonly]="!selected" formControlName="operationValue2" (focus)="focusField('operationValue2')" (blur)="focusOut()">
+          [readonly]="!selected" formControlName="operationValue2" (focus)="focusField('operationValue2')" (blur)="focusOut()"
+          [ngClass]="{'indicate-different': isOperationValue2Different()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 4">{{settings.steamMassFlowMeasurement}}</span>
           <span *ngIf="turbineForm.controls.operationType.value == 3">kW</span>

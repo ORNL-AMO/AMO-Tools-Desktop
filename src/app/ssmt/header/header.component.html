@@ -6,8 +6,8 @@
     <form>
       <div class="form-group">
         <label for="numberOfHeaders">Number Of Headers</label>
-        <select [disabled]="!inSetup || !selected" name="numberOfHeaders" class="form-control" id="numberOfHeaders" (change)="setNumberOfHeaders()"
-          (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
+        <select [disabled]="!inSetup || !selected || modificationExists" name="numberOfHeaders" class="form-control" id="numberOfHeaders"
+          (change)="setNumberOfHeaders()" (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
           <option [ngValue]="1">1</option>
           <option [ngValue]="2">2</option>
           <option [ngValue]="3">3</option>
@@ -15,9 +15,12 @@
           <option [ngValue]="5">5</option> -->
         </select>
       </div>
+      <span class="alert alert-warning w-100 text-center pull-right small" *ngIf="inSetup && modificationExists">Delete
+        Modifications to Adjust Number of Headers</span>
     </form>
     <div *ngFor="let form of headerForms">
-      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders" (emitSave)="save()"></app-header-form>
+      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+        (emitSave)="save()"></app-header-form>
     </div>
   </div>
 </div>

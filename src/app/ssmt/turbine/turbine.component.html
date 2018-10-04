@@ -3,12 +3,13 @@
     <h3>Boiler Details</h3>
   </div>
   <div class="p-3">
-    <app-condensing-turbine-form [turbineForm]="condensingTurbineForm" [settings]="settings" [selected]="selected" (emitSave)="saveCondensingTurbine()"></app-condensing-turbine-form>
+    <app-condensing-turbine-form [turbineForm]="condensingTurbineForm" [settings]="settings" [selected]="selected"
+      (emitSave)="saveCondensingTurbine()" [inSetup]="inSetup"></app-condensing-turbine-form>
     <app-pressure-turbine-form [turbineForm]="highToLowTurbineForm" [settings]="settings" [selected]="selected"
-      [turbineTitle]="'High Pressure to Low Pressure'" (emitSave)="saveHighLowPressureTurbine()"></app-pressure-turbine-form>
+      [pressureTurbineString]="'highToLowTurbine'" (emitSave)="saveHighLowPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
     <app-pressure-turbine-form [turbineForm]="highToMediumTurbineForm" [settings]="settings" [selected]="selected"
-      [turbineTitle]="'High Pressure to Medium Pressure'" (emitSave)="saveHighMediumPressureTurbine()"></app-pressure-turbine-form>
+      [pressureTurbineString]="'highToMediumTurbine'" (emitSave)="saveHighMediumPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
     <app-pressure-turbine-form [turbineForm]="mediumToLowTurbineForm" [settings]="settings" [selected]="selected"
-      [turbineTitle]="'Medium Pressure to Low Pressure'" (emitSave)="saveMediumLowPressureTurbine()"></app-pressure-turbine-form>
+      [pressureTurbineString]="'mediumToLowTurbine'" (emitSave)="saveMediumLowPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
   </div>
 </div>

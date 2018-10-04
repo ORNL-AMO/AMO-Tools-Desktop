@@ -21,7 +21,9 @@ export class HeaderComponent implements OnInit {
   inSetup: boolean;
   @Input()
   selected: boolean;
-
+  @Input()
+  modificationExists: boolean;
+  
   headerForms: Array<FormGroup>;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 

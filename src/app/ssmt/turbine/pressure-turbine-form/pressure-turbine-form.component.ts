@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
 import { PressureTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-pressure-turbine-form',
@@ -18,12 +19,14 @@ export class PressureTurbineFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  turbineTitle: string;
+  pressureTurbineString: string;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Input()
+  inSetup: boolean;
 
   turbineTypeOptions: Array<Quantity>;
-  constructor(private ssmtService: SsmtService) {
+  constructor(private ssmtService: SsmtService, private compareService: CompareService) {
   }
 
   ngOnInit() {
@@ -66,4 +69,53 @@ export class PressureTurbineFormComponent implements OnInit {
     this.ssmtService.currentField.next('default');
   }
 
+  canCompare() {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  isIsentropicEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isIsentropicEfficiencyDifferent(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
+  isGenerationEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isGenerationEfficiencyDifferent(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
+  isOperationTypeDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isOperationTypeDifferent(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
+  isOperationValue1Different() {
+    if (this.canCompare()) {
+      return this.compareService.isOperationValue1Different(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
+  isOperationValue2Different() {
+    if (this.canCompare()) {
+      return this.compareService.isOperationValue2Different(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
+  isUseTurbineDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isUseTurbineDifferent(this.pressureTurbineString);
+    } else {
+      return false;
+    }
+  }
 }
