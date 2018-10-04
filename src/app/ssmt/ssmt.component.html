@@ -11,7 +11,7 @@
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveBoiler($event)"></app-boiler>
       
       <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveHeaderData($event)"></app-header>
-      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [selected]="true" [inSetup]="true" [settings]="settings"></app-turbine>
+      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)"></app-turbine>
     </div>
     <div class="w-50">
       <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>

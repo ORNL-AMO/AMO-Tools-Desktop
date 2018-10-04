@@ -69,7 +69,7 @@ export class TurbineService {
 
   getPressureTurbineFromForm(form: FormGroup): PressureTurbine {
     return {
-      isentropicEfficiency: form.controls.useTurbine.value,
+      isentropicEfficiency: form.controls.isentropicEfficiency.value,
       generationEfficiency: form.controls.generationEfficiency.value,
       operationType: form.controls.operationType.value,
       operationValue1: form.controls.operationValue1.value,

@@ -12,6 +12,8 @@
         (emitSave)="saveBaselineBoiler($event)"></app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings" [headerInput]="ssmt.headerInput"
         (emitSave)="saveBaselineHeader($event)"></app-header>
+      <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings" [turbineInput]="ssmt.turbineInput"
+        (emitSave)="saveBaselineTurbine($event)"></app-turbine>
     </div>
 
     <!-- Modifications Start -->
@@ -27,6 +29,8 @@
         (emitSave)="saveModBoiler($event)"></app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
         (emitSave)="saveModHeader($event)"></app-header>
+      <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings" [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
+        (emitSave)="saveModTurbine($event)"></app-turbine>
     </div>
     <!-- No content message -->
     <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">
