@@ -307,9 +307,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
 
   drawCurve(svg, x, y, line, isFromForm, putOnGraph = true) {
-
-    console.log('line = ');
-    console.log(line);
     line.fuelSavings = 0.0;
     let onGraph = false;
     let data = [];
@@ -412,13 +409,13 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       })
       .on("mousemove", () => {
         this.xPosition = x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        this.updateDetailBoxes();
+        this.buildTable();
         this.moveGuideLine();
       })
       .on("mouseout", () => {
         this.guideLine.style("display", "none");
         this.xPosition = null;
-        this.updateDetailBoxes();
+        this.buildTable();
       });
   }
 
@@ -472,7 +469,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
     this.makeGraph();
     this.redrawLines();
-    this.updateDetailBoxes();
+    this.buildTable();
   }
 
   redrawLines() {
@@ -495,7 +492,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       this.lines[i].o2FlueGas = this.o2Enrichment.o2FlueGas;
       this.lines[i].combAirTemp = this.o2Enrichment.combAirTemp;
       this.lines[i].fuelConsumption = this.o2Enrichment.fuelConsumption;
-
       this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
     }
 
@@ -523,13 +519,10 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       };
 
       this.drawCurve(this.svg, this.x, this.y, line, false);
-
       this.lines.push(line);
-
       this.plotBtn.classed("disabled", true);
       this.change = false;
-
-      this.updateDetailBoxes();
+      this.buildTable();
     }
   }
 
@@ -543,25 +536,24 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
 
   deleteFromTable(i: any) {
-    console.log('deleteFromTable()');
-    console.log('i = ' + i);
+    if (i > 0) {
+      for (let j = i; j < this.rowData.length - 1; j++) {
+        this.rowData[j] = this.rowData[j + 1];
+      }
+      this.rowData.pop();
+      this.deleteLine(i - 1);
+      this.buildTable();
+    }
   }
 
 
   buildTable() {
     let i = this.rowData.length + this.deleteCount;
-    let borderColorIndex = Math.floor(i / this.graphColors.length);
-
-    const format = d3.format(",.1f");
     const format0 = d3.format(',.0f');
     const format1 = d3.format(",.1f");
     const format2 = d3.format(",.2f");
-
-    console.log('lines = ');
-    console.log(this.lines);
     this.rowData = new Array<Array<string>>();
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
-
     const o2EnrichmentPoint = {
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.xPosition,
@@ -573,8 +565,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       combAirTempEnriched: this.mainLine.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption
     };
-    // let borderColorIndex = Math.floor(0 / this.graphColors.length);
-
     let o2InAirData: string = (this.xPosition != null) ? format1(this.xPosition).toString() : format1(this.o2Enrichment.o2CombAirEnriched).toString();
     let fuelSavingsData: string;
     let fuelSavings: number;
@@ -619,7 +609,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
         combAirTempEnriched: this.lines[i].combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption
       };
-
       if (this.xPosition == null) {
         o2EnrichmentPoint.o2CombAirEnriched = this.lines[i].o2CombAirEnriched;
       }
@@ -636,209 +625,6 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
         fillColor: this.lines[i].color
       };
       this.keyColors.push(colors);
-    }
-  }
-
-  updateDetailBoxes() {
-    this.buildTable();
-
-    const format = d3.format(",.1f");
-    const format0 = d3.format(',.0f');
-    const format2 = d3.format(",.2f");
-
-    d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
-
-    const lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
-
-    // Always display mainLine details to detail box
-    lineDetail.append("td")
-      .attr("class", "text-center")
-      .style("padding", "2px")
-      // .style("width", "30px")
-      .style("background-color", this.mainLine.color);
-
-    lineDetail.append("td")
-      .attr("class", "text-center")
-      .style("vertical-align", "middle")
-      .style("font", "13px sans-serif")
-      .style("padding", "2px")
-      .html(() => {
-        if (this.xPosition != null) {
-          return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
-        } else {
-          return "<p style='margin: 0px; font-size: 1vw'>" + format(this.o2Enrichment.o2CombAirEnriched) + "%</p>";
-        }
-      });
-
-    lineDetail.append("td")
-      .attr("class", "text-center fuelSavings")
-      .style("vertical-align", "middle")
-      .style("font", "13px sans-serif")
-      .style("padding", "2px")
-      .html(() => {
-        const o2EnrichmentPoint = {
-          o2CombAir: this.o2Enrichment.o2CombAir,
-          o2CombAirEnriched: this.xPosition,
-          flueGasTemp: this.o2Enrichment.flueGasTemp,
-          flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
-          o2FlueGas: this.o2Enrichment.o2FlueGas,
-          o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
-          combAirTemp: this.o2Enrichment.combAirTemp,
-          combAirTempEnriched: this.mainLine.combAirTempEnriched,
-          fuelConsumption: this.o2Enrichment.fuelConsumption
-        };
-        if (this.xPosition != null) {
-          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
-
-          if (fuelSavings < 0 || fuelSavings > 100) {
-            return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
-          } else {
-            return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
-          }
-        } else {
-          o2EnrichmentPoint.o2CombAirEnriched = this.o2Enrichment.o2CombAirEnriched;
-          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
-
-          if (fuelSavings < 0 || fuelSavings > 100) {
-            return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
-          } else {
-            return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
-          }
-        }
-      });
-
-    lineDetail.append('td')
-      .attr('class', 'text-center')
-      .style("vertical-align", "middle")
-      .style("font", "13px sans-serif")
-      .style('padding', '2px')
-      .html(
-        "<p style='margin: 0px; font-size: 1vw'>" + format0(this.o2Enrichment.combAirTempEnriched) + "&#8457;</p>"
-      );
-    lineDetail.append('td')
-      .attr('class', 'text-center')
-      .style("vertical-align", "middle")
-      .style("font", "13px sans-serif")
-      .style('padding', '2px')
-      .html(
-        "<p style='margin: 0px; font-size: 1vw'>" + format2(this.o2Enrichment.o2FlueGasEnriched) + "%</p>"
-      );
-    lineDetail.append('td')
-      .attr('class', 'text-center')
-      .style("vertical-align", "middle")
-      .style("font", "13px sans-serif")
-      .style('padding', '2px')
-      .html(
-        "<p style='margin: 0px; font-size: 1vw'>" + format0(this.o2Enrichment.flueGasTempEnriched) + "&#8457;</p>"
-      );
-
-    if (this.lines != null) {
-      this.lines.forEach((d, i) => {
-        const lineDetail2 = d3.select('app-o2-enrichment').selectAll('#lineDetails').append('tr');
-
-        lineDetail2.append('td')
-          .attr('class', 'text-center')
-          .style("padding", "2px")
-          .style("width", "40px")
-          .style('background-color', d.color);
-
-        lineDetail2.append('td')
-          .attr('class', 'text-center')
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .html(() => {
-            if (this.xPosition != null) {
-              return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + '%</p>';
-            } else {
-              return "<p style='margin: 0px; font-size: 1vw'>" + format(d.o2CombAirEnriched) + '%</p>';
-            }
-          });
-
-        lineDetail2.append('td')
-          .attr('class', 'text-center fuelSavings')
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .html(() => {
-            const o2EnrichmentPoint = {
-              o2CombAir: this.o2Enrichment.o2CombAir,
-              o2CombAirEnriched: this.xPosition,
-              flueGasTemp: this.o2Enrichment.flueGasTemp,
-              flueGasTempEnriched: d.flueGasTempEnriched,
-              o2FlueGas: this.o2Enrichment.o2FlueGas,
-              o2FlueGasEnriched: d.o2FlueGasEnriched,
-              combAirTemp: this.o2Enrichment.combAirTemp,
-              combAirTempEnriched: d.combAirTempEnriched,
-              fuelConsumption: this.o2Enrichment.fuelConsumption
-            };
-
-            if (this.xPosition == null) {
-              o2EnrichmentPoint.o2CombAirEnriched = d.o2CombAirEnriched;
-            }
-
-            const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
-
-            if (fuelSavings < 0 || fuelSavings > 100) {
-              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
-            } else {
-              return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
-            }
-          });
-
-        lineDetail2.append('td')
-          .attr('class', 'text-center')
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .html(
-            "<p style='margin: 0px; font-size: 1vw'>" + format0(d.combAirTempEnriched) + "&#8457;</p>"
-          );
-        lineDetail2.append('td')
-          .attr('class', 'text-center')
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .html(
-            "<p style='margin: 0px; font-size: 1vw'>" + format(d.o2FlueGasEnriched) + "%</p>"
-          );
-        lineDetail2.append('td')
-          .attr('class', 'text-center')
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .html(
-            "<p style='margin: 0px; font-size: 1vw'>" + format0(d.flueGasTempEnriched) + "&#8457;</p>"
-          );
-
-        const deleteBtn = lineDetail2.append("td")
-          .style("padding", "2px")
-          .style("vertical-align", "middle")
-          .append("div")
-          // .style("padding", "0px")
-          .attr("class", "text-center")
-          .append("button")
-          .attr("class", "btn-sm deleteBtn")
-          .attr("type", "button")
-          // .style("padding", "0px")
-          // .style("width", "20px")
-          // .style("height", "40px")
-          .style("background-color", "#cc0200")
-          .on("click", () => {
-            this.deleteLine(i);
-          })
-          .append("span")
-          .attr("class", "fa fa-minus deleteMinus");
-
-        deleteBtn.select("before")
-          // .style("height", "40px")
-          .style("font-size", "18")
-          .style("vertical-align", "middle")
-          .style("horizontal-align", "middle")
-          .style("background-color", "#cc0200");
-
-      });
     }
   }
 
@@ -895,13 +681,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
   //========== end chart resize functions ==========
 
-
   highlightPoint(i: any) {
-    // console.log('highlightPoint()');
   }
-
   unhighlightPoint(i: any) {
-    // console.log('unhighlightPoint()');
   }
-
 }
