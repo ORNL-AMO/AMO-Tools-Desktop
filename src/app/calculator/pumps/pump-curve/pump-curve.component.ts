@@ -186,6 +186,7 @@ export class PumpCurveComponent implements OnInit {
       this.pumpCurveService.fanPointOne = this.pointOne;
       this.pumpCurveService.fanPointTwo = this.pointTwo;
     }
+    this.pumpCurveService.regEquation.next(null);
     this.calcMethodSubscription.unsubscribe();
     this.regEquationSubscription.unsubscribe();
   }
@@ -197,7 +198,7 @@ export class PumpCurveComponent implements OnInit {
       this.pointOne = this.pumpCurveService.pumpPointOne;
       this.pointTwo = this.pumpCurveService.pumpPointTwo;
     }
-    else if (this.pumpCurveService.pumpCurveData && !this.inAssessment && this.isFan) {
+    else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
       this.pumpCurveForm = this.pumpCurveService.fanCurveData;
       this.curveConstants = this.pumpCurveService.fanCurveConstants;
       this.pointOne = this.pumpCurveService.fanPointOne;
