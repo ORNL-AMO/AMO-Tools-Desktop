@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService } from '../header.service';
 import { SsmtService } from '../../ssmt.service';
+import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-header-form',
@@ -16,15 +17,17 @@ export class HeaderFormComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
+  @Output('emitSave')
+  emitSave = new EventEmitter<HeaderNotHighestPressure | HeaderWithHighestPressure>();
+  @Input()
+  pressureLevel: string;
   @Input()
   numberOfHeaders: number;
-  @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+
   headerLabel: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    this.headerLabel = this.headerService.getHeaderLabel(this.headerForm.controls.pressureIndex.value, this.numberOfHeaders);
     if (this.selected == false) {
       this.disableForm();
     } else {
@@ -33,10 +36,6 @@ export class HeaderFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
-      this.headerLabel = this.headerService.getHeaderLabel(this.headerForm.controls.pressureIndex.value, this.numberOfHeaders);
-    }
-
     if (changes.selected && !changes.selected.isFirstChange()) {
       if (this.selected == false) {
         this.disableForm();
@@ -47,7 +46,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   enableForm() {
-    if (this.headerForm.controls.pressureIndex.value == 0) {
+    if (this.pressureLevel == 'high') {
       this.headerForm.controls.flashCondensateReturn.enable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.enable();
@@ -56,7 +55,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   disableForm() {
-    if (this.headerForm.controls.pressureIndex.value == 0) {
+    if (this.pressureLevel == 'high') {
       this.headerForm.controls.flashCondensateReturn.disable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.disable();
@@ -73,6 +72,12 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(true);
+    if(this.pressureLevel == 'high'){
+      let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
+      this.emitSave.emit(tmpHeader);
+    }else{
+      let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
+      this.emitSave.emit(tmpHeader);
+    }
   }
 }

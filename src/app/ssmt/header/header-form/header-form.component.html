@@ -1,5 +1,7 @@
 <label class="group-label">
-  {{headerLabel}}
+  <span *ngIf="pressureLevel == 'high'">High Pressure Header</span>
+  <span *ngIf="pressureLevel == 'medium'">Medium Pressure Header</span>  
+  <span *ngIf="pressureLevel == 'low'">Low Pressure Header</span>
 </label>
 <form [formGroup]="headerForm">
   <div class="form-group">
@@ -31,7 +33,7 @@
   </div>
 
   <!--Highest Pressure-->
-  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value == 0">
+  <div class="form-group" *ngIf="pressureLevel == 'high'">
     <label for="condensateReturnTemperature">Condensate Return Temperature</label>
     <div class="input-group">
       <input name="condensateReturnTemperature" type="number" step="any" class="form-control" id="condensateReturnTemperature"
@@ -41,7 +43,7 @@
     </div>
   </div>
 
-  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value == 0">
+  <div class="form-group" *ngIf="pressureLevel == 'high'">
     <label for="flashCondensateReturn">Flash Condensate Return</label>
     <select name="flashCondensateReturn" class="form-control" id="flashCondensateReturn" (change)="save()" (focus)="focusField('flashCondensateReturn')"
       (blur)="focusOut()" formControlName="flashCondensateReturn">
@@ -51,7 +53,7 @@
   </div>
 
   <!--Non Highest Pressure-->
-  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0">
+  <div class="form-group" *ngIf="pressureLevel != 'high'">
     <label for="flashCondensateIntoHeader">Flash Condensate Into Header</label>
     <select name="flashCondensateIntoHeader" class="form-control" id="flashCondensateIntoHeader" (change)="save()"
       (focus)="focusField('flashCondensateIntoHeader')" (blur)="focusOut()" formControlName="flashCondensateIntoHeader">
@@ -71,10 +73,10 @@
   </div>
 
   <!--Non Highest Pressure-->
-  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0">
+  <div class="form-group" *ngIf="pressureLevel != 'high'">
     <label for="desuperheatSteamIntoNextHighest">Desuperheat Steam Into
-      <span *ngIf="headerForm.controls.pressureIndex.value == 1">Highest Pressure</span>
-      <span *ngIf="headerForm.controls.pressureIndex.value == 2">Medium Pressure</span>
+      <span *ngIf="numberOfHeaders == 2 && pressureLevel == 'low' || numberOfHeaders == 3 && pressureLevel == 'medium'">Highest Pressure</span>
+      <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'low'">Medium Pressure</span>
       Header</label>
     <select name="desuperheatSteamIntoNextHighest" class="form-control" id="desuperheatSteamIntoNextHighest" (change)="save()"
       (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest">
@@ -82,7 +84,7 @@
       <option [ngValue]=false>No</option>
     </select>
   </div>
-  <div class="form-group" *ngIf="headerForm.controls.pressureIndex.value != 0 && headerForm.controls.desuperheatSteamTemperature.value == true">
+  <div class="form-group" *ngIf="pressureLevel != 'high' && headerForm.controls.desuperheatSteamTemperature.value == true">
     <label for="desuperheatSteamTemperature">Desuperheat Temperature</label>
     <div class="input-group">
       <input name="desuperheatSteamTemperature" type="number" step="any" class="form-control" id="desuperheatSteamTemperature"

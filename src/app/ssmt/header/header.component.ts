@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HeaderInput, Header } from '../../shared/models/steam/ssmt';
+import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
@@ -23,15 +23,16 @@ export class HeaderComponent implements OnInit {
   selected: boolean;
   @Input()
   modificationExists: boolean;
-  
-  headerForms: Array<FormGroup>;
+
+  highPressureForm: FormGroup;
+  mediumPressureForm: FormGroup;
+  lowPressureForm: FormGroup;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     if (!this.headerInput) {
       this.headerInput = this.headerService.initHeaderDataObj();
     }
-    this.headerForms = new Array<FormGroup>();
     this.initForms();
 
   }
@@ -47,15 +48,9 @@ export class HeaderComponent implements OnInit {
   }
 
   initForms() {
-    this.headerInput.headers.forEach(header => {
-      if (header.pressureIndex == 0) {
-        let tmpForm: FormGroup = this.headerService.initHighestPressureHeaderFormFromObj(header);
-        this.headerForms.push(tmpForm);
-      } else {
-        let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(header);
-        this.headerForms.push(tmpForm);
-      }
-    })
+    this.highPressureForm = this.headerService.initHighestPressureHeaderFormFromObj(this.headerInput.highPressure);
+    this.mediumPressureForm = this.headerService.initHeaderFormFromObj(this.headerInput.mediumPressure);
+    this.lowPressureForm = this.headerService.initHeaderFormFromObj(this.headerInput.lowPressure);
   }
 
   focusField(str: string) {
@@ -67,33 +62,37 @@ export class HeaderComponent implements OnInit {
   }
 
   setNumberOfHeaders() {
-    if (this.headerInput.numberOfHeaders < this.headerForms.length) {
-      for (let i = this.headerForms.length; i > this.headerInput.numberOfHeaders; i--) {
-        this.headerForms.pop();
-      }
-    } else if (this.headerInput.numberOfHeaders > this.headerForms.length) {
-      for (let i = this.headerForms.length; i < this.headerInput.numberOfHeaders; i++) {
-        let headerInput: Header = this.headerService.initHeaderInputObj(this.headerForms.length);
-        let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerInput);
-        this.headerForms.push(tmpForm);
-      }
-    }
+    // if (this.headerInput.numberOfHeaders < this.headerForms.length) {
+    //   for (let i = this.headerForms.length; i > this.headerInput.numberOfHeaders; i--) {
+    //     this.headerForms.pop();
+    //   }
+    // } else if (this.headerInput.numberOfHeaders > this.headerForms.length) {
+    //   for (let i = this.headerForms.length; i < this.headerInput.numberOfHeaders; i++) {
+    //     let headerInput: Header = this.headerService.initHeaderInputObj(this.headerForms.length);
+    //     let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerInput);
+    //     this.headerForms.push(tmpForm);
+    //   }
+    // }
     this.save();
   }
 
-  save(){
-    let tmpHeadersArr: Array<Header> = new Array<Header>();
-    this.headerForms.forEach(form => {
-      let tmpHeader: Header;
-      if(form.controls.pressureIndex.value == 0){
-        tmpHeader = this.headerService.getHighestPressureObjFromForm(form);
-      }else{
-        tmpHeader = this.headerService.initHeaderObjFromForm(form);
-      }
-      tmpHeadersArr.push(tmpHeader);
-    })
-    this.headerInput.headers = tmpHeadersArr;
+  save() {
     this.emitSave.emit(this.headerInput);
+  }
+
+  saveHighPressure(header: HeaderWithHighestPressure) {
+    this.headerInput.highPressure = header;
+    this.save();
+  }
+
+  saveMediumPressure(header: HeaderNotHighestPressure) {
+    this.headerInput.mediumPressure = header;
+    this.save();
+  }
+
+  saveLowPressure(header: HeaderNotHighestPressure) {
+    this.headerInput.lowPressure = header;
+    this.save();
   }
 
 }

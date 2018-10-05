@@ -19,7 +19,7 @@ export interface SSMT {
 export interface SSMTInputs {
     operationsInput: OperationsInput,
     boilerInput: BoilerInput,
-    headerInput: Array<Header>,
+    headerInput: HeaderInput,
     turbineInput: TurbineInput
 }
 
@@ -127,24 +127,26 @@ export interface BoilerInput {
 
 export interface HeaderInput {
     numberOfHeaders: number,
-    headers: Array<Header>
+    highPressure: HeaderWithHighestPressure,
+    mediumPressure: HeaderNotHighestPressure,
+    lowPressure: HeaderNotHighestPressure
 }
 
-export interface Header {
+export interface HeaderWithHighestPressure {
     pressure: number,
     processSteamUsage: number,
     condensationRecoveryRate: number,
     heatLoss: number,
-    
-    //do we want to use an index for lowest to highest pressure
-    pressureIndex: number,
-    
-    //not for highest pressure (highest index?)
-    flashCondensateIntoHeader?: boolean,
-    desuperheatSteamIntoNextHighest?: boolean,
-    desuperheatSteamTemperature?: number,
-    
-    //only highest pressure (highest index?)
-    condensateReturnTemperature?: number,
-    flashCondensateReturn?: boolean
+    condensateReturnTemperature: number,
+    flashCondensateReturn: boolean
+}
+
+export interface HeaderNotHighestPressure {
+    pressure: number,
+    processSteamUsage: number,
+    condensationRecoveryRate: number,
+    heatLoss: number,
+    flashCondensateIntoHeader: boolean,
+    desuperheatSteamIntoNextHighest: boolean,
+    desuperheatSteamTemperature: number,
 }

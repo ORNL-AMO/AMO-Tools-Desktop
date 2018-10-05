@@ -18,9 +18,14 @@
       <span class="alert alert-warning w-100 text-center pull-right small" *ngIf="inSetup && modificationExists">Delete
         Modifications to Adjust Number of Headers</span>
     </form>
-    <div *ngFor="let form of headerForms">
-      <app-header-form [headerForm]="form" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
-        (emitSave)="save()"></app-header-form>
-    </div>
+    <!--high pressure header-->
+    <app-header-form [headerForm]="highPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveHighPressure($event)" [pressureLevel]="'high'"></app-header-form>
+    <!--medium pressure header-->
+    <app-header-form *ngIf="headerInput.numberOfHeaders == 3" [headerForm]="mediumPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveMediumPressure($event)" [pressureLevel]="'medium'"></app-header-form>
+    <!--low pressure header-->
+    <app-header-form [headerForm]="lowPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveLowPressure($event)" [pressureLevel]="'low'" *ngIf="headerInput.numberOfHeaders > 1"></app-header-form>
   </div>
 </div>
