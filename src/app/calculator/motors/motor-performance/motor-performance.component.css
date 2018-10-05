@@ -5,3 +5,16 @@
 .calc-help{
     padding: 8px;
 }
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
