@@ -20,12 +20,12 @@
     </form>
     <!--high pressure header-->
     <app-header-form [headerForm]="highPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
-      (emitSave)="saveHighPressure($event)" [pressureLevel]="'high'"></app-header-form>
+      (emitSave)="saveHighPressure($event)" [pressureLevel]="'highPressure'" [inSetup]="inSetup"></app-header-form>
     <!--medium pressure header-->
     <app-header-form *ngIf="headerInput.numberOfHeaders == 3" [headerForm]="mediumPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
-      (emitSave)="saveMediumPressure($event)" [pressureLevel]="'medium'"></app-header-form>
+      (emitSave)="saveMediumPressure($event)" [pressureLevel]="'mediumPressure'" [inSetup]="inSetup"></app-header-form>
     <!--low pressure header-->
     <app-header-form [headerForm]="lowPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
-      (emitSave)="saveLowPressure($event)" [pressureLevel]="'low'" *ngIf="headerInput.numberOfHeaders > 1"></app-header-form>
+      (emitSave)="saveLowPressure($event)" [pressureLevel]="'lowPressure'" *ngIf="headerInput.numberOfHeaders > 1" [inSetup]="inSetup"></app-header-form>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { HeaderService } from '../header.service';
 import { SsmtService } from '../../ssmt.service';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../shared/models/steam/ssmt';
+import { CompareService } from '../../compare.service';
 
 @Component({
   selector: 'app-header-form',
@@ -23,9 +24,11 @@ export class HeaderFormComponent implements OnInit {
   pressureLevel: string;
   @Input()
   numberOfHeaders: number;
+  @Input()
+  inSetup: boolean;
 
   headerLabel: string;
-  constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
+  constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
     if (this.selected == false) {
@@ -46,7 +49,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   enableForm() {
-    if (this.pressureLevel == 'high') {
+    if (this.pressureLevel == 'highPressure') {
       this.headerForm.controls.flashCondensateReturn.enable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.enable();
@@ -55,7 +58,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   disableForm() {
-    if (this.pressureLevel == 'high') {
+    if (this.pressureLevel == 'highPressure') {
       this.headerForm.controls.flashCondensateReturn.disable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.disable();
@@ -72,12 +75,84 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    if(this.pressureLevel == 'high'){
+    if (this.pressureLevel == 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
-    }else{
+    } else {
       let tmpHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
+    }
+  }
+
+
+  canCompare(): boolean {
+    if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  isPressureDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isPressureDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isProcessSteamUsageDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isProcessSteamUsageDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isCondensationRecoveryRateDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isCondensationRecoveryRateDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isHeatLossDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isHeatLossDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isCondensateReturnTemperatureDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isCondensateReturnTemperatureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFlashCondensateReturnDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isFlashCondensateReturnDifferent();
+    } else {
+      return false;
+    }
+  }
+  isFlashCondensateIntoHeaderDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isFlashCondensateIntoHeaderDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isDesuperheatSteamIntoNextHighestDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isDesuperheatSteamIntoNextHighestDifferent(this.pressureLevel);
+    } else {
+      return false;
+    }
+  }
+  isDesuperheatSteamTemperatureDifferent(): boolean {
+    if (this.canCompare()) {
+      return this.compareService.isDesuperheatSteamTemperatureDifferent(this.pressureLevel);
+    } else {
+      return false;
     }
   }
 }
