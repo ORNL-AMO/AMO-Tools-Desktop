@@ -161,6 +161,33 @@ export class CompareService {
   }
 
   //boiler
+  checkBoilerDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+
+    if (baseline && modification) {
+      return (
+        this.isFuelTypeDifferent(baseline, modification) ||
+        this.isFuelDifferent(baseline, modification) ||
+        this.isCombustionEfficiencyDifferent(baseline, modification) ||
+        this.isBlowdownRateDifferent(baseline, modification) ||
+        this.isPreheatMakeupWaterDifferent(baseline, modification) ||
+        this.isSteamTemperatureDifferent(baseline, modification) ||
+        this.isDeaeratorVentRateDifferent(baseline, modification) ||
+        this.isDeaeratorPressureDifferent(baseline, modification) ||
+        this.isApproachTemperatureDifferent(baseline, modification)
+      )
+    } else {
+      return false;
+    }
+  }
+
+
+
   // fuelType
   isFuelTypeDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {
@@ -857,4 +884,23 @@ export class CompareService {
     }
   }
 
+
+  getBadges(baseline: SSMT, modification: SSMT): Array<{ badge: string, componentStr: string }> {
+    let badges: Array<{ badge: string, componentStr: string }> = [];
+    if (baseline && modification) {
+      if (this.checkOperationsDifferent(baseline, modification)) {
+        badges.push({ badge: 'Operations', componentStr: 'operations' })
+      }
+      if (this.checkBoilerDifferent(baseline, modification)) {
+        badges.push({ badge: 'Boiler', componentStr: 'boiler' })
+      }
+      if (this.checkHeaderDifferent(baseline, modification)) {
+        badges.push({ badge: 'Header', componentStr: 'header' })
+      }
+      if (this.checkTurbinesDifferent(baseline, modification)) {
+        badges.push({ badge: 'Turbine', componentStr: 'turbine' })
+      }
+    }
+    return badges;
+  }
 }
