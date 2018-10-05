@@ -24,3 +24,7 @@ h5.group-label:hover{
 .remove-curve {
     color: #dc3545;
 }
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
