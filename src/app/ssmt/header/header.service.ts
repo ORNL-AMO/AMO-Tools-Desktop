@@ -92,11 +92,11 @@ export class HeaderService {
   getHeaderLabel(index: number, numberOfHeaders: number): string {
     //index is 0 indexed
     if (index == 0) {
-      return 'Highest Pressure';
+      return 'High Pressure';
     }
     else {
       if (index == numberOfHeaders - 1) {
-        return 'Lowest Pressure';
+        return 'Low Pressure';
       } else {
         if (numberOfHeaders == 3) {
           if (index == 1) {

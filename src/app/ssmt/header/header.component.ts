@@ -78,6 +78,7 @@ export class HeaderComponent implements OnInit {
         this.headerForms.push(tmpForm);
       }
     }
+    this.save();
   }
 
   save(){
