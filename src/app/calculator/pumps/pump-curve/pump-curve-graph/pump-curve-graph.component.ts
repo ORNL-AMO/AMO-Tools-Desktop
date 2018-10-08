@@ -144,6 +144,10 @@ export class PumpCurveGraphComponent implements OnInit {
     }, 100)
   }
 
+  ngOnDestroy() {
+    this.pumpCurveService.regEquation.next(null);
+  }
+
   initColumnTitles() {
     this.columnTitles = new Array<string>();
     this.columnTitles = this.pumpCurveService.initColumnTitles(this.settings, this.isFan, this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve);
