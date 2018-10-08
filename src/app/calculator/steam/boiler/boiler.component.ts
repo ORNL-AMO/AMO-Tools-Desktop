@@ -86,7 +86,7 @@ export class BoilerComponent implements OnInit {
       steamQuality: 0,
       steamMassFlow: 0,
       steamEnergyFlow: 0,
-
+      steamVolume: 0,
       blowdownPressure: 0,
       blowdownTemperature: 0,
       blowdownSpecificEnthalpy: 0,
@@ -94,7 +94,7 @@ export class BoilerComponent implements OnInit {
       blowdownQuality: 0,
       blowdownMassFlow: 0,
       blowdownEnergyFlow: 0,
-
+      blowdownVolume: 0,
       feedwaterPressure: 0,
       feedwaterTemperature: 0,
       feedwaterSpecificEnthalpy: 0,
@@ -102,8 +102,11 @@ export class BoilerComponent implements OnInit {
       feedwaterQuality: 0,
       feedwaterMassFlow: 0,
       feedwaterEnergyFlow: 0,
+      feedwaterVolume: 0,
       boilerEnergy: 0,
       fuelEnergy: 0,
+      blowdownRate: 0,
+      combustionEff: 0
     }
     return results;
   }

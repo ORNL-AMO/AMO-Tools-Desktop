@@ -222,7 +222,7 @@ export class SsmtComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         console.log('saved');
-        // this.fsatService.updateData.next(true);
+        this.ssmtService.updateData.next(true);
       })
     })
   }
@@ -237,7 +237,7 @@ export class SsmtComponent implements OnInit {
     this.save();
   }
 
-  saveTurbineData(turbineData: TurbineInput){
+  saveTurbineData(turbineData: TurbineInput) {
     this._ssmt.turbineInput = turbineData;
     this.save();
   }
@@ -298,7 +298,7 @@ export class SsmtComponent implements OnInit {
     this.isModalOpen = true;
     this.changeModificationModal.show();
   }
-  
+
   closeSelectModification() {
     this.isModalOpen = false;
     this.ssmtService.openModificationSelectModal.next(false);

@@ -138,6 +138,7 @@ export class PrvComponent implements OnInit {
       feedwaterSpecificEnthalpy: 0,
       feedwaterSpecificEntropy: 0,
       feedwaterTemperature: 0,
+      feedwaterVolume: 0,
       inletEnergyFlow: 0,
       inletMassFlow: 0,
       inletPressure: 0,
@@ -145,13 +146,15 @@ export class PrvComponent implements OnInit {
       inletSpecificEnthalpy: 0,
       inletSpecificEntropy: 0,
       inletTemperature: 0,
+      inletVolume: 0,
       outletEnergyFlow: 0,
       outletMassFlow: 0,
       outletPressure: 0,
       outletQuality: 0,
       outletSpecificEnthalpy: 0,
       outletSpecificEntropy: 0,
-      outletTemperature: 0
+      outletTemperature: 0,
+      outletVolume: 0
     }
 
     return emptyResults;

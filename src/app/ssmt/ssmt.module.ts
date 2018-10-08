@@ -34,6 +34,7 @@ import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { HeaderHelpComponent } from './help-panel/header-help/header-help.component';
 import { TurbineHelpComponent } from './help-panel/turbine-help/turbine-help.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { TurbineHelpComponent } from './help-panel/turbine-help/turbine-help.com
     OperationsModule,
     ExploreOpportunitiesModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    SharedModule
   ],
   declarations: [
     SsmtComponent,

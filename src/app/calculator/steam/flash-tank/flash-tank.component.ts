@@ -87,6 +87,7 @@ export class FlashTankComponent implements OnInit {
       inletWaterSpecificEnthalpy: 0,
       inletWaterSpecificEntropy: 0,
       inletWaterTemperature: 0,
+      inletWaterVolume: 0,
       outletGasEnergyFlow: 0,
       outletGasMassFlow: 0,
       outletGasPressure: 0,
@@ -94,6 +95,7 @@ export class FlashTankComponent implements OnInit {
       outletGasSpecificEnthalpy: 0,
       outletGasSpecificEntropy: 0,
       outletGasTemperature: 0,
+      outletGasVolume: 0,
       outletLiquidEnergyFlow: 0,
       outletLiquidMassFlow: 0,
       outletLiquidPressure: 0,
@@ -101,6 +103,7 @@ export class FlashTankComponent implements OnInit {
       outletLiquidSpecificEnthalpy: 0,
       outletLiquidSpecificEntropy: 0,
       outletLiquidTemperature: 0,
+      outletLiquidVolume: 0
     }
 
     return emptyResults;

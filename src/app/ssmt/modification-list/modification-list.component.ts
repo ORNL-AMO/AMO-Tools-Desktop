@@ -66,12 +66,11 @@ export class ModificationListComponent implements OnInit {
     }
   }
   getBadges(modification: SSMT) {
-    // if (modification) {
-    //   return this.compareService.getBadges(this.ssmt, modification);
-    // } else {
-    //   return []
-    // }
-    return [];
+    if (modification) {
+      return this.compareService.getBadges(this.ssmt, modification);
+    } else {
+      return []
+    }
   }
 
   showDropdown(index: number) {

@@ -10,7 +10,8 @@
       <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()" [selected]="true" [inSetup]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveBoiler($event)"></app-boiler>
       
-      <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveHeaderData($event)"></app-header>
+      <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveHeaderData($event)"
+      [modificationExists]="modificationExists"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)"></app-turbine>
     </div>
     <div class="w-50">

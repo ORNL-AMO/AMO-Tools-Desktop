@@ -365,17 +365,32 @@ export class AssessmentService {
       },
       headerInput: {
         numberOfHeaders: 1,
-        headers: [
-          {
-            pressure: undefined,
-            processSteamUsage: undefined,
-            condensationRecoveryRate: undefined,
-            heatLoss: undefined,
-            pressureIndex: 0,
-            condensateReturnTemperature: undefined,
-            flashCondensateReturn: false
-          }
-        ]
+        highPressure: {
+          pressure: undefined,
+          processSteamUsage: undefined,
+          condensationRecoveryRate: undefined,
+          heatLoss: undefined,
+          condensateReturnTemperature: undefined,
+          flashCondensateReturn: false
+        },
+        mediumPressure:{
+          pressure: undefined,
+          processSteamUsage: undefined,
+          condensationRecoveryRate: undefined,
+          heatLoss: undefined,
+          flashCondensateIntoHeader: undefined,
+          desuperheatSteamIntoNextHighest: undefined,
+          desuperheatSteamTemperature: undefined
+        },
+        lowPressure: {
+          pressure: undefined,
+          processSteamUsage: undefined,
+          condensationRecoveryRate: undefined,
+          heatLoss: undefined,
+          flashCondensateIntoHeader: undefined,
+          desuperheatSteamIntoNextHighest: undefined,
+          desuperheatSteamTemperature: undefined
+        }
       },
       boilerInput: {
         fuelType: 1,

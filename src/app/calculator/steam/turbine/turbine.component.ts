@@ -106,7 +106,15 @@ export class TurbineComponent implements OnInit {
       outletSpecificEnthalpy: 0,
       outletSpecificEntropy: 0,
       outletTemperature: 0,
-      powerOut: 0
+      powerOut: 0,
+      inletVolume: 0,
+      outletVolume: 0,
+      outletIdealPressure: 0,
+      outletIdealTemperature: 0,
+      outletIdealSpecificEnthalpy: 0,
+      outletIdealSpecificEntropy: 0,
+      outletIdealQuality: 0,
+      outletIdealVolume: 0
     }
     return emptyResults;
   }
