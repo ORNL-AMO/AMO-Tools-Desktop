@@ -20,6 +20,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   speedForm: FormGroup;
   @Input()
   inPsat: boolean;
+  @Input()
+  resetData: boolean;
 
   @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -71,6 +73,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
 
+  tmpPumpType: string;
+
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
   isGridToggled: boolean;
@@ -85,6 +89,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private lineChartHelperService: LineChartHelperService, private svgToPngService: SvgToPngService, private specificSpeedService: SpecificSpeedService) { }
 
   ngOnInit() {
+    this.tmpPumpType = this.speedForm.controls.pumpType.value;
     this.deleteCount = 0;
     this.graphColors = graphColors;
     this.tableData = new Array<{ borderColor: string, fillColor: string, specificSpeed: string, efficiencyCorrection: string }>();
@@ -119,8 +124,17 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
+      if (changes.resetData) {
+        this.resetTableData();
+      }
+      console.log('changes = ');
+      console.log(changes);
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
+          if (this.speedForm.controls.pumpType.value != this.tmpPumpType) {
+            this.curveChanged = true;
+          }
+          this.tmpPumpType = this.speedForm.controls.pumpType.value;
           this.makeGraph();
           this.svg.style("display", null);
         }

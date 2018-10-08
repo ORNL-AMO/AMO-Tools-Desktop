@@ -30,6 +30,7 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
+  toggleResetData: boolean = true;
   tabSelect: string = 'results';
 
   constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
@@ -79,6 +80,28 @@ export class AchievableEfficiencyComponent implements OnInit {
       this.achievableEfficiencyService.flowRate = this.efficiencyForm.controls.flowRate.value;
       this.achievableEfficiencyService.pumpType = this.efficiencyForm.controls.pumpType.value;
     }
+  }
+
+  btnResetData() {
+    if (!this.psat) {
+      this.efficiencyForm = this.psatService.initForm();
+      this.achievableEfficiencyService.flowRate = 2000;
+      this.achievableEfficiencyService.pumpType = this.psatService.getPumpStyleFromEnum(6);
+      this.efficiencyForm.patchValue({
+        pumpType: this.achievableEfficiencyService.pumpType,
+        flowRate: this.achievableEfficiencyService.flowRate
+      });
+      if (this.settings.flowMeasurement != 'gpm') {
+        let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
+        this.efficiencyForm.patchValue({
+          flowRate: this.psatService.roundVal(tmpVal, 2)
+        });
+      }
+    } else {
+      this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    }
+    this.toggleResetData = !this.toggleResetData;
+    this.calculate();
   }
 
   resizeTabs() {
