@@ -38,7 +38,7 @@
     </div>
 
     <div class="form-group" *ngIf="turbineForm.controls.operationType.value != 2">
-      <label for="processSteamUsage">
+      <label for="operationValue1">
         <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
         <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
         <span *ngIf="turbineForm.controls.operationType.value == 3">Minimum Power</span>
@@ -56,7 +56,7 @@
     </div>
 
     <div class="form-group" *ngIf="turbineForm.controls.operationType.value == 4 || turbineForm.controls.operationType.value == 3">
-      <label for="processSteamUsage">
+      <label for="operationValue2">
         <span *ngIf="turbineForm.controls.operationType.value == 4">Maximum Flow</span>
         <span *ngIf="turbineForm.controls.operationType.value == 3">Maximum Power</span>
       </label>
