@@ -8,7 +8,7 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.name"
         (input)="calculate()" />
     </div>
-    <app-operations-form></app-operations-form>
+    <app-operations-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-operations-form>
     <app-boiler-form></app-boiler-form>
   </div>
 </div>
