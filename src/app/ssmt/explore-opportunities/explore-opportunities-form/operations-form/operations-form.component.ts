@@ -17,29 +17,33 @@ export class OperationsFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+
   showHoursPerYear: boolean = false;
   showOperationsData: boolean = false;
   showMakeupWaterTemp: boolean = false;
+  showUnitCosts: boolean = false;
+  showElectricityCost: boolean = false;
+  showFuelCost: boolean = false;
+  showMakeupWaterCost: boolean = false;
+
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    this.init();
+    this.initGeneralOperations();
+    this.initOperatingCosts();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.init()
+        this.initGeneralOperations();
+        this.initOperatingCosts();
+
       }
     }
   }
 
-  init() {
-    this.initOperatingHours();
-    this.initMakeupWaterTemp();
-    this.initGeneralOperations();
-  }
-
+  //General Operations Functions
   initOperatingHours() {
     if (this.ssmt.operatingHours.hoursPerYear != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.hoursPerYear) {
       this.showHoursPerYear = true;
@@ -57,6 +61,8 @@ export class OperationsFormComponent implements OnInit {
   }
 
   initGeneralOperations() {
+    this.initOperatingHours();
+    this.initMakeupWaterTemp();
     if (this.showHoursPerYear || this.showMakeupWaterTemp) {
       this.showOperationsData = true;
     } else {
@@ -65,7 +71,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   toggleOperationsData() {
-    if(this.showOperationsData == false){
+    if (this.showOperationsData == false) {
       this.showMakeupWaterTemp = false;
       this.showHoursPerYear = false;
       this.toggleHoursPerYear();
@@ -87,10 +93,6 @@ export class OperationsFormComponent implements OnInit {
     }
   }
 
-  save() {
-    this.emitSave.emit(true);
-  }
-
   setBaselineOperatingHours() {
     this.ssmt.operatingHours.isCalculated = false;
     this.save()
@@ -101,6 +103,74 @@ export class OperationsFormComponent implements OnInit {
     this.save();
   }
 
+  //Operating Costs functions
+  initOperatingCosts() {
+    this.initFuelCosts();
+    this.initElectricityCost();
+    this.initMakeupWaterCost();
+    if(this.showFuelCost || this.showElectricityCost || this.showMakeupWaterCost){
+      this.showUnitCosts = true;
+    }
+  }
+
+  initFuelCosts() {
+    if (this.ssmt.operatingCosts.fuelCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.fuelCost) {
+      this.showFuelCost = true;
+    } else {
+      this.showFuelCost = false;
+    }
+  }
+
+  initElectricityCost() {
+    if (this.ssmt.operatingCosts.electricityCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.electricityCost) {
+      this.showElectricityCost = true;
+    } else {
+      this.showElectricityCost = false;
+    }
+  }
+
+  initMakeupWaterCost() {
+    if (this.ssmt.operatingCosts.makeUpWaterCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.makeUpWaterCost) {
+      this.showMakeupWaterCost = true;
+    } else {
+      this.showMakeupWaterCost = false;
+    }
+  }
+
+  toggleFuelCost() {
+    if (this.showFuelCost == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.fuelCost = this.ssmt.operatingCosts.fuelCost;
+      this.save();
+    }
+  }
+  toggleMakeupWaterCost() {
+    if (this.showMakeupWaterTemp == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.makeUpWaterCost = this.ssmt.operatingCosts.makeUpWaterCost;
+      this.save();
+    }
+  }
+  toggleElectricityCost() {
+    if (this.showElectricityCost == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.electricityCost = this.ssmt.operatingCosts.electricityCost;
+      this.save();
+    }
+  }
+
+  toggleUnitCosts() {
+    if(this.showUnitCosts == false){
+      this.showElectricityCost = false;
+      this.showMakeupWaterCost = false;
+      this.showFuelCost = false;
+      this.toggleElectricityCost();
+      this.toggleMakeupWaterCost();
+      this.toggleFuelCost();
+    }
+  }
+
+
+  save() {
+    this.emitSave.emit(true);
+  }
 
   focusField(str: string) {
     this.ssmtService.currentField.next(str);
