@@ -1,3 +1,76 @@
-<p>
-  boiler-form works!
-</p>
+<div class="checkbox">
+  <label class="group-label" for="adjustBoilerData">
+    <input type="checkbox" id="adjustBoilerData" value="true" (focus)="focusField('default')" (change)="toggleBoilerData()"
+      [(ngModel)]="showBoilerData" /> Adjust Boiler Operation
+  </label>
+</div>
+<ul *ngIf="showBoilerData">
+  <li>
+    <div class="checkbox">
+      <label for="modifyCombustionEfficiency">
+        <input type="checkbox" id="modifyCombustionEfficiency" value="true" (focus)="focusField('combustionEfficiency')"
+          (change)="toggleCombustionEfficiency()" [(ngModel)]="showCombustionEfficiency" /> Adjust Boiler Combustion
+        Efficiency
+      </label>
+    </div>
+    <form *ngIf="showCombustionEfficiency">
+      <div class="form-group">
+        <label for="baselineCombustionEfficiency">Baseline Combustion Efficiency</label>
+        <div class="input-group">
+          <input name="baselineCombustionEfficiency" type="number" step="any" id="baselineCombustionEfficiency" class="form-control"
+            (focus)="focusField('combustionEfficiency')" (input)="save()" [(ngModel)]="ssmt.boilerInput.combustionEfficiency"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationCombustionEfficiency">Modification Combustion Efficiency</label>
+        <div class="input-group">
+          <input name="modificationCombustionEfficiency" type="number" step="any" id="modificationCombustionEfficiency"
+            class="form-control" (focus)="focusField('combustionEfficiency')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.combustionEfficiency" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyFuelType">
+        <input type="checkbox" id="modifyFuelType" value="true" (focus)="focusField('fuel')" (change)="toggleFuelType()"
+          [(ngModel)]="showFuelType" /> Change Fuel Type
+      </label>
+    </div>
+    <form *ngIf="showFuelType">
+      <div class="form-group">
+        <label for="baselineFuelType">Baseline Fuel Type</label>
+        <select name="baselineFuelType" id="baselineFuelType" class="form-control" (focus)="focusField('fuelType')"
+          (change)="setFuelTypes()" [(ngModel)]="ssmt.boilerInput.fuelType" [disabled]="true">
+          <option [ngValue]="0">Solid/Liquid</option>
+          <option [ngValue]="1">Gas</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="baselineFuel">Baseline Fuel</label>
+        <select name="baselineFuel" id="baselineFuel" class="form-control" (focus)="focusField('fuel')" (change)="save()"
+          [(ngModel)]="ssmt.boilerInput.fuel" [disabled]="true">
+          <option *ngFor="let option of baselineFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFuelType">Modification Fuel Type</label>
+        <select name="modificationFuelType" id="modificationFuelType" class="form-control" (focus)="focusField('fuelType')"
+          (change)="setFuelTypes()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.fuelType">
+          <option [ngValue]="0">Solid/Liquid</option>
+          <option [ngValue]="1">Gas</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFuel">Modification Fuel</label>
+        <select name="modificationFuel" id="modificationFuel" class="form-control" (focus)="focusField('fuel')"
+          (change)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.fuel">
+          <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        </select>
+      </div>
+    </form>
+  </li>
+</ul>

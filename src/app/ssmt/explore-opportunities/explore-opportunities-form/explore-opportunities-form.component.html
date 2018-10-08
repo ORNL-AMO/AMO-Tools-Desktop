@@ -9,6 +9,6 @@
         (input)="calculate()" />
     </div>
     <app-operations-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-operations-form>
-    <app-boiler-form></app-boiler-form>
+    <app-boiler-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-boiler-form>
   </div>
 </div>
