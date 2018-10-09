@@ -62,6 +62,8 @@ export class PressureTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.ssmtService.turbineOperationValue.next(this.turbineForm.controls.operationType.value);
+    this.ssmtService.turbineOperationHelp.next('pressure');
     this.ssmtService.currentField.next(str);
   }
 

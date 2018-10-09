@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-operations-help',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./operations-help.component.css']
 })
 export class OperationsHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {

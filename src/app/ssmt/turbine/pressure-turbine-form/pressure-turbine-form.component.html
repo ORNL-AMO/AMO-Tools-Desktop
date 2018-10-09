@@ -1,8 +1,8 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')"
-        [ngClass]="{'indicate-different': isUseTurbineDifferent()}" (change)="save()">
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}"
+        (change)="save()">
       <span *ngIf="pressureTurbineString == 'highToLowTurbine'">High Pressure to Low Pressure</span>
       <span *ngIf="pressureTurbineString == 'highToMediumTurbine'">High Pressure to Medium Pressure</span>
       <span *ngIf="pressureTurbineString == 'mediumToLowTurbine'">Medium Pressure to Low Pressure</span>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingHours } from '../../../shared/models/operations';
 import { CompareService } from '../../compare.service';
+import { SsmtService } from '../../ssmt.service';
 
 @Component({
   selector: 'app-operating-hours',
@@ -23,7 +24,7 @@ export class OperatingHoursComponent implements OnInit {
   shiftsPerDayError: string = null;
   hoursPerShiftError: string = null;
   hoursPerYearError: string = null;
-  constructor(private compareService: CompareService) { }
+  constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     if (!this.operatingHours) {
@@ -140,5 +141,13 @@ export class OperatingHoursComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  focusField(str: string){
+    this.ssmtService.currentField.next(str);
+  }
+  
+  focusOut() {
+    this.ssmtService.currentField.next('default');
   }
 }

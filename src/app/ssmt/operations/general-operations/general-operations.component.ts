@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GeneralSteamOperations } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { CompareService } from '../../compare.service';
+import { SsmtService } from '../../ssmt.service';
 
 @Component({
   selector: 'app-general-operations',
@@ -19,7 +20,7 @@ export class GeneralOperationsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
-  constructor(private compareService: CompareService) { }
+  constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
   }
@@ -49,5 +50,12 @@ export class GeneralOperationsComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  focusField(str: string){
+    this.ssmtService.currentField.next(str);
+  }  
+  focusOut() {
+    this.ssmtService.currentField.next('default');
   }
 }
