@@ -12,9 +12,12 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
             <p>
-              This calculator allows the user to enter either energy use information gathered from meters or design specifications (for
-              fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows users
-              to compare the relative energy use of furnaces within a facility to prioritize energy evaluations and efficiency
+              This calculator allows the user to enter either energy use information gathered from meters or design
+              specifications (for
+              fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows
+              users
+              to compare the relative energy use of furnaces within a facility to prioritize energy evaluations and
+              efficiency
               improvements.
             </p>
           </div>
@@ -41,11 +44,16 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
             <p>
-              The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
-              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual Electricity
-              Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours. This calculator
-              is not intended to estimate the economic performance of a specific CHP project, rather it is intended to only
-              give the user an initial understanding of whether CHP has the potential to provide economic savings at their
+              The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended
+              parties to conduct a very
+              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
+              Electricity
+              Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours. This
+              calculator
+              is not intended to estimate the economic performance of a specific CHP project, rather it is intended to
+              only
+              give the user an initial understanding of whether CHP has the potential to provide economic savings at
+              their
               facility.
             </p>
           </div>
@@ -66,14 +74,29 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png" class="calc-img" (click)="showTool('power-factor-correction')">
+              <img src="assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png" class="calc-img"
+                (click)="showTool('power-factor-correction')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('power-factor-correction')">Power Factor Correction</a>
             <p>
-              This calculator is used to identify the capacitance (in kVAR) required for improving the power factor to the proposed level.
-              </p>
+              This calculator is used to identify the capacitance (in kVAR) required for improving the power factor to
+              the proposed level.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('co2-savings')">CO<sub>2</sub> Savings Calculator</a>
+            <p>
+              DESCRIPTION NEEDED
+            </p>
           </div>
         </div>
       </div>
@@ -100,4 +123,8 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'power-factor-correction'">
   <app-power-factor-correction></app-power-factor-correction>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'co2-savings'">
+  <app-co2-savings></app-co2-savings>
 </div>

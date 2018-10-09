@@ -1,0 +1,87 @@
+<div class="d-flex h-100 modify-conditions general" #contentContainer>
+  <div class="d-flex flex-column w-100 h-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 align-items-center bg-white">
+      <div class="col-md-auto">
+        <span class="fa fa-tachometer"></span>
+      </div>
+      <div class="pl-2">
+        <h3>CO<sub>2</sub> Savings Calculator</h3>
+      </div>
+    </div>
+    <!-- Baseline -->
+    <div class="d-flex">
+      <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
+        <div class="w-50">
+          <div class="header mr-2 ml-2">
+            <h3>Baseline</h3>
+          </div>
+          <div class="d-flex flex-column ml-4 mr-4 mb-4">
+            <div class="p-2">
+              <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Energy Use</a>
+            </div>
+            <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
+              <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Energy Use #{{index+1}}
+                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
+              <app-co2-savings-form></app-co2-savings-form>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Modifications Start -->
+        <div *ngIf="modificationExists" class="w-50">
+          <!-- Modification Header -->
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <!-- Forms -->
+          <div class="d-flex flex-column ml-4 mr-4 mb-4">
+            <div class="p-2">
+              <a class="click-link pull-right small" (click)="addModificationFixture()">+Add Energy Use</a>
+            </div>
+            <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
+              <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Energy Use #{{index+1}}
+                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
+              <app-co2-savings-form></app-co2-savings-form>
+            </div>
+          </div>
+        </div>
+        <!-- No content message -->
+        <div class="w-50" *ngIf="!modificationExists">
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <div class="p-3 no-data">
+            <h3>
+              Once you have set up your baseline..
+            </h3>
+            <button type="button" class="btn btn-primary" (click)="addModification()">Add Modified Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Panel -->
+      <div class="col-4 p-0 help-panel">
+        <div class="d-flex flex-column mh-100 scroll-item">
+          <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+                <div>Results</div>
+              </a>
+            </div>
+            <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+              <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                <div>Help</div>
+              </a>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center pl-2 pr-2">
+            <app-co2-savings-results *ngIf="tabSelect == 'results'"></app-co2-savings-results>
+            <app-co2-savings-help *ngIf="tabSelect == 'help'"></app-co2-savings-help>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
