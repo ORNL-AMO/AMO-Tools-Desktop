@@ -22,5 +22,11 @@ export interface Co2SavingsResults {
 }
 
 export interface Co2SavingsData {
-
+  energyType: string;
+  totalEmissionOutputRate: number;
+  electricityUse: number;
+  energySource?: string;
+  fuelType?: string;
+  eGridRegion?: string;
+  eGridSubregion?: string;
 }

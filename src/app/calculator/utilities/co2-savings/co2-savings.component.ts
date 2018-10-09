@@ -20,7 +20,13 @@ export class Co2SavingsComponent implements OnInit {
   tabSelect: string = 'results';
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{
-
+    energyType: 'fuel',
+    totalEmissionOutputRate: 0,
+    electricityUse: 0,
+    energySource: undefined,
+    fuelType: undefined,
+    eGridRegion: undefined,
+    eGridSubregion: undefined
   }];
   baselineElectricityUse: number;
   modificationData: Array<Co2SavingsData> = [];
@@ -83,13 +89,13 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   calculate() {
-    this.baselineData.forEach(data => {
-      data = this.co2SavingsService.calculate(data);
-    })
+    // this.baselineData.forEach(data => {
+    //   data = this.co2SavingsService.calculate(data);
+    // })
     this.baselineResults = this.co2SavingsService.getTotals(this.baselineData);
-    this.modificationData.forEach(data => {
-      data = this.co2SavingsService.calculate(data);
-    })
+    // this.modificationData.forEach(data => {
+    //   data = this.co2SavingsService.calculate(data);
+    // })
     this.modificationResults = this.co2SavingsService.getTotals(this.modificationData);
   }
 

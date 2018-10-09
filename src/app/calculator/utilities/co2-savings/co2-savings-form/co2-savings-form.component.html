@@ -1,3 +1,70 @@
-<p>
-  co2-savings-form works!
-</p>
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="energyType">Energy Type</label>
+      <div class="input-group">
+        <select name="energyType" class="form-control" id="energyType" [(ngModel)]="data.energyType" (change)="calculate()">
+          <option [ngValue]="'fuel'">Fuel</option>
+          <option [ngValue]="'electricity'">Electricity</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="data.energyType == 'fuel'">
+    <div class="form-group">
+      <label for="energySource">Energy Source</label>
+      <div class="input-group">
+        <select name="energySource" class="form-control" id="energySource" [(ngModel)]="data.fuel" (change)="setFuelOptions()">
+          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{options.energySource}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="data.energyType == 'fuel'">
+    <div class="form-group">
+      <label for="fuelType">Fuel Type</label>
+      <div class="input-group">
+        <select name="fuelType" class="form-control" id="fuelType" [(ngModel)]="data.fuelType" (change)="setFuel()">
+          <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{options.fuelType}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="data.energyType == 'electricity'">
+    <div class="form-group">
+      <label for="eGridRegion">eGrid Region</label>
+      <div class="input-group">
+        <select name="eGridRegion" class="form-control" id="eGridRegion" [(ngModel)]="data.eGridRegion" (change)="setRegion()">
+          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{options.energySource}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" *ngIf="data.energyType == 'electricity'">
+    <div class="form-group">
+      <label for="eGridSubregion">eGrid Subregion</label>
+      <div class="input-group">
+        <select name="eGridSubregion" class="form-control" id="eGridSubregion" [(ngModel)]="data.eGridSubregion"
+          (change)="setSubRegion()">
+          <option *ngFor="let option of subregions" [ngValue]="option.subregion">{{options.fuelType}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="totalEmissionOutputRate">Total Emission Output Rate</label>
+    <input name="totalEmissionOutputRate" type="number" step="any" class="form-control" id="totalEmissionOutputRate"
+      (input)="calculate()" [(ngModel)]="data.totalEmissionOutputRate">
+  </div>
+
+  <div class="form-group">
+    <label for="electricityUse">Electricity Use</label>
+    <input name="electricityUse" type="number" step="any" class="form-control" id="electricityUse" (input)="calculate()"
+      [(ngModel)]="data.electricityUse">
+  </div>
+</form>
