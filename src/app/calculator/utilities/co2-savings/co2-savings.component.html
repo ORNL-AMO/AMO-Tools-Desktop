@@ -22,7 +22,7 @@
             <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Energy Use #{{index+1}}
                 <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
-              <app-co2-savings-form [data]="baselineData"></app-co2-savings-form>
+              <app-co2-savings-form [data]="data"></app-co2-savings-form>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
             <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Energy Use #{{index+1}}
                 <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
-              <app-co2-savings-form [data]="modificationData"></app-co2-savings-form>
+              <app-co2-savings-form [data]="data"></app-co2-savings-form>
             </div>
           </div>
         </div>

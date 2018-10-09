@@ -15,8 +15,8 @@
     <div class="form-group">
       <label for="energySource">Energy Source</label>
       <div class="input-group">
-        <select name="energySource" class="form-control" id="energySource" [(ngModel)]="data.fuel" (change)="setFuelOptions()">
-          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{options.energySource}}</option>
+        <select name="energySource" class="form-control" id="energySource" [(ngModel)]="data.energySource" (change)="setFuelOptions()">
+          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{option.energySource}}</option>
         </select>
       </div>
     </div>
@@ -27,7 +27,7 @@
       <label for="fuelType">Fuel Type</label>
       <div class="input-group">
         <select name="fuelType" class="form-control" id="fuelType" [(ngModel)]="data.fuelType" (change)="setFuel()">
-          <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{options.fuelType}}</option>
+          <option *ngFor="let option of fuelOptions" [ngValue]="option.fuelType">{{option.fuelType}}</option>
         </select>
       </div>
     </div>
@@ -38,7 +38,7 @@
       <label for="eGridRegion">eGrid Region</label>
       <div class="input-group">
         <select name="eGridRegion" class="form-control" id="eGridRegion" [(ngModel)]="data.eGridRegion" (change)="setRegion()">
-          <option *ngFor="let option of otherFuels" [ngValue]="option.energySource">{{options.energySource}}</option>
+          <option *ngFor="let option of eGridRegions" [ngValue]="option.region">{{option.region}}</option>
         </select>
       </div>
     </div>
@@ -50,7 +50,7 @@
       <div class="input-group">
         <select name="eGridSubregion" class="form-control" id="eGridSubregion" [(ngModel)]="data.eGridSubregion"
           (change)="setSubRegion()">
-          <option *ngFor="let option of subregions" [ngValue]="option.subregion">{{options.fuelType}}</option>
+          <option *ngFor="let option of subregions" [ngValue]="option.subregion">{{options.subregion}}</option>
         </select>
       </div>
     </div>

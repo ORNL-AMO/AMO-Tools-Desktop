@@ -28,6 +28,11 @@ export class Co2SavingsFormComponent implements OnInit {
   ngOnInit() {
     this.otherFuels = otherFuels;
     this.eGridRegions = electricityGridRegions;
+    if(this.data.energyType == 'fuel'){
+      this.setFuelOptions();
+    }else{
+      this.setRegion();
+    }
     this.calculate();
   }
 
