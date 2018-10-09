@@ -25,8 +25,11 @@ export class BoilerFormComponent implements OnInit {
   showBoilerData: boolean = false;
   showCombustionEfficiency: boolean = false;
   showFuelType: boolean = false;
-
-
+  showBlowdownRate: boolean = false;
+  showBlowdownFlashed: boolean = false;
+  showPreheatBlowdownWater: boolean = false;
+  showInitialSteamTemperature: boolean = false;
+  showDeaeratorConditions: boolean = false;
   constructor(private ssmtService: SsmtService, private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
@@ -58,7 +61,12 @@ export class BoilerFormComponent implements OnInit {
   init() {
     this.initCombustionEfficiency();
     this.initFuel();
-    if (this.showCombustionEfficiency || this.showFuelType) {
+    this.initBlowdownRate();
+    this.initBlowdownFlashed();
+    this.initPreheatMakeupWater();
+    this.initInitialSteamTemperature();
+    this.initDeaeratorConditions();
+    if (this.showCombustionEfficiency || this.showFuelType || this.showBlowdownRate || this.showBlowdownFlashed || this.showPreheatBlowdownWater || this.showInitialSteamTemperature || this.showDeaeratorConditions) {
       this.showBoilerData = true;
     }
   }
@@ -76,10 +84,52 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
+  initBlowdownRate(){
+    if (this.ssmt.boilerInput.blowdownRate != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownRate) {
+      this.showBlowdownRate = true;
+    }
+  }
+
+  initBlowdownFlashed(){
+    if (this.ssmt.boilerInput.blowdownFlashed != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownFlashed) {
+      this.showBlowdownFlashed = true;
+    }
+  }
+
+  initPreheatMakeupWater(){
+    if (this.ssmt.boilerInput.preheatMakeupWater != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.preheatMakeupWater || 
+      this.ssmt.boilerInput.approachTemperature != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.approachTemperature) {
+      this.showPreheatBlowdownWater = true;
+    }
+  }
+
+  initInitialSteamTemperature(){
+    if (this.ssmt.boilerInput.steamTemperature != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.steamTemperature) {
+      this.showInitialSteamTemperature = true;
+    }
+  }
+
+  initDeaeratorConditions(){
+    if (this.ssmt.boilerInput.deaeratorPressure != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure || 
+      this.ssmt.boilerInput.deaeratorVentRate != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorVentRate) {
+      this.showDeaeratorConditions = true;
+    }
+  }
+
   toggleBoilerData() {
     if (this.showBoilerData == false) {
       this.showCombustionEfficiency = false;
       this.showFuelType = false;
+      this.showBlowdownRate = false;
+      this.showBlowdownFlashed = false;
+      this.showPreheatBlowdownWater = false;
+      this.showInitialSteamTemperature = false;
+      this.showDeaeratorConditions = false;
+      this.toggleDeaeratorConditions();
+      this.toggleInitialSteamTemperature();
+      this.togglePreheatBlowdownWater();
+      this.toggleBlowdownFlashed();
+      this.toggleBlowdownRate();
       this.toggleCombustionEfficiency();
       this.toggleFuelType();
     }
@@ -88,6 +138,7 @@ export class BoilerFormComponent implements OnInit {
   toggleCombustionEfficiency() {
     if (this.showCombustionEfficiency == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.combustionEfficiency = this.ssmt.boilerInput.combustionEfficiency;
+      this.save();
     }
   }
 
@@ -95,6 +146,43 @@ export class BoilerFormComponent implements OnInit {
     if (this.showFuelType == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuelType = this.ssmt.boilerInput.fuelType;
       this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuel = this.ssmt.boilerInput.fuel;
+      this.save();
+    }
+  }
+
+  toggleBlowdownRate(){
+    if(this.showBlowdownRate == false){
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownRate = this.ssmt.boilerInput.blowdownRate;
+      this.save();
+    }
+  }
+
+  toggleBlowdownFlashed(){
+    if(this.showBlowdownFlashed == false){
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownFlashed = this.ssmt.boilerInput.blowdownFlashed;
+      this.save();
+    }
+  }
+
+  togglePreheatBlowdownWater(){
+    if (this.showFuelType == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.preheatMakeupWater = this.ssmt.boilerInput.preheatMakeupWater;
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.approachTemperature = this.ssmt.boilerInput.approachTemperature;
+      this.save();
+    }
+  }
+
+  toggleInitialSteamTemperature(){
+    if(this.showInitialSteamTemperature == false){
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.steamTemperature = this.ssmt.boilerInput.steamTemperature;
+      this.save();
+    }
+  }
+  toggleDeaeratorConditions(){
+    if (this.showDeaeratorConditions == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure = this.ssmt.boilerInput.deaeratorPressure;
+      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorVentRate = this.ssmt.boilerInput.deaeratorVentRate;
+      this.save();
     }
   }
 

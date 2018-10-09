@@ -1,6 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="adjustBoilerData">
-    <input type="checkbox" id="adjustBoilerData" value="true" (focus)="focusField('default')" (change)="toggleBoilerData()"
+    <input type="checkbox" id="adjustBoilerData" (focus)="focusField('default')" (change)="toggleBoilerData()"
       [(ngModel)]="showBoilerData" /> Adjust Boiler Operation
   </label>
 </div>
@@ -8,8 +8,8 @@
   <li>
     <div class="checkbox">
       <label for="modifyCombustionEfficiency">
-        <input type="checkbox" id="modifyCombustionEfficiency" value="true" (focus)="focusField('combustionEfficiency')"
-          (change)="toggleCombustionEfficiency()" [(ngModel)]="showCombustionEfficiency" /> Adjust Boiler Combustion
+        <input type="checkbox" id="modifyCombustionEfficiency" (focus)="focusField('combustionEfficiency')" (change)="toggleCombustionEfficiency()"
+          [(ngModel)]="showCombustionEfficiency" /> Adjust Boiler Combustion
         Efficiency
       </label>
     </div>
@@ -36,8 +36,8 @@
   <li>
     <div class="checkbox">
       <label for="modifyFuelType">
-        <input type="checkbox" id="modifyFuelType" value="true" (focus)="focusField('fuel')" (change)="toggleFuelType()"
-          [(ngModel)]="showFuelType" /> Change Fuel Type
+        <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelType()" [(ngModel)]="showFuelType" />
+        Change Fuel Type
       </label>
     </div>
     <form *ngIf="showFuelType">
@@ -70,6 +70,182 @@
           (change)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.fuel">
           <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
         </select>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyBlowdownRate">
+        <input type="checkbox" id="modifyBlowdownRate" (focus)="focusField('blowdownRate')" (change)="toggleBlowdownRate()"
+          [(ngModel)]="showBlowdownRate" /> Adjust Blowdown Rate
+      </label>
+    </div>
+    <form *ngIf="showBlowdownRate">
+      <div class="form-group">
+        <label for="baselineBlowdownRate">Baseline Blowdown Rate</label>
+        <div class="input-group">
+          <input name="baselineBlowdownRate" type="number" step="any" id="baselineBlowdownRate" class="form-control"
+            (focus)="focusField('blowdownRate')" (input)="save()" [(ngModel)]="ssmt.boilerInput.blowdownRate"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationBlowdownRate">Modification Blowdown Rate</label>
+        <div class="input-group">
+          <input name="modificationBlowdownRate" type="number" step="any" id="modificationBlowdownRate" class="form-control"
+            (focus)="focusField('blowdownRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.blowdownRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyBlowdownFlashed">
+        <input type="checkbox" id="modifyBlowdownFlashed" (focus)="focusField('blowdownFlashed')" (change)="toggleBlowdownFlashed()"
+          [(ngModel)]="showBlowdownFlashed" /> Blowdown Flash to Low Pressure
+      </label>
+    </div>
+    <form *ngIf="showBlowdownFlashed">
+      <div class="form-group">
+        <label for="baselineBlowdownFlashed">Baseline Blowdown Flashed</label>
+        <select name="baselineBlowdownFlashed" id="baselineBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
+          (change)="save()" [(ngModel)]="ssmt.boilerInput.blowdownFlashed" [disabled]="true">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationBlowdownFlashed">Modification Blowdown Flashed</label>
+        <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
+          (change)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.blowdownFlashed">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyPreheatMakeupWater">
+        <input type="checkbox" id="modifyPreheatMakeupWater" (focus)="focusField('preheatMakeupWater')" (change)="togglePreheatBlowdownWater()"
+          [(ngModel)]="showPreheatBlowdownWater" /> Preheat Makeup Water with Blowdown
+      </label>
+    </div>
+    <form *ngIf="showPreheatBlowdownWater">
+      <div class="form-group">
+        <label for="baselinePreheatBlowdownWater">Baseline Preheat Make-up Water</label>
+        <select name="baselinePreheatBlowdownWater" id="baselinePreheatBlowdownWater" class="form-control" (focus)="focusField('preheatMakeupWater')"
+          (change)="save()" [(ngModel)]="ssmt.boilerInput.preheatMakeupWater" [disabled]="true">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="baselineApproachTemperature">Baseline Approach Temperature</label>
+        <div class="input-group">
+          <input name="baselineApproachTemperature" type="number" step="any" id="baselineApproachTemperature" class="form-control"
+            (focus)="focusField('approachTemperature')" (input)="save()" [(ngModel)]="ssmt.boilerInput.approachTemperature"
+            [disabled]="true" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationPreheatBlowdownWater">Modification Preheat Make-up Water</label>
+        <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control"
+          (focus)="focusField('preheatMakeupWater')" (change)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.preheatMakeupWater">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationApproachTemperature">Modification Approach Temperature</label>
+        <div class="input-group">
+          <input name="modificationApproachTemperature" type="number" step="any" id="modificationApproachTemperature"
+            class="form-control" (focus)="focusField('approachTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.approachTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifySteamTemperature">
+        <input type="checkbox" id="modifySteamTemperature" (focus)="focusField('steamTemperature')" (change)="toggleInitialSteamTemperature()"
+          [(ngModel)]="showInitialSteampTemperature" /> Change Steam Generation Conditions
+      </label>
+    </div>
+    <form *ngIf="showInitialSteampTemperature">
+      <div class="form-group">
+        <label for="baselineSteamTemperature">Baseline Initial Steam Temperature</label>
+        <div class="input-group">
+          <input name="baselineSteamTemperature" type="number" step="any" id="baselineSteamTemperature" class="form-control"
+            (focus)="focusField('steamTemperature')" (input)="save()" [(ngModel)]="ssmt.boilerInput.steamTemperature"
+            [disabled]="true" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationSteamTemperature">Modification Initial Steam Temperature</label>
+        <div class="input-group">
+          <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature" class="form-control"
+            (focus)="focusField('steamTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.steamTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyDeaeratorConditions">
+        <input type="checkbox" id="modifyDeaeratorConditions" (focus)="focusField('deaeratorPressure')" (change)="toggleDeaeratorConditions()"
+          [(ngModel)]="showDeaeratorConditions" /> Change Deaerator Operating Conditions
+      </label>
+    </div>
+    <form *ngIf="showDeaeratorConditions">
+      <div class="form-group">
+        <label for="baselineDeaeratorPressure">Baseline Deaerator Pressure</label>
+        <div class="input-group">
+          <input name="baselineDeaeratorPressure" type="number" step="any" id="baselineDeaeratorPressure" class="form-control"
+            (focus)="focusField('deaeratorPressure')" (input)="save()" [(ngModel)]="ssmt.boilerInput.deaeratorPressure"
+            [disabled]="true" />
+          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="baselineDeaeratorVentRate">Baseline Deaerator Vent Rate</label>
+        <div class="input-group">
+          <input name="baselineDeaeratorVentRate" type="number" step="any" id="baselineDeaeratorVentRate" class="form-control"
+            (focus)="focusField('deaeratorVentRate')" (input)="save()" [(ngModel)]="ssmt.boilerInput.deaeratorVentRate"
+            [disabled]="true" />
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationDeaeratorPressure">Modification Deaerator Pressure</label>
+        <div class="input-group">
+          <input name="modificationDeaeratorPressure" type="number" step="any" id="modificationDeaeratorPressure" class="form-control"
+            (focus)="focusField('deaeratorPressure')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.deaeratorPressure" />
+            <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationDeaeratorVentRate">Modification Deaerator Vent Rate</label>
+        <div class="input-group">
+          <input name="modificationDeaeratorVentRate" type="number" step="any" id="modificationDeaeratorVentRate" class="form-control"
+            (focus)="focusField('deaeratorVentRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.boilerInput.deaeratorVentRate" />
+          <span class="units input-group-addon">%</span>
+        </div>
       </div>
     </form>
   </li>
