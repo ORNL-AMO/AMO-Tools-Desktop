@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Plane } from '../../../../../shared/models/fans';
 import { Fsat203Service } from '../../fsat-203.service';
@@ -11,6 +11,8 @@ import { Settings } from '../../../../../shared/models/settings';
   styleUrls: ['./fan-data-form.component.css']
 })
 export class FanDataFormComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   planeData: Plane;
   @Input()
@@ -31,6 +33,17 @@ export class FanDataFormComponent implements OnInit {
   constructor(private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    this.calcArea();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
     this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
   }
