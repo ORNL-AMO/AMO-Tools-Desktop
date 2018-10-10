@@ -14,6 +14,8 @@ export class SsmtService {
   updateData: BehaviorSubject<boolean>;
   turbineOperationHelp: BehaviorSubject<string>;
   turbineOperationValue: BehaviorSubject<number>;
+  headerPressureLevelHelp: BehaviorSubject<string>;
+  numberOfHeadersHelp:  BehaviorSubject<number>;
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
@@ -26,6 +28,9 @@ export class SsmtService {
     this.updateData = new BehaviorSubject<boolean>(false);
     this.turbineOperationHelp = new BehaviorSubject<string>('condensing');
     this.turbineOperationValue = new BehaviorSubject<number>(1);
+    this.headerPressureLevelHelp = new BehaviorSubject<string>('highPressure');
+    this.numberOfHeadersHelp = new BehaviorSubject<number>(1);
+
 
   }
 }

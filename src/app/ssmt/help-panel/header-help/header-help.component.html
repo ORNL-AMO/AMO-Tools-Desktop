@@ -16,7 +16,9 @@
       Pressure
       <br>
       <small class="text-muted">
-        Pressure of the header.
+        <span *ngIf="pressureLevel == 'highPressure'">Pressure of the high pressure header.</span>
+        <span *ngIf="pressureLevel == 'mediumPressure'">Pressure of the medium pressure header.</span>
+        <span *ngIf="pressureLevel == 'lowPressure'">Pressure of the low pressure header.</span>
         <hr>
       </small>
     </h6>
@@ -70,7 +72,8 @@
       Flash Condensate Return
       <br>
       <small class="text-muted">
-        Select YES if the model uses a flash to reduce the pressure of the combined condensate before joining the makeup water stream.
+        Select YES if the model uses a flash to reduce the pressure of the combined condensate before joining the
+        makeup water stream.
         <hr>
       </small>
     </h6>
@@ -80,7 +83,8 @@
       Flash Condensate Into Header
       <br>
       <small class="text-muted">
-        Select YES if the model uses a flash tank to reduce the pressure of the combined condensate, sending the flash steam to another header.
+        Select YES if the model uses a flash tank to reduce the pressure of the combined condensate, sending the flash
+        steam to another header.
         <hr>
       </small>
     </h6>
@@ -97,8 +101,11 @@
   </div>
   <div class="my-2" *ngIf="currentField == 'desuperheatSteamIntoNextHighest'">
     <h6>
-      <!--TODO: fix this so it say the header name-->
-      Desuperheat Steam Into Next Header
+      Desuperheat Steam Into
+      <span *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
+        Pressure</span>
+      <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'lowPressure'">Medium Pressure</span>
+      Header
       <br>
       <small class="text-muted">
         Models the addition of feedwater into the pressure reduce valve.
@@ -111,7 +118,8 @@
       Desuperheat Temperature
       <br>
       <small class="text-muted">
-        The target desuperheating temperature for the PRV outlet. Must be below outlet temperature without desuperheating to have an effect.
+        The target desuperheating temperature for the PRV outlet. Must be below outlet temperature without
+        desuperheating to have an effect.
         <hr>
       </small>
     </h6>
