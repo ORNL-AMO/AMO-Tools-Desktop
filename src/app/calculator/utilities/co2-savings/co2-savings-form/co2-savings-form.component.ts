@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OtherFuel, otherFuels } from './co2FuelSavingsFuels';
 import { eGridRegion, electricityGridRegions } from './electricityGridRegions';
 import * as _ from 'lodash';
@@ -11,7 +11,12 @@ import { Co2SavingsData } from '../co2-savings.service';
 export class Co2SavingsFormComponent implements OnInit {
   @Input()
   data: Co2SavingsData;
-
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  modId: string;
+  @Input()
+  index: number;
 
   otherFuels: Array<OtherFuel>;
   eGridRegions: Array<eGridRegion>;
@@ -28,11 +33,8 @@ export class Co2SavingsFormComponent implements OnInit {
   ngOnInit() {
     this.otherFuels = otherFuels;
     this.eGridRegions = electricityGridRegions;
-    if(this.data.energyType == 'fuel'){
-      this.setFuelOptions();
-    }else{
-      this.setRegion();
-    }
+    this.setFuelOptions();
+    this.setRegion();
     this.calculate();
   }
 
@@ -57,6 +59,6 @@ export class Co2SavingsFormComponent implements OnInit {
     this.calculate();
   }
   calculate() {
-
+    this.emitCalculate.emit()
   }
 }

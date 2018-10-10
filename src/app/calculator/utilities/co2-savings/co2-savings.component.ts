@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { Co2SavingsService, Co2SavingsData, Co2SavingsResults } from './co2-savings.service';
+import { Co2SavingsService, Co2SavingsData } from './co2-savings.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-co2-savings',
@@ -23,16 +24,17 @@ export class Co2SavingsComponent implements OnInit {
     energyType: 'fuel',
     totalEmissionOutputRate: 0,
     electricityUse: 0,
-    energySource: undefined,
-    fuelType: undefined,
-    eGridRegion: undefined,
-    eGridSubregion: undefined
+    energySource: 'Steam & Hot Water',
+    fuelType: 'Steam & Hot Water',
+    eGridRegion: 'ASCC',
+    eGridSubregion: 'AKGD: ASCC Alaska Grid',
+    totalEmissionOutput: 0
   }];
   baselineElectricityUse: number;
   modificationData: Array<Co2SavingsData> = [];
   modificationElectricityUse: number;
-  baselineResults: Co2SavingsResults;
-  modificationResults: Co2SavingsResults;
+  baselineTotal: number;
+  modificationTotal: number;
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
@@ -43,10 +45,10 @@ export class Co2SavingsComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    if(this.co2SavingsService.baselineData){
+    if (this.co2SavingsService.baselineData) {
       this.baselineData = this.co2SavingsService.baselineData;
     }
-    if(this.co2SavingsService.modificationData){
+    if (this.co2SavingsService.modificationData) {
       this.modificationData = this.co2SavingsService.modificationData;
       this.modificationExists = true;
     }
@@ -58,7 +60,7 @@ export class Co2SavingsComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.co2SavingsService.baselineData = this.baselineData;
     this.co2SavingsService.modificationData = this.modificationData;
   }
@@ -89,45 +91,47 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   calculate() {
-    // this.baselineData.forEach(data => {
-    //   data = this.co2SavingsService.calculate(data);
-    // })
-    this.baselineResults = this.co2SavingsService.getTotals(this.baselineData);
-    // this.modificationData.forEach(data => {
-    //   data = this.co2SavingsService.calculate(data);
-    // })
-    this.modificationResults = this.co2SavingsService.getTotals(this.modificationData);
+    this.baselineData.forEach(data => {
+      data = this.co2SavingsService.calculate(data);
+    })
+    this.baselineTotal = _.sumBy(this.baselineData, 'totalEmissionOutput');
+    if (this.modificationData) {
+      this.modificationData.forEach(data => {
+        data = this.co2SavingsService.calculate(data);
+      })
+      this.modificationTotal = _.sumBy(this.modificationData, 'totalEmissionOutput');
+    }
   }
 
-  addBaselineFixture(){
+  addBaselineFixture() {
     this.baselineData.push(JSON.parse(JSON.stringify(this.baselineData[0])));
     this.calculate();
   }
 
-  removeBaselineFixture(index: number){
+  removeBaselineFixture(index: number) {
     this.baselineData.splice(index, 1);
     this.calculate();
 
   }
 
-  addModification(){
+  addModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
     this.togglePanel(this.modifiedSelected);
   }
 
 
-  addModificationFixture(){
+  addModificationFixture() {
     this.modificationData.push(JSON.parse(JSON.stringify(this.modificationData[0])));
     this.calculate();
   }
 
-  removeModificationFixture(index: number){
+  removeModificationFixture(index: number) {
     this.modificationData.splice(index, 1);
     this.calculate();
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 }

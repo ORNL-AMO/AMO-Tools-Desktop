@@ -6,19 +6,10 @@ export class Co2SavingsService {
   modificationData: Array<Co2SavingsData>;
   constructor() { }
 
-  calculate(data: Co2SavingsData): Co2SavingsResults {
-    return
+  calculate(data: Co2SavingsData): Co2SavingsData {
+    data.totalEmissionOutput = (data.totalEmissionOutputRate) * (data.electricityUse / 1000);
+    return data;
   }
-
-  getTotals(data: Array<Co2SavingsData>): Co2SavingsResults {
-    return
-  }
-}
-
-
-
-export interface Co2SavingsResults {
-
 }
 
 export interface Co2SavingsData {
@@ -29,4 +20,5 @@ export interface Co2SavingsData {
   fuelType?: string;
   eGridRegion?: string;
   eGridSubregion?: string;
+  totalEmissionOutput: number;
 }
