@@ -139,7 +139,11 @@ export class SteamService {
   }
   //PRESSURE
   convertSteamPressureInput(val: number, settings: Settings): number {
-    return this.convertUnitsService.value(val).from(settings.steamPressureMeasurement).to('MPaa');
+    let tmpPressure: number = this.convertUnitsService.value(val).from(settings.steamPressureMeasurement).to('MPaa');
+    // if(tmpPressure < 0){
+    //   tmpPressure = 0;
+    // }
+    return tmpPressure;
   }
   convertSteamPressureOutput(val: number, settings: Settings): number {
     return this.convertUnitsService.value(val).from('MPaa').to(settings.steamPressureMeasurement);

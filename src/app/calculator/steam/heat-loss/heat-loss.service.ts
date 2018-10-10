@@ -49,7 +49,7 @@ export class HeatLossService {
   getRangeValues(settings: Settings, thermodynamicQuantity: number): HeatLossRanges {
     let quantityMinMax: {min: number, max: number} = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: HeatLossRanges = {
-      inletPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletPressureMin: 1,
       inletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       quantityValueMin: quantityMinMax.min,
       quantityValueMax: quantityMinMax.max,

@@ -75,7 +75,7 @@ export class HeaderService {
   getInletRangeValues(settings: Settings, thermodynamicQuantity: number): InletRanges {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: InletRanges = {
-      pressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      pressureMin: 1,
       pressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       quantityMin: quantityMinMax.min,
       quantityMax: quantityMinMax.max,
@@ -86,7 +86,7 @@ export class HeaderService {
   }
 
   getPressureRangeValues(settings: Settings): { min: number, max: number } {
-    let min: number = Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0));
+    let min: number = 1;
     let max: number = Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0));
     return { min: min, max: max };
   }

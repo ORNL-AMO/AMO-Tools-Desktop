@@ -68,7 +68,7 @@ export class TurbineService {
     let inletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, inletThermodynamicQuantity);
     let outletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, outletThermodynamicQuantity);
     let ranges: TurbineRanges = {
-      inletPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletPressureMin: 1,
       inletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       massFlowOrPowerOutMin: 0,
       massFlowOrPowerOutMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
@@ -78,7 +78,7 @@ export class TurbineService {
       isentropicEfficiencyMax: 100,
       generatorEfficiencyMin: 50,
       generatorEfficiencyMax: 100,
-      outletSteamPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      outletSteamPressureMin: 1,
       outletSteamPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
       outletQuantityValueMin: outletQuantityMinMax.min,
       outletQuantityValueMax: outletQuantityMinMax.max
