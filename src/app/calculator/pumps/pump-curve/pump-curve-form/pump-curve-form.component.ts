@@ -31,18 +31,36 @@ export class PumpCurveFormComponent implements OnInit {
   @Input()
   isFan: boolean;
 
-
   curveForm: any;
   options: Array<string> = [
     'Diameter',
     'Speed'
-  ]
-
+  ];
+  smallUnit: string;
   modWarning: string = null;
 
   constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() { 
+  ngOnInit() {
+    this.setSmallUnit();
+  }
+
+  setSmallUnit() {
+    if (!this.isFan) {
+      if (this.settings.distanceMeasurement == 'ft') {
+        this.smallUnit = 'in';
+      } else {
+        this.smallUnit = 'cm';
+      }
+    }
+    else {
+      if (this.settings.fanFlowRate == 'ft3/min') {
+        this.smallUnit = 'in';
+      }
+      else {
+        this.smallUnit = 'cm';
+      }
+    }
   }
 
   focusField(str: string) {
@@ -112,6 +130,17 @@ export class PumpCurveFormComponent implements OnInit {
     return tmpArr;
   }
 
+  changeMeasurementOption() {
+    if (this.pumpCurveForm.measurementOption == 'Diameter') {
+      this.pumpCurveForm.baselineMeasurement = this.convertUnitsService.value(1).from('ft').to(this.smallUnit);
+      this.pumpCurveForm.modifiedMeasurement = this.convertUnitsService.value(1).from('ft').to(this.smallUnit);
+    }
+    else {
+      this.pumpCurveForm.baselineMeasurement = 1800;
+      this.pumpCurveForm.modifiedMeasurement = 1800;
+    }
+    this.calculate();
+  }
 
   getDisplayUnit(unit: string) {
     if (unit) {

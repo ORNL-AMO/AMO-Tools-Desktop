@@ -3,12 +3,13 @@ import { O2Enrichment } from '../../../shared/models/phast/o2Enrichment';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { PhastService } from '../../../phast/phast.service';
 
 @Injectable()
 export class O2EnrichmentService {
   o2Enrichment: O2Enrichment;
   lines: Array<any> = [];
-  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
+  constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
   initForm(settings: Settings): FormGroup {
     let defaultO2Enrichment: O2Enrichment = {
@@ -89,14 +90,14 @@ export class O2EnrichmentService {
       combAirMax = this.convertUnitsService.roundVal(this.convertUnitsService.value(combAirMax).from('F').to('C'), 0);
     }
 
-    if(o2Enrichment){
-      if(o2Enrichment.flueGasTempEnriched){
+    if (o2Enrichment) {
+      if (o2Enrichment.flueGasTempEnriched) {
         combAirEnrichedMax = o2Enrichment.flueGasTempEnriched;
       }
-      if(o2Enrichment.o2CombAirEnriched){
+      if (o2Enrichment.o2CombAirEnriched) {
         o2CombAirMax = o2Enrichment.o2CombAirEnriched;
       }
-      if(o2Enrichment.flueGasTemp){
+      if (o2Enrichment.flueGasTemp) {
         combAirMax = o2Enrichment.flueGasTemp;
       }
     }
@@ -105,7 +106,7 @@ export class O2EnrichmentService {
       o2CombAirMax: o2CombAirMax,
       //o2CombAirEnriched
       o2CombAirEnrichedMin: 21,
-      o2CombAirEnrichedMax: 100,     
+      o2CombAirEnrichedMax: 100,
       //flueGasTemp
       flueGasTempMin: tmpTempMin,
       flueGasTempMax: tmpFlueGasTempMax,
@@ -127,6 +128,42 @@ export class O2EnrichmentService {
     }
     return tmpO2EnrichmentMinMax;
   }
+
+
+  getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): {data: Array<any>, onGraph: boolean} {
+    line.fuelSavings = 0.0;
+    let data = [];
+    let onGraph = false;
+    let returnObj: {data: Array<any>, onGraph: boolean};
+
+    for (let i = 0; i <= 100; i += .5) {
+      o2EnrichmentPoint.o2CombAirEnriched = i;
+      const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, settings).fuelSavingsEnriched;
+      if (fuelSavings > 0 && fuelSavings < 100) {
+        if (fuelSavings > line.fuelSavings) {
+          line.fuelSavings = fuelSavings;
+        }
+        if (!data.length) {
+          data.push({
+            x: i - .001,
+            y: 0
+          });
+        }
+        onGraph = true;
+        data.push({
+          x: i,
+          y: fuelSavings
+        });
+      }
+    }
+    returnObj = {
+      data: data,
+      onGraph: onGraph
+    };
+    return returnObj;
+  }
+
+
 }
 
 

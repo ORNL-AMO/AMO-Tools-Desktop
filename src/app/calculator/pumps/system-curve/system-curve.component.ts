@@ -6,7 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
+import { Calculator, CurveData, SystemCurve, PumpCurveForm, PumpCurveDataRow } from '../../../shared/models/calculators';
 import * as _ from 'lodash';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -30,6 +30,8 @@ export class SystemCurveComponent implements OnInit {
   isFan: boolean;
   @Input()
   fsat: FSAT;
+  // @Input()
+  // pumpCurvePrimary: boolean;
 
   curveConstants: { form: FormGroup };
 

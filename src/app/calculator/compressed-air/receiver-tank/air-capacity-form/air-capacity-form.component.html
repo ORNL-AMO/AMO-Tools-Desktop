@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="airPressureIn">Air Pressure In</label>
+        <label for="airPressureIn">Air Pressure - High</label>
         <div class="input-group">
           <input name="airPressureIn" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureIn" id="airPressureIn"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureIn')">
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="airPressureOut">Air Pressure Out</label>
+        <label for="airPressureOut">Air Pressure - Low</label>
         <div class="input-group">
           <input name="airPressureOut" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressureOut" id="airPressureOut"
             (input)="getAirCapacity()" onfocus="this.select();" (focus)="changeField('airPressureOut')">
