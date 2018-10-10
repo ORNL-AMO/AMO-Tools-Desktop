@@ -48,7 +48,7 @@ export class Co2SavingsComponent implements OnInit {
     if (this.co2SavingsService.baselineData) {
       this.baselineData = this.co2SavingsService.baselineData;
     }
-    if (this.co2SavingsService.modificationData) {
+    if (this.co2SavingsService.modificationData && this.co2SavingsService.modificationData.length != 0) {
       this.modificationData = this.co2SavingsService.modificationData;
       this.modificationExists = true;
     }
