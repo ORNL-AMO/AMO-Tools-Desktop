@@ -41,7 +41,7 @@ export class Co2SavingsFormComponent implements OnInit {
   setFuelOptions() {
     let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource == val.energySource });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
-    this.calculate();
+    this.setFuel();
   }
   setFuel() {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType == val.fuelType });
@@ -51,7 +51,7 @@ export class Co2SavingsFormComponent implements OnInit {
   setRegion() {
     let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion == val.region });
     this.subregions = tmpRegion.subregions;
-    this.calculate();
+    this.setSubRegion();
   }
   setSubRegion() {
     let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion == val.subregion });

@@ -22,7 +22,7 @@ export class Co2SavingsComponent implements OnInit {
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{
     energyType: 'fuel',
-    totalEmissionOutputRate: 0,
+    totalEmissionOutputRate: 66.33,
     electricityUse: 0,
     energySource: 'Steam & Hot Water',
     fuelType: 'Steam & Hot Water',
