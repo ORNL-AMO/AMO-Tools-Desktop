@@ -59,6 +59,8 @@ export class CondensingTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.ssmtService.turbineOperationValue.next(this.turbineForm.controls.operationType.value);
+    this.ssmtService.turbineOperationHelp.next('condensing');
     this.ssmtService.currentField.next(str);
   }
 

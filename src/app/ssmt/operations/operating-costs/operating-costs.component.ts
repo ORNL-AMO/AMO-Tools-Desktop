@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingCosts } from '../../../shared/models/operations';
 import { Settings } from 'electron';
 import { CompareService } from '../../compare.service';
+import { SsmtService } from '../../ssmt.service';
 
 @Component({
   selector: 'app-operating-costs',
@@ -19,7 +20,7 @@ export class OperatingCostsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
-  constructor(private compareService: CompareService) { }
+  constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
   }
@@ -58,5 +59,12 @@ export class OperatingCostsComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  focusField(str: string){
+    this.ssmtService.currentField.next(str);
+  }  
+  focusOut() {
+    this.ssmtService.currentField.next('default');
   }
 }

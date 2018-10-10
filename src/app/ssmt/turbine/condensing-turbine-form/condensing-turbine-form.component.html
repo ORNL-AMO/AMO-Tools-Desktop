@@ -1,8 +1,7 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')"
-        [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
       Condensing Turbine
     </div>
   </label>
