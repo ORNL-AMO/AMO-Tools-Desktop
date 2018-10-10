@@ -95,6 +95,11 @@ export class SaturatedPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.changeDetectorRef.detectChanges();
+    }, 50)
   }
 
   setField(str: string) {

@@ -93,6 +93,11 @@ export class SteamPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.changeDetectorRef.detectChanges();
+    }, 50)
   }
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {

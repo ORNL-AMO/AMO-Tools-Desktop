@@ -59,7 +59,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   dataPopulated: boolean = false;
   canvasReady: boolean = false;
 
-  defaultPressureUnit: string = 'MPaa';
+  defaultPressureUnit: string = 'MPa';
   defaultEnthalpyUnit: string = 'kJkg';
   pressureArray: Array<number>;
   enthalpyArray: Array<number>;
