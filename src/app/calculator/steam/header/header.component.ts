@@ -106,9 +106,6 @@ export class HeaderComponent implements OnInit {
       })
       if (formTest == true) {
         this.results = this.steamService.header(this.input, this.settings);
-        if(this.results){
-          this.results = this.getEmptyResults();
-        }
       } else {
         this.results = this.getEmptyResults();
       }
