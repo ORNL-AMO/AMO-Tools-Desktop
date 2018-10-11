@@ -22,13 +22,13 @@ export class Co2SavingsComponent implements OnInit {
   settings: Settings;
   baselineData: Array<Co2SavingsData> = [{
     energyType: 'fuel',
-    totalEmissionOutputRate: 66.33,
-    electricityUse: 0,
-    energySource: 'Steam & Hot Water',
-    fuelType: 'Steam & Hot Water',
-    eGridRegion: 'ASCC',
-    eGridSubregion: 'AKGD: ASCC Alaska Grid',
-    totalEmissionOutput: 0
+    totalEmissionOutputRate: undefined,
+    electricityUse: undefined,
+    energySource: undefined,
+    fuelType: undefined,
+    eGridRegion: undefined,
+    eGridSubregion: undefined,
+    totalEmissionOutput: undefined
   }];
   baselineElectricityUse: number;
   modificationData: Array<Co2SavingsData> = [];
@@ -104,7 +104,18 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   addBaselineFixture() {
-    this.baselineData.push(JSON.parse(JSON.stringify(this.baselineData[0])));
+    this.baselineData.push(
+      {
+        energyType: 'fuel',
+        totalEmissionOutputRate: undefined,
+        electricityUse: undefined,
+        energySource: undefined,
+        fuelType: undefined,
+        eGridRegion: undefined,
+        eGridSubregion: undefined,
+        totalEmissionOutput: undefined
+      }
+    );
     this.calculate();
   }
 
@@ -122,7 +133,18 @@ export class Co2SavingsComponent implements OnInit {
 
 
   addModificationFixture() {
-    this.modificationData.push(JSON.parse(JSON.stringify(this.modificationData[0])));
+    this.modificationData.push(
+      {
+        energyType: 'fuel',
+        totalEmissionOutputRate: undefined,
+        electricityUse: undefined,
+        energySource: undefined,
+        fuelType: undefined,
+        eGridRegion: undefined,
+        eGridSubregion: undefined,
+        totalEmissionOutput: undefined
+      }
+    );
     this.calculate();
   }
 

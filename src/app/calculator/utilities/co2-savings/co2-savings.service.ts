@@ -7,7 +7,11 @@ export class Co2SavingsService {
   constructor() { }
 
   calculate(data: Co2SavingsData): Co2SavingsData {
-    data.totalEmissionOutput = (data.totalEmissionOutputRate) * (data.electricityUse / 1000);
+    if(data.totalEmissionOutputRate && data.electricityUse){
+      data.totalEmissionOutput = (data.totalEmissionOutputRate) * (data.electricityUse / 1000);
+    }else{
+      data.totalEmissionOutput = 0;
+    }
     return data;
   }
 }

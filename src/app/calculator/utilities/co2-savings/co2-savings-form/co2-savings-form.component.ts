@@ -33,15 +33,26 @@ export class Co2SavingsFormComponent implements OnInit {
   ngOnInit() {
     this.otherFuels = otherFuels;
     this.eGridRegions = electricityGridRegions;
-    this.setFuelOptions();
-    this.setRegion();
+    // this.setFuelOptions();
+    // this.setRegion();
+    this.calculate();
+  }
+
+  changeEnergyType(){
+    this.data.eGridRegion = undefined;
+    this.data.eGridSubregion = undefined;
+    this.data.electricityUse = undefined;
+    this.data.totalEmissionOutputRate = undefined;
+    this.data.fuelType = undefined;
+    this.data.energySource = undefined;
     this.calculate();
   }
 
   setFuelOptions() {
     let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource == val.energySource });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
-    this.setFuel();
+    this.data.fuelType = undefined;
+    this.data.totalEmissionOutputRate = undefined;
   }
   setFuel() {
     let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType == val.fuelType });
@@ -51,7 +62,8 @@ export class Co2SavingsFormComponent implements OnInit {
   setRegion() {
     let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion == val.region });
     this.subregions = tmpRegion.subregions;
-    this.setSubRegion();
+    this.data.eGridSubregion = undefined;
+    this.data.totalEmissionOutputRate = undefined;
   }
   setSubRegion() {
     let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion == val.subregion });
