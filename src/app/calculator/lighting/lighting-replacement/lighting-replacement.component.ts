@@ -66,6 +66,27 @@ export class LightingReplacementComponent implements OnInit {
     this.lightingReplacementService.modificationData = this.modificationData;
   }
 
+  btnResetData() {
+    this.baselineData = new Array<LightingReplacementResults>();
+    this.modificationData = new Array<LightingReplacementResults>();
+    let newBaselineData = {
+      hoursPerDay: 0,
+      daysPerMonth: 30,
+      monthsPerYear: 12,
+      hoursPerYear: 0,
+      wattsPerLamp: 0,
+      lampsPerFixture: 0,
+      numberOfFixtures: 0,
+      lumensPerLamp: 0,
+      totalLighting: 0,
+      electricityUse: 0
+    }
+    this.baselineData.push(newBaselineData);
+    this.lightingReplacementService.baselineData = this.baselineData;
+    this.lightingReplacementService.modificationData = this.modificationData;
+    this.calculate();
+  }
+
   togglePanel(bool: boolean) {
     if (bool == this.baselineSelected) {
       this.baselineSelected = true;
