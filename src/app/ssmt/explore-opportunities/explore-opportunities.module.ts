@@ -6,13 +6,14 @@ import { ExploreOpportunitiesHelpComponent } from './explore-opportunities-help/
 import { FormsModule } from '@angular/forms';
 import { OperationsFormComponent } from './explore-opportunities-form/operations-form/operations-form.component';
 import { BoilerFormComponent } from './explore-opportunities-form/boiler-form/boiler-form.component';
+import { HeaderFormComponent } from './explore-opportunities-form/header-form/header-form.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule
   ],
-  declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent],
+  declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent],
   exports: [ExploreOpportunitiesComponent]
 })
 export class ExploreOpportunitiesModule { }

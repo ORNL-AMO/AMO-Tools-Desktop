@@ -1,0 +1,89 @@
+<div class="checkbox">
+  <label class="group-label" for="adjustHeatLossPrecentages">
+    <input type="checkbox" id="adjustHeatLossPrecentages" (focus)="focusField('default')" (change)="toggleHeatLoss()"
+      [(ngModel)]="showHeatLoss" /> Adjust Heat Loss Percentages
+  </label>
+</div>
+<ul *ngIf="showHeatLoss">
+  <li>
+    <div class="checkbox">
+      <label for="modifyHighPressureHeatLoss">
+        <input type="checkbox" id="modifyHighPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleHighPressureHeatLoss()"
+          [(ngModel)]="showHighPressureHeatLoss" /> Adjust High Pressure Heat Loss
+      </label>
+    </div>
+    <form *ngIf="showHighPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineHPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineHPHeatLoss" type="number" step="any" id="baselineHPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.headerInput.highPressure.heatLoss"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationHPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationHPHeatLoss" type="number" step="any" id="modificationHPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.highPressure.heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders == 3">
+    <div class="checkbox">
+      <label for="modifyMediumPressureHeatLoss">
+        <input type="checkbox" id="modifyMediumPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleMediumPressureHeatLoss()"
+          [(ngModel)]="showMediumPressureHeatLoss" /> Adjust Medium Pressure Heat Loss
+      </label>
+    </div>
+    <form *ngIf="showMediumPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineMPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineMPHeatLoss" type="number" step="any" id="baselineMPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.headerInput.mediumPressure.heatLoss"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationMPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationMPHeatLoss" type="number" step="any" id="modificationMPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.mediumPressure.highPressure.heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+    <div class="checkbox">
+      <label for="modifyLowPressureHeatLoss">
+        <input type="checkbox" id="modifyLowPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggLowPressureHeatLoss()"
+          [(ngModel)]="showLowPressureHeatLoss" /> Adjust Low Pressure Heat Loss
+      </label>
+    </div>
+    <form *ngIf="showLowPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineLPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineLPHeatLoss" type="number" step="any" id="baselineLPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.headerInput.lowPressure.heatLoss"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationLPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationLPHeatLoss" type="number" step="any" id="modificationLPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.lowPressure.heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+</ul>
