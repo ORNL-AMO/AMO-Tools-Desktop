@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankDedicatedStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { CompressedAirService } from '../../compressed-air.service';
@@ -25,6 +25,18 @@ export class DedicatedStorageFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.dedicatedStorageInputs;
+    this.getReceiverVolume();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
     this.inputs = this.compressedAirService.dedicatedStorageInputs;
     this.getReceiverVolume();
   }

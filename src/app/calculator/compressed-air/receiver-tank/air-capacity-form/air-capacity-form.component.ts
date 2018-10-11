@@ -37,11 +37,8 @@ export class AirCapacityFormComponent implements OnInit {
   }
 
   resetData() {
-    this.inputs = {
-      tankSize: 0,
-      airPressureIn: 0,
-      airPressureOut: 0,
-    }
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.airCapacityInputs;
     this.getAirCapacity();
   }
 

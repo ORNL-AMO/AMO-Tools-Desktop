@@ -10,6 +10,11 @@
     </div>
     <div class="d-flex flex-column m-4">
       <app-system-capacity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculate()"></app-system-capacity-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -25,8 +30,10 @@
         <h5>
           System Capacity Help
           <br>
-          <small class="text-muted"> This is used to find the total air quantity that the compressed air system can contain
-            at any instant of time, including the air in the pipes and receivers. The total capacity of the compressed air
+          <small class="text-muted"> This is used to find the total air quantity that the compressed air system can
+            contain
+            at any instant of time, including the air in the pipes and receivers. The total capacity of the compressed
+            air
             system can be obtained by adding the volumes of pipes and receivers.
             <hr> Pipe sizes used are nominal Schedule 40 pipe sizes
 
@@ -39,7 +46,8 @@
             Pipe Size
             <br>
             <small class="text-muted">
-              Pipe that is sized too small can create big pressure losses and reduce operating efficiency. Enter the length for different
+              Pipe that is sized too small can create big pressure losses and reduce operating efficiency. Enter the
+              length for different
               Nominal Pipe sizes total.
               <hr>
             </small>

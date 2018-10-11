@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { CompressedAirService } from '../../compressed-air.service';
@@ -24,6 +24,18 @@ export class MeteredStorageFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.meteredStorageInputs;
+    this.getTotalReceiverVolume();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
     this.inputs = this.compressedAirService.meteredStorageInputs;
     this.getTotalReceiverVolume();
   }

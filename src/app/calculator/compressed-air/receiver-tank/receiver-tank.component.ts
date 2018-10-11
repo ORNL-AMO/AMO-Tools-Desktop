@@ -65,6 +65,8 @@ export class ReceiverTankComponent implements OnInit {
 
   btnResetData() {
     this.toggleResetData = !this.toggleResetData;
+    this.method = 0;
+    this.setCurrentForm();
   }
 
   resizeTabs() {

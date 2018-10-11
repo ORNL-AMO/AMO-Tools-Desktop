@@ -38,6 +38,16 @@ export class AirVelocityComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      airFlow: 0,
+      pipePressure: 0,
+      atmosphericPressure: 0,
+    }
+    this.compressedAirService.airVelocityInputs = this.inputs;
+    this.getAirVelocity(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
