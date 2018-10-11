@@ -1,8 +1,8 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" (focus)="focusField('useTurbine')"
-        [ngClass]="{'indicate-different': isUseTurbineDifferent()}" (change)="save()">
+      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}"
+        (change)="save()">
       <span *ngIf="pressureTurbineString == 'highToLowTurbine'">High Pressure to Low Pressure</span>
       <span *ngIf="pressureTurbineString == 'highToMediumTurbine'">High Pressure to Medium Pressure</span>
       <span *ngIf="pressureTurbineString == 'mediumToLowTurbine'">Medium Pressure to Low Pressure</span>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group">
-      <label for="generationEfficiency">Generation Efficiency</label>
+      <label for="generationEfficiency">Generator Efficiency</label>
       <div class="input-group">
         <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
           (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
@@ -38,7 +38,7 @@
     </div>
 
     <div class="form-group" *ngIf="turbineForm.controls.operationType.value != 2">
-      <label for="processSteamUsage">
+      <label for="operationValue1">
         <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
         <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
         <span *ngIf="turbineForm.controls.operationType.value == 3">Minimum Power</span>
@@ -56,7 +56,7 @@
     </div>
 
     <div class="form-group" *ngIf="turbineForm.controls.operationType.value == 4 || turbineForm.controls.operationType.value == 3">
-      <label for="processSteamUsage">
+      <label for="operationValue2">
         <span *ngIf="turbineForm.controls.operationType.value == 4">Maximum Flow</span>
         <span *ngIf="turbineForm.controls.operationType.value == 3">Maximum Power</span>
       </label>

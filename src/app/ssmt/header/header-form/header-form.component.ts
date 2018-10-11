@@ -67,6 +67,8 @@ export class HeaderFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.ssmtService.numberOfHeadersHelp.next(this.numberOfHeaders);
+    this.ssmtService.headerPressureLevelHelp.next(this.pressureLevel);
     this.ssmtService.currentField.next(str);
   }
 
