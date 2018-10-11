@@ -1,3 +1,5 @@
+<app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-condensate-handling-form>
+
 <!--HEAT LOSS-->
 <div class="checkbox">
   <label class="group-label" for="adjustHeatLossPrecentages">
@@ -63,7 +65,7 @@
   <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
     <div class="checkbox">
       <label for="modifyLowPressureHeatLoss">
-        <input type="checkbox" id="modifyLowPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggLowPressureHeatLoss()"
+        <input type="checkbox" id="modifyLowPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleLowPressureHeatLoss()"
           [(ngModel)]="showLowPressureHeatLoss" /> Adjust Low Pressure Heat Loss
       </label>
     </div>

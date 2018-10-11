@@ -1,0 +1,90 @@
+<!--CONDENSATE RECOVERY RATE-->
+<div class="checkbox">
+  <label class="group-label" for="adjustCondensateRecovery">
+    <input type="checkbox" id="adjustCondensateRecovery" (focus)="focusField('default')" (change)="toggleCondensateRecovery()"
+      [(ngModel)]="showCondensateRecovery" /> Adjust Condensate Recovery Rate
+  </label>
+</div>
+<ul *ngIf="showCondensateRecovery">
+  <li>
+    <div class="checkbox">
+      <label for="modifyHighPressureCondensateRecovery">
+        <input type="checkbox" id="modifyHighPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleHighPressureCondensateRecovery()"
+          [(ngModel)]="showHighPressureCondensateRecovery" /> Adjust High Pressure Condensate Recovery Rate
+      </label>
+    </div>
+    <form *ngIf="showHighPressureCondensateRecovery">
+      <div class="form-group">
+        <label for="baselineHPCondensateRecovery">Baseline Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="baselineHPCondensateRecovery" type="number" step="any" id="baselineHPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.headerInput.highPressure.condensationRecoveryRate"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationHPCondensateRecovery">Modification Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="modificationHPCondensateRecovery" type="number" step="any" id="modificationHPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders == 3">
+    <div class="checkbox">
+      <label for="modifyMediumPressureCondensateRecovery">
+        <input type="checkbox" id="modifyMediumPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleMediumPressureCondensateRecovery()"
+          [(ngModel)]="showMediumPressureCondensateRecovery" /> Adjust Medium Pressure Condensate Recovery Rate
+      </label>
+    </div>
+    <form *ngIf="showMediumPressureCondensateRecovery">
+      <div class="form-group">
+        <label for="baselineMPCondensateRecovery">Baseline Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="baselineMPCondensateRecovery" type="number" step="any" id="baselineMPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.headerInput.mediumPressure.condensationRecoveryRate"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationMPCondensateRecovery">Modification Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="modificationMPCondensateRecovery" type="number" step="any" id="modificationMPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.mediumPressure.highPressure.condensationRecoveryRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+    <div class="checkbox">
+      <label for="modifyLowPressureCondensateRecovery">
+        <input type="checkbox" id="modifyLowPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleLowPressureCondensateRecovery()"
+          [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust Low Pressure Condensate Recovery Rate
+      </label>
+    </div>
+    <form *ngIf="showLowPressureCondensateRecovery">
+      <div class="form-group">
+        <label for="baselineLPCondensateRecovery">Baseline Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="baselineLPCondensateRecovery" type="number" step="any" id="baselineLPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.headerInput.lowPressure.condensationRecoveryRate"
+            [disabled]="true" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationLPCondensateRecovery">Modification Condensate Recovery Rate</label>
+        <div class="input-group">
+          <input name="modificationLPCondensateRecovery" type="number" step="any" id="modificationLPCondensateRecovery" class="form-control"
+            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+      </div>
+    </form>
+  </li>
+</ul>
