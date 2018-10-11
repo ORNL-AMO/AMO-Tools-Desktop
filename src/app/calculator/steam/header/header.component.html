@@ -43,6 +43,11 @@
       </div> -->
       <app-header-form *ngFor="let inletForm of inletForms; let index = index;" [inletForm]="inletForm" [index]="index+1"
         [settings]="settings" (emitChangeField)="changeField($event, index)" (emitCalculate)="saveInletForm($event, index)"></app-header-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 scroll-item mh-100">

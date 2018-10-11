@@ -11,10 +11,12 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MeteredStorageFormComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  
+
   inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
 
@@ -30,7 +32,7 @@ export class MeteredStorageFormComponent implements OnInit {
     this.totalReceiverVolume = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

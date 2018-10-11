@@ -1,4 +1,3 @@
-
 .btn-container {
     text-align: center;
 }
@@ -13,4 +12,17 @@
 .btn-add-row:hover {
     cursor: pointer;
     background-color: #aaa;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { CalculateUsableCapacity } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { CompressedAirService } from '../../compressed-air.service';
@@ -11,6 +11,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
   styleUrls: ['./air-capacity-form.component.css']
 })
 export class AirCapacityFormComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   settings: Settings;
   @Output('emitChangeField')
@@ -25,6 +27,21 @@ export class AirCapacityFormComponent implements OnInit {
 
   ngOnInit() {
     this.inputs = this.compressedAirService.airCapacityInputs;
+    this.getAirCapacity();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.inputs = {
+      tankSize: 0,
+      airPressureIn: 0,
+      airPressureOut: 0,
+    }
     this.getAirCapacity();
   }
 

@@ -11,6 +11,8 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class GeneralMethodFormComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
