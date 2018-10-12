@@ -7,6 +7,9 @@
     font-size: small !important;
 }
 
+.btn-margin-10 {
+    margin: 10px 0px;
+}
 
 .pump-curve-form-section{
     border-bottom: 1px dashed;

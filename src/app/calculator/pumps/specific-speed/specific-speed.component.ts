@@ -39,6 +39,7 @@ export class SpecificSpeedComponent implements OnInit {
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
+  toggleResetData: boolean = true;
   tabSelect: string = 'results';
   calcExists: boolean;
   saving: boolean;
@@ -67,6 +68,12 @@ export class SpecificSpeedComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    this.toggleResetData = !this.toggleResetData;
+    this.speedForm = this.specificSpeedService.initForm(this.settings);
+    this.calculate();
   }
 
   resizeTabs() {
@@ -120,8 +127,8 @@ export class SpecificSpeedComponent implements OnInit {
     }
     return tmpCalculator;
   }
-  
-  initForm(){
+
+  initForm() {
     if (!this.psat) {
       if (!this.specificSpeedService.specificSpeedInputs) {
         this.speedForm = this.specificSpeedService.initForm(this.settings);

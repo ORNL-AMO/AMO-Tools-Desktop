@@ -65,6 +65,26 @@ export class Co2SavingsComponent implements OnInit {
     this.co2SavingsService.modificationData = this.modificationData;
   }
 
+  btnResetData() {
+    this.baselineData = [{
+      energyType: 'fuel',
+      totalEmissionOutputRate: undefined,
+      electricityUse: undefined,
+      energySource: undefined,
+      fuelType: undefined,
+      eGridRegion: undefined,
+      eGridSubregion: undefined,
+      totalEmissionOutput: undefined
+    }];
+    this.modificationData = new Array<Co2SavingsData>();
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+    this.modificationExists = false;
+    this.co2SavingsService.baselineData = this.baselineData;
+    this.co2SavingsService.modificationData = this.modificationData;
+    this.calculate();
+  }
+
   togglePanel(bool: boolean) {
     if (bool == this.baselineSelected) {
       this.baselineSelected = true;

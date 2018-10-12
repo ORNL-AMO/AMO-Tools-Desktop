@@ -16,6 +16,21 @@ export class ReplaceRewindService {
   };
   constructor() { }
 
+  initReplaceRewindData(): ReplaceRewindData {
+    this.replaceRewindData = {
+      operatingHours: 6000,
+      motorSize: 350,
+      load: 75,
+      electricityCost: 0.08,
+      currentEfficiency: 94.4,
+      rewindEfficiencyLoss: 0.5,
+      costOfRewind: 8384,
+      newEfficiency: 95.7,
+      purchaseCost: 33163
+    };
+    return this.replaceRewindData;
+  }
+
   getResults(inputs: ReplaceRewindData): ReplaceRewindResults {
     let results: ReplaceRewindResults = {
       differentialCost: 0,

@@ -38,6 +38,7 @@ export class EfficiencyImprovementComponent implements OnInit {
 
   calcExists: boolean;
   saving: boolean;
+  originalCalculator: Calculator;
   calculator: Calculator;
 
   constructor(private phastService: PhastService, private efficiencyImprovementService: EfficiencyImprovementService, private settingsDbService: SettingsDbService,
@@ -51,6 +52,7 @@ export class EfficiencyImprovementComponent implements OnInit {
 
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
     } else {
       this.initForm();
     }
@@ -63,6 +65,17 @@ export class EfficiencyImprovementComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment && this.originalCalculator.efficiencyImprovementInputs) {
+      this.calculator = this.originalCalculator;
+      this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
+    }
+    else {
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+    }
+    this.calculate();
   }
 
   resizeTabs() {

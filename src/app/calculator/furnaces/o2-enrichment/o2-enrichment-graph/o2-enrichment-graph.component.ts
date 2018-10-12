@@ -94,6 +94,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   @Input()
   toggleCalculate: boolean;
+  @Input()
+  toggleResetData: boolean;
   constructor(private o2EnrichmentService: O2EnrichmentService, private lineChartHelperService: LineChartHelperService, private phastService: PhastService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
     this.differ = differs.find({}).create();
   }
@@ -136,6 +138,10 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      console.log('o2enrichmentgraph resetTableData()');
+      this.resetTableData();
+    }
     if (!this.isFirstChange && changes) {
       this.onChanges();
     } else {
@@ -546,6 +552,14 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
   }
 
+  resetTableData() {
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.deleteCount = 0;
+    for (let i = 0; i < this.lines.length; i++) {
+      this.deleteLine(i);
+    }
+  }
 
   buildTable() {
     let i = this.rowData.length + this.deleteCount;

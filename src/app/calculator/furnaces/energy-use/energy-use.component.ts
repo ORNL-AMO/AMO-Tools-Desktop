@@ -42,7 +42,7 @@ export class EnergyUseComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
-
+  originalCalculator: Calculator;
   constructor(private phastService: PhastService, private energyUseService: EnergyUseService, private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -55,6 +55,7 @@ export class EnergyUseComponent implements OnInit {
 
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
     } else {
       this.initForm();
     }
@@ -66,6 +67,18 @@ export class EnergyUseComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment && this.calcExists) {
+      this.calculator = this.originalCalculator;
+    }
+    else {
+      this.flowCalculations = this.energyUseService.initDefaultValues(this.settings);
+      this.energyUseService.flowCalculations = this.flowCalculations;
+    }
+
+    this.calculate();
   }
 
   resizeTabs() {

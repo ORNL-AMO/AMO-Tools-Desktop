@@ -37,6 +37,18 @@ export class PneumaticAirComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      pistonType: 0,
+      cylinderDiameter: 0,
+      cylinderStroke: 0,
+      pistonRodDiameter: 0,
+      airPressure: 0,
+      cyclesPerMinute: 0
+    }
+    this.calculatePneumaticAirRequirement(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

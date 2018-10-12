@@ -191,6 +191,19 @@ export class SystemCurveComponent implements OnInit {
     }
   }
 
+  btnResetData() {
+    this.initDefault();
+    if (this.isFan) {
+      this.convertFanDefaults(this.settings);
+    }
+    else {
+      this.convertPumpDefaults(this.settings);
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
+  }
+
   convertPumpDefaults(settings: Settings) {
     if (settings.flowMeasurement != 'gpm') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);

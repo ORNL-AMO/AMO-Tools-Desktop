@@ -33,7 +33,6 @@ export class CompressedAirService {
     efficiencyLoaded: 0,
     efficiencyUnloaded: 0,
     costOfElectricity: 0,
-
   };
 
   pipeSizingInput: PipeSizingInput = {
@@ -67,7 +66,7 @@ export class CompressedAirService {
     finalTankPressure: 0
   };
 
-  bridgeCompressorInputs:ReceiverTankBridgingCompressor = {
+  bridgeCompressorInputs: ReceiverTankBridgingCompressor = {
     method: 3,
     distanceToCompressorRoom: 0,
     speedOfAir: 0,
@@ -108,4 +107,44 @@ export class CompressedAirService {
     six: 0,
   };
   constructor() { }
+
+
+  initReceiverTankInputs() {
+    this.airCapacityInputs = {
+      tankSize: 0,
+      airPressureIn: 0,
+      airPressureOut: 0,
+    };
+    this.dedicatedStorageInputs = {
+      method: 1,
+      atmosphericPressure: 14.7,
+      lengthOfDemand: 0,
+      airFlowRequirement: 0,
+      initialTankPressure: 0,
+      finalTankPressure: 0
+    }
+    this.meteredStorageInputs = {
+      method: 2,
+      lengthOfDemand: 0,
+      airFlowRequirement: 0,
+      atmosphericPressure: 14.7,
+      initialTankPressure: 0,
+      finalTankPressure: 0,
+      meteredControl: 0,
+    }
+    this.bridgeCompressorInputs = {
+      method: 3,
+      distanceToCompressorRoom: 0,
+      speedOfAir: 0,
+      airDemand: 0,
+      allowablePressureDrop: 0,
+      atmosphericPressure: 14.7
+    }
+    this.generalMethodInputs = {
+      airDemand: 0,
+      allowablePressureDrop: 0,
+      method: 0,
+      atmosphericPressure: 14.7,
+    }
+  }
 }
