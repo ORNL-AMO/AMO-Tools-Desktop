@@ -133,6 +133,7 @@ export class FsatComponent implements OnInit {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
+      this.checkTutorials();
     })
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
@@ -196,6 +197,24 @@ export class FsatComponent implements OnInit {
     }, 100);
   }
 
+  checkTutorials() {
+    if (this.mainTab == 'system-setup') {
+      if (!this.settingsDbService.globalSettings.disableFsatSetupTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('fsat-system-setup');
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (!this.settingsDbService.globalSettings.disableFsatAssessmentTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('fsat-assessment-tutorial');
+      }
+    } else if (this.mainTab == 'report') {
+      if (!this.settingsDbService.globalSettings.disableFsatReportTutorial) {
+        this.assessmentService.tutorialShown = false;
+        this.assessmentService.showTutorial.next('fsat-report-tutorial');
+      }
+    }
+  }
 
   initSankeyList() {
     this.fsatOptions = new Array<any>();

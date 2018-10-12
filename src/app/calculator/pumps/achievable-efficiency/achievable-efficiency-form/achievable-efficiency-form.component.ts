@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -14,6 +14,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  
   pumpTypes: Array<string> = [
     'End Suction Slurry',
     'End Suction Sewage',
@@ -32,6 +34,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   tmpPumpType: string;
   tmpFlowRate: number;
   flowRateError: string = null;
+  firstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
@@ -39,6 +42,19 @@ export class AchievableEfficiencyFormComponent implements OnInit {
       this.tmpFlowRate = this.efficiencyForm.controls.flowRate.value;
       this.tmpPumpType = this.efficiencyForm.controls.pumpType.value;
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.efficiencyForm) {
+        this.tmpFlowRate = this.efficiencyForm.controls.flowRate.value;
+        this.tmpPumpType = this.efficiencyForm.controls.pumpType.value;
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+
   }
 
   emitChange() {

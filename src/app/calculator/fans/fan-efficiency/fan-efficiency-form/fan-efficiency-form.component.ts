@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FanEfficiencyInputs } from '../fan-efficiency.component';
 import { FanTypes } from '../../../../fsat/fanOptions';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fan-efficiency-form',
@@ -11,7 +11,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class FanEfficiencyFormComponent implements OnInit {
   @Input()
-  inputs: FanEfficiencyInputs;
+  fanEfficiencyForm: FormGroup;
   @Input()
   settings: Settings;
   @Output('emitChange')
@@ -21,10 +21,6 @@ export class FanEfficiencyFormComponent implements OnInit {
 
   fanTypes: Array<{ display: string, value: number }>;
 
-  compressibilityFactorError: string = null;
-  flowRateError: string = null;
-  outletPressureError: string = null;
-  fanSpeedError: string = null;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {

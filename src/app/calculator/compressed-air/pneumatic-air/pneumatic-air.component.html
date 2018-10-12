@@ -2,14 +2,20 @@
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
-        <img src="assets/images/pneumatic-air-requirement.png" class="ico-size5">
+        <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png" class="ico-size5">
       </div>
       <div class="pl-2">
         <h3>Pneumatic Air</h3>
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-pneumatic-air-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)" (emitChangeField)="setField($event)"></app-pneumatic-air-form>
+      <app-pneumatic-air-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculatePneumaticAirRequirement($event)"
+        (emitChangeField)="setField($event)"></app-pneumatic-air-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -25,8 +31,10 @@
         <h5>
           Pneumatic Air Help
           <br>
-          <small class="text-muted"> This calculator helps in computing the quantity of air required by a specific single acting or a double acting
-            piston cylinder compressor. The design specs of the compressor are entered in the calculator and the quantity
+          <small class="text-muted"> This calculator helps in computing the quantity of air required by a specific
+            single acting or a double acting
+            piston cylinder compressor. The design specs of the compressor are entered in the calculator and the
+            quantity
             of air needed is generated.
           </small>
         </h5>
@@ -48,7 +56,7 @@
             Air Pressure
             <br>
             <small class="text-muted">
-              Pressure of the air coming out of the cylinder.
+              Pressure of the air supplied to cylinder.
               <hr>
             </small>
           </h6>

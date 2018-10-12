@@ -10,6 +10,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { FsatReportService } from './fsat-report.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-fsat-report',
@@ -123,6 +124,9 @@ export class FsatReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+    setTimeout(() => {
+      d3.selectAll('.tick text').style('display', 'initial');
+    }, 50);
   }
 
   getSettings() {

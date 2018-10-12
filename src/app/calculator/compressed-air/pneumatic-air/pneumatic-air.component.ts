@@ -25,7 +25,7 @@ export class PneumaticAirComponent implements OnInit {
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.pneumaticAirinputs;
@@ -37,13 +37,25 @@ export class PneumaticAirComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      pistonType: 0,
+      cylinderDiameter: 0,
+      cylinderStroke: 0,
+      pistonRodDiameter: 0,
+      airPressure: 0,
+      cyclesPerMinute: 0
+    }
+    this.calculatePneumaticAirRequirement(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
   calculatePneumaticAirRequirement(inputs: PneumaticAirRequirementInput) {
-    this.outputs = StandaloneService.pneumaticAirRequirement(inputs);
+    this.outputs = this.standaloneService.pneumaticAirRequirement(inputs, this.settings);
   }
 
 

@@ -5,6 +5,7 @@ import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/
 import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { FlueGasLossesService, FlueGasWarnings } from '../../../losses/flue-gas-losses/flue-gas-losses.service';
 
 @Component({
   selector: 'app-explore-flue-gas-form',
@@ -38,13 +39,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
   showFlueGas: boolean = false;
   showExcessAir: boolean = false;
   showO2: boolean = false;
-  showFuelTemp: boolean = false;
   showAirTemp: boolean = false;
-  excessAirWarning1: string = null;
-  excessAirWarning2: string = null;
-  o2warning1: string = null;
-  o2warning2: string = null;
-  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService) { }
+
+  baselineWarnings: { excessAirWarning: string, o2Warning: string };
+  modificationWarnings: { excessAirWarning: string, o2Warning: string };
+  constructor(private phastService: PhastService, private suiteDbService: SuiteDbService, private flueGasLossesService: FlueGasLossesService) { }
 
   ngOnInit() {
     this.initData();
@@ -63,24 +62,20 @@ export class ExploreFlueGasFormComponent implements OnInit {
   initData() {
     if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByMass;
-      this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByMass;
     } else {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByVolume;
+    }
+    if (this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+      this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByMass;
+    } else {
       this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByVolume;
     }
-    this.initFuelTemp();
+    this.checkBaselineWarnings(this.baselineFlueGas);
+    this.checkModificationWarnings(this.modifiedFlueGas);
     this.initExcessAir();
     this.initO2();
     this.initAirTemp();
     this.initFlueGas();
-  }
-
-  initFuelTemp() {
-    if (this.baselineFlueGas.flueGasTemperature != this.modifiedFlueGas.flueGasTemperature) {
-      this.showFuelTemp = true;
-    } else {
-      this.showFuelTemp = false;
-    }
   }
 
   initExcessAir() {
@@ -108,7 +103,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initFlueGas() {
-    if (this.showAirTemp || this.showO2 || this.showExcessAir || this.showFuelTemp) {
+    if (this.showAirTemp || this.showO2 || this.showExcessAir) {
       this.showFlueGas = true;
     } else {
       this.showFlueGas = false;
@@ -119,11 +114,9 @@ export class ExploreFlueGasFormComponent implements OnInit {
     if (this.showFlueGas == false) {
       this.showExcessAir = false;
       this.showAirTemp = false;
-      this.showFuelTemp = false;
       this.showO2 = false;
       this.toggleAirTemp();
       this.toggleExcessAir();
-      this.toggleFuelTemp();
       this.toggleO2();
     }
   }
@@ -131,84 +124,78 @@ export class ExploreFlueGasFormComponent implements OnInit {
   toggleAirTemp() {
     if (this.showAirTemp == false) {
       this.modifiedFlueGas.combustionAirTemperature = this.baselineFlueGas.combustionAirTemperature;
-      this.calculate();
-    }
-  }
-
-  toggleFuelTemp() {
-    if (this.showFuelTemp == false) {
-      this.modifiedFlueGas.flueGasTemperature = this.baselineFlueGas.flueGasTemperature;
-      this.calculate();
+      this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
 
   toggleExcessAir() {
     if (this.showExcessAir == false) {
       this.modifiedFlueGas.excessAirPercentage = this.baselineFlueGas.excessAirPercentage;
-      this.calculate();
+      this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
 
   toggleO2() {
     if (this.showO2 == false) {
       this.modifiedFlueGas.o2InFlueGas = this.baselineFlueGas.o2InFlueGas;
-      this.calculate();
+      this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
-
 
   changeMethod(num: number) {
     if (num == 1) {
       this.baselineFlueGas.o2InFlueGas = 0;
       this.baselineFlueGas.excessAirPercentage = 0;
+      this.checkBaselineWarnings(this.baselineFlueGas);
     } else if (num == 2) {
       this.modifiedFlueGas.o2InFlueGas = 0;
       this.modifiedFlueGas.excessAirPercentage = 0;
+      this.checkModificationWarnings(this.modifiedFlueGas);
     }
-    this.excessAirWarning1 = null;
-    this.excessAirWarning2 = null;
-    this.o2warning1 = null;
-    this.o2warning2 = null;
     this.calculate();
   }
 
   calculateExcessAir(loss: FlueGasByMass | FlueGasByVolume, num: number) {
     if (loss.o2InFlueGas < 0 || loss.o2InFlueGas > 20.99999) {
       loss.excessAirPercentage = 0.0;
-      if (num == 1) {
-        this.excessAirWarning1 = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
-      } else if (num == 2) {
-        this.excessAirWarning2 = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
-      }
     } else {
       let input = this.buildInput(loss);
       loss.excessAirPercentage = this.phastService.flueGasCalculateExcessAir(input);
-      if (num == 1) {
-        this.excessAirWarning1 = null;
-      } else if (num == 2) {
-        this.excessAirWarning2 = null;
-      }
     }
-    this.calculate();
+    if (num == 1) {
+      this.checkBaselineWarnings(loss);
+    } else {
+      this.checkModificationWarnings(loss);
+    }
   }
 
   calculateO2(loss: FlueGasByMass | FlueGasByVolume, num: number) {
     if (loss.excessAirPercentage < 0) {
       loss.o2InFlueGas = 0.0;
-      if (num == 1) {
-        this.o2warning1 = 'Excess Air must be greater than 0 percent';
-      } else if (num == 2) {
-        this.o2warning2 = 'Excess Air must be greater than 0 percent';
-      }
     } else {
       let input = this.buildInput(loss);
       loss.o2InFlueGas = this.phastService.flueGasCalculateO2(input);
-      if (num == 1) {
-        this.o2warning1 = null;
-      } else if (num == 2) {
-        this.o2warning2 = null;
-      }
     }
+    if (num == 1) {
+      this.checkBaselineWarnings(loss);
+    } else {
+      this.checkModificationWarnings(loss);
+    }
+  }
+
+  checkWarnings(loss: FlueGasByMass | FlueGasByVolume): { excessAirWarning: string, o2Warning: string } {
+    let tmpO2Warning: string = this.flueGasLossesService.checkO2Warning(loss);
+    let tmpExcessAirWarning: string = this.flueGasLossesService.checkExcessAirWarning(loss);
+    return { excessAirWarning: tmpExcessAirWarning, o2Warning: tmpO2Warning };
+  }
+
+  checkBaselineWarnings(loss: FlueGasByMass | FlueGasByVolume) {
+    this.baselineWarnings = this.checkWarnings(loss);
+    this.calculate();
+  }
+
+  checkModificationWarnings(loss: FlueGasByMass | FlueGasByVolume) {
+    this.modificationWarnings = this.checkWarnings(loss);
     this.calculate();
   }
 
@@ -233,7 +220,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {

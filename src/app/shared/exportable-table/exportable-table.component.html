@@ -7,8 +7,8 @@
 <textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copy after click the copy button"></textarea>
 <div class="d-flex w-100 justify-content-center pl-2 pr-2">
   <span class="input-group-btn">
-    <button (mouseenter)="updateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString" (cbOnSuccess)="copySuccess()"
-      [class.btn-success]="isCopied1">Copy Table</button>
+    <button (mouseenter)="updateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
+      (cbOnSuccess)="copySuccess()" [class.btn-success]="isCopied1">Copy Table</button>
   </span>
 </div>
 
@@ -27,8 +27,8 @@
       <td>
         <div class="key-color" [ngStyle]="{'border': '3px solid ' + keyColors[i].borderColor, 'background-color': keyColors[i].fillColor}"></div>
       </td>
-      <td *ngFor="let d of data">
-        {{d}}
+      <td *ngFor="let d of data" [innerHTML]="d">
+        <!-- {{d}} -->
       </td>
       <td class="delete-row" (click)="emitDeleteFromTable(i)">Delete</td>
     </tr>
@@ -46,8 +46,8 @@
   <tbody>
 
     <tr (mouseenter)="emitHighlightPoint(i)" (mouseleave)="emitUnhighlightPoint(i)" *ngFor="let data of rowData; let i=index;">
-      <td *ngFor="let d of data">
-        {{d}}
+      <td *ngFor="let d of data" [innerHTML]="d">
+        <!-- {{d}} -->
       </td>
     </tr>
   </tbody>

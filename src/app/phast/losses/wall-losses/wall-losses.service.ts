@@ -76,7 +76,7 @@ export class WallLossesService {
   }
   checkTemperature(loss: WallLoss): string {
     if (loss.surfaceTemperature < loss.ambientTemperature) {
-      return 'Surface temperature lower is than ambient temperature';
+      return 'Surface temperature is lower than ambient temperature';
     } else {
       return null;
     }

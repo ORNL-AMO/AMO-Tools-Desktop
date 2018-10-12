@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { CompressedAirService } from '../../compressed-air.service';
@@ -11,14 +11,16 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MeteredStorageFormComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  
+
   inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -26,11 +28,23 @@ export class MeteredStorageFormComponent implements OnInit {
     this.getTotalReceiverVolume();
   }
 
-  getTotalReceiverVolume() {
-    this.totalReceiverVolume = StandaloneService.receiverTankSizeMeteredStorage(this.inputs);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
   }
 
-  changeField(str: string){
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.meteredStorageInputs;
+    this.getTotalReceiverVolume();
+  }
+
+  getTotalReceiverVolume() {
+    this.totalReceiverVolume = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
+  }
+
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

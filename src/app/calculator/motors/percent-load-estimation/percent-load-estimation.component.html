@@ -2,7 +2,7 @@
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
-        <img src="assets/images/load-est.png" class="ico-size4">
+        <img src="assets/images/calculator-icons/motor-icons/load-est.png" class="ico-size4">
       </div>
       <div class="pl-2">
         <h3>Percent Load Estimation Calculator</h3>
@@ -21,6 +21,11 @@
       <div class="form-section">
         <app-slip-method-form *ngIf="loadEstimationMethod == 0" [data]="slipMethodData" (emitCalculate)="calculateSlipMethod($event)"></app-slip-method-form>
         <app-field-measurement-form *ngIf="loadEstimationMethod == 1" [data]="fieldMeasurementData" (emitCalculate)="calculateFieldMeasurementMethod($event)"></app-field-measurement-form>
+      </div>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
       </div>
     </div>
   </div>

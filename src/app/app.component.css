@@ -708,12 +708,7 @@ Assessments: List View
       background-size: 15px;
       padding-left: 22px;
     }
-    .list-row.psat .assessment-name a {
-      background-image: url('../assets/images/ico-psat-diagram-small.png');
-    }
-    .list-row.phast .assessment-name a {
-      background-image: url('../assets/images/ico-phast-diagram-small.png');
-    }
+
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -973,14 +968,6 @@ Sidebar
 .sidebar-group li.sub-directory > span {
   padding: 0;
 }
-  /* .sidebar-group .assessments .psat .sidebar-icon  {
-    background-image: url('../assets/images/ico-psat-diagram-small.png');
-  }
-  .sidebar-group .assessments .phast .sidebar-icon {
-    background-image: url('../assets/images/ico-phast-diagram-small.png');
-  } */
-
-
 
 /*
 Content Container

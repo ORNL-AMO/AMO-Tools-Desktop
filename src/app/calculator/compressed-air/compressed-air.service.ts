@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage } from '../../shared/models/standalone';
+import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
 
 @Injectable()
 export class CompressedAirService {
@@ -33,7 +33,6 @@ export class CompressedAirService {
     efficiencyLoaded: 0,
     efficiencyUnloaded: 0,
     costOfElectricity: 0,
-
   };
 
   pipeSizingInput: PipeSizingInput = {
@@ -67,7 +66,7 @@ export class CompressedAirService {
     finalTankPressure: 0
   };
 
-  bridgeCompressorInputs:ReceiverTankBridgingCompressor = {
+  bridgeCompressorInputs: ReceiverTankBridgingCompressor = {
     method: 3,
     distanceToCompressorRoom: 0,
     speedOfAir: 0,
@@ -91,5 +90,61 @@ export class CompressedAirService {
     meteredControl: 0,
   };
   recieverTankMethod: number = 0;
+  systeCapacityInputs: AirSystemCapacityInput = {
+    receiverCapacities: [0],
+    customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
+    oneHalf: 0,
+    threeFourths: 0,
+    one: 0,
+    oneAndOneFourth: 0,
+    oneAndOneHalf: 0,
+    two: 0,
+    twoAndOneHalf: 0,
+    three: 0,
+    threeAndOneHalf: 0,
+    four: 0,
+    five: 0,
+    six: 0,
+  };
   constructor() { }
+
+
+  initReceiverTankInputs() {
+    this.airCapacityInputs = {
+      tankSize: 0,
+      airPressureIn: 0,
+      airPressureOut: 0,
+    };
+    this.dedicatedStorageInputs = {
+      method: 1,
+      atmosphericPressure: 14.7,
+      lengthOfDemand: 0,
+      airFlowRequirement: 0,
+      initialTankPressure: 0,
+      finalTankPressure: 0
+    }
+    this.meteredStorageInputs = {
+      method: 2,
+      lengthOfDemand: 0,
+      airFlowRequirement: 0,
+      atmosphericPressure: 14.7,
+      initialTankPressure: 0,
+      finalTankPressure: 0,
+      meteredControl: 0,
+    }
+    this.bridgeCompressorInputs = {
+      method: 3,
+      distanceToCompressorRoom: 0,
+      speedOfAir: 0,
+      airDemand: 0,
+      allowablePressureDrop: 0,
+      atmosphericPressure: 14.7
+    }
+    this.generalMethodInputs = {
+      airDemand: 0,
+      allowablePressureDrop: 0,
+      method: 0,
+      atmosphericPressure: 14.7,
+    }
+  }
 }

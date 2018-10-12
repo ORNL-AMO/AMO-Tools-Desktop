@@ -1,5 +1,12 @@
 import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
-import { FormGroup } from "@angular/forms";
+import { MotorPerformanceInputs } from "../../calculator/motors/motor-performance/motor-performance.service";
+import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.service";
+import { O2Enrichment } from "./phast/o2Enrichment";
+import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
+import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
+import { FlowCalculations } from "./phast/flowCalculations";
+import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
+import { Fan203Inputs } from "./fans";
 
 export interface Calculator {
     directoryId?: number,
@@ -13,6 +20,18 @@ export interface Calculator {
     headToolType?: string,
     systemCurve?: SystemCurve,
     pumpCurveForm?: PumpCurveForm,
+    motorPerformanceInputs?: MotorPerformanceInputs
+    nemaInputs?: NemaInputs,
+    specificSpeedInputs?: SpecificSpeedInputs,
+    o2Enrichment?: O2Enrichment,
+    efficiencyImprovementInputs?: EfficiencyImprovementInputs,
+    energyEquivalencyInputs?: {
+        energyEquivalencyFuel: EnergyEquivalencyFuel,
+        energyEquivalencyElectric: EnergyEquivalencyElectric
+    },
+    flowCalculations?: FlowCalculations,
+    fanEfficiencyInputs?: FanEfficiencyInputs,
+    fan203Inputs?: Fan203Inputs,
     selected?: boolean
 }
 
@@ -30,7 +49,7 @@ export interface HeadToolSuction {
 }
 
 
-export interface HeadTool{
+export interface HeadTool {
     specificGravity: number,
     flowRate: number,
     suctionPipeDiameter: number,
@@ -79,10 +98,16 @@ export interface PumpCurveForm {
     pumpEfficiencyOrder?: number,
     pumpEfficiencyConstant?: number,
     maxFlow?: number
-  }
-  
-  export interface PumpCurveDataRow {
+}
+
+export interface PumpCurveDataRow {
     head: number,
     flow: number
-  }
-  
+}
+
+export interface SpecificSpeedInputs {
+    pumpType: number,
+    pumpRPM: number,
+    flowRate: number,
+    head: number
+}

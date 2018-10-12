@@ -25,7 +25,7 @@ export class PipeSizingComponent implements OnInit {
   inputs: PipeSizingInput;
   outputs: PipeSizingOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -38,6 +38,17 @@ export class PipeSizingComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      airFlow: 0,
+      airlinePressure: 0,
+      designVelocity: 20,
+      atmosphericPressure: 14.7
+    }
+    this.compressedAirService.pipeSizingInput = this.inputs;
+    this.calculatePipeSize(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -45,7 +56,7 @@ export class PipeSizingComponent implements OnInit {
   }
 
   calculatePipeSize(inputs: PipeSizingInput) {
-    this.outputs = StandaloneService.pipeSizing(inputs);
+    this.outputs = this.standaloneService.pipeSizing(inputs, this.settings);
   }
 
   setField(str: string) {

@@ -229,7 +229,7 @@ export class SankeyComponent implements OnInit {
         return this.makeLinks(d, results.nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#" + location + "-linear-gradient-" + i + ")";
+        return "url(#" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -753,7 +753,7 @@ export class SankeyComponent implements OnInit {
   getEndMarker(d, nodes) {
     let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].usefulOutput) {
-      return "url(" + window.location + "#end-" + location + "-" + d.target + ")";
+      return "url(#end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -896,7 +896,7 @@ export class SankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#linear-gradient-" + i + ")"
+        return "url(#linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {

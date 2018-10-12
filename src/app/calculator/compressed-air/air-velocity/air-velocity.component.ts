@@ -26,7 +26,7 @@ export class AirVelocityComponent implements OnInit {
   inputs: AirVelocityInput;
   outputs: PipeSizes;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.airVelocityInputs;    
@@ -38,13 +38,23 @@ export class AirVelocityComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      airFlow: 0,
+      pipePressure: 0,
+      atmosphericPressure: 0,
+    }
+    this.compressedAirService.airVelocityInputs = this.inputs;
+    this.getAirVelocity(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
   getAirVelocity (inputs: AirVelocityInput) {
-    this.outputs = StandaloneService.airVelocity(inputs);
+    this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
   }
 
   setField(str: string){

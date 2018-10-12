@@ -1,6 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="exploreAtmosphere">
-    <input type="checkbox" id="exploreAtmosphere" value="true" (focus)="focusField('flowRate')" (change)="toggleAtmosphere()"
+    <input type="checkbox" id="exploreAtmosphere" (focus)="focusField('flowRate')" (change)="toggleAtmosphere()"
       [(ngModel)]="showAtmosphere" /> Optimize Furnace Atmosphere Makeup System
   </label>
 </div>
@@ -22,27 +22,27 @@
           <label for="{{'flowRate_'+index}}">Baseline Flow Rate</label>
           <div class="input-group">
             <input name="{{'flowRate_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.flowRate"
-              id="{{'flowRate_'+index}}" onfocus="this.select();" (input)="checkFlowRate(1, loss.flowRate, index)" (focus)="focusField('flowRate')"
+              id="{{'flowRate_'+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('flowRate')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
               <sup>3</sup>
             </span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="flowRateError1[index] !== null">{{flowRateError1[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].flowRateWarning !== null">{{baselineWarnings[index].flowRateWarning}}</span>
         </div>
         <div class="form-group">
           <label for="{{'flowRateMod_'+index}}">Modification Flow Rate</label>
           <div class="input-group">
             <input name="{{'flowRateRateMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'feedRateMod_'+index}}"
-              onfocus="this.select();" (input)="checkFlowRate(2, phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index].flowRate, index)"
+              onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('flowRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index].flowRate">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
               <sup>3</sup>
             </span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="flowRateError2[index] !== null">{{flowRateError2[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].flowRateWarning !== null">{{modificationWarnings[index].flowRateWarning}}</span>
         </div>
       </form>
     </li>
@@ -50,7 +50,7 @@
     <li>
       <div class="checkbox form-group">
         <label for="{{'modifyInletTemp_'+index}}">
-          <input type="checkbox" id="{{'modifyInletTemp_'+index}}" (focus)="focusField('inletTemperature')" (change)="toggleInletTemp(index, loss.inletTemperature)"
+          <input type="checkbox" id="{{'modifyInletTemp_'+index}}" (focus)="focusField('inletTemperature')" (change)="toggleInletTemp(index, loss)"
             [(ngModel)]="showInletTemp[index]" /> Modify Inlet / Outlet Temperature
         </label>
         <label>
@@ -62,45 +62,45 @@
           <label for="{{'inletTemp_'+index}}">Baseline Inlet Temperature</label>
           <div class="input-group">
             <input name="{{'inletTemp_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.inletTemperature"
-              id="{{'inletTemp_'+index}}" onfocus="this.select();" (input)="checkTemp(1, loss, index)" (focus)="focusField('inletTemperature')"
+              id="{{'inletTemp_'+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('inletTemperature')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <!-- <span class="alert-warning pull-right small" *ngIf="inletTempError1[index] !== null">{{inletTempError1[index]}}</span> -->
+          <!-- <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].temperatureWarning !== null">{{baselineWarnings[index].temperatureWarning}}</span> -->
         </div>
         <div class="form-group">
           <label for="{{'outletTemp_'+index}}">Baseline Outlet Temperature</label>
           <div class="input-group">
             <input name="{{'outletTemp_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.outletTemperature"
-              id="{{'outletTemp_'+index}}" onfocus="this.select();" (input)="checkTemp(1, loss, index)" (focus)="focusField('outletTemperature')"
+              id="{{'outletTemp_'+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(index)" (focus)="focusField('outletTemperature')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="inletTempError1[index] !== null">{{inletTempError1[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index].temperatureWarning !== null">{{baselineWarnings[index].temperatureWarning}}</span>
         </div>
         <div class="form-group">
           <label for="{{'inletTempMod_'+index}}">Modification Inlet Temperature</label>
           <div class="input-group">
             <input name="{{'inletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'inletTempMod_'+index}}"
-              onfocus="this.select();" (input)="checkTemp(2, phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index], index)"
+              onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('inletTemperature')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <!-- <span class="alert-warning pull-right small" *ngIf="inletTempError2[index] !== null">{{inletTempError2[index]}}</span> -->
+          <!-- <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].temperatureWarning !== null">{{modificationWarnings[index].temperatureWarning}}</span> -->
         </div>
         <div class="form-group">
           <label for="{{'outletTempMod_'+index}}">Modification Outlet Temperature</label>
           <div class="input-group">
             <input name="{{'outletTempMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{'outletTempMod_'+index}}"
-              onfocus="this.select();" (input)="checkTemp(2, phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index], index)"
+              onfocus="this.select();" (input)="checkModificationWarnings(index)"
               (focus)="focusField('outletTemperature')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="inletTempError2[index] !== null">{{inletTempError2[index]}}</span>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index].temperatureWarning !== null">{{modificationWarnings[index].temperatureWarning}}</span>
         </div>
       </form>
     </li>

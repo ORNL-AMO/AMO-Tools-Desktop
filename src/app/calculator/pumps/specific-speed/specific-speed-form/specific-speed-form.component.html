@@ -1,7 +1,7 @@
-<form>
+<form [formGroup]="speedForm">
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select name="pumpType" class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitCalculate()" autofocus (focus)="focusField('pumpType')">
+    <select name="pumpType" class="form-control" id="pumpType" formControlName="pumpType" (change)="emitCalculate()" autofocus (focus)="focusField('pumpType')">
       <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
     </select>
   </div>
@@ -9,7 +9,7 @@
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
     <div class="input-group calc-addon-group">
-      <input name="pumpRPM" type="number" step="any" class="form-control addon-input" id="pumpRPM" [(ngModel)]="tmpPumpRpm" (input)="emitCalculate()"
+      <input name="pumpRPM" type="number" step="any" class="form-control addon-input" id="pumpRPM" formControlName="pumpRPM" (input)="emitCalculate()"
         onfocus="this.select();" (focus)="focusField('pumpRPM')">
       <span class="input-group-addon units">rpm</span>
     </div>
@@ -18,7 +18,7 @@
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
     <div class="input-group calc-addon-group">
-      <input name="flowRate" type="number" step="any" class="form-control addon-input" id="flowRate" [(ngModel)]="tmpFlowRate"
+      <input name="flowRate" type="number" step="any" class="form-control addon-input" id="flowRate" formControlName="flowRate"
         (input)="emitCalculate()" onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
@@ -27,7 +27,7 @@
   <div class="form-group">
     <label for="head">Head</label>
     <div class="input-group calc-addon-group">
-      <input name="head" type="number" step="any" class="form-control addon-input" [(ngModel)]="tmpHead" id="head" (input)="emitCalculate()"
+      <input name="head" type="number" step="any" class="form-control addon-input" formControlName="head" id="head" (input)="emitCalculate()"
         onfocus="this.select();" (focus)="focusField('head')">
       <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
     </div>

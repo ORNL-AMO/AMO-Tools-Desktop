@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankDedicatedStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { CompressedAirService } from '../../compressed-air.service';
@@ -12,6 +12,8 @@ import { Settings } from '../../../../shared/models/settings';
 
 export class DedicatedStorageFormComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
@@ -19,7 +21,7 @@ export class DedicatedStorageFormComponent implements OnInit {
   inputs: ReceiverTankDedicatedStorage;
   receiverVolume: number;
 
-  constructor(private compressedAirService: CompressedAirService) {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
@@ -27,8 +29,20 @@ export class DedicatedStorageFormComponent implements OnInit {
     this.getReceiverVolume();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.dedicatedStorageInputs;
+    this.getReceiverVolume();
+  }
+
   getReceiverVolume() {
-    this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
+    this.receiverVolume = this.standaloneService.receiverTankSizeDedicatedStorage(this.inputs, this.settings);
   }
   changeField(str: string) {
     this.emitChangeField.emit(str);

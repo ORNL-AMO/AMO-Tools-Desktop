@@ -21,21 +21,23 @@
           <label for="baselineInTemp">Baseline Initial Temperature</label>
           <div class="input-group">
             <input name="{{'baselineInTemp_'+index}}" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.baseline.initialTemperature"
-              id="{{baselineInTemp_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
+              id="{{baselineInTemp_+index}}" onfocus="this.select();" (input)="checkBaselineWarnings(material.baseline, index)" (focus)="focusField('initialTemperature')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
+          <span class="alert-warning pull-right small" *ngIf="baselineWarnings[index] !== null">{{baselineWarnings[index]}}</span>
         </div>
         <div class="form-group">
           <label for="modifiedInTemp">Modification Initial Temperature</label>
           <div class="input-group">
             <input name="{{'modifiedInTemp_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.modification.initialTemperature"
-              id="{{modifiedInTemp_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
+              id="{{modifiedInTemp_+index}}" onfocus="this.select();" (input)="checkModificationWarning(material.modification, index)" (focus)="focusField('initialTemperature')"
               (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
+          <span class="alert-warning pull-right small" *ngIf="modificationWarnings[index] !== null">{{modificationWarnings[index]}}</span>
         </div>
       </form>
     </li>

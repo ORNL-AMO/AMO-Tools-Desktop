@@ -22,7 +22,7 @@
   <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
     <div class="col-12 data-table">
       <app-results-data [phast]="phast" [inPhast]="true" [settings]="settings" [inSetup]="inSetup" [toggleCalculate]="toggleCalculate"
-        [modification]="modification" [inReport]="false"></app-results-data>
+        [modification]="modification" [inReport]="false" [modificationIndex]="modificationIndex"></app-results-data>
     </div>
   </div>
   <div class="row justify-content-center scroll-item" *ngIf="tabSelect == 'notes'" [ngStyle]="{'height.px': helpHeight}">

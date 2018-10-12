@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
+import { GasLeakageLossesService, LeakageWarnings } from '../../../losses/gas-leakage-losses/gas-leakage-losses.service';
 
 @Component({
   selector: 'app-explore-leakage-form',
@@ -26,11 +27,9 @@ export class ExploreLeakageFormComponent implements OnInit {
   showOpening: Array<boolean>;
   showPressure: Array<boolean>;
   showLeakage: boolean = false;
-  openingAreaError1: Array<string>;
-  openingAreaError2: Array<string>;
-  draftPressureError2: Array<string>;
-  draftPressureError1: Array<string>;
-  constructor() { }
+  baselineWarnings: Array<LeakageWarnings>;
+  modificationWarnings: Array<LeakageWarnings>;
+  constructor(private gasLeakageLossesService: GasLeakageLossesService) { }
 
   ngOnInit() {
     this.initData();
@@ -46,11 +45,9 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
   initData() {
     this.showOpening = new Array();
-    this.openingAreaError1 = new Array<string>();
-    this.openingAreaError2 = new Array<string>();
+    this.baselineWarnings = new Array<LeakageWarnings>();
+    this.modificationWarnings = new Array<LeakageWarnings>();
     this.showPressure = new Array();
-    this.draftPressureError1 = new Array<string>();
-    this.draftPressureError2 = new Array<string>();
     let index: number = 0;
     this.phast.losses.leakageLosses.forEach(loss => {
       let check: boolean = this.initOpening(loss.openingArea, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea);
@@ -58,15 +55,15 @@ export class ExploreLeakageFormComponent implements OnInit {
         this.showLeakage = check;
       }
       this.showOpening.push(check);
-      this.openingAreaError1.push(null);
-      this.openingAreaError2.push(null);
       check = this.initOpening(loss.draftPressure, this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure);
       if (!this.showLeakage && check) {
         this.showLeakage = check;
       }
       this.showPressure.push(check);
-      this.draftPressureError1.push(null);
-      this.draftPressureError2.push(null);
+      let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
+      this.baselineWarnings.push(tmpWarnings);
+      tmpWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
+      this.modificationWarnings.push(tmpWarnings);
       index++;
     })
   }
@@ -98,6 +95,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   toggleOpening(index: number, baselineArea: number) {
     if (this.showOpening[index] == false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;
+      this.checkModificationWarnings(index);
       this.calculate();
     }
   }
@@ -105,6 +103,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   togglePressure(index: number, baselinePressure: number) {
     if (this.showPressure[index] == false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure = baselinePressure;
+      this.checkModificationWarnings(index);
       this.calculate();
     }
   }
@@ -121,42 +120,20 @@ export class ExploreLeakageFormComponent implements OnInit {
     })
   }
 
-  checkOpening(num: number, openingArea: number, index: number) {
-    if (openingArea < 0) {
-      if (num == 1) {
-        this.openingAreaError1[index] = 'Opening Area must be equal or greater than 0';
-      } else if (num == 2) {
-        this.openingAreaError2[index] = 'Opening Area must be equal or greater than 0';
-      }
-    } else {
-      if (num == 1) {
-        this.openingAreaError1[index] = null;
-      } else if (num == 2) {
-        this.openingAreaError2[index] = null;
-      }
-      this.calculate();
-    }
+  checkBaselineWarnings(index: number) {
+    let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.losses.leakageLosses[index]);
+    this.baselineWarnings[index] = tmpWarnings;
+    this.calculate();
   }
 
-  checkPressure(num: number, draftPressure: number, index: number) {
-    if (draftPressure < 0) {
-      if (num == 1) {
-        this.draftPressureError1[index] = 'Draft Pressure must be equal or greater than 0';
-      } else if (num == 2) {
-        this.draftPressureError2[index] = 'Draft Pressure must be equal or greater than 0';
-      }
-    } else {
-      if (num == 1) {
-        this.draftPressureError1[index] = null;
-      } else if (num == 2) {
-        this.draftPressureError2[index] = null;
-      }
-      this.calculate();
-    }
+  checkModificationWarnings(index: number) {
+    let tmpWarnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
+    this.modificationWarnings[index] = tmpWarnings;
+    this.calculate();
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {

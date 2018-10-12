@@ -3,6 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fsat-banner',
@@ -14,12 +15,17 @@ export class FsatBannerComponent implements OnInit {
   assessment: Assessment;
 
   mainTab: string;
+  mainTabSubscription: Subscription;
   constructor(private fsatService: FsatService, private router: Router, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.fsatService.mainTab.subscribe(val => {
+    this.mainTabSubscription = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
     })
+  }
+
+  ngOnDestroy(){
+    this.mainTabSubscription.unsubscribe();
   }
 
   changeTab(str: string) {

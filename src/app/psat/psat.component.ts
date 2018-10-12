@@ -112,6 +112,7 @@ export class PsatComponent implements OnInit {
           this.modificationExists = false;
         }
         this.getSettings();
+        this.initSankeyList();
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
@@ -180,6 +181,7 @@ export class PsatComponent implements OnInit {
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe()
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.stepTab.next('system-basics');
   }
 
   ngAfterViewInit() {
@@ -233,7 +235,6 @@ export class PsatComponent implements OnInit {
       this.psatOptionsLength = this.psatOptions.length;
     }
   }
-
 
   getSettings(update?: boolean) {
     //get assessment settings

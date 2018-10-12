@@ -9,6 +9,8 @@ import { SteamService } from '../../steam.service';
 })
 export class SaturatedPropertiesTableComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   settings: Settings;
   @Input()
   data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
@@ -20,18 +22,21 @@ export class SaturatedPropertiesTableComponent implements OnInit {
   ngOnInit() {
     if (this.steamService.saturatedPropertiesData) {
       this.rowData = this.steamService.saturatedPropertiesData;
-    }else{
+    } else {
       this.rowData = new Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetTable();
+    }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.steamService.saturatedPropertiesData = this.rowData;
   }
 
@@ -39,6 +44,11 @@ export class SaturatedPropertiesTableComponent implements OnInit {
     if (this.data !== null) {
       this.rowData.push(this.data);
     }
+  }
+
+  resetTable() {
+    this.rowData = new Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>();
+    this.steamService.saturatedPropertiesData = this.rowData;
   }
 
   deleteRow(index: number) {

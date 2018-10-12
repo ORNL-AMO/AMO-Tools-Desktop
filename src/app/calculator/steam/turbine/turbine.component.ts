@@ -49,6 +49,11 @@ export class TurbineComponent implements OnInit {
     }, 50);
   }
 
+  btnResetData() {
+    this.turbineForm = this.turbineService.initForm(this.settings);
+    this.calculate(this.turbineForm);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

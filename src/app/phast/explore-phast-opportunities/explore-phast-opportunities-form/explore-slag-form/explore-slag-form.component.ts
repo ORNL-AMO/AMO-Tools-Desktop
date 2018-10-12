@@ -51,7 +51,7 @@ export class ExploreSlagFormComponent implements OnInit {
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {

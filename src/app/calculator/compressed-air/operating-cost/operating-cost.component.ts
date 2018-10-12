@@ -25,7 +25,7 @@ export class OperatingCostComponent implements OnInit {
   inputs: OperatingCostInput;
   outputs: OperatingCostOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputs = this.compressedAirService.operatingCostInput;
@@ -37,6 +37,21 @@ export class OperatingCostComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
+
+  btnResetData() {
+    this.inputs = {
+      motorBhp: 0,
+      bhpUnloaded: 0,
+      annualOperatingHours: 0,
+      runTimeLoaded: 0,
+      runTimeUnloaded: 0,
+      efficiencyLoaded: 0,
+      efficiencyUnloaded: 0,
+      costOfElectricity: 0,
+    }
+    this.compressedAirService.operatingCostInput = this.inputs;
+    this.calculateOperationCost(this.inputs);
+  }
   
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -45,7 +60,7 @@ export class OperatingCostComponent implements OnInit {
   }
   
   calculateOperationCost(inputs: OperatingCostInput) {
-    this.outputs = StandaloneService.operatingCost(inputs);
+    this.outputs = this.standaloneService.operatingCost(inputs, this.settings);
   }
 
   setField(str: string) {

@@ -39,8 +39,8 @@ export class SystemBasicsComponent implements OnInit {
 
   oldSettings: Settings;
 
-  horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
-  kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
+  // horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
+  // kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
 
   counter: any;
 
@@ -113,11 +113,12 @@ export class SystemBasicsComponent implements OnInit {
     }
     if (psat.inputs.motor_rated_power) {
       psat.inputs.motor_rated_power = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(this.oldSettings.powerMeasurement).to(this.settings.powerMeasurement);
-      if (this.settings.powerMeasurement == 'hp') {
-        psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.horsePowers);
-      } else {
-        psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.kWatts);
-      }
+      psat.inputs.motor_rated_power = this.convertUnitsService.roundVal(psat.inputs.motor_rated_power, 2)
+      // if (this.settings.powerMeasurement == 'hp') {
+      //   psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.horsePowers);
+      // } else {
+      //   psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.kWatts);
+      // }
     }
     if (psat.inputs.fluidTemperature) {
       if (this.settings.temperatureMeasurement && this.oldSettings.temperatureMeasurement) {
@@ -138,19 +139,19 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsModal.hide();
   }
 
-  getClosest(num: number, arr: Array<number>) {
-    let closest;
-    let diff = Infinity;
-    arr.forEach(val => {
-      let tmpDiff = Math.abs(num - val);
-      if (tmpDiff < diff) {
-        diff = tmpDiff
-        closest = val;
-      }
-    })
-    return closest;
+  // getClosest(num: number, arr: Array<number>) {
+  //   let closest;
+  //   let diff = Infinity;
+  //   arr.forEach(val => {
+  //     let tmpDiff = Math.abs(num - val);
+  //     if (tmpDiff < diff) {
+  //       diff = tmpDiff
+  //       closest = val;
+  //     }
+  //   })
+  //   return closest;
 
-  }
+  // }
 
   startSavePolling(bool?: boolean) {
     this.saveChanges()

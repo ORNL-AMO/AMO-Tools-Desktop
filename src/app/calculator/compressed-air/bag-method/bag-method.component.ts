@@ -31,7 +31,7 @@ export class BagMethodComponent implements OnInit {
   totalOperatingTime: number;
 
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     this.inputsArray = this.compressedAirService.bagMethodInputs.inputsArray;
@@ -56,6 +56,17 @@ export class BagMethodComponent implements OnInit {
 
   ngOnDestroy(){
     this.compressedAirService.bagMethodInputs.operatingHours = this.totalOperatingTime;
+  }
+
+  btnResetData() {
+    this.inputsArray = new Array<BagMethodInput>();
+    this.initBagMethodArrays();
+    this.totalOperatingTime = 0;
+    this.outputs = {
+      flowRate: 0,
+      annualConsumption: 0
+    };
+    this.calculateAnnualConsumption();
   }
 
   initBagMethodArrays() {
@@ -84,7 +95,7 @@ export class BagMethodComponent implements OnInit {
     this.outputsArray = new Array<BagMethodOutput>();
     for (let i = 0; i < this.inputsArray.length; i++) {
       this.inputsArray[i].operatingTime = JSON.parse(JSON.stringify(this.totalOperatingTime));
-      let outputs = StandaloneService.bagMethod(this.inputsArray[i]);
+      let outputs = this.standaloneService.bagMethod(this.inputsArray[i], this.settings);
       outputs.annualConsumption = this.totalOperatingTime * outputs.flowRate * 60;
       this.outputsArray.push(outputs);
       this.outputs.flowRate += outputs.flowRate;

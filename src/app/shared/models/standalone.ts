@@ -99,14 +99,15 @@ export interface PipeSizes {
 }
 
 export interface AirSystemCapacityInput extends PipeSizes {
-  receiverCapacities: Array<Number>;
+  receiverCapacities: Array<number>;
   customPipes: Array<{ pipeSize: number, pipeLength: number }>;
 }
 
-export interface AirSystemCapacityOutput extends AirSystemCapacityInput {
+export interface AirSystemCapacityOutput {
   totalPipeVolume: number;
   totalReceiverVolume: number;
   totalCapacityOfCompressedAirSystem: number;
+  receiverCapacities: Array<number>;
 }
 
 export interface AirVelocityInput {
