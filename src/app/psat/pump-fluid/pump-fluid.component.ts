@@ -126,7 +126,6 @@ export class PumpFluidComponent implements OnInit {
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
     this.checkForm(this.psatForm);
-    console.log(this.psat);
   }
 
   checkForm(form: FormGroup) {
