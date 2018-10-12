@@ -38,13 +38,10 @@
           (emitChangeField)="setCurrentField($event)" (emitEnergyType)="setEnergySourceType($event)"
           (emitAssessmentType)="setAssessmentType($event)"></app-pre-assessment-form>
       </div>
-      <div class="d-block w-100 text-right p-2 btn-group btn-group-sm">
-          <!-- <div class="w-100 justify-content-center btn-group btn-group-sm"> -->
-            <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
-              Reset Data
-            </button>
-          <!-- </div> -->
-        <!-- </div> -->
+      <div class="d-block w-100 text-right p-2 btn-group btn-group-sm" *ngIf="!inModal">
+        <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
+          Reset Data
+        </button>
       </div>
     </div>
     <div class="d-flex flex-column justify-content-center h-50" *ngIf="showName">
