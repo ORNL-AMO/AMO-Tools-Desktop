@@ -1,0 +1,18 @@
+.header .fa.fa-tachometer{
+    font-size: -webkit-xxx-large;
+}
+
+
+.fa.fa-times-circle-o:hover{
+    cursor: pointer;
+}
+
+.no-data{
+    background: none;
+}
+
+
+.btn.btn-primary{
+    padding: 4px;
+    background-color: #145A32;
+}
