@@ -124,7 +124,18 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   addBaselineFixture(){
-    this.baselineData.push(JSON.parse(JSON.stringify(this.baselineData[0])));
+    this.baselineData.push({
+      hoursPerDay: 0,
+      daysPerMonth: 30,
+      monthsPerYear: 12,
+      hoursPerYear: 0,
+      wattsPerLamp: 0,
+      lampsPerFixture: 0,
+      numberOfFixtures: 0,
+      lumensPerLamp: 0,
+      totalLighting: 0,
+      electricityUse: 0
+    });
     this.calculate();
   }
 
@@ -142,7 +153,18 @@ export class LightingReplacementComponent implements OnInit {
 
 
   addModificationFixture(){
-    this.modificationData.push(JSON.parse(JSON.stringify(this.modificationData[0])));
+    this.modificationData.push({
+      hoursPerDay: 0,
+      daysPerMonth: 30,
+      monthsPerYear: 12,
+      hoursPerYear: 0,
+      wattsPerLamp: 0,
+      lampsPerFixture: 0,
+      numberOfFixtures: 0,
+      lumensPerLamp: 0,
+      totalLighting: 0,
+      electricityUse: 0
+    });
     this.calculate();
   }
 
