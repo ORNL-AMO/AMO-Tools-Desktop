@@ -18,11 +18,8 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
-<<<<<<< Updated upstream
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
-=======
->>>>>>> Stashed changes
 
 @NgModule({
   imports: [
