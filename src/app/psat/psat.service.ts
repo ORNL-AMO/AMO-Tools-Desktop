@@ -30,19 +30,20 @@ export class PsatService {
   }
 
   convertInputs(psatInputs: PsatInputs, settings: Settings) {
-    if (settings.distanceMeasurement != 'ft' && psatInputs.head) {
-      psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
+    let inputsCpy: PsatInputs = JSON.parse(JSON.stringify(psatInputs));
+    if (settings.distanceMeasurement != 'ft' && inputsCpy.head) {
+      inputsCpy.head = this.convertUnitsService.value(inputsCpy.head).from(settings.distanceMeasurement).to('ft');
     }
-    if (settings.flowMeasurement != 'gpm' && psatInputs.flow_rate) {
-      psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
+    if (settings.flowMeasurement != 'gpm' && inputsCpy.flow_rate) {
+      inputsCpy.flow_rate = this.convertUnitsService.value(inputsCpy.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
-    if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
-      psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
+    if (settings.powerMeasurement != 'hp' && inputsCpy.motor_rated_power) {
+      inputsCpy.motor_rated_power = this.convertUnitsService.value(inputsCpy.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
-    if (settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature) {
-      psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
+    if (settings.temperatureMeasurement != 'F' && inputsCpy.fluidTemperature) {
+      inputsCpy.fluidTemperature = this.convertUnitsService.value(inputsCpy.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
-    return psatInputs;
+    return inputsCpy;
   }
 
   convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
@@ -56,6 +57,7 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+<<<<<<< HEAD
     psatInputs = this.convertInputs(psatInputs, settings);
     
     // console.log('resultsExisting()');
@@ -68,6 +70,11 @@ export class PsatService {
     // console.log('tmpResults = ');
     // console.log(tmpResults);
 
+=======
+    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
+    //call results existing
+    let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+>>>>>>> develop
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -76,10 +83,10 @@ export class PsatService {
   }
 
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);
+    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
 
     //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
+    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(tmpInputs);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -88,10 +95,7 @@ export class PsatService {
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);
-
-    let tmpInputs: any;
-    tmpInputs = psatInputs;
+    let tmpInputs: any = this.convertInputs(psatInputs, settings);
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
     let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
     if (settings.powerMeasurement != 'hp') {
