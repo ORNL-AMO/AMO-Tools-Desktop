@@ -10,12 +10,19 @@
     </div>
 
     <div class="d-flex flex-column m-4">
-      <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings" [output]="saturatedPropertiesOutput"
-        (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)" [ranges]="ranges"></app-saturated-properties-form>
+      <app-saturated-properties-form [(saturatedPropertiesForm)]="saturatedPropertiesForm" [settings]="settings"
+        [output]="saturatedPropertiesOutput" (emitCalculate)="calculate($event)" (emitChangeField)="setField($event)"
+        [ranges]="ranges"></app-saturated-properties-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
+      <br>
       <div class="d-flex w-100 justify-content-center align-items-center pt-1 pb-1">
         <button (click)="addRow()" class="btn-add-row">Create Row</button>
       </div>
-      <app-saturated-properties-table [data]="data" [settings]="settings"></app-saturated-properties-table>
+      <app-saturated-properties-table [toggleResetData]="toggleResetData" [data]="data" [settings]="settings"></app-saturated-properties-table>
     </div>
   </div>
   <div class="d-flex flex-column w-50 scroll-item mh-100">
@@ -41,9 +48,11 @@
       </form>
       <div class="w-100 h-100" #lineChartContainer>
         <app-saturated-properties-graph *ngIf="graphToggle == '0'" [settings]="settings" [chartContainerHeight]="chartContainerHeight"
-          [chartContainerWidth]="chartContainerWidth" [saturatedPropertiesOutput]="saturatedPropertiesOutput" [plotReady]="plotReady"></app-saturated-properties-graph>
+          [chartContainerWidth]="chartContainerWidth" [saturatedPropertiesOutput]="saturatedPropertiesOutput"
+          [plotReady]="plotReady"></app-saturated-properties-graph>
         <app-saturated-properties-ph-graph *ngIf="graphToggle == '1'" [settings]="settings" [chartContainerHeight]="chartContainerHeight"
-          [chartContainerWidth]="chartContainerWidth" [saturatedPropertiesOutput]="saturatedPropertiesOutput" [plotReady]="plotReady"></app-saturated-properties-ph-graph>
+          [chartContainerWidth]="chartContainerWidth" [saturatedPropertiesOutput]="saturatedPropertiesOutput"
+          [plotReady]="plotReady"></app-saturated-properties-ph-graph>
       </div>
     </div>
     <div class="d-flex flex-column" *ngIf="tabSelect == 'help'">

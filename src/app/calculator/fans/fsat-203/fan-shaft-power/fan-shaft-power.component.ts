@@ -13,6 +13,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class FanShaftPowerComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   fanShaftPower: FanShaftPower;
   @Input()
   shaftPowerDone: boolean;

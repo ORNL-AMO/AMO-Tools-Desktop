@@ -45,6 +45,13 @@ export class HeaderComponent implements OnInit {
       this.resizeTabs();
     }, 50);
   }
+
+  btnResetData() {
+    this.inletForms = new Array<FormGroup>();
+    this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
+    this.getInletForms();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

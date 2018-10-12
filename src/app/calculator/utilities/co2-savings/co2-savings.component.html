@@ -2,8 +2,8 @@
   <div class="d-flex flex-column w-100 h-100 scroll-item">
     <div #leftPanelHeader class="d-flex header pb-1 pt-1 align-items-center bg-white">
       <div class="col-md-auto">
-          <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="ico-size3">
-        </div>
+        <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="ico-size3">
+      </div>
       <div class="pl-2">
         <h3>CO<sub>2</sub> Savings Calculator</h3>
       </div>
@@ -23,6 +23,11 @@
               <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
                 <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
               <app-co2-savings-form [data]="data" (emitCalculate)="calculate()" [modId]="'baseline'" [index]="index"></app-co2-savings-form>
+            </div>
+            <div class="w-100 justify-content-center btn-group btn-group-sm">
+              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+                Reset Data
+              </button>
             </div>
           </div>
         </div>
@@ -77,7 +82,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-center pl-2 pr-2">
-            <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData" [modificationData]="modificationData" [baselineTotal]="baselineTotal" [modificationTotal]="modificationTotal"></app-co2-savings-results>
+            <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData" [modificationData]="modificationData"
+              [baselineTotal]="baselineTotal" [modificationTotal]="modificationTotal"></app-co2-savings-results>
             <app-co2-savings-help *ngIf="tabSelect == 'help'"></app-co2-savings-help>
           </div>
         </div>

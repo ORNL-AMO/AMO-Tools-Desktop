@@ -41,13 +41,16 @@ export class O2EnrichmentComponent implements OnInit {
     fuelSavingsEnriched: 0.0
   };
 
+  originalLines = [];
   lines = [];
   tabSelect: string = 'results';
   currentField: string = 'default';
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
+  originalCalculator: Calculator;
   o2Form: FormGroup;
+  toggleResetData: boolean = true;
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
@@ -61,6 +64,8 @@ export class O2EnrichmentComponent implements OnInit {
 
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
+      // this.originalLines = this.lines;
     } else {
       this.initForm();
     }
@@ -68,6 +73,9 @@ export class O2EnrichmentComponent implements OnInit {
 
     if (this.o2EnrichmentService.lines) {
       this.lines = this.o2EnrichmentService.lines;
+      if (this.inAssessment) {
+        this.originalLines = this.lines;
+      }
     }
   }
 
@@ -75,6 +83,21 @@ export class O2EnrichmentComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment) {
+      this.calculator = this.originalCalculator;
+    } else {
+      this.o2Form = this.o2EnrichmentService.initForm(this.settings);
+
+    }
+    this.lines = [];
+    if (this.o2EnrichmentService.lines) {
+      this.o2EnrichmentService.lines = [];
+    }
+    this.calculate();
+    this.toggleResetData = !this.toggleResetData;
   }
 
   resizeTabs() {

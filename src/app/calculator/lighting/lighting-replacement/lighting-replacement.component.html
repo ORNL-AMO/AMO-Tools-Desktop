@@ -24,6 +24,12 @@
                 <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
               <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()" (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
             </div>
+            <div class="w-100 justify-content-center btn-group btn-group-sm">
+              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+                Reset Data
+              </button>
+            </div>
+
           </div>
         </div>
 

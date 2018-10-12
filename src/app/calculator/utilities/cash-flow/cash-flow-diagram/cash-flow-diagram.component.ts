@@ -15,6 +15,8 @@ import { Subscription } from '../../../../../../node_modules/rxjs';
 })
 export class CashFlowDiagramComponent implements OnInit {
   @Input()
+  toggleCalculate: boolean;
+  @Input()
   cashFlowResults: CashFlowResults;
   @Input()
   cashFlowForm: CashFlowForm;
@@ -65,7 +67,6 @@ export class CashFlowDiagramComponent implements OnInit {
   chartContainerWidth: number;
   chartContainerHeight: number;
 
-
   chart: any;
   annualSavings: Array<any>;
   salvageSavings: Array<any>;
@@ -96,36 +97,25 @@ export class CashFlowDiagramComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
+    this.chartContainerHeight = 500;
+    this.graphData = new Array<any>();
+    this.compileGraphData();
+    this.resizeGraph();
+    }, 50)
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
-        this.makeGraph();
-        this.svg.style("display", null);
+        this.compileGraphData();
+        this.updateGraph();
       }
     } else {
       this.firstChange = false;
     }
-  }
-  ngAfterViewInit() {
-    setTimeout(() => {
-    // this.chartContainerWidth = this.window.innerWidth * 0.38;
-    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
-    this.chartContainerHeight = 500;
-
-    this.graphData = new Array<any>();
-    this.compileGraphData();
-    this.resizeGraph();
-
-    this.calcSub = this.cashFlowService.calculate.subscribe(val => {
-      this.compileGraphData();
-      this.updateGraph();
-    });
-    }, 50)
-  }
-
-  ngOnDestroy(){
-    this.calcSub.unsubscribe();
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -212,7 +202,6 @@ export class CashFlowDiagramComponent implements OnInit {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
     let curveGraph = this.ngChartContainer.nativeElement;
-
     if (curveGraph) {
       if (!this.expanded) {
         this.canvasWidth = curveGraph.clientWidth;
@@ -222,8 +211,6 @@ export class CashFlowDiagramComponent implements OnInit {
         this.canvasWidth = curveGraph.clientWidth * 0.9;
         this.canvasHeight = curveGraph.clientHeight * 0.8;
       }
-
-
       if (this.canvasWidth < 400) {
         this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
       } else {
@@ -273,7 +260,6 @@ export class CashFlowDiagramComponent implements OnInit {
         this.junkCost.push(0);
       }
     }
-
     this.graphData.push(this.salvageSavings);
     this.graphData.push(this.fuelCost);
     this.graphData.push(this.annualSavings);
@@ -283,7 +269,6 @@ export class CashFlowDiagramComponent implements OnInit {
   }
 
   updateGraph() {
-
     if (this.chart) {
       this.chart.load({
         columns: this.graphData,
@@ -302,9 +287,7 @@ export class CashFlowDiagramComponent implements OnInit {
     let installationCost = this.cashFlowForm.installationCost;
     let junkCost = this.cashFlowForm.junkCost;
 
-
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
@@ -364,7 +347,6 @@ export class CashFlowDiagramComponent implements OnInit {
     d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
     d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
     d3.selectAll(".c3-axis-x-label").style("fill", "#000").style("stroke", "#000");
-
   }
 
   downloadChart() {

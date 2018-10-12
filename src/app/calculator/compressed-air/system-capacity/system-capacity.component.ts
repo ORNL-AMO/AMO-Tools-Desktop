@@ -42,6 +42,27 @@ export class SystemCapacityComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      receiverCapacities: [0],
+      customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
+      oneHalf: 0,
+      threeFourths: 0,
+      one: 0,
+      oneAndOneFourth: 0,
+      oneAndOneHalf: 0,
+      two: 0,
+      twoAndOneHalf: 0,
+      three: 0,
+      threeAndOneHalf: 0,
+      four: 0,
+      five: 0,
+      six: 0,
+    }
+    this.compressedAirService.systeCapacityInputs = this.inputs;
+    this.calculate();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

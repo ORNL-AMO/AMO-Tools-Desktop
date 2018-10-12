@@ -44,6 +44,11 @@ export class DeaeratorComponent implements OnInit {
     }, 50);
   }
 
+  btnResetData() {
+    this.deaeratorForm = this.deaeratorService.initForm(this.settings);
+    this.calculate(this.deaeratorForm);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

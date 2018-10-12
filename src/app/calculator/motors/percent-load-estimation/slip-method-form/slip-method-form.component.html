@@ -29,8 +29,8 @@
 
   <div class="form-group form-section">
     <label for="measuredSpeed">Measured Speed</label>
-    <input name="measuredSpeed" type="number" step="10" min="0" class="form-control" [(ngModel)]="data.measuredSpeed" id="measuredSpeed"
-      (input)="calculate()" onfocus="this.select();" autofocus>
+    <input name="measuredSpeed" type="number" step="10" min="0" class="form-control" [(ngModel)]="data.measuredSpeed"
+      id="measuredSpeed" (input)="calculate()" onfocus="this.select();" autofocus>
     <span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>
   </div>
 

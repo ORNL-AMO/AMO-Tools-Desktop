@@ -4,3 +4,16 @@
   border-color: #BF3D00;
   padding: 5px;
 }
+
+.btn-group {
+  display: block;
+  text-align: center;
+}
+
+.btn-group .btn-sm {
+  font-size: small !important;
+}
+
+.btn-margin-10 {
+  margin: 10px 0px;
+}
