@@ -57,24 +57,9 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-<<<<<<< HEAD
-    psatInputs = this.convertInputs(psatInputs, settings);
-    
-    // console.log('resultsExisting()');
-    // console.log('psatInputs = ');
-    // console.log(psatInputs);
-
-    //call results existing
-    let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
-
-    // console.log('tmpResults = ');
-    // console.log(tmpResults);
-
-=======
     let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
     //call results existing
     let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
->>>>>>> develop
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
