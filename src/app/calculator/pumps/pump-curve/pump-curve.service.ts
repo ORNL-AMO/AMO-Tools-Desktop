@@ -179,7 +179,6 @@ export class PumpCurveService {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     if (selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(pumpCurveForm.dataRows, (val) => { return val.flow });
-      console.log('maxDataFlow = ' + maxDataFlow);
       let tmpArr = new Array<any>();
       pumpCurveForm.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);

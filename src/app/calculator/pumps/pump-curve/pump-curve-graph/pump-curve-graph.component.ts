@@ -351,16 +351,12 @@ export class PumpCurveGraphComponent implements OnInit {
     //x and y scales are required for system curve data, need to check max x/y values from all lines
     this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
     this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
-    let maxX = this.maxX.x;
-    console.log('let maxX = ');
-    console.log(maxX);
-    let maxY = this.maxY.y;
-    this.maxX.x = this.maxX.x + (this.maxX.x * 0.1);
-    console.log('this.maxY.y before adding padding = ' + this.maxY.y);
-    // if (!this.byEquation) {
-    //   let maxY = this.maxY.y;
-    // }
-    this.maxY.y = this.maxY.y + (this.maxY.y * 0.1);
+    let paddingX = this.maxX.x * 0.1;
+    let paddingY = this.maxY.y * 0.1;
+    this.maxX.x = this.maxX.x + paddingX;
+    this.maxY.y = this.maxY.y + paddingY;
+    // this.maxX.x = this.maxX.x + (this.maxX.x * 0.1);
+    // this.maxY.y = this.maxY.y + (this.maxY.y * 0.1);
     //reset and init chart area
     this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
     this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
@@ -393,40 +389,37 @@ export class PumpCurveGraphComponent implements OnInit {
         data.pop();
       }
       else {
-        let tmpMaxX = maxX;
-        let tmpMaxY = maxY;
-        console.log('tmpMaxX = ' + tmpMaxX);
-
-        let tmpData = {
-          x: tmpMaxX,
-          y: data[data.length-1].y
-        }
-        data.pop();
-        data.push(tmpData);
-
+        let tmpMaxX = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+        let tmpMaxY = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
+        // let tmpMinX = _.minBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+        // let tmpMinY = _.minBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
         for (let i = 0; i < data.length; i++) {
-          if (data[i].y == this.maxY.y) {
+          if (data[i].x >= this.maxX.x) {
+            data[i] = {
+              x: this.maxX.x - paddingX,
+              y: data[i].y
+            }
+          }
+          else if (data[i].x > tmpMaxX.flow) {
+            data[i] = {
+              x: tmpMaxX.flow,
+              y: data[i].y
+            }
+          }
+          if (data[i].y >= this.maxY.y) {
             data[i] = {
               x: data[i].x,
-              y: tmpMaxY
+              y: this.maxY.y - paddingY
+            }
+          }
+          else if (data[i].y > tmpMaxY.head) {
+            data[i] = {
+              x: data[i].x,
+              y: tmpMaxY.head
             }
           }
         }
-
-        console.log('data[' + (data.length - 1) + '] = ');
-        console.log(data[data.length - 1]);
-        // data[data.length - 1] =  {
-        //   x: tmpMaxX,
-        //   y: data[data.length - 1].y
-        // }
       }
-      console.log('yRange = ');
-      console.log(yRange);
-      console.log('maxY = ');
-      console.log(this.maxY);
-      // data.pop();
-      console.log('data = ');
-      console.log(data);
       //append and draw baseline curve
       this.linePump = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
       this.linePump = this.lineChartHelperService.drawLine(this.linePump, this.x, this.y, data);
