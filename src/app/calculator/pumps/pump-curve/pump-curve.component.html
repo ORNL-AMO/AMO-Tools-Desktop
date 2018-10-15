@@ -98,7 +98,7 @@
         [isFan]="isFan"></app-pump-curve-help>
       <app-system-curve-help *ngIf="tabSelect == 'help' && focusedForm == 'system-curve'" [isFan]="isFan"></app-system-curve-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="pumpCurveGraph">
-        <app-pump-curve-graph class="w-100" [pumpCurvePrimary]="pumpCurvePrimary" [graphPumpCurve]="graphPumpCurve" [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings"
+        <app-pump-curve-graph class="w-100" [byEquation]="byEquation" [pumpCurvePrimary]="pumpCurvePrimary" [graphPumpCurve]="graphPumpCurve" [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings"
           [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView" [staticHead]="staticHead"
           [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants" [lossCoefficient]="lossCoefficient"
           [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
