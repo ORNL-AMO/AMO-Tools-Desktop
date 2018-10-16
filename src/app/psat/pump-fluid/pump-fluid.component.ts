@@ -44,6 +44,7 @@ export class PumpFluidComponent implements OnInit {
   rpmError: string = null;
   temperatureError: string = null;
   pumpEfficiencyError: string = null;
+  specifiedDriveEfficiencyError: string = null;
   tempUnit: string;
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -174,10 +175,11 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpWarnings:  { rpmError: string, temperatureError: string, pumpEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let tmpWarnings: { rpmError: string, temperatureError: string, pumpEfficiencyError: string, specifiedDriveEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     this.rpmError = tmpWarnings.rpmError;
     this.temperatureError = tmpWarnings.temperatureError;
     this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
+    this.specifiedDriveEfficiencyError = tmpWarnings.specifiedDriveEfficiencyError;
   }
 
   canCompare() {
@@ -212,6 +214,13 @@ export class PumpFluidComponent implements OnInit {
   isDriveDifferent() {
     if (this.canCompare()) {
       return this.compareService.isDriveDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedDriveEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedDriveEfficiencyDifferent();
     } else {
       return false;
     }
@@ -253,7 +262,7 @@ export class PumpFluidComponent implements OnInit {
     }
   }
 
-  isSpecifiedEfficiencyDifferent(){
+  isSpecifiedEfficiencyDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecifiedEfficiencyDifferent();
     } else {

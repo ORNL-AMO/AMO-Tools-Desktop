@@ -43,7 +43,8 @@ export class PumpDataFormComponent implements OnInit {
     'Direct Drive',
     'V-Belt Drive',
     'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
+    'Synchronous Belt Drive',
+    'Specified Efficiency'
   ];
 
   tmpModificationPumpType: string;

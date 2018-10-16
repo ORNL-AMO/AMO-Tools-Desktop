@@ -192,6 +192,24 @@ export class PumpCurveComponent implements OnInit {
     this.regEquationSubscription.unsubscribe();
   }
 
+  btnResetSystemCurveData() {
+    this.initDefault();
+    if (!this.isFan) {
+      this.convertPumpDefaults(this.settings);
+    }
+    else {
+      this.convertFanDefaults(this.settings);
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
+  }
+
+  btnResetPumpCurveData() {
+    this.pumpCurveForm = this.pumpCurveService.initForm();
+    this.calculate();
+  }
+
   initForm() {
     if (this.pumpCurveService.pumpCurveData && !this.inAssessment && !this.isFan) {
       this.pumpCurveForm = this.pumpCurveService.pumpCurveData;

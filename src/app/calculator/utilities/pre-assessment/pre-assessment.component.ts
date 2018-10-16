@@ -82,6 +82,11 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
+  btnResetData() {
+    this.nameIndex = 1;
+    this.initAssessments();
+  }
+
   getHeight() {
     setTimeout(() => {
       if (this.container.nativeElement) {

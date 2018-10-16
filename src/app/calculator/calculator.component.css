@@ -18,3 +18,7 @@ img {
 h3{
     padding-top: .5rem;
 }
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}

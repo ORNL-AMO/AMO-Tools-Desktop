@@ -9,7 +9,13 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-replace-existing-form [(inputs)]="inputs" [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-replace-existing-form>
+      <app-replace-existing-form [(inputs)]="inputs" [settings]="settings" (emitCalculate)="calculate($event)"
+        (emitChangeField)="changeField($event)"></app-replace-existing-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">

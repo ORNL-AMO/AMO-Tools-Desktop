@@ -35,6 +35,14 @@ export class Co2SavingsFormComponent implements OnInit {
     this.eGridRegions = electricityGridRegions;
     // this.setFuelOptions();
     // this.setRegion();
+    if(this.data.fuelType){
+      let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource == val.energySource });
+      this.fuelOptions = tmpOtherFuel.fuelTypes;
+    }
+    if(this.data.eGridRegion){
+      let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion == val.region });
+      this.subregions = tmpRegion.subregions;
+    }
     this.calculate();
   }
 

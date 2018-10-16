@@ -51,6 +51,16 @@ export class StackLossComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.stackLossService.stackLossInput = {
+      flueGasType: undefined,
+      flueGasByVolume: undefined,
+      flueGasByMass: undefined
+    };
+    this.initForm();
+    this.calculate(this.stackLossForm);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -89,17 +99,17 @@ export class StackLossComponent implements OnInit {
     }
   }
 
-  getForm(){
+  getForm() {
     if (this.method == 'volume') {
-      if(this.stackLossService.stackLossInput.flueGasByVolume){
+      if (this.stackLossService.stackLossInput.flueGasByVolume) {
         this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
-      }else{      
+      } else {
         this.stackLossForm = this.stackLossService.initFormVolume();
       }
     } else if (this.method == 'mass') {
-      if(this.stackLossService.stackLossInput.flueGasByMass){
+      if (this.stackLossService.stackLossInput.flueGasByMass) {
         this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
-      }else{      
+      } else {
         this.stackLossForm = this.stackLossService.initFormMass();
       }
     }
