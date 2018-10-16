@@ -355,8 +355,6 @@ export class PumpCurveGraphComponent implements OnInit {
     let paddingY = this.maxY.y * 0.1;
     this.maxX.x = this.maxX.x + paddingX;
     this.maxY.y = this.maxY.y + paddingY;
-    // this.maxX.x = this.maxX.x + (this.maxX.x * 0.1);
-    // this.maxY.y = this.maxY.y + (this.maxY.y * 0.1);
     //reset and init chart area
     this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
     this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
@@ -391,28 +389,14 @@ export class PumpCurveGraphComponent implements OnInit {
       else {
         let tmpMaxX = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
         let tmpMaxY = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
-        // let tmpMinX = _.minBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
-        // let tmpMinY = _.minBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
         for (let i = 0; i < data.length; i++) {
-          if (data[i].x >= this.maxX.x) {
-            data[i] = {
-              x: this.maxX.x - paddingX,
-              y: data[i].y
-            }
-          }
-          else if (data[i].x > tmpMaxX.flow) {
+          if (data[i].x > tmpMaxX.flow) {
             data[i] = {
               x: tmpMaxX.flow,
               y: data[i].y
             }
           }
-          if (data[i].y >= this.maxY.y) {
-            data[i] = {
-              x: data[i].x,
-              y: this.maxY.y - paddingY
-            }
-          }
-          else if (data[i].y > tmpMaxY.head) {
+          if (data[i].y > tmpMaxY.head) {
             data[i] = {
               x: data[i].x,
               y: tmpMaxY.head
