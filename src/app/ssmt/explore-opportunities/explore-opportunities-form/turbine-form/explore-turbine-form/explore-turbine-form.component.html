@@ -1,0 +1,26 @@
+<li>
+  <div class="checkbox">
+    <label for="{{turbineType+'modifyUseTurbine'}}">
+      <input type="checkbox" id="{{turbineType+'modifyUseTurbine'}}" (focus)="focusField('useTurbine')" (change)="toggleTurbineStatus()"
+        [(ngModel)]="showUseTurbine" /> Change Initial Turbine Status
+    </label>
+  </div>
+  <form *ngIf="showUseTurbine">
+    <div class="form-group">
+      <label for="{{turbineType+'baselineUseTurbine'}}">Baseline Status</label>
+      <select name="{{turbineType+'baselineUseTurbine'}}" id="{{turbineType+'baselineUseTurbine'}}" class="form-control"
+        (focus)="focusField('useTurbine')" (change)="save()" [(ngModel)]="baselineTurbine.useTurbine" [disabled]="true">
+        <option [ngValue]="true">On</option>
+        <option [ngValue]="false">Off</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="{{turbineType+'modificationUseTurbine'}}">Modification Status</label>
+      <select name="{{turbineType+'modificationUseTurbine'}}" id="{{turbineType+'modificationUseTurbine'}}" class="form-control"
+        (focus)="focusField('useTurbine')" (change)="save()" [(ngModel)]="modificationTurbine.useTurbine">
+        <option [ngValue]="true">On</option>
+        <option [ngValue]="false">Off</option>
+      </select>
+    </div>
+  </form>
+</li>
