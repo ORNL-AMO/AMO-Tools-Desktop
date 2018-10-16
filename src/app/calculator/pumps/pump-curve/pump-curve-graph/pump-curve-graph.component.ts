@@ -17,8 +17,6 @@ import { LineChartHelperService } from '../../../../shared/line-chart-helper/lin
 })
 export class PumpCurveGraphComponent implements OnInit {
   @Input()
-  byEquation: boolean;
-  @Input()
   pumpCurvePrimary: boolean;
   @Input()
   graphPumpCurve: boolean;
@@ -382,7 +380,7 @@ export class PumpCurveGraphComponent implements OnInit {
     //append dummy curve
     if (this.graphPumpCurve) {
       //repair maxY bug
-      if (this.byEquation) {
+      if (this.selectedFormView == 'Equation') {
         data[0].y = this.pumpCurveForm.headConstant;
         data.pop();
       }

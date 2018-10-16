@@ -88,7 +88,6 @@ export class PumpCurveComponent implements OnInit {
   focusedForm: string = 'pump-curve';
   calcMethodSubscription: Subscription;
   regEquationSubscription: Subscription;
-  byEquation: boolean = true;
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
@@ -331,12 +330,6 @@ export class PumpCurveComponent implements OnInit {
 
   setFormView(str: string) {
     this.selectedFormView = str;
-    if (str == 'Equation') {
-      this.byEquation = true;
-    }
-    else {
-      this.byEquation = false;
-    }
     this.calculate();
   }
 
