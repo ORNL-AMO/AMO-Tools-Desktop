@@ -326,6 +326,23 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
+      if (baseline.fanSetup.specifiedDriveEfficiency != modification.fanSetup.specifiedDriveEfficiency) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedDriveEfficiencyDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
       if (baseline.fanSetup.drive != modification.fanSetup.drive) {
         return true;
       } else {

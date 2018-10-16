@@ -59,6 +59,7 @@ export interface FanSetup {
   fanType: number,
   fanSpeed: number,
   drive: number,
+  specifiedDriveEfficiency?: number,
   fanSpecified?: number,
   fanEfficiency?: number
 }
