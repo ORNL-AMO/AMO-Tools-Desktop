@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { SSMT, CondensingTurbineOperationTypes } from '../../../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../../../ssmt.service';
@@ -20,6 +20,8 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
+  @Input()
+  showFormToggle: boolean;
 
   showCondenserPressure: boolean;
   showOperation: boolean;
@@ -30,6 +32,16 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
     this.initForm();
   }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.showFormToggle && !changes.showFormToggle.isFirstChange()){
+      if(this.showFormToggle == false){
+        this.showOperation = false;
+        this.showCondenserPressure = false;
+      }
+    }
+  }
+
 
   initForm() {
     this.initCondenserPressure();

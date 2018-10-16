@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { SsmtService } from '../../../../ssmt.service';
@@ -22,6 +22,9 @@ export class ExploreTurbineFormComponent implements OnInit {
   turbineType: string;
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
+  @Input()
+  showFormToggle: boolean;
+
 
   showUseTurbine: boolean;
   showGenerationEfficiency: boolean;
@@ -31,6 +34,16 @@ export class ExploreTurbineFormComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.showFormToggle && !changes.showFormToggle.isFirstChange()){
+      if(this.showFormToggle == false){
+        this.showUseTurbine = false;
+        this.showGenerationEfficiency = false;
+        this.showIsentropicEfficiency = false;
+      }
+    }
   }
 
   initForm() {
