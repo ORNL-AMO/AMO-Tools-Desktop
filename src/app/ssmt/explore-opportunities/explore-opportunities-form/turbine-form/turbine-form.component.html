@@ -5,12 +5,11 @@
       [(ngModel)]="showCondensingTurbine" /> Modify High Pressure to Condensing Steam Turbine
   </label>
 </div>
-<ul *ngIf="showCondensingTurbine">
-  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.condensingTurbine"
-    [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine" [settings]="settings"
-    (emitSave)="save()"></app-explore-turbine-form>
-  <app-explore-condensing-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
-    (emitSave)="save()"></app-explore-condensing-turbine-form>
+<ul [hidden]="!showCondensingTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.condensingTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine"
+    [settings]="settings" (emitSave)="save()" (emitShowTurbine)="setShowCondensingTurbine($event)" [turbineType]="'condensingTurbine'"></app-explore-turbine-form>
+  <app-explore-condensing-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()" (emitShowTurbine)="setShowCondensingTurbine($event)"></app-explore-condensing-turbine-form>
 </ul>
 
 <!--High pressure to low pressure turbine-->
@@ -20,12 +19,11 @@
       [(ngModel)]="showHighToLowPressureTurbine" /> Modify High Pressure to Low Pressure Turbine
   </label>
 </div>
-<ul *ngIf="showHighToLowPressureTurbine">
-    <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToLowTurbine"
-    [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine" [settings]="settings"
-    (emitSave)="save()"></app-explore-turbine-form>
-  <app-explore-pressure-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
-    (emitSave)="save()"></app-explore-pressure-turbine-form>
+<ul [hidden]="!showHighToLowPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine"
+    [settings]="settings" (emitSave)="save()" (emitShowTurbine)="setShowHighLowTurbine($event)" [turbineType]="'highToLowTurbine'"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-explore-pressure-turbine-form>
 </ul>
 
 <!--high pressure to medium pressure turbine-->
@@ -35,12 +33,11 @@
       [(ngModel)]="showHighToMediumPressureTurbine" /> Modify High Pressure to Medium Pressure Turbine
   </label>
 </div>
-<ul *ngIf="showHighToMediumPressureTurbine">
-    <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToLowTurbine"
-    [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine" [settings]="settings"
-    (emitSave)="save()"></app-explore-turbine-form>
-  <app-explore-pressure-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
-    (emitSave)="save()"></app-explore-pressure-turbine-form>
+<ul [hidden]="!showHighToMediumPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToMediumTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToMediumTurbine"
+    [settings]="settings" (emitSave)="save()" (emitShowTurbine)="setShowHighMediumTurbine($event)" [turbineType]="'highToMediumTurbine'"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToMediumTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-explore-pressure-turbine-form>
 </ul>
 
 <!--medium pressure to low pressure turbine-->
@@ -50,10 +47,9 @@
       [(ngModel)]="showMediumToLowPressureTurbine" /> Modify Medium Pressure to Low Pressure Turbine
   </label>
 </div>
-<ul *ngIf="showMediumToLowPressureTurbine">
-    <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.mediumToLowTurbine"
-    [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine" [settings]="settings"
-    (emitSave)="save()"></app-explore-turbine-form>
-  <app-explore-pressure-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
-    (emitSave)="save()"></app-explore-pressure-turbine-form>
+<ul [hidden]="!showMediumToLowPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.mediumToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine"
+    [settings]="settings" (emitSave)="save()" (emitShowTurbine)="setShowMediumLowTurbine($event)" [turbineType]="'mediumToLowTurbine'"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"></app-explore-pressure-turbine-form>
 </ul>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SsmtService } from '../../../ssmt.service';
@@ -24,10 +24,8 @@ export class TurbineFormComponent implements OnInit {
   showHighToMediumPressureTurbine: boolean;
   showMediumToLowPressureTurbine: boolean;
 
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
   ngOnInit() {
-    console.log(this.ssmt);
-    this.ssmt.turbineInput.mediumToLowTurbine
   }
 
   toggleCondensingTurbine() {
@@ -46,6 +44,24 @@ export class TurbineFormComponent implements OnInit {
 
   }
 
+  setShowCondensingTurbine(showTurbine: boolean) {
+    this.showCondensingTurbine = showTurbine;
+    this.cd.detectChanges();
+  }
+  
+  setShowHighLowTurbine(showTurbine: boolean) {
+    this.showHighToLowPressureTurbine = showTurbine;
+    this.cd.detectChanges();
+  }
+  
+  setShowHighMediumTurbine(showTurbine: boolean) {
+    this.showHighToMediumPressureTurbine = showTurbine;
+  }
+
+  setShowMediumLowTurbine(showTurbine: boolean) {
+    this.showMediumToLowPressureTurbine = showTurbine;
+    this.cd.detectChanges();
+  }
 
   save() {
     this.emitSave.emit(true);

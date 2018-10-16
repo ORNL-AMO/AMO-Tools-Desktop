@@ -3,6 +3,7 @@ import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models
 import { Settings } from '../../../../../shared/models/settings';
 import { SsmtService } from '../../../../ssmt.service';
 
+
 @Component({
   selector: 'app-explore-turbine-form',
   templateUrl: './explore-turbine-form.component.html',
@@ -19,17 +20,61 @@ export class ExploreTurbineFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   turbineType: string;
+  @Output('emitShowTurbine')
+  emitShowTurbine = new EventEmitter<boolean>();
 
   showUseTurbine: boolean;
-  show
+  showGenerationEfficiency: boolean;
+  showIsentropicEfficiency: boolean;
+  
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    this.initForm();
   }
 
-  toggleTurbineStatus(){
-    if(this.showUseTurbine == false){
+  initForm() {
+    this.initIsentropicEfficiency();
+    this.initTurbineStatus();
+    this.initGenerationEfficiency();
+    if (this.showUseTurbine || this.showIsentropicEfficiency || this.showGenerationEfficiency) {
+      this.emitShowTurbine.emit(true);
+    }
+  }
+
+  initTurbineStatus() {
+    if (this.baselineTurbine.useTurbine != this.modificationTurbine.useTurbine) {
+      this.showUseTurbine = true;
+    }
+  }
+
+  initIsentropicEfficiency() {
+    if (this.baselineTurbine.isentropicEfficiency != this.modificationTurbine.isentropicEfficiency) {
+      this.showIsentropicEfficiency = true;
+    }
+  }
+
+  initGenerationEfficiency() {
+    if (this.baselineTurbine.generationEfficiency != this.modificationTurbine.generationEfficiency) {
+      this.showGenerationEfficiency = true;
+    }
+  }
+
+  toggleTurbineStatus() {
+    if (this.showUseTurbine == false) {
       this.modificationTurbine.useTurbine = this.baselineTurbine.useTurbine;
+    }
+  }
+
+  toggleIsentropicEfficiency() {
+    if (this.showIsentropicEfficiency == false) {
+      this.modificationTurbine.isentropicEfficiency = this.baselineTurbine.isentropicEfficiency;
+    }
+  }
+
+  toggleGenerationEfficiency() {
+    if (this.showGenerationEfficiency == false) {
+      this.modificationTurbine.generationEfficiency = this.baselineTurbine.generationEfficiency;
     }
   }
 
