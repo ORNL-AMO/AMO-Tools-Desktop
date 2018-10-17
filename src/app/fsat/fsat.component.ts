@@ -433,7 +433,6 @@ export class FsatComponent implements OnInit {
   }
 
   addNewMod() {
-    console.log('add new mod');
     let modName: string = 'Scenario ' + (this._fsat.modifications.length + 1);
     let tmpModification: Modification = {
       fsat: {

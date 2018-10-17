@@ -266,8 +266,6 @@ export class FsatWarningService {
   }
 
   checkSpecifiedDriveEfficiency(fanSetup: FanSetup) {
-    console.log('checkSpecifiedDriveEfficiencyERror(), fanSetup = ');
-    console.log(fanSetup);
     if (fanSetup.specifiedDriveEfficiency > 100) {
       return "Unrealistic efficiency, shouldn't be greater then 100%";
     }

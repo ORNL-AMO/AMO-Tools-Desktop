@@ -78,14 +78,10 @@ export class FanSetupComponent implements OnInit {
     this.fanSpeedError = warnings.fanSpeedError;
     this.fanEfficiencyError = warnings.fanEfficiencyError;
     this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
-    console.log('this.specifiedDriveEfficiencyError = ');
-    console.log(this.specifiedDriveEfficiencyError);
   }
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
-    console.log('fanSetup = ');
-    console.log(this.fanSetup);
     this.checkForWarnings();
     this.emitSave.emit(this.fanSetup);
   }

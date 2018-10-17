@@ -216,7 +216,6 @@ export class PumpDataFormComponent implements OnInit {
     } else if (num == 6) {
       this.modificationSpecifiedDriveEfficiencyError = str;
     }
-
   }
 
   checkPumpTypes() {
