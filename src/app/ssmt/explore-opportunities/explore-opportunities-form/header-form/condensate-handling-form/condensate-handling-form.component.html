@@ -1,11 +1,11 @@
-<!--CONDENSATE RECOVERY RATE-->
 <div class="checkbox">
-  <label class="group-label" for="adjustCondensateRecovery">
-    <input type="checkbox" id="adjustCondensateRecovery" (focus)="focusField('default')" (change)="toggleCondensateRecovery()"
-      [(ngModel)]="showCondensateRecovery" /> Adjust Condensate Recovery Rate
+  <label class="group-label" for="adjustCondensateHandling">
+    <input type="checkbox" id="adjustCondensateHandling" (focus)="focusField('default')" (change)="toggleCondensate()"
+      [(ngModel)]="showCondensateHandling" /> Adjust Condensate Handling
   </label>
 </div>
-<ul *ngIf="showCondensateRecovery">
+<ul *ngIf="showCondensateHandling">
+  <!--CONDENSATE RECOVERY RATE-->
   <li>
     <div class="checkbox">
       <label for="modifyHighPressureCondensateRecovery">
@@ -90,21 +90,20 @@
       </div>
     </form>
   </li>
-</ul>
-<!--FLASH CONDENSATE-->
-<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
-  <label class="group-label" for="adjustFlashCondensateMediumPressure">
-    <input type="checkbox" id="adjustFlashCondensateMediumPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateMediumPressure()"
-      [(ngModel)]="showFlashCondensateMediumPressure" /> Flash Condensate to Medium Pressure
-  </label>
-</div>
-<ul *ngIf="showFlashCondensateMediumPressure">
+  <!--FLASH CONDENSATE-->
   <li>
-    <form>
+    <div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
+      <label for="adjustFlashCondensateMediumPressure">
+        <input type="checkbox" id="adjustFlashCondensateMediumPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateMediumPressure()"
+          [(ngModel)]="showFlashCondensateMediumPressure" /> Flash Condensate to Medium Pressure
+      </label>
+    </div>
+    <form *ngIf="showFlashCondensateMediumPressure">
       <div class="form-group">
         <label for="baselineFlashCondensateMediumPressure">Baseline Flash Condensate to Medium Pressure</label>
         <select name="baselineFlashCondensateMediumPressure" class="form-control" id="baselineFlashCondensateMediumPressure"
-          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.mediumPressure.flashCondensateIntoHeader" [disabled]="true">
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.mediumPressure.flashCondensateIntoHeader"
+          [disabled]="true">
           <option [ngValue]=true>Yes</option>
           <option [ngValue]=false>No</option>
         </select>
@@ -119,21 +118,22 @@
       </div>
     </form>
   </li>
-</ul>
 
-<div class="checkbox" *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
-  <label class="group-label" for="adjustFlashCondensateLowPressure">
-    <input type="checkbox" id="adjustFlashCondensateLowPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateLowPressure()"
-      [(ngModel)]="showFlashCondensateLowPressure" /> Flash Condensate to Low Pressure
-  </label>
-</div>
-<ul *ngIf="showFlashCondensateLowPressure">
+
+
   <li>
-    <form>
+    <div class="checkbox" *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+      <label for="adjustFlashCondensateLowPressure">
+        <input type="checkbox" id="adjustFlashCondensateLowPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateLowPressure()"
+          [(ngModel)]="showFlashCondensateLowPressure" /> Flash Condensate to Low Pressure
+      </label>
+    </div>
+    <form *ngIf="showFlashCondensateLowPressure">
       <div class="form-group">
         <label for="baselineFlashCondensateLowPressure">Baseline Flash Condensate to Low Pressure</label>
         <select name="baselineFlashCondensateLowPressure" class="form-control" id="baselineFlashCondensateLowPressure"
-          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.lowPressure.flashCondensateIntoHeader" [disabled]="true">
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.lowPressure.flashCondensateIntoHeader"
+          [disabled]="true">
           <option [ngValue]=true>Yes</option>
           <option [ngValue]=false>No</option>
         </select>
@@ -148,19 +148,17 @@
       </div>
     </form>
   </li>
-</ul>
 
 
-<!--RETURN TEMPERATURE-->
-<div class="checkbox">
-  <label class="group-label" for="adjustReturnTemperature">
-    <input type="checkbox" id="adjustReturnTemperature" (focus)="focusField('default')" (change)="toggleReturnTemperature()"
-      [(ngModel)]="showReturnTemperature" /> Modify Condensate Return Temperature
-  </label>
-</div>
-<ul *ngIf="showReturnTemperature">
+  <!--RETURN TEMPERATURE-->
   <li>
-    <form>
+    <div class="checkbox">
+      <label for="adjustReturnTemperature">
+        <input type="checkbox" id="adjustReturnTemperature" (focus)="focusField('default')" (change)="toggleReturnTemperature()"
+          [(ngModel)]="showReturnTemperature" /> Modify Condensate Return Temperature
+      </label>
+    </div>
+    <form *ngIf="showReturnTemperature">
       <div class="form-group">
         <label for="baselineCondensateReturnTemperature">Baseline Return Temperature</label>
         <div class="input-group">

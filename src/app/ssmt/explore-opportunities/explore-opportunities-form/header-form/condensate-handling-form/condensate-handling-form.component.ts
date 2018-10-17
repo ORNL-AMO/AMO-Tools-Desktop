@@ -18,7 +18,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
 
-  showCondensateRecovery: boolean = false;
+  showCondensateHandling: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
   showMediumPressureCondensateRecovery: boolean = false;
   showLowPressureCondensateRecovery: boolean = false;
@@ -28,33 +28,47 @@ export class CondensateHandlingFormComponent implements OnInit {
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    this.initCondensateRecovery();
-    this.initReturnTemperature();
-    this.initFlashCondensateLowPressure();
-    this.initFlashCondensateMediumPressure();
+    this.initCondensateHandling();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.initCondensateRecovery();
-        this.initReturnTemperature();
-        this.initFlashCondensateLowPressure();
-        this.initFlashCondensateMediumPressure();
+        this.initCondensateHandling();
+
       }
     }
   }
 
-  //HEAT LOSS
-  initCondensateRecovery() {
+
+  initCondensateHandling() {
     this.initHighPressureCondensateRecovery();
     this.initMediumPressureCondensateRecovery();
     this.initLowPressureCondensateRecovery();
+    this.initReturnTemperature();
+    this.initFlashCondensateLowPressure();
+    this.initFlashCondensateMediumPressure();
     if (this.showHighPressureCondensateRecovery || this.showMediumPressureCondensateRecovery || this.showLowPressureCondensateRecovery) {
-      this.showCondensateRecovery = true;
+      this.showCondensateHandling = true;
     }
   }
 
+  toggleCondensate() {
+    this.showHighPressureCondensateRecovery = false;
+    this.showMediumPressureCondensateRecovery = false;
+    this.showLowPressureCondensateRecovery = false;
+    this.showReturnTemperature = false;
+    this.showFlashCondensateMediumPressure = false;
+    this.showFlashCondensateLowPressure = false;
+    this.toggleReturnTemperature();
+    this.toggleFlashCondensateLowPressure();
+    this.toggleFlashCondensateMediumPressure();
+    this.toggleHighPressureCondensateRecovery();
+    this.toggleMediumPressureCondensateRecovery();
+    this.toggleLowPressureCondensateRecovery();
+  }
+
+  //condensate recovery rate
   initHighPressureCondensateRecovery() {
     if (this.ssmt.headerInput.highPressure.condensationRecoveryRate != this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate) {
       this.showHighPressureCondensateRecovery = true;
@@ -69,15 +83,6 @@ export class CondensateHandlingFormComponent implements OnInit {
     if (this.ssmt.headerInput.lowPressure.condensationRecoveryRate != this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate) {
       this.showLowPressureCondensateRecovery = true;
     }
-  }
-
-  toggleCondensateRecovery() {
-    this.showHighPressureCondensateRecovery = false;
-    this.showMediumPressureCondensateRecovery = false;
-    this.showLowPressureCondensateRecovery = false;
-    this.toggleHighPressureCondensateRecovery();
-    this.toggleMediumPressureCondensateRecovery();
-    this.toggleLowPressureCondensateRecovery();
   }
 
   toggleHighPressureCondensateRecovery() {
