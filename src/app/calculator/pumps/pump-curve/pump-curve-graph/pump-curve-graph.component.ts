@@ -349,8 +349,10 @@ export class PumpCurveGraphComponent implements OnInit {
     //x and y scales are required for system curve data, need to check max x/y values from all lines
     this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
     this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
-    this.maxX.x = this.maxX.x + (this.maxX.x * 0.1);
-    this.maxY.y = this.maxY.y + (this.maxY.y * 0.1);
+    let paddingX = this.maxX.x * 0.1;
+    let paddingY = this.maxY.y * 0.1;
+    this.maxX.x = this.maxX.x + paddingX;
+    this.maxY.y = this.maxY.y + paddingY;
     //reset and init chart area
     this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
     this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
@@ -378,8 +380,28 @@ export class PumpCurveGraphComponent implements OnInit {
     //append dummy curve
     if (this.graphPumpCurve) {
       //repair maxY bug
-      data[0].y = this.pumpCurveForm.headConstant;
-      data.pop();
+      if (this.selectedFormView == 'Equation') {
+        data[0].y = this.pumpCurveForm.headConstant;
+        data.pop();
+      }
+      else {
+        let tmpMaxX = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+        let tmpMaxY = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].x > tmpMaxX.flow) {
+            data[i] = {
+              x: tmpMaxX.flow,
+              y: data[i].y
+            }
+          }
+          if (data[i].y > tmpMaxY.head) {
+            data[i] = {
+              x: data[i].x,
+              y: tmpMaxY.head
+            }
+          }
+        }
+      }
       //append and draw baseline curve
       this.linePump = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
       this.linePump = this.lineChartHelperService.drawLine(this.linePump, this.x, this.y, data);
