@@ -31,6 +31,7 @@ export class FanSetupComponent implements OnInit {
   fanForm: FormGroup;
   fanEfficiencyError: string = null;
   fanSpeedError: string = null;
+  specifiedDriveEfficiencyError: string = null;
   constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
@@ -73,13 +74,18 @@ export class FanSetupComponent implements OnInit {
   }
 
   checkForWarnings() {
-    let warnings: {fanEfficiencyError: string, fanSpeedError: string} = this.fsatWarningService.checkFanWarnings(this.fanSetup);
+    let warnings: {fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
     this.fanSpeedError = warnings.fanSpeedError;
     this.fanEfficiencyError = warnings.fanEfficiencyError;
+    this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
+    console.log('this.specifiedDriveEfficiencyError = ');
+    console.log(this.specifiedDriveEfficiencyError);
   }
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    console.log('fanSetup = ');
+    console.log(this.fanSetup);
     this.checkForWarnings();
     this.emitSave.emit(this.fanSetup);
   }
@@ -119,6 +125,14 @@ export class FanSetupComponent implements OnInit {
   isFanSpecifiedDifferent(){
     if (this.canCompare()) {
       return this.compareService.isSpecifiedFanEfficiencyDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isSpecifiedDriveEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedDriveEfficiencyDifferent();
     } else {
       return false;
     }
