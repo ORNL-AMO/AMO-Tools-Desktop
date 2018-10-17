@@ -17,22 +17,30 @@ export class CondensateHandlingFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  
+
   showCondensateRecovery: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
   showMediumPressureCondensateRecovery: boolean = false;
-  showLowPressureCondensateRecovery: boolean = false; 
-
-  constructor(private ssmtService: SsmtService){ }
+  showLowPressureCondensateRecovery: boolean = false;
+  showReturnTemperature: boolean = false;
+  showFlashCondensateMediumPressure: boolean = false;
+  showFlashCondensateLowPressure: boolean = false;
+  constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.initCondensateRecovery();
+    this.initReturnTemperature();
+    this.initFlashCondensateLowPressure();
+    this.initFlashCondensateMediumPressure();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
         this.initCondensateRecovery();
+        this.initReturnTemperature();
+        this.initFlashCondensateLowPressure();
+        this.initFlashCondensateMediumPressure();
       }
     }
   }
@@ -89,6 +97,48 @@ export class CondensateHandlingFormComponent implements OnInit {
   toggleLowPressureCondensateRecovery() {
     if (this.showLowPressureCondensateRecovery == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate = this.ssmt.headerInput.lowPressure.condensationRecoveryRate;
+      this.save();
+    }
+  }
+
+  //condensate return temperature
+  initReturnTemperature() {
+    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensateReturnTemperature != this.ssmt.headerInput.highPressure.condensateReturnTemperature) {
+      this.showReturnTemperature = true;
+    }
+  }
+
+  toggleReturnTemperature() {
+    if (this.showReturnTemperature == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensateReturnTemperature = this.ssmt.headerInput.highPressure.condensateReturnTemperature;
+      this.save();
+    }
+  }
+
+
+  //flash condensate
+  initFlashCondensateLowPressure() {
+    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader != this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader) {
+      this.showFlashCondensateLowPressure = true;
+    }
+  }
+
+  toggleFlashCondensateLowPressure() {
+    if (this.showFlashCondensateLowPressure == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader = this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader;
+      this.save();
+    }
+  }
+
+  initFlashCondensateMediumPressure() {
+    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.flashCondensateIntoHeader != this.ssmt.headerInput.mediumPressure.flashCondensateIntoHeader) {
+      this.showFlashCondensateMediumPressure = true;
+    }
+  }
+
+  toggleFlashCondensateMediumPressure() {
+    if (this.showFlashCondensateLowPressure == false) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.flashCondensateIntoHeader = this.ssmt.headerInput.mediumPressure.flashCondensateIntoHeader;
       this.save();
     }
   }

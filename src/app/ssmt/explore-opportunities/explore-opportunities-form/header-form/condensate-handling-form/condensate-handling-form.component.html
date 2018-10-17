@@ -9,8 +9,9 @@
   <li>
     <div class="checkbox">
       <label for="modifyHighPressureCondensateRecovery">
-        <input type="checkbox" id="modifyHighPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleHighPressureCondensateRecovery()"
-          [(ngModel)]="showHighPressureCondensateRecovery" /> Adjust High Pressure Condensate Recovery Rate
+        <input type="checkbox" id="modifyHighPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
+          (change)="toggleHighPressureCondensateRecovery()" [(ngModel)]="showHighPressureCondensateRecovery" /> Adjust
+        High Pressure Condensate Recovery Rate
       </label>
     </div>
     <form *ngIf="showHighPressureCondensateRecovery">
@@ -26,8 +27,8 @@
       <div class="form-group">
         <label for="modificationHPCondensateRecovery">Modification Condensate Recovery Rate</label>
         <div class="input-group">
-          <input name="modificationHPCondensateRecovery" type="number" step="any" id="modificationHPCondensateRecovery" class="form-control"
-            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate" />
+          <input name="modificationHPCondensateRecovery" type="number" step="any" id="modificationHPCondensateRecovery"
+            class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate" />
           <span class="input-group-addon units">%</span>
         </div>
       </div>
@@ -36,8 +37,9 @@
   <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders == 3">
     <div class="checkbox">
       <label for="modifyMediumPressureCondensateRecovery">
-        <input type="checkbox" id="modifyMediumPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleMediumPressureCondensateRecovery()"
-          [(ngModel)]="showMediumPressureCondensateRecovery" /> Adjust Medium Pressure Condensate Recovery Rate
+        <input type="checkbox" id="modifyMediumPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
+          (change)="toggleMediumPressureCondensateRecovery()" [(ngModel)]="showMediumPressureCondensateRecovery" />
+        Adjust Medium Pressure Condensate Recovery Rate
       </label>
     </div>
     <form *ngIf="showMediumPressureCondensateRecovery">
@@ -53,8 +55,8 @@
       <div class="form-group">
         <label for="modificationMPCondensateRecovery">Modification Condensate Recovery Rate</label>
         <div class="input-group">
-          <input name="modificationMPCondensateRecovery" type="number" step="any" id="modificationMPCondensateRecovery" class="form-control"
-            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.mediumPressure.highPressure.condensationRecoveryRate" />
+          <input name="modificationMPCondensateRecovery" type="number" step="any" id="modificationMPCondensateRecovery"
+            class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.mediumPressure.highPressure.condensationRecoveryRate" />
           <span class="input-group-addon units">%</span>
         </div>
       </div>
@@ -63,8 +65,9 @@
   <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
     <div class="checkbox">
       <label for="modifyLowPressureCondensateRecovery">
-        <input type="checkbox" id="modifyLowPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')" (change)="toggleLowPressureCondensateRecovery()"
-          [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust Low Pressure Condensate Recovery Rate
+        <input type="checkbox" id="modifyLowPressureCondensateRecovery" (focus)="focusField('condensationRecoveryRate')"
+          (change)="toggleLowPressureCondensateRecovery()" [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust
+        Low Pressure Condensate Recovery Rate
       </label>
     </div>
     <form *ngIf="showLowPressureCondensateRecovery">
@@ -80,10 +83,98 @@
       <div class="form-group">
         <label for="modificationLPCondensateRecovery">Modification Condensate Recovery Rate</label>
         <div class="input-group">
-          <input name="modificationLPCondensateRecovery" type="number" step="any" id="modificationLPCondensateRecovery" class="form-control"
-            (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate" />
+          <input name="modificationLPCondensateRecovery" type="number" step="any" id="modificationLPCondensateRecovery"
+            class="form-control" (focus)="focusField('condensationRecoveryRate')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate" />
           <span class="input-group-addon units">%</span>
         </div>
+      </div>
+    </form>
+  </li>
+</ul>
+<!--FLASH CONDENSATE-->
+<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders == 3">
+  <label class="group-label" for="adjustFlashCondensateMediumPressure">
+    <input type="checkbox" id="adjustFlashCondensateMediumPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateMediumPressure()"
+      [(ngModel)]="showFlashCondensateMediumPressure" /> Flash Condensate to Medium Pressure
+  </label>
+</div>
+<ul *ngIf="showFlashCondensateMediumPressure">
+  <li>
+    <form>
+      <div class="form-group">
+        <label for="baselineFlashCondensateMediumPressure">Baseline Flash Condensate to Medium Pressure</label>
+        <select name="baselineFlashCondensateMediumPressure" class="form-control" id="baselineFlashCondensateMediumPressure"
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.mediumPressure.flashCondensateIntoHeader" [disabled]="true">
+          <option [ngValue]=true>Yes</option>
+          <option [ngValue]=false>No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFlashCondensateMediumPressure">Modification Flash Condensate to Medium Pressure</label>
+        <select name="modificationFlashCondensateMediumPressure" class="form-control" id="modificationFlashCondensateMediumPressure"
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.mediumPressure.flashCondensateIntoHeader">
+          <option [ngValue]=true>Yes</option>
+          <option [ngValue]=false>No</option>
+        </select>
+      </div>
+    </form>
+  </li>
+</ul>
+
+<div class="checkbox" *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+  <label class="group-label" for="adjustFlashCondensateLowPressure">
+    <input type="checkbox" id="adjustFlashCondensateLowPressure" (focus)="focusField('default')" (change)="toggleFlashCondensateLowPressure()"
+      [(ngModel)]="showFlashCondensateLowPressure" /> Flash Condensate to Low Pressure
+  </label>
+</div>
+<ul *ngIf="showFlashCondensateLowPressure">
+  <li>
+    <form>
+      <div class="form-group">
+        <label for="baselineFlashCondensateLowPressure">Baseline Flash Condensate to Low Pressure</label>
+        <select name="baselineFlashCondensateLowPressure" class="form-control" id="baselineFlashCondensateLowPressure"
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.headerInput.lowPressure.flashCondensateIntoHeader" [disabled]="true">
+          <option [ngValue]=true>Yes</option>
+          <option [ngValue]=false>No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFlashCondensateLowPressure">Modification Flash Condensate to Low Pressure</label>
+        <select name="modificationFlashCondensateLowPressure" class="form-control" id="modificationFlashCondensateLowPressure"
+          (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader">
+          <option [ngValue]=true>Yes</option>
+          <option [ngValue]=false>No</option>
+        </select>
+      </div>
+    </form>
+  </li>
+</ul>
+
+
+<!--RETURN TEMPERATURE-->
+<div class="checkbox">
+  <label class="group-label" for="adjustReturnTemperature">
+    <input type="checkbox" id="adjustReturnTemperature" (focus)="focusField('default')" (change)="toggleReturnTemperature()"
+      [(ngModel)]="showReturnTemperature" /> Modify Condensate Return Temperature
+  </label>
+</div>
+<ul *ngIf="showReturnTemperature">
+  <li>
+    <form>
+      <div class="form-group">
+        <label for="baselineCondensateReturnTemperature">Baseline Return Temperature</label>
+        <div class="input-group">
+          <input name="baselineCondensateReturnTemperature" type="number" step="any" id="baselineCondensateReturnTemperature"
+            class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" [(ngModel)]="ssmt.headerInput.highPressure.condensateReturnTemperature"
+            [disabled]="true" />
+          <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span> </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationCondensateReturnTemperature">Modification Return Temperature</label>
+        <div class="input-group">
+          <input name="modificationCondensateReturnTemperature" type="number" step="any" id="modificationCondensateReturnTemperature"
+            class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.headerInput.highPressure.condensateReturnTemperature" />
+          <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span> </div>
       </div>
     </form>
   </li>
