@@ -248,6 +248,7 @@ export interface FanCurveInputData {
 export interface FsatInput {
   fanSpeed: number,
   drive: number,
+  specifiedDriveEfficiency?: number,
   lineFrequency: number,
   motorRatedPower: number,
   motorRpm: number,

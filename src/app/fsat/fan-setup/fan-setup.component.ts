@@ -84,6 +84,8 @@ export class FanSetupComponent implements OnInit {
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    console.log('fanSetup = ');
+    console.log(this.fanSetup);
     this.checkForWarnings();
     this.emitSave.emit(this.fanSetup);
   }
