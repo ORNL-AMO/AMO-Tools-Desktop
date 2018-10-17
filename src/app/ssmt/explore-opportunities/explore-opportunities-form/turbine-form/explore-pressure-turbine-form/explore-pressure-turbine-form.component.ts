@@ -15,7 +15,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<{baselineTurbine: PressureTurbine, modificationTurbine: PressureTurbine}>();
   @Input()
   baselineTurbine: PressureTurbine;
   @Input()
@@ -65,7 +65,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(true);
+    this.emitSave.emit({baselineTurbine: this.baselineTurbine, modificationTurbine: this.modificationTurbine});
   }
 
   focusField(str: string) {

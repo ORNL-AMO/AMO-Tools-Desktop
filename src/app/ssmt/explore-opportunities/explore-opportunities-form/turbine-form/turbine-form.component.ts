@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { SSMT } from '../../../../shared/models/steam/ssmt';
+import { SSMT, PressureTurbine, CondensingTurbine } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SsmtService } from '../../../ssmt.service';
 
@@ -16,7 +16,7 @@ export class TurbineFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
 
 
   showCondensingTurbine: boolean = false;
@@ -75,8 +75,23 @@ export class TurbineFormComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  save() {
-    this.emitSave.emit(true);
+  save(newSSMT?: SSMT) {
+    if (newSSMT) {
+      this.ssmt = newSSMT;
+    }
+    this.emitSave.emit(this.ssmt);
+  }
+
+  savePressureTurbine(saveData: { baselineTurbine: PressureTurbine, modificationTurbine: PressureTurbine }, turbineStr: string) {
+    this.ssmt.turbineInput[turbineStr] = saveData.baselineTurbine;
+    this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput[turbineStr] = saveData.modificationTurbine;
+    this.save();
+  }
+
+  saveExploreTurbine(saveData: { baselineTurbine: PressureTurbine | CondensingTurbine, modificationTurbine: PressureTurbine | CondensingTurbine }, turbineStr: string){
+    this.ssmt.turbineInput[turbineStr] = saveData.baselineTurbine;
+    this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput[turbineStr] = saveData.modificationTurbine;
+    this.save();
   }
 
   focusField(str: string) {

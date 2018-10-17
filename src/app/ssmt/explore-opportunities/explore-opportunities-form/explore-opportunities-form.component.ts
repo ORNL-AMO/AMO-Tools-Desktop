@@ -15,10 +15,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   ssmt: SSMT;
   @Input()
   exploreModIndex: number;
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<boolean>();
+
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
 
@@ -29,14 +28,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
    // this.checkOptimized();
   }
   
-
-  calculate() {
-    this.save();
-    this.emitCalculate.emit(true);
-  }
-
-  save() {
-    this.emitSave.emit(true);
+  save(newSSMT: SSMT) {
+    this.ssmt = newSSMT;
+    this.emitSave.emit(this.ssmt);
   }
 
   // toggleOptimized() {

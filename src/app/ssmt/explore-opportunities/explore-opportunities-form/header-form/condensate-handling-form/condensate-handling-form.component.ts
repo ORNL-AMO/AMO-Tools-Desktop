@@ -16,7 +16,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
 
   showCondensateHandling: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
@@ -48,7 +48,7 @@ export class CondensateHandlingFormComponent implements OnInit {
     this.initReturnTemperature();
     this.initFlashCondensateLowPressure();
     this.initFlashCondensateMediumPressure();
-    if (this.showHighPressureCondensateRecovery || this.showMediumPressureCondensateRecovery || this.showLowPressureCondensateRecovery) {
+    if (this.showHighPressureCondensateRecovery || this.showMediumPressureCondensateRecovery || this.showLowPressureCondensateRecovery || this.showReturnTemperature || this.showFlashCondensateLowPressure || this.showFlashCondensateMediumPressure) {
       this.showCondensateHandling = true;
     }
   }
@@ -131,6 +131,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   toggleFlashCondensateLowPressure() {
     if (this.showFlashCondensateLowPressure == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader = this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader;
+      console.log(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader)
       this.save();
     }
   }
@@ -148,7 +149,7 @@ export class CondensateHandlingFormComponent implements OnInit {
     }
   }
   save() {
-    this.emitSave.emit(true);
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {

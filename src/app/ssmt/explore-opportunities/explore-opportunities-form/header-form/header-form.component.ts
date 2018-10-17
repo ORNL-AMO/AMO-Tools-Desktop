@@ -16,7 +16,7 @@ export class HeaderFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
 
   showHighPressureHeatLoss: boolean = false;
   showMediumPressureHeatLoss: boolean = false;
@@ -153,8 +153,11 @@ export class HeaderFormComponent implements OnInit {
     }
   }
 
-  save() {
-    this.emitSave.emit(true);
+  save(newSSMT?: SSMT) {
+    if(newSSMT){
+      this.ssmt = newSSMT;
+    }
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {

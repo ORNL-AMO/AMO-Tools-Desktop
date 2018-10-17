@@ -17,7 +17,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
   @Input()
@@ -67,6 +67,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   toggleCondenserPressure() {
     if (this.showCondenserPressure == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.condenserPressure = this.ssmt.turbineInput.condensingTurbine.condenserPressure;
+      this.save();
     }
   }
 
@@ -74,11 +75,12 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
     if (this.showOperation == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType = this.ssmt.turbineInput.condensingTurbine.operationType;
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationValue = this.ssmt.turbineInput.condensingTurbine.operationValue;
+      this.save();
     }
   }
 
   save() {
-    this.emitSave.emit(true);
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {

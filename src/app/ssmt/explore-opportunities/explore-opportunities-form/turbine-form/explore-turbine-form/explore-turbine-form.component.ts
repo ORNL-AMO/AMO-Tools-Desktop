@@ -17,7 +17,7 @@ export class ExploreTurbineFormComponent implements OnInit {
   @Input()
   modificationTurbine: PressureTurbine | CondensingTurbine;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<{baselineTurbine: PressureTurbine | CondensingTurbine, modificationTurbine: PressureTurbine | CondensingTurbine}>();
   @Input()
   turbineType: string;
   @Output('emitShowTurbine')
@@ -92,7 +92,7 @@ export class ExploreTurbineFormComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(true);
+    this.emitSave.emit({baselineTurbine: this.baselineTurbine, modificationTurbine: this.modificationTurbine});
   }
 
   focusField(str: string) {

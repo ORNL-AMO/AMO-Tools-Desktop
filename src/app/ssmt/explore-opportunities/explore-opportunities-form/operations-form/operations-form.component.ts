@@ -16,7 +16,7 @@ export class OperationsFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
 
   showHoursPerYear: boolean = false;
   showOperationsData: boolean = false;
@@ -169,7 +169,7 @@ export class OperationsFormComponent implements OnInit {
 
 
   save() {
-    this.emitSave.emit(true);
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {
