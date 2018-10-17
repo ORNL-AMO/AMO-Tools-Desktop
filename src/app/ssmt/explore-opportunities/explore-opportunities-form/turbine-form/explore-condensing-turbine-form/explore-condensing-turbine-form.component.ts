@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { SSMT, CondensingTurbineOperationTypes } from '../../../../../shared/models/steam/ssmt';
-import { SsmtService } from '../../../../ssmt.service';
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
+import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 
 @Component({
   selector: 'app-explore-condensing-turbine-form',
@@ -26,7 +26,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   showCondenserPressure: boolean;
   showOperation: boolean;
   turbineOptionTypes: Array<Quantity>;
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
@@ -84,10 +84,11 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 }

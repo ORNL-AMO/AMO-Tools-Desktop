@@ -47,7 +47,7 @@
       <label for="{{turbineType+'modificationIsentropicEfficiency'}}">Modification Isentropic Efficiency</label>
       <div class="input-group">
         <input name="{{turbineType+'modificationIsentropicEfficiency'}}" type="number" step="any" id="{{turbineType+'modificationIsentropicEfficiency'}}"
-          class="form-control" (focus)="focusField('heatLoss')" (input)="save()" [(ngModel)]="modificationTurbine.isentropicEfficiency" />
+          class="form-control" (focus)="focusField('isentropicEfficiency')" (input)="save()" [(ngModel)]="modificationTurbine.isentropicEfficiency" />
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -75,7 +75,7 @@
       <label for="{{turbineType+'modificationGenerationEfficiency'}}">Modification Generator Efficiency</label>
       <div class="input-group">
         <input name="{{turbineType+'modificationGenerationEfficiency'}}" type="number" step="any" id="{{turbineType+'modificationGenerationEfficiency'}}"
-          class="form-control" (focus)="focusField('GenerationEfficiency')" (input)="save()" [(ngModel)]="modificationTurbine.generationEfficiency" />
+          class="form-control" (focus)="focusField('generationEfficiency')" (input)="save()" [(ngModel)]="modificationTurbine.generationEfficiency" />
         <span class="input-group-addon units">%</span>
       </div>
     </div>

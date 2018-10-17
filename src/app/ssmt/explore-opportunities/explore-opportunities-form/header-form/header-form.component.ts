@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
-import { SsmtService } from '../../../ssmt.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-header-form',
@@ -26,7 +26,7 @@ export class HeaderFormComponent implements OnInit {
   showMediumPressureSteamUsage: boolean = false;
   showLowPressureSteamUsage: boolean = false;
   showSteamUsage: boolean = false;
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.initHeatLoss();
@@ -161,10 +161,12 @@ export class HeaderFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('header');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentTab.next('header');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 }

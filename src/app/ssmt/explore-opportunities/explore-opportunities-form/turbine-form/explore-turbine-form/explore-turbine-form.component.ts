@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
-import { SsmtService } from '../../../../ssmt.service';
+import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class ExploreTurbineFormComponent implements OnInit {
   showGenerationEfficiency: boolean;
   showIsentropicEfficiency: boolean;
   
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.initForm();
@@ -96,11 +96,13 @@ export class ExploreTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 
 }

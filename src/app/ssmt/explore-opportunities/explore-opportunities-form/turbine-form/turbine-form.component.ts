@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { SSMT, PressureTurbine, CondensingTurbine } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
-import { SsmtService } from '../../../ssmt.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-turbine-form',
@@ -24,7 +24,7 @@ export class TurbineFormComponent implements OnInit {
   showHighToMediumPressureTurbine: boolean = false;
   showMediumToLowPressureTurbine: boolean = false;
 
-  constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private cd: ChangeDetectorRef) { }
   ngOnInit() {
   }
 
@@ -95,10 +95,12 @@ export class TurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 }

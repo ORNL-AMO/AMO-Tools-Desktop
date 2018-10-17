@@ -12,13 +12,17 @@ import { TurbineFormComponent } from './explore-opportunities-form/turbine-form/
 import { ExploreCondensingTurbineFormComponent } from './explore-opportunities-form/turbine-form/explore-condensing-turbine-form/explore-condensing-turbine-form.component';
 import { ExplorePressureTurbineFormComponent } from './explore-opportunities-form/turbine-form/explore-pressure-turbine-form/explore-pressure-turbine-form.component';
 import { ExploreTurbineFormComponent } from './explore-opportunities-form/turbine-form/explore-turbine-form/explore-turbine-form.component';
+import { HelpPanelModule } from '../help-panel/help-panel.module';
+import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    HelpPanelModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
-  exports: [ExploreOpportunitiesComponent]
+  exports: [ExploreOpportunitiesComponent],
+  providers: [ExploreOpportunitiesService]
 })
 export class ExploreOpportunitiesModule { }

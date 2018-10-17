@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SsmtService } from '../../../ssmt.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-operations-form',
@@ -26,7 +27,7 @@ export class OperationsFormComponent implements OnInit {
   showFuelCost: boolean = false;
   showMakeupWaterCost: boolean = false;
 
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.initGeneralOperations();
@@ -173,10 +174,12 @@ export class OperationsFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('operations');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentTab.next('operations');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 }

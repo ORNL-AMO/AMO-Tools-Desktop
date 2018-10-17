@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { SSMT } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { SsmtService } from '../../../../ssmt.service';
+import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 
 @Component({
   selector: 'app-condensate-handling-form',
@@ -25,7 +26,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   showReturnTemperature: boolean = false;
   showFlashCondensateMediumPressure: boolean = false;
   showFlashCondensateLowPressure: boolean = false;
-  constructor(private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.initCondensateHandling();
@@ -131,7 +132,6 @@ export class CondensateHandlingFormComponent implements OnInit {
   toggleFlashCondensateLowPressure() {
     if (this.showFlashCondensateLowPressure == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader = this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader;
-      console.log(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader)
       this.save();
     }
   }
@@ -153,10 +153,12 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.currentField.next(str);
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.ssmtService.currentField.next('default');
+    this.exploreOpportunitiesService.currentTab.next('turbine');
+    this.exploreOpportunitiesService.currentField.next('default');
   }
 }
