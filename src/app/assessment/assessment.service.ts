@@ -257,7 +257,7 @@ export class AssessmentService {
         outletPressure: null,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: .06,
+        cost: null,
         compressibilityFactor: 0.988,
         specificHeatRatio: 1.4,
         measuredVoltage: 460
