@@ -49,7 +49,7 @@
   </div>
 
   <!-- Help Panel -->
-  <div class="col-4 p-0 help-panel">
+  <div class="col-4 p-0 help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <app-help-panel *ngIf="modificationExists" [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"
       [containerHeight]="containerHeight"></app-help-panel>
     <div *ngIf="!modificationExists">

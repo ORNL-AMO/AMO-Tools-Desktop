@@ -3,8 +3,8 @@
     <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
     <app-ssmt-tabs></app-ssmt-tabs>
   </div>
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()" [selected]="true" [inSetup]="true"></app-operations>
@@ -14,7 +14,7 @@
       [modificationExists]="modificationExists"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)"></app-turbine>
     </div>
-    <div class="w-50">
+    <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
     </div>
   </div>
