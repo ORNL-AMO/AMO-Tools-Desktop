@@ -101,8 +101,8 @@ export class ExploreTurbineFormComponent implements OnInit {
   }
 
   focusOut() {
-    this.exploreOpportunitiesService.currentTab.next('turbine');
-    this.exploreOpportunitiesService.currentField.next('default');
+    // this.exploreOpportunitiesService.currentTab.next('turbine');
+    // this.exploreOpportunitiesService.currentField.next('default');
   }
 
 }

@@ -20,32 +20,31 @@
       </label>
       <div class="input-group">
         <input name="{{turbineType+'baselineOperationValue1'}}" type="number" step="any" class="form-control" id="{{turbineType+'baselineOperationValue1'}}"
-          (input)="save()" [(ngModel)]="baselineTurbine.operationValue1" [disabled]="true" (focus)="focusField('operationValue')">
+          (input)="save()" [(ngModel)]="baselineTurbine.operationValue1" [disabled]="true" (focus)="focusOperation(baselineTurbine.operationType, 'operationValue1')">
         <span class="units input-group-addon">
-          <span *ngIf="baselineTurbine.value == 0 || baselineTurbine.value == 4">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="baselineTurbine.value == 1 || baselineTurbine.value == 3">kW</span>
+          <span *ngIf="baselineTurbine.operationType == 0 || baselineTurbine.operationType == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="baselineTurbine.operationType == 1 || baselineTurbine.operationType == 3">kW</span>
         </span>
       </div>
     </div>
-    <div class="form-group" *ngIf="baselineTurbine.value == 4 || baselineTurbine.value == 3">
+    <div class="form-group" *ngIf="baselineTurbine.operationType == 4 || baselineTurbine.operationType == 3">
       <label for="operationValue2">
-        <span *ngIf="baselineTurbine.value == 4">Maximum Flow</span>
-        <span *ngIf="baselineTurbine.value == 3">Maximum Power</span>
+        <span *ngIf="baselineTurbine.operationType == 4">Maximum Flow</span>
+        <span *ngIf="baselineTurbine.operationType == 3">Maximum Power</span>
       </label>
       <div class="input-group">
         <input name="{{turbineType+'baselineOperationValue2'}}" type="number" step="any" class="form-control" id="{{turbineType+'baselineOperationValue2'}}"
-          (input)="save()" [(ngModel)]="baselineTurbine.operationValue2" [disabled]="true" (focus)="focusField('operationValue')">
+          (input)="save()" [(ngModel)]="baselineTurbine.operationValue2" [disabled]="true" (focus)="focusOperation(baselineTurbine.operationType, 'operationValue2')">
         <span class="units input-group-addon">
-          <span *ngIf="baselineTurbine.value == 4">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="baselineTurbine.value == 3">kW</span>
+          <span *ngIf="baselineTurbine.operationType == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="baselineTurbine.operationType == 3">kW</span>
         </span>
       </div>
     </div>
     <div class="form-group">
       <label for="{{turbineType+'modificationOperationType'}}">Modification Operation Type</label>
       <select name="{{turbineType+'modificationOperationType'}}" class="form-control" id="{{turbineType+'modificationOperationType'}}"
-        (change)="save()" (focus)="focusField('operationType')" [(ngModel)]="modificationTurbine.operationType"
-        [disabled]="true">
+        (change)="save()" (focus)="focusField('operationType')" [(ngModel)]="modificationTurbine.operationType">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
@@ -56,24 +55,24 @@
       </label>
       <div class="input-group">
         <input name="{{turbineType+'modificationOperationValue1'}}" type="number" step="any" class="form-control" id="{{turbineType+'modificationOperationValue1'}}"
-          (input)="save()" [(ngModel)]="modificationTurbine.operationValue1" [disabled]="true" (focus)="focusField('operationValue')">
+          (input)="save()" [(ngModel)]="modificationTurbine.operationValue1" (focus)="focusOperation(modificationTurbine.operationType, 'operationValue1')">
         <span class="units input-group-addon">
-          <span *ngIf="modificationTurbine.value == 0 || modificationTurbine.value == 4">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="modificationTurbine.value == 1 || modificationTurbine.value == 3">kW</span>
+          <span *ngIf="modificationTurbine.operationType == 0 || modificationTurbine.operationType == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="modificationTurbine.operationType == 1 || modificationTurbine.operationType == 3">kW</span>
         </span>
       </div>
     </div>
-    <div class="form-group" *ngIf="modificationTurbine.value == 4 || modificationTurbine.value == 3">
+    <div class="form-group" *ngIf="modificationTurbine.operationType == 4 || modificationTurbine.operationType == 3">
       <label for="operationValue2">
-        <span *ngIf="modificationTurbine.value == 4">Maximum Flow</span>
-        <span *ngIf="modificationTurbine.value == 3">Maximum Power</span>
+        <span *ngIf="modificationTurbine.operationType == 4">Maximum Flow</span>
+        <span *ngIf="modificationTurbine.operationType == 3">Maximum Power</span>
       </label>
       <div class="input-group">
         <input name="{{turbineType+'modificationOperationValue2'}}" type="number" step="any" class="form-control" id="{{turbineType+'modificationOperationValue2'}}"
-          (input)="save()" [(ngModel)]="modificationTurbine.operationValue2" [disabled]="true" (focus)="focusField('operationValue')">
+          (input)="save()" [(ngModel)]="modificationTurbine.operationValue2"(focus)="focusOperation(modificationTurbine.operationType, 'operationValue2')">
         <span class="units input-group-addon">
-          <span *ngIf="modificationTurbine.value == 4">{{settings.steamMassFlowMeasurement}}</span>
-          <span *ngIf="modificationTurbine.value == 3">kW</span>
+          <span *ngIf="modificationTurbine.operationType == 4">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="modificationTurbine.operationType == 3">kW</span>
         </span>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { PressureTurbineOperationTypes, PressureTurbine } from '../../../../../s
 import { Settings } from '../../../../../shared/models/settings';
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
+import { SsmtService } from '../../../../ssmt.service';
 
 @Component({
   selector: 'app-explore-pressure-turbine-form',
@@ -30,7 +31,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   turbineTypeOptions: Array<Quantity>;
 
   showOperation: boolean;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.turbineTypeOptions = PressureTurbineOperationTypes;
@@ -69,12 +70,17 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.ssmtService.turbineOperationHelp.next('pressure');
     this.exploreOpportunitiesService.currentTab.next('turbine');
     this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.exploreOpportunitiesService.currentTab.next('turbine');
-    this.exploreOpportunitiesService.currentField.next('default');
+    // this.exploreOpportunitiesService.currentTab.next('turbine');
+    // this.exploreOpportunitiesService.currentField.next('default');
+  }
+  focusOperation(operationValue: number, str: string){
+    this.ssmtService.turbineOperationValue.next(operationValue);
+    this.focusField(str)
   }
 }

@@ -179,7 +179,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   focusOut() {
-    this.exploreOpportunitiesService.currentTab.next('operations');
-    this.exploreOpportunitiesService.currentField.next('default');
+    // this.exploreOpportunitiesService.currentTab.next('operations');
+    // this.exploreOpportunitiesService.currentField.next('default');
   }
 }

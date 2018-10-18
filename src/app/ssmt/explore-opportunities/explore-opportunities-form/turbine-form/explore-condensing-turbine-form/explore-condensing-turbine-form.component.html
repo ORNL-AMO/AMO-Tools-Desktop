@@ -48,7 +48,8 @@
       </label>
       <div class="input-group">
         <input name="baselineOperationValue" type="number" step="any" class="form-control" id="baselineOperationValue"
-          (input)="save()" [(ngModel)]="ssmt.turbineInput.condensingTurbine.operationValue" [disabled]="true" (focus)="focusField('operationValue')">
+          (input)="save()" [(ngModel)]="ssmt.turbineInput.condensingTurbine.operationValue" [disabled]="true"
+          (focus)="focusOperation(ssmt.turbineInput.condensingTurbine.operationType)">
         <span class="units input-group-addon">
           <span *ngIf="ssmt.turbineInput.condensingTurbine.operationType == 0">{{settings.steamMassFlowMeasurement}}</span>
           <span *ngIf="ssmt.turbineInput.condensingTurbine.operationType == 1">kW</span>
@@ -72,7 +73,7 @@
       <div class="input-group">
         <input name="modificationOperationValue" type="number" step="any" class="form-control" id="modificationOperationValue"
           (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationValue"
-          (focus)="focusField('operationValue')">
+          (focus)="focusOperation(ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType)">
         <span class="units input-group-addon">
           <span *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType == 0">{{settings.steamMassFlowMeasurement}}</span>
           <span *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType == 1">kW</span>

@@ -197,7 +197,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   focusOut() {
-    this.exploreOpportunitiesService.currentTab.next('boiler');
-    this.exploreOpportunitiesService.currentField.next('default');
+    // this.exploreOpportunitiesService.currentTab.next('boiler');
+    // this.exploreOpportunitiesService.currentField.next('default');
   }
 }

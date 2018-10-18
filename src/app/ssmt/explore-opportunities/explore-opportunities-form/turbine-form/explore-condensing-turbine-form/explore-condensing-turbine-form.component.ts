@@ -3,6 +3,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { SSMT, CondensingTurbineOperationTypes } from '../../../../../shared/models/steam/ssmt';
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
+import { SsmtService } from '../../../../ssmt.service';
 
 @Component({
   selector: 'app-explore-condensing-turbine-form',
@@ -26,7 +27,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   showCondenserPressure: boolean;
   showOperation: boolean;
   turbineOptionTypes: Array<Quantity>;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
@@ -84,11 +85,17 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.ssmtService.turbineOperationHelp.next('condensing')
     this.exploreOpportunitiesService.currentTab.next('turbine');
     this.exploreOpportunitiesService.currentField.next(str);
   }
 
   focusOut() {
-    this.exploreOpportunitiesService.currentField.next('default');
+    // this.exploreOpportunitiesService.currentField.next('default');
+  }
+
+  focusOperation(operationValue: number){
+    this.ssmtService.turbineOperationValue.next(operationValue);
+    this.focusField('operationValue')
   }
 }
