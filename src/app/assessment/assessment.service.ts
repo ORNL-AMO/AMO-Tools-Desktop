@@ -319,13 +319,13 @@ export class AssessmentService {
         hoursPerYear: 8736
       },
       operatingCosts: {
-        fuelCost: 8.00,
-        makeUpWaterCost: 10.00,
-        electricityCost: .080
+        fuelCost: undefined,
+        makeUpWaterCost: 0,
+        electricityCost: undefined
       },
       generalSteamOperations: {
-        sitePowerImport: 0,
-        makeUpWaterTemperature: 0
+        sitePowerImport: undefined,
+        makeUpWaterTemperature: undefined
       },
       implementationCosts: 0.0,
       equipmentNotes: '',
@@ -391,18 +391,6 @@ export class AssessmentService {
           desuperheatSteamIntoNextHighest: undefined,
           desuperheatSteamTemperature: undefined
         }
-      },
-      boilerInput: {
-        fuelType: 1,
-        fuel: 1,
-        combustionEfficiency: undefined,
-        blowdownRate: undefined,
-        blowdownFlashed: undefined,
-        preheatMakeupWater: undefined,
-        steamTemperature: undefined,
-        deaeratorVentRate: undefined,
-        deaeratorPressure: undefined,
-        approachTemperature: undefined
       }
     }
   }

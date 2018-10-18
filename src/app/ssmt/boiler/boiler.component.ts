@@ -35,9 +35,9 @@ export class BoilerComponent implements OnInit {
 
   ngOnInit() {
     if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput);
+      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
     } else {
-      this.boilerForm = this.boilerService.initForm();
+      this.boilerForm = this.boilerService.initForm(this.settings);
     }
     this.setFuelTypes();
     if (this.selected == false) {

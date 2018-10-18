@@ -66,7 +66,7 @@
       <label for="hoursPerYear">Hours / Year</label>
       <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()"
         [(ngModel)]="operatingHours.hoursPerYear" [disabled]="!selected" [ngClass]="{'indicate-different': isHoursPerYearDifferent()}"
-        (focus)="focusField('hoursPerYear')" (blur)="focusOut()">
+        (focus)="focusField('hoursPerYear')" (blur)="focusOut()" min="0">
     </div>
     <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
   </div>

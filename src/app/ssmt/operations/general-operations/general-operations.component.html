@@ -14,7 +14,7 @@
     <div class="input-group">
       <input name="makeUpWaterTemperature" type="number" step="any" class="form-control" id="makeUpWaterTemperature"
         (input)="save()" [(ngModel)]="generalSteamOperations.makeUpWaterTemperature" [disabled]="!selected" [ngClass]="{'indicate-different': isMakeUpWaterTemperatureDifferent()}"
-        (focus)="focusField('makeUpWaterTemperature')" (blur)="focusOut()">
+        (focus)="focusField('makeUpWaterTemperature')" (blur)="focusOut()" min="0">
       <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
       <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
 

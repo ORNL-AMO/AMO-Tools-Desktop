@@ -32,6 +32,13 @@
             (blur)="focusOut()" [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine">
+          <span *ngIf="boilerForm.controls.combustionEfficiency.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.combustionEfficiency.errors.max">Value can't be greater than
+            {{boilerForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="boilerForm.controls.combustionEfficiency.errors.min">Value can't be less than
+            {{boilerForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -42,6 +49,13 @@
             [ngClass]="{'indicate-different': isBlowdownRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine">
+          <span *ngIf="boilerForm.controls.blowdownRate.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.blowdownRate.errors.max">Value can't be greater than
+            {{boilerForm.controls.blowdownRate.errors.max.max}} %.</span>
+          <span *ngIf="boilerForm.controls.blowdownRate.errors.min">Value can't be less than
+            {{boilerForm.controls.blowdownRate.errors.min.min}} %.</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -71,6 +85,12 @@
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
+          <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value can't be less than
+            {{boilerForm.controls.approachTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
       </div>
 
 
@@ -83,6 +103,17 @@
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
           <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.steamTemperature.invalid && !boilerForm.controls.steamTemperature.pristine">
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
+            {{boilerForm.controls.steamTemperature.errors.max.max}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.min">Value can't be less than
+            {{boilerForm.controls.steamTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -93,6 +124,13 @@
             [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorVentRate.invalid && !boilerForm.controls.deaeratorVentRate.pristine">
+          <span *ngIf="boilerForm.controls.deaeratorVentRate.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
+            {{boilerForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
+          <span *ngIf="boilerForm.controls.deaeratorVentRate.errors.min">Value can't be less than
+            {{boilerForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -103,6 +141,13 @@
             [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
           <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{boilerForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{boilerForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+        </span>
       </div>
     </form>
   </div>
