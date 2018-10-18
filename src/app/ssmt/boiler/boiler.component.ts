@@ -27,14 +27,6 @@ export class BoilerComponent implements OnInit {
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
-
-  fuelOptions: Array<string> = [
-    'Natural Gas',
-    'Coal',
-    'Heavy Fuel Oil',
-    'Tires'
-  ];
-
   boilerForm: FormGroup;
   options: any;
   showModal: boolean;

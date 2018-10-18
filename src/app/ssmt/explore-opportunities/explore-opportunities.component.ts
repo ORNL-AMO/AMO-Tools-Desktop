@@ -87,7 +87,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   }
 
-  save() {
+  save(newSSMT: SSMT) {
+    this.assessment.ssmt = newSSMT;
     this.emitSave.emit(this.assessment.ssmt);
   }
 

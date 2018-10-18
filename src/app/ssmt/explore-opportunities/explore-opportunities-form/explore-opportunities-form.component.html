@@ -6,9 +6,11 @@
     <div class="form-group group-name">
       <label for="modificatonName">Modification Name</label>
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.name"
-        (input)="calculate()" />
+        (input)="save(ssmt)" />
     </div>
-    <app-operations-form></app-operations-form>
-    <app-boiler-form></app-boiler-form>
+    <app-operations-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-operations-form>
+    <app-boiler-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-boiler-form>
+    <app-header-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-header-form>
+    <app-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-turbine-form>
   </div>
 </div>

@@ -1,0 +1,66 @@
+<!--Condensing turbine-->
+<div class="checkbox">
+  <label class="group-label" for="adjustHighPressureToCondensing">
+    <input type="checkbox" id="adjustHighPressureToCondensing" (focus)="focusField('default')" (change)="toggleCondensingTurbine()"
+      [(ngModel)]="showCondensingTurbine" /> Modify High Pressure to Condensing Steam Turbine
+  </label>
+</div>
+<ul [hidden]="!showCondensingTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.condensingTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine"
+    [settings]="settings" (emitSave)="saveExploreTurbine($event, 'condensingTurbine')" (emitShowTurbine)="setShowCondensingTurbine($event)"
+    [turbineType]="'condensingTurbine'" [showFormToggle]="showCondensingTurbine"></app-explore-turbine-form>
+  <app-explore-condensing-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"
+    (emitShowTurbine)="setShowCondensingTurbine($event)" [showFormToggle]="showCondensingTurbine"></app-explore-condensing-turbine-form>
+</ul>
+
+<!--High pressure to low pressure turbine-->
+<div class="checkbox">
+  <label class="group-label" for="adjustHighPressureToLowTurbinePressure">
+    <input type="checkbox" id="adjustHighPressureToLowTurbinePressure" (focus)="focusField('default')" (change)="toggleHighPressureToLowPressure()"
+      [(ngModel)]="showHighToLowPressureTurbine" /> Modify High Pressure to Low Pressure Steam Turbine
+  </label>
+</div>
+<ul [hidden]="!showHighToLowPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine"
+    [settings]="settings" (emitSave)="saveExploreTurbine($event, 'highToLowTurbine')" (emitShowTurbine)="setShowHighLowTurbine($event)"
+    [turbineType]="'highToLowTurbine'" [showFormToggle]="showHighToLowPressureTurbine"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="savePressureTurbine($event, 'highToLowTurbine')"
+    [(baselineTurbine)]="ssmt.turbineInput.highToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine"
+    [turbineType]="'highToLowTurbine'" [showFormToggle]="showHighToLowPressureTurbine"></app-explore-pressure-turbine-form>
+</ul>
+
+<!--high pressure to medium pressure turbine-->
+<div class="checkbox">
+  <label class="group-label" for="adjustHighPressureToMediumTurbinePressure">
+    <input type="checkbox" id="adjustHighPressureToMediumTurbinePressure" (focus)="focusField('default')" (change)="toggleHighPressureToMediumPressure()"
+      [(ngModel)]="showHighToMediumPressureTurbine" /> Modify High Pressure to Medium Pressure Steam Turbine
+  </label>
+</div>
+<ul [hidden]="!showHighToMediumPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.highToMediumTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToMediumTurbine"
+    [settings]="settings" (emitSave)="saveExploreTurbine($event, 'highToMediumTurbine')" (emitShowTurbine)="setShowHighMediumTurbine($event)"
+    [turbineType]="'highToMediumTurbine'" [showFormToggle]="showHighToMediumPressureTurbine"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToMediumTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="savePressureTurbine($event, 'highToMediumTurbine')"
+    [(baselineTurbine)]="ssmt.turbineInput.highToMediumTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToMediumTurbine"
+    [turbineType]="'highToMediumTurbine'" [showFormToggle]="showHighToMediumPressureTurbine"></app-explore-pressure-turbine-form>
+</ul>
+
+<!--medium pressure to low pressure turbine-->
+<div class="checkbox">
+  <label class="group-label" for="adjustMediumPressureToLowTurbine">
+    <input type="checkbox" id="adjustMediumPressureToLowTurbine" (focus)="focusField('default')" (change)="toggleMediumPressureToLowPressure()"
+      [(ngModel)]="showMediumToLowPressureTurbine" /> Modify Medium Pressure to Low Pressure Steam Turbine
+  </label>
+</div>
+<ul [hidden]="!showMediumToLowPressureTurbine">
+  <app-explore-turbine-form [(baselineTurbine)]="ssmt.turbineInput.mediumToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine"
+    [settings]="settings" (emitSave)="saveExploreTurbine($event, 'mediumToLowTurbine')" (emitShowTurbine)="setShowMediumLowTurbine($event)"
+    [turbineType]="'mediumToLowTurbine'" [showFormToggle]="showMediumToLowPressureTurbine"></app-explore-turbine-form>
+  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine.useTurbine"
+    [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="savePressureTurbine($event, 'mediumToLowTurbine')"
+    [(baselineTurbine)]="ssmt.turbineInput.mediumToLowTurbine" [(modificationTurbine)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.mediumToLowTurbine"
+    [turbineType]="'mediumToLowTurbine'" [showFormToggle]="showMediumToLowPressureTurbine"></app-explore-pressure-turbine-form>
+</ul>
