@@ -96,7 +96,7 @@ export class AssessmentService {
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: 0.06,
+      cost_kw_hour: null,
       fluidType: 'Water',
       fluidTemperature: 68
     };

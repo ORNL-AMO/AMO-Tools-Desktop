@@ -91,6 +91,9 @@ export class FieldDataComponent implements OnInit {
   }
 
   init() {
+    if(!this.psat.inputs.cost_kw_hour){
+      this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
+    }
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('operatingFraction');
