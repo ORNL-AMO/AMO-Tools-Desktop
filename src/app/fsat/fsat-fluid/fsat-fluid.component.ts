@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { Fsat203Service } from '../../calculator/fans/fsat-203/fsat-203.service';
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
-import { BaseGasDensity } from '../../shared/models/fans';
+import { BaseGasDensity, FSAT } from '../../shared/models/fans';
 import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -30,6 +30,10 @@ export class FsatFluidComponent implements OnInit {
   modificationIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  baseline: boolean;
+  @Input()
+  fsat: FSAT;
 
   gasDensityForm: FormGroup;
 
@@ -47,9 +51,26 @@ export class FsatFluidComponent implements OnInit {
   //need error string for each warning (nameOfInputField + 'Error')
   //initialize to null
   warnings: FanFluidWarnings;
+  idString: string;
   constructor(private fsatWarningService: FsatWarningService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
+      }
+      else {
+        this.idString = 'fsat_modification_' + this.modificationIndex;
+      }
+    }
+    else {
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_baseline';
+      }
+      else {
+        this.idString = 'fsat_baseline';
+      }
+    }
     this.init();
     if (!this.selected) {
       this.disableForm();

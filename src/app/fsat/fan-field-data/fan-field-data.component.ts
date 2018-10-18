@@ -59,12 +59,25 @@ export class FanFieldDataComponent implements OnInit {
   fsatCopy: FSAT;
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
-  idString: string = 'baseline';
+  idString: string;
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.baseline) {
-      this.idString = 'modification';
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
+      }
+      else {
+        this.idString = 'fsat_modification_' + this.modificationIndex;
+      }
+    }
+    else {
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_baseline';
+      }
+      else {
+        this.idString = 'fsat_baseline';
+      }
     }
     this.init();
     if (!this.selected) {
@@ -347,6 +360,4 @@ export class FanFieldDataComponent implements OnInit {
   //     return false;
   //   }
   // }
-
-
 }

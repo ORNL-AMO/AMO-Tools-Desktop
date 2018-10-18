@@ -30,6 +30,8 @@ export class FanMotorComponent implements OnInit {
   @Input()
   fieldData: FieldData;
   @Input()
+  baseline: boolean;
+  @Input()
   fsat: FSAT;
 
   efficiencyClasses: Array<{ value: number, display: string }>
@@ -51,9 +53,26 @@ export class FanMotorComponent implements OnInit {
   warnings: FanMotorWarnings;
   disableFLAOptimized: boolean = false;
   fanMotorForm: FormGroup;
+  idString: string;
   constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
+      }
+      else {
+        this.idString = 'fsat_modification_' + this.modificationIndex;
+      }
+    }
+    else {
+      if (this.fsat && this.fsat.name) {
+        this.idString = this.fsat.name.replace(/ /g, '') + '_baseline';
+      }
+      else {
+        this.idString = 'fsat_baseline';
+      }
+    }
     this.efficiencyClasses = EfficiencyClasses;
     this.init();
     // if (this.settings.powerMeasurement == 'hp') {
