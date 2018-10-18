@@ -128,20 +128,12 @@ export class FanDataFormComponent implements OnInit {
   }
 
   checkWarnings() {
-    this.specifiedError1 = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup).fanEfficiencyError;
-    this.specifiedError2 = this.fsatWarningService.checkFanWarnings(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup).fanEfficiencyError;
-    if (this.fsat.fanSetup.drive == 4) {
-      this.checkEfficiency(this.fsat.fanSetup.specifiedDriveEfficiency, 5);
-    }
-    else {
-      this.baselineSpecifiedDriveEfficiencyError = null;
-    }
-    if (this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive == 4) {
-      this.checkEfficiency(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.specifiedDriveEfficiency, 6);
-    }
-    else {
-      this.modificationSpecifiedDriveEfficiencyError = null;
-    }
+    let baseWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup);
+    let modWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
+    this.specifiedError1 = baseWarnings.fanEfficiencyError;
+    this.baselineSpecifiedDriveEfficiencyError = baseWarnings.specifiedDriveEfficiencyError;
+    this.specifiedError2 = modWarnings.fanEfficiencyError;
+    this.modificationSpecifiedDriveEfficiencyError = modWarnings.specifiedDriveEfficiencyError;
   }
 
   checkFanTypes() {
@@ -157,39 +149,6 @@ export class FanDataFormComponent implements OnInit {
     }
     if (this.fsat.fanSetup.fanType != 10 && this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanType != 10) {
       this.showFanSpecified = false;
-    }
-  }
-
-  checkEfficiency(val: number, num: number) {
-    if (num != 5 && num != 6) {
-      this.calculate();
-    }
-    if (val > 100) {
-      this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
-      return false;
-    }
-    else if (val == 0) {
-      this.setErrorMessage(num, "Cannot have 0% efficiency");
-      return false;
-    }
-    else if (val < 0) {
-      this.setErrorMessage(num, "Cannot have negative efficiency");
-      return false;
-    }
-    else {
-      this.setErrorMessage(num, null);
-      return true;
-    }
-  }
-  setErrorMessage(num: number, str: string) {
-    if (num == 3) {
-      this.specifiedError1 = str;
-    } else if (num == 4) {
-      this.specifiedError2 = str;
-    } else if (num == 5) {
-      this.baselineSpecifiedDriveEfficiencyError = str;
-    } else if (num == 6) {
-      this.modificationSpecifiedDriveEfficiencyError = str;
     }
   }
 
