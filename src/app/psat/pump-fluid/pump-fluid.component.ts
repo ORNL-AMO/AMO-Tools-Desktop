@@ -46,9 +46,26 @@ export class PumpFluidComponent implements OnInit {
   pumpEfficiencyError: string = null;
   specifiedDriveEfficiencyError: string = null;
   tempUnit: string;
+  idString: string;
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.baseline) {
+      if (this.psat && this.psat.name) {
+        this.idString = this.psat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
+      }
+      else {
+        this.idString = 'psat_modification_' + this.modificationIndex;
+      }
+    }
+    else {
+      if (this.psat && this.psat.name) {
+        this.idString = this.psat.name.replace(/ /g, '') + '_baseline';
+      }
+      else {
+        this.idString = 'psat_baseline';
+      }
+    }
     if (!this.isFirstChange) {
       if (!this.selected) {
         this.disableForm();

@@ -59,9 +59,26 @@ export class FieldDataComponent implements OnInit {
   psatForm: FormGroup;
   isFirstChange: boolean = true;
   fieldDataWarnings: FieldDataWarnings;
+  idString: string;
   constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      if (this.psat && this.psat.name) {
+        this.idString = this.psat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
+      }
+      else {
+        this.idString = 'psat_modification_' + this.modificationIndex;
+      }
+    }
+    else {
+      if (this.psat && this.psat.name) {
+        this.idString = this.psat.name.replace(/ /g, '') + '_baseline';
+      }
+      else {
+        this.idString = 'psat_baseline';
+      }
+    }
     this.init();
     if (!this.selected) {
       this.disableForm();
