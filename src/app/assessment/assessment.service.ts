@@ -362,35 +362,6 @@ export class AssessmentService {
           operationValue2: undefined,
           useTurbine: false
         }
-      },
-      headerInput: {
-        numberOfHeaders: 1,
-        highPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          condensateReturnTemperature: undefined,
-          flashCondensateReturn: false
-        },
-        mediumPressure:{
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        },
-        lowPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        }
       }
     }
   }

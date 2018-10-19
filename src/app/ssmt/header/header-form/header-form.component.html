@@ -11,6 +11,13 @@
         formControlName="pressure" (focus)="focusField('pressure')" (blur)="focusOut()" [ngClass]="{'indicate-different': isPressureDifferent()}">
       <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
+      <span *ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.pressure.errors.max">Value can't be greater than
+        {{headerForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="headerForm.controls.pressure.errors.min">Value can't be less than
+        {{headerForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
@@ -21,6 +28,13 @@
         [ngClass]="{'indicate-different': isProcessSteamUsageDifferent()}">
       <span class="units input-group-addon">{{settings.steamMassFlowMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.processSteamUsage.invalid && !headerForm.controls.processSteamUsage.pristine">
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.max">Value can't be greater than
+        {{headerForm.controls.processSteamUsage.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.min">Value can't be less than
+        {{headerForm.controls.processSteamUsage.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
@@ -31,6 +45,13 @@
         (blur)="focusOut()" [ngClass]="{'indicate-different': isCondensationRecoveryRateDifferent()}">
       <span class="units input-group-addon">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.condensationRecoveryRate.invalid && !headerForm.controls.condensationRecoveryRate.pristine">
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.max">Value can't be greater than
+        {{headerForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
+        {{headerForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+    </span>
   </div>
 
   <!--Highest Pressure-->
@@ -43,6 +64,13 @@
       <!--TODO: F/C temp degrees-->
       <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value can't be greater than
+        {{headerForm.controls.condensateReturnTemperature.errors.max.max}} {{settings.steamTemperatureMeasurement}}.</span>
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
+        {{headerForm.controls.condensateReturnTemperature.errors.min.min}} {{settings.steamTemperatureMeasurement}}.</span>
+    </span>
   </div>
 
   <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
@@ -73,6 +101,13 @@
         formControlName="heatLoss" (focus)="focusField('heatLoss')" (blur)="focusOut()" [ngClass]="{'indicate-different': isHeatLossDifferent()}">
       <span class="units input-group-addon">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.heatLoss.invalid && !headerForm.controls.heatLoss.pristine">
+      <span *ngIf="headerForm.controls.heatLoss.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.heatLoss.errors.max">Value can't be greater than
+        {{headerForm.controls.heatLoss.errors.max.max}} %.</span>
+      <span *ngIf="headerForm.controls.heatLoss.errors.min">Value can't be less than
+        {{headerForm.controls.heatLoss.errors.min.min}} %.</span>
+    </span>
   </div>
 
   <!--Non Highest Pressure-->
@@ -98,5 +133,12 @@
       <!--TODO: F/C temp degrees-->
       <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.desuperheatSteamTemperature.invalid && !headerForm.controls.desuperheatSteamTemperature.pristine">
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.max">Value can't be greater than
+        {{headerForm.controls.desuperheatSteamTemperature.errors.max.max}} {{settings.steamTemperatureMeasurement}}.</span>
+      <span *ngIf="headerForm.desuperheatSteamTemperature.heatLoss.errors.min">Value can't be less than
+        {{headerForm.controls.desuperheatSteamTemperature.errors.min.min}} {{settings.steamTemperatureMeasurement}}.</span>
+    </span>
   </div>
 </form>
