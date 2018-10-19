@@ -107,12 +107,12 @@ export class FsatService {
   }
 
   //fsat results
-
   getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
     if (this.checkValid(fsat)) {
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
         drive: fsat.fanSetup.drive,
+        specifiedDriveEfficiency: fsat.fanSetup.specifiedDriveEfficiency,
         lineFrequency: fsat.fanMotor.lineFrequency,
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
@@ -175,7 +175,6 @@ export class FsatService {
   fanResultsOptimal(input: FsatInput): FsatOutput {
     return fanAddon.fanResultsOptimal(input);
   }
-
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
     let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));

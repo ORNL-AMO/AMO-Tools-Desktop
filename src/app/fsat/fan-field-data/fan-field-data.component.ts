@@ -116,6 +116,9 @@ export class FanFieldDataComponent implements OnInit {
 
   init() {
     if (this.fieldData) {
+      if(!this.fieldData.cost){
+        this.fieldData.cost = this.settings.electricityCost;
+      }
       this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);
       // this.helpPanelService.currentField.next('operatingFraction');
       //init warning messages;
