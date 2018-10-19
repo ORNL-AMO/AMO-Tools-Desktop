@@ -16,13 +16,8 @@
     <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12">
       <label for="{{'fanSpecified_'+idString}}">Specify Fan Efficiency</label>
       <div class="input-group" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(),'error': fanEfficiencyError !== null, 'invalid': fanForm.controls.fanSpecified.invalid}">
-<<<<<<< HEAD
         <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified" id="{{'fanSpecified_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')" [readonly]="!selected">
-=======
-        <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified"
-          id="fanSpecified" onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')" [readonly]="!selected">
->>>>>>> develop
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="fanEfficiencyError !== null">{{fanEfficiencyError}}</span>
@@ -31,13 +26,8 @@
     <div class="form-group">
       <label for="{{'fanSpeed_'+idString}}">Fan Speed</label>
       <div class="input-group" [ngClass]="{'indicate-different': isFanSpeedDifferent(),'error': fanSpeedError !== null, 'invalid': fanForm.controls.fanSpeed.invalid}">
-<<<<<<< HEAD
         <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed" id="{{'fanSpeed_'+idString}}" (input)="save()"
           (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
-=======
-        <input type="number" name="fanSpeed" min="0" step="10" class="form-control" formControlName="fanSpeed" id="fanSpeed"
-          (input)="save()" (focus)="focusField('fanSpeed')" onfocus="this.select();" [readonly]="!selected">
->>>>>>> develop
         <span class="input-group-addon units">rpm</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="fanSpeedError !== null">{{fanSpeedError}}</span>
