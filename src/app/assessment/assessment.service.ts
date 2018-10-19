@@ -329,40 +329,6 @@ export class AssessmentService {
       },
       implementationCosts: 0.0,
       equipmentNotes: '',
-      turbineInput: {
-        condensingTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          condenserPressure: undefined,
-          operationType: 0,
-          operationValue: undefined,
-          useTurbine: true,
-        },
-        highToLowTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        },
-        highToMediumTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        },
-        mediumToLowTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        }
-      }
     }
   }
 }

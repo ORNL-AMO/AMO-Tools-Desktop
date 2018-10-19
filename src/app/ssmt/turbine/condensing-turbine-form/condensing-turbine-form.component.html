@@ -14,6 +14,13 @@
           (blur)="focusOut()" [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine">
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
+          {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.min">Value can't be less than
+          {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+      </span>
     </div>
 
     <div class="form-group">
@@ -24,6 +31,13 @@
           (blur)="focusOut()" [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
         <span class="units input-group-addon">%</span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.generationEfficiency.invalid && !turbineForm.controls.generationEfficiency.pristine">
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.max">Value can't be greater than
+          {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.min">Value can't be less than
+          {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+      </span>
     </div>
 
     <div class="form-group">
@@ -34,6 +48,13 @@
           [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.condenserPressure.invalid && !turbineForm.controls.condenserPressure.pristine">
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.max">Value can't be greater than
+          {{turbineForm.controls.condenserPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.min">Value can't be less than
+          {{turbineForm.controls.condenserPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
     </div>
 
     <div class="form-group">
@@ -58,6 +79,13 @@
           <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationType.invalid && !turbineForm.controls.operationType.pristine">
+        <span *ngIf="turbineForm.controls.operationType.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.operationType.errors.max">Value can't be greater than
+          {{turbineForm.controls.operationType.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="turbineForm.controls.operationType.errors.min">Value can't be less than
+          {{turbineForm.controls.operationType.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
     </div>
   </div>
 </form>
