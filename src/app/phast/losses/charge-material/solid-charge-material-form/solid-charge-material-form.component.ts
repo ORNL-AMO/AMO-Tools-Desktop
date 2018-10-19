@@ -35,6 +35,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -45,6 +47,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   showModal: boolean = false;
   warnings: SolidMaterialWarnings;
+  idString: string;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private chargeMaterialService: ChargeMaterialService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -61,6 +64,12 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = 'phast_modification_solid_' + this.lossIndex;
+    }
+    else {
+      this.idString = 'phast_baseline_solid_' + this.lossIndex;
+    }
     //get material types from ToolSuiteDb
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {

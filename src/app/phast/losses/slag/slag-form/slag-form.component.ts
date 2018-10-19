@@ -26,11 +26,20 @@ export class SlagFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  isBaseline: boolean;
+
   firstChange: boolean = true;
+  idString: string;
   constructor(private slagCompareService: SlagCompareService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
   }
 
   focusField(str: string) {
