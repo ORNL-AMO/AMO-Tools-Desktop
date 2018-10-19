@@ -67,6 +67,9 @@ export const Drives: Array<{ value: number, display: string }> = [
   }, {
     value: 3,
     display: 'Synchronous Belt Drive'
+  }, {
+    value: 4,
+    display: 'Specified Efficiency'
   }
 ];
 

@@ -277,7 +277,7 @@ export class CompareService {
       return (
         this.isFanTypeDifferent(baseline, modification) ||
         this.isFanSpeedDifferent(baseline, modification) ||
-        this.isDriveDifferent(baseline, modification) || 
+        this.isDriveDifferent(baseline, modification) ||
         this.isSpecifiedFanEfficiencyDifferent(baseline, modification)
       )
     } else {
@@ -327,6 +327,24 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.fanSetup.drive != modification.fanSetup.drive) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedDriveEfficiencyDifferent(baseline?: FSAT, modification?: FSAT) {
+    if (!baseline) {
+      baseline = this.baselineFSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedFSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.fanSetup.specifiedDriveEfficiency != modification.fanSetup.specifiedDriveEfficiency) {
+
         return true;
       } else {
         return false;
@@ -699,7 +717,7 @@ export class CompareService {
     if (baseline && modification) {
       if (this.checkFluidDifferent(baseline, modification)) {
         badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' })
-      }      
+      }
       if (this.checkFanSetupDifferent(baseline, modification)) {
         badges.push({ badge: 'Fan', componentStr: 'fan-setup' })
       }

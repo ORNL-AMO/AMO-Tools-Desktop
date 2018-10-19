@@ -51,9 +51,13 @@ export class PumpDataFormComponent implements OnInit {
   tmpBaselinePumpType: string;
   tmpModificationMotorDrive: string;
   tmpBaselineMotorDrive: string;
+  baselineSpecifiedDriveEfficiency: number;
+  modificationSpecifiedDriveEfficiency: number;
 
   specifiedError2: string = null;
   specifiedError1: string = null;
+  baselineSpecifiedDriveEfficiencyError: string = null;
+  modificationSpecifiedDriveEfficiencyError: string = null;
 
   pumpTypeTrueConst: boolean = true;
   constructor(private psatService: PsatService) {
@@ -77,6 +81,8 @@ export class PumpDataFormComponent implements OnInit {
     this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
     this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.drive);
     this.tmpBaselineMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
+    this.baselineSpecifiedDriveEfficiency = this.psat.inputs.specifiedDriveEfficiency;
+    this.modificationSpecifiedDriveEfficiency = this.psat.modifications[this.exploreModIndex].psat.inputs.specifiedDriveEfficiency;
     this.initPumpSpecified();
     this.initMotorDrive();
     this.initPumpType();
@@ -167,8 +173,22 @@ export class PumpDataFormComponent implements OnInit {
     this.calculate();
   }
 
-  checkEfficiency(val: number, num: number) {
+  setSpecifiedMotorDriveEfficiency() {
+    this.checkEfficiency(this.baselineSpecifiedDriveEfficiency, 5);
+    this.checkEfficiency(this.modificationSpecifiedDriveEfficiency, 6);
+    if (this.baselineSpecifiedDriveEfficiencyError == null) {
+      this.psat.inputs.specifiedDriveEfficiency = this.baselineSpecifiedDriveEfficiency;
+    }
+    if (this.modificationSpecifiedDriveEfficiencyError == null) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.specifiedDriveEfficiency = this.modificationSpecifiedDriveEfficiency;
+    }
     this.calculate();
+  }
+
+  checkEfficiency(val: number, num: number) {
+    if (num != 5 && num != 6) {
+      this.calculate();
+    }
     if (val > 100) {
       this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
       return false;
@@ -191,6 +211,10 @@ export class PumpDataFormComponent implements OnInit {
       this.specifiedError1 = str;
     } else if (num == 4) {
       this.specifiedError2 = str;
+    } else if (num == 5) {
+      this.baselineSpecifiedDriveEfficiencyError = str;
+    } else if (num == 6) {
+      this.modificationSpecifiedDriveEfficiencyError = str;
     }
   }
 
