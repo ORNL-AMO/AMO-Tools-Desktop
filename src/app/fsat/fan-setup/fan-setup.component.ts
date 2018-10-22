@@ -56,6 +56,12 @@ export class FanSetupComponent implements OnInit {
   }
 
   init() {
+    if (this.fanSetup.drive != 4) {
+      this.fanSetup.specifiedDriveEfficiency = 100;
+    }
+    else {
+      this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency | 100;
+    }
     this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup);
     this.checkForWarnings();
   }
@@ -74,7 +80,7 @@ export class FanSetupComponent implements OnInit {
   }
 
   checkForWarnings() {
-    let warnings: {fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
+    let warnings: { fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
     this.fanSpeedError = warnings.fanSpeedError;
     this.fanEfficiencyError = warnings.fanEfficiencyError;
     this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
@@ -82,6 +88,9 @@ export class FanSetupComponent implements OnInit {
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    if (this.fanSetup.drive != 4) {
+      this.fanSetup.specifiedDriveEfficiency = 100;
+    }
     this.checkForWarnings();
     this.emitSave.emit(this.fanSetup);
   }
@@ -118,7 +127,7 @@ export class FanSetupComponent implements OnInit {
     }
   }
 
-  isFanSpecifiedDifferent(){
+  isFanSpecifiedDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecifiedFanEfficiencyDifferent();
     } else {

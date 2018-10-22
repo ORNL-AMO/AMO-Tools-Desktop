@@ -112,7 +112,7 @@ export class FsatService {
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
         drive: fsat.fanSetup.drive,
-        specifiedDriveEfficiency: fsat.fanSetup.specifiedDriveEfficiency,
+        specifiedDriveEfficiency: fsat.fanSetup.specifiedDriveEfficiency | 100,
         lineFrequency: fsat.fanMotor.lineFrequency,
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
