@@ -56,20 +56,10 @@ export class FsatFluidComponent implements OnInit {
 
   ngOnInit() {
     if (!this.baseline) {
-      if (this.fsat && this.fsat.name) {
-        this.idString = this.fsat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
-      }
-      else {
-        this.idString = 'fsat_modification_' + this.modificationIndex;
-      }
+      this.idString = 'fsat_modification_' + this.modificationIndex;
     }
     else {
-      if (this.fsat && this.fsat.name) {
-        this.idString = this.fsat.name.replace(/ /g, '') + '_baseline';
-      }
-      else {
-        this.idString = 'fsat_baseline';
-      }
+      this.idString = 'fsat_baseline';
     }
     this.init();
     if (!this.selected) {

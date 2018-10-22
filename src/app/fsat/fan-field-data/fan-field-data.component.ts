@@ -64,20 +64,10 @@ export class FanFieldDataComponent implements OnInit {
 
   ngOnInit() {
     if (!this.baseline) {
-      if (this.fsat && this.fsat.name) {
-        this.idString = this.fsat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
-      }
-      else {
-        this.idString = 'fsat_modification_' + this.modificationIndex;
-      }
+      this.idString = 'fsat_modification_' + this.modificationIndex;
     }
     else {
-      if (this.fsat && this.fsat.name) {
-        this.idString = this.fsat.name.replace(/ /g, '') + '_baseline';
-      }
-      else {
-        this.idString = 'fsat_baseline';
-      }
+      this.idString = 'fsat_baseline';
     }
     this.init();
     if (!this.selected) {
@@ -116,7 +106,7 @@ export class FanFieldDataComponent implements OnInit {
 
   init() {
     if (this.fieldData) {
-      if(!this.fieldData.cost){
+      if (!this.fieldData.cost) {
         this.fieldData.cost = this.settings.electricityCost;
       }
       this.fieldDataForm = this.fanFieldDataService.getFormFromObj(this.fieldData);

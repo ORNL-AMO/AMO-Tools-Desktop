@@ -50,22 +50,6 @@ export class PumpFluidComponent implements OnInit {
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.baseline) {
-      if (this.psat && this.psat.name) {
-        this.idString = this.psat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
-      }
-      else {
-        this.idString = 'psat_modification_' + this.modificationIndex;
-      }
-    }
-    else {
-      if (this.psat && this.psat.name) {
-        this.idString = this.psat.name.replace(/ /g, '') + '_baseline';
-      }
-      else {
-        this.idString = 'psat_baseline';
-      }
-    }
     if (!this.isFirstChange) {
       if (!this.selected) {
         this.disableForm();
@@ -82,6 +66,12 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'psat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'psat_baseline';
+    }
     this.pumpTypes = pumpTypes;
     this.drives = drives;
     this.fluidProperties = fluidProperties;

@@ -64,26 +64,16 @@ export class FieldDataComponent implements OnInit {
 
   ngOnInit() {
     if (!this.baseline) {
-      if (this.psat && this.psat.name) {
-        this.idString = this.psat.name.replace(/ /g, '') + '_modification_' + this.modificationIndex;
-      }
-      else {
-        this.idString = 'psat_modification_' + this.modificationIndex;
-      }
+      this.idString = 'psat_modification_' + this.modificationIndex;
     }
     else {
-      if (this.psat && this.psat.name) {
-        this.idString = this.psat.name.replace(/ /g, '') + '_baseline';
-      }
-      else {
-        this.idString = 'psat_baseline';
-      }
+      this.idString = 'psat_baseline';
     }
     this.init();
     if (!this.selected) {
       this.disableForm();
     }
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,7 +98,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   init() {
-    if(!this.psat.inputs.cost_kw_hour){
+    if (!this.psat.inputs.cost_kw_hour) {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -157,17 +147,17 @@ export class FieldDataComponent implements OnInit {
     this.saved.emit(true);
   }
 
-  checkWarnings(){
+  checkWarnings() {
     this.fieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, this.baseline);
   }
 
-  changeLoadMethod(){
+  changeLoadMethod() {
     let motorAmpsValidators: Array<ValidatorFn> = new Array();
     let motorKWValidators: Array<ValidatorFn> = new Array();
-    
-    if(this.psatForm.controls.loadEstimatedMethod.value == 'Power'){
+
+    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
       motorKWValidators = [Validators.required];
-    }else{
+    } else {
       motorAmpsValidators = [Validators.required];
     }
     this.psatForm.controls.motorAmps.setValidators(motorAmpsValidators);
