@@ -45,7 +45,7 @@
 
     <div class="form-group">
       <label for="operationType">Operation Type</label>
-      <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
+      <select name="operationType" class="form-control" id="operationType" (change)="changeOperationValidators()" (focus)="focusField('operationType')"
         (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
@@ -59,7 +59,7 @@
         <span *ngIf="turbineForm.controls.operationType.value == 4">Minimum Flow</span>
       </label>
       <div class="input-group">
-        <input name="operationValue1" type="number" step="any" class="form-control" id="operationValue1" (input)="save()"
+        <input name="operationValue1" type="number" step="any" class="form-control" id="operationValue1" (input)="changeOperationValidators()"
           [readonly]="!selected" formControlName="operationValue1" (focus)="focusField('operationValue1')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isOperationValue1Different()}">
         <span class="units input-group-addon">
@@ -87,7 +87,7 @@
         <span *ngIf="turbineForm.controls.operationType.value == 3">Maximum Power</span>
       </label>
       <div class="input-group">
-        <input name="operationValue2" type="number" step="any" class="form-control" id="operationValue2" (input)="save()"
+        <input name="operationValue2" type="number" step="any" class="form-control" id="operationValue2" (input)="changeOperationValidators()"
           [readonly]="!selected" formControlName="operationValue2" (focus)="focusField('operationValue2')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isOperationValue2Different()}">
         <span class="units input-group-addon">

@@ -46,19 +46,19 @@ export class TurbineComponent implements OnInit {
       this.highToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.turbineInput.highToLowTurbine);
 
     } else {
-      this.highToLowTurbineForm = this.turbineService.initPressureForm(this.settings);
+      this.highToLowTurbineForm = this.turbineService.initPressureForm();
     }
     if (this.turbineInput.highToMediumTurbine) {
       this.highToMediumTurbineForm = this.turbineService.getPressureFormFromObj(this.turbineInput.highToMediumTurbine);
 
     } else {
-      this.highToMediumTurbineForm = this.turbineService.initPressureForm(this.settings);
+      this.highToMediumTurbineForm = this.turbineService.initPressureForm();
     }
     if (this.turbineInput.mediumToLowTurbine) {
       this.mediumToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.turbineInput.mediumToLowTurbine);
 
     } else {
-      this.mediumToLowTurbineForm = this.turbineService.initPressureForm(this.settings);
+      this.mediumToLowTurbineForm = this.turbineService.initPressureForm();
     }
   }
 

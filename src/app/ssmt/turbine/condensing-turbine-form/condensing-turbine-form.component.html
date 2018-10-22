@@ -79,12 +79,12 @@
           <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationType.invalid && !turbineForm.controls.operationType.pristine">
-        <span *ngIf="turbineForm.controls.operationType.errors.required">Value Required</span>
-        <span *ngIf="turbineForm.controls.operationType.errors.max">Value can't be greater than
-          {{turbineForm.controls.operationType.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
-        <span *ngIf="turbineForm.controls.operationType.errors.min">Value can't be less than
-          {{turbineForm.controls.operationType.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationValue.invalid && !turbineForm.controls.operationValue.pristine">
+        <span *ngIf="turbineForm.controls.operationValue.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.max">Value can't be greater than
+          {{turbineForm.controls.operationValue.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.min">Value can't be less than
+          {{turbineForm.controls.operationValue.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
       </span>
     </div>
   </div>

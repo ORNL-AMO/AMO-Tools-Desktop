@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { TurbineInput, PressureTurbine, CondensingTurbine } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -91,14 +91,14 @@ export class TurbineService {
     }
   }
 
-  initPressureForm(settings: Settings): FormGroup {
-    let operationValidators: { quantityValue1Validators: Array<Validators>, quantityValue2Validators: Array<Validators> } = this.getPressureOperationValueRanges();
+  initPressureForm(): FormGroup {
+    let operationValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.getPressureOperationValueRanges();
     let form: FormGroup = this.formBuilder.group({
       isentropicEfficiency: [, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [, [Validators.required, Validators.min(50), Validators.max(100)]],
       operationType: [0, Validators.required],
-      operationValue1: [, operationValidators.quantityValue1Validators],
-      operationValue2: [, operationValidators.quantityValue2Validators],
+      operationValue1: [, operationValidators.operationValue1Validators],
+      operationValue2: [, operationValidators.operationValue2Validators],
       useTurbine: [false, Validators.required]
     })
     for (let key in form.controls) {
@@ -108,51 +108,51 @@ export class TurbineService {
   }
 
   getPressureFormFromObj(obj: PressureTurbine): FormGroup {
-    let operationValidators: { quantityValue1Validators: Array<Validators>, quantityValue2Validators: Array<Validators> } = this.getPressureOperationValueRanges(obj);
+    let operationValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.getPressureOperationValueRanges(obj);
     return this.formBuilder.group({
       isentropicEfficiency: [obj.isentropicEfficiency, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [obj.generationEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
       operationType: [obj.operationType, Validators.required],
-      operationValue1: [obj.operationValue1, operationValidators.quantityValue1Validators],
-      operationValue2: [obj.operationValue2, operationValidators.quantityValue2Validators],
+      operationValue1: [obj.operationValue1, operationValidators.operationValue1Validators],
+      operationValue2: [obj.operationValue2, operationValidators.operationValue2Validators],
       useTurbine: [obj.useTurbine, Validators.required]
     })
   }
 
-  getPressureOperationValueRanges(obj?: PressureTurbine): { quantityValue1Validators: Array<Validators>, quantityValue2Validators: Array<Validators> } {
-    let quantityValue1Validators: Array<Validators>;
-    let quantityValue2Validators: Array<Validators>;
+  getPressureOperationValueRanges(obj?: PressureTurbine): { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } {
+    let operationValue1Validators: Array<ValidatorFn>;
+    let operationValue2Validators: Array<ValidatorFn>;
     if (obj) {
       let value1Max: number = obj.operationValue2 || 10000;
       let value2Min: number = obj.operationValue1 || 1;
       if (obj.operationType == 0) {
         //steam flow
-        quantityValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
-        quantityValue2Validators = [];
+        operationValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
+        operationValue2Validators = [];
       } else if (obj.operationType == 1) {
         //power generation
-        quantityValue1Validators = [Validators.required, Validators.min(0)];
-        quantityValue2Validators = [];
+        operationValue1Validators = [Validators.required, Validators.min(0)];
+        operationValue2Validators = [];
       } else if (obj.operationType == 2) {
         //balance header    
-        quantityValue1Validators = [];
-        quantityValue2Validators = [];
+        operationValue1Validators = [];
+        operationValue2Validators = [];
       } else if (obj.operationType == 3) {
         //power range
-        quantityValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
-        quantityValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
+        operationValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
+        operationValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
       } else if (obj.operationType == 4) {
         //flow range
-        quantityValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
-        quantityValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
+        operationValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
+        operationValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
       }
     } else {
-      quantityValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
-      quantityValue2Validators = [];
+      operationValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
+      operationValue2Validators = [];
     }
     return {
-      quantityValue1Validators: quantityValue1Validators,
-      quantityValue2Validators: quantityValue2Validators
+      operationValue1Validators: operationValue1Validators,
+      operationValue2Validators: operationValue2Validators
     }
   }
 
