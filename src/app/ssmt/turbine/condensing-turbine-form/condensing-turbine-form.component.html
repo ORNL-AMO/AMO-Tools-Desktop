@@ -59,7 +59,7 @@
 
     <div class="form-group">
       <label for="operationType">Operation Type</label>
-      <select name="operationType" class="form-control" id="operationType" (change)="save()" (focus)="focusField('operationType')"
+      <select name="operationType" class="form-control" id="operationType" (change)="changeOperationValidators()" (focus)="focusField('operationType')"
         (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>

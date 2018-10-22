@@ -47,17 +47,23 @@ export class CondensingTurbineFormComponent implements OnInit {
     }
   }
 
-  changeOperationValidators(){
+  changeOperationValidators() {
     let tmpOperationMinMax: { min: number, max: number } = this.turbineService.getCondensingOperationRange(this.turbineForm.controls.operationType.value);
-    this.turbineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min), Validators.max(tmpOperationMinMax.max)]);
+    if (tmpOperationMinMax.max) {
+      this.turbineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min), Validators.max(tmpOperationMinMax.max)]);
+    } else {
+      this.turbineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min)]);
+    }
+    this.turbineForm.controls.operationValue.reset(this.turbineForm.controls.operationValue.value);
+    this.turbineForm.controls.operationValue.markAsDirty();
     this.save();
   }
 
-  enableForm(){
+  enableForm() {
     this.turbineForm.controls.operationType.enable();
   }
 
-  disableForm(){
+  disableForm() {
     this.turbineForm.controls.operationType.disable();
   }
 
