@@ -48,24 +48,26 @@ export class HeaderComponent implements OnInit {
   }
 
   initForms() {
-    if(this.headerInput.highPressure){
+    if (this.headerInput.highPressure) {
       this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings);
     }
-    else{
+    else {
       this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
     }
-    
-    if(this.headerInput.mediumPressure){
+
+    if (this.headerInput.mediumPressure) {
       this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressure, this.settings);
-    }else{
+    } else {
       this.mediumPressureForm = this.headerService.initHeaderForm(this.settings);
     }
 
-    if(this.headerInput.lowPressure){
+    if (this.headerInput.lowPressure) {
       this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings);
-    }else{
+    } else {
       this.lowPressureForm = this.headerService.initHeaderForm(this.settings);
     }
+    console.log(this.lowPressureForm);
+    console.log(this.mediumPressureForm);
   }
 
   focusField(str: string) {

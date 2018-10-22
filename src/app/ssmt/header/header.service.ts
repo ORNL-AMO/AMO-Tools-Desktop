@@ -168,22 +168,38 @@ export class HeaderService {
       let isHighPressureHeaderValid: boolean = true;
       let isMediumPressureHeaderValid: boolean = true;
       let isLowPressureHeaderValid: boolean = true;
-      let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings);
-      if (tmpHighPressureFrom.status == 'INVALID') {
+      if (obj.highPressure) {
+        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings);
+        if (tmpHighPressureFrom.status == 'INVALID') {
+          isHighPressureHeaderValid = false;
+        }
+      } else {
         isHighPressureHeaderValid = false;
       }
+
       if (obj.numberOfHeaders > 1) {
+      }
+      if (obj.lowPressure) {
         let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings);
         if (tmpLowPressureHeaderForm.status == 'INVALID') {
           isLowPressureHeaderValid = false;
         }
       }
+      else {
+        isLowPressureHeaderValid = false;
+      }
+
       if (obj.numberOfHeaders == 3) {
-        let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressure, settings);
-        if (tmpMediumHeaderForm.status == 'INVALID') {
+        if (obj.mediumPressure) {
+          let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressure, settings);
+          if (tmpMediumHeaderForm.status == 'INVALID') {
+            isMediumPressureHeaderValid = false;
+          }
+        } else {
           isMediumPressureHeaderValid = false;
         }
       }
+
       if (isHighPressureHeaderValid && isMediumPressureHeaderValid && isLowPressureHeaderValid) {
         return true;
       } else {
