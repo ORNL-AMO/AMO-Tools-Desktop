@@ -35,11 +35,8 @@ export class FanSetupComponent implements OnInit {
   fanForm: FormGroup;
   fanEfficiencyError: string = null;
   fanSpeedError: string = null;
-<<<<<<< HEAD
   idString: string;
-=======
   specifiedDriveEfficiencyError: string = null;
->>>>>>> develop
   constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
