@@ -40,6 +40,17 @@
         </h5>
         <hr class="my-1 hr-spacer">
 
+        <div class="my-2" *ngIf="currentField == 'pistonType'">
+          <h6>
+            Piston Type
+            <br>
+            <small class="text-muted">
+              Select either 'Single Acting' or 'Double Acting' depending on the type of pneumatic cylinder.
+              <hr>
+            </small>
+          </h6>
+        </div>
+
         <div class="my-2" *ngIf="currentField == 'cylinderDiameter'">
           <h6>
             Cylinder Diameter
