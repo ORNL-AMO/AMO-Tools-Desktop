@@ -1,7 +1,7 @@
 <form [formGroup]="turbineForm">
   <label class="group-label w-100">
     <div class="form-group">
-      <input type="checkbox" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
+      <input type="checkbox" (change)="save()" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
       Condensing Turbine
     </div>
   </label>
@@ -34,9 +34,9 @@
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.generationEfficiency.invalid && !turbineForm.controls.generationEfficiency.pristine">
         <span *ngIf="turbineForm.controls.generationEfficiency.errors.required">Value Required</span>
         <span *ngIf="turbineForm.controls.generationEfficiency.errors.max">Value can't be greater than
-          {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+          {{turbineForm.controls.generationEfficiency.errors.max.max}} %.</span>
         <span *ngIf="turbineForm.controls.generationEfficiency.errors.min">Value can't be less than
-          {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+          {{turbineForm.controls.generationEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
 

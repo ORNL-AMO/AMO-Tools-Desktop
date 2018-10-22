@@ -45,8 +45,12 @@ export class HeaderFormComponent implements OnInit {
   //HEAT LOSS
   initHeatLoss() {
     this.initHighPressureHeatLoss();
-    this.initMediumPressureHeatLoss();
-    this.initLowPressureHeatLoss();
+    if (this.ssmt.headerInput.mediumPressure) {
+      this.initMediumPressureHeatLoss();
+    }
+    if (this.ssmt.headerInput.lowPressure) {
+      this.initLowPressureHeatLoss();
+    }
     if (this.showHighPressureHeatLoss || this.showMediumPressureHeatLoss || this.showLowPressureHeatLoss) {
       this.showHeatLoss = true;
     }
@@ -73,8 +77,12 @@ export class HeaderFormComponent implements OnInit {
     this.showMediumPressureHeatLoss = false;
     this.showLowPressureHeatLoss = false;
     this.toggleHighPressureHeatLoss();
-    this.toggleMediumPressureHeatLoss();
-    this.toggleLowPressureHeatLoss();
+    if (this.ssmt.headerInput.mediumPressure) {
+      this.toggleMediumPressureHeatLoss();
+    }
+    if (this.ssmt.headerInput.lowPressure) {
+      this.toggleLowPressureHeatLoss();
+    }
   }
 
   toggleHighPressureHeatLoss() {
@@ -100,8 +108,12 @@ export class HeaderFormComponent implements OnInit {
   //STEAM USAGE
   initSteamUsage() {
     this.initHighPressureSteamUsage();
-    this.initMediumPressureSteamUsage();
-    this.initLowPressureSteamUsage();
+    if (this.ssmt.headerInput.mediumPressure) {
+      this.initMediumPressureSteamUsage();
+    }
+    if (this.ssmt.headerInput.lowPressure) {
+      this.initLowPressureSteamUsage();
+    }
     if (this.showHighPressureSteamUsage || this.showMediumPressureSteamUsage || this.showLowPressureSteamUsage) {
       this.showSteamUsage = true;
     }
@@ -128,10 +140,13 @@ export class HeaderFormComponent implements OnInit {
     this.showMediumPressureSteamUsage = false;
     this.showLowPressureSteamUsage = false;
     this.toggleHighPressureSteamUsage();
-    this.toggleMediumPressureSteamUsage();
-    this.toggleLowPressureSteamUsage();
+    if (this.ssmt.headerInput.mediumPressure) {
+      this.toggleMediumPressureSteamUsage();
+    }
+    if (this.ssmt.headerInput.lowPressure) {
+      this.toggleLowPressureSteamUsage();
+    }
   }
-
   toggleHighPressureSteamUsage() {
     if (this.showHighPressureSteamUsage == false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.processSteamUsage = this.ssmt.headerInput.highPressure.processSteamUsage;
@@ -154,7 +169,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save(newSSMT?: SSMT) {
-    if(newSSMT){
+    if (newSSMT) {
       this.ssmt = newSSMT;
     }
     this.emitSave.emit(this.ssmt);

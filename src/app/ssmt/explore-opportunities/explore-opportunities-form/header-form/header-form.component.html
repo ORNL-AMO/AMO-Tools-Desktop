@@ -35,7 +35,7 @@
       </div>
     </form>
   </li>
-  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders == 3">
+  <li *ngIf="ssmt.headerInput.numberOfHeaders == 3">
     <div class="checkbox">
       <label for="modifyMediumPressureHeatLoss">
         <input type="checkbox" id="modifyMediumPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleMediumPressureHeatLoss()"
@@ -62,7 +62,7 @@
       </div>
     </form>
   </li>
-  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+  <li *ngIf="ssmt.headerInput.numberOfHeaders != 1">
     <div class="checkbox">
       <label for="modifyLowPressureHeatLoss">
         <input type="checkbox" id="modifyLowPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleLowPressureHeatLoss()"
@@ -126,7 +126,7 @@
       </div>
     </form>
   </li>
-  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders == 3">
+  <li *ngIf="ssmt.headerInput.numberOfHeaders == 3">
     <div class="checkbox">
       <label for="modifyMediumPressureSteamUsage">
         <input type="checkbox" id="modifyMediumPressureSteamUsage" (focus)="focusField('processSteamUsage')" (change)="toggleMediumPressureSteamUsage()"
@@ -153,7 +153,7 @@
       </div>
     </form>
   </li>
-  <li *ngIf="ssmt.headerInput.highPressure.numberOfHeaders != 1">
+  <li *ngIf="ssmt.headerInput.numberOfHeaders != 1">
     <div class="checkbox">
       <label for="modifyLowPressureSteamUsage">
         <input type="checkbox" id="modifyLowPressureSteamUsage" (focus)="focusField('processSteamUsage')" (change)="toggleLowPressureSteamUsage()"

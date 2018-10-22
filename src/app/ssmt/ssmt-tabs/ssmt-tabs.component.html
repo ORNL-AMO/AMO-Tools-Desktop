@@ -2,27 +2,27 @@
   <div class="d-flex tabs subtabs progress-tabs ssmt flex-wrap">
     <div class="fixed-tab-size" [ngClass]="settingsStatus">
       <a (click)="changeStepTab('system-basics')">
-        <span class="step-number">1</span> Assessment Settings</a>
+        <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">1</span> Assessment Settings</a>
     </div>
     <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
       <a (click)="changeStepTab('operations')">
-        <span class="step-number">2</span>Operations</a>
-      <!-- <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover"></app-tabs-tooltip> -->
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)" class="step-number">2</span>Operations</a>
+      <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="boilerTabStatus">
       <a (click)="changeStepTab('boiler')">
-        <span class="step-number">3</span>Boiler</a>
-      <!-- <app-tabs-tooltip [badgeClass]="fanClassStatus[0]" [reveal]="fanBadge.display" [display]="fanBadge.hover"></app-tabs-tooltip> -->
+        <span (mouseenter)="showTooltip(boilerBadge)" (mouseleave)="hideTooltip(boilerBadge)" class="step-number">3</span>Boiler</a>
+      <app-tabs-tooltip [badgeClass]="boilerTabStatus[0]" [reveal]="boilerBadge.display" [display]="boilerBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="headerTabStatus">
       <a (click)="changeStepTab('header')">
-        <span class="step-number">4</span>Header</a>
-      <!-- <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover"></app-tabs-tooltip> -->
+        <span (mouseenter)="showTooltip(headerBadge)" (mouseleave)="hideTooltip(headerBadge)" class="step-number">4</span>Header</a>
+      <app-tabs-tooltip [badgeClass]="headerTabStatus[0]" [reveal]="headerBadge.display" [display]="headerBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="turbineTabStatus">
       <a (click)="changeStepTab('turbine')">
-        <span class="step-number">5</span>Turbine</a>
-      <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display" [display]="fieldDataBadge.hover"></app-tabs-tooltip> -->
+        <span (mouseenter)="showTooltip(turbineBadge)" (mouseleave)="hideTooltip(turbineBadge)" class="step-number">5</span>Turbine</a>
+      <app-tabs-tooltip [badgeClass]="turbineTabStatus[0]" [reveal]="turbineBadge.display" [display]="turbineBadge.hover"></app-tabs-tooltip>
     </div>
   </div>
 </nav>

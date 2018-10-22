@@ -43,7 +43,7 @@ export class BoilerService {
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       'approachTemperature': [obj.approachTemperature, [Validators.min(0)]]
     })
-    for(let key in form.controls){
+    for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
     return form;
@@ -82,6 +82,19 @@ export class BoilerService {
       steamTemperatureMax: tmpSteamTemperatureMax,
       deaeratorPressureMin: tmpDeaeratorPressureMin,
       deaeratorPressureMax: tmpDeaeratorPressureMax
+    }
+  }
+
+  isBoilerValid(obj: BoilerInput, settings: Settings): boolean {
+    if (obj) {
+      let form: FormGroup = this.initFormFromObj(obj, settings);
+      if (form.status == 'VALID') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 }

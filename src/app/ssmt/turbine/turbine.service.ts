@@ -166,4 +166,52 @@ export class TurbineService {
       useTurbine: form.controls.useTurbine.value
     }
   }
+
+  isTurbineValid(obj: TurbineInput, settings: Settings) {
+    if (obj) {
+      let condensingTurbineValid: boolean = true;
+      let highToLowTurbineValid: boolean = true;
+      let highToMediumTurbineValid: boolean = true;
+      let mediumToLowTurbineValid: boolean = true;
+      if (obj.condensingTurbine) {
+        if (obj.condensingTurbine.useTurbine) {
+          let tmpForm: FormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
+          if (tmpForm.status == 'INVALID') {
+            condensingTurbineValid = false;
+          }
+        }
+      }
+      if (obj.highToLowTurbine) {
+        if (obj.highToLowTurbine.useTurbine) {
+          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
+          if (tmpForm.status == 'INVALID') {
+            highToLowTurbineValid = false;
+          }
+        }
+      }
+      if (obj.highToMediumTurbine) {
+        if (obj.highToMediumTurbine.useTurbine) {
+          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
+          if (tmpForm.status == 'INVALID') {
+            highToMediumTurbineValid = false;
+          }
+        }
+      }
+      if (obj.mediumToLowTurbine) {
+        if (obj.mediumToLowTurbine.useTurbine) {
+          let tmpForm: FormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
+          if (tmpForm.status == 'INVALID') {
+            mediumToLowTurbineValid = false;
+          }
+        }
+      }
+      if (condensingTurbineValid && highToLowTurbineValid && highToMediumTurbineValid && mediumToLowTurbineValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
 }
