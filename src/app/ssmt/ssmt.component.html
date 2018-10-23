@@ -1,7 +1,7 @@
 <div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment && settings">
   <div #header class="w-100 hide-print sticky-top">
     <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
-    <app-ssmt-tabs></app-ssmt-tabs>
+    <app-ssmt-tabs [settings]="settings" [ssmt]="_ssmt"></app-ssmt-tabs>
   </div>
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">

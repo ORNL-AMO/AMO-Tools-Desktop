@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
 import { CondensingTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
 import { CompareService } from '../../compare.service';
+import { TurbineService } from '../turbine.service';
 
 @Component({
   selector: 'app-condensing-turbine-form',
@@ -24,7 +25,7 @@ export class CondensingTurbineFormComponent implements OnInit {
   inSetup: boolean;
 
   turbineOptionTypes: Array<Quantity>;
-  constructor(private ssmtService: SsmtService, private compareService: CompareService) {
+  constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
   }
 
   ngOnInit() {
@@ -46,11 +47,23 @@ export class CondensingTurbineFormComponent implements OnInit {
     }
   }
 
-  enableForm(){
+  changeOperationValidators() {
+    let tmpOperationMinMax: { min: number, max: number } = this.turbineService.getCondensingOperationRange(this.turbineForm.controls.operationType.value);
+    if (tmpOperationMinMax.max) {
+      this.turbineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min), Validators.max(tmpOperationMinMax.max)]);
+    } else {
+      this.turbineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min)]);
+    }
+    this.turbineForm.controls.operationValue.reset(this.turbineForm.controls.operationValue.value);
+    this.turbineForm.controls.operationValue.markAsDirty();
+    this.save();
+  }
+
+  enableForm() {
     this.turbineForm.controls.operationType.enable();
   }
 
-  disableForm(){
+  disableForm() {
     this.turbineForm.controls.operationType.disable();
   }
 

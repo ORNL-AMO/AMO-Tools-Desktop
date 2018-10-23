@@ -4,6 +4,9 @@ import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
 import { CompareService } from '../../compare.service';
 import { SSMT } from '../../../shared/models/steam/ssmt';
+import { BoilerService } from '../../boiler/boiler.service';
+import { TurbineService } from '../../turbine/turbine.service';
+import { HeaderService } from '../../header/header.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -34,7 +37,8 @@ export class ModifyConditionsTabsComponent implements OnInit {
   turbineBadgeHover: boolean;
   turbineBadgeClass: Array<string>;
   updateDataSub: Subscription;
-  constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
+  constructor(private ssmtService: SsmtService, private compareService: CompareService, private boilerService: BoilerService, private turbineService: TurbineService,
+    private headerService: HeaderService) { }
 
   ngOnInit() {
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
@@ -104,19 +108,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setBoilerBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest: boolean = true;
-    //TODO:
-    // let validBaselineTest = this.operationsService.isFanFieldDataValid(baseline.operations);
+    let validBaselineTest = this.boilerService.isBoilerValid(baseline.boilerInput, this.settings);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      //TODO:
-      // validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.operations);
+      validModTest = this.boilerService.isBoilerValid(modification.boilerInput, this.settings);
       isDifferent = this.compareService.checkBoilerDifferent();
     }
     let inputError: boolean;
-    //TODO:
-    // let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -129,19 +128,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setHeaderBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest: boolean = true;
-    //TODO:
-    // let validBaselineTest = this.operationsService.isFanFieldDataValid(baseline.operations);
+    let validBaselineTest = this.headerService.isHeaderValid(baseline.headerInput, this.settings);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      //TODO:
-      // validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.operations);
+      validModTest = this.headerService.isHeaderValid(modification.headerInput, this.settings);
       isDifferent = this.compareService.checkHeaderDifferent();
     }
     let inputError: boolean;
-    //TODO:
-    // let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -154,19 +148,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setTurbineBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest: boolean = true;
-    //TODO:
-    // let validBaselineTest = this.operationsService.isFanFieldDataValid(baseline.operations);
+    let validBaselineTest = this.turbineService.isTurbineValid(baseline.turbineInput, this.settings);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      //TODO:
-      // validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.operations);
+      validModTest = this.turbineService.isTurbineValid(modification.turbineInput, this.settings);
       isDifferent = this.compareService.checkTurbinesDifferent();
     }
     let inputError: boolean;
-    //TODO:
-    // let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {

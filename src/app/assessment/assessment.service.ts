@@ -319,13 +319,13 @@ export class AssessmentService {
         hoursPerYear: 8736
       },
       operatingCosts: {
-        fuelCost: 8.00,
-        makeUpWaterCost: 10.00,
-        electricityCost: .080
+        fuelCost: undefined,
+        makeUpWaterCost: 0,
+        electricityCost: undefined
       },
       generalSteamOperations: {
-        sitePowerImport: 0,
-        makeUpWaterTemperature: 0
+        sitePowerImport: undefined,
+        makeUpWaterTemperature: undefined
       },
       implementationCosts: 0.0,
       equipmentNotes: '',
@@ -336,7 +336,7 @@ export class AssessmentService {
           condenserPressure: undefined,
           operationType: 0,
           operationValue: undefined,
-          useTurbine: true,
+          useTurbine: false
         },
         highToLowTurbine: {
           isentropicEfficiency: undefined,
@@ -362,47 +362,6 @@ export class AssessmentService {
           operationValue2: undefined,
           useTurbine: false
         }
-      },
-      headerInput: {
-        numberOfHeaders: 1,
-        highPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          condensateReturnTemperature: undefined,
-          flashCondensateReturn: false
-        },
-        mediumPressure:{
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        },
-        lowPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        }
-      },
-      boilerInput: {
-        fuelType: 1,
-        fuel: 1,
-        combustionEfficiency: undefined,
-        blowdownRate: undefined,
-        blowdownFlashed: undefined,
-        preheatMakeupWater: undefined,
-        steamTemperature: undefined,
-        deaeratorVentRate: undefined,
-        deaeratorPressure: undefined,
-        approachTemperature: undefined
       }
     }
   }
