@@ -20,6 +20,9 @@ export class OperatingCostsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  idString: string;
+  
   constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {

@@ -24,16 +24,22 @@ export class BoilerComponent implements OnInit {
   boilerInput: BoilerInput;
   @Output('emitSave')
   emitSave = new EventEmitter<BoilerInput>();
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   boilerForm: FormGroup;
   options: any;
   showModal: boolean;
+  idString: string = 'baseline_';
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
     private compareService: CompareService) { }
 
   ngOnInit() {
+    if(!this.isBaseline){
+      this.idString = 'modification_';
+    }
     if (this.boilerInput) {
       this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
     } else {

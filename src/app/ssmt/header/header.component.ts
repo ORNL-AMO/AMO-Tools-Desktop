@@ -23,13 +23,19 @@ export class HeaderComponent implements OnInit {
   selected: boolean;
   @Input()
   modificationExists: boolean;
+  @Input()
+  isBaseline: boolean;
 
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
   lowPressureForm: FormGroup;
+  idString: string = 'baseline_';
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    if(!this.isBaseline){
+      this.idString = 'modification_';
+    }
     if (!this.headerInput) {
       this.headerInput = this.headerService.initHeaderDataObj();
     }
@@ -66,8 +72,6 @@ export class HeaderComponent implements OnInit {
     } else {
       this.lowPressureForm = this.headerService.initHeaderForm(this.settings);
     }
-    console.log(this.lowPressureForm);
-    console.log(this.mediumPressureForm);
   }
 
   focusField(str: string) {
@@ -76,21 +80,6 @@ export class HeaderComponent implements OnInit {
 
   focusOut() {
     this.ssmtService.currentField.next('default');
-  }
-
-  setNumberOfHeaders() {
-    // if (this.headerInput.numberOfHeaders < this.headerForms.length) {
-    //   for (let i = this.headerForms.length; i > this.headerInput.numberOfHeaders; i--) {
-    //     this.headerForms.pop();
-    //   }
-    // } else if (this.headerInput.numberOfHeaders > this.headerForms.length) {
-    //   for (let i = this.headerForms.length; i < this.headerInput.numberOfHeaders; i++) {
-    //     let headerInput: Header = this.headerService.initHeaderInputObj(this.headerForms.length);
-    //     let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerInput);
-    //     this.headerForms.push(tmpForm);
-    //   }
-    // }
-    this.save();
   }
 
   save() {

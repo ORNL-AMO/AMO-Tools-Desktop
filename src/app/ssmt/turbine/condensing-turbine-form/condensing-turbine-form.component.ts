@@ -23,7 +23,9 @@ export class CondensingTurbineFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
-
+  @Input()
+  idString: string;
+  
   turbineOptionTypes: Array<Quantity>;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
   }

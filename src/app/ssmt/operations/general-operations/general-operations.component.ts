@@ -21,6 +21,9 @@ export class GeneralOperationsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  idString: string;
+  
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {

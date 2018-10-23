@@ -4,12 +4,15 @@
   </div>
   <div class="p-3">
     <app-condensing-turbine-form [turbineForm]="condensingTurbineForm" [settings]="settings" [selected]="selected"
-      (emitSave)="saveCondensingTurbine()" [inSetup]="inSetup"></app-condensing-turbine-form>
+      (emitSave)="saveCondensingTurbine()" [inSetup]="inSetup" [idString]="idString"></app-condensing-turbine-form>
     <app-pressure-turbine-form [turbineForm]="highToLowTurbineForm" [settings]="settings" [selected]="selected"
-      [pressureTurbineString]="'highToLowTurbine'" (emitSave)="saveHighLowPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
+      [pressureTurbineString]="'highToLowTurbine'" (emitSave)="saveHighLowPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
     <app-pressure-turbine-form [turbineForm]="highToMediumTurbineForm" [settings]="settings" [selected]="selected"
-      [pressureTurbineString]="'highToMediumTurbine'" (emitSave)="saveHighMediumPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
+      [pressureTurbineString]="'highToMediumTurbine'" (emitSave)="saveHighMediumPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
     <app-pressure-turbine-form [turbineForm]="mediumToLowTurbineForm" [settings]="settings" [selected]="selected"
-      [pressureTurbineString]="'mediumToLowTurbine'" (emitSave)="saveMediumLowPressureTurbine()" [inSetup]="inSetup"></app-pressure-turbine-form>
+      [pressureTurbineString]="'mediumToLowTurbine'" (emitSave)="saveMediumLowPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
   </div>
 </div>

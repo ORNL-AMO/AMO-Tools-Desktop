@@ -26,7 +26,9 @@ export class HeaderFormComponent implements OnInit {
   numberOfHeaders: number;
   @Input()
   inSetup: boolean;
-
+  @Input()
+  idString: string;
+  
   headerLabel: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
