@@ -41,9 +41,9 @@
     </div>
 
     <div class="form-group">
-      <label for="condenserPressure">Condenser Pressure</label>
+      <label for="{{idString+'condenserPressure'}}">Condenser Pressure</label>
       <div class="input-group">
-        <input name="{{idString+'condenserPressure'}}" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}" (input)="save()"
+        <input name="condenserPressure" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}" (input)="save()"
           [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>

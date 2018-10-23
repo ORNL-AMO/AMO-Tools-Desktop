@@ -178,15 +178,15 @@ export class HeaderService {
       }
 
       if (obj.numberOfHeaders > 1) {
-      }
-      if (obj.lowPressure) {
-        let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings);
-        if (tmpLowPressureHeaderForm.status == 'INVALID') {
+        if (obj.lowPressure) {
+          let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings);
+          if (tmpLowPressureHeaderForm.status == 'INVALID') {
+            isLowPressureHeaderValid = false;
+          }
+        }
+        else {
           isLowPressureHeaderValid = false;
         }
-      }
-      else {
-        isLowPressureHeaderValid = false;
       }
 
       if (obj.numberOfHeaders == 3) {

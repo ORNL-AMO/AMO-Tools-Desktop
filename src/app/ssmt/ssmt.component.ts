@@ -138,7 +138,7 @@ export class SsmtComponent implements OnInit {
     }, 100)
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
@@ -149,7 +149,7 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.mainTab.next('system-setup');
     this.ssmtService.stepTab.next('system-basics');
     this.ssmtService.assessmentTab.next('explore-opportunities');
-    this.ssmtService.steamModelTab.next('operations')
+    this.ssmtService.steamModelTab.next('operations');
   }
 
   subscribeTabs() {

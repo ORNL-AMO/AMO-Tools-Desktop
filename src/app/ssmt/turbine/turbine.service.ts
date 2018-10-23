@@ -101,15 +101,12 @@ export class TurbineService {
       operationValue2: [, operationValidators.operationValue2Validators],
       useTurbine: [false, Validators.required]
     })
-    for (let key in form.controls) {
-      form.controls[key].markAsDirty();
-    }
     return form;
   }
 
   getPressureFormFromObj(obj: PressureTurbine): FormGroup {
     let operationValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.getPressureOperationValueRanges(obj);
-    return this.formBuilder.group({
+    let form: FormGroup = this.formBuilder.group({
       isentropicEfficiency: [obj.isentropicEfficiency, [Validators.required, Validators.min(20), Validators.max(100)]],
       generationEfficiency: [obj.generationEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
       operationType: [obj.operationType, Validators.required],
@@ -117,6 +114,10 @@ export class TurbineService {
       operationValue2: [obj.operationValue2, operationValidators.operationValue2Validators],
       useTurbine: [obj.useTurbine, Validators.required]
     })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
+    return form;
   }
 
   getPressureOperationValueRanges(obj?: PressureTurbine): { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } {
