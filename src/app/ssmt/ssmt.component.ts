@@ -17,6 +17,7 @@ import * as _ from 'lodash';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
+import { AssessmentService } from '../assessment/assessment.service';
 @Component({
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
@@ -75,7 +76,8 @@ export class SsmtComponent implements OnInit {
     private compareService: CompareService,
     private headerService: HeaderService,
     private turbineService: TurbineService,
-    private boilerService: BoilerService
+    private boilerService: BoilerService,
+    private assessmentService: AssessmentService
   ) { }
 
   ngOnInit() {
@@ -100,6 +102,10 @@ export class SsmtComponent implements OnInit {
           this.compareService.setCompareVals(this._ssmt);
         }
         this.getSettings();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       });
     });
     this.subscribeTabs();
@@ -227,6 +233,7 @@ export class SsmtComponent implements OnInit {
     } else {
       this.modificationExists = false;
     }
+    this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
@@ -235,6 +242,21 @@ export class SsmtComponent implements OnInit {
         this.ssmtService.updateData.next(true);
       })
     })
+  }
+
+  checkSetupDone(){
+    if(this.modificationExists){
+      this._ssmt.setupDone = true;
+    }else{
+      let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
+      let isHeaderValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
+      let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this.settings);
+      if(isBoilerValid && isHeaderValid && isTurbineValid){
+        this._ssmt.setupDone = true;
+      }else{
+        this._ssmt.setupDone = false;
+      }
+    }
   }
 
   saveBoiler(boilerData: BoilerInput) {

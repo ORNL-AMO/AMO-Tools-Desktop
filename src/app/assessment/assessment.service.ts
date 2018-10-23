@@ -59,6 +59,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
     } else if (assessment.type == 'SSMT') {
+      if (assessment.ssmt.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
 
     }
