@@ -7,13 +7,13 @@
         <h3>Baseline</h3>
       </div>
       <app-operations *ngIf="modelTab == 'operations'" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="saveAssessment()"
-        [selected]="baselineSelected"></app-operations>
+        [selected]="baselineSelected" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings" [boilerInput]="ssmt.boilerInput"
-        (emitSave)="saveBaselineBoiler($event)"></app-boiler>
+        (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"></app-boiler>
       <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings" [headerInput]="ssmt.headerInput"
-        (emitSave)="saveBaselineHeader($event)"></app-header>
+        (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"></app-header>
       <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings" [turbineInput]="ssmt.turbineInput"
-        (emitSave)="saveBaselineTurbine($event)"></app-turbine>
+        (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
     </div>
 
     <!-- Modifications Start -->

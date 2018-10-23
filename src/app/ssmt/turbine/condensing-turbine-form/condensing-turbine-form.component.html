@@ -43,7 +43,7 @@
     <div class="form-group">
       <label for="condenserPressure">Condenser Pressure</label>
       <div class="input-group">
-        <input name="condenserPressure" type="number" step="any" class="form-control" id="condenserPressure" (input)="save()"
+        <input name="{{idString+'condenserPressure'}}" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}" (input)="save()"
           [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
@@ -58,20 +58,20 @@
     </div>
 
     <div class="form-group">
-      <label for="operationType">Operation Type</label>
-      <select name="operationType" class="form-control" id="operationType" (change)="changeOperationValidators()" (focus)="focusField('operationType')"
+      <label for="{{idString+'operationType'}}">Operation Type</label>
+      <select name="operationType" class="form-control" id="{{idString+'operationType'}}" (change)="changeOperationValidators()" (focus)="focusField('operationType')"
         (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="operationValue">
+      <label for="{{idString+'operationValue'}}">
         <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
         <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
       </label>
       <div class="input-group">
-        <input name="operationValue" type="number" step="any" class="form-control" id="operationValue" (input)="save()"
+        <input name="operationValue" type="number" step="any" class="form-control" id="{{idString+'operationValue'}}" (input)="save()"
           [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">

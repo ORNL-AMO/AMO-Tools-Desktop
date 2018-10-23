@@ -21,15 +21,20 @@ export class TurbineComponent implements OnInit {
   inSetup: boolean;
   @Input()
   selected: boolean;
-
+  @Input()
+  isBaseline: boolean;
 
   condensingTurbineForm: FormGroup;
   highToLowTurbineForm: FormGroup;
   highToMediumTurbineForm: FormGroup;
   mediumToLowTurbineForm: FormGroup;
+  idString: string = 'baseline_';
   constructor(private turbineService: TurbineService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = 'modification_';
+    }
     if (!this.turbineInput) {
       this.turbineInput = this.turbineService.initTurbineInputObj();
     }
