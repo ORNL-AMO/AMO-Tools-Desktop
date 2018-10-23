@@ -14,6 +14,8 @@ import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 })
 export class FanDataComponent implements OnInit {
   @Input()
+  toggleResetData: boolean;
+  @Input()
   planeData: PlaneData;
   @Input()
   fanRatedInfo: FanRatedInfo;

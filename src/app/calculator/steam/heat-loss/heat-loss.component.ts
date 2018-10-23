@@ -48,6 +48,11 @@ export class HeatLossComponent implements OnInit {
     }, 50);
   }
 
+  btnResetData() {
+    this.heatLossForm = this.heatLossService.initForm(this.settings);
+    this.calculate(this.heatLossForm);
+  }
+
   setTab(str: string) {
     this.tabSelect = str;
   }

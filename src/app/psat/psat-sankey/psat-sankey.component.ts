@@ -74,7 +74,7 @@ export class PsatSankeyComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService) { }
 
   ngOnInit() {
-    if(!this.baseline && !this.isBaseline){
+    if (!this.baseline && !this.isBaseline) {
       this.baseline = this.compareService.baselinePSAT;
     }
 
@@ -131,7 +131,7 @@ export class PsatSankeyComponent implements OnInit {
         if (this.isBaseline) {
           this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
         } else {
-          let existingResults: PsatOutputs = this.psatService.resultsExisting( JSON.parse(JSON.stringify(this.baseline.inputs)), this.settings);
+          let existingResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(this.baseline.inputs)), this.settings);
           this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, existingResults.pump_efficiency);
         }
       }
@@ -347,7 +347,7 @@ export class PsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#psat-" + location + "-linear-gradient-" + i + ")";
+        return "url(#psat-" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -613,7 +613,7 @@ export class PsatSankeyComponent implements OnInit {
   getEndMarker(d, nodes) {
     let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#psat-end-" + location + "-" + d.target + ")";
+      return "url(#psat-end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -758,7 +758,7 @@ export class PsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#psat-linear-gradient-" + i + ")"
+        return "url(#psat-linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {

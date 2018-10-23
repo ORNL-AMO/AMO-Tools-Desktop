@@ -54,6 +54,8 @@ export class Fsat203Component implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
+  originalCalculator: Calculator;
+  toggleResetData: boolean = true;
   constructor(private fsatService: FsatService, private fsat203Service: Fsat203Service, private settingsDbService: SettingsDbService, private convertFsatService: ConvertFsatService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
@@ -65,6 +67,7 @@ export class Fsat203Component implements OnInit {
 
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
     } else {
       this.initForm();
     }
@@ -83,6 +86,27 @@ export class Fsat203Component implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment && this.originalCalculator.fan203Inputs) {
+      this.inputs = this.originalCalculator.fan203Inputs;
+    }
+    else {
+      this.inputs = this.fsat203Service.getDefaultData();
+      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    }
+    this.toggleResetData = !this.toggleResetData;
+    this.checkBasics();
+    this.checkGasDensity();
+    this.checkPlane('1');
+    this.checkPlane('2');
+    this.checkPlane('3a');
+    this.checkTraversePlanes();
+    this.checkPlane('4');
+    this.checkPlane('5');
+    this.checkShaftPower();
+    this.calculate();
   }
 
   resizeTabs() {
@@ -116,7 +140,7 @@ export class Fsat203Component implements OnInit {
     if (!this.inAssessment) {
       this.fsat203Service.inputData = this.inputs;
     } else if (this.inAssessment && this.calcExists) {
-      this.calculator.fan203Inputs =  this.inputs;
+      this.calculator.fan203Inputs = this.inputs;
       this.saveCalculator();
     }
   }

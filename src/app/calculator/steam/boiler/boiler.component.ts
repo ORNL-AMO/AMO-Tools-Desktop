@@ -47,6 +47,11 @@ export class BoilerComponent implements OnInit {
   ngOnDestroy(){
   }
 
+  btnResetData() {
+    this.boilerForm = this.boilerService.initForm(this.settings);
+    this.calculate(this.boilerForm);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

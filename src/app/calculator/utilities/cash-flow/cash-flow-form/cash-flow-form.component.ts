@@ -13,9 +13,7 @@ export class CashFlowFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  // lifetime: number;
-  // benefits: number;
-  // cost: number;
+  
   constructor() { }
 
   ngOnInit() {

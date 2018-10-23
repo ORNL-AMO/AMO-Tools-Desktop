@@ -85,6 +85,11 @@ Tabs
     border: none;
     border-bottom: #F39C12 solid 3px;
   }
+  .lighting .tabs.primary .active a {
+    border: none;
+    border-bottom:   #FFFF00 solid 3px;
+  }
+
 
   .fixed-tab-size{
     min-width: 200px;

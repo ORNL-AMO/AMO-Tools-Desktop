@@ -42,6 +42,7 @@ export class EnergyEquivalencyComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
+  originalCalculator: Calculator;
   constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
@@ -54,10 +55,10 @@ export class EnergyEquivalencyComponent implements OnInit {
     }
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
     } else {
       this.initForm();
     }
-
 
     this.calculateElectric();
     this.calculateFuel();
@@ -67,6 +68,20 @@ export class EnergyEquivalencyComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment && this.calcExists) {
+      this.calculator = this.originalCalculator;
+    }
+    else {
+      this.energyEquivalencyFuel = this.energyEquivalencyService.initEquivalencyFuel();
+      this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
+      this.energyEquivalencyElectric = this.energyEquivalencyService.initEquivalencyElectric(this.settings);
+      this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
+    }
+    this.calculateFuel();
+    this.calculateElectric();
   }
 
   resizeTabs() {

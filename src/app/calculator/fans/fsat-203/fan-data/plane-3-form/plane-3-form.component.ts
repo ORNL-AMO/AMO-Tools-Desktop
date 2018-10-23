@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlaneData, Plane } from '../../../../../shared/models/fans';
 import { Fsat203Service } from '../../fsat-203.service';
@@ -8,6 +8,8 @@ import { Fsat203Service } from '../../fsat-203.service';
   styleUrls: ['./plane-3-form.component.css']
 })
 export class Plane3FormComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   planeData: Plane;
   @Output('showReadingsForm')
@@ -23,6 +25,17 @@ export class Plane3FormComponent implements OnInit {
 
   ngOnInit() {
     this.pitotDataForm = this.fsat203Service.getTraversePlaneFormFromObj(this.planeData);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.pitotDataForm = this.fsat203Service.getTraversePlaneFormFromObj(this.planeData);
+    this.save();
   }
 
   save() {
@@ -48,7 +61,7 @@ export class Plane3FormComponent implements OnInit {
     this.save();
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

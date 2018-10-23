@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
-import { FanSetup } from '../../shared/models/fans';
+import { FanSetup, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
 import { CompareService } from '../compare.service';
@@ -25,15 +25,27 @@ export class FanSetupComponent implements OnInit {
   emitSave = new EventEmitter<FanSetup>();
   @Input()
   settings: Settings;
+  @Input()
+  fsat: FSAT;
+  @Input()
+  baseline: boolean;
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
   fanEfficiencyError: string = null;
   fanSpeedError: string = null;
+  specifiedDriveEfficiencyError: string = null;
+  idString: string;
   constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'fsat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'fsat_baseline';
+    }
     this.drives = Drives;
     this.fanTypes = FanTypes;
     this.init();
@@ -55,6 +67,12 @@ export class FanSetupComponent implements OnInit {
   }
 
   init() {
+    if (this.fanSetup.drive != 4) {
+      this.fanSetup.specifiedDriveEfficiency = 100;
+    }
+    else {
+      this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency | 100;
+    }
     this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup);
     this.checkForWarnings();
   }
@@ -73,13 +91,17 @@ export class FanSetupComponent implements OnInit {
   }
 
   checkForWarnings() {
-    let warnings: {fanEfficiencyError: string, fanSpeedError: string} = this.fsatWarningService.checkFanWarnings(this.fanSetup);
+    let warnings: { fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
     this.fanSpeedError = warnings.fanSpeedError;
     this.fanEfficiencyError = warnings.fanEfficiencyError;
+    this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
   }
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    if (this.fanSetup.drive != 4) {
+      this.fanSetup.specifiedDriveEfficiency = 100;
+    }
     this.checkForWarnings();
     this.emitSave.emit(this.fanSetup);
   }
@@ -116,9 +138,17 @@ export class FanSetupComponent implements OnInit {
     }
   }
 
-  isFanSpecifiedDifferent(){
+  isFanSpecifiedDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecifiedFanEfficiencyDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isSpecifiedDriveEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedDriveEfficiencyDifferent();
     } else {
       return false;
     }

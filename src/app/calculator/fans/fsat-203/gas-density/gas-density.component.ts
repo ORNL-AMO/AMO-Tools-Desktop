@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { BaseGasDensity } from '../../../../shared/models/fans';
 import { Fsat203Service, GasDensityRanges } from '../fsat-203.service';
@@ -12,6 +12,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
   styleUrls: ['./gas-density.component.css']
 })
 export class GasDensityComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   fanGasDensity: BaseGasDensity;
   @Input()
@@ -41,6 +43,18 @@ export class GasDensityComponent implements OnInit {
   ngOnInit() {
     this.gasDensityForm = this.fsat203Service.getGasDensityFormFromObj(this.fanGasDensity, this.settings);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.gasDensityForm = this.fsat203Service.getGasDensityFormFromObj(this.fanGasDensity, this.settings);
+    this.save();
+  }
+
   save() {
     this.fanGasDensity = this.fsat203Service.getGasDensityObjFromForm(this.gasDensityForm);
     this.emitSave.emit(this.fanGasDensity);

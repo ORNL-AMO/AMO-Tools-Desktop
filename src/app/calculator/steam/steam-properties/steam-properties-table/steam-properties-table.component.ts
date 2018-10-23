@@ -8,7 +8,8 @@ import { SteamService } from '../../steam.service';
   styleUrls: ['./steam-properties-table.component.css']
 })
 export class SteamPropertiesTableComponent implements OnInit {
-
+  @Input()
+  toggleResetData: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -21,22 +22,30 @@ export class SteamPropertiesTableComponent implements OnInit {
   ngOnInit() {
     if (this.steamService.steamPropertiesData) {
       this.rowData = this.steamService.steamPropertiesData;
-    }else{
+    } else {
       this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
     }
   }
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetTable();
+    }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();
     }
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.steamService.steamPropertiesData = this.rowData;
   }
   addRow() {
     if (this.data !== null) {
       this.rowData.push(this.data);
     }
+  }
+
+  resetTable() {
+    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+    this.steamService.steamPropertiesData = this.rowData;
   }
 
   deleteRow(index: number) {

@@ -1,4 +1,4 @@
-<div class="p-2 pt-3 d-flex flex-column help-info" *ngIf="!inPreAssessment">
+<!-- <div class="p-2 pt-3 d-flex flex-column help-info" *ngIf="!inPreAssessment">
   <h5>
     Designed Energy Help
     <br>
@@ -8,8 +8,9 @@
       (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and duty cycle.
     </small>
   </h5>
-  <hr class="my-1 hr-spacer">
+  <hr class="my-1 hr-spacer"> -->
 
+<div class="help-content">
 
   <div class="my-2" *ngIf="currentField == 'fuelType'">
     <h6>
@@ -22,7 +23,7 @@
   </div>
 
 
-  <div class="my-2" *ngIf="currentField == 'totalBurnerCapacity'">
+  <div class="my-2" *ngIf="currentField == 'fuelTotalBurnerCapacity'">
     <h6>
       Total Burner Rated Capacity
       <br>
@@ -33,7 +34,7 @@
   </div>
 
 
-  <div class="my-2" *ngIf="currentField == 'percentCapacityUsed'">
+  <div class="my-2" *ngIf="currentField == 'fuelPercentCapacityUsed'">
     <h6>
       Percent of Rated Capacity Used
       <br>
@@ -44,7 +45,7 @@
   </div>
 
 
-  <div class="my-2" *ngIf="currentField == 'percentOperatingHours'">
+  <div class="my-2" *ngIf="currentField == 'fuelPercentOperatingHours'">
     <h6>
       Percent of Operating Hours
       <br>
@@ -57,6 +58,6 @@
 
 </div>
 
-  <!--<p class="text-muted">
+<!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
   </p>-->

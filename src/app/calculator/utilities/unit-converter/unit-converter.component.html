@@ -19,7 +19,8 @@
         </div>
         <div class="row value-row">
           <div class="col-6">
-            <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1" (input)="getValue2()">
+            <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
+              (input)="getValue2()">
             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
               <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
@@ -28,7 +29,8 @@
           </div>
 
           <div class="col-6">
-            <input type="number" step="any" class="form-control text-center input-field" id="value2" [(ngModel)]="value2" (input)="getValue1()">
+            <input type="number" step="any" class="form-control text-center input-field" id="value2" [(ngModel)]="value2"
+              (input)="getValue1()">
             <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
               <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
@@ -36,6 +38,11 @@
             </select>
           </div>
         </div>
+        <!-- <div class="d-block w-100 text-right p-2 btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
+            Reset Data
+          </button>
+        </div> -->
       </div>
     </div>
   </div>

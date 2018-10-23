@@ -2,7 +2,7 @@
   <div class="form-section">
     <label>Operating Hours</label>
     <div class="form-group">
-      <label for="weeksPerYear">Weeks / Year</label>
+      <label for="{{'weeksPerYear_'+idString}}">Weeks / Year</label>
       <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareWeeksPerYear(), 'error': warnings.weeksPerYearWarning !== null, 'invalid': operationsForm.controls.weeksPerYear.invalid}">
         <button class="btn input-group-btn" (click)="subtractWeek()">
           <i class="fa fa-minus"></i>
@@ -10,13 +10,14 @@
         <button class="btn input-group-btn" (click)="addWeek()">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!baselineSelected" name="weeksPerYear" type="number" step="any" min="0" max="52" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
-          formControlName="weeksPerYear" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="weeksPerYear" type="number" step="any" min="0" max="52" class="form-control"
+          id="{{'weeksPerYear_'+idString}}" (input)="calculatHrsPerYear()" formControlName="weeksPerYear" (focus)="focusField('operatingHours')"
+          (blur)="focusOut()">
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.weeksPerYearWarning !== null">{{warnings.weeksPerYearWarning}}</span>
     </div>
     <div class="form-group">
-      <label for="daysPerWeek">Days / Week</label>
+      <label for="{{'daysPerWeek_'+idString}}">Days / Week</label>
       <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareDaysPerWeek(), 'error': warnings.daysPerWeekWarning !== null, 'invalid': operationsForm.controls.daysPerWeek.invalid}">
         <button class="btn input-group-btn" (click)="subtractWeekDay()">
           <i class="fa fa-minus"></i>
@@ -24,13 +25,14 @@
         <button class="btn input-group-btn" (click)="addWeekDay()">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!baselineSelected" name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()"
-          formControlName="daysPerWeek" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control"
+          id="{{'daysPerWeek_'+idString}}" (input)="calculatHrsPerYear()" formControlName="daysPerWeek" (focus)="focusField('operatingHours')"
+          (blur)="focusOut()">
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.daysPerWeekWarning !== null">{{warnings.daysPerWeekWarning}}</span>
     </div>
     <div class="form-group">
-      <label for="shiftsPerDay">Shifts / Day</label>
+      <label for="{{'shiftsPerDay_'+idString}}">Shifts / Day</label>
       <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareShiftsPerDay(), 'error': warnings.shiftsPerDayWarning !== null, 'invalid': operationsForm.controls.shiftsPerDay.invalid}">
         <button class="btn input-group-btn" (click)="subtractShift()">
           <i class="fa fa-minus"></i>
@@ -38,13 +40,14 @@
         <button class="btn input-group-btn" (click)="addShift()">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!baselineSelected" name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
-          formControlName="shiftsPerDay" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="shiftsPerDay" type="number" step="1" min="0" class="form-control"
+          id="{{'shiftsPerDay_'+idString}}" (input)="calculatHrsPerYear()" formControlName="shiftsPerDay" (focus)="focusField('operatingHours')"
+          (blur)="focusOut()">
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.shiftsPerDayWarning !== null">{{warnings.shiftsPerDayWarning}}</span>
     </div>
     <div class="form-group">
-      <label for="hoursPerShift">Hours / Shift</label>
+      <label for="{{'hoursPerShift_'+idString}}">Hours / Shift</label>
       <div class="incrementor form-control input-group" [ngClass]="{'indicate-different': compareHoursPerShift(), 'error': warnings.hoursPerShiftWarning !== null || warnings.timeWarning !== null, 'invalid': operationsForm.controls.hoursPerShift.invalid}">
         <button class="btn input-group-btn" (click)="subtractShiftHr()">
           <i class="fa fa-minus"></i>
@@ -52,53 +55,56 @@
         <button class="btn input-group-btn" (click)="addShiftHr()">
           <i class="fa fa-plus"></i>
         </button>
-        <input [readonly]="!baselineSelected" name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
-          formControlName="hoursPerShift" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control"
+          id="{{'hoursPerShift_'+idString}}" (input)="calculatHrsPerYear()" formControlName="hoursPerShift" (focus)="focusField('operatingHours')"
+          (blur)="focusOut()">
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.hoursPerShiftWarning !== null">{{warnings.hoursPerShiftWarning}}</span>
       <span class="alert-warning pull-right small" *ngIf="warnings.timeWarning !== null">{{warnings.timeWarning}}</span>
     </div>
     <!--<span class="alert-warning pull-right small" *ngIf="!isCalculated">Above values not used.</span>-->
     <div class="form-group">
-      <label for="hoursPerYear">Hours / Year</label>
-      <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" formControlName="hoursPerYear"
-        (focus)="focusField('operatingHours')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareHoursPerYear(), 'error': warnings.hoursPerYearWarning !== null, 'invalid': operationsForm.controls.hoursPerYear.invalid}">
+      <label for="{{'hoursPerYear_'+idString}}">Hours / Year</label>
+      <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control" id="{{'hoursPerYear_'+idString}}"
+        (input)="setNotCalculated()" formControlName="hoursPerYear" (focus)="focusField('operatingHours')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': compareHoursPerYear(), 'error': warnings.hoursPerYearWarning !== null, 'invalid': operationsForm.controls.hoursPerYear.invalid}">
       <span class="alert-warning pull-right small" *ngIf="warnings.hoursPerYearWarning !== null">{{warnings.hoursPerYearWarning}}</span>
     </div>
   </div>
   <div class="form-section">
     <label>Operating Costs</label>
     <div class="form-group">
-      <label for="fuelCost">Fuel</label>
+      <label for="{{'fuelCost_'+idString}}">Fuel</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareFuelCost(), 'invalid': operationsForm.controls.fuelCost.invalid}">
-        <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="save()" formControlName="fuelCost"
-          (focus)="focusField('operatingCosts')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="fuelCost" type="number" step="any" class="form-control" id="{{'fuelCost_'+idString}}"
+          (input)="save()" formControlName="fuelCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
       </div>
     </div>
     <div class="form-group">
-      <label for="steamCost">Steam</label>
+      <label for="{{'steamCost_'+idString}}">Steam</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareSteamCost(), 'invalid': operationsForm.controls.steamCost.invalid}">
-        <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="save()" formControlName="steamCost"
-          (focus)="focusField('operatingCosts')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="steamCost" type="number" step="any" class="form-control" id="{{'steamCost_'+idString}}"
+          (input)="save()" formControlName="steamCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/MMBtu</span>
       </div>
     </div>
     <div class="form-group">
-      <label for="electricityCost">Electricity</label>
+      <label for="{{'electricityCost_'+idString}}">Electricity</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareElectricityCost(), 'invalid': operationsForm.controls.electricityCost.invalid}">
-        <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="save()"
-          formControlName="electricityCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="electricityCost" type="number" step="any" class="form-control" id="{{'electricityCost_'+idString}}"
+          (input)="save()" formControlName="electricityCost" (focus)="focusField('operatingCosts')" (blur)="focusOut()">
         <span class="units input-group-addon">$/kWh</span>
       </div>
     </div>
   </div>
   <div class="form-section" *ngIf="!isBaseline">
     <div class="form-group">
-      <label for="implementationCost">Implementation Cost</label>
+      <label for="{{'implementationCost_'+idString}}">Implementation Cost</label>
       <div class="input-group">
-        <input [readonly]="!baselineSelected" name="implementationCost" type="number" step="any" class="form-control" id="implementationCost" (input)="save()"
-          formControlName="implementationCost" (focus)="focusField('implementationCost')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="implementationCost" type="number" step="any" class="form-control"
+          id="{{'implementationCost_'+idString}}" (input)="save()" formControlName="implementationCost" (focus)="focusField('implementationCost')"
+          (blur)="focusOut()">
         <span class="units input-group-addon">$</span>
       </div>
     </div>

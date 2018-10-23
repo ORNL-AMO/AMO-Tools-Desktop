@@ -25,7 +25,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()
   inAssessment: boolean;
 
-
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -86,6 +85,18 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
+  }
+
+  btnResetData() {
+    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    if (this.settings.powerMeasurement != 'hp') {
+      if (this.nemaForm.controls.horsePower.value == '200') {
+        this.nemaForm.patchValue({
+          horsePower: '150'
+        })
+      }
+    }
+    this.calculate();
   }
 
   initCalculator(): Calculator {

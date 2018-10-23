@@ -20,6 +20,31 @@ export class PercentLoadEstimationService {
   };
   loadEstimationMethod: number = 0;
   constructor() { }
+
+  initSlipMethodInputs(): SlipMethod {
+    this.slipMethodInputs = {
+      synchronousSpeed: 0,
+      measuredSpeed: 0,
+      nameplateFullLoadSpeed: 0
+    };
+    return this.slipMethodInputs;
+  }
+
+  initFieldMeasurementInputs(): FieldMeasurementInputs {
+    this.fieldMeasurementInputs = {
+      phase1Voltage: 0,
+      phase1Amps: 0,
+      phase2Voltage: 0,
+      phase2Amps: 0,
+      phase3Voltage: 0,
+      phase3Amps: 0,
+      ratedVoltage: 0,
+      ratedCurrent: 0,
+      powerFactor: 0
+    }
+    return this.fieldMeasurementInputs;
+  }
+
   getResults(data: FieldMeasurementInputs): FieldMeasurementOutputs {
     let outputs: FieldMeasurementOutputs = {
       averageVoltage: this.averageVoltage(data),

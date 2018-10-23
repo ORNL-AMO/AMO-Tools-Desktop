@@ -3,26 +3,26 @@
   <div class="form-group">
     <label for="fuelFiredEfficiency1">Fuel-Fire Equipment Efficiency</label>
     <div class="input-group">
-      <input autofocus name="fuelFiredEfficiency1" [(ngModel)]="energyEquivalencyElectric.fuelFiredEfficiency" type="number" step="any"
-        class="form-control" id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiency')"
-        (blur)="focusOut()">
+      <input autofocus name="fuelFiredEfficiency1" [(ngModel)]="energyEquivalencyElectric.fuelFiredEfficiency" type="number"
+        step="any" class="form-control" id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();"
+        (focus)="focusField('fuelFiredEfficiency')" (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
   </div>
   <div class="form-group">
     <label for="electricallyHeatedEfficiency1">Electrically Heated Equipment Efficiency</label>
     <div class="input-group">
-      <input name="electricallyHeatedEfficiency1" [(ngModel)]="energyEquivalencyElectric.electricallyHeatedEfficiency" type="number"
-        step="any" class="form-control" id="electricallyHeatedEfficiency1" (input)="calcElectric()" onfocus="this.select();"
-        (focus)="focusField('electricallyHeatedEfficiency')" (blur)="focusOut()">
+      <input name="electricallyHeatedEfficiency1" [(ngModel)]="energyEquivalencyElectric.electricallyHeatedEfficiency"
+        type="number" step="any" class="form-control" id="electricallyHeatedEfficiency1" (input)="calcElectric()"
+        onfocus="this.select();" (focus)="focusField('electricallyHeatedEfficiency')" (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
   </div>
   <div class="form-group">
     <label for="fuelFiredHeatInput1">Heat Input for Fuel-Fire Equipment</label>
     <div class="input-group">
-      <input name="fuelFiredHeatInput1" [(ngModel)]="energyEquivalencyElectric.fuelFiredHeatInput" type="number" step="any" class="form-control"
-        id="fuelFiredHeatInput1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredHeatInput')"
+      <input name="fuelFiredHeatInput1" [(ngModel)]="energyEquivalencyElectric.fuelFiredHeatInput" type="number" step="any"
+        class="form-control" id="fuelFiredHeatInput1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredHeatInput')"
         (blur)="focusOut()">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
@@ -40,16 +40,16 @@
     <label for="electricallyHeatedEfficiency2">Electrically Heated Equipment Efficiency</label>
     <div class="input-group">
       <input name="electricallyHeatedEfficiency2" [(ngModel)]="energyEquivalencyFuel.electricallyHeatedEfficiency" type="number"
-        step="any" class="form-control" id="electricallyHeatedEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricallyHeatedEfficiencyFuel')"
-        (blur)="focusOut()">
+        step="any" class="form-control" id="electricallyHeatedEfficiency2" (input)="calcFuel()" onfocus="this.select();"
+        (focus)="focusField('electricallyHeatedEfficiencyFuel')" (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
   </div>
   <div class="form-group">
     <label for="fuelFiredEfficiency2">Fuel-Fired Equipment Efficiency</label>
     <div class="input-group">
-      <input name="fuelFiredEfficiency2" [(ngModel)]="energyEquivalencyFuel.fuelFiredEfficiency" type="number" step="any" class="form-control"
-        id="fuelFiredEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiencyFuel')"
+      <input name="fuelFiredEfficiency2" [(ngModel)]="energyEquivalencyFuel.fuelFiredEfficiency" type="number" step="any"
+        class="form-control" id="fuelFiredEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiencyFuel')"
         (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
@@ -57,11 +57,10 @@
   <div class="form-group">
     <label for="electricalHeatInput3">Heat Input for Electrically Heated Equipment</label>
     <div class="input-group">
-      <input name="electricalHeatInput3" [(ngModel)]="energyEquivalencyFuel.electricalHeatInput" type="number" step="any" class="form-control"
-        id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
+      <input name="electricalHeatInput3" [(ngModel)]="energyEquivalencyFuel.electricalHeatInput" type="number" step="any"
+        class="form-control" id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
         (blur)="focusOut()">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
+      <span class="input-group-addon units">kW</span>
     </div>
   </div>
   <div class="form-group">
