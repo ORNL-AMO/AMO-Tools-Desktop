@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { SSMT, PressureTurbine, CondensingTurbine } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { TurbineService } from '../../../turbine/turbine.service';
 
 @Component({
   selector: 'app-turbine-form',
@@ -24,8 +25,24 @@ export class TurbineFormComponent implements OnInit {
   showHighToMediumPressureTurbine: boolean = false;
   showMediumToLowPressureTurbine: boolean = false;
 
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private cd: ChangeDetectorRef) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private cd: ChangeDetectorRef, private turbineService: TurbineService) { }
   ngOnInit() {
+    if(!this.ssmt.turbineInput.condensingTurbine){
+      this.ssmt.turbineInput.condensingTurbine = this.turbineService.initCondensingTurbineObj();
+      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine = this.turbineService.initCondensingTurbineObj();
+    }
+    if(!this.ssmt.turbineInput.highToLowTurbine){
+      this.ssmt.turbineInput.highToLowTurbine = this.turbineService.initPressureTurbine();
+      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToLowTurbine = this.turbineService.initPressureTurbine();
+    }
+    if(!this.ssmt.turbineInput.highToMediumTurbine){
+      this.ssmt.turbineInput.highToMediumTurbine = this.turbineService.initPressureTurbine();
+      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToMediumTurbine = this.turbineService.initPressureTurbine();
+    }
+    if(!this.ssmt.turbineInput.mediumToLowTurbine){
+      this.ssmt.turbineInput.mediumToLowTurbine = this.turbineService.initPressureTurbine();
+      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.mediumToLowTurbine = this.turbineService.initPressureTurbine();
+    }
   }
 
   toggleCondensingTurbine() {

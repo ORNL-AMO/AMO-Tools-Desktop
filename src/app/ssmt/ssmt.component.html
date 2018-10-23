@@ -23,7 +23,7 @@
     </div>
   </div>
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
       [containerHeight]="containerHeight"></app-modify-conditions>

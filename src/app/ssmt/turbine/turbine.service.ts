@@ -18,6 +18,17 @@ export class TurbineService {
     }
   }
 
+  initCondensingTurbineObj(): CondensingTurbine{
+    return {
+      isentropicEfficiency: undefined,
+      generationEfficiency: undefined,
+      condenserPressure: undefined,
+      operationType: 0,
+      operationValue: undefined,
+      useTurbine: false
+    }
+  }
+
   initPressureTurbine(): PressureTurbine {
     return {
       isentropicEfficiency: undefined,
