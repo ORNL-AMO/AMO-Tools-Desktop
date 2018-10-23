@@ -62,8 +62,8 @@
       <input name="condensateReturnTemperature" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_condensateReturnTemperature'}}"
         (input)="save()" [readonly]="!selected" formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
         (blur)="focusOut()" [ngClass]="{'indicate-different': isCondensateReturnTemperatureDifferent()}">
-      <!--TODO: F/C temp degrees-->
-      <span class="units input-group-addon">{{settings.steamTemperatureMeasurement}}</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
       <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
