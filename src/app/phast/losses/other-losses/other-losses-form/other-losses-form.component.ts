@@ -25,12 +25,21 @@ export class OtherLossesFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   firstChange: boolean = true;
   resultsUnit: string;
+  idString: string;
   constructor(private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

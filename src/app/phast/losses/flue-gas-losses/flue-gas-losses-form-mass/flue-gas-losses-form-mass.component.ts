@@ -33,6 +33,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
   
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -47,11 +49,17 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   calculationExcessAir = 0.0;
   calculationFlueGasO2 = 0.0;
-
+  idString: string;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService,
     private lossesService: LossesService, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value != '') {

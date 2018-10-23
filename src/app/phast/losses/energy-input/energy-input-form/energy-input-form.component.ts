@@ -25,12 +25,21 @@ export class EnergyInputFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   flowInput: boolean;
+  idString: string;
   constructor(private energyInputCompareService: EnergyInputCompareService) { }
 
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     if (this.energyInputForm.controls.flowRateInput.value) {
       this.flowInput = false;
     }
