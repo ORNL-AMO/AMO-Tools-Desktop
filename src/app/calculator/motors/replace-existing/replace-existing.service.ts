@@ -14,6 +14,19 @@ export class ReplaceExistingService {
   };
   constructor() { }
 
+  initReplaceExistingData(): ReplaceExistingData {
+    this.replaceExistingData = {
+      operatingHours: 5200,
+      motorSize: 150,
+      existingEfficiency: 92,
+      load: 75,
+      electricityCost: 0.12,
+      newEfficiency: 96,
+      purchaseCost: 13000
+    };
+    return this.replaceExistingData;
+  }
+
   getResults(inputs: ReplaceExistingData): ReplaceExistingResults {
     let results: ReplaceExistingResults = {
       existingEnergyUse: 0,

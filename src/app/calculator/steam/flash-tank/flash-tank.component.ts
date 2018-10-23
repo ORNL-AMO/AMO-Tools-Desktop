@@ -47,6 +47,11 @@ export class FlashTankComponent implements OnInit {
     }, 50);
   }
 
+  btnResetData() {
+    this.flashTankForm = this.flashTankService.initForm(this.settings);
+    this.calculate(this.flashTankForm);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

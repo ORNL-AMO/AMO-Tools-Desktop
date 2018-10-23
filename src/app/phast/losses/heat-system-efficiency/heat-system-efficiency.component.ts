@@ -28,16 +28,23 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   modExists: boolean;
   @Input()
   modificationIndex: number;
-  
+
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
   efficiencyForm: FormGroup;
   systemLosses: number = 0;
   grossHeat: number = 0;
   resultsUnit: string;
+  idString: string;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification';
+    }
+    else {
+      this.idString = '_baseline';
+    }
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

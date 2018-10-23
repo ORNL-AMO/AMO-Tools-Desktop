@@ -38,6 +38,17 @@ export class PipeSizingComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = {
+      airFlow: 0,
+      airlinePressure: 0,
+      designVelocity: 20,
+      atmosphericPressure: 14.7
+    }
+    this.compressedAirService.pipeSizingInput = this.inputs;
+    this.calculatePipeSize(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

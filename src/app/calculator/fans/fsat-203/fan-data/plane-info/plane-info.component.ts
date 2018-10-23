@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Fsat203Service } from '../../fsat-203.service';
 import { FormGroup } from '@angular/forms';
 import { PlaneData } from '../../../../../shared/models/fans';
@@ -11,6 +11,8 @@ import { ConvertUnitsService } from '../../../../../shared/convert-units/convert
   styleUrls: ['./plane-info.component.css']
 })
 export class PlaneInfoComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   planeData: PlaneData;
   @Output('emitSave')
@@ -28,6 +30,18 @@ export class PlaneInfoComponent implements OnInit {
   ngOnInit() {
     this.getSum(this.planeData);
     this.planeInfoForm = this.fsat203Service.getPlaneInfoFormFromObj(this.planeData);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.getSum(this.planeData);
+    this.planeInfoForm = this.fsat203Service.getPlaneInfoFormFromObj(this.planeData);
+    this.save();
   }
 
   focusField(str: string) {

@@ -25,13 +25,16 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   voltageWarning: string = null;
 
   motorPhases: Array<number> = [
     1,
     3
-  ]
+  ];
+  idString: string;
   constructor(private auxiliaryPowerCompareService: AuxiliaryPowerCompareService, private auxiliaryLossesService: AuxiliaryPowerLossesService) { }
   
   ngOnChanges(changes: SimpleChanges) {
@@ -47,6 +50,12 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }

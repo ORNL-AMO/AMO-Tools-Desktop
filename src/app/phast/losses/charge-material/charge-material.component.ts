@@ -47,6 +47,7 @@ export class ChargeMaterialComponent implements OnInit {
     netHeatLoss: number,
     endoExoHeat: number
   };
+  idString: string;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,6 +65,12 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification';
+    }
+    else {
+      this.idString = '_baseline';
+    }
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

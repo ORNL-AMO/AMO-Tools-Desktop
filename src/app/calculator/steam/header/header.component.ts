@@ -27,7 +27,6 @@ export class HeaderComponent implements OnInit {
   inletForms: Array<FormGroup>;
   input: HeaderInput;
   results: HeaderOutput;
-  numInlets: number = 3;
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   inletThermoQuantity: number = 0;
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) { }
@@ -47,6 +46,13 @@ export class HeaderComponent implements OnInit {
       this.resizeTabs();
     }, 50);
   }
+
+  btnResetData() {
+    this.inletForms = new Array<FormGroup>();
+    this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
+    this.getInletForms();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -65,10 +71,11 @@ export class HeaderComponent implements OnInit {
   initForms() {
     this.inletForms = new Array<FormGroup>();
     if (this.headerService.headerInput) {
+      this.input = this.headerService.headerInput;
       this.headerService.headerInput.inlets.forEach(inlet => {
         let tmpForm: FormGroup = this.headerService.getInletFormFromObj(inlet, this.settings);
         this.inletForms.push(tmpForm);
-      })
+      });
       this.headerPressureForm = this.headerService.getHeaderFormFromObj(this.headerService.headerInput, this.settings);
     } else {
       this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
@@ -77,13 +84,13 @@ export class HeaderComponent implements OnInit {
   }
 
   getInletForms() {
-    if (this.inletForms.length < this.numInlets) {
-      for (let i = (this.inletForms.length); i < this.numInlets; i++) {
-        let tmpFrom: FormGroup = this.headerService.initInletForm(this.settings);
-        this.inletForms.push(tmpFrom);
+    if (this.headerPressureForm.controls.numInlets.value > this.inletForms.length) {
+      for (let i = (this.inletForms.length); i < this.headerPressureForm.controls.numInlets.value; i++) {
+        let tmpForm: FormGroup = this.headerService.initInletForm(this.settings);
+        this.inletForms.push(tmpForm);
       }
     } else {
-      while (this.inletForms.length != this.numInlets) {
+      while (this.inletForms.length != this.headerPressureForm.controls.numInlets.value) {
         this.inletForms.pop();
       }
     }

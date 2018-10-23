@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FanRatedInfo } from '../../../../shared/models/fans';
 import { FormGroup } from '@angular/forms';
 import { HelpPanelService } from '../../../../fsat/help-panel/help-panel.service';
@@ -12,6 +12,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
   styleUrls: ['./fsat-basics.component.css']
 })
 export class FsatBasicsComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
   @Input()
   fanRatedInfo: FanRatedInfo;
   @Input()
@@ -35,7 +37,17 @@ export class FsatBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo, this.settings);
-    
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.ratedInfoForm = this.fsat203Service.getBasicsFormFromObject(this.fanRatedInfo, this.settings);
+    this.save();
   }
 
   focusField(str: string) {

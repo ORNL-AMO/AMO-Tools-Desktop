@@ -43,12 +43,14 @@ export class FanEfficiencyComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
+  originalCalculator: Calculator;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
   
     ngOnInit() {
     if (this.inAssessment) {
       this.getCalculator();
+      this.originalCalculator = this.calculator;
     } else {
       this.initForm();
     }
@@ -66,6 +68,17 @@ export class FanEfficiencyComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    if (this.inAssessment && this.originalCalculator.fanEfficiencyInputs) {
+      this.calculator = this.originalCalculator;
+      this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.calculator.fanEfficiencyInputs);
+    }
+    else {
+      this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
+    }
+    this.calculate();
   }
 
 

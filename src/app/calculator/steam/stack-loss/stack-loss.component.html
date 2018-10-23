@@ -15,11 +15,16 @@
           <option [ngValue]="'mass'">Solid/Liquid</option>
         </select>
       </div>
-      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings" (emitChangeField)="changeField($event)"
-        (emitCalculate)="calculate($event)"></app-stack-loss-form>
+      <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
+        (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-form>
       <div class="form-group">
         <label class="small bold">Slack Loss</label>
         <div class="small bold text-center">{{stackLossPercent | sigFigs:'3'}} %</div>
+      </div>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
       </div>
     </div>
   </div>
@@ -40,7 +45,8 @@
       <app-stack-loss-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-stack-loss-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
         <h5 class="text-center">Stack Loss (%)</h5>
-        <app-percent-graph [value]="stackLossPercent" [valueDescription]="'Stack Loss'" [fontSize]="32" [unit]="'%'" [title]="'stack-loss-percent'"></app-percent-graph>
+        <app-percent-graph [value]="stackLossPercent" [valueDescription]="'Stack Loss'" [fontSize]="32" [unit]="'%'"
+          [title]="'stack-loss-percent'"></app-percent-graph>
       </div>
     </div>
   </div>

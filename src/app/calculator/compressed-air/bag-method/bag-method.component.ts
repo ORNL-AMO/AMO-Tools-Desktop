@@ -58,6 +58,17 @@ export class BagMethodComponent implements OnInit {
     this.compressedAirService.bagMethodInputs.operatingHours = this.totalOperatingTime;
   }
 
+  btnResetData() {
+    this.inputsArray = new Array<BagMethodInput>();
+    this.initBagMethodArrays();
+    this.totalOperatingTime = 0;
+    this.outputs = {
+      flowRate: 0,
+      annualConsumption: 0
+    };
+    this.calculateAnnualConsumption();
+  }
+
   initBagMethodArrays() {
     let input: BagMethodInput = {
       operatingTime: 0,

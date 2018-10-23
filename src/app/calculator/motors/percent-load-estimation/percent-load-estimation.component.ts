@@ -51,8 +51,15 @@ export class PercentLoadEstimationComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
+  }
+
+  btnResetData() {
+    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
   }
 
   resizeTabs() {

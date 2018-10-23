@@ -94,13 +94,22 @@ export class HeadToolComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
-  
-  ngOnDestroy(){
-    if(!this.inAssessment){
+
+  ngOnDestroy() {
+    if (!this.inAssessment) {
       this.headToolService.headToolType = this.headToolType;
       this.headToolService.headToolSuctionInputs = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm)
       this.headToolService.headToolInputs = this.headToolService.getHeadToolFromForm(this.headToolForm);
     }
+  }
+
+  btnResetData() {
+    console.log('btnResetData()');
+    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
+    this.calculateHeadTool();
+    this.calculateHeadToolSuctionTank();
+    // this.save();
   }
 
   resizeTabs() {

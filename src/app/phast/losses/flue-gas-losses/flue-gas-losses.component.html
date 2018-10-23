@@ -17,7 +17,8 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name"
+            (input)="setName(loss)">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
@@ -29,7 +30,8 @@
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
-          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name"
+            (input)="setName(loss)">
           <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
@@ -40,19 +42,21 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <div class="form-group">
-        <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
+        <label class="small" for="{{'type_'+lossIndex+idString}}">Type of fuel</label>
+        <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="loss.measurementType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
           (focus)="changeField('measurementType')" (blur)="focusOut()" (change)="saveLosses()" [ngClass]="{'indicate-different': compareLossType(lossIndex)}">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>
         </select>
       </div>
-      <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-flue-gas-losses-form-mass>
-      <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-flue-gas-losses-form-volume>
+      <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'"
+        (changeField)="changeField($event)" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"
+        [inSetup]="inSetup" [isBaseline]="isBaseline"></app-flue-gas-losses-form-mass>
+      <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'"
+        (changeField)="changeField($event)" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)"
+        [inSetup]="inSetup" [isBaseline]="isBaseline"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row loss-total" [ngClass]="{'input-error': (showError == true || availableHeatError)}">

@@ -54,6 +54,12 @@ export class PrvComponent implements OnInit {
     }, 50);
   }
 
+  btnResetData() {
+    this.isSuperHeating = false;
+    this.setInletForm(this.prvService.initInletForm(this.settings))
+    this.setFeedwaterForm(this.prvService.initFeedwaterForm(this.settings));
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

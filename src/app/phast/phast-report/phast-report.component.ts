@@ -12,6 +12,7 @@ import { PhastReportService } from './phast-report.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-phast-report',
@@ -132,6 +133,9 @@ export class PhastReportComponent implements OnInit {
 
   setTab(str: string): void {
     this.currentTab = str;
+    setTimeout(() => {
+      d3.selectAll('.tick text').style('display', 'initial');
+    }, 50);
   }
 
 
