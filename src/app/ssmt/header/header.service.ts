@@ -130,8 +130,8 @@ export class HeaderService {
   }
 
   getRanges(settings: Settings, pressureMin?: number, pressureMax?: number): HeaderRanges {
-    let tmpPressureMin: number = this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement);
-    let tmpPressureMax: number = this.convertUnitsService.value(3185).from('psi').to(settings.steamPressureMeasurement);
+    let tmpPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
+    let tmpPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     if (pressureMin > tmpPressureMin) {
       tmpPressureMin = pressureMin;
     }

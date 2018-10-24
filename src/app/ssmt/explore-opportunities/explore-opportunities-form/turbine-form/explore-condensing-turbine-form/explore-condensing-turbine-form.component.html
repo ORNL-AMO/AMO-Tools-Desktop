@@ -20,7 +20,7 @@
       <div class="input-group">
         <input name="condensingTurbineModificationCondenserPressure" type="number" step="any" id="condensingTurbineModificationCondenserPressure" class="form-control"
           (focus)="focusField('condenserPressure')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.condenserPressure" />
-        <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
       </div>
     </div>
   </form>
