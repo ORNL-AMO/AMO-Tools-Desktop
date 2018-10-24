@@ -359,7 +359,7 @@ export class SsmtComponent implements OnInit {
     this.isModalOpen = false;
     this.ssmtService.openModificationSelectModal.next(false);
     this.changeModificationModal.hide();
-    // this.fsatService.updateData.next(true);
+    this.ssmtService.updateData.next(true);
   }
 
   getContainerHeight() {
