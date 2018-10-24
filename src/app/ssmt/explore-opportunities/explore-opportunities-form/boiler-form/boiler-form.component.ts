@@ -41,6 +41,14 @@ export class BoilerFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showBoilerData = false;
+        this.showCombustionEfficiency = false;
+        this.showFuelType = false;
+        this.showBlowdownRate = false;
+        this.showBlowdownFlashed = false;
+        this.showPreheatBlowdownWater = false;
+        this.showInitialSteamTemperature = false;
+        this.showDeaeratorConditions = false;
         this.init();
       }
     }

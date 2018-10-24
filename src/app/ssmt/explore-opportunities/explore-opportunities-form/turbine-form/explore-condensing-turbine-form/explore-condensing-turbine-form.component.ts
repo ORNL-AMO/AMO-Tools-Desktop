@@ -31,7 +31,6 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
 
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
-    console.log(this.turbineOptionTypes);
     this.initForm();
   }
 
@@ -41,6 +40,12 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
         this.showOperation = false;
         this.showCondenserPressure = false;
       }
+    }
+
+    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+      this.showOperation = false;
+      this.showCondenserPressure = false;
+      this.initForm();
     }
   }
 

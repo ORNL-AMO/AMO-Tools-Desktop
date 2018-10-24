@@ -35,8 +35,14 @@ export class CondensateHandlingFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showCondensateHandling = false;
+        this.showHighPressureCondensateRecovery = false;
+        this.showMediumPressureCondensateRecovery = false;
+        this.showLowPressureCondensateRecovery = false;
+        this.showReturnTemperature = false;
+        this.showFlashCondensateMediumPressure = false;
+        this.showFlashCondensateLowPressure = false;
         this.initCondensateHandling();
-
       }
     }
   }

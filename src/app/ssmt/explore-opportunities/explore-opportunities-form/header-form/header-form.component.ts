@@ -36,6 +36,14 @@ export class HeaderFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showHighPressureHeatLoss = false;
+        this.showMediumPressureHeatLoss = false;
+        this.showLowPressureHeatLoss = false;
+        this.showHeatLoss = false;
+        this.showHighPressureSteamUsage = false;
+        this.showMediumPressureSteamUsage = false;
+        this.showLowPressureSteamUsage = false;
+        this.showSteamUsage = false;
         this.initHeatLoss();
         this.initSteamUsage();
       }
