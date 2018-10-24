@@ -48,3 +48,8 @@
   background-color: #2980b9;
   transition: all .5s ease-in-out;
 }
+
+.ssmt .btn-primary{
+  background-color: #F39C12;
+  transition: all .5s ease-in-out;
+}
