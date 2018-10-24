@@ -34,6 +34,7 @@ export class HeaderService {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
     let tmpForm: FormGroup = this.formBuilder.group({
       headerPressure: [inputObj.headerPressure, [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
+      numInlets: [inputObj.numberOfInlets]
     });
     return tmpForm;
   }
@@ -52,7 +53,8 @@ export class HeaderService {
   getObjFromForm(headerForm: FormGroup, inletForms: Array<FormGroup>): HeaderInput {
     let input: HeaderInput = {
       headerPressure: headerForm.controls.headerPressure.value,
-      inlets: new Array<HeaderInputObj>()
+      inlets: new Array<HeaderInputObj>(),
+      numberOfInlets: headerForm.controls.numInlets.value
     }
     inletForms.forEach(form => {
       let tmpObj: HeaderInputObj = this.getInletObjFromForm(form);
