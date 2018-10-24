@@ -87,15 +87,14 @@ export class PrvService {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
 
     let ranges: PrvRanges = {
-      inletPressureMin: 1,
-      inletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      inletPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       quantityValueMin: quantityMinMax.min,
       quantityValueMax: quantityMinMax.max,
       inletMassFlowMin: 0,
       inletMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
-      outletPressureMin: 1,
-      outletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0))
-
+      outletPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      outletPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3))
     }
     return ranges;
   }
@@ -103,8 +102,8 @@ export class PrvService {
   getFeedwaterRangeValues(settings: Settings, feedwaterThermodynamicQuantity: number): FeedwaterRanges {
     let feedwaterMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, feedwaterThermodynamicQuantity);
     let ranges: FeedwaterRanges = {
-      feedwaterPressureMin: 1,
-      feedwaterPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      feedwaterPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      feedwaterPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       feedwaterQuantityValueMin: feedwaterMinMax.min,
       feedwaterQuantityValueMax: feedwaterMinMax.max,
       desuperheatingTempMin: Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0)),
