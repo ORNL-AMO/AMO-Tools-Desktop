@@ -44,6 +44,13 @@ export class ExploreTurbineFormComponent implements OnInit {
         this.showIsentropicEfficiency = false;
       }
     }
+    
+    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+      this.showUseTurbine = false;
+      this.showGenerationEfficiency = false;
+      this.showIsentropicEfficiency = false;
+      this.initForm();
+    }
   }
 
   initForm() {

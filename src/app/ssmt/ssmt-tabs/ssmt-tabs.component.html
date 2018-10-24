@@ -2,7 +2,8 @@
   <div class="d-flex tabs subtabs progress-tabs ssmt flex-wrap">
     <div class="fixed-tab-size" [ngClass]="settingsStatus">
       <a (click)="changeStepTab('system-basics')">
-        <span (mouseenter)="showTooltip(fieldDataBadge)" (mouseleave)="hideTooltip(fieldDataBadge)" class="step-number">1</span> Assessment Settings</a>
+        <span (mouseenter)="showTooltip(settingsBadge)" (mouseleave)="hideTooltip(settingsBadge)" class="step-number">1</span> Assessment Settings</a>
+        <app-tabs-tooltip [badgeClass]="settingsStatus[0]" [reveal]="settingsBadge.display" [display]="settingsBadge.hover"></app-tabs-tooltip>
     </div>
     <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
       <a (click)="changeStepTab('operations')">

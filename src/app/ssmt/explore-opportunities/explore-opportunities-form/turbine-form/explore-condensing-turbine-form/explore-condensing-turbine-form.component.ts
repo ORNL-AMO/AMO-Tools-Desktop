@@ -41,6 +41,12 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
         this.showCondenserPressure = false;
       }
     }
+
+    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+      this.showOperation = false;
+      this.showCondenserPressure = false;
+      this.initForm();
+    }
   }
 
 

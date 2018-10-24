@@ -38,6 +38,7 @@ export class SsmtTabsComponent implements OnInit {
 
   modSubscription: Subscription;
   selectedModification: SSMT;
+  settingsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   operationsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   boilerBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   headerBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -89,7 +90,7 @@ export class SsmtTabsComponent implements OnInit {
   changeStepTab(str: string) {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
-    if (str == 'fan-setup' || str == 'operations' || str == 'boiler') {
+    if (str == 'system-basics' || str == 'operations' || str == 'boiler') {
       this.ssmtService.stepTab.next(str);
     } else if (str == 'header') {
       if (boilerValid) {
@@ -116,7 +117,7 @@ export class SsmtTabsComponent implements OnInit {
 
   checkOperationsStatus() {
     if (this.stepTab == 'operations') {
-      this.operationsTabStatus = ['active'];
+      this.operationsTabStatus = ['success', 'active'];
     } else {
       this.operationsTabStatus = ['success'];
     }
@@ -124,7 +125,7 @@ export class SsmtTabsComponent implements OnInit {
 
   checkSettingsStatus() {
     if (this.stepTab == 'system-basics') {
-      this.settingsStatus = ['active', 'success'];
+      this.settingsStatus = ['success', 'active'];
     } else {
       this.settingsStatus = ['success'];
     }

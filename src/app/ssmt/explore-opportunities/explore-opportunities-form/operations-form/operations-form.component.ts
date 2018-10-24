@@ -37,6 +37,13 @@ export class OperationsFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
+        this.showHoursPerYear = false;
+        this.showOperationsData = false;
+        this.showMakeupWaterTemp = false;
+        this.showUnitCosts = false;
+        this.showElectricityCost = false;
+        this.showFuelCost = false;
+        this.showMakeupWaterCost = false;
         this.initGeneralOperations();
         this.initOperatingCosts();
 

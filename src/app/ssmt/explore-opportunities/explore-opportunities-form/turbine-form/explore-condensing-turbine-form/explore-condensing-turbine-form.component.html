@@ -1,24 +1,24 @@
 <li>
   <div class="checkbox">
-    <label for="modifyCondenserPressure">
-      <input type="checkbox" id="modifyCondenserPressure" (focus)="focusField('condenserPressure')" (change)="toggleCondenserPressure()"
+    <label for="condensingTurbineModifyCondenserPressure">
+      <input type="checkbox" id="condensingTurbineModifyCondenserPressure" (focus)="focusField('condenserPressure')" (change)="toggleCondenserPressure()"
         [(ngModel)]="showCondenserPressure" /> Modify Condenser Pressure
     </label>
   </div>
   <form *ngIf="showCondenserPressure">
     <div class="form-group">
-      <label for="baselineCondenserPressure">Baseline Condenser Pressure</label>
+      <label for="condensingTurbineBaselineCondenserPressure">Baseline Condenser Pressure</label>
       <div class="input-group">
-        <input name="baselineCondenserPressure" type="number" step="any" id="baselineCondenserPressure" class="form-control"
+        <input name="condensingTurbineBaselineCondenserPressure" type="number" step="any" id="condensingTurbineBaselineCondenserPressure" class="form-control"
           (focus)="focusField('condenserPressure')" (input)="save()" [(ngModel)]="ssmt.turbineInput.condensingTurbine.condenserPressure"
           [disabled]="true" />
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
       </div>
     </div>
     <div class="form-group">
-      <label for="modificationCondenserPressure">Modification Condenser Pressure</label>
+      <label for="condensingTurbineModificationCondenserPressure">Modification Condenser Pressure</label>
       <div class="input-group">
-        <input name="modificationCondenserPressure" type="number" step="any" id="modificationCondenserPressure" class="form-control"
+        <input name="condensingTurbineModificationCondenserPressure" type="number" step="any" id="condensingTurbineModificationCondenserPressure" class="form-control"
           (focus)="focusField('condenserPressure')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.condenserPressure" />
         <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
       </div>
@@ -28,26 +28,26 @@
 
 <li>
   <div class="checkbox">
-    <label for="modifyOperationType">
-      <input type="checkbox" id="modifyOperationType" (focus)="focusField('operationType')" (change)="toggleOperationType()"
+    <label for="condensingTurbineModifyOperationType">
+      <input type="checkbox" id="condensingTurbineModifyOperationType" (focus)="focusField('operationType')" (change)="toggleOperationType()"
         [(ngModel)]="showOperation" /> Modify Operation Type
     </label>
   </div>
   <form *ngIf="showOperation">
     <div class="form-group">
-      <label for="baselineOperationType">Baseline Operation Type</label>
-      <select name="baselineOperationType" class="form-control" id="baselineOperationType" (change)="save()" (focus)="focusField('operationType')"
+      <label for="condensingTurbineBaselineOperationType">Baseline Operation Type</label>
+      <select name="condensingTurbineBaselineOperationType" class="form-control" id="condensingTurbineBaselineOperationType" (change)="save()" (focus)="focusField('operationType')"
         [(ngModel)]="ssmt.turbineInput.condensingTurbine.operationType" [disabled]="true">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="baselineOperationValue">
+      <label for="condensingTurbineBaselineOperationValue">
         <span *ngIf="ssmt.turbineInput.condensingTurbine.operationType == 0">Fixed Flow</span>
         <span *ngIf="ssmt.turbineInput.condensingTurbine.operationType == 1">Fixed Power</span>
       </label>
       <div class="input-group">
-        <input name="baselineOperationValue" type="number" step="any" class="form-control" id="baselineOperationValue"
+        <input name="condensingTurbineBaselineOperationValue" type="number" step="any" class="form-control" id="condensingTurbineBaselineOperationValue"
           (input)="save()" [(ngModel)]="ssmt.turbineInput.condensingTurbine.operationValue" [disabled]="true"
           (focus)="focusOperation(ssmt.turbineInput.condensingTurbine.operationType)">
         <span class="units input-group-addon">
@@ -57,21 +57,21 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="modificationOperationType">Modification Operation Type</label>
-      <select name="modificationOperationType" class="form-control" id="modificationOperationType" (change)="save()"
+      <label for="condensingTurbineModificationOperationType">Modification Operation Type</label>
+      <select name="condensingTurbineModificationOperationType" class="form-control" id="condensingTurbineModificationOperationType" (change)="save()"
         (focus)="focusField('operationType')" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType">
         <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="modificationOperationValue">
+      <label for="condensingTurbineModificationOperationValue">
         <span *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType == 0">Fixed
           Flow</span>
         <span *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType == 1">Fixed
           Power</span>
       </label>
       <div class="input-group">
-        <input name="modificationOperationValue" type="number" step="any" class="form-control" id="modificationOperationValue"
+        <input name="condensingTurbineModificationOperationValue" type="number" step="any" class="form-control" id="condensingTurbineModificationOperationValue"
           (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationValue"
           (focus)="focusOperation(ssmt.modifications[exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType)">
         <span class="units input-group-addon">

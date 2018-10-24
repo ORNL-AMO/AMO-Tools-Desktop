@@ -44,6 +44,10 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
         this.showOperation = false;
       }
     }
+    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+      this.showOperation = false;
+      this.initOperationType();
+    }
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { SSMT, PressureTurbine, CondensingTurbine } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
@@ -27,23 +27,39 @@ export class TurbineFormComponent implements OnInit {
 
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private cd: ChangeDetectorRef, private turbineService: TurbineService) { }
   ngOnInit() {
-    if(!this.ssmt.turbineInput.condensingTurbine){
+    this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
+      this.showCondensingTurbine = false;
+      this.showHighToLowPressureTurbine = false;
+      this.showHighToMediumPressureTurbine = false;
+      this.showMediumToLowPressureTurbine = false;
+      this.initForm();
+    }
+  }
+
+  initForm() {
+    if (!this.ssmt.turbineInput.condensingTurbine) {
       this.ssmt.turbineInput.condensingTurbine = this.turbineService.initCondensingTurbineObj();
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine = this.turbineService.initCondensingTurbineObj();
     }
-    if(!this.ssmt.turbineInput.highToLowTurbine){
+    if (!this.ssmt.turbineInput.highToLowTurbine) {
       this.ssmt.turbineInput.highToLowTurbine = this.turbineService.initPressureTurbine();
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToLowTurbine = this.turbineService.initPressureTurbine();
     }
-    if(!this.ssmt.turbineInput.highToMediumTurbine){
+    if (!this.ssmt.turbineInput.highToMediumTurbine) {
       this.ssmt.turbineInput.highToMediumTurbine = this.turbineService.initPressureTurbine();
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToMediumTurbine = this.turbineService.initPressureTurbine();
     }
-    if(!this.ssmt.turbineInput.mediumToLowTurbine){
+    if (!this.ssmt.turbineInput.mediumToLowTurbine) {
       this.ssmt.turbineInput.mediumToLowTurbine = this.turbineService.initPressureTurbine();
       this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.mediumToLowTurbine = this.turbineService.initPressureTurbine();
     }
   }
+
+
 
   toggleCondensingTurbine() {
     this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine = this.ssmt.turbineInput.condensingTurbine;
@@ -105,7 +121,7 @@ export class TurbineFormComponent implements OnInit {
     this.save();
   }
 
-  saveExploreTurbine(saveData: { baselineTurbine: PressureTurbine | CondensingTurbine, modificationTurbine: PressureTurbine | CondensingTurbine }, turbineStr: string){
+  saveExploreTurbine(saveData: { baselineTurbine: PressureTurbine | CondensingTurbine, modificationTurbine: PressureTurbine | CondensingTurbine }, turbineStr: string) {
     this.ssmt.turbineInput[turbineStr] = saveData.baselineTurbine;
     this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput[turbineStr] = saveData.modificationTurbine;
     this.save();

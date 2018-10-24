@@ -25,30 +25,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   constructor(private ssmtService: SsmtService) { }
 
   ngOnInit() {
-   // this.checkOptimized();
   }
   
   save(newSSMT: SSMT) {
     this.ssmt = newSSMT;
     this.emitSave.emit(this.ssmt);
   }
-
-  // toggleOptimized() {
-  //   if (!this.ssmt.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
-  //     // this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.fixedSpeed = 0;
-  //     this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin = 0;
-  //     this.showSizeMargin = false;
-  //   }
-  //   this.calculate();
-  // }
-
-  // checkOptimized() {
-  //   if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
-  //     if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin != 0) {
-  //       this.showSizeMargin = true;
-  //     }
-  //   }
-  // }
 
   focusField(str: string){
     // this.helpPanelService.currentField.next(str);
